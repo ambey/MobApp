@@ -1,0 +1,123 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/ame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="com.extenprise.mapp.service.activity.SignUpActivity"
+            android:weightSum="1">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/uploadimageview"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="10dp"
+                android:onClick="captureImage" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/uploadimage"
+                android:text="Upload Image"
+                android:layout_marginLeft="25dp"
+                android:textSize="15sp"
+                android:layout_below="@+id/uploadimageview"
+                android:layout_marginTop="5dp"
+                android:textColor="#009f6b"
+                android:onClick="captureImage"
+                />
+            <View
+                android:id="@+id/ln"
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:background="#009f6b"
+                android:layout_marginLeft="22dp"
+                android:layout_below="@+id/uploadimage"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editTextFName"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/editTextCnfPasswd"
+                    android:layout_below="@+id/editTextCnfPasswd"
+                    android:ems="10"
+                    android:hint="First Name *"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/editTextLName"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/editTextCnfPasswd"
+                    android:layout_below="@+id/editTextCnfPasswd"
+                    android:layout_toRightOf="@+id/editTextFName"
+                    android:ems="10"
+                    android:hint="Last Name *"
+                    android:inputType="textPersonName" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email Id *"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/editTextPasswd"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextEmail"
+                android:ems="10"
+                android:hint="Password *"
+                android:inputType="textPassword"
+                android:text="" />
+
+            <EditText
+                android:id="@+id/editTextCnfPasswd"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextPasswd"
+                android:ems="10"
+                android:hint="Confirm Password *"
+                android:inputType="textPassword"
+                android:text="" />
+
+            <Button
+                android:id="@+id/Register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextCountry"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button"
+                android:onClick="showAddWorkPlaceScreen"
+                android:text="@string/next"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

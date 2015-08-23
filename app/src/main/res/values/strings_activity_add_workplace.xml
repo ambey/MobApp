@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_add_workplace">Work Place Details</string>
+
+    <string name="work_place_details">Work Place Details:</string>
+    <string name="work_place_type">Work Place Type *</string>
+    <string name="add_new_work_place">Add New\nWork Place</string>
+    <string name="start_time">Start Time *</string>
+    <string name="end_time">End Time *</string>
+    <string name="work_hrs">Work Hours: *</string>
+
+    <string name="error_invalid_phone">Invalid Phone Number</string>
+</resources>

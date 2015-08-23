@@ -1,0 +1,151 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".AdvanceSearchDoc">
+
+    <ProgressBar
+        android:id="@+id/search_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <TextView android:textSize="18.0dip"
+        android:textStyle="bold"
+        android:textColor="#ffffffff"
+        android:id="@+id/viewDr"
+        android:background="@drawable/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dr." />
+    <EditText android:id="@+id/editSearchDr"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Doctor Name, Clinic"
+        android:layout_toRightOf="@id/viewDr" />
+
+    <EditText android:id="@+id/viewSpeciality"
+
+        android:layout_width="160.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.0dip"
+        android:hint="Speciality"
+        android:layout_below="@id/editSearchDr" />
+    <EditText android:id="@+id/viewLocation"
+
+        android:layout_width="160.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:hint="Location"
+        android:layout_toRightOf="@+id/viewSpeciality"
+        android:layout_alignTop="@+id/viewSpeciality"
+        android:layout_alignBottom="@+id/viewSpeciality" />
+    <ScrollView android:id="@+id/advSearchForm"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/separate"
+        android:fillViewport="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+        <RelativeLayout android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <EditText android:id="@+id/editTextQualification"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:hint="Qualification" />
+            <EditText android:id="@+id/editTextExp"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:hint="Min Experience (Yr)"
+                android:layout_toRightOf="@+id/editTextQualification"
+                android:layout_alignTop="@+id/editTextQualification"
+                android:inputType="phone" />
+            <TextView android:textStyle="bold"
+                android:textColor="#ffffffff"
+                android:id="@+id/viewWorkHrsLbl"
+                android:background="@drawable/label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4.0dip"
+                android:text="Availability Timings"
+                android:layout_below="@+id/editTextQualification" />
+            <Button android:id="@+id/buttonStartTime"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:hint="Start Time"
+                android:layout_below="@+id/viewWorkHrsLbl"
+                android:onClick="showStartTimePicker" />
+            <Button android:id="@+id/buttonEndTime"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:hint="End Time"
+                android:layout_toRightOf="@+id/buttonStartTime"
+                android:layout_alignTop="@+id/buttonStartTime"
+                android:onClick="showEndTimePicker" />
+            <TextView android:textStyle="bold"
+                android:textColor="#ffffffff"
+                android:id="@+id/viewWeeklyOffLbl"
+                android:background="@drawable/label"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="4.0dip"
+                android:text="Available day"
+                android:layout_below="@+id/buttonStartTime" />
+            <Spinner android:entries="@array/days"
+                android:id="@+id/spinAvailDays"
+                android:background="@drawable/spinner"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:prompt="@string/weekly_off"
+                android:layout_below="@+id/viewWeeklyOffLbl" />
+            <TextView android:textStyle="bold"
+                android:textColor="#ffffffff"
+                android:id="@+id/viewGender"
+                android:background="@drawable/label"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:text="@string/gender"
+                android:layout_alignLeft="@+id/buttonEndTime"
+                android:layout_alignTop="@+id/viewWeeklyOffLbl" />
+            <Spinner android:entries="@array/genderType"
+                android:id="@+id/spinGender"
+                android:background="@drawable/spinner"
+                android:layout_width="160.0dip"
+                android:layout_height="wrap_content"
+                android:prompt="@string/gender"
+                android:layout_above="@+id/buttonSearch"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+            <Button android:textStyle="bold"
+                android:textColor="#ffffffff"
+                android:id="@+id/buttonSearch"
+                android:background="@drawable/button"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="@string/search"
+                android:onClick="searchDr"
+                android:layout_below="@+id/spinAvailDays"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+    <EditText android:id="@+id/separate"
+        android:layout_width="fill_parent"
+        android:layout_height="30.0dip"
+        android:editable="false"
+        android:layout_below="@+id/viewSpeciality" />
+
+
+
+
+</RelativeLayout>
