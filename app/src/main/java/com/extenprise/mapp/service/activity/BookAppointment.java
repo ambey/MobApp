@@ -42,6 +42,7 @@ public class BookAppointment extends ActionBarActivity {
 
     static final int DATE_DIALOG_ID = 999;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
