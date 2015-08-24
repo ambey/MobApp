@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.extenprise.mapp.service.activity.AddSpecialityActivity">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:icon="@drawable/abc_ic_ab_back_mtrl_am_alpha"
+        android:enabled="true" android:id="@+id/action_back"
+        android:layout_alignParentLeft="true"
+        android:orderInCategory="100" android:title="Back"
+        app:showAsAction="ifRoom" />
+</menu>

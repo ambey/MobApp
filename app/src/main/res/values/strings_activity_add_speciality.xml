@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_add_speciality">Professional Details</string>
+
+    <string name="share_exp">Work Experience ...</string>
+    <string name="speciality">Speciality</string>
+    <string name="specName">Your Speciality *</string>
+    <string name="service">Service Provided *</string>
+    <string name="experience">Experience (Yr) *</string>
+    <string name="done">Done</string>
+    <string name="thats_it">That\'s It!</string>
+    <string name="add_new_spec">Add New Speciality</string>
+    <string name="add_work_place">Add Work Place</string>
+
+    <string name="error_invalid_experience">Invalid value entered for experience</string>
+</resources>

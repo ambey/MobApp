@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_service_provider_home">Welcome</string>
+    <string name="view_appoint">View Appointments</string>
+    <string name="view_report">View Reports</string>
+</resources>

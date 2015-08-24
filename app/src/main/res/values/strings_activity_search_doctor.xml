@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_search_doctor">Find A Doctor</string>
+    <string name="search">Search</string>
+    <string name="action_search">Search</string>
+    <string name="i_am_doctor">Doctor</string>
+    <string name="i_am_med_st">Medical\nStore</string>
+    <string name="i_am_rad">Radiologist</string>
+    <string name="i_am_path_lab">Diagnostic\nCenter</string>
+    <string name="login_as">Sign In As ...</string>
+</resources>
