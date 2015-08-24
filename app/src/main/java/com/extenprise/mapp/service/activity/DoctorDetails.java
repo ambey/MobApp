@@ -1,7 +1,11 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,37 +13,37 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.database.sqlite.SQLiteDatabase;
-import android.content.ContentValues;
-import android.content.Intent;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasService;
+import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
 public class DoctorDetails extends Activity {
 
-    private TextView mtextviewDocname;
-    private TextView mtextviewDocspeciality;
-    private TextView mtextviewDocQualification;
-    private TextView mtextviewDocExperience;
-    private TextView mtextviewReviews;
-    private TextView mtextviewClinic;
-    private TextView mTextviewClinictime;
-    private TextView mtextviewFees;
-    private ImageView mimageViewAvailable;
-
-    private Button mbuttnBookAppointment;
+    private TextView mTextViewDocname;
+    private TextView mTextViewDocSpeciality;
+    private TextView mTextViewDocQualification;
+    private TextView mTextViewDocExperience;
+    private TextView mTextViewReviews;
+    private TextView mTextViewClinic;
+    private TextView mTextViewClinicTime;
+    private TextView mTextViewFees;
+    private ImageView mImageViewAvailable;
     private View mFormView;
     private View mProgressView;
+    private ServProvHasServHasServPt spsspt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,40 +53,51 @@ public class DoctorDetails extends Activity {
         mFormView = findViewById(R.id.bookAppointmentForm);
         mProgressView = findViewById(R.id.progressView);
 
-        ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
+        spsspt = LoginHolder.spsspt;
         ServiceProvider serviceProvider = LoginHolder.spsspt.getServProvHasService().getServProv();
 
-        mtextviewClinic = (TextView)findViewById(R.id.textviewFirstClinic);
-        mtextviewDocExperience = (TextView)findViewById(R.id.textviewDocExperience);
-        mtextviewDocname = (TextView)findViewById(R.id.textviewDocname);
-        mTextviewClinictime = (TextView)findViewById(R.id.textviewFirstclinictime);
-        mtextviewDocspeciality = (TextView)findViewById(R.id.textviewDocspeciality);
-        mtextviewFees = (TextView)findViewById(R.id.textviewFees);
-        mtextviewReviews = (TextView)findViewById(R.id.textviewReviews);
-        mtextviewDocQualification = (TextView)findViewById(R.id.textviewDocQualification);
-        mbuttnBookAppointment = (Button)findViewById(R.id.buttonBookAppointment);
+        mTextViewClinic = (TextView)findViewById(R.id.textviewFirstClinic);
+        mTextViewDocExperience = (TextView)findViewById(R.id.textviewDocExperience);
+        mTextViewDocname = (TextView)findViewById(R.id.textviewDocname);
+        mTextViewClinicTime = (TextView)findViewById(R.id.textviewFirstclinictime);
+        mTextViewDocSpeciality = (TextView)findViewById(R.id.textviewDocspeciality);
+        mImageViewAvailable = (ImageView)findViewById(R.id.imageViewAvailable);
 
+        mTextViewFees = (TextView)findViewById(R.id.textviewFees);
+        mTextViewReviews = (TextView)findViewById(R.id.textviewReviews);
+        mTextViewDocQualification = (TextView)findViewById(R.id.textviewDocQualification);
 
-        mtextviewClinic.setText(spsspt.getServicePoint().getName());
-        mtextviewDocExperience.setText("" + spsspt.getServProvHasService().getExperience());
-
-
-        mTextviewClinictime.setText(UIUtility.getTimeString(spsspt.getStartTime()) + " to "
+        mTextViewClinic.setText(spsspt.getServicePoint().getName());
+        mTextViewDocExperience.setText("" + spsspt.getServProvHasService().getExperience());
+        mTextViewClinicTime.setText(UIUtility.getTimeString(spsspt.getStartTime()) + " to "
                 + UIUtility.getTimeString(spsspt.getEndTime()));
-        mtextviewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
-        mtextviewDocspeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
+        mTextViewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
+        mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
 
-        mtextviewReviews.setText("11");
-        mtextviewDocQualification.setText("MD Medicine");
-        mtextviewFees.setText("Rs 120");
+        mTextViewReviews.setText("11");
+        mTextViewDocQualification.setText("MD Medicine");
+        mTextViewFees.setText("Rs 120");
+
+        if(UIUtility.findDocAvailability(spsspt.getWeeklyOff())) {
+            mImageViewAvailable.setImageResource(R.drawable.g_circle);
+        } else {
+            mImageViewAvailable.setImageResource(R.drawable.r_circle);
+        }
+
     }
 
     public void bookAppointment(View view) {
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        /*UIUtility.showProgress(this, mFormView, mProgressView, true);
 
         SaveAppointData task = new SaveAppointData(this);
-        task.execute((Void) null);
+        task.execute((Void) null);*/
 
+        /*LoginHolder.servLoginRef.setfName(mTextViewDocname.getText().toString());
+        LoginHolder.spsspt.setStartTime(spsspt.getStartTime());
+        LoginHolder.spsspt.setEndTime(spsspt.getEndTime());*/
+
+        Intent intent = new Intent(this, BookAppointment.class);
+        startActivity(intent);
     }
 
     @Override
@@ -142,10 +157,12 @@ public class DoctorDetails extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.");
             UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
-            Intent intent = new Intent(myActivity, LoginActivity.class);
-            startActivity(intent);
+            if(UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
+                /*Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
+                startActivity(intent);*/
+                return;
+            }
         }
 
         @Override

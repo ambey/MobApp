@@ -121,7 +121,7 @@
             android:label="@string/title_activity_book_appointment" >
         </activity>
         <activity
-            android:name="com.example.avinash.mapp.TimeSlots"
+            android:name=".service.activity.TimeSlots"
             android:label="@string/title_activity_time_slots" >
         </activity>
     </application>
