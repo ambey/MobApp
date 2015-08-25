@@ -78,7 +78,7 @@ public class DoctorDetails extends Activity {
         mTextViewDocQualification.setText("MD Medicine");
         mTextViewFees.setText("Rs 120");
 
-        if(UIUtility.findDocAvailability(spsspt.getWeeklyOff())) {
+        if(UIUtility.findDocAvailability(spsspt.getWeeklyOff(), Calendar.getInstance())) {
             mImageViewAvailable.setImageResource(R.drawable.g_circle);
         } else {
             mImageViewAvailable.setImageResource(R.drawable.r_circle);

@@ -39,7 +39,7 @@ public class SearchResult extends Activity {
         ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
         mImageViewAvailable = (ImageView)findViewById(R.id.imageViewAvailability);
 
-        if(UIUtility.findDocAvailability(spsspt.getWeeklyOff())) {
+        if(UIUtility.findDocAvailability(spsspt.getWeeklyOff(), Calendar.getInstance())) {
             mImageViewAvailable.setImageResource(R.drawable.g_circle);
         } else {
             mImageViewAvailable.setImageResource(R.drawable.r_circle);

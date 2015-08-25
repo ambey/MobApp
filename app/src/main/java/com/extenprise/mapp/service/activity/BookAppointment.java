@@ -60,6 +60,7 @@ public class BookAppointment extends ActionBarActivity {
         mTextViewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
         mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
 
+
         ArrayList<String> liste = new ArrayList<String>();
 
         for(int i=LoginHolder.spsspt.getStartTime(); i<=LoginHolder.spsspt.getEndTime(); i++) {
@@ -81,6 +82,31 @@ public class BookAppointment extends ActionBarActivity {
 
     }
 
+    public void setTimeSlots(Calendar cal) {
+
+        if(!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
+            UIUtility.showAlert(this, "Sorry!", "Doctr is not available on the given date.");
+            return;
+        }
+
+
+        ArrayList<String> liste = new ArrayList<String>();
+
+        for(int i=LoginHolder.spsspt.getStartTime(); i<=LoginHolder.spsspt.getEndTime(); i++) {
+            String from = UIUtility.getTimeString(i);
+            liste.add(from);
+            i=i+30;
+        }
+
+        //String[] values = new String[] { spsspt.getStartTime() + " to " + spsspt.getEndTime() };
+
+        //Collections.addAll(liste, values);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_time_slots, liste);
+
+        mListTimeSlots.setAdapter(adapter);
+    }
+
     public void setCurrentDateOnView() {
 
         tvDisplayDate = (TextView) findViewById(R.id.tvDate);
@@ -99,6 +125,7 @@ public class BookAppointment extends ActionBarActivity {
 
         // set current date into datepicker
         dpResult.init(year, month, day, null);
+        setTimeSlots(c);
 
     }
 
@@ -112,6 +139,7 @@ public class BookAppointment extends ActionBarActivity {
             public void onClick(View v) {
 
                 showDialog(DATE_DIALOG_ID);
+
 
             }
 
@@ -148,6 +176,9 @@ public class BookAppointment extends ActionBarActivity {
             // set selected date into datepicker also
             dpResult.init(year, month, day, null);
 
+            Calendar cal = Calendar.getInstance();
+            cal.set(year, month, day);
+            setTimeSlots(cal);
 
 
         }
