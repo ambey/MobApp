@@ -1,0 +1,131 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:background="@drawable/background"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.extenprise.mapp.service.activity.SignUpPrevious"
+    >
+
+    <ScrollView
+        android:id="@+id/signup_form"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/imageViewMlogo"
+            android:layout_width="250dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="60dp"
+            android:layout_weight="0.44"
+            android:background="@drawable/background"
+            android:src="@drawable/medico_logo_new" />
+
+        <Button
+            android:id="@+id/signUpButton"
+            style="?android:textAppearanceSmall"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/button"
+            android:text="Sign Up (Only Patients)"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/imageViewMlogo"/>
+
+        <View
+            android:id="@+id/lnView"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_marginTop="50dp"
+            android:layout_below="@+id/signUpButton"/>
+
+        <TextView
+            android:id="@+id/serviceProviderTextView"
+            style="?android:textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="60dp"
+            android:background="#fff"
+            android:text="Are you a Medical Service Provider like?"
+            android:textColor="#0000ff"
+            android:textSize="18sp"
+            android:visibility="visible"
+            android:layout_below="@+id/lnView"/>
+
+        <ImageView
+            android:id="@+id/medicalStoreImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/med_store"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@+id/serviceProviderTextView"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/medicalStoreImage"
+            android:layout_marginTop="0dp"
+            android:text="Medical Store"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000"/>
+
+
+        <ImageView
+            android:id="@+id/doctorImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/doctor"
+            android:layout_toEndOf="@id/medicalStoreImage"
+            android:layout_toRightOf="@id/medicalStoreImage"
+            android:layout_marginLeft="70dp"
+            android:layout_below="@+id/serviceProviderTextView"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/doctorImage"
+            android:layout_marginTop="0dp"
+            android:text="Practitioner"
+            android:layout_marginLeft="130dp"
+            android:textColor="#000"/>
+
+        <ImageView
+            android:id="@+id/diagnosticImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/diag_centre"
+            android:layout_toEndOf="@id/doctorImage"
+            android:layout_toRightOf="@id/doctorImage"
+            android:layout_marginLeft="70dp"
+            android:layout_below="@+id/serviceProviderTextView"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/medicalStoreImage"
+            android:layout_marginTop="0dp"
+            android:text="Diagnostic\nCenter"
+            android:layout_marginLeft="250dp"
+            android:textColor="#000"
+            />
+
+</RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

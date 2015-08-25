@@ -80,11 +80,11 @@
         <activity
             android:name=".service.activity.MainActivity"
             android:label="@string/title_activity_main" >
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> -->
         </activity>
         <activity
             android:name=".service.activity.AddSpecialityActivity"
@@ -110,11 +110,11 @@
         <activity
             android:name=".activity.HomeScreenActivity"
             android:label="@string/title_activity_home_screen" >
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> -->
         </activity>
         <activity
             android:name=".service.activity.BookAppointment"
@@ -123,6 +123,15 @@
         <activity
             android:name=".service.activity.TimeSlots"
             android:label="@string/title_activity_time_slots" >
+        </activity>
+        <activity
+            android:name=".service.activity.SignUpPrevious"
+            android:label="@string/title_activity_sign_up_previous" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -52,10 +52,11 @@
     <string name="title_activity_advance__search_doc">Advance Search Doctor</string>
     <string name="title_activity_search_result">List of Doctor</string>
     <string name="title_activity_doctor_details">Doctor Details</string>
-    <string name="title_activity_search_doctor_list">List Of Doctors</string>
-    <string name="title_activity_search_doctor_result">Search Doctor Result</string>
+    <string name="title_activity_search_doctor_list">SearchDoctorList</string>
+    <string name="title_activity_search_doctor_result">SearchDoctorResult</string>
     <string name="title_activity_search_doc_result_list">List of Doctors</string>
-    <string name="title_activity_book_appointment">Book Appointment</string>
-    <string name="title_activity_time_slots">Time Slots</string>
-    <string name="title_activity_home_screen">Extenprise Mobile</string>
+    <string name="title_activity_book_appointment">BookAppointment</string>
+    <string name="title_activity_time_slots">TimeSlots</string>
+    <string name="title_activity_sign_up_previous">SignUpPrevious</string>
+    <string name="title_activity_home_screen">Home Screen</string>
 </resources>

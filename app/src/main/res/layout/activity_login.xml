@@ -35,7 +35,7 @@
             <ImageView
                 android:id="@+id/imageViewMlogo"
                 android:layout_width="250dp"
-                android:layout_height="100dp"
+                android:layout_height="120dp"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="40dp"
                 android:layout_weight="0.44"
@@ -70,11 +70,13 @@
                 android:layout_width="160dp"
                 android:layout_height="20dp"
                 android:layout_below="@+id/password"
-                android:layout_marginLeft="0dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="20dp"
                 android:text="Remember Me"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:buttonTint="@color/abc_background_cache_hint_selector_material_dark" />
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -100,7 +102,7 @@
                 android:text="Sign Up (Only Patients)"
                 android:textColor="#0000ff"
                 android:textSize="16sp"
-                android:visibility="visible"/>
+                android:visibility="invisible"/>
 
 
 
@@ -108,77 +110,15 @@
                 android:id="@+id/registerServProv"
                 style="?android:textAppearanceSmall"
                 android:layout_width="200dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="70dp"
                 android:layout_marginTop="25dp"
-                android:background="#fff"
-                android:text="Are you a Service Provider?"
+
+                android:text="Not Registered With Us?"
                 android:textColor="#0000ff"
                 android:textSize="16sp"
                 android:visibility="visible" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
-
-                <ImageView
-                    android:id="@+id/medicalStoreImage"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="40dp"
-                    android:src="@drawable/med_store"
-                    android:layout_marginLeft="20dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/medicalStoreImage"
-                    android:layout_marginTop="0dp"
-                    android:text="Medical Store"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="#000"/>
-
-                <ImageView
-                    android:id="@+id/doctorImage"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="40dp"
-                    android:src="@drawable/doctor"
-                    android:layout_toEndOf="@id/medicalStoreImage"
-                    android:layout_toRightOf="@id/medicalStoreImage"
-                    android:layout_marginLeft="50dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/doctorImage"
-                    android:layout_marginTop="0dp"
-                    android:text="Practitioner"
-                    android:layout_marginLeft="130dp"
-                    android:textColor="#000"/>
-
-                <ImageView
-                    android:id="@+id/diagnosticImage"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="40dp"
-                    android:src="@drawable/diag_centre"
-                    android:layout_toEndOf="@id/doctorImage"
-                    android:layout_toRightOf="@id/doctorImage"
-                    android:layout_marginLeft="50dp"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/medicalStoreImage"
-                    android:layout_marginTop="0dp"
-                    android:text="Diagnostic\nCenter"
-                    android:layout_marginLeft="250dp"
-                    android:textColor="#000"
-                    />
-            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>
