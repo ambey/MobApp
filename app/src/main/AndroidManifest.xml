@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/Theme.AppCompat.Light"
-    package="com.extenprise.mapp" >
-
+    package="com.extenprise.mapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -30,7 +28,7 @@
         android:allowBackup="true"
         android:icon="@drawable/medico_logo"
         android:logo="@drawable/medico_logo"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!--
         <activity
@@ -48,7 +46,7 @@
             android:name=".service.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".service.activity.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.MainActivity" />
@@ -62,14 +60,14 @@
         </activity>
         <activity
             android:name=".service.activity.SearchDoctorActivity"
-            android:parentActivityName=".service.activity.MainActivity" >
+            android:parentActivityName=".service.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.MainActivity" />
         </activity>
         <activity
             android:name=".service.activity.SignUpActivity"
-            android:label="@string/title_activity_sign_up" >
+            android:label="@string/title_activity_sign_up">
 
             <!--
             <intent-filter>
@@ -81,12 +79,12 @@
         </activity>
         <activity
             android:name=".service.activity.MainActivity"
-            android:label="@string/title_activity_main" >
-           <!-- <intent-filter>
+            android:label="@string/title_activity_main">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+            </intent-filter>
         </activity>
         <activity
             android:name=".service.activity.AddSpecialityActivity"
@@ -99,41 +97,64 @@
             android:label="@string/title_activity_service_provider_home" />
         <activity
             android:name=".service.activity.AdvanceSearchDoc"
-            android:label="@string/title_activity_search_doctor" />
+            android:label="@string/title_activity_search_doctor"
+            android:parentActivityName=".service.activity.SearchDoctorActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.SearchDoctorActivity" />
+        </activity>
         <activity
             android:name=".service.activity.SearchResult"
             android:label="@string/title_activity_search_result" />
         <activity
             android:name=".service.activity.DoctorDetails"
-            android:label="@string/title_activity_doctor_details" />
+            android:label="@string/title_activity_doctor_details"
+            android:parentActivityName=".service.activity.SearchDocResultList">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.SearchDocResultList" />
+        </activity>
         <activity
             android:name=".service.activity.SearchDocResultList"
-            android:label="@string/title_activity_search_doc_result_list" />
+            android:label="@string/title_activity_search_doc_result_list"
+            android:parentActivityName=".service.activity.SearchDoctorActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.SearchDoctorActivity" />
+        </activity>
+
         <activity
             android:name=".activity.HomeScreenActivity"
-            android:label="@string/title_activity_home_screen" >
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:label="@string/title_activity_home_screen">
+            <!--
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".service.activity.BookAppointment"
-            android:label="@string/title_activity_book_appointment" >
+            android:label="@string/title_activity_book_appointment"
+            android:parentActivityName=".service.activity.DoctorDetails">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.DoctorDetails" />
         </activity>
         <activity
             android:name=".service.activity.TimeSlots"
-            android:label="@string/title_activity_time_slots" >
-        </activity>
+            android:label="@string/title_activity_time_slots"></activity>
         <activity
             android:name=".service.activity.SignUpPrevious"
-            android:label="@string/title_activity_sign_up_previous" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:label="@string/title_activity_sign_up_previous">
+            <!--
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
+            -->
         </activity>
     </application>
 
