@@ -1,5 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.support.v7.app.ActionBarActivity;
@@ -24,7 +25,7 @@ import java.util.Calendar;
 import java.util.Collections;
 
 
-public class BookAppointment extends ActionBarActivity {
+public class BookAppointment extends Activity {
 
     private TextView mTextViewDocname;
     private TextView mTextViewDocSpeciality;
@@ -85,7 +86,8 @@ public class BookAppointment extends ActionBarActivity {
     public void setTimeSlots(Calendar cal) {
 
         if(!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
-            UIUtility.showAlert(this, "Sorry!", "Doctr is not available on the given date.");
+            UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
+
             return;
         }
 
