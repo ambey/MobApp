@@ -106,11 +106,11 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/button"
                 android:onClick="showSignInScreen"
-                android:text="@string/i_am_doctor"
+                android:text="Sign-In"
                 android:textColor="#fff"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:visibility="visible"
+                android:visibility="invisible"
                 />
 
             <Button

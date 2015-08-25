@@ -69,7 +69,8 @@ public abstract class UIUtility {
     }
 
     public static String getTimeString (int minutes) {
-        return minutes / 60 + ":" + minutes % 60;
+        return String.format("%02d:%02d", minutes / 60, minutes % 60);
+        //return minutes / 60 + ":" + minutes % 60;
     }
 
     public static boolean findDocAvailability(String weekOff, Calendar calendar) {

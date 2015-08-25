@@ -3,11 +3,17 @@ package com.extenprise.mapp.service.activity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -16,13 +22,21 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.db.MappContract;
+import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasService;
+import com.extenprise.mapp.service.data.Service;
+import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 
 public class BookAppointment extends Activity {
@@ -33,13 +47,14 @@ public class BookAppointment extends Activity {
     //private View mProgressView;
     private ListView mListTimeSlots;
 
-    private TextView tvDisplayDate;
-    private DatePicker dpResult;
-    private Button btnChangeDate;
+    private TextView mTvDisplayDate;
+    private DatePicker mDpResult;
+    private Button mBtnChangeDate, mbuttonBook;
 
     private int year;
     private int month;
     private int day;
+    private String selectedItem;
 
     static final int DATE_DIALOG_ID = 999;
 
@@ -64,7 +79,7 @@ public class BookAppointment extends Activity {
 
         ArrayList<String> liste = new ArrayList<String>();
 
-        for(int i=LoginHolder.spsspt.getStartTime(); i<=LoginHolder.spsspt.getEndTime(); i++) {
+        for(int i=LoginHolder.spsspt.getStartTime(); i<=LoginHolder.spsspt.getEndTime();) {
             String from = UIUtility.getTimeString(i);
             liste.add(from);
             i=i+30;
@@ -83,10 +98,21 @@ public class BookAppointment extends Activity {
 
     }
 
+    public void bookAppointment(View view) {
+        //UIUtility.showProgress(this, mFormView, mProgressView, true);
+
+        SaveAppointData task = new SaveAppointData(this);
+        task.execute((Void) null);
+    }
+
     public void setTimeSlots(Calendar cal) {
 
         if(!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
             UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
+            // listView is your instance of your ListView
+            ArrayAdapter sampleAdapter = (ArrayAdapter)mListTimeSlots.getAdapter();
+            sampleAdapter.clear();
+            sampleAdapter.notifyDataSetChanged();
             return;
         }
 
@@ -105,13 +131,29 @@ public class BookAppointment extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.activity_time_slots, liste);
 
+        mListTimeSlots.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+        mListTimeSlots.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                for(int a = 0; a < parent.getChildCount(); a++)
+                {
+                    parent.getChildAt(a).setBackgroundColor(Color.TRANSPARENT);
+                }
+                view.setBackgroundColor(Color.GREEN);
+
+                selectedItem = mListTimeSlots.getItemAtPosition(position).toString().trim();
+
+            }
+        });
+
         mListTimeSlots.setAdapter(adapter);
     }
 
     public void setCurrentDateOnView() {
 
-        tvDisplayDate = (TextView) findViewById(R.id.tvDate);
-        dpResult = (DatePicker) findViewById(R.id.datePicker);
+        mTvDisplayDate = (TextView) findViewById(R.id.tvDate);
+        mDpResult = (DatePicker) findViewById(R.id.datePicker);
 
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
@@ -119,22 +161,22 @@ public class BookAppointment extends Activity {
         day = c.get(Calendar.DAY_OF_MONTH);
 
         // set current date into textview
-        tvDisplayDate.setText(new StringBuilder()
+        mTvDisplayDate.setText(new StringBuilder()
                 // Month is 0 based, just add 1
                 .append(month + 1).append("-").append(day).append("-")
                 .append(year).append(" "));
 
         // set current date into datepicker
-        dpResult.init(year, month, day, null);
+        mDpResult.init(year, month, day, null);
         setTimeSlots(c);
 
     }
 
     public void addListenerOnButton() {
 
-        btnChangeDate = (Button) findViewById(R.id.btnChangeDate);
+        mBtnChangeDate = (Button) findViewById(R.id.btnChangeDate);
 
-        btnChangeDate.setOnClickListener(new View.OnClickListener() {
+        mBtnChangeDate.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -170,18 +212,16 @@ public class BookAppointment extends Activity {
             day = selectedDay;
 
             // set selected date into textview
-            tvDisplayDate.setText(new StringBuilder().append(month + 1)
+            mTvDisplayDate.setText(new StringBuilder().append(month + 1)
                     .append("-").append(day).append("-").append(year)
                     .append(" "));
 
             // set selected date into datepicker also
-            dpResult.init(year, month, day, null);
+            mDpResult.init(year, month, day, null);
 
             Calendar cal = Calendar.getInstance();
             cal.set(year, month, day);
             setTimeSlots(cal);
-
-
         }
     };
 
@@ -205,5 +245,56 @@ public class BookAppointment extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class SaveAppointData extends AsyncTask<Void, Void, Void> {
+
+        private Activity myActivity;
+
+        public SaveAppointData(Activity activity) {
+            myActivity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
+            ServiceProvider sp = LoginHolder.spsspt.getServProvHasService().getServProv();
+
+            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            /*Date date = null;
+            try {
+                date = new SimpleDateFormat("dd.MM.yyyy").parse(mTvDisplayDate.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }*/
+
+            ContentValues values = new ContentValues();
+            values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME, UIUtility.getMinutes(selectedItem));
+            //values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, spsspt.getEndTime());
+            values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTvDisplayDate.toString());
+            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
+            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServProvHasService().getService().getName());
+            values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getServProvHasService().getService().getSpeciality());
+            values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, sp.getIdServiceProvider());
+
+            db.insert(MappContract.Appointment.TABLE_NAME, null, values);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
+                /*Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
+                startActivity(intent);*/
+                return;
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+
     }
 }

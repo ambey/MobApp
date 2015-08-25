@@ -66,6 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listTimeSlots"
+        android:choiceMode="singleChoice"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/buttonBook"
         android:layout_below="@+id/btnChangeDate" />
@@ -80,6 +81,7 @@
         android:textColor="#fff"
         android:id="@+id/buttonBook"
         android:layout_alignParentBottom="true"
+        android:onClick="bookAppointment"
         android:layout_centerHorizontal="true" />
 
     <Button

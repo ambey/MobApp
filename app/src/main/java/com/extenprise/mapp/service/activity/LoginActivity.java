@@ -67,7 +67,7 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set up the login form.
         mMobileNumber = (AutoCompleteTextView) findViewById(R.id.mobileNumber);
@@ -93,11 +93,13 @@ public class LoginActivity extends Activity {
             }
         });
 
-        TextView mRegisterButton = (TextView) findViewById(R.id.registerServProv);
+        TextView mRegisterButton = (TextView) findViewById(R.id.notRegistered);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerServProv();
+                //registerServProv();
+                Intent intent = new Intent(getApplicationContext(), SignUpPrevious.class);
+                startActivity(intent);
             }
         });
 

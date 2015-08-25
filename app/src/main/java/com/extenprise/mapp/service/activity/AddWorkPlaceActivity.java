@@ -97,9 +97,7 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void addNewWorkPlace(View view) {
-        if (!isValidInput()) {
-            return;
-        }
+
 
         ServProvHasService sps1 = new ServProvHasService();
         sps1.setServProv(LoginHolder.servLoginRef);
@@ -158,6 +156,11 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void registerDone(View view) {
+
+        if (!isValidInput()) {
+            return;
+        }
+
         addNewWorkPlace(view);
         /*Intent intent = new Intent(this, AddSpecialityActivity.class);
         startActivity(intent);*/
@@ -210,6 +213,22 @@ public class AddWorkPlaceActivity extends Activity {
             focusView = mStartTime;
             valid = false;
         }
+        /*if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
+               !(mStartTime.getText().toString().equals(getString(R.string.start_time))) ) {
+            if (mStartTime.getText().toString().equals(mEndTime.getText().toString())) {
+                mEndTime.setError("Start Time and End Time Can't be similar.");
+                focusView = mStartTime;
+                valid = false;
+            }*/
+        if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
+                !(mStartTime.getText().toString().equals(getString(R.string.start_time))) ) {
+            if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
+                mEndTime.setError("End Time Can't be similar or less than to Start Time.");
+                focusView = mEndTime;
+                valid = false;
+            }
+        }
+
         String email = mEmailId.getText().toString();
         if (TextUtils.isEmpty(email)) {
             mEmailId.setError(getString(R.string.error_field_required));
