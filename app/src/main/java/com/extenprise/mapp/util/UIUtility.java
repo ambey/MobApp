@@ -72,8 +72,8 @@ public abstract class UIUtility {
         return minutes / 60 + ":" + minutes % 60;
     }
 
-    public static boolean findDocAvailability(String weekOff) {
-        Calendar calendar = Calendar.getInstance();
+    public static boolean findDocAvailability(String weekOff, Calendar calendar) {
+        //Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         int weekOffDay = 1; // for sunday
         boolean flag = false;
