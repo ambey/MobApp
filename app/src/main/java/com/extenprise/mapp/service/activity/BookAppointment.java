@@ -87,7 +87,6 @@ public class BookAppointment extends Activity {
 
         if(!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
             UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
-
             return;
         }
 
