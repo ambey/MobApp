@@ -41,7 +41,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_weight="0.44"
                 android:background="@drawable/background"
-                android:src="@drawable/medico_logo_new" />
+                android:src="@drawable/med_logo_final" />
 
             <AutoCompleteTextView
                 android:id="@+id/mobileNumber"

@@ -29,7 +29,7 @@
                 android:id="@+id/imageViewLogo"
                 android:layout_width="250dp"
                 android:layout_height="100dp"
-                android:src="@drawable/medico_logo"
+                android:src="@drawable/med_logo_final"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"/>
 
