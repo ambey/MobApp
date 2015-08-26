@@ -39,8 +39,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="Doctor,Clinic,Pharmacy,Diagnostic Center"
-                android:layout_marginTop="50dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="50dp"/>
 
             <EditText
                 android:id="@+id/editTextSearchSp"
@@ -48,8 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextSearchDr"
                 android:hint="Speciality"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="10dp"/>
 
             <EditText
                 android:id="@+id/editTextSearchLoc"
@@ -60,8 +58,7 @@
                 android:layout_toEndOf="@+id/editTextSearchSp"
                 android:layout_toRightOf="@+id/editTextSearchSp"
                 android:layout_below="@+id/editTextSearchDr"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="10dp"/>
 
             <Button
                 android:id="@+id/buttonSearch"
@@ -90,6 +87,7 @@
                 android:textSize="16sp"
                 android:layout_centerInParent="true"/>
 
+<!--
             <TextView
                 android:id="@+id/textViewLoginAs"
                 android:layout_width="fill_parent"
@@ -150,6 +148,7 @@
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:visibility="invisible"/>
+-->
 
         </RelativeLayout>
     </ScrollView>

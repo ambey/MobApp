@@ -67,7 +67,11 @@
         </activity>
         <activity
             android:name=".service.activity.SignUpActivity"
-            android:label="@string/title_activity_sign_up">
+            android:label="@string/title_activity_sign_up"
+            android:parentActivityName=".service.activity.SignUpPrevious">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.SignUpPrevious" />
 
             <!--
             <intent-filter>
@@ -147,7 +151,11 @@
             android:label="@string/title_activity_time_slots"></activity>
         <activity
             android:name=".service.activity.SignUpPrevious"
-            android:label="@string/title_activity_sign_up_previous">
+            android:label="@string/title_activity_sign_up_previous"
+            android:parentActivityName=".service.activity.LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.LoginActivity" />
             <!--
                         <intent-filter>
                             <action android:name="android.intent.action.MAIN" />

@@ -23,6 +23,7 @@
             android:layout_height="100dp"
             android:layout_marginRight="30dp"
             android:background="@drawable/button"
+            android:textColor="#fff"
             android:onClick="showMedicoHome"
             android:text="Medico" />
 
@@ -31,6 +32,7 @@
             android:layout_height="100dp"
             android:layout_marginRight="30dp"
             android:background="@drawable/button"
+            android:textColor="#fff"
             android:enabled="false"
             android:text="Travel" />
 

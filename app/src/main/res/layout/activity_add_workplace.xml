@@ -17,8 +17,8 @@
         android:hint="Speciality *"
         android:background="@drawable/text"
         android:inputType="textAutoComplete"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+        android:textSize="18dp"/>
+
     <EditText
         android:id="@+id/editTextExperience"
         android:layout_width="120dp"
@@ -30,7 +30,6 @@
         android:hint="Exp (Yr) *"
         android:background="@drawable/text"
         android:textSize="18dp"
-        android:textStyle="bold"
         android:inputType="number"/>
 
 
@@ -44,8 +43,7 @@
         android:padding="4dp"
         android:hint="Qualification *"
         android:background="@drawable/text"
-        android:textSize="18dp"
-        android:textStyle="bold"/>
+        android:textSize="18dp"/>
 
 
 
@@ -58,9 +56,7 @@
         android:text="@string/work_place_details"
         android:background="@drawable/label"
         android:layout_marginTop="5dp"
-        android:textColor="#fff"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+        android:textSize="18dp"/>
 
     <TextView
         android:id="@+id/viewWorkPlaceCount"
@@ -74,9 +70,7 @@
         android:layout_marginLeft="10dp"
         android:text="#1"
         android:background="@drawable/label"
-        android:textColor="#fff"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="18sp"/>
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -102,7 +96,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:hint="Name *"
-                android:inputType="textAutoComplete" />
+                android:inputType="textAutoComplete"/>
 
             <Spinner
                 android:id="@+id/viewWorkPlaceType"
@@ -123,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextName"
                 android:hint="Location *"
-                android:inputType="textAutoComplete" />
+                android:inputType="textAutoComplete"/>
 
             <Spinner
                 android:id="@+id/editTextCity"
@@ -144,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextLoc"
                 android:hint="Phone 1 *"
-                android:inputType="phone" />
+                android:inputType="phone"/>
 
             <EditText
                 android:id="@+id/editTextPhone2"
@@ -154,7 +148,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/editTextPhone1"
                 android:hint="Phone 2 (Optional)"
-                android:inputType="phone" />
+                android:inputType="phone"/>
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -162,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextPhone1"
                 android:hint="Email ID"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"/>
 
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
@@ -171,9 +165,7 @@
                 android:layout_below="@id/editTextEmail"
                 android:layout_margin="4dp"
                 android:text="@string/work_hrs"
-                android:background="@drawable/label"
-                android:textColor="#fff"
-                android:textStyle="bold" />
+                android:background="@drawable/label"/>
 
             <Button
                 android:id="@+id/buttonStartTime"
@@ -200,9 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:text="@string/weekly_off"
-                android:background="@drawable/label"
-                android:textColor="#fff"
-                android:textStyle="bold" />
+                android:background="@drawable/label"/>
 
             <Spinner
                 android:id="@+id/editTextWeeklyOff"
@@ -221,8 +211,6 @@
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
                 android:background="@drawable/button"
-                android:textColor="#fff"
-                android:textStyle="bold"
                 android:onClick="addNewWorkPlace"
                 android:text="@string/add_new_work_place" />
 
@@ -236,8 +224,6 @@
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"
                 android:background="@drawable/button"
-                android:textColor="#fff"
-                android:textStyle="bold"
                 android:onClick="registerDone"
                 android:text="@string/thats_it" />
 

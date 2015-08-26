@@ -52,8 +52,7 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/imageViewMlogo"
-                android:textColor="@color/black"/>
+                android:layout_below="@+id/imageViewMlogo"/>
 
             <EditText
                 android:id="@+id/password"
@@ -67,8 +66,7 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/mobileNumber"
-                android:textColor="@color/black"/>
+                android:layout_below="@+id/mobileNumber"/>
 
             <CheckBox
                 android:id="@+id/rememberMe"
@@ -80,7 +78,6 @@
                 android:text="Remember Me"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#000"
                 android:buttonTint="@color/abc_background_cache_hint_selector_material_dark" />
 
             <Button
