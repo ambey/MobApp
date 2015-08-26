@@ -8,13 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ambey on 23/7/15.
  */
 public class MappDbHelper extends SQLiteOpenHelper {
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
     public static final String DB_NAME = "Mapp.db";
-
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INT";
     private static final String FLOAT_TYPE = " FLOAT";
     private static final String COMMA_SEP = ",";
+
     private static final String SQL_CREATE_SERV_PROV =
             "CREATE TABLE " + MappContract.ServiceProvider.TABLE_NAME + " (" +
                     MappContract.ServiceProvider._ID + " INTEGER PRIMARY KEY," +
@@ -69,11 +69,14 @@ public class MappDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_CUSTOMER =
             "CREATE TABLE " + MappContract.Customer.TABLE_NAME + " (" +
                     MappContract.Customer._ID + " INTEGER PRIMARY KEY," +
+                    MappContract.Customer.COLUMN_NAME_ID_CUSTOMER + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_FNAME + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_LNAME + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_PHONE + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_ALT_PHONE + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_DOB + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Customer.COLUMN_NAME_AGE + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Customer.COLUMN_NAME_WEIGHT + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_LOCATION + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_GENDER + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_ID_CITY + TEXT_TYPE + COMMA_SEP +

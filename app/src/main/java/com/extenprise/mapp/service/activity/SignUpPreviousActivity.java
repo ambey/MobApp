@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.R;
 
 
-public class SignUpPrevious extends Activity {
+public class SignUpPreviousActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,12 +5,10 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,18 +17,15 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 
-public class DoctorDetails extends Activity {
+public class DoctorDetailsActivity extends Activity {
 
     private TextView mTextViewDocname;
     private TextView mTextViewDocSpeciality;
@@ -96,7 +91,7 @@ public class DoctorDetails extends Activity {
         LoginHolder.spsspt.setStartTime(spsspt.getStartTime());
         LoginHolder.spsspt.setEndTime(spsspt.getEndTime());*/
 
-        Intent intent = new Intent(this, BookAppointment.class);
+        Intent intent = new Intent(this, BookAppointmentActivity.class);
         startActivity(intent);
     }
 

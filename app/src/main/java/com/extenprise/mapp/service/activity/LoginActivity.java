@@ -1,7 +1,5 @@
 package com.extenprise.mapp.service.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -10,7 +8,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -98,7 +95,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //registerServProv();
-                Intent intent = new Intent(getApplicationContext(), SignUpPrevious.class);
+                Intent intent = new Intent(getApplicationContext(), SignUpPreviousActivity.class);
                 startActivity(intent);
             }
         });
@@ -281,6 +278,7 @@ public class LoginActivity extends Activity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
+                MappContract.ServiceProvider._ID,
                 MappContract.ServiceProvider.COLUMN_NAME_FNAME,
                 MappContract.ServiceProvider.COLUMN_NAME_LNAME,
                 MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID
@@ -300,9 +298,10 @@ public class LoginActivity extends Activity {
         if(count > 0) {
             c.moveToFirst();
             ServiceProvider sp = new ServiceProvider();
-            sp.setfName(c.getString(0));
-            sp.setlName(c.getString(1));
-            sp.setEmailId(c.getString(2));
+            sp.setIdServiceProvider(Integer.parseInt(c.getString(0)));
+            sp.setfName(c.getString(1));
+            sp.setlName(c.getString(2));
+            sp.setEmailId(c.getString(3));
 
             LoginHolder.servLoginRef = sp;
         }

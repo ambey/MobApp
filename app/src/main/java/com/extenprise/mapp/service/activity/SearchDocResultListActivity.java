@@ -20,9 +20,7 @@ import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchDoctor;
 
-import java.text.SimpleDateFormat;
-
-public class SearchDocResultList extends Activity {
+public class SearchDocResultListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +92,7 @@ public class SearchDocResultList extends Activity {
                 LoginHolder.spsspt.setServProvHasService(sps);
                 LoginHolder.spsspt.setServicePoint(spt);
 
-                Intent i = new Intent(getApplicationContext(), DoctorDetails.class);
+                Intent i = new Intent(getApplicationContext(), DoctorDetailsActivity.class);
                 startActivity(i);
             }
         });

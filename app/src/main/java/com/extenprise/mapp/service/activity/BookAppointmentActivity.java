@@ -40,7 +40,7 @@ import java.util.Collections;
 import java.util.Date;
 
 
-public class BookAppointment extends Activity {
+public class BookAppointmentActivity extends Activity {
 
     private TextView mTextViewDocname;
     private TextView mTextViewDocSpeciality;
@@ -122,7 +122,7 @@ public class BookAppointment extends Activity {
             return;
         }
         ArrayList<String> liste = new ArrayList<String>();
-        for(int i=LoginHolder.spsspt.getStartTime(); i<=LoginHolder.spsspt.getEndTime(); i++) {
+        for(int i = LoginHolder.spsspt.getStartTime(); i < LoginHolder.spsspt.getEndTime();) {
             String from = UIUtility.getTimeString(i);
             if(!isTimeSlotsBooked(from)) {
                 liste.add(from);
@@ -270,7 +270,8 @@ public class BookAppointment extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
-                
+                Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
+                startActivity(intent);
                 //return;
             }
         }

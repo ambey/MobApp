@@ -67,7 +67,7 @@ public class SearchDoctorActivity extends Activity {
         spsspt.setServProvHasService(sps);
         LoginHolder.spsspt = spsspt;
 
-        Intent i = new Intent(this, AdvanceSearchDoc.class);
+        Intent i = new Intent(this, AdvanceSearchDocActivity.class);
         startActivity(i);
     }
 
@@ -155,7 +155,7 @@ public class SearchDoctorActivity extends Activity {
             mSearchTask = null;
             UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
             if (success) {
-                Intent intent = new Intent(mActivity, SearchDocResultList.class);
+                Intent intent = new Intent(mActivity, SearchDocResultListActivity.class);
                 startActivity(intent);
             } else {
                 UIUtility.showAlert(mActivity,"No Results Found","Sorry, No result matches to your criteria!");

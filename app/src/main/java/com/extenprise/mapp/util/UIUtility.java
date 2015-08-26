@@ -7,8 +7,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by ambey on 23/7/15.
@@ -107,4 +110,9 @@ public abstract class UIUtility {
         return flag;
     }
 
+    public static int getAge(String dob) {
+        long ageInMillis = new Date().getTime() - getMinutes(dob);
+        Date age = new Date(ageInMillis);
+        return age.getYear();
+    }
 }

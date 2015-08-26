@@ -34,11 +34,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:background="@drawable/button"
-                android:enabled="false"
+                android:enabled="true"
                 android:text="@string/view_appoint"
                 android:textColor="#fff"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="viewAppointment"/>
 
             <Button
                 android:id="@+id/buttonViewReport"

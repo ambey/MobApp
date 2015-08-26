@@ -21,7 +21,7 @@ import com.extenprise.mapp.util.UIUtility;
 
 import java.util.Calendar;
 
-public class AdvanceSearchDoc extends Activity {
+public class AdvanceSearchDocActivity extends Activity {
 
     private UserSearchTask mSearchTask = null;
 
@@ -183,11 +183,11 @@ public class AdvanceSearchDoc extends Activity {
             UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
 
             if (success) {
-                Intent intent = new Intent(mActivity, SearchDocResultList.class);
+                Intent intent = new Intent(mActivity, SearchDocResultListActivity.class);
                 startActivity(intent);
 
             } else {
-                    /*Intent intent = new Intent(mActivity, AdvanceSearchDoc.class);
+                    /*Intent intent = new Intent(mActivity, AdvanceSearchDocActivity.class);
                     startActivity(intent);*/
                 UIUtility.showAlert(mActivity,"No Results Found","Sorry, No result matches to your criteria!");
             }

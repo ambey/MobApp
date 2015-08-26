@@ -53,11 +53,13 @@ public class MappContract {
 
     public static abstract class Customer implements BaseColumns {
         public static final String TABLE_NAME = "Customer";
-
+        public static final String COLUMN_NAME_ID_CUSTOMER = "idCustomer";
         public static final String COLUMN_NAME_FNAME = "fName";
         public static final String COLUMN_NAME_LNAME = "lName";
         public static final String COLUMN_NAME_PASSWD = "passwd";
         public static final String COLUMN_NAME_GENDER = "gender";
+        public static final String COLUMN_NAME_AGE = "age";
+        public static final String COLUMN_NAME_WEIGHT = "weight";
         public static final String COLUMN_NAME_LOCATION = "location";
         public static final String COLUMN_NAME_PHONE = "phone";
         public static final String COLUMN_NAME_ALT_PHONE = "altPhone";

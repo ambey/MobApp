@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.extenprise.mapp" >
+    package="com.extenprise.mapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -28,7 +28,7 @@
         android:allowBackup="true"
         android:icon="@drawable/doctor"
         android:logo="@drawable/doctor"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!--
         <activity
@@ -46,7 +46,7 @@
             android:name=".service.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".service.activity.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.MainActivity" />
@@ -60,7 +60,7 @@
         </activity>
         <activity
             android:name=".service.activity.SearchDoctorActivity"
-            android:parentActivityName=".service.activity.MainActivity" >
+            android:parentActivityName=".service.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.MainActivity" />
@@ -68,7 +68,7 @@
         <activity
             android:name=".service.activity.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".service.activity.SignUpPrevious" >
+            android:parentActivityName=".service.activity.SignUpPrevious">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SignUpPrevious" />
@@ -83,7 +83,7 @@
         </activity>
         <activity
             android:name=".service.activity.MainActivity"
-            android:label="Medico" >
+            android:label="Medico">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -102,7 +102,7 @@
         <activity
             android:name=".service.activity.AdvanceSearchDoc"
             android:label="@string/title_activity_search_doctor"
-            android:parentActivityName=".service.activity.SearchDoctorActivity" >
+            android:parentActivityName=".service.activity.SearchDoctorActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDoctorActivity" />
@@ -113,7 +113,7 @@
         <activity
             android:name=".service.activity.DoctorDetails"
             android:label="@string/title_activity_doctor_details"
-            android:parentActivityName=".service.activity.SearchDocResultList" >
+            android:parentActivityName=".service.activity.SearchDocResultList">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDocResultList" />
@@ -121,15 +121,15 @@
         <activity
             android:name=".service.activity.SearchDocResultList"
             android:label="@string/title_activity_search_doc_result_list"
-            android:parentActivityName=".service.activity.SearchDoctorActivity" >
+            android:parentActivityName=".service.activity.SearchDoctorActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDoctorActivity" />
         </activity>
+
         <activity
             android:name=".activity.HomeScreenActivity"
-            android:label="@string/title_activity_home_screen" >
-
+            android:label="@string/title_activity_home_screen">
             <!--
                         <intent-filter>
                             <action android:name="android.intent.action.MAIN" />
@@ -141,18 +141,18 @@
         <activity
             android:name=".service.activity.BookAppointment"
             android:label="@string/title_activity_book_appointment"
-            android:parentActivityName=".service.activity.DoctorDetails" >
+            android:parentActivityName=".service.activity.DoctorDetails">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.DoctorDetails" />
         </activity>
         <activity
             android:name=".service.activity.TimeSlots"
-            android:label="@string/title_activity_time_slots" />
+            android:label="@string/title_activity_time_slots"></activity>
         <activity
             android:name=".service.activity.SignUpPrevious"
             android:label="@string/title_activity_sign_up_previous"
-            android:parentActivityName=".service.activity.LoginActivity" >
+            android:parentActivityName=".service.activity.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.LoginActivity" />
@@ -163,14 +163,6 @@
                             <category android:name="android.intent.category.LAUNCHER" />
                         </intent-filter>
             -->
-        </activity>
-        <activity
-            android:name=".service.activity.PatientHistoryActivity"
-            android:label="@string/title_activity_patient_history" >
-        </activity>
-        <activity
-            android:name="com.extenprise.medico.AppointmentPastData"
-            android:label="@string/title_activity_appointment_past_data" >
         </activity>
     </application>
 

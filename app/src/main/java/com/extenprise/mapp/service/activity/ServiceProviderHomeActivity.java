@@ -1,9 +1,11 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
@@ -22,6 +24,11 @@ public class ServiceProviderHomeActivity extends Activity {
                 LoginHolder.servLoginRef.getlName();
 
         welcomeView.setText(label);
+    }
+
+    public void viewAppointment(View view) {
+        Intent intent = new Intent(this, ViewAppointmentListActivity.class);
+        startActivity(intent);
     }
 
     @Override
