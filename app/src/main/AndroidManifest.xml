@@ -68,10 +68,10 @@
         <activity
             android:name=".service.activity.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".service.activity.SignUpPrevious">
+            android:parentActivityName=".service.activity.SignUpPreviousActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.SignUpPrevious" />
+                android:value=".service.activity.SignUpPreviousActivity" />
 
             <!--
             <intent-filter>
@@ -100,7 +100,7 @@
             android:name=".service.activity.ServiceProviderHomeActivity"
             android:label="@string/title_activity_service_provider_home" />
         <activity
-            android:name=".service.activity.AdvanceSearchDoc"
+            android:name=".service.activity.AdvanceSearchDocActivity"
             android:label="@string/title_activity_search_doctor"
             android:parentActivityName=".service.activity.SearchDoctorActivity">
             <meta-data
@@ -111,15 +111,15 @@
             android:name=".service.activity.SearchResult"
             android:label="@string/title_activity_search_result" />
         <activity
-            android:name=".service.activity.DoctorDetails"
+            android:name=".service.activity.DoctorDetailsActivity"
             android:label="@string/title_activity_doctor_details"
-            android:parentActivityName=".service.activity.SearchDocResultList">
+            android:parentActivityName=".service.activity.SearchDocResultListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.SearchDocResultList" />
+                android:value=".service.activity.SearchDocResultListActivity" />
         </activity>
         <activity
-            android:name=".service.activity.SearchDocResultList"
+            android:name=".service.activity.SearchDocResultListActivity"
             android:label="@string/title_activity_search_doc_result_list"
             android:parentActivityName=".service.activity.SearchDoctorActivity">
             <meta-data
@@ -139,18 +139,18 @@
             -->
         </activity>
         <activity
-            android:name=".service.activity.BookAppointment"
+            android:name=".service.activity.BookAppointmentActivity"
             android:label="@string/title_activity_book_appointment"
-            android:parentActivityName=".service.activity.DoctorDetails">
+            android:parentActivityName=".service.activity.DoctorDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.DoctorDetails" />
+                android:value=".service.activity.DoctorDetailsActivity" />
         </activity>
         <activity
             android:name=".service.activity.TimeSlots"
             android:label="@string/title_activity_time_slots"></activity>
         <activity
-            android:name=".service.activity.SignUpPrevious"
+            android:name=".service.activity.SignUpPreviousActivity"
             android:label="@string/title_activity_sign_up_previous"
             android:parentActivityName=".service.activity.LoginActivity">
             <meta-data
