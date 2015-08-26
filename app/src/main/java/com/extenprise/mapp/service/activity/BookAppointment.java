@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -76,33 +77,38 @@ public class BookAppointment extends Activity {
         mTextViewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
         mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
 
-
-        ArrayList<String> liste = new ArrayList<String>();
-
-        for(int i=LoginHolder.spsspt.getStartTime(); i<=LoginHolder.spsspt.getEndTime();) {
-            String from = UIUtility.getTimeString(i);
-            liste.add(from);
-            i=i+30;
-        }
-
-        //String[] values = new String[] { spsspt.getStartTime() + " to " + spsspt.getEndTime() };
-
-        //Collections.addAll(liste, values);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_time_slots, liste);
-
-        mListTimeSlots.setAdapter(adapter);
-
         setCurrentDateOnView();
         addListenerOnButton();
 
     }
 
+    private boolean isTimeSlotsBooked(String selectedItem) {
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV
+        };
+        String selection = MappContract.Appointment.COLUMN_NAME_FROM_TIME + "=? and " +
+                MappContract.Appointment.COLUMN_NAME_DATE + "=?";
+        String[] selectionArgs = {
+                "" + UIUtility.getMinutes(selectedItem),
+                mTvDisplayDate.getText().toString()
+        };
+        Cursor c = db.query(MappContract.Appointment.TABLE_NAME,
+                projection, selection, selectionArgs, null, null, null);
+        int count = c.getCount();
+        c.close();
+        return (count > 0);
+    }
+
     public void bookAppointment(View view) {
         //UIUtility.showProgress(this, mFormView, mProgressView, true);
-
-        SaveAppointData task = new SaveAppointData(this);
-        task.execute((Void) null);
+        if(!isTimeSlotsBooked(selectedItem)) {
+            SaveAppointData task = new SaveAppointData(this);
+            task.execute((Void) null);
+        } else {
+            UIUtility.showAlert(this, "Sorry!", "The time slot is already booked.");
+        }
     }
 
     public void setTimeSlots(Calendar cal) {
@@ -115,19 +121,14 @@ public class BookAppointment extends Activity {
             sampleAdapter.notifyDataSetChanged();
             return;
         }
-
-
         ArrayList<String> liste = new ArrayList<String>();
-
         for(int i=LoginHolder.spsspt.getStartTime(); i<=LoginHolder.spsspt.getEndTime(); i++) {
             String from = UIUtility.getTimeString(i);
-            liste.add(from);
+            if(!isTimeSlotsBooked(from)) {
+                liste.add(from);
+            }
             i=i+30;
         }
-
-        //String[] values = new String[] { spsspt.getStartTime() + " to " + spsspt.getEndTime() };
-
-        //Collections.addAll(liste, values);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.activity_time_slots, liste);
 
@@ -140,13 +141,10 @@ public class BookAppointment extends Activity {
                 {
                     parent.getChildAt(a).setBackgroundColor(Color.TRANSPARENT);
                 }
-                view.setBackgroundColor(Color.GREEN);
-
                 selectedItem = mListTimeSlots.getItemAtPosition(position).toString().trim();
-
+                view.setBackgroundColor(Color.GREEN);
             }
         });
-
         mListTimeSlots.setAdapter(adapter);
     }
 
@@ -173,21 +171,14 @@ public class BookAppointment extends Activity {
     }
 
     public void addListenerOnButton() {
-
         mBtnChangeDate = (Button) findViewById(R.id.btnChangeDate);
-
         mBtnChangeDate.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 showDialog(DATE_DIALOG_ID);
-
-
             }
 
         });
-
     }
 
     @Override
@@ -263,17 +254,10 @@ public class BookAppointment extends Activity {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            /*Date date = null;
-            try {
-                date = new SimpleDateFormat("dd.MM.yyyy").parse(mTvDisplayDate.toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }*/
-
             ContentValues values = new ContentValues();
             values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME, UIUtility.getMinutes(selectedItem));
-            //values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, spsspt.getEndTime());
-            values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTvDisplayDate.toString());
+            values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, UIUtility.getMinutes(selectedItem) + 30);
+            values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTvDisplayDate.getText().toString());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServProvHasService().getService().getName());
             values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getServProvHasService().getService().getSpeciality());
@@ -286,15 +270,12 @@ public class BookAppointment extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
-                /*Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
-                startActivity(intent);*/
-                return;
+                
+                //return;
             }
         }
-
         @Override
         protected void onCancelled() {
         }
-
     }
 }
