@@ -59,4 +59,7 @@
     <string name="title_activity_time_slots">TimeSlots</string>
     <string name="title_activity_sign_up_previous">SignUpPrevious</string>
     <string name="title_activity_home_screen">Home Screen</string>
+    <string name="title_activity_view_appointment">ViewAppointment</string>
+    <string name="title_activity_view_appointment_list">ViewAppointmentList</string>
+    <string name="title_activity_appointment_details">AppointmentDetails</string>
 </resources>

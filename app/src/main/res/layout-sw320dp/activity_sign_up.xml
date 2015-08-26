@@ -25,14 +25,14 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:id="@+id/uploadimageview"
-                android:layout_marginTop="0dp"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginTop="10dp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/uploadimage"
                 android:text="Upload Image"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="15dp"
                 android:textSize="15sp"
                 android:layout_below="@+id/uploadimageview"
                 android:layout_marginTop="5dp"
@@ -44,34 +44,38 @@
                 android:layout_height="1dp"
                 android:background="#009f6b"
                 android:layout_marginLeft="22dp"
-                android:layout_below="@+id/uploadimage"/>
+                android:layout_below="@+id/uploadimage"
+                android:visibility="invisible"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/editTextFName"
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/editTextCnfPasswd"
                     android:layout_below="@+id/editTextCnfPasswd"
                     android:ems="10"
                     android:hint="First Name *"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textColor="@color/black"/>
 
                 <EditText
                     android:id="@+id/editTextLName"
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_alignRight="@+id/editTextCnfPasswd"
                     android:layout_below="@+id/editTextCnfPasswd"
                     android:layout_toRightOf="@+id/editTextFName"
                     android:ems="10"
                     android:hint="Last Name *"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:layout_marginLeft="12dp"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -81,7 +85,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Email Id *"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"/>
 
             <EditText
                 android:id="@+id/editTextPasswd"
@@ -91,7 +97,9 @@
                 android:ems="10"
                 android:hint="Password *"
                 android:inputType="textPassword"
-                android:text="" />
+                android:text=""
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"/>
 
             <EditText
                 android:id="@+id/editTextCnfPasswd"
@@ -101,7 +109,9 @@
                 android:ems="10"
                 android:hint="Confirm Password *"
                 android:inputType="textPassword"
-                android:text="" />
+                android:text=""
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"/>
 
             <Button
                 android:id="@+id/Register"
@@ -109,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextCountry"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/button"
                 android:onClick="showAddWorkPlaceScreen"
                 android:text="@string/next"
