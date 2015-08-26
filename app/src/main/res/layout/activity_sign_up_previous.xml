@@ -22,30 +22,32 @@
             android:id="@+id/imageViewMlogo"
             android:layout_width="250dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="60dp"
+
+            android:layout_marginTop="40dp"
             android:layout_weight="0.44"
             android:background="@drawable/background"
-            android:src="@drawable/medico_logo_new" />
+            android:src="@drawable/medico_logo_new"
+            android:layout_centerHorizontal="true"/>
 
         <Button
             android:id="@+id/signUpButton"
             style="?android:textAppearanceSmall"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="60dp"
+
+            android:layout_marginTop="50dp"
             android:background="@drawable/button"
             android:text="Sign Up (Only Patients)"
             android:textColor="#fff"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_below="@+id/imageViewMlogo"/>
+            android:layout_below="@+id/imageViewMlogo"
+            android:layout_centerHorizontal="true"/>
 
         <View
             android:id="@+id/lnView"
             android:layout_width="fill_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.4dp"
             android:background="@android:color/black"
             android:layout_marginTop="50dp"
             android:layout_below="@+id/signUpButton"/>
@@ -58,11 +60,12 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="60dp"
             android:background="#fff"
-            android:text="Are you a Medical Service Provider like?"
+            android:text="Are you a Medical Service Provider?"
             android:textColor="#0000ff"
             android:textSize="18sp"
             android:visibility="visible"
-            android:layout_below="@+id/lnView"/>
+            android:layout_below="@+id/lnView"
+            android:layout_centerHorizontal="true"/>
 
         <ImageView
             android:id="@+id/medicalStoreImage"
@@ -79,7 +82,7 @@
             android:layout_below="@id/medicalStoreImage"
             android:layout_marginTop="0dp"
             android:text="Medical Store"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:textColor="#000"/>
 
 
@@ -121,8 +124,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/medicalStoreImage"
             android:layout_marginTop="1dp"
-            android:text="Diagnostic\nCenter"
-            android:layout_marginLeft="250dp"
+            android:text="DiagnosticCenter"
+            android:layout_marginLeft="240dp"
             android:textColor="#000"
             />
 
