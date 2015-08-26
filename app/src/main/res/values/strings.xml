@@ -62,4 +62,6 @@
     <string name="title_activity_view_appointment">ViewAppointment</string>
     <string name="title_activity_view_appointment_list">ViewAppointmentList</string>
     <string name="title_activity_appointment_details">AppointmentDetails</string>
+    <string name="title_activity_patient_history">PatientHistoryActivity</string>
+    <string name="title_activity_appointment_past_data">AppointmentPastData</string>
 </resources>

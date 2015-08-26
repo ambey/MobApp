@@ -16,7 +16,7 @@
         android:id="@+id/appointmentDetailsView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AppointMent Details"
+        android:text="Appointment Details"
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_marginTop="10dp"/>
@@ -41,6 +41,7 @@
         />
 
     <TextView
+        android:id="@+id/textViewPatientWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Weight"
@@ -52,7 +53,61 @@
         android:layout_marginLeft="50dp"
         />
 
-        
+        <TextView
+            android:id="@+id/pastAppointmentView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewPatientAge"
+            android:text="Past Appointments"
+            android:layout_marginTop="40dp"
+            android:textSize="18sp"
+            />
+        <ListView
+            android:id="@+id/pastAppointmentListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/pastAppointmentView"
+            android:background="@drawable/list"/>
+        <Button
+            android:id="@+id/viewMoreButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="View More"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_below="@+id/pastAppointmentListView"
+            android:layout_marginTop="30dp"
+            android:layout_alignRight="@+id/pastAppointmentListView"
+             />
+
+        <Button
+            android:id="@+id/rXButton"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="Rx Now"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_below="@+id/viewMoreButton"
+            android:layout_marginTop="80dp"
+            android:layout_alignLeft="@+id/pastAppointmentListView"
+            />
+
+        <Button
+            android:id="@+id/uploadScanRxButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="Upload Scanned Rx"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_below="@+id/viewMoreButton"
+            android:layout_marginTop="80dp"
+            android:layout_alignRight="@+id/pastAppointmentListView"
+            />
+
 </RelativeLayout>
     </ScrollView>
 
