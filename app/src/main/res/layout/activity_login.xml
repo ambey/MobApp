@@ -52,7 +52,8 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/imageViewMlogo"/>
+                android:layout_below="@+id/imageViewMlogo"
+                android:textColor="@color/black"/>
 
             <EditText
                 android:id="@+id/password"
@@ -66,12 +67,13 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/mobileNumber"/>
+                android:layout_below="@+id/mobileNumber"
+                android:textColor="@color/black"/>
 
             <CheckBox
                 android:id="@+id/rememberMe"
                 android:layout_width="160dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/password"
 
                 android:layout_marginTop="20dp"
