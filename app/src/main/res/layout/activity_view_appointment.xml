@@ -15,49 +15,52 @@
         android:textSize="20sp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Age :"
-        android:id="@+id/patientLNameTextView"
-        android:layout_marginTop="10dp"
-        android:textSize="18sp"
-        android:layout_below="@+id/patientNameTextView"/>
+
 
     <TextView
         android:id="@+id/patientAgeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="age "
+        android:hint="Age "
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="50dp"
         android:textSize="18sp"
         android:layout_below="@+id/patientNameTextView"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Weight :"
-        android:layout_marginTop="10dp"
-        android:textSize="18sp"
         android:layout_toEndOf="@+id/patientAgeTextView"
         android:layout_toRightOf="@+id/patientAgeTextView"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="10dp"
+        android:text="year"
         android:layout_below="@+id/patientNameTextView"
-        android:id="@+id/textView4" />
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"/>
+
+
 
     <TextView
         android:id="@+id/patientWeightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="weight"
+        android:hint="Weight"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="130dp"
+        android:layout_marginLeft="100dp"
         android:textSize="18sp"
         android:layout_toEndOf="@+id/patientAgeTextView"
         android:layout_toRightOf="@+id/patientAgeTextView"
         android:layout_below="@+id/patientNameTextView"
        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/patientWeightTextView"
+        android:layout_toRightOf="@+id/patientWeightTextView"
+        android:layout_marginLeft="10dp"
+        android:text="kg"
+        android:layout_below="@+id/patientNameTextView"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/textView3"
@@ -66,9 +69,33 @@
         android:hint="Patient Name"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_above="@+id/textView4"
+        android:layout_marginTop="20dp"
         android:layout_toRightOf="@+id/patientNameTextView"
-        android:layout_toEndOf="@+id/patientNameTextView" />
+        android:layout_toEndOf="@+id/patientNameTextView"
+        android:layout_marginLeft="10dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewPatientAppointmentTime"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/patientWeightTextView"
+        android:layout_toEndOf="@+id/patientWeightTextView"
+        android:hint="Time"
+        android:textSize="18sp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/patientNameTextView"
+        />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/textViewPatientAppointmentTime"
+        android:layout_toEndOf="@+id/textViewPatientAppointmentTime"
+        android:hint="AM/PM"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/patientNameTextView"
+        />
 </RelativeLayout>
