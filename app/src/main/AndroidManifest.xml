@@ -45,11 +45,11 @@
         <activity
             android:name=".service.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".service.activity.MainActivity"
+            android:parentActivityName=".service.activity.SearchDoctorActivity"
             android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.MainActivity" />
+                android:value=".service.activity.SearchDoctorActivity" />
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,11 +60,18 @@
         </activity>
         <activity
             android:name=".service.activity.SearchDoctorActivity"
-            android:parentActivityName=".service.activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.MainActivity" />
+            android:label="Medico">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+
+
+
+
         <activity
             android:name=".service.activity.SignUpActivity"
             android:label="@string/title_activity_sign_up"
@@ -84,11 +91,6 @@
         <activity
             android:name=".service.activity.MainActivity"
             android:label="Medico">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".service.activity.AddSpecialityActivity"

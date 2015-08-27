@@ -115,7 +115,23 @@ public class AdvanceSearchDocActivity extends Activity {
         tpd.show();
     }
 
+    public void dayPicker(View view, final Button button) {
+        // Process to get Current Time
+        final Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_WEEK);
+
+        /*String[] array = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
+        multiSelectionSpinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner);
+        multiSelectionSpinner.setItems(array);
+        multiSelectionSpinner.setSelection(new int[]{2, 6});*/
+
+
+
+    }
+
     public void searchDr(View view) {
+
+        View focusView = null;
 
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
@@ -128,6 +144,16 @@ public class AdvanceSearchDocActivity extends Activity {
         String startTime = mButtonStartTime.getText().toString();
         String endTime = mButttonEndTime.getText().toString();
         String availDay = mAvaildays.getSelectedItem().toString();
+
+        if (!(endTime.equals("Start Time")) &&
+                !(startTime.equals("End Time")) ) {
+            if (UIUtility.getMinutes(startTime) >= UIUtility.getMinutes(endTime)) {
+                mButttonEndTime.setError("End Time Can't be similar or less than to Start Time.");
+                focusView = mButttonEndTime;
+                focusView.requestFocus();
+                return;
+            }
+        }
 
         if(!name.equals("")) {
             if(name.contains(",")) {

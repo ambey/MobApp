@@ -42,7 +42,7 @@ public abstract class SearchAppointment {
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_PHONE + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_WEIGHT + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_ALT_PHONE + ", " +
-                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_EMAIL_ID + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_EMAIL_ID +
                 " from " +
                 MappContract.Appointment.TABLE_NAME + ", " +
                 MappContract.Customer.TABLE_NAME + " where " +
