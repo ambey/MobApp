@@ -64,4 +64,19 @@
     <string name="title_activity_appointment_details">AppointmentDetails</string>
     <string name="title_activity_patient_history">PatientHistoryActivity</string>
     <string name="title_activity_appointment_past_data">AppointmentPastData</string>
+    <string name="view_more">View More</string>
+    <string name="rx_now">Rx Now</string>
+    <string name="upload_rx">Upload Scanned Rx</string>
+    <string name="date">Date</string>
+    <string name="view_rx">View Rx</string>
+    <string name="last_appt">Last Appointment</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="time">Time</string>
+    <string name="time_desc">AM/PM</string>
+    <string name="age">Age</string>
+    <string name="year">Years</string>
+    <string name="weight">Weight</string>
+    <string name="kg">Kg</string>
 </resources>

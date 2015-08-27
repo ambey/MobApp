@@ -40,7 +40,7 @@
                 android:layout_below="@id/viewServiceLbl"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/spinner"
-                android:entries="@array/service"
+                android:entries="@array/speciality"
                 android:inputType="textAutoComplete" />
 
             <TextView

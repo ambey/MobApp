@@ -125,7 +125,7 @@ public class ViewAppointmentListActivity extends Activity {
                 MappContract.Customer.COLUMN_NAME_WEIGHT,
         };
         int[] viewIds = new int[] {
-                R.id.patientNameTextView,
+                R.id.patientFNameTextView,
                 R.id.patientLNameTextView,
                 R.id.patientAgeTextView,
                 R.id.patientWeightTextView,

@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.extenprise.mapp.R;
 
 
-public class AppointmentDetails extends Activity {
+public class AppointmentDetailsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

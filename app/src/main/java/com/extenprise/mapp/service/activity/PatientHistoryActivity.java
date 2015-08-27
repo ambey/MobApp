@@ -2,14 +2,13 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.extenprise.mapp.R;
 
 
-public class ViewAppointmentList extends Activity {
+public class PatientHistoryActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
