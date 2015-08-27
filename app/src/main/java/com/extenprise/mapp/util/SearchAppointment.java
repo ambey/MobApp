@@ -28,10 +28,21 @@ public abstract class SearchAppointment {
     private static String getQuery() {
         String query = "select " +
                     MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment._ID + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_DATE + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_FROM_TIME + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_TO_TIME + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
+
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_FNAME + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_LNAME + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_AGE + ", " +
-                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_WEIGHT +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_DOB + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_GENDER + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_LOCATION + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_PHONE + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_WEIGHT + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_ALT_PHONE + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_EMAIL_ID + ", " +
                 " from " +
                 MappContract.Appointment.TABLE_NAME + ", " +
                 MappContract.Customer.TABLE_NAME + " where " +
@@ -46,5 +57,4 @@ public abstract class SearchAppointment {
 
         return query;
     }
-
 }

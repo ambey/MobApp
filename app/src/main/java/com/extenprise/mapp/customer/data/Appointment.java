@@ -3,10 +3,10 @@ package com.extenprise.mapp.customer.data;
 //import com.extenprise.mapp.customer.data.CustomerHistoryData;
 //import com.extenprise.mapp.common.Appointment;
 
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.ServicePoint;
+import com.extenprise.mapp.service.data.*;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 public class Appointment {
 

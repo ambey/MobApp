@@ -1,7 +1,6 @@
 package com.extenprise.mapp.customer.data;
 
-import java.sql.Date;
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class Customer {
@@ -14,11 +13,20 @@ public class Customer {
     private String emailId;
     private String passwd;
     private String gender;
+    private int age;
     private String location;
     private Date dob;
     private String city;
     private String state;
     private String country;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public String getfName() {
         return fName;

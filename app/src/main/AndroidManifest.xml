@@ -148,7 +148,7 @@
         </activity>
         <activity
             android:name=".service.activity.TimeSlots"
-            android:label="@string/title_activity_time_slots"/>
+            android:label="@string/title_activity_time_slots"></activity>
         <activity
             android:name=".service.activity.SignUpPreviousActivity"
             android:label="@string/title_activity_sign_up_previous"
@@ -172,7 +172,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.ServiceProviderHomeActivity" />
         </activity>
-
+        <activity
+            android:name=".service.activity.ViewAppointment"
+            android:label="@string/title_activity_view_appointment"></activity>
     </application>
 
 </manifest>

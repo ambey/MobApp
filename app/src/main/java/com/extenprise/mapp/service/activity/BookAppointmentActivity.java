@@ -201,8 +201,8 @@ public class BookAppointmentActivity extends Activity {
             day = selectedDay;
 
             // set selected date into textview
-            mTvDisplayDate.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
+            mTvDisplayDate.setText(new StringBuilder().append(day)
+                    .append("-").append(month + 1).append("-").append(year)
                     .append(" "));
 
             // set selected date into datepicker also

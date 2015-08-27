@@ -4,16 +4,34 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Appointment;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class AppointmentDetailsActivity extends Activity {
+
+    TextView mDateTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_details);
+
+        mDateTextView = (TextView)findViewById(R.id.dateTextView);
+
+        Appointment appointment = LoginHolder.appointment;
+
+        DateFormat df = new SimpleDateFormat("dd/MM/yy");
+        Date dateOfAppointment = appointment.getDateOfAppointment();
+        mDateTextView.setText(df.format(dateOfAppointment));
     }
 
     @Override

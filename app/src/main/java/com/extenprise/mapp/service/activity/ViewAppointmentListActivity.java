@@ -17,11 +17,18 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Appointment;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 public class ViewAppointmentListActivity extends Activity {
 
@@ -74,8 +81,8 @@ public class ViewAppointmentListActivity extends Activity {
             day = selectedDay;
 
             // set selected date into textview
-            mAppointmentDateTextView.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
+            mAppointmentDateTextView.setText(new StringBuilder().append(day)
+                    .append("-").append(month+1).append("-").append(year)
                     .append(" "));
 
             // set selected date into datepicker also
@@ -123,12 +130,14 @@ public class ViewAppointmentListActivity extends Activity {
                 MappContract.Customer.COLUMN_NAME_LNAME,
                 MappContract.Customer.COLUMN_NAME_AGE,
                 MappContract.Customer.COLUMN_NAME_WEIGHT,
+                MappContract.Appointment.COLUMN_NAME_FROM_TIME
         };
         int[] viewIds = new int[] {
                 R.id.patientFNameTextView,
                 R.id.patientLNameTextView,
                 R.id.patientAgeTextView,
                 R.id.patientWeightTextView,
+                R.id.timeDescTextView
         };
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.activity_view_appointment,
@@ -142,6 +151,40 @@ public class ViewAppointmentListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 cursor.moveToPosition(position);
+
+                Appointment appointment = new Appointment();
+                Customer customer = new Customer();
+
+                customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
+                customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
+                customer.setEmailId(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_EMAIL_ID)));
+                customer.setGender(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_GENDER)));
+                customer.setLocation(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LOCATION)));
+                customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_PHONE)));
+                customer.setAltPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_ALT_PHONE)));
+                customer.setAge(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE))));
+
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+                try {
+                    Date dob = formatter.parse(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_DOB)));
+                    if(dob != null) {
+                        customer.setDob(dob);
+                    }
+
+                    Date doAppnt = formatter.parse(mAppointmentDateTextView.getText().toString());
+                    if(doAppnt != null) {
+                        appointment.setDateOfAppointment(doAppnt);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                appointment.setCustomer(customer);
+                appointment.setServPointType(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE)));
+                appointment.setFromTime(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME))));
+                appointment.setToTime(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_TO_TIME))));
+
+                LoginHolder.appointment = appointment;
                 Intent i = new Intent(getApplicationContext(), AppointmentDetailsActivity.class);
                 startActivity(i);
             }
