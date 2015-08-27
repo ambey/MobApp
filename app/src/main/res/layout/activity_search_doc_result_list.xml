@@ -7,10 +7,49 @@
     android:descendantFocusability="blocksDescendants"
     tools:context="com.extenprise.mapp.service.activity.SearchDocResultListActivity">
 
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/gcircle"
+        android:id="@+id/imageViewAvailable"/>
+    <TextView
+        android:id="@+id/textViewAvailable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available Today"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="30dp"/>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/button"
+        android:id="@+id/imageViewUnAvailable"
+        android:layout_above="@+id/docListView"
+        android:layout_toLeftOf="@+id/textViewUnAvailable"
+        android:layout_toStartOf="@+id/textViewUnAvailable" />
+    <TextView
+        android:id="@+id/textViewUnAvailable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unavailable Today"
+        android:layout_alignTop="@+id/textViewAvailable"
+        android:layout_alignRight="@+id/docListView"
+        android:layout_alignEnd="@+id/docListView" />
+    <View
+        android:id="@+id/lnView"
+        android:layout_width="fill_parent"
+        android:layout_height="0.4dp"
+        android:background="@android:color/black"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/imageViewAvailable"/>
+
     <ListView
+        android:layout_below="@+id/imageViewAvailable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/docListView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

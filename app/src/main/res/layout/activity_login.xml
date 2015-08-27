@@ -38,21 +38,30 @@
                 android:layout_height="100dp"
 
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="0.44"
                 android:background="@drawable/background"
                 android:src="@drawable/med_logo_final" />
+            
+            <Spinner android:entries="@array/loginOption"
+                android:id="@+id/spinLoginOption"
+                android:background="@drawable/spinner"
+                android:layout_width="170dp"
+                android:layout_height="35dp"
+                android:prompt="@string/weekly_off"
+                android:layout_below="@+id/imageViewMlogo"
+                android:layout_marginTop="20dp"/>
 
             <AutoCompleteTextView
                 android:id="@+id/mobileNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:hint="Registered Mobile Number"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/imageViewMlogo"/>
+                android:layout_below="@+id/spinLoginOption"/>
 
             <EditText
                 android:id="@+id/password"

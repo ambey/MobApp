@@ -7,53 +7,147 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/background"
-    tools:context=".ServiceProviderHomeActivity">
+    tools:context=".ServiceProviderHomeActivity"
+    >
 
     <TextView
         android:id="@+id/viewWelcomeLbl"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome"
+        android:text="Hello Dr."
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_marginLeft="100dp"/>
 
-    <ScrollView
-        android:layout_width="fill_parent"
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:src="@drawable/dr"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp">
+        android:text="Last Modified:"
+        android:layout_below="@+id/viewWelcomeLbl"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="40dp"/>
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/textView1"
+        android:layout_toRightOf="@+id/textView1"
+        android:layout_below="@+id/viewWelcomeLbl"
+        android:hint="@string/date"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="5dp"/>
 
-        <LinearLayout
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/textViewDate"
+        android:layout_toRightOf="@+id/textViewDate"
+        android:layout_below="@+id/viewWelcomeLbl"
+        android:hint="@string/time"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="5dp"/>
+
+    <View
+        android:id="@+id/linenView"
+        android:layout_width="fill_parent"
+        android:layout_height="0.4dp"
+        android:background="@android:color/black"
+        android:layout_marginTop="120dp"
+        />
+
+
+            <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_below="@+id/linenView"
+            android:layout_marginTop="40dp"
+            >
+
 
             <Button
                 android:id="@+id/buttonViewAppoint"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/button"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/square_round_button"
                 android:enabled="true"
                 android:text="@string/view_appoint"
                 android:textColor="#fff"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:onClick="viewAppointment"/>
+                android:onClick="viewAppointment"
+                />
 
             <Button
                 android:id="@+id/buttonViewReport"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/button"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:background="@drawable/square_round_button"
                 android:enabled="false"
-                android:text="@string/view_report"
+                android:text="@string/viewpatientreport"
                 android:textColor="#fff"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="25dp"
+                />
+
+            <View
+                android:id="@+id/linenView1"
+                android:layout_width="fill_parent"
+                android:layout_height="0.4dp"
+                android:background="@android:color/black"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/buttonViewAppoint"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                />
+
+            <Button
+                android:id="@+id/buttonViewRx"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/square_round_button"
+                android:enabled="true"
+                android:text="@string/viewpatientrx"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_below="@+id/linenView1"
+                android:layout_marginTop="20dp"/>
+
+            <Button
+                android:id="@+id/buttonView4"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:background="@drawable/square_round_button"
+                android:enabled="true"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_alignTop="@+id/buttonViewRx"
+                android:layout_alignRight="@+id/linenView1"
+                android:layout_alignEnd="@+id/linenView1" />
+
+                <View
+                    android:id="@+id/linenView2"
+                    android:layout_width="0.4dp"
+                    android:layout_height="200dp"
+                    android:background="@android:color/black"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
 
-        </LinearLayout>
-    </ScrollView>
+        </RelativeLayout>
+
 
 </RelativeLayout>

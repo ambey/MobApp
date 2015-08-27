@@ -1,98 +1,114 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.service.activity.AppointmentDetailsActivity">
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
-        android:id="@+id/appointmentDetailsTextView"
+        android:id="@+id/appointmentDetailsView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="Appointment Details"
+        android:textStyle="bold"
         android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <include
-        android:id="@+id/appointmentLayout"
-        layout="@layout/activity_view_appointment"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/appointmentDetailsTextView"
-        android:layout_marginTop="10dp" />
-
+        android:layout_marginTop="10dp"/>
     <TextView
-        android:id="@+id/pastAppointmentTextView"
+        android:id="@+id/textViewPatientName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appointmentLayout"
-        android:layout_marginTop="40dp"
-        android:text="@string/last_appt"
-        android:textSize="18sp" />
+        android:hint="Patient Name"
+        android:layout_below="@+id/appointmentDetailsView"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
 
-    <LinearLayout
-        android:id="@+id/pastAppointmentLayout"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/textViewPatientAge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pastAppointmentTextView"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp">
+        android:hint="Age"
+        android:layout_below="@+id/textViewPatientName"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/textViewPatientWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Weight"
+        android:layout_below="@+id/textViewPatientName"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/textViewPatientAge"
+        android:layout_toRightOf="@+id/textViewPatientAge"
+        android:layout_marginLeft="50dp"
+        />
 
         <TextView
-            android:id="@+id/dateTextView"
+            android:id="@+id/pastAppointmentView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date" />
+            android:layout_below="@+id/textViewPatientAge"
+            android:text="Past Appointments"
+            android:layout_marginTop="40dp"
+            android:textSize="18sp"
+            />
+        <ListView
+            android:id="@+id/pastAppointmentListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/pastAppointmentView"
+            android:background="@drawable/list"/>
+        <Button
+            android:id="@+id/viewMoreButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="View More"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_below="@+id/pastAppointmentListView"
+            android:layout_marginTop="30dp"
+            android:layout_alignRight="@+id/pastAppointmentListView"
+             />
 
         <Button
-            android:id="@+id/viewRxButton"
-            style="@style/LinkButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/rXButton"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/view_rx" />
+            android:background="@drawable/button"
+            android:text="Rx Now"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_below="@+id/viewMoreButton"
+            android:layout_marginTop="80dp"
+            android:layout_alignLeft="@+id/pastAppointmentListView"
+            />
 
         <Button
-            android:id="@+id/viewReportButton"
-            style="@style/LinkButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/uploadScanRxButton"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/view_report" />
-    </LinearLayout>
+            android:background="@drawable/button"
+            android:text="Upload Scanned Rx"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_below="@+id/viewMoreButton"
+            android:layout_marginTop="80dp"
+            android:layout_alignRight="@+id/pastAppointmentListView"
+            />
 
-    <Button
-        android:id="@+id/viewMoreButton"
-        style="@style/RectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@id/pastAppointmentLayout"
-        android:layout_below="@id/pastAppointmentLayout"
-        android:layout_marginTop="5dp"
-        android:text="@string/view_more" />
-
-    <Button
-        android:id="@+id/rXButton"
-        style="@style/RoundButton"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/pastAppointmentLayout"
-        android:layout_alignParentBottom="true"
-        android:text="@string/rx_now" />
-
-    <Button
-        android:id="@+id/uploadScanRxButton"
-        style="@style/RoundButton"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/pastAppointmentLayout"
-        android:layout_alignTop="@id/rXButton"
-        android:layout_below="@+id/viewMoreButton"
-        android:background="@drawable/button"
-        android:text="@string/upload_rx" />
+</RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
