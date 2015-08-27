@@ -38,7 +38,7 @@ public class SignUpActivity extends Activity {
 
     private EditText mFirstName;
     private EditText mLastName;
-    private EditText mEmailview;
+    private EditText mCellphoneview;
     private EditText mPasswdView;
     private EditText mCnfPasswdView;
     private ImageView mImgView;
@@ -66,7 +66,7 @@ public class SignUpActivity extends Activity {
 
         mFirstName = (EditText) findViewById(R.id.editTextFName);
         mLastName = (EditText) findViewById(R.id.editTextLName);
-        mEmailview = (EditText) findViewById(R.id.editTextEmail);
+        mCellphoneview = (EditText) findViewById(R.id.editTextCellphone);
         mPasswdView = (EditText) findViewById(R.id.editTextPasswd);
         mCnfPasswdView = (EditText) findViewById(R.id.editTextCnfPasswd);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
@@ -109,7 +109,7 @@ public class SignUpActivity extends Activity {
         ServiceProvider sp = new ServiceProvider();
         sp.setfName(mFirstName.getText().toString());
         sp.setlName(mLastName.getText().toString());
-        sp.setEmailId(mEmailview.getText().toString());
+        sp.setPhone(mCellphoneview.getText().toString());
         sp.setPasswd(mPasswdView.getText().toString());
 
         LoginHolder.servLoginRef = sp;
@@ -148,14 +148,14 @@ public class SignUpActivity extends Activity {
             cancel = true;
         }
 
-        String email = mEmailview.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mEmailview.setError(getString(R.string.error_field_required));
-            focusView = mEmailview;
+        String phone = mCellphoneview.getText().toString();
+        if (TextUtils.isEmpty(phone)) {
+            mCellphoneview.setError(getString(R.string.error_field_required));
+            focusView = mCellphoneview;
             cancel = true;
-        } else if (!Validator.isEmailValid(email)) {
-            mEmailview.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailview;
+        } else if (!Validator.isPhoneValid(phone)) {
+            mCellphoneview.setError(getString(R.string.error_invalid_phone));
+            focusView = mCellphoneview;
             cancel = true;
         }
         if (TextUtils.isEmpty(mLastName.getText().toString())) {
@@ -169,9 +169,9 @@ public class SignUpActivity extends Activity {
             cancel = true;
         }
 
-        if(isEmailIdRegistered(email)) {
-            mEmailview.setError(getString(R.string.error_email_registered));
-            focusView = mEmailview;
+        if(isPhoneRegistered(phone)) {
+            mCellphoneview.setError(getString(R.string.error_phone_registered));
+            focusView = mCellphoneview;
             cancel = true;
         }
 
@@ -182,18 +182,18 @@ public class SignUpActivity extends Activity {
         return true;
     }
 
-    private boolean isEmailIdRegistered(String emailId) {
+    private boolean isPhoneRegistered(String phone) {
         MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID
+                MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE
         };
 
-        String selection = MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID + "=?";
+        String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=?";
 
         String[] selectionArgs = {
-                emailId
+                phone
         };
         Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
                 projection, selection, selectionArgs, null, null, null);
@@ -203,7 +203,7 @@ public class SignUpActivity extends Activity {
         return (count > 0);
     }
 
-    private void captureImage(View v) {
+    public void captureImage(View v) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);

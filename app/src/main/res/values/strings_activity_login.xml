@@ -14,4 +14,5 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_email_exists">This email Id is already registered.\nPlease enter your password.</string>
     <string name="error_email_registered">This email Id is already registered.\nPlease Sign In.</string>
+    <string name="error_phone_registered">This phone number is already registered.\nPlease Sign In.</string>
 </resources>

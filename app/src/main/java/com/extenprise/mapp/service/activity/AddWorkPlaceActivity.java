@@ -337,9 +337,8 @@ public class AddWorkPlaceActivity extends Activity {
         if (!workPlaceAdded) {
             /*mSpeciality.setText("Some Error");*/
         } else {
-            int count = 1;
             if (sp != null) {
-                count = sp.getServiceCount();
+                int count = sp.getServiceCount();
                 if (count > 0) {
                     String speciality = sps.getService().getSpeciality();
                     String exp = "" + sps.getExperience();
@@ -374,7 +373,7 @@ public class AddWorkPlaceActivity extends Activity {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
             ContentValues values = new ContentValues();
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID, sp.getEmailId());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE, sp.getPhone());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_FNAME, sp.getfName());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, sp.getlName());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_PASSWD, sp.getPasswd());

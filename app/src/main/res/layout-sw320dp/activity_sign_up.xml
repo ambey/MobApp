@@ -74,20 +74,18 @@
                     android:ems="10"
                     android:hint="Last Name *"
                     android:inputType="textPersonName"
-                    android:layout_marginLeft="12dp"
-                    android:textColor="@color/black"/>
+                    android:layout_marginLeft="12dp"/>
 
             </LinearLayout>
 
             <EditText
-                android:id="@+id/editTextEmail"
+                android:id="@+id/editTextCellphone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Email Id *"
-                android:inputType="textEmailAddress"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"/>
+                android:hint="Cellphone Number *"
+                android:inputType="phone"
+                android:layout_marginTop="10dp" />
 
             <EditText
                 android:id="@+id/editTextPasswd"
@@ -98,8 +96,7 @@
                 android:hint="Password *"
                 android:inputType="textPassword"
                 android:text=""
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="10dp"/>
 
             <EditText
                 android:id="@+id/editTextCnfPasswd"
@@ -110,8 +107,7 @@
                 android:hint="Confirm Password *"
                 android:inputType="textPassword"
                 android:text=""
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="10dp"/>
 
             <Button
                 android:id="@+id/Register"

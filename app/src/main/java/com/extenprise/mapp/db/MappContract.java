@@ -14,6 +14,7 @@ public class MappContract {
         public static final String COLUMN_NAME_FNAME = "fName";
         public static final String COLUMN_NAME_LNAME = "lName";
         public static final String COLUMN_NAME_EMAIL_ID = "emailId";
+        public static final String COLUMN_NAME_CELLPHONE = "cellphone";
         public static final String COLUMN_NAME_PASSWD = "passwd";
         public static final String COLUMN_NAME_GENDER = "gender";
         public static final String COLUMN_NAME_QUALIFICATION = "qualification";

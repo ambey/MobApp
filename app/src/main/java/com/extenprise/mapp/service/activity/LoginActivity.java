@@ -105,7 +105,7 @@ public class LoginActivity extends Activity {
         loginPrefsEditor = loginPreferences.edit();
 
         saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (saveLogin == true) {
+        if (saveLogin) {
             mMobileNumber.setText(loginPreferences.getString("username", ""));
             mPasswordView.setText(loginPreferences.getString("password", ""));
             mSaveLoginCheckBox.setChecked(true);
@@ -194,7 +194,7 @@ public class LoginActivity extends Activity {
             mMobileNumber.setError(getString(R.string.error_field_required));
             focusView = mMobileNumber;
             cancel = true;
-        } else if (!Validator.isEmailValid(mobile)) {
+        } else if (!Validator.isPhoneValid(mobile)) {
             mMobileNumber.setError(getString(R.string.error_invalid_phone));
             focusView = mMobileNumber;
             cancel = true;
@@ -284,7 +284,7 @@ public class LoginActivity extends Activity {
                 MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID
         };
 
-        String selection = MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID + "=? and " +
+        String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=? and " +
                 MappContract.ServiceProvider.COLUMN_NAME_PASSWD + "=?";
 
         String[] selectionArgs = {
@@ -318,12 +318,12 @@ public class LoginActivity extends Activity {
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity mActivity;
-        private final String mEmail;
+        private final String mCellphone;
         private final String mPassword;
 
-        UserLoginTask(Activity activity, String email, String password) {
+        UserLoginTask(Activity activity, String cellphone, String password) {
             mActivity = activity;
-            mEmail = email;
+            mCellphone = cellphone;
             mPassword = password;
         }
 
@@ -332,7 +332,7 @@ public class LoginActivity extends Activity {
             /*if (mPassword == null) {
                 return isEmailIdRegistered(mEmail);
             }*/
-            return isLoginValid(mEmail, mPassword);
+            return isLoginValid(mCellphone, mPassword);
 
             // attempt authentication against a network service.
 /*

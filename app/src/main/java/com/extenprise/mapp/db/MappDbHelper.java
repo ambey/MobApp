@@ -20,6 +20,7 @@ public class MappDbHelper extends SQLiteOpenHelper {
                     MappContract.ServiceProvider._ID + " INTEGER PRIMARY KEY," +
                     MappContract.ServiceProvider.COLUMN_NAME_FNAME + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_LNAME + TEXT_TYPE + COMMA_SEP +
+                    MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_GENDER + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_CONSULTATION_FEE + TEXT_TYPE + COMMA_SEP +
