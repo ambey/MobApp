@@ -65,6 +65,5 @@ public class SignUpPreviousActivity extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-       // return super.onOptionsItemSelected(item);
     }
 }

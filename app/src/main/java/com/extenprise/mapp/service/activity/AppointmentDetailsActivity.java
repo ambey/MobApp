@@ -1,7 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,7 +8,7 @@ import android.view.MenuItem;
 import com.extenprise.mapp.R;
 
 
-public class AppointmentDetailsActivity extends Activity {
+public class AppointmentDetails extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

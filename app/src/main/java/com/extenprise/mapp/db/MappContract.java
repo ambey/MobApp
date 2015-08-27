@@ -81,4 +81,28 @@ public class MappContract {
         public static final String COLUMN_NAME_SERVICE_NAME = "serviceName";
         public static final String COLUMN_NAME_SPECIALITY = "speciality";
     }
+
+    public static abstract class Report implements BaseColumns {
+        public static final String TABLE_NAME = "Report";
+
+        public static final String COLUMN_NAME_ID_APPMT = "idAppmt";
+        public static final String COLUMN_NAME_REPORT_TYPE = "reportType";
+        public static final String COLUMN_NAME_ID_REPORT = "idReport";
+    }
+
+    public static abstract class Prescription implements BaseColumns {
+        public static final String TABLE_NAME = "Prescription";
+
+        public static final String COLUMN_NAME_ID_RX = "idRx";
+        public static final String COLUMN_NAME_SR_NO = "srNo";
+        public static final String COLUMN_NAME_DRUG_NAME = "dName";
+        public static final String COLUMN_NAME_DRUG_STRENGTH = "dStrength";
+        public static final String COLUMN_NAME_DOSE_QTY = "doseQty";
+        public static final String COLUMN_NAME_TIMES_PER_DAY = "timesPerDay";
+        public static final String COLUMN_NAME_TIMING = "timing";
+        public static final String COLUMN_NAME_EMPTY_OR_FULL = "emptyOrFull";
+        public static final String COLUMN_NAME_INTAKE_STEPS = "intakeSteps";
+        public static final String COLUMN_NAME_ALT_DRUG_NAME = "altDName";
+        public static final String COLUMN_NAME_ALT_DRUG_STRENGTH = "altDStrength";
+    }
 }

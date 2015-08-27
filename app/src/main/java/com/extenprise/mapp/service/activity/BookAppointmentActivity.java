@@ -67,8 +67,8 @@ public class BookAppointmentActivity extends Activity {
 
         //mFormView = findViewById(R.id.bookAppointmentForm);
         //mProgressView = findViewById(R.id.progressView);
-        mTextViewDocname = (TextView)findViewById(R.id.textViewDocName);
-        mTextViewDocSpeciality = (TextView)findViewById(R.id.textViewDocSpec);
+        mTextViewDocname = (TextView) findViewById(R.id.textViewDocName);
+        mTextViewDocSpeciality = (TextView) findViewById(R.id.textViewDocSpec);
         mListTimeSlots = (ListView) findViewById(R.id.listTimeSlots);
 
         ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
@@ -103,7 +103,7 @@ public class BookAppointmentActivity extends Activity {
 
     public void bookAppointment(View view) {
         //UIUtility.showProgress(this, mFormView, mProgressView, true);
-        if(!isTimeSlotsBooked(selectedItem)) {
+        if (!isTimeSlotsBooked(selectedItem)) {
             SaveAppointData task = new SaveAppointData(this);
             task.execute((Void) null);
         } else {
@@ -113,21 +113,20 @@ public class BookAppointmentActivity extends Activity {
 
     public void setTimeSlots(Calendar cal) {
 
-        if(!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
+        if (!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
             UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
             // listView is your instance of your ListView
-            ArrayAdapter sampleAdapter = (ArrayAdapter)mListTimeSlots.getAdapter();
+            ArrayAdapter sampleAdapter = (ArrayAdapter) mListTimeSlots.getAdapter();
             sampleAdapter.clear();
             sampleAdapter.notifyDataSetChanged();
             return;
         }
         ArrayList<String> liste = new ArrayList<String>();
-        for(int i = LoginHolder.spsspt.getStartTime(); i < LoginHolder.spsspt.getEndTime();) {
+        for (int i = LoginHolder.spsspt.getStartTime(); i <= LoginHolder.spsspt.getEndTime(); i += 30) {
             String from = UIUtility.getTimeString(i);
-            if(!isTimeSlotsBooked(from)) {
+            if (!isTimeSlotsBooked(from)) {
                 liste.add(from);
             }
-            i=i+30;
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.activity_time_slots, liste);
@@ -137,8 +136,7 @@ public class BookAppointmentActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                for(int a = 0; a < parent.getChildCount(); a++)
-                {
+                for (int a = 0; a < parent.getChildCount(); a++) {
                     parent.getChildAt(a).setBackgroundColor(Color.TRANSPARENT);
                 }
                 selectedItem = mListTimeSlots.getItemAtPosition(position).toString().trim();
@@ -187,7 +185,7 @@ public class BookAppointmentActivity extends Activity {
             case DATE_DIALOG_ID:
                 // set date picker as current date
                 return new DatePickerDialog(this, datePickerListener,
-                        year, month,day);
+                        year, month, day);
         }
         return null;
     }
@@ -275,6 +273,7 @@ public class BookAppointmentActivity extends Activity {
                 //return;
             }
         }
+
         @Override
         protected void onCancelled() {
         }

@@ -19,7 +19,7 @@
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
 
-    <string-array name="service">
+    <string-array name="speciality">
         <item>Physician</item>
     </string-array>
 
