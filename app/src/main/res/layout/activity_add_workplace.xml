@@ -217,7 +217,7 @@
 
             <Button
                 android:id="@+id/buttonAddWorkPlace"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextWeeklyOff"
                 android:layout_marginTop="30dp"
@@ -226,18 +226,18 @@
                 android:onClick="addNewWorkPlace"
                 android:text="@string/add_new_work_place"
                 android:textColor="#fff"
-                android:layout_marginLeft="60dp"/>
+                android:layout_marginLeft="10dp"/>
 
             <Button
                 android:id="@+id/buttonDone"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="65dp"
                 android:padding="10dp"
                 android:background="@drawable/button"
                 android:onClick="registerDone"
                 android:text="@string/thats_it"
                 android:textColor="#fff"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/buttonAddWorkPlace"
                 android:layout_toEndOf="@+id/buttonAddWorkPlace"

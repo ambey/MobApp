@@ -54,7 +54,7 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/radioButtonPatient"/>
+                android:layout_below="@+id/radioGroup"/>
 
             <EditText
                 android:id="@+id/password"
@@ -127,35 +127,42 @@
                 android:layout_below="@+id/email_sign_in_button"
                 android:layout_centerHorizontal="true"/>
 
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageViewMlogo"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal"
+                >
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Patient"
                 android:id="@+id/radioButtonPatient"
 
-                android:layout_below="@+id/imageViewMlogo"
-                android:layout_marginTop="40dp"/>
+                 />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medical Service Provider"
                 android:id="@+id/radioButtonMedServiceProvider"
-                android:layout_alignTop="@+id/radioButtonPatient"
-                android:layout_alignRight="@+id/imageViewMlogo"
-                android:layout_alignEnd="@+id/imageViewMlogo"
-                android:checked="false" />
+
+                 />
+            </RadioGroup>
 <TextView
     android:id="@+id/viewLogin"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Login As "
-    android:layout_above="@+id/radioButtonMedServiceProvider"
+    android:layout_below="@+id/imageViewMlogo"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_marginBottom="5dp"
-    android:textSize="15sp"
-    android:layout_marginLeft="5dp"/>
+    android:layout_marginTop="20dp"
+    android:textSize="16sp"
+    android:layout_marginLeft="8dp"/>
 
         </RelativeLayout>
     </ScrollView>
