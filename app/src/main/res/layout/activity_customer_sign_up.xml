@@ -8,7 +8,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -112,16 +113,113 @@
         android:layout_alignRight="@+id/viewDateOfBirth"
         android:layout_alignEnd="@+id/viewDateOfBirth"
         android:hint="Date Of Birth"/>
-    <EditText
-        android:id="@+id/editTextCustomerAddress"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextDateOfBirth"
-        android:ems="10"
-        android:hint="Address"
-        android:inputType="textPassword"
-        android:layout_marginTop="10dp"/>
 
+    <EditText
+        android:id="@+id/editTextCustomerAge"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/editTextDateOfBirth"
+        android:background="@drawable/spinner"
+        android:ems="10"
+        android:hint="@string/age"
+        android:inputType="number"
+        android:layout_marginTop="10dp"
+        />
+<TextView
+    android:id="@+id/viewYear"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/year"
+    android:layout_below="@+id/editTextDateOfBirth"
+    android:layout_toRightOf="@+id/editTextCustomerAge"
+    android:layout_toEndOf="@+id/editTextCustomerAge"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="10dp"/>
+
+
+
+    <EditText
+        android:id="@+id/editTextCustomerWeight"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@drawable/spinner"
+        android:ems="10"
+        android:hint="@string/weight"
+        android:inputType="number"
+        android:layout_below="@+id/spinGender"
+        android:layout_alignLeft="@+id/spinGender"
+        android:layout_alignStart="@+id/spinGender"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/viewWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/kg"
+        android:layout_below="@+id/editTextDateOfBirth"
+        android:layout_toRightOf="@+id/editTextCustomerWeight"
+        android:layout_toEndOf="@+id/editTextCustomerWeight"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:id="@+id/viewAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextCustomerAge"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/label"
+        android:text="Address"
+        android:textColor="#fff"/>
+    <EditText
+        android:id="@+id/editTextLoc"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewAddress"
+        android:hint="Location "
+        android:inputType="textAutoComplete"
+        android:layout_marginTop="5dp"/>
+    <Spinner
+        android:id="@+id/editTextCity"
+        android:layout_width="170dp"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@+id/editTextLoc"
+        android:layout_alignBottom="@+id/editTextLoc"
+        android:layout_marginLeft="10dp"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/spinner"
+        android:entries="@array/city"
+        android:prompt="@string/city" />
+    <EditText
+        android:id="@+id/editTextZipCode"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextLoc"
+        android:hint="Zip Code"
+        android:inputType="textAutoComplete"
+        android:layout_marginTop="5dp"/>
+    <Spinner
+        android:id="@+id/editTextState"
+        android:layout_width="170dp"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@+id/editTextZipCode"
+        android:layout_alignBottom="@+id/editTextZipCode"
+        android:layout_marginLeft="10dp"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/spinner"
+        android:entries="@array/state"
+        android:prompt="@string/state" />
+    <Button
+        android:id="@+id/buttonCustomerSignUp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:layout_below="@+id/editTextZipCode"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Done"
+        android:textColor="#fff"
+        />
 
 
 
@@ -130,4 +228,4 @@
 </RelativeLayout>
     </ScrollView>
 
-</RelativeLayout>
+    </RelativeLayout>
