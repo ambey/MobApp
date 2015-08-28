@@ -64,7 +64,13 @@
         <item>Gel</item>
         <item>Cream</item>
     </string-array>
+    <string-array name="state">
+        <item>Maharashtra</item>
+        <item>Goa</item>
+        <item>Karnataka</item>
+    </string-array>
 
+    <string name="state">State</string>
     <string name="gender">Gender</string>
     <string name="title_activity_advance__search_doc">Advance Search Doctor</string>
     <string name="title_activity_search_result">List of Doctor</string>
@@ -98,8 +104,6 @@
     <string name="weight">Weight</string>
     <string name="kg">Kg</string>
     <string name="practice_days">Days Of Practice</string>
-    <string name="select_days">Select Days</string>
-    <string name="avail_days">Available Days</string>
     <string name="add">Add</string>
     <string name="alt_drug">Alternate Drug</string>
     <string name="strength">Strength</string>
@@ -110,6 +114,9 @@
     <string name="dose_qty">Dose Qty</string>
     <string name="course_dur">Course Dur</string>
     <string name="drug_name">Drug Name</string>
-    <string name="srno">SrNo</string>
-    
+    <string name="srno">Sr No</string>
+
+
+
+
 </resources>
