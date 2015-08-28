@@ -194,7 +194,7 @@
                 android:layout_below="@id/buttonStartTime"
                 android:layout_height="20dp"
                 android:layout_margin="4dp"
-                android:text="@string/weekly_off"
+                android:text="@string/practice_days"
                 android:background="@drawable/label"
                 android:textColor="#fff"/>
 
@@ -211,13 +211,13 @@
                 android:background="@drawable/spinner"
                 android:layout_width="160.0dip"
                 android:text="Select Days"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="10dp"/>
 
             <Button
                 android:id="@+id/buttonAddWorkPlace"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextWeeklyOff"
                 android:layout_marginTop="30dp"
@@ -225,21 +225,22 @@
                 android:background="@drawable/button"
                 android:onClick="addNewWorkPlace"
                 android:text="@string/add_new_work_place"
-                android:textColor="#fff"/>
+                android:textColor="#fff"
+                android:layout_marginLeft="80dp"/>
 
             <Button
                 android:id="@+id/buttonDone"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/buttonAddWorkPlace"
-                android:layout_alignTop="@+id/buttonAddWorkPlace"
-                android:layout_alignBottom="@id/buttonAddWorkPlace"
-                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
                 android:padding="10dp"
                 android:background="@drawable/button"
                 android:onClick="registerDone"
                 android:text="@string/thats_it"
-                android:textColor="#fff"/>
+                android:textColor="#fff"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/buttonAddWorkPlace"
+                android:layout_toEndOf="@+id/buttonAddWorkPlace"
+                android:layout_alignTop="@+id/buttonAddWorkPlace" />
 
         </RelativeLayout>
     </ScrollView>

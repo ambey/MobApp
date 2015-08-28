@@ -114,7 +114,7 @@
                 android:background="@drawable/spinner"
                 android:layout_width="160.0dip"
                 android:text="Select Days"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="20dp"/>
             <TextView android:textStyle="bold"
@@ -130,7 +130,7 @@
                 android:id="@+id/spinGender"
                 android:background="@drawable/spinner"
                 android:layout_width="160.0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:prompt="@string/gender"
                 android:layout_above="@+id/buttonSearch"
                 android:layout_alignParentRight="true"
