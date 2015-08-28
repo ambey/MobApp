@@ -12,7 +12,7 @@
 
     <EditText
         android:id="@+id/editTextSpeciality"
-        android:layout_width="200dp"
+        android:layout_width="220dp"
         android:layout_height="25dp"
         android:hint="Speciality *"
         android:background="@drawable/text"
@@ -49,18 +49,19 @@
 
     <TextView
         android:id="@+id/viewWorkPlaceDetLbl"
-        android:layout_width="160dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextQualification"
         android:layout_alignLeft="@id/editTextSpeciality"
         android:text="@string/work_place_details"
         android:background="@drawable/label"
         android:layout_marginTop="5dp"
-        android:textSize="18dp"/>
+        android:textSize="18dp"
+        android:textColor="#fff"/>
 
     <TextView
         android:id="@+id/viewWorkPlaceCount"
-        android:layout_width="160dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/viewWorkPlaceDetLbl"
         android:layout_toRightOf="@id/viewWorkPlaceDetLbl"
@@ -70,7 +71,8 @@
         android:layout_marginLeft="10dp"
         android:text="#1"
         android:background="@drawable/label"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textColor="#fff"/>
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -121,7 +123,7 @@
 
             <Spinner
                 android:id="@+id/editTextCity"
-                android:layout_width="100dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/editTextLoc"
                 android:layout_alignBottom="@+id/editTextLoc"
@@ -134,7 +136,7 @@
 
             <EditText
                 android:id="@+id/editTextPhone1"
-                android:layout_width="160dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextLoc"
                 android:hint="Phone 1 *"
@@ -142,7 +144,7 @@
 
             <EditText
                 android:id="@+id/editTextPhone2"
-                android:layout_width="160dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/editTextPhone1"
                 android:layout_marginLeft="10dp"
@@ -161,15 +163,16 @@
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_below="@id/editTextEmail"
                 android:layout_margin="4dp"
                 android:text="@string/work_hrs"
-                android:background="@drawable/label"/>
+                android:background="@drawable/label"
+                android:textColor="#fff"/>
 
             <Button
                 android:id="@+id/buttonStartTime"
-                android:layout_width="160dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewWorkHrsLbl"
                 android:text="@string/start_time"
@@ -177,7 +180,7 @@
 
             <Button
                 android:id="@+id/buttonEndTime"
-                android:layout_width="160dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/buttonStartTime"
                 android:layout_toRightOf="@+id/buttonStartTime"
@@ -189,10 +192,11 @@
                 android:id="@+id/viewWeeklyOffLbl"
                 android:layout_width="fill_parent"
                 android:layout_below="@id/buttonStartTime"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_margin="4dp"
                 android:text="@string/weekly_off"
-                android:background="@drawable/label"/>
+                android:background="@drawable/label"
+                android:textColor="#fff"/>
 
             <Spinner
                 android:id="@+id/editTextWeeklyOff"
@@ -205,18 +209,19 @@
 
             <Button
                 android:id="@+id/buttonAddWorkPlace"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextWeeklyOff"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:padding="10dp"
                 android:background="@drawable/button"
                 android:onClick="addNewWorkPlace"
-                android:text="@string/add_new_work_place" />
+                android:text="@string/add_new_work_place"
+                android:textColor="#fff"/>
 
             <Button
                 android:id="@+id/buttonDone"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/buttonAddWorkPlace"
                 android:layout_alignTop="@+id/buttonAddWorkPlace"
@@ -225,7 +230,8 @@
                 android:padding="10dp"
                 android:background="@drawable/button"
                 android:onClick="registerDone"
-                android:text="@string/thats_it" />
+                android:text="@string/thats_it"
+                android:textColor="#fff"/>
 
         </RelativeLayout>
     </ScrollView>

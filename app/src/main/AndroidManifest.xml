@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.extenprise.mapp">
+    package="com.extenprise.mapp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -45,7 +45,11 @@
         <activity
             android:name=".service.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:parentActivityName=".service.activity.SearchDoctorActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.SearchDoctorActivity" />
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,6 +67,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+
+
         <activity
             android:name=".service.activity.SignUpActivity"
             android:label="@string/title_activity_sign_up"
@@ -95,7 +104,7 @@
         <activity
             android:name=".service.activity.AdvanceSearchDocActivity"
             android:label="@string/title_activity_search_doctor"
-            android:parentActivityName=".service.activity.SearchDoctorActivity" >
+            android:parentActivityName=".service.activity.SearchDoctorActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDoctorActivity" />
@@ -168,34 +177,9 @@
         <activity
             android:name=".service.activity.ViewAppointment"
             android:label="@string/title_activity_view_appointment" />
-
         <activity
-            android:name=".service.activity.RxActivity"
-            android:label="@string/title_activity_rx"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
-<!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
--->
-
-        </activity>
-
-        <activity android:name=".service.activity.AppointmentDetailsActivity"
-            android:label="@string/title_activity_appointment_details">
-<!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
--->
-
+            android:name="com.extenprise.medico.CustomerSignUpActivity"
+            android:label="@string/title_activity_customer_sign_up" >
         </activity>
     </application>
 
