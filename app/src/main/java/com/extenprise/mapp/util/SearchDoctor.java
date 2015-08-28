@@ -135,7 +135,7 @@ public abstract class SearchDoctor {
         }
 
         if(bracket) {
-            whereClause += ")";
+            whereClause += ") ";
         }
 
         if(!spec.equals("")) {
@@ -180,10 +180,11 @@ public abstract class SearchDoctor {
                 }*/
 
                 availDay = availDay.replaceAll(",", "%");
+                availDay = "%" + availDay + "%";
             }
 
 
-            whereClause += " and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like " + availDay;
+            whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ?";
             argList.add(availDay);
         }
 /*

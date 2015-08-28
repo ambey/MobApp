@@ -246,7 +246,7 @@
                 android:padding="10dp"
                 android:background="@drawable/button"
                 android:onClick="registerDone"
-                android:text="@string/done"
+                android:text="@string/done1"
                 android:textColor="#fff"
                 android:layout_marginLeft="30dp"
                 android:layout_alignParentBottom="true"
