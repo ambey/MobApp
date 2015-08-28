@@ -1,8 +1,11 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -11,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -36,12 +40,17 @@ public class AddWorkPlaceActivity extends Activity {
     private EditText mQualification;
     private Button mStartTime;
     private Button mEndTime;
-    private Spinner mWeeklyOff;
+    //private Spinner mWeeklyOff;
     private Spinner mServPtType;
     private int hour, minute;
 
     private View mFormView;
     private View mProgressView;
+
+    private Button mMultiSpinnerDays;
+    protected CharSequence[] _options = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "All Day" };
+    protected boolean[] _selections =  new boolean[ _options.length ];
+    String []selectedDays = new String[_options.length];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +69,64 @@ public class AddWorkPlaceActivity extends Activity {
         mEmailId = (EditText) findViewById(R.id.editTextEmail);
         mStartTime = (Button) findViewById(R.id.buttonStartTime);
         mEndTime = (Button) findViewById(R.id.buttonEndTime);
-        mWeeklyOff = (Spinner) findViewById(R.id.editTextWeeklyOff);
+        //mWeeklyOff = (Spinner) findViewById(R.id.editTextWeeklyOff);
         mServPtType = (Spinner) findViewById(R.id.viewWorkPlaceType);
 
         mSpeciality = (EditText) findViewById(R.id.editTextSpeciality);
         mExperience = (EditText) findViewById(R.id.editTextExperience);
         mQualification = (EditText) findViewById(R.id.editTextQualification);
 
+        mMultiSpinnerDays = (Button)findViewById(R.id.editTextWeeklyOff);
+        mMultiSpinnerDays.setOnClickListener( new ButtonClickHandler() );
     }
 
+    public class ButtonClickHandler implements View.OnClickListener {
+        public void onClick( View view ) {
+            showDialog( 0 );
+        }
+    }
+
+    @Override
+    protected Dialog onCreateDialog( int id )
+    {
+        return  new AlertDialog.Builder( this )
+                .setTitle("Available Days" )
+                .setMultiChoiceItems(_options, _selections, new DialogSelectionClickHandler() )
+                .setPositiveButton("OK", new DialogButtonClickHandler() )
+                .create();
+    }
+
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener
+    {
+        public void onClick( DialogInterface dialog, int clicked, boolean selected )
+        {
+            Log.i("ME", _options[clicked] + " selected: " + selected);
+        }
+    }
+
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener
+    {
+        public void onClick( DialogInterface dialog, int clicked )
+        {
+            switch( clicked )
+            {
+                case DialogInterface.BUTTON_POSITIVE:
+                    printSelectedPlanets();
+                    break;
+            }
+        }
+    }
+
+    protected void printSelectedPlanets(){
+        for( int i = 0; i < _options.length; i++ ){
+            Log.i( "ME", _options[ i ] + " selected: " + _selections[i] );
+        }
+        for( int i = 0; i < _options.length; i++ ){
+            if(_selections[i]) {
+                selectedDays[i] = _options[i].toString();
+            }
+        }
+    }
     protected void onResume() {
         super.onResume();
         initialize();
@@ -118,11 +176,8 @@ public class AddWorkPlaceActivity extends Activity {
         ///////////////////////////////Speciality added////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         ServicePoint spt = new ServicePoint();
         ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
-
 
         spt.setName(mName.getText().toString().trim());
         spt.setLocation(mLoc.getText().toString().trim());
@@ -131,17 +186,10 @@ public class AddWorkPlaceActivity extends Activity {
         spt.setAltPhone(mPhone2.getText().toString().trim());
         spt.setEmailId(mEmailId.getText().toString().trim());
 
-        //SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getTimeInstance();
-
-
-
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
-            spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
-            spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
-
-            //spsspt.setEndTime(new Time(sdf.parse(mStartTime.getText().toString()).getTime()));
-
-        spsspt.setWeeklyOff(mWeeklyOff.getSelectedItem().toString());
+        spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
+        spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
+        spsspt.setWeeklyOff(selectedDays.toString());
         spsspt.setServicePoint(spt);
         spt.addSpsspt(spsspt);
 
@@ -292,6 +340,7 @@ public class AddWorkPlaceActivity extends Activity {
             focusView = mQualification;
             valid = false;
         }
+
         if (focusView != null) {
             focusView.requestFocus();
         }
@@ -307,8 +356,9 @@ public class AddWorkPlaceActivity extends Activity {
         mEmailId.setText("");
         mStartTime.setText(R.string.start_time);
         mEndTime.setText(R.string.end_time);
-        mWeeklyOff.setSelected(false);
+        //mWeeklyOff.setSelected(false);
         mServPtType.setSelected(false);
+
     }
 
     private void initialize() {

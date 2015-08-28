@@ -156,7 +156,11 @@ public abstract class SearchDoctor {
             whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + ">=? ";
             argList.add("" + UIUtility.getMinutes(endTime));
         }
+
         if(!availDay.equals("")) {
+            if (availDay.contains(",")) {
+                String[] days = name.split(" ", 2);
+            }
             whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + "!=? ";
             argList.add(availDay);
         }

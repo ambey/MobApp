@@ -100,12 +100,21 @@
                 android:layout_marginTop="30dp"
                 android:text="Available days"
                 android:layout_below="@+id/buttonStartTime" />
-            <Spinner android:entries="@array/days"
+            <!--<Spinner
+                android:entries="@array/days"
                 android:id="@+id/spinAvailDays"
                 android:background="@drawable/spinner"
                 android:layout_width="160.0dip"
                 android:layout_height="wrap_content"
                 android:prompt="@string/weekly_off"
+                android:layout_below="@+id/viewWeeklyOffLbl"
+                android:layout_marginTop="20dp"/>-->
+            <Button
+                android:id="@+id/spinAvailDays"
+                android:background="@drawable/spinner"
+                android:layout_width="160.0dip"
+                android:text="Select Days"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="20dp"/>
             <TextView android:textStyle="bold"
