@@ -47,7 +47,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Email Id *"
+        android:hint="Email Id"
         android:inputType="textEmailAddress"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/editTextCellphone"/>
@@ -79,7 +79,7 @@
         android:background="@drawable/label"
         android:layout_width="170dp"
         android:layout_height="20dp"
-        android:text="@string/gender"
+        android:text="@string/gender1"
         android:layout_below="@+id/editTextConPasswd"
         android:layout_alignRight="@+id/editTextConPasswd"
         android:layout_alignEnd="@+id/editTextConPasswd"
@@ -100,7 +100,7 @@
         android:background="@drawable/label"
         android:layout_width="170dp"
         android:layout_height="20dp"
-        android:text="@string/dob"
+        android:text="@string/date_of_birth"
         android:layout_alignTop="@+id/viewGender"
         android:layout_toLeftOf="@+id/editTextCustomerLName"
         android:layout_toStartOf="@+id/editTextCustomerLName" />
@@ -112,27 +112,28 @@
         android:layout_alignTop="@+id/spinGender"
         android:layout_alignRight="@+id/viewDateOfBirth"
         android:layout_alignEnd="@+id/viewDateOfBirth"
-        android:hint="Date Of Birth"/>
+        android:hint="Date Of Birth "/>
 
     <EditText
-        android:id="@+id/editTextCustomerAge"
+        android:id="@+id/editTextCustomerHeight"
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_below="@+id/editTextDateOfBirth"
         android:background="@drawable/spinner"
         android:ems="10"
-        android:hint="@string/age"
+        android:hint="@string/height"
         android:inputType="number"
         android:layout_marginTop="10dp"
+        android:visibility="visible"
         />
 <TextView
     android:id="@+id/viewYear"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/year"
+    android:text="@string/cms"
     android:layout_below="@+id/editTextDateOfBirth"
-    android:layout_toRightOf="@+id/editTextCustomerAge"
-    android:layout_toEndOf="@+id/editTextCustomerAge"
+    android:layout_toRightOf="@+id/editTextCustomerHeight"
+    android:layout_toEndOf="@+id/editTextCustomerHeight"
     android:layout_marginTop="20dp"
     android:layout_marginLeft="10dp"/>
 
@@ -164,7 +165,7 @@
         android:id="@+id/viewAddress"
         android:layout_width="fill_parent"
         android:layout_height="20dp"
-        android:layout_below="@+id/editTextCustomerAge"
+        android:layout_below="@+id/editTextCustomerHeight"
         android:layout_marginTop="10dp"
         android:background="@drawable/label"
         android:text="Address"
@@ -221,8 +222,14 @@
         android:textColor="#fff"
         />
 
-
-
+    <DatePicker
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/datePicker2"
+        android:layout_below="@+id/viewGender"
+        android:layout_alignLeft="@+id/buttonCustomerSignUp"
+        android:layout_alignStart="@+id/buttonCustomerSignUp"
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>
