@@ -54,6 +54,17 @@
         <item>Medical Service Provider</item>
 
     </string-array>
+    <string-array name="when">
+        <item>Before Meal</item>
+        <item>After Meal</item>
+    </string-array>
+    <string-array name="drug_type">
+        <item>Tablet</item>
+        <item>Syrup</item>
+        <item>Gel</item>
+        <item>Cream</item>
+    </string-array>
+
     <string name="gender">Gender</string>
     <string name="title_activity_advance__search_doc">Advance Search Doctor</string>
     <string name="title_activity_search_result">List of Doctor</string>
@@ -85,4 +96,16 @@
     <string name="year">Years</string>
     <string name="weight">Weight</string>
     <string name="kg">Kg</string>
+    <string name="title_activity_rx">RxActivity</string>
+    <string name="add">Add</string>
+    <string name="strength">Strength</string>
+    <string name="drug_name">Drug Name</string>
+    <string name="alt_drug">Alternate Drug</string>
+    <string name="dose_qty">Dose Qty</string>
+    <string name="course_dur">Course Dur</string>
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="evening">Evening</string>
+    <string name="intake_steps">Intake Steps</string>
+    <string name="srno"># SrNo</string>
 </resources>

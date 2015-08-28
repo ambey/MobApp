@@ -34,7 +34,7 @@ public class SearchDoctorActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_doctor);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
         //getActionBar().setDisplayShowTitleEnabled(false);
 
         LoginHolder.spsspt = new ServProvHasServHasServPt();
@@ -159,7 +159,6 @@ public class SearchDoctorActivity extends Activity {
                 startActivity(intent);
             } else {
                 UIUtility.showAlert(mActivity,"No Results Found","Sorry, No result matches to your criteria!");
-                return;
             }
         }
 

@@ -1,6 +1,4 @@
 <resources>
-    <string name="date">Date</string>
-    <string name="time">Time</string>
     <string name="viewpatientrx">View Patient\n Rx</string>
     <string name="viewpatientreport">View Patient Report</string>
 

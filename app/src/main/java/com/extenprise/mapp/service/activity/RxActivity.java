@@ -1,47 +1,34 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.data.Appointment;
+import com.extenprise.mapp.util.UIUtility;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-
-public class AppointmentDetailsActivity extends Activity {
-
-    TextView mDateTextView;
+public class RxActivity extends Activity {
+    private TextView mMTime;
+    private TextView mATime;
+    private TextView mETime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_appointment_details);
+        setContentView(R.layout.activity_rx);
 
-        mDateTextView = (TextView) findViewById(R.id.dateTextView);
-
-        Appointment appointment = LoginHolder.appointment;
-        try {
-            DateFormat df = new SimpleDateFormat("dd/MM/yy");
-            Date dateOfAppointment = appointment.getDateOfAppointment();
-            mDateTextView.setText(df.format(dateOfAppointment));
-        } catch (NullPointerException x) {
-            x.printStackTrace();
-        }
+        mMTime = (TextView) findViewById(R.id.timeMTextView);
+        mATime = (TextView) findViewById(R.id.timeATextView);
+        mETime = (TextView) findViewById(R.id.timeETextView);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_appointment_details, menu);
+        getMenuInflater().inflate(R.menu.menu_rx, menu);
         return true;
     }
 
@@ -60,8 +47,15 @@ public class AppointmentDetailsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showRxActivity(View view) {
-        Intent intent = new Intent(this, RxActivity.class);
-        startActivity(intent);
+    public void showMTimePicker(View view) {
+        UIUtility.timePicker(view, mMTime);
+    }
+
+    public void showATimePicker(View view) {
+        UIUtility.timePicker(view, mATime);
+    }
+
+    public void showETimePicker(View view) {
+        UIUtility.timePicker(view, mETime);
     }
 }

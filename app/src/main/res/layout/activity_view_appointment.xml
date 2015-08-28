@@ -64,22 +64,12 @@
         android:text="@string/kg"
         android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/timeDescTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/patientFNameTextView"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:text="@string/time_desc"
-        android:textSize="18sp" />
-
-    <TextView
+     <TextView
         android:id="@+id/appointmentTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/patientFNameTextView"
-        android:layout_toLeftOf="@id/timeDescTextView"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:text="@string/time"
         android:textSize="18sp" />

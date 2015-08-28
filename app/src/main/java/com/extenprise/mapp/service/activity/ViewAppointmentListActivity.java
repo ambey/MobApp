@@ -137,7 +137,7 @@ public class ViewAppointmentListActivity extends Activity {
                 R.id.patientLNameTextView,
                 R.id.patientAgeTextView,
                 R.id.patientWeightTextView,
-                R.id.timeDescTextView
+                R.id.appointmentTimeTextView
         };
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.activity_view_appointment,
