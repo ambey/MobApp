@@ -47,7 +47,7 @@ public class AdvanceSearchDocActivity extends Activity {
     private View mSearchFormView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] _options = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "All Day" };
+    protected CharSequence[] _options = { "All Day", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     protected boolean[] _selections =  new boolean[ _options.length ];
     String []selectedDays = new String[_options.length];
 
@@ -201,7 +201,7 @@ public class AdvanceSearchDocActivity extends Activity {
         String exp = mExperience.getText().toString().trim();
         String startTime = mButtonStartTime.getText().toString();
         String endTime = mButttonEndTime.getText().toString();
-        String availDay = selectedDays.toString();
+        String availDay = UIUtility.getCommaSepparatedString(selectedDays);
 
         if (!(endTime.equals("")) &&
                 !(startTime.equals("")) ) {

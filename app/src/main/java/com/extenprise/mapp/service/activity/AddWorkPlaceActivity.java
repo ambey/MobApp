@@ -48,7 +48,7 @@ public class AddWorkPlaceActivity extends Activity {
     private View mProgressView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] _options = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "All Day" };
+    protected CharSequence[] _options = { "All Day", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     protected boolean[] _selections =  new boolean[ _options.length ];
     String []selectedDays = new String[_options.length];
 
@@ -111,22 +111,22 @@ public class AddWorkPlaceActivity extends Activity {
             switch( clicked )
             {
                 case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedPlanets();
+                    printSelectedDays();
                     break;
             }
         }
     }
 
-    protected void printSelectedPlanets(){
+    protected void printSelectedDays(){
         for( int i = 0; i < _options.length; i++ ){
             Log.i( "ME", _options[ i ] + " selected: " + _selections[i] );
-        }
-        for( int i = 0; i < _options.length; i++ ){
+
             if(_selections[i]) {
                 selectedDays[i] = _options[i].toString();
             }
         }
     }
+
     protected void onResume() {
         super.onResume();
         initialize();
@@ -155,29 +155,20 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void addNewWorkPlace(View view) {
-
-
-        ServProvHasService sps1 = new ServProvHasService();
-        sps1.setServProv(LoginHolder.servLoginRef);
-        sps1.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
+        if (!isValidInput()) {
+            return;
+        }
+        ServProvHasService sps = new ServProvHasService();
+        sps.setServProv(LoginHolder.servLoginRef);
+        sps.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
 
         Service s = new Service();
-        /*s.setName(mService.getSelectedItem().toString());*/
         s.setName("Physician");
         s.setSpeciality(mSpeciality.getText().toString().trim());
-
-        sps1.setService(s);
-        LoginHolder.servLoginRef.addServProvHasService(sps1);
-
-        ServProvHasServHasServPt spsspt1 = new ServProvHasServHasServPt();
-        spsspt1.setServProvHasService(sps1);
-        LoginHolder.spsspt = spsspt1;
-
-        ///////////////////////////////Speciality added////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
+        sps.setService(s);
 
         ServicePoint spt = new ServicePoint();
-        ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
+        ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
 
         spt.setName(mName.getText().toString().trim());
         spt.setLocation(mLoc.getText().toString().trim());
@@ -189,29 +180,22 @@ public class AddWorkPlaceActivity extends Activity {
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
         spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
         spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
-        spsspt.setWeeklyOff(selectedDays.toString());
+        spsspt.setWeeklyOff(UIUtility.getCommaSepparatedString(selectedDays));
         spsspt.setServicePoint(spt);
+        spsspt.setServProvHasService(sps);
         spt.addSpsspt(spsspt);
-
-        ServProvHasService sps = spsspt.getServProvHasService();
         sps.addServProvHasServHasSaervPt(spsspt);
 
-        clearWorkPlace();
+        LoginHolder.servLoginRef.addServProvHasService(sps);
 
+        clearWorkPlace();
         int count = sps.getWorkPlaceCount() + 1;
         TextView countView = (TextView) findViewById(R.id.viewWorkPlaceCount);
         countView.setText("#" + count);
     }
 
     public void registerDone(View view) {
-
-        if (!isValidInput()) {
-            return;
-        }
-
         addNewWorkPlace(view);
-        /*Intent intent = new Intent(this, AddSpecialityActivity.class);
-        startActivity(intent);*/
         saveData(view);
     }
 
@@ -251,70 +235,6 @@ public class AddWorkPlaceActivity extends Activity {
         boolean valid = true;
         View focusView = null;
 
-        if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {
-            mEndTime.setError(getString(R.string.error_field_required));
-            focusView = mEndTime;
-            valid = false;
-        }
-        if (mStartTime.getText().toString().equals(getString(R.string.start_time))) {
-            mStartTime.setError(getString(R.string.error_field_required));
-            focusView = mStartTime;
-            valid = false;
-        }
-        /*if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
-               !(mStartTime.getText().toString().equals(getString(R.string.start_time))) ) {
-            if (mStartTime.getText().toString().equals(mEndTime.getText().toString())) {
-                mEndTime.setError("Start Time and End Time Can't be similar.");
-                focusView = mStartTime;
-                valid = false;
-            }*/
-        if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
-                !(mStartTime.getText().toString().equals(getString(R.string.start_time))) ) {
-            if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
-                mEndTime.setError("End Time Can't be similar or less than to Start Time.");
-                focusView = mEndTime;
-                valid = false;
-            }
-        }
-
-        String email = mEmailId.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mEmailId.setError(getString(R.string.error_field_required));
-            focusView = mEmailId;
-            valid = false;
-        } else if (!Validator.isEmailValid(mEmailId.getText().toString())) {
-            mEmailId.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailId;
-            valid = false;
-        }
-        String phone2 = mPhone2.getText().toString();
-        if (!TextUtils.isEmpty(phone2) && !Validator.isPhoneValid(phone2)) {
-            mPhone2.setError(getString(R.string.error_invalid_phone));
-            focusView = mPhone2;
-            valid = false;
-        }
-        String phone1 = mPhone1.getText().toString();
-        if (TextUtils.isEmpty(phone1)) {
-            mPhone1.setError(getString(R.string.error_field_required));
-            focusView = mPhone1;
-            valid = false;
-        } else if (!Validator.isPhoneValid(phone1)) {
-            mPhone1.setError(getString(R.string.error_invalid_phone));
-            focusView = mPhone1;
-            valid = false;
-        }
-        String location = mLoc.getText().toString();
-        if (TextUtils.isEmpty(location)) {
-            mLoc.setError(getString(R.string.error_field_required));
-            focusView = mLoc;
-            valid = false;
-        }
-        String name = mName.getText().toString();
-        if (TextUtils.isEmpty(name)) {
-            mName.setError(getString(R.string.error_field_required));
-            focusView = mName;
-            valid = false;
-        }
         String spec = mSpeciality.getText().toString();
         if (TextUtils.isEmpty(spec)) {
             mSpeciality.setError(getString(R.string.error_field_required));
@@ -338,6 +258,68 @@ public class AddWorkPlaceActivity extends Activity {
         if (TextUtils.isEmpty(qualification)) {
             mQualification.setError(getString(R.string.error_field_required));
             focusView = mQualification;
+            valid = false;
+        }
+
+        String name = mName.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            mName.setError(getString(R.string.error_field_required));
+            focusView = mName;
+            valid = false;
+        }
+        String location = mLoc.getText().toString();
+        if (TextUtils.isEmpty(location)) {
+            mLoc.setError(getString(R.string.error_field_required));
+            focusView = mLoc;
+            valid = false;
+        }
+        String phone1 = mPhone1.getText().toString();
+        if (TextUtils.isEmpty(phone1)) {
+            mPhone1.setError(getString(R.string.error_field_required));
+            focusView = mPhone1;
+            valid = false;
+        } else if (!Validator.isPhoneValid(phone1)) {
+            mPhone1.setError(getString(R.string.error_invalid_phone));
+            focusView = mPhone1;
+            valid = false;
+        }
+        String phone2 = mPhone2.getText().toString();
+        if (!TextUtils.isEmpty(phone2) && !Validator.isPhoneValid(phone2)) {
+            mPhone2.setError(getString(R.string.error_invalid_phone));
+            focusView = mPhone2;
+            valid = false;
+        }
+        String email = mEmailId.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            mEmailId.setError(getString(R.string.error_field_required));
+            focusView = mEmailId;
+            valid = false;
+        } else if (!Validator.isEmailValid(mEmailId.getText().toString())) {
+            mEmailId.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailId;
+            valid = false;
+        }
+        if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {
+            mEndTime.setError(getString(R.string.error_field_required));
+            focusView = mEndTime;
+            valid = false;
+        }
+        if (mStartTime.getText().toString().equals(getString(R.string.start_time))) {
+            mStartTime.setError(getString(R.string.error_field_required));
+            focusView = mStartTime;
+            valid = false;
+        }
+        if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
+                !(mStartTime.getText().toString().equals(getString(R.string.start_time))) ) {
+            if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
+                mEndTime.setError("End Time Can't be similar or less than to Start Time.");
+                focusView = mEndTime;
+                valid = false;
+            }
+        }
+        if(UIUtility.getCommaSepparatedString(selectedDays).equals("")) {
+            mMultiSpinnerDays.setError(getString(R.string.error_field_required));
+            focusView = mMultiSpinnerDays;
             valid = false;
         }
 

@@ -139,4 +139,17 @@ public abstract class UIUtility {
         tpd.show();
     }
 
+    public static String getCommaSepparatedString(String[] arr) {
+        StringBuffer sb = new StringBuffer("");
+        for (int i = 0; arr != null && i < arr.length; i++) {
+            if(arr[i] != null && !arr[i].equals("")) {
+                sb.append(arr[i]);
+            }
+            if (i < arr.length - 1) {
+                sb.append(',');
+            }
+        }
+        return sb.toString();
+    }
+
 }

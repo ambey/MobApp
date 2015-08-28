@@ -210,7 +210,7 @@
                 android:id="@+id/editTextWeeklyOff"
                 android:background="@drawable/spinner"
                 android:layout_width="160.0dip"
-                android:text="Select Days"
+                android:text="@string/select_days"
                 android:layout_height="30dp"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="10dp"/>
@@ -226,7 +226,7 @@
                 android:onClick="addNewWorkPlace"
                 android:text="@string/add_new_work_place"
                 android:textColor="#fff"
-                android:layout_marginLeft="80dp"/>
+                android:layout_marginLeft="60dp"/>
 
             <Button
                 android:id="@+id/buttonDone"
@@ -237,6 +237,7 @@
                 android:onClick="registerDone"
                 android:text="@string/thats_it"
                 android:textColor="#fff"
+                android:layout_marginLeft="20dp"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/buttonAddWorkPlace"
                 android:layout_toEndOf="@+id/buttonAddWorkPlace"

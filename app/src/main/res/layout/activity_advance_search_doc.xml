@@ -98,7 +98,7 @@
                 android:layout_width="160.0dip"
                 android:layout_height="20dp"
                 android:layout_marginTop="30dp"
-                android:text="Available days"
+                android:text="@string/avail_days"
                 android:layout_below="@+id/buttonStartTime" />
             <!--<Spinner
                 android:entries="@array/days"
@@ -113,7 +113,7 @@
                 android:id="@+id/spinAvailDays"
                 android:background="@drawable/spinner"
                 android:layout_width="160.0dip"
-                android:text="Select Days"
+                android:text="@string/select_days"
                 android:layout_height="30dp"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="20dp"/>

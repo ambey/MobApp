@@ -2,11 +2,13 @@ package com.extenprise.mapp.util;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.ArrayAdapter;
 
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by ambey on 23/7/15.
@@ -158,10 +160,24 @@ public abstract class SearchDoctor {
         }
 
         if(!availDay.equals("")) {
+            /*if (availDay.contains(",")) {
+                ArrayList<String> dayList = new ArrayList<String>(Arrays.asList(availDay.split(",")));
+            }*/
+            //ArrayList<String> availDayList = new ArrayList<String>(Arrays.asList(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF.split(",")));
+
             if (availDay.contains(",")) {
-                String[] days = name.split(" ", 2);
+                /*String[] nm = availDay.split(",");
+                v1 = nm[0].trim();
+                if(nm.length > 1) {
+                    v2 = nm[1].trim();
+                }
+                for(int i = 0; i <= nm.length; i++) {
+
+                }*/
+                availDay = availDay.replaceAll(",", "%");
             }
-            whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + "!=? ";
+
+            whereClause += " and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like %" + availDay + "%";
             argList.add(availDay);
         }
 /*
