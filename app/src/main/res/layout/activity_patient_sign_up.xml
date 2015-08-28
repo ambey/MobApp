@@ -218,7 +218,7 @@
         android:layout_below="@+id/editTextZipCode"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Done"
+        android:text="@string/done"
         android:textColor="#fff"
         />
 
