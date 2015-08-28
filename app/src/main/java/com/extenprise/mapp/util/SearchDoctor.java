@@ -165,6 +165,10 @@ public abstract class SearchDoctor {
             }*/
             //ArrayList<String> availDayList = new ArrayList<String>(Arrays.asList(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF.split(",")));
 
+            if(availDay.endsWith(",")) {
+                availDay = availDay.substring(0, availDay.length() - 1);
+            }
+
             if (availDay.contains(",")) {
                 /*String[] nm = availDay.split(",");
                 v1 = nm[0].trim();
@@ -174,10 +178,12 @@ public abstract class SearchDoctor {
                 for(int i = 0; i <= nm.length; i++) {
 
                 }*/
+
                 availDay = availDay.replaceAll(",", "%");
             }
 
-            whereClause += " and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like %" + availDay + "%";
+
+            whereClause += " and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like " + availDay;
             argList.add(availDay);
         }
 /*

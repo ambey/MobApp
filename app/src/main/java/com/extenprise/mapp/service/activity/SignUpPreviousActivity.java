@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.activity.PatientSignUpActivity;
 
 
 public class SignUpPreviousActivity extends Activity {
@@ -29,6 +30,11 @@ public class SignUpPreviousActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    public void signUpPatient(View view) {
+        Intent intent = new Intent(this, PatientSignUpActivity.class);
+        startActivity(intent);
     }
 
     @Override

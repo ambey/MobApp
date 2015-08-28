@@ -34,7 +34,6 @@
             style="?android:textAppearanceSmall"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="50dp"
             android:background="@drawable/button"
             android:text="Sign Up (Only Patients)"
@@ -42,7 +41,8 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_below="@+id/imageViewMlogo"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:onClick="signUpPatient"/>
 
         <View
             android:id="@+id/lnView"

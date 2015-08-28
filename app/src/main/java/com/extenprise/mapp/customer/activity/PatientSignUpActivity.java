@@ -1,5 +1,6 @@
-package com.extenprise.medico;
+package com.extenprise.mapp.customer.activity;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,18 +9,18 @@ import android.view.MenuItem;
 import com.extenprise.mapp.R;
 
 
-public class CustomerSignUpActivity extends ActionBarActivity {
+public class PatientSignUpActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_sign_up);
+        setContentView(R.layout.activity_patient_sign_up);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_customer_sign_up, menu);
+        getMenuInflater().inflate(R.menu.menu_patient_sign_up, menu);
         return true;
     }
 

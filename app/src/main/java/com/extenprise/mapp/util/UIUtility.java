@@ -152,4 +152,8 @@ public abstract class UIUtility {
         return sb.toString();
     }
 
+    public static String getDays() {
+        return "All Days,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+    }
+
 }

@@ -115,14 +115,10 @@
     <string name="course_dur">Course Dur</string>
     <string name="drug_name">Drug Name</string>
     <string name="srno">Sr No</string>
+    <string name="avail_days">Available Days</string>
     <string name="select_days">Select Days</string>
     <string name="date_of_birth">Date Of Birth *</string>
     <string name="gender1">Gender *</string>
     <string name="height">Height</string>
     <string name="cms">Cms</string>
-    <string name="avail_days">Available Days</string>
-
-
-
-
 </resources>

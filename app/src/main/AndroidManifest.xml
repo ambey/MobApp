@@ -179,7 +179,7 @@
             android:name=".service.activity.ViewAppointment"
             android:label="@string/title_activity_view_appointment" />
         <activity
-            android:name="com.extenprise.medico.CustomerSignUpActivity"
+            android:name=".customer.activity.PatientSignUpActivity"
             android:label="@string/title_activity_customer_sign_up" >
         </activity>
     </application>

@@ -47,9 +47,9 @@ public class AdvanceSearchDocActivity extends Activity {
     private View mSearchFormView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] _options = { "All Day", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-    protected boolean[] _selections =  new boolean[ _options.length ];
-    String []selectedDays = new String[_options.length];
+    protected CharSequence[] options = { "All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    protected boolean[] selections =  new boolean[ options.length ];
+    StringBuilder selectedDays = new StringBuilder("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class AdvanceSearchDocActivity extends Activity {
     {
         return  new AlertDialog.Builder( this )
                 .setTitle("Available Days" )
-                .setMultiChoiceItems(_options, _selections, new DialogSelectionClickHandler() )
+                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler() )
                 .setPositiveButton("OK", new DialogButtonClickHandler())
                 .create();
     }
@@ -104,7 +104,7 @@ public class AdvanceSearchDocActivity extends Activity {
     {
         public void onClick( DialogInterface dialog, int clicked, boolean selected )
         {
-            Log.i( "ME", _options[ clicked ] + " selected: " + selected );
+            Log.i( "ME", options[ clicked ] + " selected: " + selected );
         }
     }
 
@@ -115,21 +115,28 @@ public class AdvanceSearchDocActivity extends Activity {
             switch( clicked )
             {
                 case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedPlanets();
+                    mMultiSpinnerDays.setText("Select Days");
+                    printSelectedDays();
                     break;
             }
         }
     }
 
-    protected void printSelectedPlanets(){
-        for( int i = 0; i < _options.length; i++ ){
-            Log.i( "ME", _options[ i ] + " selected: " + _selections[i] );
-        }
-        for( int i = 0; i < _options.length; i++ ){
-            if(_selections[i]) {
-                selectedDays[i] = _options[i].toString();
+    protected void printSelectedDays(){
+        for( int i = 0; i < options.length; i++ ){
+            Log.i( "ME", options[ i ] + " selected: " + selections[i] );
+
+            if(selections[i]) {
+                //selectedDays[i] = options[i].toString();
+                selectedDays.append(options[i].toString());
+                selectedDays.append(",");
             }
         }
+        if(options.toString().equals("All Days")) {
+            mMultiSpinnerDays.setText(UIUtility.getDays());
+        }
+        mMultiSpinnerDays.setText(selectedDays.toString());
+        //selectedDays = new StringBuilder(selectedDays.substring(0, selectedDays.length() - 1));
     }
 
 
@@ -201,7 +208,12 @@ public class AdvanceSearchDocActivity extends Activity {
         String exp = mExperience.getText().toString().trim();
         String startTime = mButtonStartTime.getText().toString();
         String endTime = mButttonEndTime.getText().toString();
-        String availDay = UIUtility.getCommaSepparatedString(selectedDays);
+        //String availDay = UIUtility.getCommaSepparatedString(selectedDays);
+
+        String availDay = "";
+        if(selectedDays != null && !(selectedDays.toString().equals(""))) {
+            availDay = selectedDays.toString();
+        }
 
         if (!(endTime.equals("")) &&
                 !(startTime.equals("")) ) {

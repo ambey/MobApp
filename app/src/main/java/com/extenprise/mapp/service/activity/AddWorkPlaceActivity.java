@@ -48,9 +48,10 @@ public class AddWorkPlaceActivity extends Activity {
     private View mProgressView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] _options = { "All Day", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    protected CharSequence[] _options = { "All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     protected boolean[] _selections =  new boolean[ _options.length ];
-    String []selectedDays = new String[_options.length];
+    //String []selectedDays = new String[_options.length];
+    StringBuilder selectedDays = new StringBuilder("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,9 @@ public class AddWorkPlaceActivity extends Activity {
             Log.i( "ME", _options[ i ] + " selected: " + _selections[i] );
 
             if(_selections[i]) {
-                selectedDays[i] = _options[i].toString();
+                //selectedDays[i] = _options[i].toString();
+                selectedDays.append(_options[i].toString());
+                selectedDays.append(",");
             }
         }
     }
@@ -180,7 +183,7 @@ public class AddWorkPlaceActivity extends Activity {
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
         spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
         spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
-        spsspt.setWeeklyOff(UIUtility.getCommaSepparatedString(selectedDays));
+        spsspt.setWeeklyOff(selectedDays.substring(0, selectedDays.length() - 1));
         spsspt.setServicePoint(spt);
         spsspt.setServProvHasService(sps);
         spt.addSpsspt(spsspt);
@@ -317,7 +320,7 @@ public class AddWorkPlaceActivity extends Activity {
                 valid = false;
             }
         }
-        if(UIUtility.getCommaSepparatedString(selectedDays).equals("")) {
+        if((selectedDays.substring(0, selectedDays.length() - 1)).equals("")) {
             mMultiSpinnerDays.setError(getString(R.string.error_field_required));
             focusView = mMultiSpinnerDays;
             valid = false;
