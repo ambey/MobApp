@@ -194,14 +194,22 @@
                 android:text="@string/weekly_off"
                 android:background="@drawable/label"/>
 
-            <Spinner
+            <!--<Spinner
                 android:id="@+id/editTextWeeklyOff"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:background="@drawable/spinner"
                 android:entries="@array/days"
-                android:prompt="@string/weekly_off" />
+                android:prompt="@string/weekly_off" />-->
+            <Button
+                android:id="@+id/editTextWeeklyOff"
+                android:background="@drawable/spinner"
+                android:layout_width="160.0dip"
+                android:text="Select Days"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/viewWeeklyOffLbl"
+                android:layout_marginTop="10dp"/>
 
             <Button
                 android:id="@+id/buttonAddWorkPlace"

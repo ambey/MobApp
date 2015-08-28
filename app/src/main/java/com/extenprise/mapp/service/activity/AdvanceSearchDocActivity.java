@@ -1,21 +1,30 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.util.MultiSelectionSpinner;
+import com.extenprise.mapp.util.SearchAppointment;
 import com.extenprise.mapp.util.SearchDoctor;
 import com.extenprise.mapp.util.UIUtility;
 
@@ -31,11 +40,16 @@ public class AdvanceSearchDocActivity extends Activity {
     private EditText mLocation;
     private EditText mQualification;
     private EditText mExperience;
-    private Spinner mAvaildays;
-    private Spinner mGender;
 
+    //private Spinner mAvaildays;
+    private Spinner mGender;
     private View mProgressView;
     private View mSearchFormView;
+
+    private Button mMultiSpinnerDays;
+    protected CharSequence[] _options = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "All Day" };
+    protected boolean[] _selections =  new boolean[ _options.length ];
+    String []selectedDays = new String[_options.length];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +62,7 @@ public class AdvanceSearchDocActivity extends Activity {
         mQualification = (EditText)findViewById(R.id.editTextQualification);
         mButtonStartTime = (Button)findViewById(R.id.buttonStartTime);
         mButttonEndTime = (Button)findViewById(R.id.buttonEndTime);
-        mAvaildays = (Spinner) findViewById(R.id.spinAvailDays);
+        //mAvaildays = (Spinner) findViewById(R.id.spinAvailDays);
         mGender = (Spinner) findViewById(R.id.spinGender);
         mExperience = (EditText) findViewById(R.id.editTextExp);
 
@@ -60,7 +74,65 @@ public class AdvanceSearchDocActivity extends Activity {
             mSpeciality.setText(LoginHolder.spsspt.getServProvHasService().getService().getSpeciality());
             mDrClinicName.setText(LoginHolder.spsspt.getServicePoint().getName());
         }
+
+        /*String[] array = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "All Day" };
+        MultiSelectionSpinner multiSelectionSpinner = (MultiSelectionSpinner) findViewById(R.id.spinAvailDays);
+        multiSelectionSpinner.setItems(array);
+        multiSelectionSpinner.setSelection(new int[]{2, 6});*/
+
+        mMultiSpinnerDays = (Button)findViewById(R.id.spinAvailDays);
+        mMultiSpinnerDays.setOnClickListener( new ButtonClickHandler() );
     }
+
+    public class ButtonClickHandler implements View.OnClickListener {
+        public void onClick( View view ) {
+            showDialog( 0 );
+        }
+    }
+
+    @Override
+    protected Dialog onCreateDialog( int id )
+    {
+        return  new AlertDialog.Builder( this )
+                .setTitle("Available Days" )
+                .setMultiChoiceItems(_options, _selections, new DialogSelectionClickHandler() )
+                .setPositiveButton("OK", new DialogButtonClickHandler())
+                .create();
+    }
+
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener
+    {
+        public void onClick( DialogInterface dialog, int clicked, boolean selected )
+        {
+            Log.i( "ME", _options[ clicked ] + " selected: " + selected );
+        }
+    }
+
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener
+    {
+        public void onClick( DialogInterface dialog, int clicked )
+        {
+            switch( clicked )
+            {
+                case DialogInterface.BUTTON_POSITIVE:
+                    printSelectedPlanets();
+                    break;
+            }
+        }
+    }
+
+    protected void printSelectedPlanets(){
+        for( int i = 0; i < _options.length; i++ ){
+            Log.i( "ME", _options[ i ] + " selected: " + _selections[i] );
+        }
+        for( int i = 0; i < _options.length; i++ ){
+            if(_selections[i]) {
+                selectedDays[i] = _options[i].toString();
+            }
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,20 +187,6 @@ public class AdvanceSearchDocActivity extends Activity {
         tpd.show();
     }
 
-    public void dayPicker(View view, final Button button) {
-        // Process to get Current Time
-        final Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_WEEK);
-
-        /*String[] array = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
-        multiSelectionSpinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner);
-        multiSelectionSpinner.setItems(array);
-        multiSelectionSpinner.setSelection(new int[]{2, 6});*/
-
-
-
-    }
-
     public void searchDr(View view) {
 
         View focusView = null;
@@ -143,10 +201,10 @@ public class AdvanceSearchDocActivity extends Activity {
         String exp = mExperience.getText().toString().trim();
         String startTime = mButtonStartTime.getText().toString();
         String endTime = mButttonEndTime.getText().toString();
-        String availDay = mAvaildays.getSelectedItem().toString();
+        String availDay = selectedDays.toString();
 
-        if (!(endTime.equals("Start Time")) &&
-                !(startTime.equals("End Time")) ) {
+        if (!(endTime.equals("")) &&
+                !(startTime.equals("")) ) {
             if (UIUtility.getMinutes(startTime) >= UIUtility.getMinutes(endTime)) {
                 mButttonEndTime.setError("End Time Can't be similar or less than to Start Time.");
                 focusView = mButttonEndTime;
