@@ -70,13 +70,16 @@ public class DoctorDetailsActivity extends Activity {
         mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
 
         mTextViewReviews.setText("11");
-        mTextViewDocQualification.setText("MD Medicine");
+        mTextViewDocQualification.setText(serviceProvider.getQualification());
         mTextViewFees.setText("Rs 120");
 
+        TextView availability = (TextView) findViewById(R.id.textviewAvailability);
         if(UIUtility.findDocAvailability(spsspt.getWeeklyOff(), Calendar.getInstance())) {
             mImageViewAvailable.setImageResource(R.drawable.g_circle);
+            availability.setText(getString(R.string.available));
         } else {
             mImageViewAvailable.setImageResource(R.drawable.r_circle);
+            availability.setText(getString(R.string.unavailable));
         }
 
     }
@@ -156,7 +159,6 @@ public class DoctorDetailsActivity extends Activity {
             if(UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
                 /*Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
                 startActivity(intent);*/
-                return;
             }
         }
 

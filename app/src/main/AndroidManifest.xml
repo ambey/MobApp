@@ -46,11 +46,7 @@
         <activity
             android:name=".service.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".service.activity.SearchDoctorActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.SearchDoctorActivity" />
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -14,34 +14,59 @@
     tools:context=".SearchResult">
 
     <TextView
-        android:id="@+id/view1"
+        android:id="@+id/viewDr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dr."
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_alignParentLeft="true"
         android:textStyle="bold"
         android:textSize="20sp"
         android:focusable="false"/>
     <TextView
-        android:id="@+id/viewDocname"
+        android:id="@+id/viewFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Name"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/viewDr"
+        android:layout_marginLeft="10dp"
+        android:text="FirstName"
         android:textStyle="bold"
         android:textSize="20sp"
         android:focusable="false"/>
     <TextView
-        android:id="@+id/viewDocSpeciality"
+        android:id="@+id/viewLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text=" LastName"
+        android:textStyle="bold"
         android:textSize="20sp"
-        android:hint="Speciality"
-        android:layout_above="@+id/view2"
-        android:layout_toLeftOf="@+id/imageViewAvailability"
-        android:layout_toStartOf="@+id/imageViewAvailability"
+        android:layout_toRightOf="@+id/viewFirstName"
+        android:layout_toEndOf="@+id/viewFirstName"
+        android:layout_marginLeft="10dp"
+        android:focusable="false"/>
+    <TextView
+        android:id="@+id/viewClinicName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewFirstName"
+        android:layout_alignLeft="@id/viewFirstName"
+        android:text="@string/clinic_name"/>
+    <TextView
+        android:id="@+id/viewComma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/viewClinicName"
+        android:layout_alignBaseline="@id/viewClinicName"
+        android:text=","
+        android:focusable="false"/>
+    <TextView
+        android:id="@+id/viewLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/viewComma"
+        android:layout_alignBaseline="@id/viewClinicName"
+        android:layout_marginLeft="10dp"
+        android:text="Location"
         android:focusable="false"/>
     <ImageView
         android:layout_width="20dp"
@@ -49,51 +74,49 @@
         android:id="@+id/imageViewAvailability"
         android:background="@drawable/button"
         android:backgroundTint="#f00"
-        android:focusable="false"
-        android:layout_alignBottom="@+id/viewDocSpeciality"
+        android:layout_alignBottom="@+id/viewClinicName"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     <TextView
+        android:id="@+id/viewDocSpeciality"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exp(yr): "
-        android:textSize="20sp"
-        android:id="@+id/view2"
-        android:layout_below="@+id/view1"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:text="Speciality"
+        android:layout_below="@id/viewClinicName"
+        android:layout_alignLeft="@id/viewDr"
+        android:layout_marginTop="5dp"
         android:focusable="false"/>
     <TextView
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_marginLeft="5dp"
-        android:id="@+id/viewExperience"
+        android:textSize="16sp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/viewExpLabel"
+        android:text="@string/exp_short"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/view2"
-        android:layout_toEndOf="@+id/view2"
-        android:focusable="false"
-        android:hint="Year"/>
+        android:layout_alignBaseline="@id/viewDocSpeciality"
+        android:layout_toRightOf="@+id/viewDocSpeciality"
+        android:layout_toEndOf="@+id/viewDocSpeciality"/>
     <TextView
-        android:id="@+id/viewLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:hint="Location"
-        android:layout_alignTop="@+id/viewExperience"
-        android:layout_alignLeft="@+id/viewDocSpeciality"
-        android:layout_alignStart="@+id/viewDocSpeciality"
-        android:focusable="false"/>
+        android:textSize="16sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/viewExpValue"
+        android:text="Num"
+        android:layout_alignParentBottom="true"
+        android:layout_alignBaseline="@id/viewDocSpeciality"
+        android:layout_toRightOf="@id/viewExpLabel"
+        android:layout_toEndOf="@id/viewExpLabel"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/year_short"
+        android:textSize="16sp"
+        android:id="@+id/viewYears"
+        android:layout_toRightOf="@id/viewExpValue"
+        android:layout_alignBaseline="@id/viewExpValue"
+        android:layout_marginLeft="5dp"/>
 
-    <TextView
-        android:id="@+id/viewDocSirName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint=" sirName"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_above="@+id/view2"
-        android:layout_toRightOf="@+id/viewDocname"
-        android:layout_toEndOf="@+id/viewDocname"
-        android:focusable="false"/>
 </RelativeLayout>

@@ -18,32 +18,34 @@ import android.widget.SpinnerAdapter;
  * and the user presses it. This allows for the selection of more than one option.
  */
 public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClickListener {
-    String[] _items = null;
-    boolean[] _selection = null;
+    String[] mItems = null;
+    boolean[] mSelection = null;
 
-    ArrayAdapter<String> _proxyAdapter;
+    ArrayAdapter<String> mProxyAdapter;
 
     /**
      * Constructor for use when instantiating directly.
+     *
      * @param context
      */
     public MultiSelectionSpinner(Context context) {
         super(context);
 
-        _proxyAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
-        super.setAdapter(_proxyAdapter);
+        mProxyAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
+        super.setAdapter(mProxyAdapter);
     }
 
     /**
      * Constructor used by the layout inflater.
+     *
      * @param context
      * @param attrs
      */
     public MultiSelectionSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        _proxyAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
-        super.setAdapter(_proxyAdapter);
+        mProxyAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
+        super.setAdapter(mProxyAdapter);
     }
 
     /**
@@ -51,14 +53,13 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
      */
     @Override
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        if (_selection != null && which < _selection.length) {
-            _selection[which] = isChecked;
+        if (mSelection != null && which < mSelection.length) {
+            mSelection[which] = isChecked;
 
-            _proxyAdapter.clear();
-            _proxyAdapter.add(buildSelectedItemString());
+            mProxyAdapter.clear();
+            mProxyAdapter.add(buildSelectedItemString());
             setSelection(0);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Argument 'which' is out of bounds.");
         }
     }
@@ -69,51 +70,42 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
     @Override
     public boolean performClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMultiChoiceItems(_items, _selection, this);
+        builder.setMultiChoiceItems(mItems, mSelection, this);
         builder.show();
         return true;
     }
 
     /**
-     * MultiSelectSpinner does not support setting an adapter. This will throw an exception.
-     * @param adapter
-     */
-    @Override
-    public void setAdapter(SpinnerAdapter adapter) {
-        throw new RuntimeException("setAdapter is not supported by MultiSelectSpinner.");
-    }
-
-    /**
      * Sets the options for this spinner.
+     *
      * @param items
      */
     public void setItems(String[] items) {
-        _items = items;
-        _selection = new boolean[_items.length];
+        mItems = items;
+        mSelection = new boolean[mItems.length];
 
-        Arrays.fill(_selection, false);
+        Arrays.fill(mSelection, false);
     }
 
     /**
      * Sets the options for this spinner.
+     *
      * @param items
      */
     public void setItems(List<String> items) {
-        _items = items.toArray(new String[items.size()]);
-        _selection = new boolean[_items.length];
-
-        Arrays.fill(_selection, false);
+        setItems((String[]) items.toArray());
     }
 
     /**
      * Sets the selected options based on an array of string.
+     *
      * @param selection
      */
     public void setSelection(String[] selection) {
         for (String sel : selection) {
-            for (int j = 0; j < _items.length; ++j) {
-                if (_items[j].equals(sel)) {
-                    _selection[j] = true;
+            for (int j = 0; j < mItems.length; ++j) {
+                if (mItems[j].equals(sel)) {
+                    mSelection[j] = true;
                 }
             }
         }
@@ -121,42 +113,38 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
 
     /**
      * Sets the selected options based on a list of string.
+     *
      * @param selection
      */
     public void setSelection(List<String> selection) {
-        for (String sel : selection) {
-            for (int j = 0; j < _items.length; ++j) {
-                if (_items[j].equals(sel)) {
-                    _selection[j] = true;
-                }
-            }
-        }
+        setSelection((String[]) selection.toArray());
     }
 
     /**
      * Sets the selected options based on an array of positions.
+     *
      * @param selectedIndicies
      */
     public void setSelection(int[] selectedIndicies) {
         for (int index : selectedIndicies) {
-            if (index >= 0 && index < _selection.length) {
-                _selection[index] = true;
-            }
-            else {
-                throw new IllegalArgumentException("Index " + index + " is out of bounds.");
+            try {
+                mSelection[index] = true;
+            } catch (ArrayIndexOutOfBoundsException x) {
+                x.printStackTrace();
             }
         }
     }
 
     /**
      * Returns a list of strings, one for each selected item.
+     *
      * @return
      */
     public List<String> getSelectedStrings() {
-        List<String> selection = new LinkedList<String>();
-        for (int i = 0; i < _items.length; ++i) {
-            if (_selection[i]) {
-                selection.add(_items[i]);
+        List<String> selection = new LinkedList<>();
+        for (int i = 0; i < mItems.length; ++i) {
+            if (mSelection[i]) {
+                selection.add(mItems[i]);
             }
         }
         return selection;
@@ -164,12 +152,13 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
 
     /**
      * Returns a list of positions, one for each selected item.
+     *
      * @return
      */
-    public List<Integer> getSelectedIndicies() {
-        List<Integer> selection = new LinkedList<Integer>();
-        for (int i = 0; i < _items.length; ++i) {
-            if (_selection[i]) {
+    public List<Integer> getSelectedIndices() {
+        List<Integer> selection = new LinkedList<>();
+        for (int i = 0; i < mItems.length; ++i) {
+            if (mSelection[i]) {
                 selection.add(i);
             }
         }
@@ -178,20 +167,21 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
 
     /**
      * Builds the string for display in the spinner.
+     *
      * @return comma-separated list of selected items
      */
     private String buildSelectedItemString() {
         StringBuilder sb = new StringBuilder();
         boolean foundOne = false;
 
-        for (int i = 0; i < _items.length; ++i) {
-            if (_selection[i]) {
+        for (int i = 0; i < mItems.length; ++i) {
+            if (mSelection[i]) {
                 if (foundOne) {
                     sb.append(", ");
                 }
                 foundOne = true;
 
-                sb.append(_items[i]);
+                sb.append(mItems[i]);
             }
         }
 

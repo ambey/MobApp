@@ -47,7 +47,7 @@
     <string-array name="genderType">
         <item>Male</item>
         <item>Female</item>
-        
+
     </string-array>
     <string-array name="loginOption">
         <item>Patient</item>
@@ -70,8 +70,10 @@
         <item>Karnataka</item>
     </string-array>
     <string-array name="Speciality">
-        <item>Cardiologiest</item>
-            </string-array>
+        <item>Physician</item>
+        <item>Pharmacist</item>
+        <item>Radiologist</item>
+    </string-array>
 
     <string name="state">State</string>
     <string name="gender">Gender</string>
@@ -127,8 +129,10 @@
     <string name="done1">Done</string>
     <string name="add_another">Add Another Work Place</string>
     <string name="speciality_doc">Speciality</string>
-
-
-
+    <string name="year_short">Yr</string>
+    <string name="exp_short">Exp.</string>
+    <string name="clinic_name">Clinic Name</string>
+    <string name="available">Available</string>
+    <string name="unavailable">Unavailable</string>
 
 </resources>

@@ -43,14 +43,16 @@ public class SearchDocResultListActivity extends Activity {
                 MappContract.ServiceProvider.COLUMN_NAME_LNAME,
                 MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY,
                 MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE,
+                MappContract.ServicePoint.COLUMN_NAME_NAME,
                 MappContract.ServicePoint.COLUMN_NAME_LOCATION
         };
 
         int[] viewIds = new int[] {
-                R.id.viewDocname,
-                R.id.viewDocSirName,
+                R.id.viewFirstName,
+                R.id.viewLastName,
                 R.id.viewDocSpeciality,
-                R.id.viewExperience,
+                R.id.viewExpValue,
+                R.id.viewClinicName,
                 R.id.viewLocation
         };
 
@@ -72,6 +74,7 @@ public class SearchDocResultListActivity extends Activity {
                 ServiceProvider sp = new ServiceProvider();
                 sp.setfName(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_FNAME)));
                 sp.setlName(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_LNAME)));
+                sp.setQualification(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION)));
 
                 Service s = new Service();
                 s.setSpeciality(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY)));

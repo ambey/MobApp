@@ -10,4 +10,5 @@
     <string name="work_hrs">Work Hours: *</string>
 
     <string name="error_invalid_phone">Invalid Phone Number</string>
+    <string name="error_endtime">End Time is invalid</string>
 </resources>

@@ -14,13 +14,22 @@ public class ServiceProvider {
     private String emailId;
     private String passwd;
     private String gender;
+    private String qualification;
     private boolean subscribed;
     private Date subsDate;
     private ArrayList<ServProvHasService> services;
 
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
     public void addServProvHasService(ServProvHasService sps) {
         if (services == null) {
-            services = new ArrayList<ServProvHasService>();
+            services = new ArrayList<>();
         }
         services.add(sps);
     }

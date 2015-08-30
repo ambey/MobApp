@@ -10,22 +10,32 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
+import com.extenprise.mapp.LoginHolder;
+import com.extenprise.mapp.R;
+import com.extenprise.mapp.db.MappContract;
+import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasService;
+import com.extenprise.mapp.service.data.Service;
+import com.extenprise.mapp.service.data.ServicePoint;
+import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Validator;
 
-import com.extenprise.mapp.*;
-import com.extenprise.mapp.db.*;
-import com.extenprise.mapp.service.data.*;
-import com.extenprise.mapp.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddWorkPlaceActivity extends Activity {
 
@@ -35,7 +45,7 @@ public class AddWorkPlaceActivity extends Activity {
     private EditText mPhone1;
     private EditText mPhone2;
     private EditText mEmailId;
-    private EditText mSpeciality;
+    private Spinner mSpeciality;
     private EditText mExperience;
     private EditText mQualification;
     private Button mStartTime;
@@ -48,10 +58,10 @@ public class AddWorkPlaceActivity extends Activity {
     private View mProgressView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] _options = { "All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-    protected boolean[] _selections =  new boolean[ _options.length ];
+    protected CharSequence[] _options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    protected boolean[] _selections = new boolean[_options.length];
     //String []selectedDays = new String[_options.length];
-    StringBuilder selectedDays = new StringBuilder("");
+    String selectedDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,60 +83,103 @@ public class AddWorkPlaceActivity extends Activity {
         //mWeeklyOff = (Spinner) findViewById(R.id.editTextWeeklyOff);
         mServPtType = (Spinner) findViewById(R.id.viewWorkPlaceType);
 
-        mSpeciality = (EditText) findViewById(R.id.editTextSpeciality);
+        mSpeciality = (Spinner) findViewById(R.id.editTextSpeciality);
         mExperience = (EditText) findViewById(R.id.editTextExperience);
         mQualification = (EditText) findViewById(R.id.editTextQualification);
 
-        mMultiSpinnerDays = (Button)findViewById(R.id.editTextWeeklyOff);
-        mMultiSpinnerDays.setOnClickListener( new ButtonClickHandler() );
+        mMultiSpinnerDays = (Button) findViewById(R.id.editTextWeeklyOff);
+        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
     }
 
     public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick( View view ) {
-            showDialog( 0 );
+        public void onClick(View view) {
+            if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+                setupSelection();
+            }
+            showDialog(0);
         }
     }
 
     @Override
-    protected Dialog onCreateDialog( int id )
-    {
-        return  new AlertDialog.Builder( this )
-                .setTitle("Available Days" )
-                .setMultiChoiceItems(_options, _selections, new DialogSelectionClickHandler() )
-                .setPositiveButton("OK", new DialogButtonClickHandler() )
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        super.onPrepareDialog(id, dialog);
+        if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            setupSelection();
+        }
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        return new AlertDialog.Builder(this)
+                .setTitle("Available Days")
+                .setMultiChoiceItems(_options, _selections, new DialogSelectionClickHandler())
+                .setPositiveButton("OK", new DialogButtonClickHandler())
                 .create();
     }
 
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener
-    {
-        public void onClick( DialogInterface dialog, int clicked, boolean selected )
-        {
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
+        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
             Log.i("ME", _options[clicked] + " selected: " + selected);
         }
     }
 
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener
-    {
-        public void onClick( DialogInterface dialog, int clicked )
-        {
-            switch( clicked )
-            {
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int clicked) {
+            switch (clicked) {
                 case DialogInterface.BUTTON_POSITIVE:
                     printSelectedDays();
+                    mMultiSpinnerDays.setText(selectedDays);
                     break;
             }
         }
     }
 
-    protected void printSelectedDays(){
-        for( int i = 0; i < _options.length; i++ ){
-            Log.i( "ME", _options[ i ] + " selected: " + _selections[i] );
+    protected void printSelectedDays() {
+        if(_selections[0]) {
+            setupAllDaysSelected();
+            return;
+        }
+        int i = 1;
+        selectedDays = getString(R.string.select_days);
+        for (; i < _options.length; i++) {
+            Log.i("ME", _options[i] + " selected: " + _selections[i]);
 
-            if(_selections[i]) {
-                //selectedDays[i] = _options[i].toString();
-                selectedDays.append(_options[i].toString());
-                selectedDays.append(",");
+            if (_selections[i]) {
+                selectedDays = _options[i++].toString();
+                break;
             }
+        }
+        for (; i < _options.length; i++) {
+            Log.i("ME", _options[i] + " selected: " + _selections[i]);
+
+            if (_selections[i]) {
+                selectedDays += "," + _options[i].toString();
+            }
+        }
+    }
+
+    private void setupSelection() {
+        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
+        _selections[0] = false;
+        for(String d : selectedDays) {
+            _selections[getDayIndex(d)] = true;
+        }
+    }
+
+    private int getDayIndex(String day) {
+        for(int i = 0; i < _options.length; i++) {
+            if(day.equals(_options[i])) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void setupAllDaysSelected() {
+        _selections[0] = false;
+        selectedDays = _options[1].toString();
+        for(int i = 2; i < _options.length; i++){
+            selectedDays += "," + _options[i];
         }
     }
 
@@ -158,16 +211,21 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void addNewWorkPlace(View view) {
+        addNewWorkPlace();
+    }
+
+    private boolean addNewWorkPlace() {
         if (!isValidInput()) {
-            return;
+            return false;
         }
         ServProvHasService sps = new ServProvHasService();
         sps.setServProv(LoginHolder.servLoginRef);
         sps.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
 
+        LoginHolder.servLoginRef.setQualification(mQualification.getText().toString());
+
         Service s = new Service();
-        s.setName("Physician");
-        s.setSpeciality(mSpeciality.getText().toString().trim());
+        s.setSpeciality(mSpeciality.getSelectedItem().toString().trim());
         sps.setService(s);
 
         ServicePoint spt = new ServicePoint();
@@ -195,11 +253,13 @@ public class AddWorkPlaceActivity extends Activity {
         int count = sps.getWorkPlaceCount() + 1;
         TextView countView = (TextView) findViewById(R.id.viewWorkPlaceCount);
         countView.setText("#" + count);
+        return true;
     }
 
     public void registerDone(View view) {
-        addNewWorkPlace(view);
-        saveData(view);
+        if (addNewWorkPlace()) {
+            saveData(view);
+        }
     }
 
     public void showStartTimePicker(View view) {
@@ -238,12 +298,6 @@ public class AddWorkPlaceActivity extends Activity {
         boolean valid = true;
         View focusView = null;
 
-        String spec = mSpeciality.getText().toString();
-        if (TextUtils.isEmpty(spec)) {
-            mSpeciality.setError(getString(R.string.error_field_required));
-            focusView = mSpeciality;
-            valid = false;
-        }
         String exp = mExperience.getText().toString();
         if (TextUtils.isEmpty(exp)) {
             mExperience.setError(getString(R.string.error_field_required));
@@ -293,11 +347,7 @@ public class AddWorkPlaceActivity extends Activity {
             valid = false;
         }
         String email = mEmailId.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mEmailId.setError(getString(R.string.error_field_required));
-            focusView = mEmailId;
-            valid = false;
-        } else if (!Validator.isEmailValid(mEmailId.getText().toString())) {
+        if (!TextUtils.isEmpty(email) && !Validator.isEmailValid(mEmailId.getText().toString())) {
             mEmailId.setError(getString(R.string.error_invalid_email));
             focusView = mEmailId;
             valid = false;
@@ -313,14 +363,14 @@ public class AddWorkPlaceActivity extends Activity {
             valid = false;
         }
         if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
-                !(mStartTime.getText().toString().equals(getString(R.string.start_time))) ) {
+                !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
             if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
-                mEndTime.setError("End Time Can't be similar or less than to Start Time.");
+                mEndTime.setError(getString(R.string.error_endtime));
                 focusView = mEndTime;
                 valid = false;
             }
         }
-        if((selectedDays.substring(0, selectedDays.length() - 1)).equals("")) {
+        if (selectedDays.length() == 0 || (selectedDays.substring(0, selectedDays.length() - 1)).equals("")) {
             mMultiSpinnerDays.setError(getString(R.string.error_field_required));
             focusView = mMultiSpinnerDays;
             valid = false;
@@ -377,7 +427,12 @@ public class AddWorkPlaceActivity extends Activity {
                 if (count > 0) {
                     String speciality = sps.getService().getSpeciality();
                     String exp = "" + sps.getExperience();
-                    mSpeciality.setText(speciality);
+                    SpinnerAdapter sa = mSpeciality.getAdapter();
+                    for (int i = 0; i < sa.getCount(); i++) {
+                        if (speciality.equalsIgnoreCase(sa.getItem(i).toString())) {
+                            mSpeciality.setSelection(i);
+                        }
+                    }
                     mExperience.setText(exp);
                 }
             }
@@ -404,6 +459,9 @@ public class AddWorkPlaceActivity extends Activity {
             ServiceProvider sp = LoginHolder.servLoginRef;
             ArrayList<ServProvHasService> spsList = sp.getServices();
 
+            if (spsList == null) {
+                return null;
+            }
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -412,6 +470,7 @@ public class AddWorkPlaceActivity extends Activity {
             values.put(MappContract.ServiceProvider.COLUMN_NAME_FNAME, sp.getfName());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, sp.getlName());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_PASSWD, sp.getPasswd());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION, sp.getQualification());
 
             long spId = db.insert(MappContract.ServiceProvider.TABLE_NAME, null, values);
 
