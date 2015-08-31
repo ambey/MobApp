@@ -135,5 +135,10 @@
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
     <string name="pincode">Pincode</string>
+    <string name="title_activity_patients_home_screen">PatientsHomeScreenActivity</string>
+    <string name="rs_sign">\u20B9</string>
+    <string name="doc_appoint">View Doctor's Appointments</string>
+    <string name="my_report">View My Reports</string>
+    <string name="my_rx">View My Rx</string>
 
 </resources>

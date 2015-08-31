@@ -14,7 +14,7 @@
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!--
     <android:uses-permission
@@ -29,7 +29,7 @@
         android:allowBackup="true"
         android:icon="@drawable/doctor"
         android:logo="@drawable/doctor"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
 
         <!--
         <activity
@@ -47,6 +47,7 @@
             android:name=".service.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,22 +58,17 @@
         </activity>
         <activity
             android:name=".service.activity.SearchDoctorActivity"
-            android:label="Medico">
+            android:label="Medico" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
-
-
         <activity
             android:name=".service.activity.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".service.activity.SignUpPreviousActivity">
+            android:parentActivityName=".service.activity.SignUpPreviousActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SignUpPreviousActivity" />
@@ -87,7 +83,7 @@
         </activity>
         <activity
             android:name=".service.activity.MainActivity"
-            android:label="Medico">
+            android:label="Medico" >
         </activity>
         <activity
             android:name=".service.activity.AddSpecialityActivity"
@@ -101,7 +97,7 @@
         <activity
             android:name=".service.activity.AdvanceSearchDocActivity"
             android:label="@string/title_activity_search_doctor"
-            android:parentActivityName=".service.activity.SearchDoctorActivity">
+            android:parentActivityName=".service.activity.SearchDoctorActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDoctorActivity" />
@@ -177,6 +173,10 @@
         <activity
             android:name=".customer.activity.PatientSignUpActivity"
             android:label="@string/title_activity_customer_sign_up" >
+        </activity>
+        <activity
+            android:name=".service.activity.PatientsHomeScreenActivity"
+            android:label="@string/title_activity_patients_home_screen" >
         </activity>
     </application>
 

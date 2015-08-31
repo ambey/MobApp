@@ -71,7 +71,7 @@
 
 
             <Button
-                android:id="@+id/buttonViewAppoint"
+                android:id="@+id/buttonDoctorsAppointment"
                 android:layout_width="130dp"
                 android:layout_height="80dp"
                 android:layout_marginLeft="25dp"
@@ -106,7 +106,7 @@
                 android:layout_height="0.4dp"
                 android:background="@android:color/black"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/buttonViewAppoint"
+                android:layout_below="@+id/buttonDoctorsAppointment"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 />
