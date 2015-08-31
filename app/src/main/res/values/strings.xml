@@ -66,8 +66,6 @@
     </string-array>
     <string-array name="state">
         <item>Maharashtra</item>
-        <item>Goa</item>
-        <item>Karnataka</item>
     </string-array>
     <string-array name="Speciality">
         <item>Physician</item>
@@ -125,7 +123,7 @@
     <string name="date_of_birth">Date Of Birth *</string>
     <string name="gender1">Gender *</string>
     <string name="height">Height</string>
-    <string name="cms">Cms</string>
+    <string name="cm">cm</string>
     <string name="done1">Done</string>
     <string name="add_another">Add Another Work Place</string>
     <string name="speciality_doc">Speciality</string>
@@ -134,5 +132,6 @@
     <string name="clinic_name">Clinic Name</string>
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
+    <string name="pincode">Pincode</string>
 
 </resources>

@@ -1,238 +1,209 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.customer.activity.PatientSignUpActivity">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <EditText
-        android:id="@+id/editTextCustomerFName"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextCnfPasswd"
-        android:layout_below="@+id/editTextCnfPasswd"
-        android:ems="10"
-        android:hint="First Name *"
-        android:inputType="textPersonName"
-        />
-    <EditText
-        android:id="@+id/editTextCustomerLName"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/editTextCustomerFName"
-        android:ems="10"
-        android:hint="Last Name *"
-        android:inputType="textPersonName"
-        android:layout_marginLeft="12dp"/>
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextCellphone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Cellphone Number *"
-        android:inputType="phone"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/editTextCustomerFName"/>
-    <EditText
-        android:id="@+id/editTextCustomerEmail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Email Id"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/editTextCellphone"/>
-    <EditText
-        android:id="@+id/editTextPasswd"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextCustomerEmail"
-        android:ems="10"
-        android:hint="Password *"
-        android:inputType="textPassword"
-        android:layout_marginTop="10dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextConPasswd"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextPasswd"
-        android:ems="10"
-        android:hint="Confirm Password *"
-        android:inputType="textPassword"
-        android:layout_marginTop="10dp"/>
+            <EditText
+                android:id="@+id/editTextCustomerFName"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/editTextCnfPasswd"
+                android:layout_below="@+id/editTextCnfPasswd"
+                android:ems="10"
+                android:hint="First Name *"
+                android:inputType="textPersonName" />
 
+            <EditText
+                android:id="@+id/editTextCustomerLName"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_toRightOf="@+id/editTextCustomerFName"
+                android:ems="10"
+                android:hint="Last Name *"
+                android:inputType="textPersonName" />
 
+            <EditText
+                android:id="@+id/editTextCellphone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextCustomerFName"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Cellphone Number *"
+                android:inputType="phone" />
 
-    <TextView android:textStyle="bold"
-        android:textColor="#ffffffff"
-        android:id="@+id/viewGender"
-        android:background="@drawable/label"
-        android:layout_width="170dp"
-        android:layout_height="20dp"
-        android:text="@string/gender1"
-        android:layout_below="@+id/editTextConPasswd"
-        android:layout_alignRight="@+id/editTextConPasswd"
-        android:layout_alignEnd="@+id/editTextConPasswd"
-        android:layout_marginTop="10dp"/>
-    <Spinner android:entries="@array/genderType"
-        android:id="@+id/spinGender"
-        android:background="@drawable/spinner"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:prompt="@string/gender"
-        android:layout_below="@+id/viewGender"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"/>
-    <TextView android:textStyle="bold"
-        android:textColor="#ffffffff"
-        android:id="@+id/viewDateOfBirth"
-        android:background="@drawable/label"
-        android:layout_width="170dp"
-        android:layout_height="20dp"
-        android:text="@string/date_of_birth"
-        android:layout_alignTop="@+id/viewGender"
-        android:layout_toLeftOf="@+id/editTextCustomerLName"
-        android:layout_toStartOf="@+id/editTextCustomerLName" />
-    <EditText
-        android:id="@+id/editTextDateOfBirth"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:background="@drawable/spinner"
-        android:layout_alignTop="@+id/spinGender"
-        android:layout_alignRight="@+id/viewDateOfBirth"
-        android:layout_alignEnd="@+id/viewDateOfBirth"
-        android:hint="Date Of Birth "/>
+            <EditText
+                android:id="@+id/editTextCustomerEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextCellphone"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Email Id"
+                android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/editTextCustomerHeight"
-        android:layout_width="80dp"
-        android:layout_height="30dp"
-        android:layout_below="@+id/editTextDateOfBirth"
-        android:background="@drawable/spinner"
-        android:ems="10"
-        android:hint="@string/height"
-        android:inputType="number"
-        android:layout_marginTop="10dp"
-        android:visibility="visible"
-        />
-<TextView
-    android:id="@+id/viewYear"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/cms"
-    android:layout_below="@+id/editTextDateOfBirth"
-    android:layout_toRightOf="@+id/editTextCustomerHeight"
-    android:layout_toEndOf="@+id/editTextCustomerHeight"
-    android:layout_marginTop="20dp"
-    android:layout_marginLeft="10dp"/>
+            <EditText
+                android:id="@+id/editTextPasswd"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextCustomerEmail"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Password *"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/editTextConPasswd"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextPasswd"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Confirm Password *"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/textViewDOB"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextConPasswd"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/spinner"
+                android:hint="@string/dob" />
+
+            <Spinner
+                android:id="@+id/spinGender"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/textViewDOB"
+                android:background="@drawable/spinner"
+                android:entries="@array/genderType"
+                android:prompt="@string/gender" />
+
+            <EditText
+                android:id="@+id/editTextHeight"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinGender"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/spinner"
+                android:hint="@string/height"
+                android:inputType="number"
+                />
+
+            <TextView
+                android:id="@+id/viewHeightUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/editTextHeight"
+                android:layout_toRightOf="@id/editTextHeight"
+                android:layout_alignBottom="@id/editTextHeight"
+                android:text="@string/cm" />
 
 
+            <EditText
+                android:id="@+id/editTextWeight"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/spinGender"
+                android:layout_alignStart="@+id/spinGender"
+                android:layout_alignTop="@id/editTextHeight"
+                android:background="@drawable/spinner"
+                android:hint="@string/weight"
+                android:inputType="number" />
 
-    <EditText
-        android:id="@+id/editTextCustomerWeight"
-        android:layout_width="80dp"
-        android:layout_height="30dp"
-        android:background="@drawable/spinner"
-        android:ems="10"
-        android:hint="@string/weight"
-        android:inputType="number"
-        android:layout_below="@+id/spinGender"
-        android:layout_alignLeft="@+id/spinGender"
-        android:layout_alignStart="@+id/spinGender"
-        android:layout_marginTop="10dp"/>
-    <TextView
-        android:id="@+id/viewWeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/kg"
-        android:layout_below="@+id/editTextDateOfBirth"
-        android:layout_toRightOf="@+id/editTextCustomerWeight"
-        android:layout_toEndOf="@+id/editTextCustomerWeight"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"/>
-    <TextView
-        android:id="@+id/viewAddress"
-        android:layout_width="fill_parent"
-        android:layout_height="20dp"
-        android:layout_below="@+id/editTextCustomerHeight"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/label"
-        android:text="Address"
-        android:textColor="#fff"/>
-    <EditText
-        android:id="@+id/editTextLoc"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewAddress"
-        android:hint="Location "
-        android:inputType="textAutoComplete"
-        android:layout_marginTop="5dp"/>
-    <Spinner
-        android:id="@+id/editTextCity"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:layout_toRightOf="@+id/editTextLoc"
-        android:layout_alignBottom="@+id/editTextLoc"
-        android:layout_marginLeft="10dp"
-        android:padding="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/spinner"
-        android:entries="@array/city"
-        android:prompt="@string/city" />
-    <EditText
-        android:id="@+id/editTextZipCode"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextLoc"
-        android:hint="Zip Code"
-        android:inputType="textAutoComplete"
-        android:layout_marginTop="5dp"/>
-    <Spinner
-        android:id="@+id/editTextState"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:layout_toRightOf="@+id/editTextZipCode"
-        android:layout_alignBottom="@+id/editTextZipCode"
-        android:layout_marginLeft="10dp"
-        android:padding="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/spinner"
-        android:entries="@array/state"
-        android:prompt="@string/state" />
-    <Button
-        android:id="@+id/buttonCustomerSignUp"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button"
-        android:layout_below="@+id/editTextZipCode"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="@string/done"
-        android:textColor="#fff"
-        />
+            <TextView
+                android:id="@+id/viewWeightUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/editTextWeight"
+                android:layout_toRightOf="@id/editTextWeight"
+                android:layout_alignBottom="@id/editTextWeight"
+                android:text="@string/kg" />
 
-    <DatePicker
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/datePicker2"
-        android:layout_below="@+id/viewGender"
-        android:layout_alignLeft="@+id/buttonCustomerSignUp"
-        android:layout_alignStart="@+id/buttonCustomerSignUp"
-        android:visibility="invisible"/>
+            <TextView
+                android:id="@+id/viewAddress"
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:layout_below="@+id/editTextHeight"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/label"
+                android:text="Address"
+                android:textColor="#fff" />
 
+            <EditText
+                android:id="@+id/editTextLoc"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/viewAddress"
+                android:layout_marginTop="5dp"
+                android:hint="Location "
+                android:inputType="textAutoComplete" />
 
-</RelativeLayout>
+            <Spinner
+                android:id="@+id/editTextCity"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/editTextLoc"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/spinner"
+                android:entries="@array/city"
+                android:padding="5dp"
+                android:prompt="@string/city" />
+
+            <EditText
+                android:id="@+id/editTextZipCode"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextCity"
+                android:layout_marginTop="5dp"
+                android:hint="@string/pincode"
+                android:inputType="textAutoComplete" />
+
+            <Spinner
+                android:id="@+id/editTextState"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/editTextZipCode"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/spinner"
+                android:entries="@array/state"
+                android:padding="5dp"
+                android:prompt="@string/state" />
+
+            <Button
+                android:id="@+id/buttonCustomerSignUp"
+                style="@style/RoundButton"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextState"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="@string/done"/>
+
+        </RelativeLayout>
     </ScrollView>
 
-    </RelativeLayout>
+</RelativeLayout>
