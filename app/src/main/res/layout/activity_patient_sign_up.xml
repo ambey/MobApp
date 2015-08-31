@@ -78,17 +78,28 @@
                 android:inputType="textPassword" />
 
             <TextView
-                android:id="@+id/textViewDOB"
-                android:layout_width="150dp"
+                android:id="@+id/textViewDOBLbl"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/editTextConPasswd"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/dob_label"/>
+            <TextView
+                android:id="@+id/textViewDOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/textViewDOBLbl"
+                android:layout_toEndOf="@id/textViewDOBLbl"
+                android:layout_alignTop="@id/textViewDOBLbl"
                 android:background="@drawable/spinner"
-                android:hint="@string/dob" />
+                android:hint="@string/dobFormat"
+                android:onClick="showDatePicker"/>
 
             <Spinner
                 android:id="@+id/spinGender"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -162,7 +173,7 @@
 
             <Spinner
                 android:id="@+id/editTextCity"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/editTextLoc"
                 android:layout_alignParentRight="true"
@@ -183,7 +194,7 @@
 
             <Spinner
                 android:id="@+id/editTextState"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/editTextZipCode"
                 android:layout_alignParentRight="true"

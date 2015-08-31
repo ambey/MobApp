@@ -5,16 +5,22 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.util.UIUtility;
 
 
 public class PatientSignUpActivity extends Activity {
+    private TextView mViewDOB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_sign_up);
+
+        mViewDOB = (TextView) findViewById(R.id.textViewDOB);
     }
 
     @Override
@@ -37,5 +43,9 @@ public class PatientSignUpActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDatePicker(View view) {
+        UIUtility.datePicker(view, mViewDOB);
     }
 }

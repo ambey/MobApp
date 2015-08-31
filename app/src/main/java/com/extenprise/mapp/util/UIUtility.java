@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -69,12 +70,12 @@ public abstract class UIUtility {
         return true;
     }
 
-    public static int getMinutes (String time) {
+    public static int getMinutes(String time) {
         String[] timeStr = time.split(":");
         return (Integer.parseInt(timeStr[0]) * 60 + Integer.parseInt(timeStr[1]));
     }
 
-    public static String getTimeString (int minutes) {
+    public static String getTimeString(int minutes) {
         return String.format("%02d:%02d", minutes / 60, minutes % 60);
         //return minutes / 60 + ":" + minutes % 60;
     }
@@ -93,31 +94,33 @@ public abstract class UIUtility {
                 // etc ...
         }*/
 
-        if(weekOff.equalsIgnoreCase("Monday")) {
+        if (weekOff.equalsIgnoreCase("Monday")) {
             weekOffDay = 2;
-        } else if(weekOff.equalsIgnoreCase("Tuesday")) {
+        } else if (weekOff.equalsIgnoreCase("Tuesday")) {
             weekOffDay = 3;
-        } else if(weekOff.equalsIgnoreCase("Wednesday")) {
+        } else if (weekOff.equalsIgnoreCase("Wednesday")) {
             weekOffDay = 4;
-        } else if(weekOff.equalsIgnoreCase("Thursday")) {
+        } else if (weekOff.equalsIgnoreCase("Thursday")) {
             weekOffDay = 5;
-        } else if(weekOff.equalsIgnoreCase("Friday")) {
+        } else if (weekOff.equalsIgnoreCase("Friday")) {
             weekOffDay = 6;
-        } else if(weekOff.equalsIgnoreCase("Saturday")) {
+        } else if (weekOff.equalsIgnoreCase("Saturday")) {
             weekOffDay = 7;
         }
 
-        if(weekOffDay != day) {
+        if (weekOffDay != day) {
             flag = true;
         }
         return flag;
     }
 
+/*
     public static int getAge(String dob) {
         long ageInMillis = new Date().getTime() - getMinutes(dob);
         Date age = new Date(ageInMillis);
         return age.getYear();
     }
+*/
 
     public static void timePicker(View view, final TextView button) {
         // Process to get Current Time
@@ -139,10 +142,29 @@ public abstract class UIUtility {
         tpd.show();
     }
 
+    public static void datePicker(View view, final TextView button) {
+        // Process to get Current Time
+        final Calendar c = Calendar.getInstance();
+        final int year = c.get(Calendar.YEAR);
+        final int month = c.get(Calendar.MONTH);
+        final int day = c.get(Calendar.DAY_OF_MONTH);
+
+        // Launch Time Picker Dialog
+        DatePickerDialog dpd = new DatePickerDialog(view.getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        button.setText(String.format("%02d/%02d/%4d", dayOfMonth, monthOfYear, year));
+                    }
+                }, year, month, day);
+        dpd.show();
+    }
+
     public static String getCommaSepparatedString(String[] arr) {
         StringBuffer sb = new StringBuffer("");
         for (int i = 0; arr != null && i < arr.length; i++) {
-            if(arr[i] != null && !arr[i].equals("")) {
+            if (arr[i] != null && !arr[i].equals("")) {
                 sb.append(arr[i]);
             }
             if (i < arr.length - 1) {
