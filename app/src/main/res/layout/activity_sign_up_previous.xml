@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:background="@drawable/button"
-            android:text="Sign Up (Only Patients)"
+            android:text="@string/signUpPatient"
             android:textColor="#fff"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -60,7 +60,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="60dp"
             android:background="#fff"
-            android:text="Are you a Medical Service Provider?"
+            android:text="@string/areYouServProv"
             android:textColor="#0000ff"
             android:textSize="18sp"
             android:visibility="visible"
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/medicalStoreImage"
             android:layout_marginTop="0dp"
-            android:text="Medical Store"
+            android:text="@string/medicalStore"
             android:layout_marginLeft="5dp"
             android:textColor="#000"/>
 
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/doctorImage"
             android:layout_marginTop="0dp"
-            android:text="Practitioner"
+            android:text="@string/practitionar"
             android:layout_marginLeft="130dp"
             android:textColor="#000"/>
 
@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/medicalStoreImage"
             android:layout_marginTop="1dp"
-            android:text="DiagnosticCenter"
+            android:text="@string/diagnosticCenter"
             android:layout_marginLeft="235dp"
             android:textColor="#000"
             />

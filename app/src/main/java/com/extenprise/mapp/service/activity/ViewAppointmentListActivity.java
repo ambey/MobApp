@@ -160,8 +160,7 @@ public class ViewAppointmentListActivity extends Activity {
                 customer.setEmailId(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_EMAIL_ID)));
                 customer.setGender(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_GENDER)));
                 customer.setLocation(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LOCATION)));
-                customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_PHONE)));
-                customer.setAltPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_ALT_PHONE)));
+                customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
                 customer.setAge(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE))));
 
                 DateFormat formatter = new SimpleDateFormat("dd-MM-yy");

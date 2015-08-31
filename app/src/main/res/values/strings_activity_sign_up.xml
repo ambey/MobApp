@@ -2,4 +2,18 @@
 <resources>
     <string name="next">Next</string>
     <string name="error_password_not_matching">The password do not match</string>
+    <string name="signUpPatient">Sign Up (Only Patients)</string>
+    <string name="areYouServProv">Are You A Medical Service Provider?</string>
+
+    <string name="fnm">First Name *</string>
+    <string name="lnm">Last Name *</string>
+    <string name="cellPhoneNo">Cell Phone Number</string>
+    <string name="passWdCon">Confirm Password</string>
+    <string name="address">Address</string>
+
+    <string name="medicalStore">Medical Store</string>
+    <string name="practitionar">Practitioner</string>
+    <string name="diagnosticCenter">Diagnostic Center</string>
+
+
 </resources>

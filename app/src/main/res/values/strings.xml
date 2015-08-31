@@ -83,7 +83,7 @@
     <string name="title_activity_search_doctor_list">SearchDoctorList</string>
     <string name="title_activity_search_doctor_result">SearchDoctorResult</string>
     <string name="title_activity_search_doc_result_list">List of Doctors</string>
-    <string name="title_activity_book_appointment">BookAppointment</string>
+    <string name="title_activity_book_appointment">Book Appointment</string>
     <string name="title_activity_time_slots">TimeSlots</string>
     <string name="title_activity_sign_up_previous">SignUpPrevious</string>
     <string name="title_activity_home_screen">Home Screen</string>
@@ -137,8 +137,15 @@
     <string name="pincode">Pincode</string>
     <string name="title_activity_patients_home_screen">PatientsHomeScreenActivity</string>
     <string name="rs_sign">\u20B9</string>
-    <string name="doc_appoint">View Doctor's Appointments</string>
+    <string name="doc_appoint">View Doctor Appointments</string>
     <string name="my_report">View My Reports</string>
     <string name="my_rx">View My Rx</string>
+    <string name="medico">Medico</string>
+    <string name="historyData">History Data</string>
+    <string name="myAppointment">My Appointment</string>
+    <string name="otherData">Other Data</string>
+    <string name="lastModified">Last Modified : </string>
+    <string name="hello">Hello</string>
+    <string name="helloDr">Hello Dr</string>
 
 </resources>

@@ -21,7 +21,7 @@
     <EditText android:id="@+id/editSearchDr"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Doctor,Clinic,Pharmacy,Diag Center"
+        android:hint="@string/searchDrHint"
          />
 
     <EditText android:id="@+id/viewSpeciality"
@@ -29,14 +29,14 @@
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Speciality"
+        android:hint="@string/speciality"
         android:layout_below="@id/editSearchDr" />
     <EditText android:id="@+id/viewLocation"
 
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10.0dip"
-        android:hint="Location"
+        android:hint="@string/loc1"
         android:layout_toRightOf="@+id/viewSpeciality"
         android:layout_alignTop="@+id/viewSpeciality"
         android:layout_alignBottom="@+id/viewSpeciality" />
@@ -55,13 +55,13 @@
             <EditText android:id="@+id/editTextQualification"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:hint="Qualification"
+                android:hint="@string/qualification1"
                 android:layout_marginTop="10dp"/>
             <EditText android:id="@+id/editTextExp"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:hint="Min Exp (Yr)"
+                android:hint="@string/minExp"
                 android:layout_toRightOf="@+id/editTextQualification"
                 android:layout_alignTop="@+id/editTextQualification"
                 android:inputType="phone" />
@@ -71,21 +71,20 @@
                 android:background="@drawable/label"
                 android:layout_width="fill_parent"
                 android:layout_height="20dp"
-
-                android:text="Availability Timings"
+                android:text="@string/workHrsLbl"
                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/editTextQualification" />
             <Button android:id="@+id/buttonStartTime"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:hint="Start Time"
+                android:hint="@string/strtTime"
                 android:layout_below="@+id/viewWorkHrsLbl"
                 android:onClick="showStartTimePicker"
                 android:layout_marginTop="20dp"/>
             <Button android:id="@+id/buttonEndTime"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:hint="End Time"
+                android:hint="@string/endTime"
                 android:onClick="showEndTimePicker"
                 android:layout_above="@+id/viewWeeklyOffLbl"
                 android:layout_alignLeft="@+id/spinGender"

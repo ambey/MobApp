@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_activity_search_doctor">Find A Doctor</string>
-    <string name="search">Search</string>
+    <string name="search">Search Now</string>
     <string name="action_search">Search</string>
     <string name="i_am_doctor">Doctor</string>
     <string name="i_am_med_st">Medical\nStore</string>
     <string name="i_am_rad">Radiologist</string>
     <string name="i_am_path_lab">Diagnostic\nCenter</string>
-    <string name="login_as">Sign In As ...</string>
+    <string name="login_as">Log In As</string>
+    <string name="loc1">Location</string>
+    <string name="qualification1">Qualification</string>
+    <string name="minExp">Min exp (Yr)</string>
+    <string name="workHrsLbl">Availability Timings</string>
+    <string name="strtTime">Start Time</string>
+    <string name="endTime">End Time</string>
+    <string name="searchDrHint">Doctor,Clinic,Pharmacy,Diagnostic Center</string>
+    <string name="drLbl">Dr</string>
+    <string name="review">Read Reviews</string>
+    <string name="expLbl">Exp (Yr) : </string>
+    <string name="consultFee">Consultation Fees : </string>
+    <string name="availToday">Available Today</string>
+    <string name="unavailToday">Unavailable Today</string>
+    <string name="value">Value</string>
+    <string name="comma">,</string>
 </resources>

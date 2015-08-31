@@ -62,9 +62,11 @@ public class MappContract {
         public static final String COLUMN_NAME_AGE = "age";
         public static final String COLUMN_NAME_WEIGHT = "weight";
         public static final String COLUMN_NAME_LOCATION = "location";
-        public static final String COLUMN_NAME_PHONE = "phone";
-        public static final String COLUMN_NAME_ALT_PHONE = "altPhone";
+        public static final String COLUMN_NAME_ZIPCODE = "zipCode";
+        public static final String COLUMN_NAME_CELLPHONE = "cellphone";
+        public static final String COLUMN_NAME_HEIGHT = "height";
         public static final String COLUMN_NAME_EMAIL_ID = "emailID";
+        public static final String COLUMN_NAME_ID_STATE = "idState";
         public static final String COLUMN_NAME_ID_CITY = "idCity";
         public static final String COLUMN_NAME_DOB = "dob";
     }

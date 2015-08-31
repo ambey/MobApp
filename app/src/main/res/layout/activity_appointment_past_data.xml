@@ -10,7 +10,7 @@
     android:layout_width="150dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:hint="Date"
+    android:hint="@string/date"
     android:textSize="18sp"/>
 
     <TextView
@@ -18,19 +18,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="View Rx"
+        android:text="@string/view_rx"
         android:textSize="18sp"
         android:textColor="#ff0000ff"
         android:layout_toEndOf="@+id/dateTextView"
         android:layout_toRightOf="@+id/dateTextView"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:id="@+id/textViewReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="View Report"
+        android:text="@string/view_report"
         android:textSize="18sp"
         android:textColor="#ff0000ff"
         android:layout_toEndOf="@+id/textViewRx"

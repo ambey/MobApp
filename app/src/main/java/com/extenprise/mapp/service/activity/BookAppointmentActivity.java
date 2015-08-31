@@ -260,6 +260,7 @@ public class BookAppointmentActivity extends Activity {
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServProvHasService().getService().getName());
             values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getServProvHasService().getService().getSpeciality());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, sp.getIdServiceProvider());
+            values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, LoginHolder.custLoginRef.getIdCustomer());
 
             db.insert(MappContract.Appointment.TABLE_NAME, null, values);
             return null;

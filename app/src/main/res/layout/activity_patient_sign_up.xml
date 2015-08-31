@@ -8,6 +8,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.customer.activity.PatientSignUpActivity">
 
+    <ProgressBar
+        android:id="@+id/progressView"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -24,7 +32,7 @@
                 android:layout_alignLeft="@+id/editTextCnfPasswd"
                 android:layout_below="@+id/editTextCnfPasswd"
                 android:ems="10"
-                android:hint="First Name *"
+                android:hint="@string/fnm"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -34,7 +42,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_toRightOf="@+id/editTextCustomerFName"
                 android:ems="10"
-                android:hint="Last Name *"
+                android:hint="@string/lnm"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -44,7 +52,7 @@
                 android:layout_below="@+id/editTextCustomerFName"
                 android:layout_marginTop="10dp"
                 android:ems="10"
-                android:hint="Cellphone Number *"
+                android:hint="@string/cellPhoneNo"
                 android:inputType="phone" />
 
             <EditText
@@ -54,7 +62,7 @@
                 android:layout_below="@+id/editTextCellphone"
                 android:layout_marginTop="10dp"
                 android:ems="10"
-                android:hint="Email Id"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress" />
 
             <EditText
@@ -64,7 +72,7 @@
                 android:layout_below="@+id/editTextCustomerEmail"
                 android:layout_marginTop="10dp"
                 android:ems="10"
-                android:hint="Password *"
+                android:hint="@string/passWd"
                 android:inputType="textPassword" />
 
             <EditText
@@ -74,7 +82,7 @@
                 android:layout_below="@+id/editTextPasswd"
                 android:layout_marginTop="10dp"
                 android:ems="10"
-                android:hint="Confirm Password *"
+                android:hint="@string/passWdCon"
                 android:inputType="textPassword" />
 
             <TextView
@@ -94,8 +102,7 @@
                 android:layout_toEndOf="@id/textViewDOBLbl"
                 android:layout_alignTop="@id/textViewDOBLbl"
                 android:background="@drawable/spinner"
-                android:hint="@string/dobFormat"
-                android:onClick="showDatePicker"/>
+                android:hint="@string/dobFormat"/>
 
             <Spinner
                 android:id="@+id/spinGender"
@@ -159,7 +166,7 @@
                 android:layout_below="@+id/editTextHeight"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/label"
-                android:text="Address"
+                android:text="@string/address"
                 android:textColor="#fff" />
 
             <EditText
@@ -168,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewAddress"
                 android:layout_marginTop="5dp"
-                android:hint="Location "
+                android:hint="@string/loc"
                 android:inputType="textAutoComplete" />
 
             <Spinner
@@ -212,7 +219,8 @@
                 android:layout_below="@+id/editTextState"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:text="@string/done"/>
+                android:text="@string/done"
+                android:onClick="registerPatient"/>
 
         </RelativeLayout>
     </ScrollView>

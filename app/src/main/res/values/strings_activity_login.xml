@@ -7,6 +7,13 @@
     <string name="action_sign_in">Sign In</string>
     <string name="action_sign_up">Register With Us</string>
     <string name="action_sign_in_short">Sign In</string>
+    <string name="passWd">Password *</string>
+    <string name="regMobNo">Registered Mobile Number *</string>
+    <string name="rememberMe">Remember Me</string>
+    <string name="login">Log In</string>
+    <string name="notReg">Not Registered With Us?</string>
+    <string name="servProv">Medical Service Provider</string>
+    <string name="patient">Patient</string>
 
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>

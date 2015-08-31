@@ -19,7 +19,7 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <TextView android:text="Book Appointment"
+    <TextView android:text="@string/title_activity_book_appointment"
         android:layout_width="wrap_content"
         android:background="@drawable/spinner"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/textView2" />
-    <TextView android:hint="Doctor speciality"
+    <TextView android:hint="@string/speciality"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:hint="Doctor Name"
+        android:hint="@string/drName"
         android:textSize="18dp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -58,7 +58,7 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Selected Date"
+        android:hint="@string/date"
         android:textColor="@color/black"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_below="@+id/textViewDocSpec"
@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button"
-        android:text="Book"
+        android:text="@string/title_activity_book_appointment"
         android:padding="10dp"
         android:textColor="#fff"
         android:id="@+id/buttonBook"
@@ -91,7 +91,7 @@
         android:id="@+id/btnChangeDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change Date"
+        android:text="@string/changDate"
         android:layout_below="@+id/tvDate"
         android:layout_alignRight="@+id/tvDate"
         android:layout_alignEnd="@+id/tvDate" />

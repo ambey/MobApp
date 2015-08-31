@@ -25,10 +25,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -55,6 +58,8 @@ public class LoginActivity extends Activity {
     private View mProgressView;
     private View mLoginFormView;
     private CheckBox mSaveLoginCheckBox;
+    private RadioGroup mRadioGroupUType;
+    private RadioButton mRadioButtonUType;
 
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -65,6 +70,8 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
         // Set up the login form.
         mMobileNumber = (AutoCompleteTextView) findViewById(R.id.mobileNumber);
@@ -113,6 +120,8 @@ public class LoginActivity extends Activity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
     }
 
     @Override
@@ -164,6 +173,14 @@ public class LoginActivity extends Activity {
     public void attemptLogin() {
         if (mAuthTask != null) {
             return;
+        }
+
+        int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
+        if(uTypeID == -1) {
+            UIUtility.showAlert(this, "", "Please Select user type.");
+            return;
+        } else {
+            mRadioButtonUType = (RadioButton)findViewById(uTypeID);
         }
 
         // Reset errors.
@@ -276,36 +293,79 @@ public class LoginActivity extends Activity {
     private boolean isLoginValid(String mobile, String passwd) {
         MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        int count = 0;
 
-        String[] projection = {
-                MappContract.ServiceProvider._ID,
-                MappContract.ServiceProvider.COLUMN_NAME_FNAME,
-                MappContract.ServiceProvider.COLUMN_NAME_LNAME,
-                MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID
-        };
+        if(mRadioButtonUType.getText().toString().trim().equalsIgnoreCase("Patient")) {
 
-        String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=? and " +
-                MappContract.ServiceProvider.COLUMN_NAME_PASSWD + "=?";
+            String[] projection = {
+                    MappContract.Customer._ID,
+                    MappContract.Customer.COLUMN_NAME_FNAME,
+                    MappContract.Customer.COLUMN_NAME_LNAME,
+                    MappContract.Customer.COLUMN_NAME_EMAIL_ID,
+                    MappContract.Customer.COLUMN_NAME_CELLPHONE
+            };
 
-        String[] selectionArgs = {
-                mobile,
-                passwd
-        };
-        Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
-                projection, selection, selectionArgs, null, null, null);
+            String selection = MappContract.Customer.COLUMN_NAME_CELLPHONE + "=? and " +
+                    MappContract.Customer.COLUMN_NAME_PASSWD + "=?";
 
-        int count = c.getCount();
-        if(count > 0) {
-            c.moveToFirst();
-            ServiceProvider sp = new ServiceProvider();
-            sp.setIdServiceProvider(Integer.parseInt(c.getString(0)));
-            sp.setfName(c.getString(1));
-            sp.setlName(c.getString(2));
-            sp.setEmailId(c.getString(3));
+            String[] selectionArgs = {
+                    mobile,
+                    passwd
+            };
+            Cursor c = db.query(MappContract.Customer.TABLE_NAME,
+                    projection, selection, selectionArgs, null, null, null);
 
-            LoginHolder.servLoginRef = sp;
+            count = c.getCount();
+            if (count > 0) {
+                c.moveToFirst();
+                Customer p = new Customer();
+                p.setIdCustomer(Integer.parseInt(c.getString(0)));
+                p.setfName(c.getString(1));
+                p.setlName(c.getString(2));
+                p.setEmailId(c.getString(3));
+                p.setPhone(c.getString(4));
+
+                if(LoginHolder.custLoginRef != null) {
+                    if(LoginHolder.custLoginRef.getStatus() != null) {
+                        p.setStatus(LoginHolder.custLoginRef.getStatus());
+                    }
+                }
+                LoginHolder.custLoginRef = p;
+            }
+            c.close();
+
+        } else {
+
+            String[] projection = {
+                    MappContract.ServiceProvider._ID,
+                    MappContract.ServiceProvider.COLUMN_NAME_FNAME,
+                    MappContract.ServiceProvider.COLUMN_NAME_LNAME,
+                    MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID
+            };
+
+            String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=? and " +
+                    MappContract.ServiceProvider.COLUMN_NAME_PASSWD + "=?";
+
+            String[] selectionArgs = {
+                    mobile,
+                    passwd
+            };
+            Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
+                    projection, selection, selectionArgs, null, null, null);
+
+            count = c.getCount();
+            if (count > 0) {
+                c.moveToFirst();
+                ServiceProvider sp = new ServiceProvider();
+                sp.setIdServiceProvider(Integer.parseInt(c.getString(0)));
+                sp.setfName(c.getString(1));
+                sp.setlName(c.getString(2));
+                sp.setEmailId(c.getString(3));
+
+                LoginHolder.servLoginRef = sp;
+            }
+            c.close();
         }
-        c.close();
 
         return (count > 0);
     }
@@ -410,8 +470,20 @@ public class LoginActivity extends Activity {
                     return;
                 }*/
                 //finish();
-                Intent intent = new Intent(mActivity, ServiceProviderHomeActivity.class);
-                startActivity(intent);
+                if(mRadioButtonUType.getText().toString().trim().equalsIgnoreCase("Patient")) {
+                    if(LoginHolder.custLoginRef.getStatus() != null) {
+                        if(LoginHolder.custLoginRef.getStatus().equals("Appointment")) {
+                            Intent intent = new Intent(mActivity, BookAppointmentActivity.class);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Intent intent = new Intent(mActivity, PatientsHomeScreenActivity.class);
+                        startActivity(intent);
+                    }
+                } else {
+                    Intent intent = new Intent(mActivity, ServiceProviderHomeActivity.class);
+                    startActivity(intent);
+                }
             } else {
                 /*if(mPassword == null) {
                     Intent intent = new Intent(mActivity, SignUpActivity.class);

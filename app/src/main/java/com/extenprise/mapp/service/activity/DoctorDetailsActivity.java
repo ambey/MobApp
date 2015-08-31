@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
@@ -69,7 +70,7 @@ public class DoctorDetailsActivity extends Activity {
         mTextViewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
         mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
 
-        mTextViewReviews.setText("11");
+        //mTextViewReviews.setText("11");
         mTextViewDocQualification.setText(serviceProvider.getQualification());
         mTextViewFees.setText("Rs 120");
 
@@ -94,8 +95,16 @@ public class DoctorDetailsActivity extends Activity {
         LoginHolder.spsspt.setStartTime(spsspt.getStartTime());
         LoginHolder.spsspt.setEndTime(spsspt.getEndTime());*/
 
-        Intent intent = new Intent(this, BookAppointmentActivity.class);
-        startActivity(intent);
+        if(LoginHolder.custLoginRef != null) {
+            Intent intent = new Intent(this, BookAppointmentActivity.class);
+            startActivity(intent);
+        } else {
+            Customer c = new Customer();
+            c.setStatus("Appointment");
+            LoginHolder.custLoginRef = c;
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

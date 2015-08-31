@@ -2,4 +2,8 @@
     <string name="viewpatientrx">View Patient\n Rx</string>
     <string name="viewpatientreport">View Patient Report</string>
 
+    <string name="appointLbl">Appointment Details</string>
+    <string name="appointment">Appointment</string>
+    <string name="drName">Doctor Name</string>
+    <string name="changDate">Change Date</string>
 </resources>

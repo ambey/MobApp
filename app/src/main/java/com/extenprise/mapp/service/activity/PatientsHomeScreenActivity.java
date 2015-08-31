@@ -1,19 +1,29 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 
 
-public class PatientsHomeScreenActivity extends ActionBarActivity {
+public class PatientsHomeScreenActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
+
+        TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        String label = welcomeView.getText().toString() + " " +
+                LoginHolder.custLoginRef.getfName() + " " +
+                LoginHolder.custLoginRef.getlName();
+
+        welcomeView.setText(label);
     }
 
     @Override

@@ -17,7 +17,7 @@
         android:id="@+id/viewDr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dr."
+        android:text="@string/drLbl"
         android:layout_marginLeft="5dp"
         android:layout_alignParentLeft="true"
         android:textStyle="bold"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/viewDr"
         android:layout_marginLeft="10dp"
-        android:text="FirstName"
+        android:text="@string/first_name"
         android:textStyle="bold"
         android:textSize="20sp"
         android:focusable="false"/>
@@ -37,7 +37,7 @@
         android:id="@+id/viewLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" LastName"
+        android:text="@string/last_name"
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_toRightOf="@+id/viewFirstName"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/viewClinicName"
         android:layout_alignBaseline="@id/viewClinicName"
-        android:text=","
+        android:text="@string/comma"
         android:focusable="false"/>
     <TextView
         android:id="@+id/viewLocation"
@@ -66,7 +66,7 @@
         android:layout_toRightOf="@id/viewComma"
         android:layout_alignBaseline="@id/viewClinicName"
         android:layout_marginLeft="10dp"
-        android:text="Location"
+        android:text="@string/loc1"
         android:focusable="false"/>
     <ImageView
         android:layout_width="20dp"
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Speciality"
+        android:text="@string/speciality"
         android:layout_below="@id/viewClinicName"
         android:layout_alignLeft="@id/viewDr"
         android:layout_marginTop="5dp"
@@ -104,7 +104,7 @@
         android:textSize="16sp"
         android:layout_marginLeft="5dp"
         android:id="@+id/viewExpValue"
-        android:text="Num"
+        android:text="@string/value"
         android:layout_alignParentBottom="true"
         android:layout_alignBaseline="@id/viewDocSpeciality"
         android:layout_toRightOf="@id/viewExpLabel"

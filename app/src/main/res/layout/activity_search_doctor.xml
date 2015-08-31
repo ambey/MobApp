@@ -38,7 +38,7 @@
                 android:id="@+id/editTextSearchDr"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Doctor,Clinic,Pharmacy,Diagnostic Center"
+                android:hint="@string/searchDrHint"
                 android:layout_marginTop="50dp"/>
 
             <EditText
@@ -46,14 +46,14 @@
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextSearchDr"
-                android:hint="Speciality"
+                android:hint="@string/speciality"
                 android:layout_marginTop="10dp"/>
 
             <EditText
                 android:id="@+id/editTextSearchLoc"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:hint="Location"
+                android:hint="@string/loc1"
                 android:layout_marginLeft="12dp"
                 android:layout_toEndOf="@+id/editTextSearchSp"
                 android:layout_toRightOf="@+id/editTextSearchSp"
@@ -68,7 +68,7 @@
                 android:layout_below="@+id/editTextSearchLoc"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/button"
-                android:text="Search Now"
+                android:text="@string/search"
                 android:onClick="searchDr"
                 android:textColor="#fff"
                 android:textStyle="bold" />

@@ -16,6 +16,8 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Created by ambey on 23/7/15.
@@ -114,13 +116,45 @@ public abstract class UIUtility {
         return flag;
     }
 
-/*
-    public static int getAge(String dob) {
+
+    /*public static int getAge(String dob) {
+
         long ageInMillis = new Date().getTime() - getMinutes(dob);
         Date age = new Date(ageInMillis);
         return age.getYear();
+
+    }*/
+
+    public static int getAge (String dob) {
+
+        int year=0, month=0, day=0;
+        if(!dob.equals("")) {
+            if(dob.contains("/")) {
+                String[] dobStr = dob.split("/", 3);
+                if (dobStr.length > 1) {
+                    day = Integer.parseInt(dobStr[0]);
+                    month = Integer.parseInt(dobStr[1]);
+                    year = Integer.parseInt(dobStr[2]);
+                }
+            }
+        }
+        GregorianCalendar cal = new GregorianCalendar();
+        int y, m, d, a;
+
+        y = cal.get(Calendar.YEAR);
+        m = cal.get(Calendar.MONTH);
+        d = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(year, month, day);
+
+        a = y - cal.get(Calendar.YEAR);
+        if ((m < cal.get(Calendar.MONTH))
+                || ((m == cal.get(Calendar.MONTH)) && (d < cal
+                .get(Calendar.DAY_OF_MONTH)))) {
+            --a;
+        }
+        return a;
     }
-*/
+
 
     public static void timePicker(View view, final TextView button) {
         // Process to get Current Time
@@ -155,7 +189,7 @@ public abstract class UIUtility {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        button.setText(String.format("%02d/%02d/%4d", dayOfMonth, monthOfYear, year));
+                        button.setText(String.format("%02d/%02d/%4d", dayOfMonth, monthOfYear+1, year));
                     }
                 }, year, month, day);
         dpd.show();

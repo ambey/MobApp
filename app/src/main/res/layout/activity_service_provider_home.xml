@@ -14,7 +14,7 @@
         android:id="@+id/viewWelcomeLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello Dr."
+        android:text="@string/helloDr"
         android:textSize="18sp"
         android:layout_marginLeft="100dp"/>
 
@@ -27,7 +27,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Last Modified:"
+        android:text="@string/lastModified"
         android:layout_below="@+id/viewWelcomeLbl"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="40dp"/>

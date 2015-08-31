@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="110dp"
                 android:layout_marginTop="30dp"
-                android:text="Dr. "
+                android:text="@string/drLbl"
                 android:textColor="#006600"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="150dp"
                 android:layout_marginTop="30dp"
-                android:hint="Doctor Name"
+                android:hint="@string/drName"
                 android:textColor="#006600"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -63,7 +63,7 @@
                 android:layout_below="@+id/textviewDocname"
                 android:layout_marginLeft="150dp"
                 android:layout_marginTop="10dp"
-                android:hint="Speciality"
+                android:hint="@string/speciality"
                 android:textSize="15sp" />
 
             <ImageView
@@ -101,7 +101,7 @@
                 android:layout_below="@+id/ln"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
-                android:hint="Qualification"
+                android:hint="@string/qualification1"
                 android:textSize="15sp" />
 
             <TextView
@@ -111,7 +111,7 @@
                 android:layout_below="@+id/ln"
                 android:layout_marginLeft="200dp"
                 android:layout_marginTop="15dp"
-                android:text="Exp : "
+                android:text="@string/expLbl"
                 android:textSize="15sp" />
 
             <TextView
@@ -119,9 +119,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ln"
-                android:layout_marginLeft="235dp"
+                android:layout_marginLeft="260dp"
                 android:layout_marginTop="15dp"
-                android:hint="Year"
+                android:hint="@string/year"
                 android:textSize="15sp" />
 
             <ImageView
@@ -140,7 +140,7 @@
                 android:layout_below="@+id/textviewDocExperience"
                 android:layout_marginLeft="180dp"
                 android:layout_marginTop="25dp"
-                android:text="Read Reviews"
+                android:text="@string/review"
                 android:textColor="#4166f5"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -153,7 +153,7 @@
                 android:layout_marginTop="25dp"
                 android:background="@drawable/text"
                 android:paddingLeft="10dp"
-                android:text="Clinc Names"
+                android:text="@string/clinic_name"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -166,7 +166,7 @@
                 android:layout_toRightOf="@id/textviewClinicName"
                 android:background="@drawable/text"
                 android:paddingLeft="10dp"
-                android:text="Timing"
+                android:text="@string/time"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -179,7 +179,7 @@
                 android:layout_marginTop="1dp"
                 android:background="@drawable/text"
                 android:paddingLeft="10dp"
-                android:text="Clinc1"
+                android:text="@string/clinic_name"
                 android:textSize="15sp" />
 
             <TextView
@@ -190,7 +190,7 @@
                 android:layout_below="@id/textviewClinicName"
                 android:layout_marginTop="1dp"
                 android:background="@drawable/text"
-                android:text="Timing"
+                android:text="@string/time"
                 android:textSize="15sp"
                 android:paddingLeft="10dp"/>
 
@@ -202,7 +202,7 @@
                 android:layout_below="@+id/textviewFirstClinic"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="15dp"
-                android:text="Consultation Fees : "
+                android:text="@string/consultFee"
 
 
                 android:textSize="15sp" />
@@ -214,7 +214,7 @@
                 android:layout_below="@+id/textviewFirstClinic"
                 android:layout_marginLeft="180dp"
                 android:layout_marginTop="15dp"
-                android:hint="Fees Value "
+                android:hint="@string/consultFee"
                 android:textSize="15sp" />
             <TextView
                 android:layout_width="wrap_content"
@@ -239,7 +239,7 @@
                 android:background="@drawable/button"
                 android:onClick="bookAppointment"
                 android:padding="10dp"
-                android:text="Book Appointment"
+                android:text="@string/title_activity_book_appointment"
                 android:textColor="#fff"
                 android:textStyle="bold" />
         </RelativeLayout>
