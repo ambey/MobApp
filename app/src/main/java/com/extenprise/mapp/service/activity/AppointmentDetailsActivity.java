@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.data.Appointment;
+import com.extenprise.mapp.data.Appointment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -62,6 +62,7 @@ public class AppointmentDetailsActivity extends Activity {
 
     public void showRxActivity(View view) {
         Intent intent = new Intent(this, RxActivity.class);
+        intent.putExtra("parent-activity", AppointmentDetailsActivity.class.toString());
         startActivity(intent);
     }
 }

@@ -125,11 +125,11 @@ public abstract class UIUtility {
 
     }*/
 
-    public static int getAge (String dob) {
+    public static int getAge(String dob) {
 
-        int year=0, month=0, day=0;
-        if(!dob.equals("")) {
-            if(dob.contains("/")) {
+        int year = 0, month = 0, day = 0;
+        if (!dob.equals("")) {
+            if (dob.contains("/")) {
                 String[] dobStr = dob.split("/", 3);
                 if (dobStr.length > 1) {
                     day = Integer.parseInt(dobStr[0]);
@@ -189,7 +189,7 @@ public abstract class UIUtility {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        button.setText(String.format("%02d/%02d/%4d", dayOfMonth, monthOfYear+1, year));
+                        button.setText(String.format("%02d/%02d/%4d", dayOfMonth, monthOfYear + 1, year));
                     }
                 }, year, month, day);
         dpd.show();
@@ -210,6 +210,13 @@ public abstract class UIUtility {
 
     public static String getDays() {
         return "All Days,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+    }
+
+    public static String getDaAsString(String sep) {
+        Calendar c = Calendar.getInstance();
+        return (c.get(Calendar.DAY_OF_MONTH) + sep +
+                (c.get(Calendar.MONTH) + 1) + sep +
+                c.get(Calendar.YEAR));
     }
 
 }

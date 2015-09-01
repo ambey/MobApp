@@ -100,12 +100,16 @@ public class MappContract {
         public static final String COLUMN_NAME_SR_NO = "srNo";
         public static final String COLUMN_NAME_DRUG_NAME = "dName";
         public static final String COLUMN_NAME_DRUG_STRENGTH = "dStrength";
+        public static final String COLUMN_NAME_DRUG_FORM = "dForm";
         public static final String COLUMN_NAME_DOSE_QTY = "doseQty";
+        public static final String COLUMN_NAME_COURSE_DUR = "courseDur";
         public static final String COLUMN_NAME_TIMES_PER_DAY = "timesPerDay";
         public static final String COLUMN_NAME_TIMING = "timing";
         public static final String COLUMN_NAME_EMPTY_OR_FULL = "emptyOrFull";
         public static final String COLUMN_NAME_INTAKE_STEPS = "intakeSteps";
         public static final String COLUMN_NAME_ALT_DRUG_NAME = "altDName";
         public static final String COLUMN_NAME_ALT_DRUG_STRENGTH = "altDStrength";
+        public static final String COLUMN_NAME_ALT_DRUG_FORM  = "altDForm";
     }
+
 }

@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.data.Appointment;
+import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
@@ -28,7 +28,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
 public class ViewAppointmentListActivity extends Activity {
 
@@ -128,6 +127,7 @@ public class ViewAppointmentListActivity extends Activity {
         String[] values = new String[] {
                 MappContract.Customer.COLUMN_NAME_FNAME,
                 MappContract.Customer.COLUMN_NAME_LNAME,
+                MappContract.Customer.COLUMN_NAME_GENDER,
                 MappContract.Customer.COLUMN_NAME_AGE,
                 MappContract.Customer.COLUMN_NAME_WEIGHT,
                 MappContract.Appointment.COLUMN_NAME_FROM_TIME
@@ -135,6 +135,7 @@ public class ViewAppointmentListActivity extends Activity {
         int[] viewIds = new int[] {
                 R.id.patientFNameTextView,
                 R.id.patientLNameTextView,
+                R.id.patientGenderTextView,
                 R.id.patientAgeTextView,
                 R.id.patientWeightTextView,
                 R.id.appointmentTimeTextView

@@ -105,6 +105,27 @@ public class MappDbHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_APPOINTMENT =
             "DROP TABLE IF EXISTS " + MappContract.Appointment.TABLE_NAME;
 
+    private static final String SQL_CREATE_RX =
+            "CREATE TABLE " + MappContract.Prescription.TABLE_NAME + " (" +
+                    MappContract.Prescription._ID + " INTEGER PRIMARY KEY," +
+                    MappContract.Prescription.COLUMN_NAME_ID_RX + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_SR_NO + INT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_DRUG_NAME + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_DRUG_STRENGTH + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_DRUG_FORM + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_DOSE_QTY + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_COURSE_DUR + INT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_EMPTY_OR_FULL + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_TIMES_PER_DAY + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_TIMING + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_INTAKE_STEPS + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_ALT_DRUG_NAME + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_ALT_DRUG_STRENGTH + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Prescription.COLUMN_NAME_ALT_DRUG_FORM + TEXT_TYPE + ")";
+
+    private static final String SQL_DELETE_RX =
+            "DROP TABLE IF EXISTS " + MappContract.Prescription.TABLE_NAME;
+
     public MappDbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -117,6 +138,7 @@ public class MappDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_SERV_PT);
         db.execSQL(SQL_CREATE_CUSTOMER);
         db.execSQL(SQL_CREATE_APPOINTMENT);
+        db.execSQL(SQL_CREATE_RX);
     }
 
     @Override
@@ -127,6 +149,7 @@ public class MappDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_SERV_PT);
         db.execSQL(SQL_DELETE_CUSTOMER);
         db.execSQL(SQL_DELETE_APPOINTMENT);
+        db.execSQL(SQL_DELETE_RX);
         onCreate(db);
     }
 

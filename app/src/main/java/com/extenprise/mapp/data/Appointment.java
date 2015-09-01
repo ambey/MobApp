@@ -1,22 +1,25 @@
-package com.extenprise.mapp.customer.data;
+package com.extenprise.mapp.data;
 
 //import com.extenprise.mapp.customer.data.CustomerHistoryData;
 //import com.extenprise.mapp.common.Appointment;
 
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.service.data.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
 public class Appointment {
 
     private String servPointType;
-    private Date dateOfAppointment;
+    private Date date;
     private int fromTime; //as minutes
     private int toTime;//as minutes
     private ServicePoint servicePoint;
     private ServProvHasService servProvHasService;
     private Customer customer;
+    private ArrayList<Report> reports;
 
     public String getServPointType() {
         return servPointType;
@@ -27,11 +30,11 @@ public class Appointment {
     }
 
     public Date getDateOfAppointment() {
-        return dateOfAppointment;
+        return date;
     }
 
     public void setDateOfAppointment(Date dateOfAppointment) {
-        this.dateOfAppointment = dateOfAppointment;
+        this.date = dateOfAppointment;
     }
 
     public int getFromTime() {

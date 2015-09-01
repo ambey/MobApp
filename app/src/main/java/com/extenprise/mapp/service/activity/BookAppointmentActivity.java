@@ -19,6 +19,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
@@ -32,6 +34,8 @@ import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,44 +46,36 @@ import java.util.Date;
 
 public class BookAppointmentActivity extends Activity {
 
-    private TextView mTextViewDocname;
+    private TextView mTextViewDocFName;
+    private TextView mTextViewDocLName;
     private TextView mTextViewDocSpeciality;
-    //private View mFormView;
-    //private View mProgressView;
-    private ListView mListTimeSlots;
-
-    private TextView mTvDisplayDate;
-    private DatePicker mDpResult;
-    private Button mBtnChangeDate, mbuttonBook;
-
-    private int year;
-    private int month;
-    private int day;
-    private String selectedItem;
-
-    static final int DATE_DIALOG_ID = 999;
-
+    private TextView mTextViewQualification;
+    private Spinner mSpinnerTimeSlots;
+    private TextView mTextViewDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_appointment);
 
-        //mFormView = findViewById(R.id.bookAppointmentForm);
-        //mProgressView = findViewById(R.id.progressView);
-        mTextViewDocname = (TextView) findViewById(R.id.textViewDocName);
-        mTextViewDocSpeciality = (TextView) findViewById(R.id.textViewDocSpec);
-        mListTimeSlots = (ListView) findViewById(R.id.listTimeSlots);
+        mTextViewDocFName = (TextView) findViewById(R.id.tvDocFName);
+        mTextViewDocLName = (TextView) findViewById(R.id.tvDocLName);
+        mTextViewDocSpeciality = (TextView) findViewById(R.id.tvDocSpec);
+        mTextViewQualification = (TextView) findViewById(R.id.tvQualification);
+        mSpinnerTimeSlots = (Spinner) findViewById(R.id.spinnerTimeSlots);
+        mTextViewDate = (TextView) findViewById(R.id.tvDate);
 
         ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
         ServiceProvider serviceProvider = LoginHolder.spsspt.getServProvHasService().getServProv();
 
-        mTextViewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
+        mTextViewDocFName.setText(serviceProvider.getfName());
+        mTextViewDocLName.setText(serviceProvider.getlName());
         mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
+        mTextViewQualification.setText("(" + serviceProvider.getQualification() + ")");
 
-        setCurrentDateOnView();
-        addListenerOnButton();
-
+        String date = UIUtility.getDaAsString("/");
+        mTextViewDate.setText(date);
+        setTimeSlots(date);
     }
 
     private boolean isTimeSlotsBooked(String selectedItem) {
@@ -92,7 +88,7 @@ public class BookAppointmentActivity extends Activity {
                 MappContract.Appointment.COLUMN_NAME_DATE + "=?";
         String[] selectionArgs = {
                 "" + UIUtility.getMinutes(selectedItem),
-                mTvDisplayDate.getText().toString()
+                mTextViewDate.getText().toString()
         };
         Cursor c = db.query(MappContract.Appointment.TABLE_NAME,
                 projection, selection, selectionArgs, null, null, null);
@@ -103,7 +99,7 @@ public class BookAppointmentActivity extends Activity {
 
     public void bookAppointment(View view) {
         //UIUtility.showProgress(this, mFormView, mProgressView, true);
-        if (!isTimeSlotsBooked(selectedItem)) {
+        if (!isTimeSlotsBooked(mSpinnerTimeSlots.getSelectedItem().toString())) {
             SaveAppointData task = new SaveAppointData(this);
             task.execute((Void) null);
         } else {
@@ -111,28 +107,32 @@ public class BookAppointmentActivity extends Activity {
         }
     }
 
-    public void setTimeSlots(Calendar cal) {
+    public void setTimeSlots(String dateStr) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+        Calendar cal = Calendar.getInstance();
+        try {
+            Date date = sdf.parse(dateStr);
+            cal.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if (!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
             UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
-            // listView is your instance of your ListView
-            ArrayAdapter sampleAdapter = (ArrayAdapter) mListTimeSlots.getAdapter();
-            sampleAdapter.clear();
-            sampleAdapter.notifyDataSetChanged();
             return;
         }
-        ArrayList<String> liste = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (int i = LoginHolder.spsspt.getStartTime(); i <= LoginHolder.spsspt.getEndTime(); i += 30) {
             String from = UIUtility.getTimeString(i);
             if (!isTimeSlotsBooked(from)) {
-                liste.add(from);
+                list.add(from);
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_time_slots, liste);
-
-        mListTimeSlots.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-        mListTimeSlots.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this,R.layout.layout_spinner, list);
+        mSpinnerTimeSlots.setAdapter(spinnerAdapter);
+/*
+        mSpinnerTimeSlots.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -144,41 +144,14 @@ public class BookAppointmentActivity extends Activity {
             }
         });
         mListTimeSlots.setAdapter(adapter);
+*/
     }
 
-    public void setCurrentDateOnView() {
-
-        mTvDisplayDate = (TextView) findViewById(R.id.tvDate);
-        mDpResult = (DatePicker) findViewById(R.id.datePicker);
-
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-
-        // set current date into textview
-        mTvDisplayDate.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(month + 1).append("-").append(day).append("-")
-                .append(year).append(" "));
-
-        // set current date into datepicker
-        mDpResult.init(year, month, day, null);
-        setTimeSlots(c);
-
+    public void showDatePicker(View view) {
+        UIUtility.datePicker(view, mTextViewDate);
     }
 
-    public void addListenerOnButton() {
-        mBtnChangeDate = (Button) findViewById(R.id.btnChangeDate);
-        mBtnChangeDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(DATE_DIALOG_ID);
-            }
-
-        });
-    }
-
+/*
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -213,6 +186,7 @@ public class BookAppointmentActivity extends Activity {
             setTimeSlots(cal);
         }
     };
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -252,10 +226,11 @@ public class BookAppointmentActivity extends Activity {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+            String selectedItem = mSpinnerTimeSlots.getSelectedItem().toString();
             ContentValues values = new ContentValues();
             values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME, UIUtility.getMinutes(selectedItem));
             values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, UIUtility.getMinutes(selectedItem) + 30);
-            values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTvDisplayDate.getText().toString());
+            values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTextViewDate.getText().toString());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServProvHasService().getService().getName());
             values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getServProvHasService().getService().getSpeciality());
@@ -268,7 +243,7 @@ public class BookAppointmentActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
+            if (UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
                 Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
                 startActivity(intent);
                 //return;

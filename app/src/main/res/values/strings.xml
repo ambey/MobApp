@@ -57,9 +57,13 @@
 
     </string-array>
     <string-array name="when">
-        <item>Before Meal</item>
-        <item>After Meal</item>
+        <item>@string/before_meal</item>
+        <item>@string/after_meal</item>
     </string-array>
+
+    <string name="before_meal">Before Meal</string>
+    <string name="after_meal">After Meal</string>
+
     <string-array name="drug_type">
         <item>Tablet</item>
         <item>Syrup</item>
@@ -147,5 +151,8 @@
     <string name="lastModified">Last Modified : </string>
     <string name="hello">Hello</string>
     <string name="helloDr">Hello Dr</string>
+    <string name="dateFormat">dd/mm/yyyy</string>
 
+    <string name="error_num_should_be_positive">This field should be a positive number</string>
+    <string name="error_invalid_number">Invalid number</string>
 </resources>
