@@ -49,7 +49,7 @@ public class AdvanceSearchDocActivity extends Activity {
     private Button mMultiSpinnerDays;
     protected CharSequence[] options = { "All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     protected boolean[] selections =  new boolean[ options.length ];
-    StringBuilder selectedDays = new StringBuilder("");
+    String selectedDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,68 +75,100 @@ public class AdvanceSearchDocActivity extends Activity {
             mDrClinicName.setText(LoginHolder.spsspt.getServicePoint().getName());
         }
 
-        /*String[] array = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "All Day" };
-        MultiSelectionSpinner multiSelectionSpinner = (MultiSelectionSpinner) findViewById(R.id.spinAvailDays);
-        multiSelectionSpinner.setItems(array);
-        multiSelectionSpinner.setSelection(new int[]{2, 6});*/
-
         mMultiSpinnerDays = (Button)findViewById(R.id.spinAvailDays);
         mMultiSpinnerDays.setOnClickListener( new ButtonClickHandler() );
     }
 
     public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick( View view ) {
-            showDialog( 0 );
+        public void onClick(View view) {
+            if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+                setupSelection();
+            }
+            showDialog(0);
         }
     }
 
     @Override
-    protected Dialog onCreateDialog( int id )
-    {
-        return  new AlertDialog.Builder( this )
-                .setTitle("Available Days" )
-                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler() )
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        super.onPrepareDialog(id, dialog);
+        if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            setupSelection();
+        }
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        return new AlertDialog.Builder(this)
+                .setTitle("Available Days")
+                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
                 .setPositiveButton("OK", new DialogButtonClickHandler())
                 .create();
     }
 
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener
-    {
-        public void onClick( DialogInterface dialog, int clicked, boolean selected )
-        {
-            Log.i( "ME", options[ clicked ] + " selected: " + selected );
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
+        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
+            Log.i("ME", options[clicked] + " selected: " + selected);
         }
     }
 
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener
-    {
-        public void onClick( DialogInterface dialog, int clicked )
-        {
-            switch( clicked )
-            {
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int clicked) {
+            switch (clicked) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    mMultiSpinnerDays.setText("Select Days");
                     printSelectedDays();
+                    mMultiSpinnerDays.setText(selectedDays);
                     break;
             }
         }
     }
 
-    protected void printSelectedDays(){
-        for( int i = 0; i < options.length; i++ ){
-            Log.i( "ME", options[ i ] + " selected: " + selections[i] );
+    protected void printSelectedDays() {
+        if(selections[0]) {
+            setupAllDaysSelected();
+            return;
+        }
+        int i = 1;
+        selectedDays = getString(R.string.select_days);
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
 
-            if(selections[i]) {
-                //selectedDays[i] = options[i].toString();
-                selectedDays.append(options[i].toString());
-                selectedDays.append(",");
+            if (selections[i]) {
+                selectedDays = options[i++].toString();
+                break;
             }
         }
-        if(options.toString().equals("All Days")) {
-            mMultiSpinnerDays.setText(UIUtility.getDays());
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
+
+            if (selections[i]) {
+                selectedDays += "," + options[i].toString();
+            }
         }
-        mMultiSpinnerDays.setText(selectedDays.toString());
-        //selectedDays = new StringBuilder(selectedDays.substring(0, selectedDays.length() - 1));
+    }
+
+    private void setupSelection() {
+        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
+        selections[0] = false;
+        for(String d : selectedDays) {
+            selections[getDayIndex(d)] = true;
+        }
+    }
+
+    private int getDayIndex(String day) {
+        for(int i = 0; i < options.length; i++) {
+            if(day.equals(options[i])) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void setupAllDaysSelected() {
+        selections[0] = false;
+        selectedDays = options[1].toString();
+        for(int i = 2; i < options.length; i++){
+            selectedDays += "," + options[i];
+        }
     }
 
 
@@ -210,10 +242,10 @@ public class AdvanceSearchDocActivity extends Activity {
         String endTime = mButttonEndTime.getText().toString();
         //String availDay = UIUtility.getCommaSepparatedString(selectedDays);
 
-        String availDay = "";
-        if(selectedDays != null && !(selectedDays.toString().equals(""))) {
-            availDay = selectedDays.toString();
-        }
+        String availDay = mMultiSpinnerDays.getText().toString();
+        /*if(selectedDays != null && !(selectedDays.equals(""))) {
+            availDay = selectedDays;
+        }*/
 
         if (!(endTime.equals("")) &&
                 !(startTime.equals("")) ) {

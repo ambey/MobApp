@@ -160,32 +160,12 @@ public abstract class SearchDoctor {
         }
 
         if (!availDay.equals("")) {
-            /*if (availDay.contains(",")) {
-                ArrayList<String> dayList = new ArrayList<String>(Arrays.asList(availDay.split(",")));
-            }*/
-            //ArrayList<String> availDayList = new ArrayList<String>(Arrays.asList(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF.split(",")));
-
-            if (availDay.endsWith(",")) {
-                availDay = availDay.substring(0, availDay.length() - 1);
-            }
-
             if (availDay.contains(",")) {
-                /*String[] nm = availDay.split(",");
-                v1 = nm[0].trim();
-                if(nm.length > 1) {
-                    v2 = nm[1].trim();
-                }
-                for(int i = 0; i <= nm.length; i++) {
-
-                }*/
-
                 availDay = availDay.replaceAll(",", "%");
-                availDay = "%" + availDay + "%";
+                //availDay = "%" + availDay + "%";
             }
-
-
             whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ?";
-            argList.add(availDay);
+            argList.add("%" + availDay + "%");
         }
 /*
         if(!qualification.equals("")) {

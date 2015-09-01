@@ -14,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -82,19 +84,11 @@ public abstract class UIUtility {
         //return minutes / 60 + ":" + minutes % 60;
     }
 
-    public static boolean findDocAvailability(String weekOff, Calendar calendar) {
+    public static boolean findDocAvailability(String availDays, Calendar calendar) {
         //Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        /*int day = calendar.get(Calendar.DAY_OF_WEEK);
         int weekOffDay = 1; // for sunday
         boolean flag = false;
-
-        /*switch (day) {
-            case Calendar.SUNDAY:
-                // ...
-
-            case Calendar.MONDAY:
-                // etc ...
-        }*/
 
         if (weekOff.equalsIgnoreCase("Monday")) {
             weekOffDay = 2;
@@ -113,7 +107,31 @@ public abstract class UIUtility {
         if (weekOffDay != day) {
             flag = true;
         }
-        return flag;
+        return flag;*/
+
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        String searchDay = "Sunday";
+        if(day == 2) {
+            searchDay = "Monday";
+        } else if(day == 3) {
+            searchDay = "Tuesday";
+        } else if(day == 4) {
+            searchDay = "Wednesday";
+        } else if(day == 5) {
+            searchDay = "Thursday";
+        } else if(day == 6) {
+            searchDay = "Friday";
+        } else if(day == 7) {
+            searchDay = "Saturday";
+        }
+
+        ArrayList<String> availDaysList = new ArrayList<String>();
+        availDaysList.add(availDays);
+        if(availDays.contains(",")) {
+            availDaysList = new ArrayList<>(Arrays.asList(availDays.trim().split(",")));
+        }
+
+        return availDaysList.contains(searchDay);
     }
 
 

@@ -90,9 +90,17 @@ public class ViewAppointmentListActivity extends Activity
 
     public void setCurrentDateOnView() {
         Calendar c = Calendar.getInstance();
-
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
         mAppointmentDateTextView.setText(sdf.format(c.getTime()));
+
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        if(SearchAppointment.searchAppointment(dbHelper, sdf.format(c.getTime()),
+                LoginHolder.servLoginRef.getIdServiceProvider())) {
+            setAppointmentList();
+        } else {
+            UIUtility.showAlert(this, "", "No Appointments for this date.");
+            return;
+        }
     }
 
     private void setAppointmentList() {
@@ -196,8 +204,12 @@ public class ViewAppointmentListActivity extends Activity
     @Override
     public void datePicked(String date) {
         MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        SearchAppointment.searchAppointment(dbHelper, date,
-                LoginHolder.servLoginRef.getIdServiceProvider());
-        setAppointmentList();
+        if(SearchAppointment.searchAppointment(dbHelper, date,
+                LoginHolder.servLoginRef.getIdServiceProvider())) {
+            setAppointmentList();
+        } else {
+            UIUtility.showAlert(this, "", "No Appointments for this date.");
+            return;
+        }
     }
 }

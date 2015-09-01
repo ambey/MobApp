@@ -26,7 +26,7 @@ public abstract class SearchAppointment {
     }
 
     private static String getQuery() {
-        String query = "select " +
+        return "select " +
                     MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment._ID + ", " +
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_DATE + ", " +
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_FROM_TIME + ", " +
@@ -55,7 +55,5 @@ public abstract class SearchAppointment {
 
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER + " = " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_ID_CUSTOMER;
-
-        return query;
     }
 }

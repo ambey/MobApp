@@ -58,8 +58,8 @@ public class AddWorkPlaceActivity extends Activity {
     private View mProgressView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] _options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-    protected boolean[] _selections = new boolean[_options.length];
+    protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    protected boolean[] selections = new boolean[options.length];
     //String []selectedDays = new String[_options.length];
     String selectedDays;
 
@@ -112,14 +112,14 @@ public class AddWorkPlaceActivity extends Activity {
     protected Dialog onCreateDialog(int id) {
         return new AlertDialog.Builder(this)
                 .setTitle("Available Days")
-                .setMultiChoiceItems(_options, _selections, new DialogSelectionClickHandler())
+                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
                 .setPositiveButton("OK", new DialogButtonClickHandler())
                 .create();
     }
 
     public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
         public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            Log.i("ME", _options[clicked] + " selected: " + selected);
+            Log.i("ME", options[clicked] + " selected: " + selected);
         }
     }
 
@@ -135,40 +135,40 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     protected void printSelectedDays() {
-        if(_selections[0]) {
+        if(selections[0]) {
             setupAllDaysSelected();
             return;
         }
         int i = 1;
         selectedDays = getString(R.string.select_days);
-        for (; i < _options.length; i++) {
-            Log.i("ME", _options[i] + " selected: " + _selections[i]);
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
 
-            if (_selections[i]) {
-                selectedDays = _options[i++].toString();
+            if (selections[i]) {
+                selectedDays = options[i++].toString();
                 break;
             }
         }
-        for (; i < _options.length; i++) {
-            Log.i("ME", _options[i] + " selected: " + _selections[i]);
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
 
-            if (_selections[i]) {
-                selectedDays += "," + _options[i].toString();
+            if (selections[i]) {
+                selectedDays += "," + options[i].toString();
             }
         }
     }
 
     private void setupSelection() {
         String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
-        _selections[0] = false;
+        selections[0] = false;
         for(String d : selectedDays) {
-            _selections[getDayIndex(d)] = true;
+            selections[getDayIndex(d)] = true;
         }
     }
 
     private int getDayIndex(String day) {
-        for(int i = 0; i < _options.length; i++) {
-            if(day.equals(_options[i])) {
+        for(int i = 0; i < options.length; i++) {
+            if(day.equals(options[i])) {
                 return i;
             }
         }
@@ -176,10 +176,10 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     private void setupAllDaysSelected() {
-        _selections[0] = false;
-        selectedDays = _options[1].toString();
-        for(int i = 2; i < _options.length; i++){
-            selectedDays += "," + _options[i];
+        selections[0] = false;
+        selectedDays = options[1].toString();
+        for(int i = 2; i < options.length; i++){
+            selectedDays += "," + options[i];
         }
     }
 
