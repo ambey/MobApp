@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Email Id"
-                android:inputType="phone"
+                android:inputType="textEmailAddress"
                 android:layout_marginTop="10dp" />
 
             <EditText

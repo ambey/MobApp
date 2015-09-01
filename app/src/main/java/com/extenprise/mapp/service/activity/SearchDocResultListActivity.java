@@ -1,15 +1,22 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -19,8 +26,16 @@ import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchDoctor;
+import com.extenprise.mapp.util.UIUtility;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class SearchDocResultListActivity extends Activity {
+
+    ArrayList<HashMap<String, Object>> searchResults;
+    LayoutInflater inflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +52,10 @@ public class SearchDocResultListActivity extends Activity {
                     String[] from,
                     int[] to,
                     int flags);*/
+
+
+        //ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.activity_search_result);
+
 
         String[] values = new String[] {
                 MappContract.ServiceProvider.COLUMN_NAME_FNAME,
@@ -60,7 +79,29 @@ public class SearchDocResultListActivity extends Activity {
                 R.layout.activity_search_result,
                 cursor,
                 values,
-                viewIds, 0);
+                viewIds, 0){
+            @Override
+            public View getView(int position, View convertView,
+                                ViewGroup parent) {
+
+                View view =super.getView(position, convertView, parent);
+                cursor.moveToPosition(position);
+                String docAvailDays = cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF));
+
+                ImageView mImageViewAvailable = (ImageView) view.findViewById(R.id.imageViewAvailability);
+
+                if(UIUtility.findDocAvailability(docAvailDays, Calendar.getInstance())) {
+                    mImageViewAvailable.setImageResource(R.drawable.g_circle);
+                } else {
+                    mImageViewAvailable.setImageResource(R.drawable.r_circle);
+                }
+
+            /*YOUR CHOICE OF COLOR*/
+                //textView.setTextColor(Color.BLUE);
+
+                return view;
+            }
+        };
 
         ListView listView = (ListView) findViewById(R.id.docListView);
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
@@ -126,5 +167,60 @@ public class SearchDocResultListActivity extends Activity {
 
 
 
+    /*private class CustomAdapter extends ArrayAdapter<HashMap<String, Object>>
+    {
 
+        public CustomAdapter(Context context, int textViewResourceId,
+                             ArrayList<HashMap<String, Object>> Strings) {
+
+            //let android do the initializing :)
+            super(context, textViewResourceId, Strings);
+        }
+
+
+        //class for caching the views in a row
+        private class ViewHolder
+        {
+            ImageView photo;
+            TextView name,team;
+
+        }
+
+        ViewHolder viewHolder;
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if(convertView==null)
+            {
+                convertView=inflater.inflate(R.layout.activity_search_result, null);
+                viewHolder=new ViewHolder();
+
+                //cache the views
+                *//*viewHolder.photo=(ImageView) convertView.findViewById(R.drawable.g_circle);
+                viewHolder.name=(TextView) convertView.findViewById(R.id.name);
+                viewHolder.team=(TextView) convertView.findViewById(R.id.team);*//*
+
+                //link the cached views to the convertview
+                convertView.setTag(viewHolder);
+
+            }
+            else
+                viewHolder=(ViewHolder) convertView.getTag();
+
+
+            int photoId=(Integer) searchResults.get(position).get("photo");
+
+            //set the data to be displayed
+            viewHolder.photo.setImageDrawable(getResources().getDrawable(photoId));
+            viewHolder.name.setText(searchResults.get(position).get("name").toString());
+            viewHolder.team.setText(searchResults.get(position).get("team").toString());
+
+            //return the view to be displayed
+            return convertView;
+        }
+
+    }*/
 }
+
+

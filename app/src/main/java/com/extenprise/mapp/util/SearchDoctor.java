@@ -160,12 +160,12 @@ public abstract class SearchDoctor {
         }
 
         if (!availDay.equals("")) {
-            if (availDay.contains(",")) {
+            /*if (availDay.contains(",")) {
                 availDay = availDay.replaceAll(",", "%");
                 //availDay = "%" + availDay + "%";
-            }
-            whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ?";
-            argList.add("%" + availDay + "%");
+            }*/
+            whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " in ( ? )";
+            argList.add(availDay);
         }
 /*
         if(!qualification.equals("")) {

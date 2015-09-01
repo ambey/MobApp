@@ -241,7 +241,7 @@ public class AddWorkPlaceActivity extends Activity {
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
         spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
         spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
-        spsspt.setWeeklyOff(selectedDays.substring(0, selectedDays.length() - 1));
+        spsspt.setWeeklyOff(mMultiSpinnerDays.getText().toString());
         spsspt.setServicePoint(spt);
         spsspt.setServProvHasService(sps);
         spt.addSpsspt(spsspt);
@@ -370,7 +370,7 @@ public class AddWorkPlaceActivity extends Activity {
                 valid = false;
             }
         }
-        if (selectedDays.length() == 0 || (selectedDays.substring(0, selectedDays.length() - 1)).equals("")) {
+        if (mMultiSpinnerDays.getText().toString().equals(R.string.select_days)) {
             mMultiSpinnerDays.setError(getString(R.string.error_field_required));
             focusView = mMultiSpinnerDays;
             valid = false;

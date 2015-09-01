@@ -72,11 +72,12 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/imageViewAvailability"
-        android:background="@drawable/button"
-        android:backgroundTint="#f00"
+        android:src="@drawable/g_circle"
         android:layout_alignBottom="@+id/viewClinicName"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <!--android:background="@drawable/button"
+    android:backgroundTint="#f00"-->
     <TextView
         android:id="@+id/viewDocSpeciality"
         android:layout_width="wrap_content"
