@@ -157,23 +157,30 @@ public abstract class UIUtility {
 
 
     public static void timePicker(View view, final TextView button) {
+        datePicker(view, button, null);
+    }
+
+    public static void datePicker(View view, final TextView button, final DateChangeListener listener) {
         // Process to get Current Time
         final Calendar c = Calendar.getInstance();
-        final int hour = c.get(Calendar.HOUR_OF_DAY);
-        final int minute = c.get(Calendar.MINUTE);
+        final int year = c.get(Calendar.YEAR);
+        final int month = c.get(Calendar.MONTH);
+        final int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Launch Time Picker Dialog
-        TimePickerDialog tpd = new TimePickerDialog(view.getContext(),
-                new TimePickerDialog.OnTimeSetListener() {
+        DatePickerDialog dpd = new DatePickerDialog(view.getContext(),
+                new DatePickerDialog.OnDateSetListener() {
 
                     @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
-                        // Display Selected time in textbox
-                        button.setText(String.format("%02d:%02d", hourOfDay, minute));
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String date = String.format("%02d/%02d/%4d", dayOfMonth, monthOfYear + 1, year);
+                        button.setText(date);
+                        if (listener != null) {
+                            listener.datePicked(date);
+                        }
                     }
-                }, hour, minute, false);
-        tpd.show();
+                }, year, month, day);
+        dpd.show();
     }
 
     public static void datePicker(View view, final TextView button) {

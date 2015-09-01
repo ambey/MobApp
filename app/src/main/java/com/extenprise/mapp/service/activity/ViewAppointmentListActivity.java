@@ -29,35 +29,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ViewAppointmentListActivity extends Activity {
+public class ViewAppointmentListActivity extends Activity
+        implements DateChangeListener {
 
     private TextView mAppointmentDateTextView;
     private ListView mAppointmentListView;
-    private DatePicker mDpResult;
-
-    private int year;
-    private int month;
-    private int day;
-    static final int DATE_DIALOG_ID = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_appointment_list);
 
-        mAppointmentDateTextView = (TextView)findViewById(R.id.appointmentDateTextView);
-        mAppointmentListView = (ListView)findViewById(R.id.appointmentListView);
-        mDpResult = (DatePicker) findViewById(R.id.datePicker);
+        mAppointmentDateTextView = (TextView) findViewById(R.id.appointmentDateTextView);
+        mAppointmentListView = (ListView) findViewById(R.id.appointmentListView);
 
         setCurrentDateOnView();
-        mAppointmentDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog(DATE_DIALOG_ID);
-            }
-        });
+        setAppointmentList();
     }
 
+/*
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -96,35 +86,20 @@ public class ViewAppointmentListActivity extends Activity {
             setAppointmentList();
         }
     };
+*/
 
     public void setCurrentDateOnView() {
+        Calendar c = Calendar.getInstance();
 
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-
-        // set current date into textview
-        mAppointmentDateTextView.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(month + 1).append("-").append(day).append("-")
-                .append(year).append(" "));
-
-        // set current date into datepicker
-        mDpResult.init(year, month, day, null);
-
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        SearchAppointment.searchAppointment(dbHelper, mAppointmentDateTextView.getText().toString(),
-                LoginHolder.servLoginRef.getIdServiceProvider());
-
-        setAppointmentList();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+        mAppointmentDateTextView.setText(sdf.format(c.getTime()));
     }
 
     private void setAppointmentList() {
 
         final Cursor cursor = SearchAppointment.getCursor();
 
-        String[] values = new String[] {
+        String[] values = new String[]{
                 MappContract.Customer.COLUMN_NAME_FNAME,
                 MappContract.Customer.COLUMN_NAME_LNAME,
                 MappContract.Customer.COLUMN_NAME_GENDER,
@@ -132,7 +107,7 @@ public class ViewAppointmentListActivity extends Activity {
                 MappContract.Customer.COLUMN_NAME_WEIGHT,
                 MappContract.Appointment.COLUMN_NAME_FROM_TIME
         };
-        int[] viewIds = new int[] {
+        int[] viewIds = new int[]{
                 R.id.patientFNameTextView,
                 R.id.patientLNameTextView,
                 R.id.patientGenderTextView,
@@ -167,12 +142,12 @@ public class ViewAppointmentListActivity extends Activity {
                 DateFormat formatter = new SimpleDateFormat("dd-MM-yy");
                 try {
                     Date dob = formatter.parse(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_DOB)));
-                    if(dob != null) {
+                    if (dob != null) {
                         customer.setDob(dob);
                     }
 
                     Date doAppnt = formatter.parse(mAppointmentDateTextView.getText().toString());
-                    if(doAppnt != null) {
+                    if (doAppnt != null) {
                         appointment.setDateOfAppointment(doAppnt);
                     }
                 } catch (ParseException e) {
@@ -212,5 +187,17 @@ public class ViewAppointmentListActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDatePicker(View view) {
+        UIUtility.datePicker(view, mAppointmentDateTextView, this);
+    }
+
+    @Override
+    public void datePicked(String date) {
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        SearchAppointment.searchAppointment(dbHelper, date,
+                LoginHolder.servLoginRef.getIdServiceProvider());
+        setAppointmentList();
     }
 }

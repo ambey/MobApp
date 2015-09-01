@@ -32,6 +32,7 @@ import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.UIUtility;
 
 import org.w3c.dom.Text;
@@ -44,7 +45,8 @@ import java.util.Collections;
 import java.util.Date;
 
 
-public class BookAppointmentActivity extends Activity {
+public class BookAppointmentActivity extends Activity
+        implements DateChangeListener {
 
     private TextView mTextViewDocFName;
     private TextView mTextViewDocLName;
@@ -123,70 +125,15 @@ public class BookAppointmentActivity extends Activity {
             return;
         }
         ArrayList<String> list = new ArrayList<>();
-        for (int i = LoginHolder.spsspt.getStartTime(); i <= LoginHolder.spsspt.getEndTime(); i += 30) {
+        for (int i = LoginHolder.spsspt.getStartTime(); i < LoginHolder.spsspt.getEndTime(); i += 30) {
             String from = UIUtility.getTimeString(i);
             if (!isTimeSlotsBooked(from)) {
                 list.add(from);
             }
         }
-        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this,R.layout.layout_spinner, list);
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
-/*
-        mSpinnerTimeSlots.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                for (int a = 0; a < parent.getChildCount(); a++) {
-                    parent.getChildAt(a).setBackgroundColor(Color.TRANSPARENT);
-                }
-                selectedItem = mListTimeSlots.getItemAtPosition(position).toString().trim();
-                view.setBackgroundColor(Color.GREEN);
-            }
-        });
-        mListTimeSlots.setAdapter(adapter);
-*/
     }
-
-    public void showDatePicker(View view) {
-        UIUtility.datePicker(view, mTextViewDate);
-    }
-
-/*
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DATE_DIALOG_ID:
-                // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener,
-                        year, month, day);
-        }
-        return null;
-    }
-
-    private DatePickerDialog.OnDateSetListener datePickerListener
-            = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-
-            // set selected date into textview
-            mTvDisplayDate.setText(new StringBuilder().append(day)
-                    .append("-").append(month + 1).append("-").append(year)
-                    .append(" "));
-
-            // set selected date into datepicker also
-            mDpResult.init(year, month, day, null);
-
-            Calendar cal = Calendar.getInstance();
-            cal.set(year, month, day);
-            setTimeSlots(cal);
-        }
-    };
-*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -208,6 +155,15 @@ public class BookAppointmentActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDatePicker(View view) {
+        UIUtility.datePicker(view, mTextViewDate, this);
+    }
+
+    @Override
+    public void datePicked(String date) {
+        setTimeSlots(date);
     }
 
     class SaveAppointData extends AsyncTask<Void, Void, Void> {
