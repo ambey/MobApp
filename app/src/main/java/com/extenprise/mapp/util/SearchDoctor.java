@@ -160,33 +160,36 @@ public abstract class SearchDoctor {
             argList.add("" + UIUtility.getMinutes(endTime));
         }
 
-        /*if (!availDay.equals("")) {
+        if (!availDay.equals("")) {
             whereClause += "and ";
+
             if (availDay.contains(",")) {
                 //availDay = availDay.replaceAll(",", "%");
                 //availDay = "%" + availDay + "%";
+                whereClause += "( ";
                 String[] days = availDay.trim().split(",");
                 for(int i=0; i<days.length; i++) {
                     whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
-                    argList.add(days[i] + "%");
+                    argList.add("%" + days[i] + "%");
                     if(i+1 < days.length) {
                         whereClause += " or ";
                     }
                 }
+                whereClause += " )";
             } else {
                 whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
                 argList.add("%" + availDay + "%");
             }
-        }*/
+        }
 
-        if (!availDay.equals("")) {
+        /*if (!availDay.equals("")) {
             if(availDay.contains(",")) {
                 availDay = availDay.replaceAll(",", "%");
             }
             //availDay = "%" + availDay + "%";
             whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
             argList.add("%" + availDay + "%");
-        }
+        }*/
 /*
         if(!qualification.equals("")) {
             //whereClause += checkWhereClause(whereClause) + + ;

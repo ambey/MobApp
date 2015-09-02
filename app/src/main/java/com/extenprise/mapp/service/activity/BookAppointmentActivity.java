@@ -199,11 +199,10 @@ public class BookAppointmentActivity extends Activity
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if (UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.")) {
-                Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
-                startActivity(intent);
-                //return;
-            }
+            UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.");
+            /*Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
+            startActivity(intent);*/
+            return;
         }
 
         @Override

@@ -320,7 +320,7 @@ public class AdvanceSearchDocActivity extends Activity {
             } else {
                     /*Intent intent = new Intent(mActivity, AdvanceSearchDocActivity.class);
                     startActivity(intent);*/
-                UIUtility.showAlert(mActivity,"No Results Found","Sorry, No result matches to your criteria!");
+                UIUtility.showAlert(mActivity, "No Results Found","Sorry, No result matches to your criteria!");
             }
         }
 

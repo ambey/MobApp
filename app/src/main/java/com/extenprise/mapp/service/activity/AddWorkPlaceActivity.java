@@ -518,10 +518,10 @@ public class AddWorkPlaceActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            UIUtility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
             UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
-            Intent intent = new Intent(myActivity, LoginActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(myActivity, LoginActivity.class);
+            //startActivity(intent);
         }
 
         @Override
