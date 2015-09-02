@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.ArrayAdapter;
 
+import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 
@@ -159,13 +160,32 @@ public abstract class SearchDoctor {
             argList.add("" + UIUtility.getMinutes(endTime));
         }
 
-        if (!availDay.equals("")) {
-            /*if (availDay.contains(",")) {
-                availDay = availDay.replaceAll(",", "%");
+        /*if (!availDay.equals("")) {
+            whereClause += "and ";
+            if (availDay.contains(",")) {
+                //availDay = availDay.replaceAll(",", "%");
                 //availDay = "%" + availDay + "%";
-            }*/
-            whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " in ( ? )";
-            argList.add(availDay);
+                String[] days = availDay.trim().split(",");
+                for(int i=0; i<days.length; i++) {
+                    whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
+                    argList.add(days[i] + "%");
+                    if(i+1 < days.length) {
+                        whereClause += " or ";
+                    }
+                }
+            } else {
+                whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
+                argList.add("%" + availDay + "%");
+            }
+        }*/
+
+        if (!availDay.equals("")) {
+            if(availDay.contains(",")) {
+                availDay = availDay.replaceAll(",", "%");
+            }
+            //availDay = "%" + availDay + "%";
+            whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
+            argList.add("%" + availDay + "%");
         }
 /*
         if(!qualification.equals("")) {

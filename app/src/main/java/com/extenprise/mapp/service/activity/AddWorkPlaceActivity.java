@@ -370,7 +370,8 @@ public class AddWorkPlaceActivity extends Activity {
                 valid = false;
             }
         }
-        if (mMultiSpinnerDays.getText().toString().equals(R.string.select_days)) {
+        String days = mMultiSpinnerDays.getText().toString();
+        if (days.equalsIgnoreCase("Select Days")) {
             mMultiSpinnerDays.setError(getString(R.string.error_field_required));
             focusView = mMultiSpinnerDays;
             valid = false;

@@ -243,6 +243,9 @@ public class AdvanceSearchDocActivity extends Activity {
         //String availDay = UIUtility.getCommaSepparatedString(selectedDays);
 
         String availDay = mMultiSpinnerDays.getText().toString();
+        if(availDay.equalsIgnoreCase("Select Days")) {
+            availDay = "";
+        }
         /*if(selectedDays != null && !(selectedDays.equals(""))) {
             availDay = selectedDays;
         }*/
