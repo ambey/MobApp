@@ -103,7 +103,7 @@ public class AddSpecialityActivity extends Activity {
         sps.setExperience(Float.parseFloat(mExperience.getText().toString()));
 
         Service s = new Service();
-        s.setName(mService.getSelectedItem().toString());
+        s.setServCatagory(mService.getSelectedItem().toString());
         s.setSpeciality(mSpeciality.getText().toString());
 
 
@@ -241,7 +241,7 @@ public class AddSpecialityActivity extends Activity {
             for (ServProvHasService sps : spsList) {
                 values = new ContentValues();
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV, spId);
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME, sps.getService().getName());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME, sps.getService().getServCatagory());
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService().getSpeciality());
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE, sps.getExperience());
 

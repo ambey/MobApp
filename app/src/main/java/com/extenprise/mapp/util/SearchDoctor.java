@@ -40,10 +40,10 @@ public abstract class SearchDoctor {
 
     public static boolean searchByAll(MappDbHelper dbHelper, String name, String clinic, String spec, String loc,
                                       String qualification, String exp, String startTime, String endTime,
-                                      String availDay, String gender) {
+                                      String availDay, String gender, String consultFee) {
         ArrayList<String> argList = new ArrayList<>();
         String whereClause = getWhereClause(name, clinic, spec, loc, qualification,
-                exp, startTime, endTime, availDay, gender, argList);
+                exp, startTime, endTime, availDay, gender, consultFee, argList);
         String[] selectionArgs = argList.toArray(new String[argList.size()]);
         String query = getQuery(whereClause);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -57,10 +57,12 @@ public abstract class SearchDoctor {
                 MappContract.ServiceProvider.COLUMN_NAME_FNAME + ", " +
                 MappContract.ServiceProvider.COLUMN_NAME_LNAME + ", " +
                 MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + ", " +
+                MappContract.ServiceProvider.COLUMN_NAME_GENDER + ", " +
                 MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + ", " +
                 MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME + ", " +
                 MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + ", " +
                 MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + ", " +
                 MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME + ", " +
                 MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + ", " +
                 MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE + ", " +
@@ -93,7 +95,7 @@ public abstract class SearchDoctor {
 
     private static String getWhereClause(String name, String clinic, String spec, String loc, String qualification,
                                          String exp, String startTime, String endTime,
-                                         String availDay, String gender, ArrayList<String> argList) {
+                                         String availDay, String gender, String consultFee, ArrayList<String> argList) {
 
         name = name.trim();
 
@@ -139,9 +141,9 @@ public abstract class SearchDoctor {
             whereClause += ") ";
         }
 
-        if (!spec.equals("")) {
-            whereClause += "and lower(" + MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + ") like ? ";
-            argList.add("%" + spec.toLowerCase() + "%");
+        if (!spec.equalsIgnoreCase("")) {
+            whereClause += "and lower(" + MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + ") = ? ";
+            argList.add(spec.toLowerCase());
         }
         if (!loc.equals("")) {
             whereClause += "and lower(" + MappContract.ServicePoint.COLUMN_NAME_LOCATION + ") like ? ";
@@ -190,16 +192,30 @@ public abstract class SearchDoctor {
             whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
             argList.add("%" + availDay + "%");
         }*/
-/*
+
         if(!qualification.equals("")) {
-            //whereClause += checkWhereClause(whereClause) + + ;
-            //argList.add(qualification);
+            whereClause += "and lower(" + MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + ") like ? ";
+            argList.add("%" + qualification.toLowerCase() + "%");
         }
         if(!gender.equals("")) {
-            //whereClause += checkWhereClause(whereClause) + + ;
-            //argList.add(gender);
+            whereClause += "and " + MappContract.ServiceProvider.COLUMN_NAME_GENDER + " = ? ";
+            argList.add(gender);
         }
-*/
+        if(!consultFee.equals("")) {
+            if(consultFee.contains("<")) {
+                whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " < ? ";
+                argList.add(consultFee.replaceAll("<", ""));
+            } else if(consultFee.contains("-")) {
+                String range[] = consultFee.split("-");
+                whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " >= ? ";
+                argList.add(range[0]);
+                whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " <= ? ";
+                argList.add(range[1]);
+            } else if(consultFee.contains(">")) {
+                whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " <= ? ";
+                argList.add(consultFee.replaceAll(">", ""));
+            }
+        }
 
         if (whereClause.startsWith("and")) {
             return whereClause.substring(3);

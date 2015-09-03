@@ -18,7 +18,7 @@ public class MappContract {
         public static final String COLUMN_NAME_PASSWD = "passwd";
         public static final String COLUMN_NAME_GENDER = "gender";
         public static final String COLUMN_NAME_QUALIFICATION = "qualification";
-        public static final String COLUMN_NAME_CONSULTATION_FEE = "consultationFee";
+        public static final String COLUMN_NAME_REGISTRATION_NUMBER = "registrationNumber";
     }
 
     public static abstract class ServProvHasServ implements BaseColumns {
@@ -27,6 +27,7 @@ public class MappContract {
         public static final String COLUMN_NAME_ID_SERV_PROV = "idServProv";
         public static final String COLUMN_NAME_SERVICE_NAME = "serviceName";
         public static final String COLUMN_NAME_SPECIALITY = "speciality";
+        public static final String COLUMN_NAME_SERVICE_CATAGORY = "serviceCatagory";
         public static final String COLUMN_NAME_EXPERIENCE = "experience";
     }
 
@@ -39,6 +40,7 @@ public class MappContract {
         public static final String COLUMN_NAME_WEEKLY_OFF = "weeklyOff";
         public static final String COLUMN_NAME_START_TIME = "startTime";
         public static final String COLUMN_NAME_END_TIME = "endTime";
+        public static final String COLUMN_NAME_CONSULTATION_FEE = "consultationFee";
     }
 
     public static abstract class ServicePoint implements BaseColumns {

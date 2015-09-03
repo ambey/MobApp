@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
@@ -27,6 +29,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
@@ -41,6 +44,9 @@ public class SignUpActivity extends Activity {
     private EditText mCellphoneview;
     private EditText mPasswdView;
     private EditText mCnfPasswdView;
+    private RadioGroup mRadioGroupGender;
+    private RadioButton mRadioButtonGender;
+    private EditText mRegistrationNumber;
     private ImageView mImgView;
     private TextView mImgTxtView;
 
@@ -71,6 +77,8 @@ public class SignUpActivity extends Activity {
         mCnfPasswdView = (EditText) findViewById(R.id.editTextCnfPasswd);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
         mImgTxtView = (TextView) findViewById(R.id.uploadimage);
+        mRadioGroupGender = (RadioGroup) findViewById(R.id.radioGroupGender);
+        mRegistrationNumber = (EditText) findViewById(R.id.editTextRegistrationNumber);
     }
 
     @Override
@@ -110,6 +118,8 @@ public class SignUpActivity extends Activity {
         sp.setfName(mFirstName.getText().toString());
         sp.setlName(mLastName.getText().toString());
         sp.setPhone(mCellphoneview.getText().toString());
+        sp.setGender(mRadioButtonGender.getText().toString());
+        sp.setRegNo(mRegistrationNumber.getText().toString());
         sp.setPasswd(mPasswdView.getText().toString());
 
         LoginHolder.servLoginRef = sp;
@@ -175,6 +185,30 @@ public class SignUpActivity extends Activity {
             cancel = true;
         }
 
+        int uTypeID = mRadioGroupGender.getCheckedRadioButtonId();
+        if(uTypeID == -1) {
+            //UIUtility.showAlert(this, "", "Please Select Gender.");
+            mRadioButtonGender.setError("Please select Gender.");
+            focusView = mRadioGroupGender;
+            cancel = true;
+            //return;
+        } else {
+            mRadioButtonGender = (RadioButton)findViewById(uTypeID);
+        }
+
+        String regNo = mRegistrationNumber.getText().toString();
+        if(TextUtils.isEmpty(regNo)) {
+            mRegistrationNumber.setError(getString(R.string.error_field_required));
+            focusView = mRegistrationNumber;
+            cancel = true;
+        }
+
+        if(isRegNoExist(regNo)) {
+            mRegistrationNumber.setError("This Registration Number is already Registered.");
+            focusView = mRegistrationNumber;
+            cancel = true;
+        }
+
         if (cancel) {
             focusView.requestFocus();
             return false;
@@ -194,6 +228,27 @@ public class SignUpActivity extends Activity {
 
         String[] selectionArgs = {
                 phone
+        };
+        Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
+                projection, selection, selectionArgs, null, null, null);
+        int count = c.getCount();
+        c.close();
+
+        return (count > 0);
+    }
+
+    private boolean isRegNoExist(String regNo) {
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER
+        };
+
+        String selection = MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER + "=?";
+
+        String[] selectionArgs = {
+                regNo
         };
         Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
                 projection, selection, selectionArgs, null, null, null);

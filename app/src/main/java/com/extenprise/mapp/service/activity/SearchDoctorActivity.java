@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -25,7 +26,7 @@ public class SearchDoctorActivity extends Activity {
 
     private UserSearchTask mSearchTask = null;
     private EditText mDrClinicName;
-    private EditText mSpeciality;
+    private Spinner mSpeciality;
     private EditText mLocation;
     private View mProgressView;
     private View mSearchFormView;
@@ -41,16 +42,16 @@ public class SearchDoctorActivity extends Activity {
         LoginHolder.servLoginRef = new ServiceProvider();
 
         mDrClinicName = (EditText) findViewById(R.id.editTextSearchDr);
-        mSpeciality = (EditText) findViewById(R.id.editTextSearchSp);
+        mSpeciality = (Spinner) findViewById(R.id.editTextSearchSp);
         mLocation = (EditText) findViewById(R.id.editTextSearchLoc);
         mSearchFormView = findViewById(R.id.search_form);
         mProgressView = findViewById(R.id.search_progress);
     }
 
     public void advSearch(View view) {
-        String name = mDrClinicName.getText().toString();
-        String loc = mLocation.getText().toString();
-        String sp = mSpeciality.getText().toString();
+        String name = mDrClinicName.getText().toString().trim();
+        String loc = mLocation.getText().toString().trim();
+        String sp = mSpeciality.getSelectedItem().toString();
 
         ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
 
@@ -107,7 +108,10 @@ public class SearchDoctorActivity extends Activity {
 
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
-        String sp = mSpeciality.getText().toString().trim();
+        String sp = mSpeciality.getSelectedItem().toString();
+        if(sp.equals("Speciality")) {
+            sp = "";
+        }
         String dr = name, clinic = name;
 
         if(!name.equals("")) {
@@ -144,7 +148,7 @@ public class SearchDoctorActivity extends Activity {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             boolean presence = false;
 
-            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mLoc, "", "", "", "", "", "")) {
+            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mLoc, "", "", "", "", "", "", "")) {
                 presence = true;
             }
             return presence;

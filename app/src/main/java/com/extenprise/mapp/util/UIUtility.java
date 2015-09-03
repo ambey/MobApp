@@ -12,6 +12,7 @@ import android.os.Build;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -274,6 +275,17 @@ public abstract class UIUtility {
         return String.format("%02d/%02d/%04d", c.get(Calendar.DAY_OF_MONTH)
                 , c.get(Calendar.MONTH) + 1
                 , c.get(Calendar.YEAR));
+    }
+
+    public static int getSpinnerIndex(Spinner spinner, String str) {
+        int index = 0;
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(str)){
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 
 }

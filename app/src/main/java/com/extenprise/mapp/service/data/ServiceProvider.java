@@ -15,9 +15,19 @@ public class ServiceProvider {
     private String passwd;
     private String gender;
     private String qualification;
+    private String regNo;
     private boolean subscribed;
     private Date subsDate;
     private ArrayList<ServProvHasService> services;
+
+
+    public String getRegNo() {
+        return regNo;
+    }
+
+    public void setRegNo(String regNo) {
+        this.regNo = regNo;
+    }
 
     public String getQualification() {
         return qualification;
@@ -44,7 +54,7 @@ public class ServiceProvider {
     public ServProvHasService getServProvHasService(String name, String speciality) {
         for (ServProvHasService sps: services) {
             Service s = sps.getService();
-            if(s.getName().equals(name) && s.getSpeciality().equals(speciality)) {
+            if(s.getServCatagory().equals(name) && s.getSpeciality().equals(speciality)) {
                 return sps;
             }
         }

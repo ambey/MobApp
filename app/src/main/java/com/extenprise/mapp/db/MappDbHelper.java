@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ambey on 23/7/15.
  */
 public class MappDbHelper extends SQLiteOpenHelper {
-    public static final int DB_VERSION = 6;
+    public static final int DB_VERSION = 8;
     public static final String DB_NAME = "Mapp.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INT";
@@ -21,9 +21,9 @@ public class MappDbHelper extends SQLiteOpenHelper {
                     MappContract.ServiceProvider.COLUMN_NAME_FNAME + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_LNAME + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + TEXT_TYPE + COMMA_SEP +
+                    MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_GENDER + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServiceProvider.COLUMN_NAME_CONSULTATION_FEE + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServiceProvider.COLUMN_NAME_PASSWD + TEXT_TYPE + ")";
 
@@ -36,6 +36,7 @@ public class MappDbHelper extends SQLiteOpenHelper {
                     MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + TEXT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE + FLOAT_TYPE + ")";
 
     private static final String SQL_DELETE_SERV_PROV_HAS_SERV =
@@ -49,6 +50,7 @@ public class MappDbHelper extends SQLiteOpenHelper {
                     MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + TEXT_TYPE + COMMA_SEP +
                     MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME + INT_TYPE + COMMA_SEP +
                     MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + INT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + FLOAT_TYPE + COMMA_SEP +
                     MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + TEXT_TYPE + ")";
 
     private static final String SQL_DELETE_SERV_PROV_HAS_SERV_HAS_SERV_PT =

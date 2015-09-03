@@ -3,8 +3,16 @@ package com.extenprise.mapp.service.data;
 public class Service {
 
     private int idService;
-    private String name;
+    private String servCatagory;
     private String speciality;
+
+    public String getServCatagory() {
+        return servCatagory;
+    }
+
+    public void setServCatagory(String servCatagory) {
+        this.servCatagory = servCatagory;
+    }
 
     public int getIdService() {
         return idService;
@@ -12,14 +20,6 @@ public class Service {
 
     public void setIdService(int idService) {
         this.idService = idService;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getSpeciality() {

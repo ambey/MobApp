@@ -101,11 +101,16 @@ public class BookAppointmentActivity extends Activity
 
     public void bookAppointment(View view) {
         //UIUtility.showProgress(this, mFormView, mProgressView, true);
-        if (!isTimeSlotsBooked(mSpinnerTimeSlots.getSelectedItem().toString())) {
-            SaveAppointData task = new SaveAppointData(this);
-            task.execute((Void) null);
+        if(mSpinnerTimeSlots.getSelectedItem() != null && !(mSpinnerTimeSlots.getSelectedItem().toString().equals(""))) {
+
+            if (!isTimeSlotsBooked(mSpinnerTimeSlots.getSelectedItem().toString())) {
+                SaveAppointData task = new SaveAppointData(this);
+                task.execute((Void) null);
+            } else {
+                UIUtility.showAlert(this, "Sorry!", "The time slot is already booked.");
+            }
         } else {
-            UIUtility.showAlert(this, "Sorry!", "The time slot is already booked.");
+            UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
         }
     }
 
@@ -189,7 +194,7 @@ public class BookAppointmentActivity extends Activity
             values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, UIUtility.getMinutes(selectedItem) + 30);
             values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTextViewDate.getText().toString());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
-            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServProvHasService().getService().getName());
+            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServProvHasService().getService().getServCatagory());
             values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getServProvHasService().getService().getSpeciality());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, sp.getIdServiceProvider());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, LoginHolder.custLoginRef.getIdCustomer());

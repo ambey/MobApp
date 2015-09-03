@@ -7,12 +7,21 @@ public class ServProvHasServHasServPt {
 
     private String servPointType;
     private String weeklyOff;
+    private float consultFee;
     private int startTime; //as minutes
     private int endTime;//as minutes
     //private ArrayList<CustomerHistoryData> historyData;
     //private ArrayList<Appointment> appointment;
     private ServicePoint servicePoint;
     private ServProvHasService servProvHasService;
+
+    public float getConsultFee() {
+        return consultFee;
+    }
+
+    public void setConsultFee(float consultFee) {
+        this.consultFee = consultFee;
+    }
 
     public String getServPointType() {
         return servPointType;

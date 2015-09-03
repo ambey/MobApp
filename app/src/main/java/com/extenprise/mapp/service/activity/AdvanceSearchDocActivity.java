@@ -36,13 +36,14 @@ public class AdvanceSearchDocActivity extends Activity {
 
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
     private EditText mDrClinicName;
-    private EditText mSpeciality;
+    private Spinner mSpeciality;
     private EditText mLocation;
     private EditText mQualification;
     private EditText mExperience;
 
     //private Spinner mAvaildays;
     private Spinner mGender;
+    private Spinner mConsultFee;
     private View mProgressView;
     private View mSearchFormView;
 
@@ -57,7 +58,7 @@ public class AdvanceSearchDocActivity extends Activity {
         setContentView(R.layout.activity_advance_search_doc);
 
         mDrClinicName = (EditText)findViewById(R.id.editSearchDr);
-        mSpeciality = (EditText)findViewById(R.id.viewSpeciality);
+        mSpeciality = (Spinner)findViewById(R.id.viewSpeciality);
         mLocation = (EditText)findViewById(R.id.viewLocation);
         mQualification = (EditText)findViewById(R.id.editTextQualification);
         mButtonStartTime = (Button)findViewById(R.id.buttonStartTime);
@@ -65,13 +66,16 @@ public class AdvanceSearchDocActivity extends Activity {
         //mAvaildays = (Spinner) findViewById(R.id.spinAvailDays);
         mGender = (Spinner) findViewById(R.id.spinGender);
         mExperience = (EditText) findViewById(R.id.editTextExp);
+        mConsultFee = (Spinner) findViewById(R.id.spinConsultationFees);
 
         mSearchFormView = findViewById(R.id.advSearchForm);
         mProgressView = findViewById(R.id.search_progress);
 
         if(LoginHolder.spsspt != null) {
             mLocation.setText(LoginHolder.spsspt.getServicePoint().getLocation());
-            mSpeciality.setText(LoginHolder.spsspt.getServProvHasService().getService().getSpeciality());
+            //mSpeciality.setSelection(LoginHolder.spsspt.getServProvHasService().getService().getSpeciality());
+            //mSpeciality.setSelection();
+            mSpeciality.setSelection(UIUtility.getSpinnerIndex(mSpeciality, LoginHolder.spsspt.getServProvHasService().getService().getSpeciality()));
             mDrClinicName.setText(LoginHolder.spsspt.getServicePoint().getName());
         }
 
@@ -107,7 +111,13 @@ public class AdvanceSearchDocActivity extends Activity {
 
     public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
         public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            Log.i("ME", options[clicked] + " selected: " + selected);
+            if(options[clicked].toString().equalsIgnoreCase("All Days")) {
+                for (CharSequence option : options) {
+                    Log.i("ME", option + " selected: " + selected);
+                }
+            } else {
+                Log.i("ME", options[clicked] + " selected: " + selected);
+            }
         }
     }
 
@@ -232,11 +242,17 @@ public class AdvanceSearchDocActivity extends Activity {
 
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
-        String sp = mSpeciality.getText().toString().trim();
+        String sp = mSpeciality.getSelectedItem().toString();
+        if(sp.equals("Speciality")) {
+            sp = "";
+        }
         String dr = name, clinic = name;
 
         String qualification = mQualification.getText().toString().trim();
         String gender = mGender.getSelectedItem().toString();
+        if(gender.equals("Both")) {
+            gender = "";
+        }
         String exp = mExperience.getText().toString().trim();
         String startTime = mButtonStartTime.getText().toString();
         String endTime = mButttonEndTime.getText().toString();
@@ -246,6 +262,7 @@ public class AdvanceSearchDocActivity extends Activity {
         if(availDay.equalsIgnoreCase("Select Days")) {
             availDay = "";
         }
+        String consultFee = mConsultFee.getSelectedItem().toString();
         /*if(selectedDays != null && !(selectedDays.equals(""))) {
             availDay = selectedDays;
         }*/
@@ -271,18 +288,18 @@ public class AdvanceSearchDocActivity extends Activity {
         }
         UIUtility.showProgress(this, mSearchFormView, mProgressView, true);
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, loc,
-                qualification, exp, startTime, endTime, availDay, gender);
+                qualification, exp, startTime, endTime, availDay, gender, consultFee);
         mSearchTask.execute((Void) null);
     }
 
     public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity mActivity;
-        private final String mName, mClinic, mSpec, mLoc, mQualification, mExp, mStartTime, mEndTime, mAvailDay, mGender;
+        private final String mName, mClinic, mSpec, mLoc, mQualification, mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee;
 
         public UserSearchTask(Activity mActivity, String mName, String mClinic, String mSpec, String mLoc,
                               String mQualification, String mExp, String mStartTime, String mEndTime,
-                              String mAvailDay, String mGender) {
+                              String mAvailDay, String mGender, String mConsultFee) {
 
             this.mActivity = mActivity;
             this.mName = mName;
@@ -295,6 +312,7 @@ public class AdvanceSearchDocActivity extends Activity {
             this.mEndTime = mEndTime;
             this.mAvailDay = mAvailDay;
             this.mGender = mGender;
+            this.mConsultFee = mConsultFee;
         }
 
         @Override
@@ -302,7 +320,7 @@ public class AdvanceSearchDocActivity extends Activity {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             boolean presence = false;
             if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mLoc, mQualification,
-                    mExp, mStartTime, mEndTime, mAvailDay, mGender)) {
+                    mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee)) {
                 presence = true;
             }
             return presence;

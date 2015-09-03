@@ -181,7 +181,7 @@
             android:name=".customer.activity.PatientSignUpActivity"
             android:label="@string/title_activity_customer_sign_up"></activity>
         <activity
-            android:name=".service.activity.PatientsHomeScreenActivity"
+            android:name=".customer.activity.PatientsHomeScreenActivity"
             android:label="@string/title_activity_patients_home_screen"></activity>
         <activity
             android:name=".service.activity.RxActivity"

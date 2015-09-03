@@ -50,8 +50,11 @@ public class AddWorkPlaceActivity extends Activity {
     private EditText mQualification;
     private Button mStartTime;
     private Button mEndTime;
+    //private Spinner mGender;
+    private EditText mConsultFee;
     //private Spinner mWeeklyOff;
     private Spinner mServPtType;
+    private Spinner mServCatagory;
     private int hour, minute;
 
     private View mFormView;
@@ -80,14 +83,15 @@ public class AddWorkPlaceActivity extends Activity {
         mEmailId = (EditText) findViewById(R.id.editTextEmail);
         mStartTime = (Button) findViewById(R.id.buttonStartTime);
         mEndTime = (Button) findViewById(R.id.buttonEndTime);
-        //mWeeklyOff = (Spinner) findViewById(R.id.editTextWeeklyOff);
+        //mGender = (Spinner) findViewById(R.id.spinGender);
+        mConsultFee = (EditText) findViewById(R.id.editTextConsultationFees);
         mServPtType = (Spinner) findViewById(R.id.viewWorkPlaceType);
-
         mSpeciality = (Spinner) findViewById(R.id.editTextSpeciality);
         mExperience = (EditText) findViewById(R.id.editTextExperience);
         mQualification = (EditText) findViewById(R.id.editTextQualification);
-
         mMultiSpinnerDays = (Button) findViewById(R.id.editTextWeeklyOff);
+        mServCatagory = (Spinner) findViewById(R.id.spinServiceProvCategory);
+
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
     }
 
@@ -119,7 +123,13 @@ public class AddWorkPlaceActivity extends Activity {
 
     public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
         public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            Log.i("ME", options[clicked] + " selected: " + selected);
+            if(options[clicked].toString().equalsIgnoreCase("All Days")) {
+                for (CharSequence option : options) {
+                    Log.i("ME", option + " selected: " + selected);
+                }
+            } else {
+                Log.i("ME", options[clicked] + " selected: " + selected);
+            }
         }
     }
 
@@ -218,14 +228,16 @@ public class AddWorkPlaceActivity extends Activity {
         if (!isValidInput()) {
             return false;
         }
+        LoginHolder.servLoginRef.setQualification(mQualification.getText().toString().trim());
+        //LoginHolder.servLoginRef.setGender(mGender.getSelectedItem().toString());
+
         ServProvHasService sps = new ServProvHasService();
         sps.setServProv(LoginHolder.servLoginRef);
         sps.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
 
-        LoginHolder.servLoginRef.setQualification(mQualification.getText().toString());
-
         Service s = new Service();
-        s.setSpeciality(mSpeciality.getSelectedItem().toString().trim());
+        s.setSpeciality(mSpeciality.getSelectedItem().toString());
+        s.setServCatagory(mServCatagory.getSelectedItem().toString());
         sps.setService(s);
 
         ServicePoint spt = new ServicePoint();
@@ -242,6 +254,7 @@ public class AddWorkPlaceActivity extends Activity {
         spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
         spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
         spsspt.setWeeklyOff(mMultiSpinnerDays.getText().toString());
+        spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         spsspt.setServicePoint(spt);
         spsspt.setServProvHasService(sps);
         spt.addSpsspt(spsspt);
@@ -376,6 +389,13 @@ public class AddWorkPlaceActivity extends Activity {
             focusView = mMultiSpinnerDays;
             valid = false;
         }
+        String cosultFee = mConsultFee.getText().toString();
+        if (TextUtils.isEmpty(cosultFee)) {
+            mConsultFee.setError(getString(R.string.error_field_required));
+            focusView = mConsultFee;
+            valid = false;
+        }
+
 
         if (focusView != null) {
             focusView.requestFocus();
@@ -394,6 +414,8 @@ public class AddWorkPlaceActivity extends Activity {
         mEndTime.setText(R.string.end_time);
         //mWeeklyOff.setSelected(false);
         mServPtType.setSelected(false);
+        mConsultFee.setText("");
+        mMultiSpinnerDays.setText("Select Days");
 
     }
 
@@ -472,6 +494,8 @@ public class AddWorkPlaceActivity extends Activity {
             values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, sp.getlName());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_PASSWD, sp.getPasswd());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION, sp.getQualification());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_GENDER, sp.getGender());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER, sp.getRegNo());
 
             long spId = db.insert(MappContract.ServiceProvider.TABLE_NAME, null, values);
 
@@ -480,8 +504,8 @@ public class AddWorkPlaceActivity extends Activity {
             for (ServProvHasService sps : spsList) {
                 values = new ContentValues();
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV, spId);
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME, sps.getService().getName());
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService().getSpeciality());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE, sps.getExperience());
 
                 long spsId = db.insert(MappContract.ServProvHasServ.TABLE_NAME, null, values);
@@ -501,12 +525,15 @@ public class AddWorkPlaceActivity extends Activity {
                     values = new ContentValues();
                     values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV, spsId);
                     values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT, sptId);
+
                     try {
                         values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME, spsspt.getStartTime());
                         values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME, spsspt.getEndTime());
                     } catch (Exception x) {
                         x.printStackTrace();
                     }
+                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
+                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE, spsspt.getConsultFee());
                     values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF, spsspt.getWeeklyOff());
 
                     db.insert(MappContract.ServProvHasServHasServPt.TABLE_NAME, null, values);
