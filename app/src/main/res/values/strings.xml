@@ -157,4 +157,5 @@
 
     <string name="error_num_should_be_positive">This field should be a positive number</string>
     <string name="error_invalid_number">Invalid number</string>
+    <string name="consult_fees">Consultation Fees</string>
 </resources>

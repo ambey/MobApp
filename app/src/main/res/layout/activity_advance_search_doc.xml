@@ -24,13 +24,16 @@
         android:hint="@string/searchDrHint"
          />
 
-    <EditText android:id="@+id/viewSpeciality"
+    <Spinner android:id="@+id/viewSpeciality"
 
         android:layout_width="170dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:hint="@string/speciality"
-        android:layout_below="@id/editSearchDr" />
+        android:layout_below="@id/editSearchDr"
+        android:background="@drawable/spinner"
+        android:entries="@array/Speciality"
+        android:prompt="@string/speciality_doc"/>
     <EditText android:id="@+id/viewLocation"
 
         android:layout_width="170dp"
