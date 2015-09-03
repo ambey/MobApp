@@ -79,6 +79,29 @@
         <item>Radiologist</item>
     </string-array>
 
+    <string-array name="genderTypeSearch">
+        <item>Both</item>
+        <item>Male</item>
+        <item>Female</item>
+
+    </string-array>
+
+    <string-array name="consultationFees">
+        <item>lt 200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>gt 500</item>
+
+    </string-array>
+    <string-array name="specialitySearch">
+        <item>All</item>
+        <item>Physician</item>
+        <item>Pharmacist</item>
+        <item>Radiologist</item>
+    </string-array>
+
+
+
     <string name="state">State</string>
     <string name="gender">Gender</string>
     <string name="title_activity_advance__search_doc">Advance Search Doctor</string>

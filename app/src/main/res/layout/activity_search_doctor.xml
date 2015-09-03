@@ -49,7 +49,7 @@
                 android:hint="@string/speciality"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/spinner"
-                android:entries="@array/Speciality"
+                android:entries="@array/specialitySearch"
                 android:prompt="@string/speciality_doc"/>
 
             <EditText
