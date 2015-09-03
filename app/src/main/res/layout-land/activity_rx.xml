@@ -19,184 +19,221 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toRightOf="@id/fNameTextView"
+        android:layout_toEndOf="@id/fNameTextView"
         android:text="@string/last_name" />
 
     <TextView
         android:id="@+id/dateTextView"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/lNameTextView"
         android:layout_marginLeft="150dp"
+        android:layout_marginStart="150dp"
+        android:layout_toRightOf="@id/lNameTextView"
+        android:layout_toEndOf="@id/lNameTextView"
         android:text="@string/date" />
 
-    <Button
-        android:id="@+id/addButton"
-        style="@style/RoundButton"
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/add" />
+        android:layout_height="fill_parent"
+        android:layout_below="@id/fNameTextView"
+        android:layout_marginTop="20dp">
 
-    <Button
-        android:id="@+id/doneButton"
-        style="@style/RoundButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/addButton"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@id/addButton"
-        android:text="@string/done" />
-
-    <EditText
-        android:id="@+id/altDrugEditText"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/addButton"
-        android:hint="@string/alt_drug"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/altDrugStrengthEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/altDrugEditText"
-        android:layout_toRightOf="@id/altDrugEditText"
-        android:layout_marginLeft="10dp"
-        android:hint="@string/strength"
-        android:inputType="text" />
-
-    <Spinner
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/altDrugEditText"
-        android:layout_toRightOf="@id/altDrugStrengthEditText"
-        android:layout_marginLeft="10dp"
-        android:entries="@array/drug_type" />
-
-    <EditText
-        android:id="@+id/intakeStepsEditText"
-        android:layout_width="fill_parent"
-        android:layout_height="30dp"
-        android:gravity="start"
-        android:textAlignment="textStart"
-        android:layout_marginRight="50dp"
-        android:layout_above="@id/altDrugEditText"
-        android:hint="@string/intake_steps" />
-
-    <LinearLayout
-        android:id="@+id/timeLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/intakeStepsEditText"
-        android:layout_marginRight="50dp"
-        android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/morningCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:text="@string/morning" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/timeMTextView"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/time"
-                android:onClick="showMTimePicker"/>
-
-            <CheckBox
-                android:id="@+id/noonCheckBox"
+                android:id="@+id/srNoTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/morningCheckBox"
-                android:layout_marginRight="5dp"
-                android:text="@string/afternoon" />
+                android:text="@string/srno" />
 
-            <TextView
-                android:id="@+id/timeATextView"
-                android:layout_width="50dp"
+            <EditText
+                android:id="@+id/drugEditText"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/time"
-                android:onClick="showATimePicker"/>
+                android:layout_below="@id/srNoTextView"
+                android:hint="@string/drug_name"
+                android:inputType="text" />
 
-            <CheckBox
-                android:id="@+id/eveningCheckBox"
+            <EditText
+                android:id="@+id/drugStrengthEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/noonCheckBox"
-                android:text="@string/evening" />
-
-            <TextView
-                android:id="@+id/timeETextView"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/drugEditText"
                 android:layout_marginLeft="10dp"
-                android:text="@string/time"
-                android:onClick="showETimePicker"/>
-    </LinearLayout>
+                android:layout_marginStart="10dp"
+                android:layout_toRightOf="@id/drugEditText"
+                android:layout_toEndOf="@id/drugEditText"
+                android:hint="@string/strength"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/doseQtyEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/timeLayout"
-        android:hint="@string/dose_qty"
-        android:inputType="text" />
+            <Spinner
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/drugEditText"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toRightOf="@id/drugStrengthEditText"
+                android:layout_toEndOf="@id/drugStrengthEditText"
+                android:entries="@array/drug_type" />
 
-    <EditText
-        android:id="@+id/courseDurEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/doseQtyEditText"
-        android:layout_toRightOf="@id/doseQtyEditText"
-        android:layout_marginLeft="10dp"
-        android:hint="@string/course_dur"
-        android:inputType="number" />
+            <EditText
+                android:id="@+id/doseQtyEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/drugEditText"
+                android:hint="@string/dose_qty"
+                android:inputType="text" />
 
-    <Spinner
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/doseQtyEditText"
-        android:layout_toRightOf="@id/courseDurEditText"
-        android:layout_marginLeft="10dp"
-        android:entries="@array/when" />
+            <EditText
+                android:id="@+id/courseDurEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/doseQtyEditText"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toRightOf="@id/doseQtyEditText"
+                android:layout_toEndOf="@id/doseQtyEditText"
+                android:hint="@string/course_dur"
+                android:inputType="number" />
 
-    <EditText
-        android:id="@+id/drugEditText"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/doseQtyEditText"
-        android:hint="@string/drug_name"
-        android:inputType="text" />
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/doseQtyEditText"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toRightOf="@id/courseDurEditText"
+                android:layout_toEndOf="@id/courseDurEditText"
+                android:entries="@array/when" />
 
-    <EditText
-        android:id="@+id/drugStrengthEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/drugEditText"
-        android:layout_toRightOf="@id/drugEditText"
-        android:layout_marginLeft="10dp"
-        android:hint="@string/strength"
-        android:inputType="text" />
+            <LinearLayout
+                android:id="@+id/timeLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/doseQtyEditText"
+                android:layout_marginRight="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-    <Spinner
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/drugEditText"
-        android:layout_toRightOf="@id/drugStrengthEditText"
-        android:layout_marginLeft="10dp"
-        android:entries="@array/drug_type" />
+                <CheckBox
+                    android:id="@+id/morningCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/morning" />
 
-    <TextView
-        android:id="@+id/srNoTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/drugEditText"
-        android:text="@string/srno" />
+                <TextView
+                    android:id="@+id/timeMTextView"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="showMTimePicker"
+                    android:text="@string/time" />
+
+                <CheckBox
+                    android:id="@+id/noonCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/morningCheckBox"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/afternoon" />
+
+                <TextView
+                    android:id="@+id/timeATextView"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="showATimePicker"
+                    android:text="@string/time" />
+
+                <CheckBox
+                    android:id="@+id/eveningCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/noonCheckBox"
+                    android:text="@string/evening" />
+
+                <TextView
+                    android:id="@+id/timeETextView"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="showETimePicker"
+                    android:text="@string/time" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/intakeStepsEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/timeLayout"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="start"
+                android:hint="@string/intake_steps"
+                android:textAlignment="textStart" />
+
+            <EditText
+                android:id="@+id/altDrugEditText"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/alt_drug"
+                android:layout_below="@id/intakeStepsEditText"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/altDrugStrengthEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/altDrugEditText"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/altDrugEditText"
+                android:layout_toRightOf="@id/altDrugEditText"
+                android:hint="@string/strength"
+                android:inputType="text" />
+
+            <Spinner
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/altDrugEditText"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/altDrugStrengthEditText"
+                android:layout_toRightOf="@id/altDrugStrengthEditText"
+                android:entries="@array/drug_type" />
+
+            <LinearLayout
+                android:id="@+id/buttonLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/altDrugEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/addButton"
+                    style="@style/RoundButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add" />
+
+                <Button
+                    android:id="@+id/doneButton"
+                    style="@style/RoundButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/done" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

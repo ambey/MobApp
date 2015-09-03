@@ -75,6 +75,7 @@ public class MappContract {
         public static final String TABLE_NAME = "Appointment";
 
         public static final String COLUMN_NAME_DATE = "date";
+        public static final String COLUMN_NAME_FROM_TIME_STR = "fromTimeStr";
         public static final String COLUMN_NAME_FROM_TIME = "fromTime";
         public static final String COLUMN_NAME_TO_TIME = "toTime";
         public static final String COLUMN_NAME_ID_SERV_PT = "idServPt";

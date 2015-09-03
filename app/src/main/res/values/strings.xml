@@ -97,6 +97,8 @@
     <string name="title_activity_patient_history">PatientHistoryActivity</string>
     <string name="title_activity_appointment_past_data">AppointmentPastData</string>
     <string name="title_activity_customer_sign_up">Customer Sign Up</string>
+    <string name="title_activity_rx_activity">Rx Page</string>
+
     <string name="view_more">View More</string>
     <string name="rx_now">Rx Now</string>
     <string name="upload_rx">Upload Scanned Rx</string>

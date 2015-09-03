@@ -1,8 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,22 +8,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.*;
+import com.extenprise.mapp.util.DateChangeListener;
+import com.extenprise.mapp.util.SearchAppointment;
+import com.extenprise.mapp.util.UIUtility;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -43,8 +42,8 @@ public class ViewAppointmentListActivity extends Activity
         mAppointmentDateTextView = (TextView) findViewById(R.id.appointmentDateTextView);
         mAppointmentListView = (ListView) findViewById(R.id.appointmentListView);
 
-        setCurrentDateOnView();
-        setAppointmentList();
+        String date = setCurrentDateOnView();
+        setAppointmentList(date);
     }
 
 /*
@@ -88,24 +87,36 @@ public class ViewAppointmentListActivity extends Activity
     };
 */
 
-    public void setCurrentDateOnView() {
+    public String setCurrentDateOnView() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        mAppointmentDateTextView.setText(sdf.format(c.getTime()));
 
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        if(SearchAppointment.searchAppointment(dbHelper, sdf.format(c.getTime()),
-                LoginHolder.servLoginRef.getIdServiceProvider())) {
-            setAppointmentList();
-        } else {
-            UIUtility.showAlert(this, "", "No Appointments for this date.");
-            return;
-        }
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        String date = sdf.format(c.getTime());
+        mAppointmentDateTextView.setText(date);
+        return date;
     }
 
-    private void setAppointmentList() {
+    private void setAppointmentList(String date) {
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        if (!SearchAppointment.searchAppointment(dbHelper, date,
+                LoginHolder.servLoginRef.getIdServiceProvider())) {
+            return;
+        }
 
         final Cursor cursor = SearchAppointment.getCursor();
+        if (cursor.getCount() <= 0) {
+            return;
+        }
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+        do {
+            cursor.moveToNext();
+            Appointment appointment = new Appointment();
+            appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+            appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+
+        } while (!cursor.isLast());
 
         String[] values = new String[]{
                 MappContract.Customer.COLUMN_NAME_FNAME,
@@ -113,7 +124,7 @@ public class ViewAppointmentListActivity extends Activity
                 MappContract.Customer.COLUMN_NAME_GENDER,
                 MappContract.Customer.COLUMN_NAME_AGE,
                 MappContract.Customer.COLUMN_NAME_WEIGHT,
-                MappContract.Appointment.COLUMN_NAME_FROM_TIME
+                MappContract.Appointment.COLUMN_NAME_FROM_TIME_STR
         };
         int[] viewIds = new int[]{
                 R.id.patientFNameTextView,
@@ -146,18 +157,18 @@ public class ViewAppointmentListActivity extends Activity
                 customer.setLocation(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LOCATION)));
                 customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
                 customer.setAge(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE))));
+                customer.setWeight(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_WEIGHT))));
 
-                DateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+                SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+                formatter.applyPattern("dd/MM/yyyy");
+
                 try {
                     Date dob = formatter.parse(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_DOB)));
                     if (dob != null) {
                         customer.setDob(dob);
                     }
 
-                    Date doAppnt = formatter.parse(mAppointmentDateTextView.getText().toString());
-                    if (doAppnt != null) {
-                        appointment.setDateOfAppointment(doAppnt);
-                    }
+                    appointment.setDateOfAppointment(mAppointmentDateTextView.getText().toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -203,13 +214,6 @@ public class ViewAppointmentListActivity extends Activity
 
     @Override
     public void datePicked(String date) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        if(SearchAppointment.searchAppointment(dbHelper, date,
-                LoginHolder.servLoginRef.getIdServiceProvider())) {
-            setAppointmentList();
-        } else {
-            UIUtility.showAlert(this, "", "No Appointments for this date.");
-            return;
-        }
+        setAppointmentList(date);
     }
 }

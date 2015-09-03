@@ -5,21 +5,25 @@ import java.util.ArrayList;
 /**
  * Created by ambey on 31/8/15.
  */
-public class Rx {
-    private Appointment appointment;
-    private String id;
+public class Rx extends Report {
     private ArrayList<RxItem> items;
+    private byte[] scannedCopy;
 
     public Rx() {
+        setType("Prescription");
         items = new ArrayList<>();
     }
 
-    public Appointment getAppointment() {
-        return appointment;
+    public byte[] getScannedCopy() {
+        return scannedCopy;
     }
 
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
+    public void setScannedCopy(byte[] scannedCopy) {
+        this.scannedCopy = scannedCopy;
+    }
+
+    public ArrayList<RxItem> getItems() {
+        return items;
     }
 
     public int getRxItemCount() {

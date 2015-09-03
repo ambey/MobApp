@@ -113,6 +113,7 @@ public class SearchDocResultListActivity extends Activity {
                 cursor.moveToPosition(position);
 
                 ServiceProvider sp = new ServiceProvider();
+                sp.setIdServiceProvider(cursor.getInt(cursor.getColumnIndex(MappContract.ServiceProvider._ID)));
                 sp.setfName(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_FNAME)));
                 sp.setlName(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_LNAME)));
                 sp.setQualification(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION)));

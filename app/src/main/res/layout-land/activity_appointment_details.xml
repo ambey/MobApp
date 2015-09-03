@@ -30,10 +30,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/appointmentDetailsTextView"
-                android:layout_toRightOf="@id/appointmentDetailsTextView"
+                android:layout_marginLeft="150dp"
+                android:layout_marginStart="150dp"
                 android:layout_toEndOf="@id/appointmentDetailsTextView"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
+                android:layout_toRightOf="@id/appointmentDetailsTextView"
                 android:text="@string/date" />
 
             <include
@@ -82,23 +82,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="@string/view_report" />
-            </LinearLayout>
 
-            <Button
-                android:id="@+id/viewMoreButton"
-                style="@style/RectButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/pastAppointmentLayout"
-                android:layout_below="@id/pastAppointmentLayout"
-                android:layout_marginTop="5dp"
-                android:text="@string/view_more" />
+                <Button
+                    android:id="@+id/viewMoreButton"
+                    style="@style/RectButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/view_more" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/buttonLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/viewMoreButton"
+                android:layout_below="@id/pastAppointmentLayout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="25dp"
                 android:orientation="horizontal">

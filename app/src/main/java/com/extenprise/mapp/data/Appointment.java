@@ -13,13 +13,21 @@ import java.util.Date;
 public class Appointment {
 
     private String servPointType;
-    private Date date;
+    private String date;
     private int fromTime; //as minutes
     private int toTime;//as minutes
     private ServicePoint servicePoint;
     private ServProvHasService servProvHasService;
     private Customer customer;
     private ArrayList<Report> reports;
+
+    public Appointment() {
+        reports = new ArrayList<>();
+    }
+
+    public boolean addReport(Report report) {
+        return reports.add(report);
+    }
 
     public String getServPointType() {
         return servPointType;
@@ -29,11 +37,11 @@ public class Appointment {
         this.servPointType = servPointType;
     }
 
-    public Date getDateOfAppointment() {
+    public String getDateOfAppointment() {
         return date;
     }
 
-    public void setDateOfAppointment(Date dateOfAppointment) {
+    public void setDateOfAppointment(String dateOfAppointment) {
         this.date = dateOfAppointment;
     }
 

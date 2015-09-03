@@ -185,6 +185,7 @@ public class BookAppointmentActivity extends Activity
             String selectedItem = mSpinnerTimeSlots.getSelectedItem().toString();
             ContentValues values = new ContentValues();
             values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME, UIUtility.getMinutes(selectedItem));
+            values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME_STR, selectedItem);
             values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, UIUtility.getMinutes(selectedItem) + 30);
             values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTextViewDate.getText().toString());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());

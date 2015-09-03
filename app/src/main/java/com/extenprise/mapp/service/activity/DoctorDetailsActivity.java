@@ -72,7 +72,7 @@ public class DoctorDetailsActivity extends Activity {
 
         //mTextViewReviews.setText("11");
         mTextViewDocQualification.setText(serviceProvider.getQualification());
-        mTextViewFees.setText("Rs 120");
+        mTextViewFees.setText("120");
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
         if(UIUtility.findDocAvailability(spsspt.getWeeklyOff(), Calendar.getInstance())) {

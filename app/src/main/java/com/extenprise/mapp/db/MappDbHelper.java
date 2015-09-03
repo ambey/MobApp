@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ambey on 23/7/15.
  */
 public class MappDbHelper extends SQLiteOpenHelper {
-    public static final int DB_VERSION = 5;
+    public static final int DB_VERSION = 6;
     public static final String DB_NAME = "Mapp.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INT";
@@ -94,6 +94,7 @@ public class MappDbHelper extends SQLiteOpenHelper {
                     MappContract.Appointment._ID + " INTEGER PRIMARY KEY," +
                     MappContract.Appointment.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
                     MappContract.Appointment.COLUMN_NAME_FROM_TIME + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Appointment.COLUMN_NAME_FROM_TIME_STR + TEXT_TYPE + COMMA_SEP +
                     MappContract.Appointment.COLUMN_NAME_TO_TIME + TEXT_TYPE + COMMA_SEP +
                     MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER + TEXT_TYPE + COMMA_SEP +
                     MappContract.Appointment.COLUMN_NAME_ID_SERV_PT + TEXT_TYPE + COMMA_SEP +

@@ -14,6 +14,7 @@ public class Customer {
     private String passwd;
     private String gender;
     private int age;
+    private float weight;
     private String location;
     private Date dob;
     private String city;
@@ -36,6 +37,14 @@ public class Customer {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     public String getfName() {

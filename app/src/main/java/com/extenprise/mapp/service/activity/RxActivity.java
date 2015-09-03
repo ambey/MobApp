@@ -11,12 +11,18 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.util.UIUtility;
 
 public class RxActivity extends Activity {
+    private TextView mFName;
+    private TextView mLName;
+    private TextView mDate;
     private TextView mSrNo;
     private TextView mDrugName;
     private TextView mDrugStrength;
@@ -41,6 +47,9 @@ public class RxActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx);
 
+        mFName = (TextView) findViewById(R.id.fNameTextView);
+        mLName = (TextView) findViewById(R.id.lNameTextView);
+        mDate = (TextView) findViewById(R.id.dateTextView);
         mSrNo = (TextView) findViewById(R.id.srNoTextView);
         mDrugName = (TextView) findViewById(R.id.drugEditText);
         mDrugStrength = (TextView) findViewById(R.id.drugStrengthEditText);
@@ -59,6 +68,15 @@ public class RxActivity extends Activity {
         mAltDrugStrength = (TextView) findViewById(R.id.altDrugStrengthEditText);
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
         mRx = new Rx();
+
+        Appointment appointment = LoginHolder.appointment;
+        Customer customer = appointment.getCustomer();
+
+        mFName.setText(customer.getfName());
+        mLName.setText(customer.getlName());
+        mDate.setText(appointment.getDateOfAppointment());
+        mSrNo.setText("#1");
+
     }
 
     @Override
@@ -103,6 +121,8 @@ public class RxActivity extends Activity {
 
     public void doneRx(View view) {
         if (addRxItem()) {
+            Appointment appointment = LoginHolder.appointment;
+            appointment.addReport(mRx);
             try {
                 Intent intent = new Intent(this, Class.forName(getIntent().getStringExtra("parent-activity")));
                 startActivity(intent);

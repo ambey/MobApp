@@ -11,6 +11,7 @@
     <string name="name">Name *</string>
     <string name="count">#1</string>
     <string name="qualification">Qualification *</string>
+    <string name="experience">Exp (Yr) *</string>
     <string name="loc">Location *</string>
     <string name="phone1">Phone 1 *</string>
     <string name="phone2">Phone 2 (Optional)</string>

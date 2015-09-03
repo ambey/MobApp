@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/tvDrLbl"
-        style="@style/greenBoldText"
+        style="@style/largeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvBookApptLbl"
@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/tvDocFName"
-        style="@style/greenBoldText"
+        style="@style/largeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/tvDrLbl"
@@ -53,7 +53,7 @@
 
     <TextView
         android:id="@+id/tvDocLName"
-        style="@style/greenBoldText"
+        style="@style/largeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/tvDocFName"
@@ -65,7 +65,7 @@
 
     <TextView
         android:id="@+id/tvDocSpec"
-        style="@style/blueBoldText"
+        style="@style/mediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDrLbl"
@@ -75,7 +75,7 @@
 
     <TextView
         android:id="@+id/tvQualification"
-        style="@style/blueBoldText"
+        style="@style/mediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tvDocSpec"

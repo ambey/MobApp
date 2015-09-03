@@ -142,23 +142,23 @@ public abstract class UIUtility {
 
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         String searchDay = "Sunday";
-        if(day == 2) {
+        if (day == 2) {
             searchDay = "Monday";
-        } else if(day == 3) {
+        } else if (day == 3) {
             searchDay = "Tuesday";
-        } else if(day == 4) {
+        } else if (day == 4) {
             searchDay = "Wednesday";
-        } else if(day == 5) {
+        } else if (day == 5) {
             searchDay = "Thursday";
-        } else if(day == 6) {
+        } else if (day == 6) {
             searchDay = "Friday";
-        } else if(day == 7) {
+        } else if (day == 7) {
             searchDay = "Saturday";
         }
 
         ArrayList<String> availDaysList = new ArrayList<String>();
         availDaysList.add(availDays);
-        if(availDays.contains(",")) {
+        if (availDays.contains(",")) {
             availDaysList = new ArrayList<>(Arrays.asList(availDays.trim().split(",")));
         }
 
@@ -271,9 +271,9 @@ public abstract class UIUtility {
 
     public static String getDaAsString(String sep) {
         Calendar c = Calendar.getInstance();
-        return (c.get(Calendar.DAY_OF_MONTH) + sep +
-                (c.get(Calendar.MONTH) + 1) + sep +
-                c.get(Calendar.YEAR));
+        return String.format("%02d/%02d/%04d", c.get(Calendar.DAY_OF_MONTH)
+                , c.get(Calendar.MONTH) + 1
+                , c.get(Calendar.YEAR));
     }
 
 }
