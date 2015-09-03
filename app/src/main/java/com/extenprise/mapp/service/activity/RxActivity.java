@@ -1,7 +1,10 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -17,9 +20,17 @@ import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
+import com.extenprise.mapp.db.MappContract;
+import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 
+import java.util.Map;
+
 public class RxActivity extends Activity {
+    private View mForm;
+    private View mProgressBar;
     private TextView mFName;
     private TextView mLName;
     private TextView mDate;
@@ -46,6 +57,9 @@ public class RxActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx);
+
+        mForm = findViewById(R.id.rxItemForm);
+        mProgressBar = findViewById(R.id.rxSave_progress);
 
         mFName = (TextView) findViewById(R.id.fNameTextView);
         mLName = (TextView) findViewById(R.id.lNameTextView);
@@ -123,13 +137,15 @@ public class RxActivity extends Activity {
         if (addRxItem()) {
             Appointment appointment = LoginHolder.appointment;
             appointment.addReport(mRx);
-            try {
-                Intent intent = new Intent(this, Class.forName(getIntent().getStringExtra("parent-activity")));
-                startActivity(intent);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            mRx.setAppointment(appointment);
+            addRxToDB();
         }
+    }
+
+    private void addRxToDB() {
+        UIUtility.showProgress(this, mForm, mProgressBar, true);
+        RxDBTask task = new RxDBTask(this);
+        task.execute();
     }
 
     private boolean addRxItem() {
@@ -231,5 +247,68 @@ public class RxActivity extends Activity {
             focusView.requestFocus();
         }
         return valid;
+    }
+
+    private class RxDBTask extends AsyncTask<Void, Void, Void> {
+
+        private Activity myActivity;
+
+        public RxDBTask(Activity activity) {
+            myActivity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            Appointment appointment = mRx.getAppointment();
+            String rxId = "a" + appointment.getId() + "r" + appointment.getReportCount();
+            values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getId());
+            values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
+            for (RxItem item : mRx.getItems()) {
+                values.put(MappContract.Prescription.COLUMN_NAME_SR_NO, item.getSrno());
+                values.put(MappContract.Prescription.COLUMN_NAME_DRUG_NAME, item.getDrugName());
+                values.put(MappContract.Prescription.COLUMN_NAME_DRUG_STRENGTH, item.getDrugStrength());
+                values.put(MappContract.Prescription.COLUMN_NAME_DRUG_FORM, item.getDrugForm());
+                values.put(MappContract.Prescription.COLUMN_NAME_DOSE_QTY, item.getDoseQty());
+                values.put(MappContract.Prescription.COLUMN_NAME_COURSE_DUR, item.getCourseDur());
+                values.put(MappContract.Prescription.COLUMN_NAME_ALT_DRUG_NAME, item.getAltDrugName());
+                values.put(MappContract.Prescription.COLUMN_NAME_ALT_DRUG_STRENGTH, item.getAltDrugStrength());
+                values.put(MappContract.Prescription.COLUMN_NAME_ALT_DRUG_FORM, item.getAltDrugForm());
+                values.put(MappContract.Prescription.COLUMN_NAME_INTAKE_STEPS, item.getInTakeSteps());
+                values.put(MappContract.Prescription.COLUMN_NAME_EMPTY_OR_FULL, (item.isBeforeMeal() ? "EMPTY" : "FULL"));
+                String timesPerDay = (item.isMorning() ? "1" : "0") + "-" +
+                        (item.isAfternoon() ? "1" : "0") + "-" +
+                        (item.isEvening() ? "1" : "0");
+                values.put(MappContract.Prescription.COLUMN_NAME_TIMES_PER_DAY, timesPerDay);
+                String mTime = item.getmTime();
+                String aTime = item.getaTime();
+                String eTime = item.geteTime();
+                String timing = ((mTime != null && !mTime.equals(getString(R.string.time))) ? mTime : "") + "|" +
+                        ((aTime != null && !aTime.equals(getString(R.string.time))) ? aTime : "") + "|" +
+                        ((eTime != null && !eTime.equals(getString(R.string.time))) ? eTime : "");
+                values.put(MappContract.Prescription.COLUMN_NAME_TIMING, timing);
+                db.insert(MappContract.Prescription.TABLE_NAME, null, values);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                UIUtility.showProgress(myActivity, mForm, mProgressBar, false);
+                String parentClass = myActivity.getIntent().getStringExtra("parent-activity").split(" ")[1];
+                Intent intent = new Intent(myActivity, Class.forName(parentClass));
+                startActivity(intent);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
     }
 }

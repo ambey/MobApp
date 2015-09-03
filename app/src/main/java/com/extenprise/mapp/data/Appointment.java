@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 public class Appointment {
-
+    private int id;
     private String servPointType;
     private String date;
     private int fromTime; //as minutes
@@ -25,8 +25,20 @@ public class Appointment {
         reports = new ArrayList<>();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public boolean addReport(Report report) {
         return reports.add(report);
+    }
+
+    public int getReportCount() {
+        return reports.size();
     }
 
     public String getServPointType() {

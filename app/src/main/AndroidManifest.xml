@@ -83,7 +83,7 @@
         </activity>
         <activity
             android:name=".service.activity.MainActivity"
-            android:label="Medico"></activity>
+            android:label="Medico" />
         <activity
             android:name=".service.activity.AddSpecialityActivity"
             android:label="@string/title_activity_add_speciality" />
@@ -96,7 +96,7 @@
         <activity
             android:name=".service.activity.AdvanceSearchDocActivity"
             android:label="@string/title_activity_search_doctor"
-            android:parentActivityName=".service.activity.SearchDoctorActivity">
+            android:parentActivityName=".service.activity.SearchDoctorActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDoctorActivity" />
@@ -107,7 +107,7 @@
         <activity
             android:name=".service.activity.DoctorDetailsActivity"
             android:label="@string/title_activity_doctor_details"
-            android:parentActivityName=".service.activity.SearchDocResultListActivity">
+            android:parentActivityName=".service.activity.SearchDocResultListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDocResultListActivity" />
@@ -115,7 +115,7 @@
         <activity
             android:name=".service.activity.SearchDocResultListActivity"
             android:label="@string/title_activity_search_doc_result_list"
-            android:parentActivityName=".service.activity.SearchDoctorActivity">
+            android:parentActivityName=".service.activity.SearchDoctorActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.SearchDoctorActivity" />
@@ -123,14 +123,14 @@
         <activity
             android:name=".service.activity.AppointmentDetailsActivity"
             android:label="@string/title_activity_appointment_details"
-            android:parentActivityName=".service.activity.ViewAppointmentListActivity">
+            android:parentActivityName=".service.activity.ViewAppointmentListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.ViewAppointmentListActivity" />
         </activity>
         <activity
             android:name=".activity.HomeScreenActivity"
-            android:label="@string/title_activity_home_screen">
+            android:label="@string/title_activity_home_screen" >
 
             <!--
                         <intent-filter>
@@ -143,7 +143,7 @@
         <activity
             android:name=".service.activity.BookAppointmentActivity"
             android:label="@string/title_activity_book_appointment"
-            android:parentActivityName=".service.activity.DoctorDetailsActivity">
+            android:parentActivityName=".service.activity.DoctorDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.DoctorDetailsActivity" />
@@ -154,7 +154,7 @@
         <activity
             android:name=".service.activity.SignUpPreviousActivity"
             android:label="@string/title_activity_sign_up_previous"
-            android:parentActivityName=".service.activity.LoginActivity">
+            android:parentActivityName=".service.activity.LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.LoginActivity" />
@@ -169,7 +169,7 @@
         <activity
             android:name=".service.activity.ViewAppointmentListActivity"
             android:label="@string/title_activity_view_appointment_list"
-            android:parentActivityName=".service.activity.ServiceProviderHomeActivity">
+            android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.ServiceProviderHomeActivity" />
@@ -179,17 +179,27 @@
             android:label="@string/title_activity_view_appointment" />
         <activity
             android:name=".customer.activity.PatientSignUpActivity"
-            android:label="@string/title_activity_customer_sign_up"></activity>
+            android:label="@string/title_activity_customer_sign_up" />
+<!--
         <activity
-            android:name=".customer.activity.PatientsHomeScreenActivity"
-            android:label="@string/title_activity_patients_home_screen"></activity>
+            android:name=".service.activity.PatientsHomeScreenActivity"
+            android:label="@string/title_activity_patients_home_screen" />
+-->
         <activity
             android:name=".service.activity.RxActivity"
             android:label="@string/title_activity_rx_activity"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity">
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.AppointmentDetailsActivity" />
+        </activity>
+        <activity
+            android:name=".service.activity.ViewRxActivity"
+            android:label="@string/title_activity_view_rx"
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
         </activity>
     </application>
 

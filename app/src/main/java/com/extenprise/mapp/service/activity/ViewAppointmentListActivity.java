@@ -109,13 +109,14 @@ public class ViewAppointmentListActivity extends Activity
             return;
         }
 
-        ArrayList<Appointment> appointments = new ArrayList<>();
+        final ArrayList<Appointment> appointments = new ArrayList<>();
         do {
             cursor.moveToNext();
             Appointment appointment = new Appointment();
+            appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
             appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
             appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
-
+            appointments.add(appointment);
         } while (!cursor.isLast());
 
         String[] values = new String[]{
@@ -147,7 +148,7 @@ public class ViewAppointmentListActivity extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 cursor.moveToPosition(position);
 
-                Appointment appointment = new Appointment();
+                Appointment appointment = appointments.get(position);
                 Customer customer = new Customer();
 
                 customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));

@@ -99,7 +99,9 @@ public class MappContract {
     public static abstract class Prescription implements BaseColumns {
         public static final String TABLE_NAME = "Prescription";
 
+        public static final String COLUMN_NAME_ID_APPOMT = "idAppont";
         public static final String COLUMN_NAME_ID_RX = "idRx";
+        public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_SR_NO = "srNo";
         public static final String COLUMN_NAME_DRUG_NAME = "dName";
         public static final String COLUMN_NAME_DRUG_STRENGTH = "dStrength";

@@ -14,15 +14,22 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
+import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.DBUtil;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 
 public class AppointmentDetailsActivity extends Activity {
+
+    private Appointment mAppont;
+    private ArrayList<Appointment> mOtherApponts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +47,17 @@ public class AppointmentDetailsActivity extends Activity {
         Button rxButton = (Button) findViewById(R.id.rXButton);
         Button uploadRxButton = (Button) findViewById(R.id.uploadScanRxButton);
 
-        Appointment appointment = LoginHolder.appointment;
-        Customer customer = appointment.getCustomer();
+        mAppont = LoginHolder.appointment;
+        Customer customer = mAppont.getCustomer();
 
-        String dateStr = appointment.getDateOfAppointment();
+        String dateStr = mAppont.getDateOfAppointment();
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         try {
             Date date = sdf.parse(dateStr);
-            date.setTime(date.getTime() + appointment.getFromTime() * 60 * 1000);
+            date.setTime(date.getTime() + mAppont.getFromTime() * 60 * 1000);
             if (date.after(today)) {
                 rxButton.setEnabled(false);
                 uploadRxButton.setEnabled(false);
@@ -89,10 +96,31 @@ public class AppointmentDetailsActivity extends Activity {
         fNameView.setText(customer.getfName());
         lNameView.setText(customer.getlName());
         timeView.setText(String.format("%02d:%02d",
-                appointment.getFromTime() / 60, appointment.getFromTime() % 60));
+                mAppont.getFromTime() / 60, mAppont.getFromTime() % 60));
         genderView.setText(customer.getGender());
         ageView.setText("" + customer.getAge());
         wtView.setText(String.format("%.1f", customer.getWeight()));
+
+        mOtherApponts = DBUtil.getOtherAppointments(new MappDbHelper(getApplicationContext()),
+                mAppont.getId());
+        View pastAppontLayout = findViewById(R.id.pastAppointmentLayout);
+        if (mOtherApponts.size() <= 1) {
+            Button viewMoreButton = (Button) findViewById(R.id.viewMoreButton);
+            if (viewMoreButton == null) {
+                viewMoreButton = (Button) pastAppontLayout.findViewById(R.id.viewMoreButton);
+            }
+            viewMoreButton.setEnabled(false);
+            viewMoreButton.setBackground(getDrawable(R.drawable.disabled_button));
+        }
+        if (mOtherApponts.size() > 0) {
+            TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
+            dateOthView.setText(mOtherApponts.get(0).getDateOfAppointment());
+        } else {
+            pastAppontLayout.setVisibility(View.INVISIBLE);
+            TextView msgView = (TextView) findViewById(R.id.viewMsg);
+            msgView.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -121,5 +149,16 @@ public class AppointmentDetailsActivity extends Activity {
         Intent intent = new Intent(this, RxActivity.class);
         intent.putExtra("parent-activity", AppointmentDetailsActivity.class.toString());
         startActivity(intent);
+    }
+
+    public void showRxDetails(View view) {
+        ViewRxActivity.appointment = mOtherApponts.get(0);
+        ViewRxActivity.appointment.setCustomer(mAppont.getCustomer());
+        Intent intent = new Intent(this, ViewRxActivity.class);
+        startActivity(intent);
+    }
+
+    public void showPatientHistory(View view) {
+
     }
 }

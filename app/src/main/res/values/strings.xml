@@ -176,8 +176,11 @@
     <string name="hello">Hello</string>
     <string name="helloDr">Hello Dr</string>
     <string name="dateFormat">dd/mm/yyyy</string>
+    <string name="rx_details">Rx Details</string>
 
+    <string name="no_past_appont">No appointments found!</string>
     <string name="error_num_should_be_positive">This field should be a positive number</string>
     <string name="error_invalid_number">Invalid number</string>
     <string name="consult_fees">Consultation Fees</string>
+    <string name="title_activity_view_rx">viewRxActivity</string>
 </resources>
