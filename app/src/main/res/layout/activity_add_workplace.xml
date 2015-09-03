@@ -32,12 +32,12 @@
         android:id="@+id/spinGender"
         android:layout_width="170dp"
         android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-
+        android:layout_toEndOf="@+id/editTextSpeciality"
+        android:layout_toRightOf="@+id/editTextSpeciality"
         android:background="@drawable/spinner"
         android:entries="@array/genderType"
-        android:prompt="@string/gender" />
+        android:prompt="@string/gender"
+        android:layout_marginLeft="8dp"/>
 
     <EditText
         android:id="@+id/editTextExperience"
@@ -47,9 +47,11 @@
         android:background="@drawable/text"
         android:textSize="18dp"
         android:inputType="number"
-        android:layout_alignTop="@+id/editTextQualification"
-        android:layout_alignLeft="@+id/spinGender"
-        android:layout_alignStart="@+id/spinGender" />
+        android:layout_below="@+id/spinGender"
+        android:layout_toEndOf="@+id/editTextQualification"
+        android:layout_toRightOf="@+id/editTextQualification"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"/>
 
 
     <EditText
@@ -121,7 +123,7 @@
 
             <Spinner
                 android:id="@+id/viewWorkPlaceType"
-                android:layout_width="100dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/editTextName"
                 android:layout_toRightOf="@id/editTextName"
@@ -204,7 +206,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/buttonStartTime"
                 android:layout_toRightOf="@+id/buttonStartTime"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/end_time"
                 android:onClick="showEndTimePicker" />
 
@@ -235,32 +237,37 @@
                 android:background="@drawable/label"
                 android:textColor="#fff"
                 android:textSize="18dp"
-                android:layout_above="@+id/editTextWeeklyOff"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_below="@+id/buttonEndTime"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_toEndOf="@+id/viewWeeklyOffLbl"
+                android:layout_toRightOf="@+id/viewWeeklyOffLbl"/>
 
             <TextView
+                android:id="@+id/viewRsSign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:layout_below="@+id/viewConsultationFees"
                 android:text="@string/rs_sign"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="8dp"
                 android:layout_toEndOf="@+id/editTextWeeklyOff"
                 android:layout_toRightOf="@+id/editTextWeeklyOff"/>
 
             <EditText
+
                 android:id="@+id/editTextConsultationFees"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/consult_fees"
                 android:inputType="number"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="0dp"
                 android:layout_marginTop="10dp"
-                android:layout_above="@+id/buttonAddWorkPlace"
-                android:layout_alignLeft="@+id/buttonEndTime"
-                android:layout_alignStart="@+id/buttonEndTime" />
+                android:layout_toEndOf="@+id/viewRsSign"
+                android:layout_toRightOf="@+id/viewRsSign"
+                android:layout_below="@+id/viewConsultationFees"
+                 />
 
 
             <Button
