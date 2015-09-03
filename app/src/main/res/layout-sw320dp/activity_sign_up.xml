@@ -25,7 +25,7 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:id="@+id/uploadimageview"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:src="@drawable/dr"
                 />
             <TextView
@@ -51,7 +51,7 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <EditText
@@ -118,13 +118,44 @@
                 android:text=""
                 android:layout_marginTop="10dp"/>
 
+            <RadioGroup
+                android:id="@+id/radioGroupGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                >
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:id="@+id/radioButtonMale"
+                    />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    android:id="@+id/radioButtonFemale"
+                    android:layout_marginLeft="30dp"
+                    />
+            </RadioGroup>
+            <EditText
+                android:id="@+id/editTextRegistrationNumber"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Registration Number *"
+                android:inputType="number"
+                android:layout_marginTop="5dp" />
+
             <Button
                 android:id="@+id/Register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextCountry"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/button"
                 android:onClick="showAddWorkPlaceScreen"
                 android:text="@string/next"

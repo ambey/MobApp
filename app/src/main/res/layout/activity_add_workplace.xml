@@ -11,7 +11,7 @@
 
 
     <Spinner
-        android:id="@+id/editTextSpeciality"
+        android:id="@+id/spinServiceProvCategory"
         android:layout_width="170dp"
         android:layout_height="40dp"
         android:padding="5dp"
@@ -19,6 +19,20 @@
         android:background="@drawable/spinner"
         android:entries="@array/Speciality"
         android:prompt="@string/speciality_doc" />
+
+
+    <Spinner
+        android:id="@+id/editTextSpeciality"
+        android:layout_width="170dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/spinner"
+        android:entries="@array/Speciality"
+        android:prompt="@string/speciality_doc"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/spinServiceProvCategory"
+        android:layout_toRightOf="@+id/spinServiceProvCategory"/>
     <!-- <EditText
          android:id="@+id/editTextSpeciality"
          android:layout_width="220dp"
@@ -28,16 +42,6 @@
          android:inputType="textAutoComplete"
          android:textSize="18dp"/> -->
 
-    <Spinner
-        android:id="@+id/spinGender"
-        android:layout_width="170dp"
-        android:layout_height="40dp"
-        android:layout_toEndOf="@+id/editTextSpeciality"
-        android:layout_toRightOf="@+id/editTextSpeciality"
-        android:background="@drawable/spinner"
-        android:entries="@array/genderType"
-        android:prompt="@string/gender"
-        android:layout_marginLeft="8dp"/>
 
     <EditText
         android:id="@+id/editTextExperience"
@@ -47,10 +51,10 @@
         android:background="@drawable/text"
         android:textSize="18dp"
         android:inputType="number"
-        android:layout_below="@+id/spinGender"
+        android:layout_below="@+id/editTextSpeciality"
         android:layout_toEndOf="@+id/editTextQualification"
         android:layout_toRightOf="@+id/editTextQualification"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="8dp"/>
 
 
@@ -58,8 +62,7 @@
         android:id="@+id/editTextQualification"
         android:layout_width="170dp"
         android:layout_height="25dp"
-        android:layout_below="@+id/editTextSpeciality"
-        android:layout_alignLeft="@id/editTextSpeciality"
+        android:layout_below="@+id/spinServiceProvCategory"
         android:layout_marginTop="5dp"
         android:padding="4dp"
         android:hint="@string/qualification"
@@ -73,7 +76,6 @@
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextQualification"
-        android:layout_alignLeft="@id/editTextSpeciality"
         android:text="@string/work_place_details"
         android:background="@drawable/label"
         android:layout_marginTop="10dp"
@@ -107,7 +109,6 @@
         android:id="@+id/addWorkPlaceForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/editTextSpeciality"
         android:layout_below="@+id/viewWorkPlaceDetLbl">
 
         <RelativeLayout
