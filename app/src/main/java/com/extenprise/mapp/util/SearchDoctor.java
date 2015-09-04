@@ -38,11 +38,11 @@ public abstract class SearchDoctor {
 */
 
 
-    public static boolean searchByAll(MappDbHelper dbHelper, String name, String clinic, String spec, String loc,
+    public static boolean searchByAll(MappDbHelper dbHelper, String name, String clinic, String spec, String servCategory, String loc,
                                       String qualification, String exp, String startTime, String endTime,
                                       String availDay, String gender, String consultFee) {
         ArrayList<String> argList = new ArrayList<>();
-        String whereClause = getWhereClause(name, clinic, spec, loc, qualification,
+        String whereClause = getWhereClause(name, clinic, spec, servCategory, loc, qualification,
                 exp, startTime, endTime, availDay, gender, consultFee, argList);
         String[] selectionArgs = argList.toArray(new String[argList.size()]);
         String query = getQuery(whereClause);
@@ -93,7 +93,7 @@ public abstract class SearchDoctor {
         return query;
     }
 
-    private static String getWhereClause(String name, String clinic, String spec, String loc, String qualification,
+    private static String getWhereClause(String name, String clinic, String spec, String servCategory, String loc, String qualification,
                                          String exp, String startTime, String endTime,
                                          String availDay, String gender, String consultFee, ArrayList<String> argList) {
 
@@ -141,9 +141,13 @@ public abstract class SearchDoctor {
             whereClause += ") ";
         }
 
-        if (!spec.equalsIgnoreCase("")) {
+        if (!spec.equals("")) {
             whereClause += "and lower(" + MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + ") = ? ";
             argList.add(spec.toLowerCase());
+        }
+        if (!servCategory.equals("")) {
+            whereClause += "and lower(" + MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + ") = ? ";
+            argList.add(servCategory.toLowerCase());
         }
         if (!loc.equals("")) {
             whereClause += "and lower(" + MappContract.ServicePoint.COLUMN_NAME_LOCATION + ") like ? ";

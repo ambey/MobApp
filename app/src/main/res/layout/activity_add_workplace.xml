@@ -17,7 +17,7 @@
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/spinner"
-        android:entries="@array/Speciality"
+        android:entries="@array/serviceCategory"
         android:prompt="@string/speciality_doc" />
 
 
@@ -28,7 +28,7 @@
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/spinner"
-        android:entries="@array/Speciality"
+        android:entries="@array/speciality"
         android:prompt="@string/speciality_doc"
         android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/spinServiceProvCategory"

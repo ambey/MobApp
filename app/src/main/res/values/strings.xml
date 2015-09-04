@@ -21,10 +21,6 @@
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
 
-    <string-array name="speciality">
-        <item>Physician</item>
-    </string-array>
-
     <string-array name="city">
         <item>Pune</item>
     </string-array>
@@ -73,7 +69,21 @@
     <string-array name="state">
         <item>Maharashtra</item>
     </string-array>
-    <string-array name="Speciality">
+    <string-array name="speciality">
+        <item>Cardiologist</item>
+        <item>Oncologist</item>
+        <item>Gynaecologist</item>
+        <item>Dermatologist</item>
+        <item>Neurologist</item>
+        <item>Psychologist</item>
+        <item>Hematologist</item>
+        <item>pathologist</item>
+        <item>Radiologist</item>
+        <item>Urologist</item>
+    </string-array>
+
+    <string-array name="serviceCategory">
+        <item>Service Category</item>
         <item>Physician</item>
         <item>Pharmacist</item>
         <item>Diagnostic Center</item>
@@ -87,6 +97,7 @@
     </string-array>
 
     <string-array name="consultationFees">
+        <item>&#45;</item>
         <item>&lt;200</item>
         <item>200&#45;500</item>
         <item>500&gt;</item>
@@ -94,6 +105,20 @@
     </string-array>
     <string-array name="specialitySearch">
         <item>Speciality</item>
+        <item>Cardiologist</item>
+        <item>Oncologist</item>
+        <item>Gynaecologist</item>
+        <item>Dermatologist</item>
+        <item>Neurologist</item>
+        <item>Psychologist</item>
+        <item>Hematologist</item>
+        <item>pathologist</item>
+        <item>Radiologist</item>
+        <item>Urologist</item>
+    </string-array>
+
+    <string-array name="serviceCategorySearch">
+        <item>Service Category</item>
         <item>Physician</item>
         <item>Pharmacist</item>
         <item>Diagnostic Center</item>

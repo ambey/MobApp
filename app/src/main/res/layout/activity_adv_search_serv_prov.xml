@@ -169,6 +169,14 @@
                 android:layout_toRightOf="@+id/textViewConsultationFees"
                 android:layout_marginTop="25dp"
                 android:layout_marginLeft="8dp"/>
+            <Spinner
+                android:id="@+id/spinServiceProvCategory"
+                android:layout_width="170dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/spinConsultationFees"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/spinner"
+                android:entries="@array/serviceCategorySearch" />
 
 
             <Button android:textStyle="bold"
@@ -179,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/search"
                 android:onClick="searchDr"
-                android:layout_below="@+id/spinConsultationFees"
+                android:layout_below="@+id/spinServiceProvCategory"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"/>
 

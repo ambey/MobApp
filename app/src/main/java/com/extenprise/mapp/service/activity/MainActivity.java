@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     }
 
     public void showMedicoHome(View v) {
-        Intent intent = new Intent(this, SearchDoctorActivity.class);
+        Intent intent = new Intent(this, SearchServProvActivity.class);
         startActivity(intent);
     }
 

@@ -72,7 +72,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/imageViewAvailability"
-        android:src="@drawable/g_circle"
+        android:src="@drawable/gcircle"
         android:layout_alignBottom="@+id/viewClinicName"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

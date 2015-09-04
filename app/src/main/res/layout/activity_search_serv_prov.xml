@@ -37,11 +37,9 @@
                 android:layout_width="170dp"
                 android:layout_height="35dp"
                 android:layout_below="@+id/imageViewLogo"
-                android:hint="@string/speciality"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/spinner"
-                android:entries="@array/Speciality"
-                android:prompt="@string/speciality_doc"/>
+                android:entries="@array/serviceCategorySearch" />
 
             <EditText
                 android:layout_below="@+id/spinServiceProvCategory"
@@ -57,11 +55,9 @@
                 android:layout_width="170dp"
                 android:layout_height="35dp"
                 android:layout_below="@+id/editTextSearchDr"
-                android:hint="@string/speciality"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/spinner"
-                android:entries="@array/specialitySearch"
-                android:prompt="@string/speciality_doc"/>
+                android:entries="@array/specialitySearch" />
 
             <EditText
                 android:id="@+id/editTextSearchLoc"

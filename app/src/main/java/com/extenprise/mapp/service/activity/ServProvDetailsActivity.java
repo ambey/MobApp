@@ -1,10 +1,7 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,19 +11,16 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 
-public class DoctorDetailsActivity extends Activity {
+public class ServProvDetailsActivity extends Activity {
 
     private TextView mTextViewDocname;
     private TextView mTextViewDocSpeciality;
@@ -44,7 +38,7 @@ public class DoctorDetailsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_doctor_details);
+        setContentView(R.layout.activity_serv_prov_details);
 
         mFormView = findViewById(R.id.bookAppointmentForm);
         mProgressView = findViewById(R.id.progressView);

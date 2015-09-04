@@ -10,20 +10,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.extenprise.mapp.service.activity.LoginActivity;
+import com.extenprise.mapp.activity.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 /**
  * Created by ambey on 23/7/15.

@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,7 +25,6 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
@@ -37,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class SignUpActivity extends Activity {
+public class ServProvSignUpActivity extends Activity {
 
     private EditText mFirstName;
     private EditText mLastName;
@@ -51,7 +46,7 @@ public class SignUpActivity extends Activity {
     private TextView mImgTxtView;
 
     // LogCat tag
-    private static final String TAG = SignUpActivity.class.getSimpleName();
+    private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
 
     // Camera activity request codes
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
@@ -185,15 +180,16 @@ public class SignUpActivity extends Activity {
             cancel = true;
         }
 
-        int uTypeID = mRadioGroupGender.getCheckedRadioButtonId();
-        if(uTypeID == -1) {
+        int genderID = mRadioGroupGender.getCheckedRadioButtonId();
+        if(genderID == -1) {
             //UIUtility.showAlert(this, "", "Please Select Gender.");
-            mRadioButtonGender.setError("Please select Gender.");
-            focusView = mRadioGroupGender;
+            RadioButton mFemale = (RadioButton)findViewById(R.id.radioButtonFemale);
+            mFemale.setError("Please select Gender.");
+            focusView = mFemale;
             cancel = true;
             //return;
         } else {
-            mRadioButtonGender = (RadioButton)findViewById(uTypeID);
+            mRadioButtonGender = (RadioButton)findViewById(genderID);
         }
 
         String regNo = mRegistrationNumber.getText().toString();

@@ -1,10 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,11 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -32,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class SearchDocResultListActivity extends Activity {
+public class SearchServProvResultActivity extends Activity {
 
     ArrayList<HashMap<String, Object>> searchResults;
     LayoutInflater inflater;
@@ -40,7 +36,7 @@ public class SearchDocResultListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_doc_result_list);
+        setContentView(R.layout.activity_search_serv_prov_result);
 
         //TO  VIEW THE LIST OF DOCTORS IN LISTVIEW FROM CURSOR THROUGH ADAPTER
 
@@ -91,9 +87,9 @@ public class SearchDocResultListActivity extends Activity {
                 ImageView mImageViewAvailable = (ImageView) view.findViewById(R.id.imageViewAvailability);
 
                 if(UIUtility.findDocAvailability(docAvailDays, Calendar.getInstance())) {
-                    mImageViewAvailable.setImageResource(R.drawable.g_circle);
+                    mImageViewAvailable.setImageResource(R.drawable.gcircle);
                 } else {
-                    mImageViewAvailable.setImageResource(R.drawable.r_circle);
+                    mImageViewAvailable.setImageResource(R.drawable.rcircle);
                 }
 
             /*YOUR CHOICE OF COLOR*/
@@ -137,7 +133,7 @@ public class SearchDocResultListActivity extends Activity {
                 LoginHolder.spsspt.setServProvHasService(sps);
                 LoginHolder.spsspt.setServicePoint(spt);
 
-                Intent i = new Intent(getApplicationContext(), DoctorDetailsActivity.class);
+                Intent i = new Intent(getApplicationContext(), ServProvDetailsActivity.class);
                 startActivity(i);
             }
         });

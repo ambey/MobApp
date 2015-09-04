@@ -1,9 +1,8 @@
-package com.extenprise.mapp.service.activity;
+package com.extenprise.mapp.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +11,8 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientSignUpActivity;
+import com.extenprise.mapp.service.activity.SearchServProvActivity;
+import com.extenprise.mapp.service.activity.ServProvSignUpActivity;
 
 
 public class SignUpPreviousActivity extends Activity {
@@ -26,7 +27,7 @@ public class SignUpPreviousActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //registerServProv();
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ServProvSignUpActivity.class);
                 startActivity(intent);
             }
         });
@@ -64,7 +65,7 @@ public class SignUpPreviousActivity extends Activity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_search:
-                Intent intent = new Intent(this, SearchDoctorActivity.class);
+                Intent intent = new Intent(this, SearchServProvActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_sign_in:

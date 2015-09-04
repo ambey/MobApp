@@ -116,7 +116,7 @@ public class BookAppointmentActivity extends Activity
 
     public void setTimeSlots(String dateStr) {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
         try {
             Date date = sdf.parse(dateStr);
@@ -206,7 +206,7 @@ public class BookAppointmentActivity extends Activity
         @Override
         protected void onPostExecute(Void aVoid) {
             UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.");
-            /*Intent intent = new Intent(myActivity, SearchDoctorActivity.class);
+            /*Intent intent = new Intent(myActivity, SearchServProvActivity.class);
             startActivity(intent);*/
             return;
         }

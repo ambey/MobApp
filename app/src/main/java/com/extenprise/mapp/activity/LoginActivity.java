@@ -1,4 +1,4 @@
-package com.extenprise.mapp.service.activity;
+package com.extenprise.mapp.activity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -35,6 +35,10 @@ import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.activity.BookAppointmentActivity;
+import com.extenprise.mapp.service.activity.SearchServProvActivity;
+import com.extenprise.mapp.service.activity.ServProvSignUpActivity;
+import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
@@ -142,7 +146,7 @@ public class LoginActivity extends Activity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_search:
-                Intent intent = new Intent(this, SearchDoctorActivity.class);
+                Intent intent = new Intent(this, SearchServProvActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_sign_in:
@@ -161,7 +165,7 @@ public class LoginActivity extends Activity {
     public void registerServProv() {
         mMobileNumber.setError(null);
         mPasswordView.setError(null);
-        Intent intent = new Intent(this, SignUpActivity.class);
+        Intent intent = new Intent(this, ServProvSignUpActivity.class);
         startActivity(intent);
     }
 
@@ -233,7 +237,7 @@ public class LoginActivity extends Activity {
             mAuthTask = new UserLoginTask(this, email, null);
             mAuthTask.execute((Void) null);
 
-            //Intent intent = new Intent(this, SignUpActivity.class);
+            //Intent intent = new Intent(this, ServProvSignUpActivity.class);
             //startActivity(intent);
         }*/ else {
 
@@ -487,7 +491,7 @@ public class LoginActivity extends Activity {
                 }
             } else {
                 /*if(mPassword == null) {
-                    Intent intent = new Intent(mActivity, SignUpActivity.class);
+                    Intent intent = new Intent(mActivity, ServProvSignUpActivity.class);
                     startActivity(intent);
                     return;
                 }*/

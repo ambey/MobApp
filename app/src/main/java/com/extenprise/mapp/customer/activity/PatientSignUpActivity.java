@@ -2,12 +2,9 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -18,20 +15,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.activity.LoginActivity;
-import com.extenprise.mapp.service.activity.SignUpPreviousActivity;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.ServicePoint;
-import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
-
-import java.util.ArrayList;
 
 
 public class PatientSignUpActivity extends Activity {
@@ -57,6 +45,7 @@ public class PatientSignUpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_sign_up);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFormView = findViewById(R.id.scrollView);
         mProgressView = findViewById(R.id.progressView);

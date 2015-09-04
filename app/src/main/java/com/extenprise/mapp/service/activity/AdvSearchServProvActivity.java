@@ -2,7 +2,6 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -14,29 +13,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.MultiSelectionSpinner;
-import com.extenprise.mapp.util.SearchAppointment;
 import com.extenprise.mapp.util.SearchDoctor;
 import com.extenprise.mapp.util.UIUtility;
 
 import java.util.Calendar;
 
-public class AdvanceSearchDocActivity extends Activity {
+public class AdvSearchServProvActivity extends Activity {
 
     private UserSearchTask mSearchTask = null;
 
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
     private EditText mDrClinicName;
     private Spinner mSpeciality;
+    private Spinner mServProvCategory;
     private EditText mLocation;
     private EditText mQualification;
     private EditText mExperience;
@@ -55,10 +51,11 @@ public class AdvanceSearchDocActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_advance_search_doc);
+        setContentView(R.layout.activity_adv_search_serv_prov);
 
         mDrClinicName = (EditText)findViewById(R.id.editSearchDr);
         mSpeciality = (Spinner)findViewById(R.id.viewSpeciality);
+        mServProvCategory = (Spinner)findViewById(R.id.spinServiceProvCategory);
         mLocation = (EditText)findViewById(R.id.viewLocation);
         mQualification = (EditText)findViewById(R.id.editTextQualification);
         mButtonStartTime = (Button)findViewById(R.id.buttonStartTime);
@@ -76,6 +73,7 @@ public class AdvanceSearchDocActivity extends Activity {
             //mSpeciality.setSelection(LoginHolder.spsspt.getServProvHasService().getService().getSpeciality());
             //mSpeciality.setSelection();
             mSpeciality.setSelection(UIUtility.getSpinnerIndex(mSpeciality, LoginHolder.spsspt.getServProvHasService().getService().getSpeciality()));
+            mServProvCategory.setSelection(UIUtility.getSpinnerIndex(mServProvCategory, LoginHolder.spsspt.getServProvHasService().getService().getSpeciality()));
             mDrClinicName.setText(LoginHolder.spsspt.getServicePoint().getName());
         }
 
@@ -246,6 +244,11 @@ public class AdvanceSearchDocActivity extends Activity {
         if(sp.equals("Speciality")) {
             sp = "";
         }
+        String sc = mServProvCategory.getSelectedItem().toString();
+        if(sc.equals("Service Category")) {
+            sc = "";
+        }
+
         String dr = name, clinic = name;
 
         String qualification = mQualification.getText().toString().trim();
@@ -263,6 +266,9 @@ public class AdvanceSearchDocActivity extends Activity {
             availDay = "";
         }
         String consultFee = mConsultFee.getSelectedItem().toString();
+        if(consultFee.equals("-")) {
+            consultFee = "";
+        }
         /*if(selectedDays != null && !(selectedDays.equals(""))) {
             availDay = selectedDays;
         }*/
@@ -287,7 +293,7 @@ public class AdvanceSearchDocActivity extends Activity {
             }
         }
         UIUtility.showProgress(this, mSearchFormView, mProgressView, true);
-        mSearchTask = new UserSearchTask(this, dr, clinic, sp, loc,
+        mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
         mSearchTask.execute((Void) null);
     }
@@ -295,9 +301,10 @@ public class AdvanceSearchDocActivity extends Activity {
     public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity mActivity;
-        private final String mName, mClinic, mSpec, mLoc, mQualification, mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee;
+        private final String mName, mClinic, mSpec, mServCategory, mLoc,
+                mQualification, mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee;
 
-        public UserSearchTask(Activity mActivity, String mName, String mClinic, String mSpec, String mLoc,
+        public UserSearchTask(Activity mActivity, String mName, String mClinic, String mSpec, String mServCategory, String mLoc,
                               String mQualification, String mExp, String mStartTime, String mEndTime,
                               String mAvailDay, String mGender, String mConsultFee) {
 
@@ -313,13 +320,14 @@ public class AdvanceSearchDocActivity extends Activity {
             this.mAvailDay = mAvailDay;
             this.mGender = mGender;
             this.mConsultFee = mConsultFee;
+            this.mServCategory = mServCategory;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             boolean presence = false;
-            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mLoc, mQualification,
+            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mServCategory, mLoc, mQualification,
                     mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee)) {
                 presence = true;
             }
@@ -332,11 +340,11 @@ public class AdvanceSearchDocActivity extends Activity {
             UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
 
             if (success) {
-                Intent intent = new Intent(mActivity, SearchDocResultListActivity.class);
+                Intent intent = new Intent(mActivity, SearchServProvResultActivity.class);
                 startActivity(intent);
 
             } else {
-                    /*Intent intent = new Intent(mActivity, AdvanceSearchDocActivity.class);
+                    /*Intent intent = new Intent(mActivity, AdvSearchServProvActivity.class);
                     startActivity(intent);*/
                 UIUtility.showAlert(mActivity, "No Results Found","Sorry, No result matches to your criteria!");
             }

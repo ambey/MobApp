@@ -13,6 +13,7 @@ import android.widget.Spinner;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
 import com.extenprise.mapp.service.data.ServProvHasService;
@@ -22,11 +23,12 @@ import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchDoctor;
 import com.extenprise.mapp.util.UIUtility;
 
-public class SearchDoctorActivity extends Activity {
+public class SearchServProvActivity extends Activity {
 
     private UserSearchTask mSearchTask = null;
     private EditText mDrClinicName;
     private Spinner mSpeciality;
+    private Spinner mServProvCategory;
     private EditText mLocation;
     private View mProgressView;
     private View mSearchFormView;
@@ -34,15 +36,16 @@ public class SearchDoctorActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_doctor);
+        setContentView(R.layout.activity_search_serv_prov);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         //getActionBar().setDisplayShowTitleEnabled(false);
 
         LoginHolder.spsspt = new ServProvHasServHasServPt();
-        LoginHolder.servLoginRef = new ServiceProvider();
+        LoginHolder.servLoginRef = new ServiceProvider();//spinServiceProvCategory
 
         mDrClinicName = (EditText) findViewById(R.id.editTextSearchDr);
         mSpeciality = (Spinner) findViewById(R.id.editTextSearchSp);
+        mServProvCategory = (Spinner)findViewById(R.id.spinServiceProvCategory);
         mLocation = (EditText) findViewById(R.id.editTextSearchLoc);
         mSearchFormView = findViewById(R.id.search_form);
         mProgressView = findViewById(R.id.search_progress);
@@ -52,6 +55,7 @@ public class SearchDoctorActivity extends Activity {
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
         String sp = mSpeciality.getSelectedItem().toString();
+        String sc = mServProvCategory.getSelectedItem().toString();
 
         ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
 
@@ -61,6 +65,7 @@ public class SearchDoctorActivity extends Activity {
 
         Service s = new Service();
         s.setSpeciality(sp);
+        s.setServCatagory(sc);
         ServProvHasService sps = new ServProvHasService();
         sps.setService(s);
 
@@ -68,7 +73,7 @@ public class SearchDoctorActivity extends Activity {
         spsspt.setServProvHasService(sps);
         LoginHolder.spsspt = spsspt;
 
-        Intent i = new Intent(this, AdvanceSearchDocActivity.class);
+        Intent i = new Intent(this, AdvSearchServProvActivity.class);
         startActivity(i);
     }
 
@@ -112,6 +117,11 @@ public class SearchDoctorActivity extends Activity {
         if(sp.equals("Speciality")) {
             sp = "";
         }
+        String sc = mServProvCategory.getSelectedItem().toString();
+        if(sc.equals("Service Category")) {
+            sc = "";
+        }
+
         String dr = name, clinic = name;
 
         if(!name.equals("")) {
@@ -126,21 +136,22 @@ public class SearchDoctorActivity extends Activity {
 
         /*SearchDoctor.mDbHelper = new MappDbHelper(getApplicationContext());*/
         UIUtility.showProgress(this, mSearchFormView, mProgressView, true);
-        mSearchTask = new UserSearchTask(this, dr, clinic, sp, loc);
+        mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc);
         mSearchTask.execute((Void) null);
     }
 
     public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity mActivity;
-        private final String mName, mClinic, mSpec, mLoc;
+        private final String mName, mClinic, mSpec, mServCategory, mLoc;
 
-        UserSearchTask(Activity activity, String name, String clinic, String spec, String loc) {
+        UserSearchTask(Activity activity, String name, String clinic, String spec, String mservCategory, String loc) {
             mActivity = activity;
             mName = name;
             mClinic = clinic;
             mSpec = spec;
             mLoc = loc;
+            mServCategory = mservCategory;
         }
 
         @Override
@@ -148,7 +159,7 @@ public class SearchDoctorActivity extends Activity {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             boolean presence = false;
 
-            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mLoc, "", "", "", "", "", "", "")) {
+            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mServCategory, mLoc, "", "", "", "", "", "", "")) {
                 presence = true;
             }
             return presence;
@@ -159,7 +170,7 @@ public class SearchDoctorActivity extends Activity {
             mSearchTask = null;
             UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
             if (success) {
-                Intent intent = new Intent(mActivity, SearchDocResultListActivity.class);
+                Intent intent = new Intent(mActivity, SearchServProvResultActivity.class);
                 startActivity(intent);
             } else {
                 UIUtility.showAlert(mActivity,"No Results Found","Sorry, No result matches to your criteria!");
