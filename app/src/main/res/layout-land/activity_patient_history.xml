@@ -17,18 +17,22 @@
 
     <TextView
         android:id="@+id/textViewFName"
-        style="@style/largeText"
+        style="@style/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textViewhistoryLbl"
+        android:layout_alignTop="@id/textViewhistoryLbl"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/textViewhistoryLbl"
+        android:layout_toRightOf="@id/textViewhistoryLbl"
         android:text="@string/first_name" />
 
     <TextView
         android:id="@+id/textViewLName"
-        style="@style/largeText"
+        style="@style/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/textViewFName"
+        android:layout_alignTop="@id/textViewhistoryLbl"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@id/textViewFName"
@@ -40,14 +44,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewhistoryLbl"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:text="@string/myAppointment"
         android:textSize="18sp" />
 
     <ListView
         android:id="@+id/listViewMyAppont"
         android:layout_width="wrap_content"
-        android:layout_height="120dp"
+        android:layout_height="80dp"
         android:layout_below="@+id/textViewMyAppontLbl"
         android:layout_marginTop="10dp"
         android:background="@drawable/list" />
@@ -57,16 +61,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listViewMyAppont"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:text="@string/otherData"
         android:textSize="18sp" />
 
     <ListView
         android:id="@+id/otherDataListView"
         android:layout_width="wrap_content"
-        android:layout_height="120dp"
+        android:layout_height="80dp"
         android:layout_below="@+id/textViewOtherDataLbl"
         android:layout_marginTop="10dp"
         android:background="@drawable/list" />
-
 </RelativeLayout>

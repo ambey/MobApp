@@ -3,7 +3,6 @@ package com.extenprise.mapp.service.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,13 +11,12 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DBUtil;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,7 +108,7 @@ public class AppointmentDetailsActivity extends Activity {
                 viewMoreButton = (Button) pastAppontLayout.findViewById(R.id.viewMoreButton);
             }
             viewMoreButton.setEnabled(false);
-            viewMoreButton.setBackground(getDrawable(R.drawable.disabled_button));
+            viewMoreButton.setBackgroundResource(R.drawable.disabled_button);
         }
         if (mOtherApponts.size() > 0) {
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
@@ -159,6 +157,7 @@ public class AppointmentDetailsActivity extends Activity {
     }
 
     public void showPatientHistory(View view) {
-
+        Intent intent = new Intent(this, PatientHistoryActivity.class);
+        startActivity(intent);
     }
 }
