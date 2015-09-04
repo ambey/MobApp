@@ -239,4 +239,25 @@ public abstract class DBUtil {
         cursor.close();
         return rx;
     }
+
+    public static ArrayList<String> getSpec(MappDbHelper dbHelper, String servCategory) {
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] selectionArgs = { servCategory };
+        String query = "select DISTINCT " + MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + " from " +
+                MappContract.ServProvHasServ.TABLE_NAME + " where " +
+                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + " = ? ";
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        ArrayList<String> specs = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            do {
+                cursor.moveToNext();
+                specs.add(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY)));
+            } while (!cursor.isLast());
+        }
+        cursor.close();
+        return specs;
+    }
 }

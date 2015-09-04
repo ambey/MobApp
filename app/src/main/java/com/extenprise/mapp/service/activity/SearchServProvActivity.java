@@ -8,8 +8,10 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -20,8 +22,10 @@ import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.SearchDoctor;
+import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
+
+import java.util.ArrayList;
 
 public class SearchServProvActivity extends Activity {
 
@@ -49,6 +53,10 @@ public class SearchServProvActivity extends Activity {
         mLocation = (EditText) findViewById(R.id.editTextSearchLoc);
         mSearchFormView = findViewById(R.id.search_form);
         mProgressView = findViewById(R.id.search_progress);
+
+        /*ArrayList<String> list = new ArrayList<>();
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
+        mSpeciality.setAdapter(spinnerAdapter);*/
     }
 
     public void advSearch(View view) {
@@ -114,11 +122,11 @@ public class SearchServProvActivity extends Activity {
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
         String sp = mSpeciality.getSelectedItem().toString();
-        if(sp.equals("Speciality")) {
+        if(sp.equals("Select Speciality")) {
             sp = "";
         }
         String sc = mServProvCategory.getSelectedItem().toString();
-        if(sc.equals("Service Category")) {
+        if(sc.equals("Select Category")) {
             sc = "";
         }
 
@@ -134,7 +142,7 @@ public class SearchServProvActivity extends Activity {
             }
         }
 
-        /*SearchDoctor.mDbHelper = new MappDbHelper(getApplicationContext());*/
+        /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
         UIUtility.showProgress(this, mSearchFormView, mProgressView, true);
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc);
         mSearchTask.execute((Void) null);
@@ -159,7 +167,7 @@ public class SearchServProvActivity extends Activity {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             boolean presence = false;
 
-            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mServCategory, mLoc, "", "", "", "", "", "", "")) {
+            if(SearchServProv.searchByAll(dbHelper, mName, mClinic, mSpec, mServCategory, mLoc, "", "", "", "", "", "", "")) {
                 presence = true;
             }
             return presence;

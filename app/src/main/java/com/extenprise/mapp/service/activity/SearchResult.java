@@ -1,28 +1,14 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
-import com.extenprise.mapp.service.data.ServicePoint;
-import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.SearchDoctor;
 import com.extenprise.mapp.util.UIUtility;
 
 import java.util.Calendar;

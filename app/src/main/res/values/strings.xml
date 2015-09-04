@@ -70,6 +70,7 @@
         <item>Maharashtra</item>
     </string-array>
     <string-array name="speciality">
+        <item>Select Speciality</item>
         <item>Cardiologist</item>
         <item>Oncologist</item>
         <item>Gynaecologist</item>
@@ -77,13 +78,13 @@
         <item>Neurologist</item>
         <item>Psychologist</item>
         <item>Hematologist</item>
-        <item>pathologist</item>
+        <item>Pathologist</item>
         <item>Radiologist</item>
         <item>Urologist</item>
     </string-array>
 
     <string-array name="serviceCategory">
-        <item>Service Category</item>
+        <item>Select Category</item>
         <item>Physician</item>
         <item>Pharmacist</item>
         <item>Diagnostic Center</item>
@@ -104,6 +105,7 @@
 
     </string-array>
     <string-array name="specialitySearch">
+        <item>Select Speciality</item>
         <item>Speciality</item>
         <item>Cardiologist</item>
         <item>Oncologist</item>
@@ -118,7 +120,7 @@
     </string-array>
 
     <string-array name="serviceCategorySearch">
-        <item>Service Category</item>
+        <item>Select Category</item>
         <item>Physician</item>
         <item>Pharmacist</item>
         <item>Diagnostic Center</item>

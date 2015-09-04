@@ -12,17 +12,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.SearchDoctor;
+import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AdvSearchServProvActivity extends Activity {
@@ -79,6 +84,28 @@ public class AdvSearchServProvActivity extends Activity {
 
         mMultiSpinnerDays = (Button)findViewById(R.id.spinAvailDays);
         mMultiSpinnerDays.setOnClickListener( new ButtonClickHandler() );
+
+        /*mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String servCategory = mServProvCategory.getSelectedItem().toString();
+                MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+                if(servCategory.equalsIgnoreCase("Select Category")) {
+                    ArrayList<String> specs = DBUtil.getSpec(dbHelper, servCategory);
+                    setSpecs(specs);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });*/
+    }
+
+    private void setSpecs(ArrayList<String> specs) {
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specs);
+        mSpeciality.setAdapter(spinnerAdapter);
     }
 
     public class ButtonClickHandler implements View.OnClickListener {
@@ -241,11 +268,11 @@ public class AdvSearchServProvActivity extends Activity {
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
         String sp = mSpeciality.getSelectedItem().toString();
-        if(sp.equals("Speciality")) {
+        if(sp.equals("Select Speciality")) {
             sp = "";
         }
         String sc = mServProvCategory.getSelectedItem().toString();
-        if(sc.equals("Service Category")) {
+        if(sc.equals("Select Category")) {
             sc = "";
         }
 
@@ -327,7 +354,7 @@ public class AdvSearchServProvActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             boolean presence = false;
-            if(SearchDoctor.searchByAll(dbHelper, mName, mClinic, mSpec, mServCategory, mLoc, mQualification,
+            if(SearchServProv.searchByAll(dbHelper, mName, mClinic, mSpec, mServCategory, mLoc, mQualification,
                     mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee)) {
                 presence = true;
             }

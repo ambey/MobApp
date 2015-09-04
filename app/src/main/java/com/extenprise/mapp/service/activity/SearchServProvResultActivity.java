@@ -21,7 +21,7 @@ import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.SearchDoctor;
+import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class SearchServProvResultActivity extends Activity {
 
         //TO  VIEW THE LIST OF DOCTORS IN LISTVIEW FROM CURSOR THROUGH ADAPTER
 
-        final Cursor cursor = SearchDoctor.getCursor();
+        final Cursor cursor = SearchServProv.getCursor();
 
         /* SimpleCursorAdapter(Context context,
                     int layout,

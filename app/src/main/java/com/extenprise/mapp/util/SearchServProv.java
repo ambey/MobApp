@@ -14,7 +14,7 @@ import java.util.Arrays;
 /**
  * Created by ambey on 23/7/15.
  */
-public abstract class SearchDoctor {
+public abstract class SearchServProv {
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -23,7 +23,7 @@ public abstract class SearchDoctor {
     //private static int cursorPosition;
 
     /*public static void setCursorPosition(int cursorPosition) {
-        SearchDoctor.cursorPosition = cursorPosition;
+        SearchServProv.cursorPosition = cursorPosition;
     }*/
 
     public static Cursor getCursor() {

@@ -311,6 +311,20 @@ public class AddWorkPlaceActivity extends Activity {
         boolean valid = true;
         View focusView = null;
 
+        String category = mServCatagory.getSelectedItem().toString();
+        if(category.equalsIgnoreCase("Select Category")) {
+            UIUtility.showAlert(this, "", "Please select service category.");
+            focusView = mServCatagory;
+            valid = false;
+        }
+
+        String spec = mSpeciality.getSelectedItem().toString();
+        if(spec.equalsIgnoreCase("Select Speciality")) {
+            UIUtility.showAlert(this, "", "Please select speciality.");
+            focusView = mSpeciality;
+            valid = false;
+        }
+
         String exp = mExperience.getText().toString();
         if (TextUtils.isEmpty(exp)) {
             mExperience.setError(getString(R.string.error_field_required));
