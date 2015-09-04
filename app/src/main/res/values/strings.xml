@@ -198,7 +198,7 @@
     <string name="myAppointment">My Appointments</string>
     <string name="othAppointment">Other Appointments</string>
     <string name="otherData">Other Data</string>
-    <string name="lastModified">Last Modified : </string>
+    <string name="lastModified">Last Visited : </string>
     <string name="hello">Hello</string>
     <string name="helloDr">Hello Dr</string>
     <string name="dateFormat">dd/mm/yyyy</string>

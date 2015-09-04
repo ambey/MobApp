@@ -57,7 +57,7 @@
         android:id="@+id/linenView"
         android:layout_width="fill_parent"
         android:layout_height="0.4dp"
-        android:background="@android:color/black"
+        android:background="#9d9d9d"
         android:layout_marginTop="120dp"
         />
 
@@ -66,7 +66,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linenView"
-            android:layout_marginTop="40dp"
+
             >
 
 
@@ -78,9 +78,9 @@
                 android:background="@drawable/square_round_button"
                 android:enabled="true"
                 android:text="@string/view_appoint"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textColor="#b0171f"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
                 android:onClick="viewAppointment"
                 />
 
@@ -91,9 +91,8 @@
                 android:background="@drawable/disabled_button"
                 android:enabled="false"
                 android:text="@string/viewpatientreport"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textColor="#888888"
+                android:textSize="16sp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -109,6 +108,7 @@
                 android:layout_below="@+id/buttonDoctorsAppointment"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:visibility="invisible"
                 />
 
             <Button
@@ -119,11 +119,10 @@
                 android:background="@drawable/disabled_button"
                 android:enabled="true"
                 android:text="@string/viewpatientrx"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textColor="#888888"
+                android:textSize="16sp"
                 android:layout_below="@+id/linenView1"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="0dp"/>
 
             <Button
                 android:id="@+id/buttonView4"
@@ -141,13 +140,29 @@
                 <View
                     android:id="@+id/linenView2"
                     android:layout_width="0.4dp"
-                    android:layout_height="200dp"
-                    android:background="@android:color/black"
+                    android:layout_height="210dp"
+                    android:background="#9d9d9d"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true" />
 
+                <View
+                    android:id="@+id/linenView4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.4dp"
+                    android:background="#9d9d9d"
+                    android:layout_marginTop="210dp"
+                    />
 
-        </RelativeLayout>
+                <View
+                    android:id="@+id/linenView5"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.4dp"
+                    android:background="#9d9d9d"
+                    android:layout_marginTop="100dp"
+                    />
+
+
+            </RelativeLayout>
 
 
 </RelativeLayout>

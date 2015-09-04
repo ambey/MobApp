@@ -53,30 +53,33 @@
         android:id="@+id/linenView"
         android:layout_width="fill_parent"
         android:layout_height="0.4dp"
-        android:background="@android:color/black"
+        android:background="#9d9d9d"
         android:layout_marginTop="120dp"
         />
 
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/linenView"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="0dp"
+
         >
+
 
 
         <Button
             android:id="@+id/buttonDoctorsAppointment"
-            android:layout_width="130dp"
+            android:layout_width="140dp"
             android:layout_height="80dp"
             android:layout_marginLeft="25dp"
             android:background="@drawable/square_round_button"
             android:enabled="true"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textColor="#b0171f"
+            android:textSize="16sp"
+
             android:text="@string/doc_appoint"
+            android:layout_marginTop="10dp"
 
             />
 
@@ -87,9 +90,8 @@
             android:background="@drawable/disabled_button"
             android:enabled="false"
             android:text="@string/my_report"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textColor="#888888"
+            android:textSize="16sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -106,6 +108,7 @@
             android:layout_below="@+id/buttonDoctorsAppointment"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
+            android:visibility="invisible"
             />
 
         <Button
@@ -116,11 +119,11 @@
             android:background="@drawable/disabled_button"
             android:enabled="true"
             android:text="@string/my_rx"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textColor="#888888"
+            android:textSize="16sp"
+
             android:layout_below="@+id/linenView1"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="0dp"/>
 
         <Button
             android:id="@+id/buttonView4"
@@ -138,11 +141,25 @@
         <View
             android:id="@+id/linenView2"
             android:layout_width="0.4dp"
-            android:layout_height="200dp"
-            android:background="@android:color/black"
+            android:layout_height="210dp"
+            android:background="#9d9d9d"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
+        <View
+            android:id="@+id/linenView4"
+            android:layout_width="fill_parent"
+            android:layout_height="0.4dp"
+            android:background="#9d9d9d"
+            android:layout_marginTop="210dp"
+            />
 
+        <View
+            android:id="@+id/linenView5"
+            android:layout_width="fill_parent"
+            android:layout_height="0.4dp"
+            android:background="#9d9d9d"
+            android:layout_marginTop="100dp"
+            />
 
     </RelativeLayout>
 
