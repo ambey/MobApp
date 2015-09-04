@@ -195,7 +195,8 @@
     <string name="my_rx">View My Rx</string>
     <string name="medico">Medico</string>
     <string name="historyData">History Data</string>
-    <string name="myAppointment">My Appointment</string>
+    <string name="myAppointment">My Appointments</string>
+    <string name="othAppointment">Other Appointments</string>
     <string name="otherData">Other Data</string>
     <string name="lastModified">Last Modified : </string>
     <string name="hello">Hello</string>

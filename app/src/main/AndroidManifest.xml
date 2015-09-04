@@ -154,9 +154,6 @@
                 android:value=".service.activity.ServProvDetailsActivity" />
         </activity>
         <activity
-            android:name=".service.activity.TimeSlots"
-            android:label="@string/title_activity_time_slots" />
-        <activity
             android:name=".activity.SignUpPreviousActivity"
             android:label="@string/title_activity_sign_up_previous"
             android:parentActivityName=".activity.LoginActivity" >

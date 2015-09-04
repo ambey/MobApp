@@ -1,6 +1,7 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +19,9 @@ import com.extenprise.mapp.util.DBUtil;
 
 public class ViewRxActivity extends Activity {
 
-    public static Appointment appointment;
+    private String mParentActivity;
+    private int mCustId;
+    private int mServProvId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +37,24 @@ public class ViewRxActivity extends Activity {
         TextView age = (TextView) layout.findViewById(R.id.patientAgeTextView);
         TextView weight = (TextView) layout.findViewById(R.id.patientWeightTextView);
 
-        Customer customer = appointment.getCustomer();
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        Intent intent = getIntent();
+
+        mParentActivity = intent.getStringExtra("parent-activity");
+
+        mCustId = intent.getIntExtra("cust_id", -1);
+        mServProvId = intent.getIntExtra("sp_id", -1);
+        int appontId = intent.getIntExtra("appont_id", -1);
+        Customer customer = DBUtil.getCustomer(dbHelper, mCustId);
+        Appointment appointment = DBUtil.getAppointment(dbHelper, appontId);
         date.setText(appointment.getDateOfAppointment());
         fname.setText(customer.getfName());
         lname.setText(customer.getlName());
         time.setText(String.format("%02d:%02d", appointment.getFromTime() / 60,
                 appointment.getFromTime() % 60));
         gender.setText(customer.getGender());
-        //age.setText(customer.getAge());
-        //weight.setText("" + customer.getWeight());
+        age.setText("" + customer.getAge());
+        weight.setText("" + customer.getWeight());
 
         String[] values = {
                 MappContract.Prescription.COLUMN_NAME_ID_APPOMT,
@@ -60,7 +72,7 @@ public class ViewRxActivity extends Activity {
         ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.layout_rx_item,
-                DBUtil.getRxCursor(new MappDbHelper(getApplicationContext()), appointment.getId()),
+                DBUtil.getRxCursor(new MappDbHelper(getApplicationContext()), appontId),
                 values,
                 viewIds, 0);
         rxItemsList.setAdapter(adapter);
@@ -86,5 +98,20 @@ public class ViewRxActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public Intent getParentActivityIntent() {
+        if(mParentActivity != null) {
+            try {
+                Intent intent = new Intent(this, Class.forName(mParentActivity));
+                intent.putExtra("cust_id", mCustId);
+                intent.putExtra("sp_id", mServProvId);
+                return intent;
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return super.getParentActivityIntent();
+            }
+        }
+        return super.getParentActivityIntent();
     }
 }

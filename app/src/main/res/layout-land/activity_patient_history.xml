@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/textViewFName"
-        style="@style/titleText"
+        style="@style/largeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/textViewhistoryLbl"
@@ -29,7 +29,7 @@
 
     <TextView
         android:id="@+id/textViewLName"
-        style="@style/titleText"
+        style="@style/largeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/textViewhistoryLbl"
@@ -53,8 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_below="@+id/textViewMyAppontLbl"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/list" />
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/textViewOtherDataLbl"
@@ -66,10 +65,9 @@
         android:textSize="18sp" />
 
     <ListView
-        android:id="@+id/otherDataListView"
+        android:id="@+id/listViewOtherData"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_below="@+id/textViewOtherDataLbl"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/list" />
+        android:layout_marginTop="10dp"/>
 </RelativeLayout>

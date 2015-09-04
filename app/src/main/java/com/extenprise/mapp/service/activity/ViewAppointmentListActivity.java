@@ -151,6 +151,7 @@ public class ViewAppointmentListActivity extends Activity
                 Appointment appointment = appointments.get(position);
                 Customer customer = new Customer();
 
+                customer.setIdCustomer(cursor.getInt(cursor.getColumnIndex(MappContract.Customer._ID)));
                 customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
                 customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
                 customer.setEmailId(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_EMAIL_ID)));

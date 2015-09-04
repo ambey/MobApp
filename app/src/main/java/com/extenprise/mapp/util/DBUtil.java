@@ -3,6 +3,7 @@ package com.extenprise.mapp.util;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * Created by ambey on 3/9/15.
  */
 public abstract class DBUtil {
-    public static ArrayList<Appointment> getAppointments(MappDbHelper dbHelper, int serviceProvId) {
+    public static Cursor getServProvAppointmentsCursor(MappDbHelper dbHelper, int serviceProvId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {
                 MappContract.Appointment._ID,
@@ -31,8 +32,49 @@ public abstract class DBUtil {
             selection = MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV + "=?";
         }
 
-        Cursor cursor = db.query(MappContract.Appointment.TABLE_NAME, projection, selection
+        return db.query(MappContract.Appointment.TABLE_NAME, projection, selection
                 , args, null, null, null);
+    }
+
+    public static ArrayList<Appointment> getServProvAppointments(MappDbHelper dbHelper, int serviceProvId) {
+        Cursor cursor = getServProvAppointmentsCursor(dbHelper, serviceProvId);
+        ArrayList<Appointment> appointments = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            do {
+                cursor.moveToNext();
+                Appointment appointment = new Appointment();
+                appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+                appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+                appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
+                appointments.add(appointment);
+            } while (!cursor.isLast());
+        }
+        cursor.close();
+        return appointments;
+    }
+
+    public static Cursor getOtherServProvAppointmentsCursor(MappDbHelper dbHelper, int serviceProvId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                MappContract.Appointment._ID,
+                MappContract.Appointment.COLUMN_NAME_FROM_TIME,
+                MappContract.Appointment.COLUMN_NAME_DATE
+        };
+        String[] args = null;
+        String selection = null;
+        if (serviceProvId != -1) {
+            args = new String[1];
+            args[0] = "" + serviceProvId;
+
+            selection = MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV + "<>?";
+        }
+
+        return db.query(MappContract.Appointment.TABLE_NAME, projection, selection
+                , args, null, null, null);
+    }
+
+    public static ArrayList<Appointment> getOtherServProvAppointments(MappDbHelper dbHelper, int serviceProvId) {
+        Cursor cursor = getOtherServProvAppointmentsCursor(dbHelper, serviceProvId);
         ArrayList<Appointment> appointments = new ArrayList<>();
         if (cursor.getCount() > 0) {
             do {
@@ -81,12 +123,80 @@ public abstract class DBUtil {
         return appointments;
     }
 
+    public static Appointment getAppointment(MappDbHelper dbHelper, int appontId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                MappContract.Appointment._ID,
+                MappContract.Appointment.COLUMN_NAME_FROM_TIME,
+                MappContract.Appointment.COLUMN_NAME_DATE
+        };
+        String[] args = null;
+        String selection = null;
+        if (appontId != -1) {
+            args = new String[1];
+            args[0] = "" + appontId;
+
+            selection = MappContract.Appointment._ID + "=?";
+        }
+
+        Cursor cursor = db.query(true, MappContract.Appointment.TABLE_NAME, projection, selection, args, null, null, null, null);
+        Appointment appointment = null;
+        if (cursor.getCount() > 0) {
+            cursor.moveToNext();
+            appointment = new Appointment();
+            appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+            appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+            appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
+        }
+        cursor.close();
+        return appointment;
+    }
+
+    public static Customer getCustomer(MappDbHelper dbHelper, int custId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                MappContract.Customer._ID,
+                MappContract.Customer.COLUMN_NAME_FNAME,
+                MappContract.Customer.COLUMN_NAME_LNAME,
+                MappContract.Customer.COLUMN_NAME_AGE,
+                MappContract.Customer.COLUMN_NAME_CELLPHONE,
+                MappContract.Customer.COLUMN_NAME_HEIGHT,
+                MappContract.Customer.COLUMN_NAME_WEIGHT,
+                MappContract.Customer.COLUMN_NAME_GENDER
+        };
+        String[] args = null;
+        String selection = null;
+        if (custId != -1) {
+            args = new String[1];
+            args[0] = "" + custId;
+
+            selection = MappContract.Appointment._ID + "=?";
+        }
+
+        Cursor cursor = db.query(true, MappContract.Customer.TABLE_NAME, projection, selection, args, null, null, null, null);
+        Customer customer = null;
+        if (cursor.getCount() > 0) {
+            cursor.moveToNext();
+            customer = new Customer();
+            customer.setIdCustomer(custId);
+            customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
+            customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
+            customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
+            customer.setAge(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE)));
+            customer.setWeight(cursor.getFloat(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_WEIGHT)));
+            customer.setHeight(cursor.getFloat(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_HEIGHT)));
+            customer.setGender(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_GENDER)));
+        }
+        cursor.close();
+        return customer;
+    }
+
     public static Cursor getRxCursor(MappDbHelper dbHelper, int appontId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selection = MappContract.Prescription.COLUMN_NAME_ID_APPOMT + "=?";
         String[] args = {"" + appontId};
         return db.query(MappContract.Prescription.TABLE_NAME, null,
-                selection, args, null, null, null);
+                null, null, null, null, null);
     }
 
     public static Rx getRx(MappDbHelper dbHelper, int appontId) {

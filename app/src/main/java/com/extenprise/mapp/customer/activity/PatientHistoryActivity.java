@@ -1,19 +1,76 @@
 package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.db.MappContract;
+import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.activity.ViewRxActivity;
+import com.extenprise.mapp.util.DBUtil;
 
 
 public class PatientHistoryActivity extends Activity {
+
+    private int mServProvId;
+    private int mCustId;
+    private Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_history);
+
+        TextView viewFName = (TextView) findViewById(R.id.textViewFName);
+        TextView viewLName = (TextView) findViewById(R.id.textViewLName);
+        ListView lvMyAppont = (ListView) findViewById(R.id.listViewMyAppont);
+        ListView lvOthAppont = (ListView) findViewById(R.id.listViewOtherData);
+
+        Intent intent = getIntent();
+        mServProvId = intent.getIntExtra("sp_id", -1);
+        mCustId = intent.getIntExtra("cust_id", -1);
+
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        Customer customer = DBUtil.getCustomer(dbHelper, mCustId);
+        viewFName.setText(customer.getfName());
+        viewLName.setText(customer.getlName());
+
+        Cursor myCursor = DBUtil.getServProvAppointmentsCursor(dbHelper, mServProvId);
+        Cursor othCursor = DBUtil.getOtherServProvAppointmentsCursor(dbHelper, mServProvId);
+
+        String[] columns = {
+                MappContract.Appointment.COLUMN_NAME_DATE,
+                MappContract.Appointment._ID
+        };
+        int[] viewIds = {
+                R.id.dateTextView,
+                R.id.appontIdTextView
+        };
+        SimpleCursorAdapter myAdapter = new SimpleCursorAdapter(this,
+                R.layout.layout_appont_row,
+                myCursor,
+                columns,
+                viewIds,
+                0);
+        lvMyAppont.setAdapter(myAdapter);
+
+        SimpleCursorAdapter othAdapter = new SimpleCursorAdapter(this,
+                R.layout.layout_appont_row,
+                othCursor,
+                columns,
+                viewIds,
+                0);
+        lvOthAppont.setAdapter(othAdapter);
     }
 
     @Override
@@ -37,4 +94,17 @@ public class PatientHistoryActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void showRxDetails(View view) {
+        View parent = (View)view.getParent();
+        TextView b = (TextView) parent.findViewById(R.id.appontIdTextView);
+        int appontId = Integer.parseInt(b.getText().toString());
+        Intent intent = new Intent(this, ViewRxActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
+        intent.putExtra("appont_id", appontId);
+        intent.putExtra("cust_id", mCustId);
+        intent.putExtra("sp_id", mServProvId);
+        startActivity(intent);
+    }
+
 }

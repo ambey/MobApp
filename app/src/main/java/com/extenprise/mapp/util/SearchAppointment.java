@@ -35,6 +35,7 @@ public abstract class SearchAppointment {
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_TO_TIME + ", " +
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
 
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer._ID + ", "  +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_FNAME + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_LNAME + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_AGE + ", " +

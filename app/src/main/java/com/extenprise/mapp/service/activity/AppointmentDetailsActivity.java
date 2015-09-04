@@ -102,11 +102,12 @@ public class AppointmentDetailsActivity extends Activity {
         mOtherApponts = DBUtil.getOtherAppointments(new MappDbHelper(getApplicationContext()),
                 mAppont.getId());
         View pastAppontLayout = findViewById(R.id.pastAppointmentLayout);
+        Button viewMoreButton = (Button) findViewById(R.id.viewMoreButton);
+        if (viewMoreButton == null) {
+            viewMoreButton = (Button) pastAppontLayout.findViewById(R.id.viewMoreButton);
+        }
+        viewMoreButton.setVisibility(View.VISIBLE);
         if (mOtherApponts.size() <= 1) {
-            Button viewMoreButton = (Button) findViewById(R.id.viewMoreButton);
-            if (viewMoreButton == null) {
-                viewMoreButton = (Button) pastAppontLayout.findViewById(R.id.viewMoreButton);
-            }
             viewMoreButton.setEnabled(false);
             viewMoreButton.setBackgroundResource(R.drawable.disabled_button);
         }
@@ -150,14 +151,16 @@ public class AppointmentDetailsActivity extends Activity {
     }
 
     public void showRxDetails(View view) {
-        ViewRxActivity.appointment = mOtherApponts.get(0);
-        ViewRxActivity.appointment.setCustomer(mAppont.getCustomer());
         Intent intent = new Intent(this, ViewRxActivity.class);
+        intent.putExtra("appont_id", mOtherApponts.get(0).getId());
+        intent.putExtra("cust_id", mAppont.getCustomer().getIdCustomer());
         startActivity(intent);
     }
 
     public void showPatientHistory(View view) {
         Intent intent = new Intent(this, PatientHistoryActivity.class);
+        intent.putExtra("sp_id", LoginHolder.servLoginRef.getIdServiceProvider());
+        intent.putExtra("cust_id", mAppont.getCustomer().getIdCustomer());
         startActivity(intent);
     }
 }
