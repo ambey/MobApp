@@ -197,7 +197,7 @@
                 android:layout_below="@+id/editTextCity"
                 android:layout_marginTop="5dp"
                 android:hint="@string/pincode"
-                android:inputType="textAutoComplete" />
+                android:inputType="number" />
 
             <Spinner
                 android:id="@+id/editTextState"

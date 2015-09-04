@@ -16,37 +16,45 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
+    <Spinner
+        android:id="@+id/spinServiceProvCategory"
+        android:layout_width="170dp"
+        android:layout_height="35dp"
+
+        android:layout_marginTop="0dp"
+        android:background="@drawable/spinner"
+        android:entries="@array/serviceCategorySearch" />
 
 
     <EditText android:id="@+id/editSearchDr"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/searchDrHint"
+        android:layout_below="@+id/spinServiceProvCategory"
+        android:layout_marginTop="10dp"
          />
 
     <Spinner android:id="@+id/viewSpeciality"
 
         android:layout_width="170dp"
         android:layout_height="35dp"
-        android:layout_marginTop="10dp"
         android:hint="@string/speciality"
-        android:layout_below="@id/editSearchDr"
         android:background="@drawable/spinner"
         android:entries="@array/specialitySearch"
-        android:prompt="@string/speciality_doc"/>
+        android:prompt="@string/speciality_doc"
+        android:layout_toEndOf="@+id/spinServiceProvCategory"
+        android:layout_toRightOf="@+id/spinServiceProvCategory"
+        android:layout_marginLeft="8dp"/>
     <EditText android:id="@+id/viewLocation"
-
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10.0dip"
-        android:hint="@string/loc1"
-        android:layout_toRightOf="@+id/viewSpeciality"
-        android:layout_alignTop="@+id/viewSpeciality"
-        android:layout_alignBottom="@+id/viewSpeciality" />
-    <ScrollView android:id="@+id/advSearchForm"
+        android:layout_marginTop="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewSpeciality"
+        android:hint="@string/loc1"
+        android:layout_below="@+id/editSearchDr" />
+    <ScrollView android:id="@+id/advSearchForm"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/viewLocation"
         android:fillViewport="false"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -149,14 +157,22 @@
             <TextView
                 android:id="@+id/textViewConsultationFees"
                 android:textStyle="bold"
-                android:layout_width="170dp"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:text="@string/consult_fees"
                 android:layout_below="@+id/spinAvailDays"
-                android:background="@drawable/label"
                 android:layout_marginTop="30dp"
-                android:textColor="#fff"
+                android:layout_marginLeft="30dp"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/textViewConsultationFees"
+                android:layout_toRightOf="@+id/textViewConsultationFees"
+                android:text="@string/rs_sign"
+                android:layout_below="@+id/spinAvailDays"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"/>
 
             <Spinner android:entries="@array/consultationFees"
                 android:id="@+id/spinConsultationFees"
@@ -167,16 +183,8 @@
                 android:layout_below="@+id/spinAvailDays"
                 android:layout_toEndOf="@+id/textViewConsultationFees"
                 android:layout_toRightOf="@+id/textViewConsultationFees"
-                android:layout_marginTop="25dp"
-                android:layout_marginLeft="8dp"/>
-            <Spinner
-                android:id="@+id/spinServiceProvCategory"
-                android:layout_width="170dp"
-                android:layout_height="35dp"
-                android:layout_below="@+id/spinConsultationFees"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/spinner"
-                android:entries="@array/serviceCategorySearch" />
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="35dp"/>
 
 
             <Button android:textStyle="bold"
@@ -187,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/search"
                 android:onClick="searchDr"
-                android:layout_below="@+id/spinServiceProvCategory"
+                android:layout_below="@+id/textViewConsultationFees"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"/>
 
