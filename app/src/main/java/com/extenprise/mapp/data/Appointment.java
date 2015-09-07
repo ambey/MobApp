@@ -3,14 +3,18 @@ package com.extenprise.mapp.data;
 //import com.extenprise.mapp.customer.data.CustomerHistoryData;
 //import com.extenprise.mapp.common.Appointment;
 
+import android.support.annotation.NonNull;
+
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.service.data.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 
-public class Appointment {
+public class Appointment implements Comparable<Appointment> {
     private int id;
     private String servPointType;
     private String date;
@@ -95,5 +99,22 @@ public class Appointment {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    @Override
+    public int compareTo(@NonNull Appointment another) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date thisDate = sdf.parse(this.getDateOfAppointment());
+            Date otherDate = sdf.parse(another.getDateOfAppointment());
+            int compareValue = thisDate.compareTo(otherDate);
+            if (compareValue == 0) {
+                return (this.getFromTime() - another.getFromTime());
+            }
+            return compareValue;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
