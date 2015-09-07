@@ -29,6 +29,11 @@
         </style>
     -->
 
+    <style name="RoundSquareButton">
+        <item name="android:background">@drawable/square_round_button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#b0171f</item>
+    </style>
     <style name="RoundButton">
         <item name="android:background">@drawable/button</item>
         <item name="android:textStyle">bold</item>

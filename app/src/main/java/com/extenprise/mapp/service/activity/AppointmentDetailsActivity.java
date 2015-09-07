@@ -65,8 +65,8 @@ public class AppointmentDetailsActivity extends Activity {
                 rxButton.setEnabled(false);
                 uploadRxButton.setEnabled(false);
 
-                rxButton.setBackgroundResource(R.drawable.disabled_button);
-                uploadRxButton.setBackgroundResource(R.drawable.disabled_button);
+                rxButton.setBackgroundResource(R.drawable.inactive_button);
+                uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
             } else if (date.before(today)) {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
                 cal.setTime(date);
@@ -75,7 +75,7 @@ public class AppointmentDetailsActivity extends Activity {
                     rxButton.setEnabled(false);
                     uploadRxButton.setEnabled(true);
 
-                    rxButton.setBackgroundResource(R.drawable.disabled_button);
+                    rxButton.setBackgroundResource(R.drawable.inactive_button);
                     uploadRxButton.setBackgroundResource(R.drawable.button);
                 } else {
                     rxButton.setEnabled(true);
@@ -88,8 +88,8 @@ public class AppointmentDetailsActivity extends Activity {
                 rxButton.setEnabled(false);
                 uploadRxButton.setEnabled(false);
 
-                rxButton.setBackgroundResource(R.drawable.disabled_button);
-                uploadRxButton.setBackgroundResource(R.drawable.disabled_button);
+                rxButton.setBackgroundResource(R.drawable.inactive_button);
+                uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class AppointmentDetailsActivity extends Activity {
         viewMoreButton.setVisibility(View.VISIBLE);
         if (othApponts.size() <= 1) {
             viewMoreButton.setEnabled(false);
-            viewMoreButton.setBackgroundResource(R.drawable.disabled_button);
+            viewMoreButton.setBackgroundResource(R.drawable.inactive_button);
         }
         if (othApponts.size() > 0) {
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);

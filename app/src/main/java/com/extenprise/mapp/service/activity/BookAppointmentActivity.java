@@ -1,24 +1,16 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -28,30 +20,20 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
-import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.UIUtility;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 
 
 public class BookAppointmentActivity extends Activity
         implements DateChangeListener {
 
-    private TextView mTextViewDocFName;
-    private TextView mTextViewDocLName;
-    private TextView mTextViewDocSpeciality;
-    private TextView mTextViewQualification;
     private Spinner mSpinnerTimeSlots;
     private TextView mTextViewDate;
 
@@ -60,20 +42,20 @@ public class BookAppointmentActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_appointment);
 
-        mTextViewDocFName = (TextView) findViewById(R.id.tvDocFName);
-        mTextViewDocLName = (TextView) findViewById(R.id.tvDocLName);
-        mTextViewDocSpeciality = (TextView) findViewById(R.id.tvDocSpec);
-        mTextViewQualification = (TextView) findViewById(R.id.tvQualification);
+        TextView textViewDocFName = (TextView) findViewById(R.id.tvDocFName);
+        TextView textViewDocLName = (TextView) findViewById(R.id.tvDocLName);
+        TextView textViewDocSpeciality = (TextView) findViewById(R.id.tvDocSpec);
+        TextView textViewQualification = (TextView) findViewById(R.id.tvQualification);
         mSpinnerTimeSlots = (Spinner) findViewById(R.id.spinnerTimeSlots);
         mTextViewDate = (TextView) findViewById(R.id.tvDate);
 
         ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
         ServiceProvider serviceProvider = LoginHolder.spsspt.getServProvHasService().getServProv();
 
-        mTextViewDocFName.setText(serviceProvider.getfName());
-        mTextViewDocLName.setText(serviceProvider.getlName());
-        mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
-        mTextViewQualification.setText("(" + serviceProvider.getQualification() + ")");
+        textViewDocFName.setText(serviceProvider.getfName());
+        textViewDocLName.setText(serviceProvider.getlName());
+        textViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
+        textViewQualification.setText("(" + serviceProvider.getQualification() + ")");
 
         String date = UIUtility.getDaAsString("/");
         mTextViewDate.setText(date);
@@ -167,6 +149,7 @@ public class BookAppointmentActivity extends Activity
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
         if(list.size() > 0) {
             bookButton.setEnabled(true);
+            bookButton.setBackgroundResource(R.drawable.button);
         }
     }
 
@@ -229,7 +212,7 @@ public class BookAppointmentActivity extends Activity
             values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, sp.getIdServiceProvider());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, LoginHolder.custLoginRef.getIdCustomer());
 
-            long rowId = db.insert(MappContract.Appointment.TABLE_NAME, null, values);
+            db.insert(MappContract.Appointment.TABLE_NAME, null, values);
             return null;
         }
 
