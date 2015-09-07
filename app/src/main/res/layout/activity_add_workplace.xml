@@ -28,6 +28,7 @@
         android:layout_height="40dp"
         android:padding="5dp"
         android:spinnerMode="dropdown"
+        android:background="@drawable/spinner"
         android:layout_marginBottom="5dp"
         android:choiceMode="singleChoice"
         android:layout_marginLeft="10dp"
@@ -315,13 +316,15 @@
                 android:id="@+id/buttonAddWorkPlace"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
+                android:layout_below="@id/editTextWeeklyOff"
                 android:padding="10dp"
                 android:background="@drawable/button"
                 android:onClick="addNewWorkPlace"
                 android:text="@string/add_another"
                 android:textColor="#fff"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"/>
 
             <Button
                 android:id="@+id/buttonDone"
@@ -333,7 +336,6 @@
                 android:text="@string/done1"
                 android:textColor="#fff"
                 android:layout_marginLeft="30dp"
-                android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/buttonAddWorkPlace"
                 android:layout_toEndOf="@+id/buttonAddWorkPlace"
                 android:layout_alignTop="@+id/buttonAddWorkPlace" />

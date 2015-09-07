@@ -1,8 +1,14 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,11 +20,22 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
+import com.extenprise.mapp.data.RxItem;
+import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.util.UIUtility;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -185,16 +202,90 @@ public class AppointmentDetailsActivity extends Activity {
 
     public void startFileChooser(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
+        intent.setType("image/*");
         startActivityForResult(intent, 1);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String Fpath = data.getDataString();
-        super.onActivityResult(requestCode, resultCode, data);
-
+        if (data == null) {
+            return;
+        }
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            SaveBlobTask saveBlobTask = new SaveBlobTask(this, data);
+            saveBlobTask.execute();
+        }
     }
 
+    private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
+
+        private Activity myActivity;
+        private Intent mData;
+
+        public SaveBlobTask(Activity activity, Intent data) {
+            myActivity = activity;
+            mData = data;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+/*
+
+                try {
+                    InputStream stream = getContentResolver().openInputStream(
+                            mData.getData());
+                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                    stream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+*/
+            String path = mData.getDataString();
+            try {
+                RandomAccessFile raf = new RandomAccessFile(path, "r");
+                byte[] bytes = new byte[(int)raf.length()];
+                raf.readFully(bytes);
+                raf.close();
+                ContentValues values = new ContentValues();
+                Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);
+                String rxId = "a" + appointment.getId() + "r" + (appointment.getReportCount() + 1);
+
+                values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getId());
+                values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
+                values.put(MappContract.Prescription.COLUMN_NAME_SCANNED_COPY, bytes);
+                db.insert(MappContract.Prescription.TABLE_NAME,null,values);
+
+            } catch (FileNotFoundException x) {
+                x.printStackTrace();
+            } catch (IOException x) {
+                x.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+/*
+            try {
+                UIUtility.showProgress(myActivity, mForm, mProgressBar, false);
+                Intent intent = new Intent(myActivity, Class.forName(mParentActivity));
+                intent.putExtra("appont_id", mAppontId);
+                intent.putExtra("cust_id", mCustId);
+                startActivity(intent);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+*/
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
 
     private List<Appointment> getPastAppointments(Appointment appointment) {
         ArrayList<Appointment> othApponts = DBUtil.getOtherAppointments(new MappDbHelper(this),
@@ -210,7 +301,7 @@ public class AppointmentDetailsActivity extends Activity {
             }
         }
         if (found) {
-            return othApponts.subList(0, i - 1);
+            return othApponts.subList(0, i);
         }
         return null;
     }

@@ -115,6 +115,7 @@ public class MappContract {
         public static final String COLUMN_NAME_ALT_DRUG_NAME = "altDName";
         public static final String COLUMN_NAME_ALT_DRUG_STRENGTH = "altDStrength";
         public static final String COLUMN_NAME_ALT_DRUG_FORM  = "altDForm";
+        public static final String COLUMN_NAME_SCANNED_COPY = "scannedCopy";
     }
 
 }

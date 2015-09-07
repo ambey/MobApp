@@ -13,7 +13,8 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ScrollView android:id="@+id/search_form"
+    <ScrollView
+        android:id="@+id/search_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -29,136 +30,140 @@
                 android:id="@+id/imageViewLogo"
                 android:layout_width="250dp"
                 android:layout_height="100dp"
-                android:src="@drawable/med_logo_final"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="40dp"/>
+                android:layout_marginTop="40dp"
+                android:src="@drawable/med_logo_final" />
+
             <Spinner
                 android:id="@+id/spinServiceProvCategory"
                 android:layout_width="165dp"
-                android:spinnerMode="dropdown"
                 android:layout_height="35dp"
                 android:layout_below="@+id/imageViewLogo"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/spinner"
-                android:entries="@array/serviceCategorySearch" />
+                android:entries="@array/serviceCategorySearch"
+                android:spinnerMode="dropdown" />
 
             <EditText
-                android:layout_below="@+id/spinServiceProvCategory"
                 android:id="@+id/editTextSearchDr"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/searchDrHint"
+                android:layout_below="@+id/spinServiceProvCategory"
+                android:layout_marginTop="20dp"
 
-                android:layout_marginTop="20dp"/>
+                android:hint="@string/searchDrHint" />
 
             <Spinner
                 android:id="@+id/editTextSearchSp"
                 android:layout_width="165dp"
                 android:layout_height="35dp"
                 android:layout_below="@+id/imageViewLogo"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="40dp"
-                android:spinnerMode="dropdown"
                 android:layout_toEndOf="@+id/spinServiceProvCategory"
                 android:layout_toRightOf="@+id/spinServiceProvCategory"
-                android:layout_marginLeft="10dp"/>
+                android:background="@drawable/spinner"
+                android:spinnerMode="dropdown" />
 
             <EditText
                 android:id="@+id/editTextSearchLoc"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/loc1"
                 android:layout_below="@+id/editTextSearchDr"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:hint="@string/loc1" />
 
             <Button
                 android:id="@+id/buttonSearch"
                 android:layout_width="200dp"
-                android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextSearchLoc"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/button"
-                android:text="@string/search"
                 android:onClick="searchDr"
+                android:text="@string/search"
                 android:textColor="#fff"
                 android:textStyle="bold" />
 
-            <Button android:textColor="#ff0000ff"
+            <Button
                 android:id="@+id/buttonAdvanceSearch"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="@string/adv_search"
-                android:onClick="advSearch"
+                android:layout_below="@+id/buttonSearch"
                 android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:background="#fff"
-                android:layout_below="@+id/buttonSearch"
                 android:layout_marginTop="30dp"
-                android:textSize="16sp"
-                android:layout_centerInParent="true"/>
+                android:background="#fff"
+                android:onClick="advSearch"
+                android:text="@string/adv_search"
+                android:textColor="#ff0000ff"
+                android:textSize="16sp" />
 
-<!--
-            <TextView
-                android:id="@+id/textViewLoginAs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/buttonSearch"
-                android:layout_marginTop="140dp"
-                android:text="@string/login_as"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                />
+            <!--
+                        <TextView
+                            android:id="@+id/textViewLoginAs"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/buttonSearch"
+                            android:layout_marginTop="140dp"
+                            android:text="@string/login_as"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            />
 
-            <Button
-                android:id="@+id/buttonDr"
-                android:layout_width="80dp"
-                android:layout_height="100dp"
-                android:layout_below="@+id/textViewLoginAs"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button"
-                android:onClick="showSignInScreen"
-                android:text="Sign-In"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                />
+                        <Button
+                            android:id="@+id/buttonDr"
+                            android:layout_width="80dp"
+                            android:layout_height="100dp"
+                            android:layout_below="@+id/textViewLoginAs"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/button"
+                            android:onClick="showSignInScreen"
+                            android:text="Sign-In"
+                            android:textColor="#fff"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible"
+                            />
 
-            <Button
-                android:id="@+id/buttonMedSt"
-                android:layout_width="80dp"
-                android:layout_height="100dp"
-                android:layout_alignTop="@+id/buttonDr"
-                android:layout_below="@+id/textViewLoginAs"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@+id/buttonDr"
-                android:background="@drawable/button"
-                android:enabled="false"
-                android:onClick="showSignInScreen"
-                android:text="@string/i_am_med_st"
-                android:textColor="#fff"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:visibility="invisible"/>
+                        <Button
+                            android:id="@+id/buttonMedSt"
+                            android:layout_width="80dp"
+                            android:layout_height="100dp"
+                            android:layout_alignTop="@+id/buttonDr"
+                            android:layout_below="@+id/textViewLoginAs"
+                            android:layout_marginLeft="20dp"
+                            android:layout_toRightOf="@+id/buttonDr"
+                            android:background="@drawable/button"
+                            android:enabled="false"
+                            android:onClick="showSignInScreen"
+                            android:text="@string/i_am_med_st"
+                            android:textColor="#fff"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible"/>
 
-            <Button
-                android:id="@+id/buttonRad"
-                android:layout_width="80dp"
-                android:layout_height="100dp"
-                android:layout_below="@+id/textViewLoginAs"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_toRightOf="@id/buttonMedSt"
-                android:background="@drawable/button"
-                android:enabled="false"
-                android:onClick="showSignInScreen"
-                android:text="@string/i_am_path_lab"
-                android:textColor="#fff"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:visibility="invisible"/>
--->
+                        <Button
+                            android:id="@+id/buttonRad"
+                            android:layout_width="80dp"
+                            android:layout_height="100dp"
+                            android:layout_below="@+id/textViewLoginAs"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_toRightOf="@id/buttonMedSt"
+                            android:background="@drawable/button"
+                            android:enabled="false"
+                            android:onClick="showSignInScreen"
+                            android:text="@string/i_am_path_lab"
+                            android:textColor="#fff"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible"/>
+            -->
 
         </RelativeLayout>
     </ScrollView>
