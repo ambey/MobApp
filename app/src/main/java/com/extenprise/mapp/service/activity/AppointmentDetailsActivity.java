@@ -21,13 +21,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 
 public class AppointmentDetailsActivity extends Activity {
 
     private int mAppontId;
     private int mCustId;
+    private int mLastAppontId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,29 +107,30 @@ public class AppointmentDetailsActivity extends Activity {
         ageView.setText("" + customer.getAge());
         wtView.setText(String.format("%.1f", customer.getWeight()));
 
-        ArrayList<Appointment> othApponts = DBUtil.getOtherAppointments(new MappDbHelper(this),
-                appointment.getId());
         View pastAppontLayout = findViewById(R.id.pastAppointmentLayout);
         Button viewMoreButton = (Button) findViewById(R.id.viewMoreButton);
         if (viewMoreButton == null) {
             viewMoreButton = (Button) pastAppontLayout.findViewById(R.id.viewMoreButton);
         }
         viewMoreButton.setVisibility(View.VISIBLE);
-        if (othApponts.size() <= 1) {
-            viewMoreButton.setEnabled(false);
-            viewMoreButton.setBackgroundResource(R.drawable.inactive_button);
-        }
-        if (othApponts.size() > 0) {
+        List<Appointment> pastApponts = getPastAppointments(appointment);
+        mLastAppontId = -1;
+        if(pastApponts != null) {
+            Appointment lastAppont = pastApponts.get(pastApponts.size() - 1);
+            mLastAppontId = lastAppont.getId();
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
             TextView idOthView = (TextView) pastAppontLayout.findViewById(R.id.appontIdTextView);
-            dateOthView.setText(othApponts.get(0).getDateOfAppointment());
-            idOthView.setText("" + othApponts.get(0).getId());
+            dateOthView.setText(lastAppont.getDateOfAppointment());
+            idOthView.setText("" + lastAppont.getId());
         } else {
             pastAppontLayout.setVisibility(View.INVISIBLE);
             TextView msgView = (TextView) findViewById(R.id.viewMsg);
             msgView.setVisibility(View.VISIBLE);
         }
-
+        if (pastApponts == null || pastApponts.size() <= 1) {
+            viewMoreButton.setEnabled(false);
+            viewMoreButton.setBackgroundResource(R.drawable.inactive_button);
+        }
     }
 
     @Override
@@ -161,16 +165,38 @@ public class AppointmentDetailsActivity extends Activity {
 
     public void showRxDetails(View view) {
         Intent intent = new Intent(this, ViewRxActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("appont_id", mAppontId);
+        intent.putExtra("last_appont_id", mLastAppontId);
         intent.putExtra("cust_id", mCustId);
         startActivity(intent);
     }
 
     public void showPatientHistory(View view) {
         Intent intent = new Intent(this, PatientHistoryActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("sp_id", LoginHolder.servLoginRef.getIdServiceProvider());
         intent.putExtra("cust_id", mCustId);
         intent.putExtra("appont_id", mAppontId);
         startActivity(intent);
+    }
+
+    private List<Appointment> getPastAppointments(Appointment appointment) {
+        ArrayList<Appointment> othApponts = DBUtil.getOtherAppointments(new MappDbHelper(this),
+                appointment.getId());
+        Collections.sort(othApponts);
+        int i = 0;
+        boolean found = false;
+        for (; i < othApponts.size(); i++) {
+            if (appointment.compareTo(othApponts.get(i)) >= 0) {
+                found = true;
+            } else {
+                break;
+            }
+        }
+        if (found) {
+            return othApponts.subList(0, i - 1);
+        }
+        return null;
     }
 }

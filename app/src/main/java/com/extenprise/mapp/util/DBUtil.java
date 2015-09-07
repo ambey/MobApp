@@ -100,11 +100,9 @@ public abstract class DBUtil {
             appointment = new Appointment();
             appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
             appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-            appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.TABLE_NAME + "." +
-                    MappContract.Appointment._ID)));
+            appointment.setId(cursor.getInt(cursor.getColumnIndex("_id")));
             Customer customer = new Customer();
-            customer.setIdCustomer(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.TABLE_NAME + "." +
-                    MappContract.Customer._ID)));
+            customer.setIdCustomer(cursor.getInt(cursor.getColumnIndex("CUST_ID")));
             customer.setGender(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_GENDER)));
             customer.setHeight(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_HEIGHT)));
             customer.setWeight(cursor.getFloat(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_WEIGHT)));

@@ -20,7 +20,7 @@ import com.extenprise.mapp.util.DBUtil;
 
 
 public class PatientHistoryActivity extends Activity {
-
+    private String mParentActivity;
     private int mServProvId;
     private int mCustId;
     private int mAppontId;
@@ -36,6 +36,7 @@ public class PatientHistoryActivity extends Activity {
         ListView lvOthAppont = (ListView) findViewById(R.id.listViewOtherData);
 
         Intent intent = getIntent();
+        mParentActivity = intent.getStringExtra("parent-activity");
         mServProvId = intent.getIntExtra("sp_id", -1);
         mCustId = intent.getIntExtra("cust_id", -1);
         mAppontId = intent.getIntExtra("appont_id", -1);
@@ -96,15 +97,36 @@ public class PatientHistoryActivity extends Activity {
     }
 
     public void showRxDetails(View view) {
-        View parent = (View)view.getParent();
+        View parent = (View) view.getParent();
         TextView b = (TextView) parent.findViewById(R.id.appontIdTextView);
         int appontId = Integer.parseInt(b.getText().toString());
         Intent intent = new Intent(this, ViewRxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("appont_id", appontId);
+        intent.putExtra("appont_id", mAppontId);
+        intent.putExtra("last_appont_id", appontId);
         intent.putExtra("cust_id", mCustId);
         intent.putExtra("sp_id", mServProvId);
         startActivity(intent);
+    }
+
+    public Intent getParentActivityIntent() {
+        Intent intent;
+        if (mParentActivity != null) {
+            try {
+                intent = new Intent(this, Class.forName(mParentActivity));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                intent = super.getParentActivityIntent();
+            }
+        } else {
+            intent = super.getParentActivityIntent();
+        }
+        if (intent != null) {
+            intent.putExtra("appont_id", mAppontId);
+            intent.putExtra("cust_id", mCustId);
+            intent.putExtra("sp_id", mServProvId);
+        }
+        return intent;
     }
 
 }

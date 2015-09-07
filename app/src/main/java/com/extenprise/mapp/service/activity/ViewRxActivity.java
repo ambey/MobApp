@@ -22,6 +22,7 @@ public class ViewRxActivity extends Activity {
     private String mParentActivity;
     private int mCustId;
     private int mServProvId;
+    private int mAppontId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,11 @@ public class ViewRxActivity extends Activity {
 
         mCustId = intent.getIntExtra("cust_id", -1);
         mServProvId = intent.getIntExtra("sp_id", -1);
-        int appontId = intent.getIntExtra("appont_id", -1);
+        mAppontId = intent.getIntExtra("appont_id", -1);
+
+        int lastAppontId = intent.getIntExtra("last_appont_id", -1);
+        int appontId = (lastAppontId != -1) ? lastAppontId : mAppontId;
+
         Customer customer = DBUtil.getCustomer(dbHelper, mCustId);
         Appointment appointment = DBUtil.getAppointment(dbHelper, appontId);
         date.setText(appointment.getDateOfAppointment());
@@ -101,9 +106,10 @@ public class ViewRxActivity extends Activity {
     }
 
     public Intent getParentActivityIntent() {
-        if(mParentActivity != null) {
+        if (mParentActivity != null) {
             try {
                 Intent intent = new Intent(this, Class.forName(mParentActivity));
+                intent.putExtra("appont_id", mAppontId);
                 intent.putExtra("cust_id", mCustId);
                 intent.putExtra("sp_id", mServProvId);
                 return intent;
