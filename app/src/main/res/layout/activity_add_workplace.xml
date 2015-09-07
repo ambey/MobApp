@@ -233,6 +233,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:background="@drawable/spinner"
+
                 android:entries="@array/days"
                 android:prompt="@string/weekly_off" />-->
             <TextView
