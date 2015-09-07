@@ -276,6 +276,13 @@ public abstract class DBUtil {
         return rx;
     }
 
+    public static int deleteRx(MappDbHelper dbHelper, String rxId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String selection = MappContract.Prescription.COLUMN_NAME_ID_RX + "=?";
+        String[] args = {"" + rxId};
+        return db.delete(MappContract.Prescription.TABLE_NAME, MappContract.Prescription.COLUMN_NAME_ID_RX + "=?", args);
+    }
+
     public static ArrayList<String> getSpec(MappDbHelper dbHelper, String servCategory) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();

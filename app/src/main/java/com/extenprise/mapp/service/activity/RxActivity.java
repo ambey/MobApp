@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.UIUtility;
 
 public class RxActivity extends Activity {
@@ -46,10 +48,20 @@ public class RxActivity extends Activity {
     private Spinner mAltDrugForm;
     private Rx mRx;
 
+    private String mParentActivity;
+    private int mAppontId;
+    private int mCustId;
+    private Appointment mAppont;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx);
+
+        Intent intent = getIntent();
+        mParentActivity = intent.getStringExtra("parent-activity");
+        mAppontId = intent.getIntExtra("appont_id", -1);
+        mCustId = intent.getIntExtra("cust_id", -1);
 
         mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);
@@ -74,15 +86,20 @@ public class RxActivity extends Activity {
         mAltDrugName = (TextView) findViewById(R.id.altDrugEditText);
         mAltDrugStrength = (TextView) findViewById(R.id.altDrugStrengthEditText);
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
-        mRx = new Rx();
 
-        Appointment appointment = LoginHolder.appointment;
-        Customer customer = appointment.getCustomer();
+        MappDbHelper dbHelper = new MappDbHelper(this);
+        mRx = DBUtil.getRx(dbHelper, mAppontId);
+        if(mRx == null) {
+            mRx = new Rx();
+        }
+        mAppont = DBUtil.getAppointment(dbHelper, mAppontId);
+        Customer customer = mAppont.getCustomer();
+        mRx.setAppointment(mAppont);
 
         fName.setText(customer.getfName());
         lName.setText(customer.getlName());
-        date.setText(appointment.getDateOfAppointment());
-        mSrNo.setText("#1");
+        date.setText(mAppont.getDateOfAppointment());
+        mSrNo.setText("" + (mRx.getRxItemCount() + 1));
 
     }
 
@@ -128,9 +145,7 @@ public class RxActivity extends Activity {
 
     public void doneRx(View view) {
         if (addRxItem()) {
-            Appointment appointment = LoginHolder.appointment;
-            appointment.addReport(mRx);
-            mRx.setAppointment(appointment);
+            mAppont.addReport(mRx);
             addRxToDB();
         }
     }
@@ -258,6 +273,8 @@ public class RxActivity extends Activity {
             ContentValues values = new ContentValues();
             Appointment appointment = mRx.getAppointment();
             String rxId = "a" + appointment.getId() + "r" + appointment.getReportCount();
+            DBUtil.deleteRx(dbHelper, rxId);
+
             values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getId());
             values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
             for (RxItem item : mRx.getItems()) {
@@ -292,8 +309,9 @@ public class RxActivity extends Activity {
         protected void onPostExecute(Void aVoid) {
             try {
                 UIUtility.showProgress(myActivity, mForm, mProgressBar, false);
-                String parentClass = myActivity.getIntent().getStringExtra("parent-activity");
-                Intent intent = new Intent(myActivity, Class.forName(parentClass));
+                Intent intent = new Intent(myActivity, Class.forName(mParentActivity));
+                intent.putExtra("appont_id", mAppontId);
+                intent.putExtra("cust_id", mCustId);
                 startActivity(intent);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -303,5 +321,19 @@ public class RxActivity extends Activity {
         @Override
         protected void onCancelled() {
         }
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        try {
+            Intent intent = new Intent(this, Class.forName(mParentActivity));
+            intent.putExtra("appont_id", mAppontId);
+            intent.putExtra("cust_id", mCustId);
+            return intent;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return super.getParentActivityIntent();
     }
 }

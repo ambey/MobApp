@@ -36,6 +36,7 @@ public class BookAppointmentActivity extends Activity
 
     private Spinner mSpinnerTimeSlots;
     private TextView mTextViewDate;
+    private Button mBookButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class BookAppointmentActivity extends Activity
         TextView textViewQualification = (TextView) findViewById(R.id.tvQualification);
         mSpinnerTimeSlots = (Spinner) findViewById(R.id.spinnerTimeSlots);
         mTextViewDate = (TextView) findViewById(R.id.tvDate);
+        mBookButton = (Button) findViewById(R.id.buttonBook);
 
         ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
         ServiceProvider serviceProvider = LoginHolder.spsspt.getServProvHasService().getServProv();
@@ -97,14 +99,14 @@ public class BookAppointmentActivity extends Activity
     }
 
     public void setTimeSlots(String dateStr) {
-        Button bookButton = (Button) findViewById(R.id.buttonBook);
-        bookButton.setEnabled(false);
+        mBookButton.setEnabled(false);
+        mBookButton.setBackgroundResource(R.drawable.inactive_button);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
         int minutes = cal.get(Calendar.HOUR_OF_DAY) * 60 +
-                cal.get(Calendar.MINUTE) +
-                120; // For todays appointment, available time slots would start two hours from now
+                cal.get(Calendar.MINUTE);// +
+                //120; // For todays appointment, available time slots would start two hours from now
         // Set the hour, minute and other components to zero, so that we can compare the date.
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -148,8 +150,8 @@ public class BookAppointmentActivity extends Activity
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
         if(list.size() > 0) {
-            bookButton.setEnabled(true);
-            bookButton.setBackgroundResource(R.drawable.button);
+            mBookButton.setEnabled(true);
+            mBookButton.setBackgroundResource(R.drawable.button);
         }
     }
 
@@ -219,6 +221,8 @@ public class BookAppointmentActivity extends Activity
         @Override
         protected void onPostExecute(Void aVoid) {
             UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.");
+            mBookButton.setEnabled(false);
+            mBookButton.setBackgroundResource(R.drawable.inactive_button);
             /*Intent intent = new Intent(myActivity, SearchServProvActivity.class);
             startActivity(intent);*/
             //return;

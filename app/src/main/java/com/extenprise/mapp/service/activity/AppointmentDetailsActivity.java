@@ -154,6 +154,8 @@ public class AppointmentDetailsActivity extends Activity {
     public void showRxActivity(View view) {
         Intent intent = new Intent(this, RxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
+        intent.putExtra("appont_id", mAppontId);
+        intent.putExtra("cust_id", mCustId);
         startActivity(intent);
     }
 
