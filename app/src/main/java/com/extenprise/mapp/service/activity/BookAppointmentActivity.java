@@ -115,12 +115,31 @@ public class BookAppointmentActivity extends Activity
     }
 
     public void setTimeSlots(String dateStr) {
+        Button bookButton = (Button) findViewById(R.id.buttonBook);
+        bookButton.setEnabled(false);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
+        int minutes = cal.get(Calendar.HOUR_OF_DAY) * 60 +
+                cal.get(Calendar.MINUTE) +
+                120; // For todays appointment, available time slots would start two hours from now
+        // Set the hour, minute and other components to zero, so that we can compare the date.
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date today = cal.getTime();
+        boolean todayAppont = false;
         try {
             Date date = sdf.parse(dateStr);
             cal.setTime(date);
+            if(date.compareTo(today) < 0) {
+                UIUtility.showAlert(this, getString(R.string.title_activity_book_appointment),
+                        getString(R.string.error_past_date));
+                return;
+            } else if(date.compareTo(today) == 0) {
+                todayAppont = true;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -129,15 +148,26 @@ public class BookAppointmentActivity extends Activity
             UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
             return;
         }
+
+        int startTime = LoginHolder.spsspt.getStartTime();
+        if(todayAppont) {
+            while (startTime < minutes) {
+                startTime += 30;
+            }
+        }
         ArrayList<String> list = new ArrayList<>();
-        for (int i = LoginHolder.spsspt.getStartTime(); i < LoginHolder.spsspt.getEndTime(); i += 30) {
+        for (int i = startTime; i < LoginHolder.spsspt.getEndTime(); i += 30) {
             String from = UIUtility.getTimeString(i);
             if (!isTimeSlotsBooked(from)) {
                 list.add(from);
             }
         }
+
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
+        if(list.size() > 0) {
+            bookButton.setEnabled(true);
+        }
     }
 
     @Override

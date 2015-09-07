@@ -147,6 +147,8 @@
     <string name="title_activity_appointment_past_data">AppointmentPastData</string>
     <string name="title_activity_customer_sign_up">Customer Sign Up</string>
     <string name="title_activity_rx_activity">Rx Page</string>
+    <string name="title_activity_view_rx">View Rx</string>
+    <string name="title_activity_patients_home_screen">Home</string>
 
     <string name="view_more">View More</string>
     <string name="rx_now">Rx Now</string>
@@ -190,7 +192,6 @@
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
     <string name="pincode">Pincode</string>
-    <string name="title_activity_patients_home_screen">PatientsHomeScreenActivity</string>
     <string name="rs_sign">\u20B9</string>
     <string name="doc_appoint">View Doctor Appointments</string>
     <string name="my_report">View My Reports</string>
@@ -209,6 +210,6 @@
     <string name="no_past_appont">No appointments found!</string>
     <string name="error_num_should_be_positive">This field should be a positive number</string>
     <string name="error_invalid_number">Invalid number</string>
+    <string name="error_past_date">Selected date has already passed by</string>
     <string name="consult_fees">Consultation Fees</string>
-    <string name="title_activity_view_rx">viewRxActivity</string>
 </resources>
