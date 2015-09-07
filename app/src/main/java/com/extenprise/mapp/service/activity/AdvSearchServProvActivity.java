@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -85,28 +88,53 @@ public class AdvSearchServProvActivity extends Activity {
         mMultiSpinnerDays = (Button)findViewById(R.id.spinAvailDays);
         mMultiSpinnerDays.setOnClickListener( new ButtonClickHandler() );
 
-        /*mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String servCategory = mServProvCategory.getSelectedItem().toString();
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-                if(servCategory.equalsIgnoreCase("Select Category")) {
-                    ArrayList<String> specs = DBUtil.getSpec(dbHelper, servCategory);
-                    setSpecs(specs);
-                }
+                DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
+                //setSpecs(specs);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
-        });*/
+        });
     }
 
-    private void setSpecs(ArrayList<String> specs) {
+    public void showtimeFields(View view) {
+        if(mButtonStartTime.getVisibility() == View.VISIBLE) {
+            UIUtility.expandOrCollapse(mButtonStartTime, "");
+            UIUtility.expandOrCollapse(mButttonEndTime, "");
+        } else {
+            UIUtility.expandOrCollapse(mButtonStartTime, "expand");
+            UIUtility.expandOrCollapse(mButttonEndTime, "expand");
+        }
+    }
+
+    public void showGenderField(View view) {
+        if(mGender.getVisibility() == View.VISIBLE) {
+            UIUtility.expandOrCollapse(mGender, "");
+        } else {
+            UIUtility.expandOrCollapse(mGender, "expand");
+        }
+    }
+
+    public void showDaysField(View view) {
+        if(mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
+            UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
+        } else {
+            UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+        }
+    }
+
+
+
+    /*private void setSpecs(ArrayList<String> specs) {
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specs);
         mSpeciality.setAdapter(spinnerAdapter);
-    }
+    }*/
 
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
@@ -268,7 +296,7 @@ public class AdvSearchServProvActivity extends Activity {
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
         String sp = mSpeciality.getSelectedItem().toString();
-        if(sp.equals("Select Speciality")) {
+        if(sp.equals("Select Speciality") || sp.equals("Other")) {
             sp = "";
         }
         String sc = mServProvCategory.getSelectedItem().toString();

@@ -1,8 +1,14 @@
 package com.extenprise.mapp.util;
 
+import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
+import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
@@ -283,7 +289,7 @@ public abstract class DBUtil {
         return db.delete(MappContract.Prescription.TABLE_NAME, MappContract.Prescription.COLUMN_NAME_ID_RX + "=?", args);
     }
 
-    public static ArrayList<String> getSpec(MappDbHelper dbHelper, String servCategory) {
+    public static void setSpecOfCategory(Context activity, MappDbHelper dbHelper, String servCategory, Spinner speciality) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = {servCategory};
@@ -294,6 +300,8 @@ public abstract class DBUtil {
         Cursor cursor = db.rawQuery(query, selectionArgs);
 
         ArrayList<String> specs = new ArrayList<>();
+        specs.add("Select Speciality");
+
         if (cursor.getCount() > 0) {
             do {
                 cursor.moveToNext();
@@ -301,7 +309,13 @@ public abstract class DBUtil {
             } while (!cursor.isLast());
         }
         cursor.close();
-        return specs;
+        setNewSpec(activity, specs, speciality);
+    }
+
+    public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
+        specs.add("Other");
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, specs);
+        speciality.setAdapter(spinnerAdapter);
     }
 
     private static String getSelectClauseForAppointment() {

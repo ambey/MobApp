@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,6 +33,7 @@ import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
 
@@ -92,8 +95,109 @@ public class AddWorkPlaceActivity extends Activity {
         mMultiSpinnerDays = (Button) findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) findViewById(R.id.spinServiceProvCategory);
 
+        mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String servCategory = mServCatagory.getSelectedItem().toString();
+                MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+                DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
+                //setSpecs(specs);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+
+
+
+        mSpeciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String spec = mSpeciality.getSelectedItem().toString();
+                if(spec.equals("Other")) {
+                    openDialog();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
     }
+
+    private AlertDialog openDialog() {
+        final EditText txtSpec = new EditText(this);
+        txtSpec.setHint("Add Speciality");
+
+        return new AlertDialog.Builder(this)
+                .setTitle("Add Speciality")
+                .setView(txtSpec)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String newSpec = txtSpec.getText().toString();
+                        ArrayList<String> specs = new ArrayList<String>();
+                        specs.add(newSpec);
+                        DBUtil.setNewSpec(getApplicationContext(), specs, mSpeciality);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public void showtimeFields(View view) {
+        if(mStartTime.getVisibility() == View.VISIBLE) {
+            UIUtility.expandOrCollapse(mStartTime, "");
+            UIUtility.expandOrCollapse(mEndTime, "");
+        } else {
+            UIUtility.expandOrCollapse(mStartTime, "expand");
+            UIUtility.expandOrCollapse(mEndTime, "expand");
+        }
+    }
+
+    public void showFeeFields(View view) {
+        if(mConsultFee.getVisibility() == View.VISIBLE) {
+            UIUtility.expandOrCollapse(mConsultFee, "");
+        } else {
+            UIUtility.expandOrCollapse(mConsultFee, "expand");
+        }
+    }
+
+    public void showDaysFields(View view) {
+        if(mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
+            UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
+        } else {
+            UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+        }
+    }
+
+    public void showWorkFields(View view) {
+        if(mName.getVisibility() == View.VISIBLE) {
+            UIUtility.expandOrCollapse(mName, "");
+            UIUtility.expandOrCollapse(mLoc, "");
+            UIUtility.expandOrCollapse(mPhone1, "");
+            UIUtility.expandOrCollapse(mPhone2, "");
+            UIUtility.expandOrCollapse(mEmailId, "");
+            UIUtility.expandOrCollapse(mCity, "");
+            UIUtility.expandOrCollapse(mServPtType, "");
+        } else {
+            UIUtility.expandOrCollapse(mName, "expand");
+            UIUtility.expandOrCollapse(mLoc, "expand");
+            UIUtility.expandOrCollapse(mPhone1, "expand");
+            UIUtility.expandOrCollapse(mPhone2, "expand");
+            UIUtility.expandOrCollapse(mEmailId, "expand");
+            UIUtility.expandOrCollapse(mCity, "expand");
+            UIUtility.expandOrCollapse(mServPtType, "expand");
+        }
+    }
+
 
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
@@ -313,14 +417,26 @@ public class AddWorkPlaceActivity extends Activity {
 
         String category = mServCatagory.getSelectedItem().toString();
         if(category.equalsIgnoreCase("Select Category")) {
-            UIUtility.showAlert(this, "", "Please select service category.");
+            //UIUtility.showAlert(this, "", "Please select service category.");
+            View selectedView = mServCatagory.getSelectedView();
+            if (selectedView != null && selectedView instanceof TextView) {
+                TextView selectedTextView = (TextView) selectedView;
+                String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
+                selectedTextView.setError(errorString);
+            }
             focusView = mServCatagory;
             valid = false;
         }
 
         String spec = mSpeciality.getSelectedItem().toString();
-        if(spec.equalsIgnoreCase("Select Speciality")) {
-            UIUtility.showAlert(this, "", "Please select speciality.");
+        if(spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
+            //UIUtility.showAlert(this, "", "Please select speciality.");
+            View selectedView = mSpeciality.getSelectedView();
+            if (selectedView != null && selectedView instanceof TextView) {
+                TextView selectedTextView = (TextView) selectedView;
+                String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
+                selectedTextView.setError(errorString);
+            }
             focusView = mSpeciality;
             valid = false;
         }

@@ -26,6 +26,7 @@
         android:background="@drawable/spinner"
         android:text="@string/date"
         android:textSize="20sp"
+        android:clickable="true"
         android:onClick="showDatePicker"/>
 
     <ListView

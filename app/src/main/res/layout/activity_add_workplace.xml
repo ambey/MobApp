@@ -15,6 +15,7 @@
         android:layout_width="170dp"
         android:layout_height="40dp"
         android:padding="5dp"
+        android:spinnerMode="dropdown"
         android:layout_marginBottom="5dp"
         android:background="@drawable/spinner"
         android:entries="@array/serviceCategory"
@@ -26,10 +27,9 @@
         android:layout_width="170dp"
         android:layout_height="40dp"
         android:padding="5dp"
+        android:spinnerMode="dropdown"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/spinner"
-        android:entries="@array/speciality"
-        android:prompt="@string/speciality_doc"
+        android:choiceMode="singleChoice"
         android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/spinServiceProvCategory"
         android:layout_toRightOf="@+id/spinServiceProvCategory"/>
@@ -73,10 +73,12 @@
 
     <TextView
         android:id="@+id/viewWorkPlaceDetLbl"
-        android:layout_width="170dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextQualification"
         android:text="@string/work_place_details"
+        android:onClick="showWorkFields"
+        android:clickable="true"
         android:background="@drawable/label"
         android:layout_marginTop="10dp"
         android:textSize="18dp"
@@ -86,16 +88,13 @@
         android:id="@+id/viewWorkPlaceCount"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/viewWorkPlaceDetLbl"
-        android:layout_toRightOf="@id/viewWorkPlaceDetLbl"
-        android:layout_alignTop="@id/viewWorkPlaceDetLbl"
-        android:layout_alignBottom="@id/viewWorkPlaceDetLbl"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:text="@string/count"
         android:background="@drawable/label"
         android:textSize="18dp"
-        android:textColor="#fff"/>
+        android:textColor="#fff"
+        android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
+        android:layout_alignLeft="@+id/editTextSpeciality"
+        android:layout_alignStart="@+id/editTextSpeciality" />
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -130,6 +129,7 @@
                 android:layout_toRightOf="@id/editTextName"
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
+                android:spinnerMode="dropdown"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/spinner"
                 android:entries="@array/work_place_type"
@@ -151,6 +151,7 @@
                 android:layout_alignBottom="@+id/editTextLoc"
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
+                android:spinnerMode="dropdown"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/spinner"
                 android:entries="@array/city"
@@ -188,6 +189,8 @@
                 android:layout_height="20dp"
                 android:layout_below="@id/editTextEmail"
                 android:layout_marginTop="10dp"
+                android:onClick="showtimeFields"
+                android:clickable="true"
                 android:text="@string/work_hrs"
                 android:background="@drawable/label"
                 android:textColor="#fff"
@@ -217,6 +220,8 @@
                 android:layout_below="@id/buttonStartTime"
                 android:layout_height="20dp"
                 android:layout_marginTop="10dp"
+                android:onClick="showDaysFields"
+                android:clickable="true"
                 android:text="@string/practice_days"
                 android:background="@drawable/label"
                 android:textColor="#fff"
@@ -238,6 +243,8 @@
                 android:background="@drawable/label"
                 android:textColor="#fff"
                 android:textSize="18dp"
+                android:onClick="showFeeFields"
+                android:clickable="true"
                 android:layout_below="@+id/buttonEndTime"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="8dp"
@@ -264,6 +271,7 @@
                 android:hint="@string/consult_fees"
                 android:inputType="number"
                 android:layout_marginLeft="0dp"
+
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/viewRsSign"
                 android:layout_toRightOf="@+id/viewRsSign"
@@ -277,6 +285,7 @@
                 android:layout_width="170.0dip"
                 android:text="@string/select_days"
                 android:layout_height="30dp"
+
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="10dp"/>
 
@@ -308,6 +317,50 @@
                 android:layout_toEndOf="@+id/buttonAddWorkPlace"
                 android:layout_alignTop="@+id/buttonAddWorkPlace" />
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/dropDownIcon"
+                android:id="@+id/imageView4"
+                android:onClick="showtimeFields"
+                android:clickable="true"
+                android:layout_alignTop="@+id/viewWorkHrsLbl"
+                android:layout_alignRight="@+id/buttonEndTime"
+                android:layout_alignEnd="@+id/buttonEndTime" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/dropDownIcon"
+                android:id="@+id/imageView5"
+                android:onClick="showDaysFields"
+                android:clickable="true"
+                android:layout_alignTop="@+id/viewWeeklyOffLbl"
+                android:layout_toLeftOf="@+id/viewConsultationFees"
+                android:layout_toStartOf="@+id/viewConsultationFees" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/dropDownIcon"
+                android:id="@+id/imageView6"
+                android:onClick="showFeeFields"
+                android:clickable="true"
+                android:layout_alignTop="@+id/viewConsultationFees"
+                android:layout_alignRight="@+id/viewConsultationFees"
+                android:layout_alignEnd="@+id/viewConsultationFees" />
+
         </RelativeLayout>
     </ScrollView>
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/dropDownIcon"
+        android:id="@+id/imageView7"
+        android:onClick="showWorkFields"
+        android:clickable="true"
+        android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
+        android:layout_alignRight="@+id/editTextExperience"
+        android:layout_alignEnd="@+id/editTextExperience" />
 </RelativeLayout>

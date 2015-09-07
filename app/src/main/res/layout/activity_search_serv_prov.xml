@@ -35,6 +35,7 @@
             <Spinner
                 android:id="@+id/spinServiceProvCategory"
                 android:layout_width="165dp"
+                android:spinnerMode="dropdown"
                 android:layout_height="35dp"
                 android:layout_below="@+id/imageViewLogo"
                 android:layout_marginTop="40dp"
@@ -56,8 +57,7 @@
                 android:layout_height="35dp"
                 android:layout_below="@+id/imageViewLogo"
                 android:layout_marginTop="40dp"
-                android:background="@drawable/spinner"
-                android:entries="@array/specialitySearch"
+                android:spinnerMode="dropdown"
                 android:layout_toEndOf="@+id/spinServiceProvCategory"
                 android:layout_toRightOf="@+id/spinServiceProvCategory"
                 android:layout_marginLeft="10dp"/>

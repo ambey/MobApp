@@ -107,6 +107,7 @@
         android:layout_marginStart="10dp"
         android:hint="@string/dateFormat"
         android:onClick="showDatePicker"
+        android:clickable="true"
         android:textSize="15sp" />
 
     <TextView
