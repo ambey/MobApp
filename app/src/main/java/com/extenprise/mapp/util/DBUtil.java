@@ -16,28 +16,37 @@ import java.util.ArrayList;
  * Created by ambey on 3/9/15.
  */
 public abstract class DBUtil {
-    public static Cursor getServProvAppointmentsCursor(MappDbHelper dbHelper, int serviceProvId) {
+    public static Cursor getServProvAppointmentsCursor(MappDbHelper dbHelper, int serviceProvId, String date) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] projection = {
-                MappContract.Appointment._ID,
-                MappContract.Appointment.COLUMN_NAME_FROM_TIME,
-                MappContract.Appointment.COLUMN_NAME_DATE
-        };
-        String[] args = null;
-        String selection = null;
-        if (serviceProvId != -1) {
-            args = new String[1];
-            args[0] = "" + serviceProvId;
+        String query = getSelectClauseForAppointment() + " where ";
 
-            selection = MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV + "=?";
+        String[] args = null;
+        if (serviceProvId != 1 || date != null) {
+            ArrayList<String> argList = new ArrayList<>();
+            if (serviceProvId != -1) {
+                argList.add("" + serviceProvId);
+                query += MappContract.Appointment.TABLE_NAME + "." +
+                        MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV + "=? and ";
+            }
+            if (date != null) {
+                argList.add(date);
+                query += MappContract.Appointment.TABLE_NAME + "." +
+                        MappContract.Appointment.COLUMN_NAME_DATE + "=? and ";
+            }
+            args = new String[argList.size()];
+            for(int i = 0; i < argList.size(); i++) {
+                args[i] = argList.get(i);
+            }
         }
 
-        return db.query(MappContract.Appointment.TABLE_NAME, projection, selection
-                , args, null, null, null);
+        query += MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER + " = " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer._ID;
+
+        return db.rawQuery(query, args);
     }
 
-    public static ArrayList<Appointment> getServProvAppointments(MappDbHelper dbHelper, int serviceProvId) {
-        Cursor cursor = getServProvAppointmentsCursor(dbHelper, serviceProvId);
+    public static ArrayList<Appointment> getServProvAppointments(MappDbHelper dbHelper, int serviceProvId, String date) {
+        Cursor cursor = getServProvAppointmentsCursor(dbHelper, serviceProvId, date);
         ArrayList<Appointment> appointments = new ArrayList<>();
         if (cursor.getCount() > 0) {
             do {
@@ -45,12 +54,68 @@ public abstract class DBUtil {
                 Appointment appointment = new Appointment();
                 appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
                 appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-                appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
+                appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.TABLE_NAME + "." +
+                        MappContract.Appointment._ID)));
+                Customer customer = new Customer();
+                customer.setIdCustomer(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.TABLE_NAME + "." +
+                        MappContract.Customer._ID)));
+                customer.setGender(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_GENDER)));
+                customer.setHeight(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_HEIGHT)));
+                customer.setWeight(cursor.getFloat(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_WEIGHT)));
+                customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
+                customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
+                customer.setAge(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE)));
+                customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
+                appointment.setCustomer(customer);
                 appointments.add(appointment);
             } while (!cursor.isLast());
         }
         cursor.close();
         return appointments;
+    }
+
+    public static Cursor getAppointmentCursor(MappDbHelper dbHelper, int appontId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = getSelectClauseForAppointment() + " where ";
+
+        String[] args = null;
+        if (appontId != -1) {
+            args = new String[1];
+            args[0] = "" + appontId;
+            query += MappContract.Appointment.TABLE_NAME + "." +
+                    MappContract.Appointment._ID + "=? and ";
+        }
+
+        query += MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER + " = " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer._ID;
+
+        return db.rawQuery(query, args);
+    }
+
+    public static Appointment getAppointment(MappDbHelper dbHelper, int appontId) {
+        Cursor cursor = getAppointmentCursor(dbHelper, appontId);
+        Appointment appointment = null;
+        if (cursor.getCount() > 0) {
+            cursor.moveToNext();
+            appointment = new Appointment();
+            appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+            appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+            appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.TABLE_NAME + "." +
+                    MappContract.Appointment._ID)));
+            Customer customer = new Customer();
+            customer.setIdCustomer(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.TABLE_NAME + "." +
+                    MappContract.Customer._ID)));
+            customer.setGender(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_GENDER)));
+            customer.setHeight(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_HEIGHT)));
+            customer.setWeight(cursor.getFloat(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_WEIGHT)));
+            customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
+            customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
+            customer.setAge(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE)));
+            customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
+            appointment.setCustomer(customer);
+        }
+        cursor.close();
+        return appointment;
     }
 
     public static Cursor getOtherServProvAppointmentsCursor(MappDbHelper dbHelper, int serviceProvId) {
@@ -123,35 +188,6 @@ public abstract class DBUtil {
         return appointments;
     }
 
-    public static Appointment getAppointment(MappDbHelper dbHelper, int appontId) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] projection = {
-                MappContract.Appointment._ID,
-                MappContract.Appointment.COLUMN_NAME_FROM_TIME,
-                MappContract.Appointment.COLUMN_NAME_DATE
-        };
-        String[] args = null;
-        String selection = null;
-        if (appontId != -1) {
-            args = new String[1];
-            args[0] = "" + appontId;
-
-            selection = MappContract.Appointment._ID + "=?";
-        }
-
-        Cursor cursor = db.query(true, MappContract.Appointment.TABLE_NAME, projection, selection, args, null, null, null, null);
-        Appointment appointment = null;
-        if (cursor.getCount() > 0) {
-            cursor.moveToNext();
-            appointment = new Appointment();
-            appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
-            appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-            appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
-        }
-        cursor.close();
-        return appointment;
-    }
-
     public static Customer getCustomer(MappDbHelper dbHelper, int custId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {
@@ -196,7 +232,7 @@ public abstract class DBUtil {
         String selection = MappContract.Prescription.COLUMN_NAME_ID_APPOMT + "=?";
         String[] args = {"" + appontId};
         return db.query(MappContract.Prescription.TABLE_NAME, null,
-                null, null, null, null, null);
+                selection, args, null, null, null);
     }
 
     public static Rx getRx(MappDbHelper dbHelper, int appontId) {
@@ -243,7 +279,7 @@ public abstract class DBUtil {
     public static ArrayList<String> getSpec(MappDbHelper dbHelper, String servCategory) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] selectionArgs = { servCategory };
+        String[] selectionArgs = {servCategory};
         String query = "select DISTINCT " + MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + " from " +
                 MappContract.ServProvHasServ.TABLE_NAME + " where " +
                 MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + " = ? ";
@@ -259,5 +295,31 @@ public abstract class DBUtil {
         }
         cursor.close();
         return specs;
+    }
+
+    private static String getSelectClauseForAppointment() {
+        return "select " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment._ID + " AS _id, " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_DATE + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_FROM_TIME + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_FROM_TIME_STR + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_TO_TIME + ", " +
+                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
+
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer._ID + " AS CUST_ID, " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_FNAME + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_LNAME + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_AGE + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_DOB + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_GENDER + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_LOCATION + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_ZIPCODE + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_CELLPHONE + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_WEIGHT + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_HEIGHT + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_EMAIL_ID +
+                " from " +
+                MappContract.Appointment.TABLE_NAME + ", " +
+                MappContract.Customer.TABLE_NAME;
     }
 }

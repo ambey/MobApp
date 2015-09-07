@@ -18,6 +18,7 @@ import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.SearchAppointment;
 import com.extenprise.mapp.util.UIUtility;
@@ -46,47 +47,6 @@ public class ViewAppointmentListActivity extends Activity
         setAppointmentList(date);
     }
 
-/*
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DATE_DIALOG_ID:
-                // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener,
-                        year, month,day);
-        }
-        return null;
-    }
-
-    private DatePickerDialog.OnDateSetListener datePickerListener
-            = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-
-            // set selected date into textview
-            mAppointmentDateTextView.setText(new StringBuilder().append(day)
-                    .append("-").append(month+1).append("-").append(year)
-                    .append(" "));
-
-            // set selected date into datepicker also
-            mDpResult.init(year, month, day, null);
-
-            Calendar cal = Calendar.getInstance();
-            cal.set(year, month, day);
-
-            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-            SearchAppointment.searchAppointment(dbHelper, mAppointmentDateTextView.getText().toString(),
-                    LoginHolder.servLoginRef.getIdServiceProvider());
-            setAppointmentList();
-        }
-    };
-*/
-
     public String setCurrentDateOnView() {
         Calendar c = Calendar.getInstance();
 
@@ -98,26 +58,11 @@ public class ViewAppointmentListActivity extends Activity
     }
 
     private void setAppointmentList(String date) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        if (!SearchAppointment.searchAppointment(dbHelper, date,
-                LoginHolder.servLoginRef.getIdServiceProvider())) {
-            return;
-        }
-
-        final Cursor cursor = SearchAppointment.getCursor();
+        MappDbHelper dbHelper = new MappDbHelper(this);
+        final Cursor cursor = DBUtil.getServProvAppointmentsCursor(dbHelper, LoginHolder.servLoginRef.getIdServiceProvider(), date);
         if (cursor.getCount() <= 0) {
             return;
         }
-
-        final ArrayList<Appointment> appointments = new ArrayList<>();
-        do {
-            cursor.moveToNext();
-            Appointment appointment = new Appointment();
-            appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
-            appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-            appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
-            appointments.add(appointment);
-        } while (!cursor.isLast());
 
         String[] values = new String[]{
                 MappContract.Customer.COLUMN_NAME_FNAME,
@@ -148,6 +93,7 @@ public class ViewAppointmentListActivity extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 cursor.moveToPosition(position);
 
+/*
                 Appointment appointment = appointments.get(position);
                 Customer customer = new Customer();
 
@@ -181,8 +127,11 @@ public class ViewAppointmentListActivity extends Activity
                 appointment.setToTime(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_TO_TIME))));
 
                 LoginHolder.appointment = appointment;
-                Intent i = new Intent(getApplicationContext(), AppointmentDetailsActivity.class);
-                startActivity(i);
+*/
+                Intent intent = new Intent(getApplicationContext(), AppointmentDetailsActivity.class);
+                intent.putExtra("appont_id", cursor.getInt(cursor.getColumnIndex("_id")));
+                intent.putExtra("cust_id", cursor.getInt(cursor.getColumnIndex("CUST_ID")));
+                startActivity(intent);
             }
         });
         mAppointmentListView.setAdapter(adapter);

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ public class PatientHistoryActivity extends Activity {
 
     private int mServProvId;
     private int mCustId;
-    private Cursor mCursor;
+    private int mAppontId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +38,14 @@ public class PatientHistoryActivity extends Activity {
         Intent intent = getIntent();
         mServProvId = intent.getIntExtra("sp_id", -1);
         mCustId = intent.getIntExtra("cust_id", -1);
+        mAppontId = intent.getIntExtra("appont_id", -1);
 
         MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
         Customer customer = DBUtil.getCustomer(dbHelper, mCustId);
         viewFName.setText(customer.getfName());
         viewLName.setText(customer.getlName());
 
-        Cursor myCursor = DBUtil.getServProvAppointmentsCursor(dbHelper, mServProvId);
+        Cursor myCursor = DBUtil.getServProvAppointmentsCursor(dbHelper, mServProvId, null);
         Cursor othCursor = DBUtil.getOtherServProvAppointmentsCursor(dbHelper, mServProvId);
 
         String[] columns = {

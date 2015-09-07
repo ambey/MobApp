@@ -199,7 +199,7 @@ public class BookAppointmentActivity extends Activity
             values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, sp.getIdServiceProvider());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, LoginHolder.custLoginRef.getIdCustomer());
 
-            db.insert(MappContract.Appointment.TABLE_NAME, null, values);
+            long rowId = db.insert(MappContract.Appointment.TABLE_NAME, null, values);
             return null;
         }
 
@@ -208,7 +208,7 @@ public class BookAppointmentActivity extends Activity
             UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.");
             /*Intent intent = new Intent(myActivity, SearchServProvActivity.class);
             startActivity(intent);*/
-            return;
+            //return;
         }
 
         @Override

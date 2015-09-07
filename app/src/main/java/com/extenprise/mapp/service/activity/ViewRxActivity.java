@@ -57,7 +57,7 @@ public class ViewRxActivity extends Activity {
         weight.setText("" + customer.getWeight());
 
         String[] values = {
-                MappContract.Prescription.COLUMN_NAME_ID_APPOMT,
+                MappContract.Prescription.COLUMN_NAME_SR_NO,
                 MappContract.Prescription.COLUMN_NAME_DRUG_NAME,
                 MappContract.Prescription.COLUMN_NAME_DOSE_QTY,
                 MappContract.Prescription.COLUMN_NAME_COURSE_DUR
@@ -72,7 +72,7 @@ public class ViewRxActivity extends Activity {
         ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.layout_rx_item,
-                DBUtil.getRxCursor(new MappDbHelper(getApplicationContext()), appontId),
+                DBUtil.getRxCursor(new MappDbHelper(this), appontId),
                 values,
                 viewIds, 0);
         rxItemsList.setAdapter(adapter);

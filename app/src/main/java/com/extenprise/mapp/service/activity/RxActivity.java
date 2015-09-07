@@ -22,18 +22,11 @@ import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
-
-import java.util.Map;
 
 public class RxActivity extends Activity {
     private View mForm;
     private View mProgressBar;
-    private TextView mFName;
-    private TextView mLName;
-    private TextView mDate;
     private TextView mSrNo;
     private TextView mDrugName;
     private TextView mDrugStrength;
@@ -61,9 +54,9 @@ public class RxActivity extends Activity {
         mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);
 
-        mFName = (TextView) findViewById(R.id.fNameTextView);
-        mLName = (TextView) findViewById(R.id.lNameTextView);
-        mDate = (TextView) findViewById(R.id.dateTextView);
+        TextView fName = (TextView) findViewById(R.id.fNameTextView);
+        TextView lName = (TextView) findViewById(R.id.lNameTextView);
+        TextView date = (TextView) findViewById(R.id.dateTextView);
         mSrNo = (TextView) findViewById(R.id.srNoTextView);
         mDrugName = (TextView) findViewById(R.id.drugEditText);
         mDrugStrength = (TextView) findViewById(R.id.drugStrengthEditText);
@@ -86,9 +79,9 @@ public class RxActivity extends Activity {
         Appointment appointment = LoginHolder.appointment;
         Customer customer = appointment.getCustomer();
 
-        mFName.setText(customer.getfName());
-        mLName.setText(customer.getlName());
-        mDate.setText(appointment.getDateOfAppointment());
+        fName.setText(customer.getfName());
+        lName.setText(customer.getlName());
+        date.setText(appointment.getDateOfAppointment());
         mSrNo.setText("#1");
 
     }
@@ -299,7 +292,7 @@ public class RxActivity extends Activity {
         protected void onPostExecute(Void aVoid) {
             try {
                 UIUtility.showProgress(myActivity, mForm, mProgressBar, false);
-                String parentClass = myActivity.getIntent().getStringExtra("parent-activity").split(" ")[1];
+                String parentClass = myActivity.getIntent().getStringExtra("parent-activity");
                 Intent intent = new Intent(myActivity, Class.forName(parentClass));
                 startActivity(intent);
             } catch (ClassNotFoundException e) {
