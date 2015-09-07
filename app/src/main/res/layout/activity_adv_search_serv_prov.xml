@@ -230,7 +230,7 @@
 
             <Spinner
                 android:entries="@array/genderTypeSearch"
-                android:id="@+id/spinner"
+                android:id="@+id/spinGender"
                 android:background="@drawable/spinner"
                 android:layout_width="170.0dip"
                 android:layout_height="30dp"
