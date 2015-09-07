@@ -73,7 +73,7 @@
 
     <TextView
         android:id="@+id/viewWorkPlaceDetLbl"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextQualification"
         android:text="@string/work_place_details"
@@ -119,21 +119,23 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
-                android:inputType="textAutoComplete"/>
+                android:inputType="textAutoComplete"
+                android:visibility="gone"
+                />
 
             <Spinner
                 android:id="@+id/viewWorkPlaceType"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/editTextName"
-                android:layout_toRightOf="@id/editTextName"
-                android:layout_marginLeft="10dp"
                 android:padding="5dp"
+                android:layout_toEndOf="@+id/editTextName"
+                android:layout_toRightOf="@+id/editTextName"
                 android:spinnerMode="dropdown"
-                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/spinner"
                 android:entries="@array/work_place_type"
-                android:prompt="@string/work_place_type" />
+                android:prompt="@string/work_place_type"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/editTextLoc"
@@ -141,21 +143,28 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextName"
                 android:hint="@string/loc"
-                android:inputType="textAutoComplete"/>
+                android:inputType="textAutoComplete"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+               />
 
             <Spinner
                 android:id="@+id/editTextCity"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/editTextLoc"
                 android:layout_toRightOf="@+id/editTextLoc"
-                android:layout_alignBottom="@+id/editTextLoc"
                 android:layout_marginLeft="10dp"
+                android:layout_below="@+id/viewWorkPlaceType"
+                android:layout_marginTop="10dp"
                 android:padding="5dp"
                 android:spinnerMode="dropdown"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/spinner"
                 android:entries="@array/city"
-                android:prompt="@string/city" />
+                android:prompt="@string/city"
+                android:visibility="gone"
+                />
 
             <EditText
                 android:id="@+id/editTextPhone1"
@@ -163,17 +172,20 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextLoc"
                 android:hint="@string/phone1"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/editTextPhone2"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/editTextPhone1"
+                android:layout_below="@+id/editTextCity"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/editTextPhone1"
+                android:layout_toEndOf="@+id/editTextPhone1"
                 android:hint="@string/phone2"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -181,7 +193,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextPhone1"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
@@ -202,17 +215,23 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewWorkHrsLbl"
                 android:text="@string/start_time"
-                android:onClick="showStartTimePicker" />
+                android:onClick="showStartTimePicker"
+                android:visibility="gone"
+
+                />
 
             <Button
                 android:id="@+id/buttonEndTime"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/buttonStartTime"
+                android:layout_toEndOf="@id/buttonStartTime"
                 android:layout_toRightOf="@+id/buttonStartTime"
                 android:layout_marginLeft="8dp"
                 android:text="@string/end_time"
-                android:onClick="showEndTimePicker" />
+                android:onClick="showEndTimePicker"
+                android:layout_below="@+id/viewWorkHrsLbl"
+                android:visibility="gone"
+                />
 
             <TextView
                 android:id="@+id/viewWeeklyOffLbl"
@@ -246,7 +265,7 @@
                 android:textSize="18dp"
                 android:onClick="showFeeFields"
                 android:clickable="true"
-                android:layout_below="@+id/buttonEndTime"
+                android:layout_below="@+id/buttonStartTime"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="8dp"
                 android:layout_toEndOf="@+id/viewWeeklyOffLbl"
@@ -260,9 +279,9 @@
                 android:layout_below="@+id/viewConsultationFees"
                 android:text="@string/rs_sign"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="8dp"
-                android:layout_toEndOf="@+id/editTextWeeklyOff"
-                android:layout_toRightOf="@+id/editTextWeeklyOff"/>
+                android:layout_marginLeft="180dp"
+                android:visibility="gone"
+                />
 
             <EditText
 
@@ -272,11 +291,12 @@
                 android:hint="@string/consult_fees"
                 android:inputType="number"
                 android:layout_marginLeft="0dp"
-
+                android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/viewRsSign"
                 android:layout_toRightOf="@+id/viewRsSign"
                 android:layout_below="@+id/viewConsultationFees"
+
                  />
 
 
@@ -286,9 +306,10 @@
                 android:layout_width="170.0dip"
                 android:text="@string/select_days"
                 android:layout_height="30dp"
-
+android:visibility="gone"
                 android:layout_below="@+id/viewWeeklyOffLbl"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+               />
 
             <Button
                 android:id="@+id/buttonAddWorkPlace"
@@ -326,8 +347,8 @@
                 android:onClick="showtimeFields"
                 android:clickable="true"
                 android:layout_alignTop="@+id/viewWorkHrsLbl"
-                android:layout_alignRight="@+id/buttonEndTime"
-                android:layout_alignEnd="@+id/buttonEndTime" />
+                android:layout_alignRight="@+id/viewWorkHrsLbl"
+                android:layout_alignEnd="@+id/viewWorkHrsLbl" />
 
             <ImageView
                 android:layout_width="20dp"
