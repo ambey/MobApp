@@ -17,6 +17,8 @@ import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -180,6 +182,19 @@ public class AppointmentDetailsActivity extends Activity {
         intent.putExtra("appont_id", mAppontId);
         startActivity(intent);
     }
+
+    public void startFileChooser(View view) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
+        startActivityForResult(intent, 1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String Fpath = data.getDataString();
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
 
     private List<Appointment> getPastAppointments(Appointment appointment) {
         ArrayList<Appointment> othApponts = DBUtil.getOtherAppointments(new MappDbHelper(this),
