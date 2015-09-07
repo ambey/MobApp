@@ -113,8 +113,7 @@
                 android:layout_width="170.0dip"
                 android:layout_height="20dp"
                 android:layout_marginTop="30dp"
-                android:onClick="showDaysField"
-                android:clickable="true"
+
                 android:text="@string/avail_days"
                 android:layout_below="@+id/buttonStartTime" />
             <!--<Spinner
@@ -131,7 +130,7 @@
                 android:background="@drawable/spinner"
                 android:layout_width="170.0dip"
                 android:text="@string/select_days"
-                android:visibility="gone"
+
                 android:layout_height="30dp"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="10dp"/>
@@ -142,23 +141,11 @@
                 android:layout_width="170.0dip"
                 android:layout_height="20dp"
                 android:text="@string/gender"
-                android:onClick="showGenderField"
-                android:clickable="true"
                 android:layout_toEndOf="@+id/viewWeeklyOffLbl"
                 android:layout_toRightOf="@+id/viewWeeklyOffLbl"
                 android:layout_below="@+id/buttonEndTime"
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="8dp"/>
-            <Spinner android:entries="@array/genderTypeSearch"
-                android:id="@+id/spinGender"
-                android:background="@drawable/spinner"
-                android:layout_width="170.0dip"
-                android:layout_height="30dp"
-                android:spinnerMode="dropdown"
-                android:prompt="@string/gender"
-                android:layout_above="@+id/buttonSearch"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:id="@+id/textViewConsultationFees"
@@ -178,21 +165,20 @@
                 android:text="@string/rs_sign"
                 android:layout_below="@+id/spinAvailDays"
                 android:layout_marginTop="30dp"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:id="@+id/textView2" />
 
             <Spinner android:entries="@array/consultationFees"
                 android:id="@+id/spinConsultationFees"
                 android:background="@drawable/spinner"
                 android:layout_width="170dp"
                 android:layout_height="30dp"
-                android:visibility="gone"
+
                 android:prompt="@string/consult_fees"
-                android:layout_below="@+id/spinAvailDays"
-                android:layout_toEndOf="@+id/textViewConsultationFees"
-                android:layout_toRightOf="@+id/textViewConsultationFees"
-                android:layout_marginTop="20dp"
                 android:spinnerMode="dropdown"
-                android:layout_marginLeft="35dp"/>
+                android:layout_alignBottom="@+id/textViewConsultationFees"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
 
             <Button android:textStyle="bold"
@@ -210,7 +196,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/dropDownIcon"
+                android:src="@drawable/drop_down_icon"
                 android:id="@+id/imageView"
                 android:onClick="showDaysField"
                 android:clickable="true"
@@ -221,7 +207,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/dropDownIcon"
+                android:src="@drawable/drop_down_icon"
                 android:id="@+id/imageView2"
                 android:onClick="showGenderField"
                 android:clickable="true"
@@ -232,11 +218,24 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/dropDownIcon"
+                android:src="@drawable/drop_down_icon"
                 android:id="@+id/imageView3"
                 android:onClick="showtimeFields"
                 android:clickable="true"
                 android:layout_alignTop="@+id/viewWorkHrsLbl"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <Spinner
+                android:entries="@array/genderTypeSearch"
+                android:id="@+id/spinner"
+                android:background="@drawable/spinner"
+                android:layout_width="170.0dip"
+                android:layout_height="30dp"
+                android:spinnerMode="dropdown"
+                android:prompt="@string/gender"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/viewGender"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 

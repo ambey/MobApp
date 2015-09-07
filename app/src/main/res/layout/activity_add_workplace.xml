@@ -239,8 +239,7 @@
                 android:layout_below="@id/buttonStartTime"
                 android:layout_height="20dp"
                 android:layout_marginTop="10dp"
-                android:onClick="showDaysFields"
-                android:clickable="true"
+
                 android:text="@string/practice_days"
                 android:background="@drawable/label"
                 android:textColor="#fff"
@@ -263,8 +262,7 @@
                 android:background="@drawable/label"
                 android:textColor="#fff"
                 android:textSize="18dp"
-                android:onClick="showFeeFields"
-                android:clickable="true"
+
                 android:layout_below="@+id/buttonStartTime"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="8dp"
@@ -280,7 +278,7 @@
                 android:text="@string/rs_sign"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="180dp"
-                android:visibility="gone"
+
                 />
 
             <EditText
@@ -291,7 +289,7 @@
                 android:hint="@string/consult_fees"
                 android:inputType="number"
                 android:layout_marginLeft="0dp"
-                android:visibility="gone"
+
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/viewRsSign"
                 android:layout_toRightOf="@+id/viewRsSign"
@@ -306,7 +304,7 @@
                 android:layout_width="170.0dip"
                 android:text="@string/select_days"
                 android:layout_height="30dp"
-android:visibility="gone"
+
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="10dp"
                />
@@ -342,7 +340,7 @@ android:visibility="gone"
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/dropDownIcon"
+                android:src="@drawable/drop_down_icon"
                 android:id="@+id/imageView4"
                 android:onClick="showtimeFields"
                 android:clickable="true"
@@ -353,10 +351,9 @@ android:visibility="gone"
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/dropDownIcon"
+                android:src="@drawable/drop_down_icon"
                 android:id="@+id/imageView5"
-                android:onClick="showDaysFields"
-                android:clickable="true"
+
                 android:layout_alignTop="@+id/viewWeeklyOffLbl"
                 android:layout_toLeftOf="@+id/viewConsultationFees"
                 android:layout_toStartOf="@+id/viewConsultationFees" />
@@ -364,7 +361,7 @@ android:visibility="gone"
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/dropDownIcon"
+                android:src="@drawable/drop_down_icon"
                 android:id="@+id/imageView6"
                 android:onClick="showFeeFields"
                 android:clickable="true"
@@ -378,7 +375,7 @@ android:visibility="gone"
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/dropDownIcon"
+        android:src="@drawable/drop_down_icon"
         android:id="@+id/imageView7"
         android:onClick="showWorkFields"
         android:clickable="true"

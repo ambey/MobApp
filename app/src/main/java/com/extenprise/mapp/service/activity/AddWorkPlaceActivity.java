@@ -163,9 +163,12 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void showFeeFields(View view) {
+        TextView rupeeSign = (TextView)findViewById(R.id.viewRsSign);
         if(mConsultFee.getVisibility() == View.VISIBLE) {
             UIUtility.expandOrCollapse(mConsultFee, "");
+            UIUtility.expandOrCollapse(rupeeSign, "");
         } else {
+            UIUtility.expandOrCollapse(rupeeSign, "expand");
             UIUtility.expandOrCollapse(mConsultFee, "expand");
         }
     }
