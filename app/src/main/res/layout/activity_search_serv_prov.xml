@@ -34,7 +34,7 @@
                 android:layout_marginTop="40dp"/>
             <Spinner
                 android:id="@+id/spinServiceProvCategory"
-                android:layout_width="170dp"
+                android:layout_width="165dp"
                 android:layout_height="35dp"
                 android:layout_below="@+id/imageViewLogo"
                 android:layout_marginTop="40dp"
@@ -52,21 +52,21 @@
 
             <Spinner
                 android:id="@+id/editTextSearchSp"
-                android:layout_width="170dp"
+                android:layout_width="165dp"
                 android:layout_height="35dp"
-                android:layout_below="@+id/editTextSearchDr"
-                android:layout_marginTop="20dp"
+                android:layout_below="@+id/imageViewLogo"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/spinner"
-                android:entries="@array/specialitySearch" />
+                android:entries="@array/specialitySearch"
+                android:layout_toEndOf="@+id/spinServiceProvCategory"
+                android:layout_toRightOf="@+id/spinServiceProvCategory"
+                android:layout_marginLeft="10dp"/>
 
             <EditText
                 android:id="@+id/editTextSearchLoc"
-                android:layout_width="170dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/loc1"
-                android:layout_marginLeft="12dp"
-                android:layout_toEndOf="@+id/editTextSearchSp"
-                android:layout_toRightOf="@+id/editTextSearchSp"
                 android:layout_below="@+id/editTextSearchDr"
                 android:layout_marginTop="20dp"/>
 
