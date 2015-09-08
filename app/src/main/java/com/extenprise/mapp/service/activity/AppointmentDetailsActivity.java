@@ -200,91 +200,11 @@ public class AppointmentDetailsActivity extends Activity {
         startActivity(intent);
     }
 
-    public void startFileChooser(View view) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, 1);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            SaveBlobTask saveBlobTask = new SaveBlobTask(this, data);
-            saveBlobTask.execute();
-        }
-    }
-
-    private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
-
-        private Activity myActivity;
-        private Intent mData;
-
-        public SaveBlobTask(Activity activity, Intent data) {
-            myActivity = activity;
-            mData = data;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-/*
-
-                try {
-                    InputStream stream = getContentResolver().openInputStream(
-                            mData.getData());
-                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                    stream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-*/
-            String path = mData.getDataString();
-            try {
-                RandomAccessFile raf = new RandomAccessFile(path, "r");
-                byte[] bytes = new byte[(int)raf.length()];
-                raf.readFully(bytes);
-                raf.close();
-                ContentValues values = new ContentValues();
-                Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);
-                String rxId = "a" + appointment.getId() + "r" + (appointment.getReportCount() + 1);
-
-                values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getId());
-                values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
-                values.put(MappContract.Prescription.COLUMN_NAME_SCANNED_COPY, bytes);
-                db.insert(MappContract.Prescription.TABLE_NAME,null,values);
-
-            } catch (FileNotFoundException x) {
-                x.printStackTrace();
-            } catch (IOException x) {
-                x.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-/*
-            try {
-                UIUtility.showProgress(myActivity, mForm, mProgressBar, false);
-                Intent intent = new Intent(myActivity, Class.forName(mParentActivity));
-                intent.putExtra("appont_id", mAppontId);
-                intent.putExtra("cust_id", mCustId);
-                startActivity(intent);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-*/
-        }
-
-        @Override
-        protected void onCancelled() {
-        }
+    public void showScannedRxScreen(View view) {
+        Intent intent = new Intent(this, ScannedRxActivity.class);
+        intent.putExtra("cust_id", mCustId);
+        intent.putExtra("appont_id", mAppontId);
+        startActivity(intent);
     }
 
     private List<Appointment> getPastAppointments(Appointment appointment) {

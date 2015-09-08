@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:onClick="startFileChooser"
+            android:onClick="showScannedRxScreen"
             android:text="@string/upload_rx" />
 
     </LinearLayout>

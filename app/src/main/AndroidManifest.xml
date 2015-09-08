@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.extenprise.mapp">
+    package="com.extenprise.mapp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -29,7 +29,7 @@
         android:allowBackup="true"
         android:icon="@drawable/doctor"
         android:logo="@drawable/doctor"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
 
         <!--
         <activity
@@ -46,7 +46,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:windowSoftInputMode="adjustResize|stateVisible" >
 
             <!--
             <intent-filter>
@@ -58,7 +58,7 @@
         </activity>
         <activity
             android:name=".service.activity.SearchServProvActivity"
-            android:label="Medico">
+            android:label="Medico" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,7 +68,7 @@
         <activity
             android:name=".service.activity.ServProvSignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".activity.SignUpPreviousActivity">
+            android:parentActivityName=".activity.SignUpPreviousActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.SignUpPreviousActivity" />
@@ -214,6 +214,14 @@
         <activity
             android:name=".customer.activity.PatientHistoryActivity"
             android:label="@string/title_activity_patient_history"
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
+        </activity>
+        <activity
+            android:name=".service.activity.ScannedRxActivity"
+            android:label="@string/title_activity_scanned_rx"
             android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

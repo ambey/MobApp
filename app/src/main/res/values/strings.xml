@@ -149,6 +149,7 @@
     <string name="title_activity_rx_activity">Rx Page</string>
     <string name="title_activity_view_rx">View Rx</string>
     <string name="title_activity_patients_home_screen">Home</string>
+    <string name="title_activity_scanned_rx">Scanned Rx Copy</string>
 
     <string name="view_more">View More</string>
     <string name="rx_now">Rx Now</string>
@@ -206,10 +207,14 @@
     <string name="helloDr">Hello Dr</string>
     <string name="dateFormat">dd/mm/yyyy</string>
     <string name="rx_details">Rx Details</string>
+    <string name="scan_rx_now">Scan Rx Copy Now!</string>
+    <string name="already_scanned">It\'s Already Scanned</string>
+    <string name="rx_copy">Rx Copy</string>
 
     <string name="no_past_appont">No appointments found!</string>
     <string name="error_num_should_be_positive">This field should be a positive number</string>
     <string name="error_invalid_number">Invalid number</string>
     <string name="error_past_date">Selected date has already passed by</string>
     <string name="consult_fees">Consultation Fees</string>
+
 </resources>
