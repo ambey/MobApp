@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -154,50 +155,66 @@ public class AddWorkPlaceActivity extends Activity {
 
     public void showtimeFields(View view) {
         if(mStartTime.getVisibility() == View.VISIBLE) {
-            UIUtility.expandOrCollapse(mStartTime, "");
-            UIUtility.expandOrCollapse(mEndTime, "");
+            mStartTime.setVisibility(View.GONE);
+            mEndTime.setVisibility(View.GONE);
         } else {
-            UIUtility.expandOrCollapse(mStartTime, "expand");
-            UIUtility.expandOrCollapse(mEndTime, "expand");
+            mStartTime.setVisibility(View.VISIBLE);
+            mEndTime.setVisibility(View.VISIBLE);
         }
     }
 
     public void showFeeFields(View view) {
         TextView rupeeSign = (TextView)findViewById(R.id.viewRsSign);
         if(mConsultFee.getVisibility() == View.VISIBLE) {
-            UIUtility.expandOrCollapse(mConsultFee, "");
-            UIUtility.expandOrCollapse(rupeeSign, "");
+            mConsultFee.setVisibility(View.GONE);
+            rupeeSign.setVisibility(View.GONE);
         } else {
-            UIUtility.expandOrCollapse(rupeeSign, "expand");
-            UIUtility.expandOrCollapse(mConsultFee, "expand");
+            mConsultFee.setVisibility(View.VISIBLE);
+            rupeeSign.setVisibility(View.VISIBLE);
         }
     }
 
     public void showDaysFields(View view) {
         if(mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
-            UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
+            mMultiSpinnerDays.setVisibility(View.GONE);
         } else {
-            UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+            //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+            mMultiSpinnerDays.setVisibility(View.VISIBLE);
         }
     }
 
     public void showWorkFields(View view) {
         if(mName.getVisibility() == View.VISIBLE) {
-            UIUtility.expandOrCollapse(mName, "");
+            /*UIUtility.expandOrCollapse(mName, "");
             UIUtility.expandOrCollapse(mLoc, "");
             UIUtility.expandOrCollapse(mPhone1, "");
             UIUtility.expandOrCollapse(mPhone2, "");
             UIUtility.expandOrCollapse(mEmailId, "");
             UIUtility.expandOrCollapse(mCity, "");
-            UIUtility.expandOrCollapse(mServPtType, "");
+            UIUtility.expandOrCollapse(mServPtType, "");*/
+
+            mName.setVisibility(View.GONE);
+            mLoc.setVisibility(View.GONE);
+            mPhone1.setVisibility(View.GONE);
+            mPhone2.setVisibility(View.GONE);
+            mEmailId.setVisibility(View.GONE);
+            mCity.setVisibility(View.GONE);
+            mServPtType.setVisibility(View.GONE);
         } else {
-            UIUtility.expandOrCollapse(mName, "expand");
+            /*UIUtility.expandOrCollapse(mName, "expand");
             UIUtility.expandOrCollapse(mLoc, "expand");
             UIUtility.expandOrCollapse(mPhone1, "expand");
             UIUtility.expandOrCollapse(mPhone2, "expand");
             UIUtility.expandOrCollapse(mEmailId, "expand");
             UIUtility.expandOrCollapse(mCity, "expand");
-            UIUtility.expandOrCollapse(mServPtType, "expand");
+            UIUtility.expandOrCollapse(mServPtType, "expand");*/
+            mName.setVisibility(View.VISIBLE);
+            mLoc.setVisibility(View.VISIBLE);
+            mPhone1.setVisibility(View.VISIBLE);
+            mPhone2.setVisibility(View.VISIBLE);
+            mEmailId.setVisibility(View.VISIBLE);
+            mCity.setVisibility(View.VISIBLE);
+            mServPtType.setVisibility(View.VISIBLE);
         }
     }
 

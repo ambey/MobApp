@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -105,27 +106,34 @@ public class AdvSearchServProvActivity extends Activity {
 
     public void showtimeFields(View view) {
         if(mButtonStartTime.getVisibility() == View.VISIBLE) {
-            UIUtility.expandOrCollapse(mButtonStartTime, "");
-            UIUtility.expandOrCollapse(mButttonEndTime, "");
+            mButtonStartTime.setVisibility(View.GONE);
+            mButttonEndTime.setVisibility(View.GONE);
+            //view.setBackgroundColor(Color.parseColor("#b0171f"));
         } else {
-            UIUtility.expandOrCollapse(mButtonStartTime, "expand");
-            UIUtility.expandOrCollapse(mButttonEndTime, "expand");
+            mButtonStartTime.setVisibility(View.VISIBLE);
+            mButttonEndTime.setVisibility(View.VISIBLE);
+            //view.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 
     public void showGenderField(View view) {
         if(mGender.getVisibility() == View.VISIBLE) {
-            UIUtility.expandOrCollapse(mGender, "");
+            //UIUtility.expandOrCollapse(mGender, "");
+            mGender.setVisibility(View.GONE);
+
         } else {
-            UIUtility.expandOrCollapse(mGender, "expand");
+            //UIUtility.expandOrCollapse(mGender, "expand");
+            mGender.setVisibility(View.VISIBLE);
         }
     }
 
     public void showDaysField(View view) {
         if(mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
-            UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
+            //UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
+            mMultiSpinnerDays.setVisibility(View.GONE);
         } else {
-            UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+            //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+            mMultiSpinnerDays.setVisibility(View.VISIBLE);
         }
     }
 

@@ -87,14 +87,14 @@
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
                 android:layout_width="fill_parent"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_below="@+id/editTextQualification"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/label"
                 android:clickable="true"
                 android:onClick="showtimeFields"
-                android:spinnerMode="dropdown"
                 android:text="@string/workHrsLbl"
+                android:textSize="20dp"
                 android:textColor="#ffffffff"
                 android:textStyle="bold" />
 
@@ -123,8 +123,9 @@
 
             <TextView
                 android:id="@+id/viewWeeklyOffLbl"
-                android:layout_width="170.0dip"
-                android:layout_height="20dp"
+                android:layout_width="160.0dip"
+                android:layout_height="30dp"
+                android:textSize="20dp"
                 android:layout_below="@+id/buttonStartTime"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/label"
@@ -144,7 +145,7 @@
                 android:layout_marginTop="20dp"/>-->
             <Button
                 android:id="@+id/spinAvailDays"
-                android:layout_width="170.0dip"
+                android:layout_width="160.0dip"
                 android:layout_height="30dp"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="10dp"
@@ -154,8 +155,9 @@
 
             <TextView
                 android:id="@+id/viewGender"
-                android:layout_width="170.0dip"
-                android:layout_height="20dp"
+                android:layout_width="160.0dip"
+                android:layout_height="30dp"
+                android:textSize="20dp"
                 android:layout_below="@+id/buttonEndTime"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="30dp"
@@ -182,15 +184,14 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_alignEnd="@+id/imageView"
-                android:layout_alignRight="@+id/imageView"
+                android:text="@string/rs_sign"
                 android:layout_alignTop="@+id/textViewConsultationFees"
-                android:text="@string/rs_sign" />
+                android:layout_toLeftOf="@+id/spinConsultationFees"
+                android:layout_toStartOf="@+id/spinConsultationFees" />
 
             <Spinner
                 android:id="@+id/spinConsultationFees"
-                android:layout_width="170dp"
+                android:layout_width="160dp"
                 android:layout_height="30dp"
                 android:layout_alignBottom="@+id/textViewConsultationFees"
                 android:layout_alignParentEnd="true"
@@ -215,42 +216,10 @@
                 android:textColor="#ffffffff"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignEnd="@+id/viewWeeklyOffLbl"
-                android:layout_alignRight="@+id/viewWeeklyOffLbl"
-                android:layout_alignTop="@+id/viewWeeklyOffLbl"
-                android:clickable="true"
-                android:onClick="showDaysField"
-                android:src="@drawable/drop_down_icon" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignEnd="@+id/editTextExp"
-                android:layout_alignRight="@+id/editTextExp"
-                android:layout_alignTop="@+id/viewGender"
-                android:clickable="true"
-                android:onClick="showGenderField"
-                android:src="@drawable/drop_down_icon" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/viewWorkHrsLbl"
-                android:clickable="true"
-                android:onClick="showtimeFields"
-                android:src="@drawable/drop_down_icon" />
 
             <Spinner
                 android:id="@+id/spinGender"
-                android:layout_width="170.0dip"
+                android:layout_width="160.0dip"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -260,8 +229,9 @@
                 android:background="@drawable/spinner"
                 android:entries="@array/genderTypeSearch"
                 android:prompt="@string/gender"
+                android:visibility="gone"
                 android:spinnerMode="dropdown"
-                android:visibility="gone" />
+                 />
 
         </RelativeLayout>
     </ScrollView>

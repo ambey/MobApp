@@ -55,7 +55,7 @@
         android:layout_below="@+id/editTextSpeciality"
         android:layout_toEndOf="@+id/editTextQualification"
         android:layout_toRightOf="@+id/editTextQualification"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="8dp"/>
 
 
@@ -64,7 +64,7 @@
         android:layout_width="170dp"
         android:layout_height="25dp"
         android:layout_below="@+id/spinServiceProvCategory"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:padding="4dp"
         android:hint="@string/qualification"
         android:background="@drawable/text"
@@ -75,14 +75,14 @@
     <TextView
         android:id="@+id/viewWorkPlaceDetLbl"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:textSize="20dp"
         android:layout_below="@+id/editTextQualification"
         android:text="@string/work_place_details"
         android:onClick="showWorkFields"
         android:clickable="true"
         android:background="@drawable/label"
-        android:layout_marginTop="10dp"
-        android:textSize="18dp"
+        android:layout_marginTop="30dp"
         android:textColor="#fff"/>
 
     <TextView
@@ -119,6 +119,7 @@
                 android:id="@+id/editTextName"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:hint="@string/name"
                 android:inputType="textAutoComplete"
                 android:visibility="gone"
@@ -129,6 +130,7 @@
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/editTextName"
                 android:layout_toRightOf="@+id/editTextName"
                 android:spinnerMode="dropdown"
@@ -144,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextName"
                 android:hint="@string/loc"
+
                 android:inputType="textAutoComplete"
                 android:layout_marginTop="10dp"
                 android:visibility="gone"
@@ -159,6 +162,7 @@
                 android:layout_below="@+id/viewWorkPlaceType"
                 android:layout_marginTop="10dp"
                 android:padding="5dp"
+
                 android:spinnerMode="dropdown"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/spinner"
@@ -174,6 +178,7 @@
                 android:layout_below="@+id/editTextLoc"
                 android:hint="@string/phone1"
                 android:inputType="phone"
+                android:layout_marginTop="10dp"
                 android:visibility="gone"/>
 
             <EditText
@@ -185,6 +190,7 @@
                 android:layout_toRightOf="@id/editTextPhone1"
                 android:layout_toEndOf="@+id/editTextPhone1"
                 android:hint="@string/phone2"
+                android:layout_marginTop="10dp"
                 android:inputType="phone"
                 android:visibility="gone"/>
 
@@ -194,21 +200,22 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextPhone1"
                 android:hint="@string/email"
+
                 android:inputType="textEmailAddress"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
                 android:layout_width="fill_parent"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
+                android:textSize="20dp"
                 android:layout_below="@id/editTextEmail"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:onClick="showtimeFields"
                 android:clickable="true"
                 android:text="@string/work_hrs"
                 android:background="@drawable/label"
-                android:textColor="#fff"
-                android:textSize="18dp"/>
+                android:textColor="#fff" />
 
             <Button
                 android:id="@+id/buttonStartTime"
@@ -236,16 +243,17 @@
 
             <TextView
                 android:id="@+id/viewWeeklyOffLbl"
-                android:layout_width="170dp"
+                android:layout_width="160dp"
                 android:layout_below="@id/buttonStartTime"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="30dp"
+                android:textSize="20dp"
+                android:layout_marginTop="30dp"
                 android:onClick="showDaysFields"
                 android:clickable="true"
                 android:text="@string/practice_days"
                 android:background="@drawable/label"
                 android:textColor="#fff"
-                android:textSize="18dp"/>
+                />
 
             <!--<Spinner
                 android:id="@+id/editTextWeeklyOff"
@@ -259,15 +267,15 @@
             <TextView
                 android:id="@+id/viewConsultationFees"
                 android:layout_width="170dp"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
+                android:textSize="20dp"
                 android:text="@string/consult_fees"
                 android:background="@drawable/label"
                 android:textColor="#fff"
-                android:textSize="18dp"
                 android:onClick="showFeeFields"
                 android:clickable="true"
                 android:layout_below="@+id/buttonStartTime"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginLeft="8dp"
                 android:layout_toEndOf="@+id/viewWeeklyOffLbl"
                 android:layout_toRightOf="@+id/viewWeeklyOffLbl"/>
@@ -304,7 +312,7 @@
             <Button
                 android:id="@+id/editTextWeeklyOff"
                 android:background="@drawable/spinner"
-                android:layout_width="170.0dip"
+                android:layout_width="160.0dip"
                 android:text="@string/select_days"
                 android:layout_height="30dp"
                 android:visibility="gone"
@@ -340,49 +348,8 @@
                 android:layout_toEndOf="@+id/buttonAddWorkPlace"
                 android:layout_alignTop="@+id/buttonAddWorkPlace" />
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/drop_down_icon"
-                android:id="@+id/imageView4"
-                android:onClick="showtimeFields"
-                android:clickable="true"
-                android:layout_alignTop="@+id/viewWorkHrsLbl"
-                android:layout_alignRight="@+id/viewWorkHrsLbl"
-                android:layout_alignEnd="@+id/viewWorkHrsLbl" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/drop_down_icon"
-                android:id="@+id/imageView5"
-
-                android:layout_alignTop="@+id/viewWeeklyOffLbl"
-                android:layout_toLeftOf="@+id/viewConsultationFees"
-                android:layout_toStartOf="@+id/viewConsultationFees" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/drop_down_icon"
-                android:id="@+id/imageView6"
-                android:onClick="showFeeFields"
-                android:clickable="true"
-                android:layout_alignTop="@+id/viewConsultationFees"
-                android:layout_alignRight="@+id/viewConsultationFees"
-                android:layout_alignEnd="@+id/viewConsultationFees" />
 
         </RelativeLayout>
     </ScrollView>
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/drop_down_icon"
-        android:id="@+id/imageView7"
-        android:onClick="showWorkFields"
-        android:clickable="true"
-        android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
-        android:layout_alignRight="@+id/editTextExperience"
-        android:layout_alignEnd="@+id/editTextExperience" />
 </RelativeLayout>
