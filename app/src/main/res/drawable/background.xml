@@ -32,7 +32,7 @@
 
         <item>
 
-            <bitmap  android:scaleType="centerCrop" android:alpha="200" android:gravity="center|bottom|clip_vertical" android:src="@drawable/stethsc1" />
+            <bitmap  android:scaleType="centerCrop" android:gravity="center" android:src="@drawable/s53" />
 
         </item>
 

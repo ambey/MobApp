@@ -41,7 +41,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_weight="0.44"
 
-                android:src="@drawable/med_logo_final" />
+                android:src="@drawable/med1" />
 
             
 

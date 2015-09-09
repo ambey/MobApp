@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/background"
+        android:orientation="vertical"
+        android:id="@+id/parent_linear_layout" >
+
+    <RadioGroup android:id="@+id/radioGroup1"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_height="wrap_content">
+        <RadioButton android:layout_height="wrap_content"
+            android:id="@+id/radio0" android:layout_width="wrap_content"
+            android:checked="true"/>
+        <RadioButton android:layout_height="wrap_content"
+            android:id="@+id/radio1" android:layout_width="wrap_content"
+             />
+    </RadioGroup>
+
+        <ViewFlipper
+            android:id="@+id/viewFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <include
+                android:id="@+id/home_screen_index_layout"
+                layout="@layout/activity_sign_up" />
+            <include
+                android:id="@+id/home_screen_recover_layout"
+                layout="@layout/activity_add_workplace" />
+
+        </ViewFlipper>
+
+
+
+    </LinearLayout>

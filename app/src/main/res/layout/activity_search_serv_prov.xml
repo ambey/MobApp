@@ -32,7 +32,7 @@
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
-                android:src="@drawable/med_logo_final" />
+                android:src="@drawable/med1" />
 
             <Spinner
                 android:id="@+id/spinServiceProvCategory"
@@ -87,18 +87,33 @@
                 android:textColor="#fff"
                 android:textStyle="bold" />
 
-            <Button
+            <TextView
                 android:id="@+id/buttonAdvanceSearch"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/buttonSearch"
+                android:layout_marginLeft="95dp"
+                android:layout_marginTop="30dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:onClick="advSearch"
+                android:text="@string/adv_search"
+                android:textColor="#ff0000ff"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/flipper"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/buttonAdvanceSearch"
                 android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="30dp"
                 android:background="#fff"
-                android:onClick="advSearch"
-                android:text="@string/adv_search"
+                android:clickable="true"
+                android:onClick="viewFlipper"
+                android:text="View Flipper"
                 android:textColor="#ff0000ff"
                 android:textSize="16sp" />
 

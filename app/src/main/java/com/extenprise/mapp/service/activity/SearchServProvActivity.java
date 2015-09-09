@@ -16,6 +16,7 @@ import android.widget.SpinnerAdapter;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
@@ -73,6 +74,11 @@ public class SearchServProvActivity extends Activity {
         /*ArrayList<String> list = new ArrayList<>();
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpeciality.setAdapter(spinnerAdapter);*/
+    }
+
+    public void viewFlipper(View view) {
+        Intent i = new Intent(this, FirstFlipperActivity.class);
+        startActivity(i);
     }
 
     public void advSearch(View view) {

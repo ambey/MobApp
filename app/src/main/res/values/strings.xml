@@ -216,5 +216,6 @@
     <string name="error_invalid_number">Invalid number</string>
     <string name="error_past_date">Selected date has already passed by</string>
     <string name="consult_fees">Consultation Fees</string>
+    <string name="title_activity_first_flipper">FirstFlipperActivity</string>
 
 </resources>

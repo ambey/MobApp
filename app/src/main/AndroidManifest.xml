@@ -227,6 +227,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
         </activity>
+        <activity
+            android:name=".activity.FirstFlipperActivity"
+            android:label="@string/title_activity_first_flipper" >
+        </activity>
     </application>
 
 </manifest>
