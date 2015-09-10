@@ -1,7 +1,5 @@
 package com.extenprise.mapp.service.activity;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,13 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,9 +33,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ServProvSignUpActivity extends FragmentActivity {
-
-/*
+/**
+ * Created by ambey on 10/9/15.
+ */
+public class ServProvSignUpFragment extends Fragment {
+    private View mRootView;
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mCellphoneview;
@@ -48,10 +48,8 @@ public class ServProvSignUpActivity extends FragmentActivity {
     private EditText mRegistrationNumber;
     private ImageView mImgView;
     private TextView mImgTxtView;
-*/
 
     // LogCat tag
-/*
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
 
     // Camera activity request codes
@@ -64,131 +62,24 @@ public class ServProvSignUpActivity extends FragmentActivity {
     private Uri fileUri; // file url to store image/video
 
     private Button btnCapturePicture, btnRecordVideo;
-*/
 
-    private ServProvsignUpPagerAdapter mPagerAdapter;
-    private ViewPager mViewPager;
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up_pager);
-
-        mPagerAdapter = new ServProvsignUpPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.signUpViewPager);
-        mViewPager.setAdapter(mPagerAdapter);
-
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                try {
-                    getActionBar().setSelectedNavigationItem(position);
-                } catch (NullPointerException x) {
-                    x.printStackTrace();
-                }
-            }
-        });
-
-        final ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        }
-
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            @Override
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-            }
-
-            @Override
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-            }
-        };
-
-        try {
-            actionBar.addTab(actionBar.newTab().setTabListener(tabListener));
-            actionBar.addTab(actionBar.newTab().setTabListener(tabListener));
-
-        } catch (NullPointerException x) {
-            x.printStackTrace();
-        }
-        /*
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mRootView = inflater.inflate(R.layout.activity_sign_up, container, false);
         LoginHolder.servLoginRef = new ServiceProvider();
 
-        mFirstName = (EditText) findViewById(R.id.editTextFName);
-        mLastName = (EditText) findViewById(R.id.editTextLName);
-        mCellphoneview = (EditText) findViewById(R.id.editTextCellphone);
-        mPasswdView = (EditText) findViewById(R.id.editTextPasswd);
-        mCnfPasswdView = (EditText) findViewById(R.id.editTextCnfPasswd);
-        mImgView = (ImageView) findViewById(R.id.uploadimageview);
-        mImgTxtView = (TextView) findViewById(R.id.uploadimage);
-        mRadioGroupGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-        mRegistrationNumber = (EditText) findViewById(R.id.editTextRegistrationNumber);
-        */
+        mFirstName = (EditText) mRootView.findViewById(R.id.editTextFName);
+        mLastName = (EditText) mRootView.findViewById(R.id.editTextLName);
+        mCellphoneview = (EditText) mRootView.findViewById(R.id.editTextCellphone);
+        mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
+        mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
+        mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
+        mImgTxtView = (TextView) mRootView.findViewById(R.id.uploadimage);
+        mRadioGroupGender = (RadioGroup) mRootView.findViewById(R.id.radioGroupGender);
+        mRegistrationNumber = (EditText) mRootView.findViewById(R.id.editTextRegistrationNumber);
+        return mRootView;
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sign_up, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /*
-        public void showAddWorkPlaceScreen(View v) {
-            if (!isValidInput()) {
-                return;
-            }
-    */
-/*
-        // Show a progress spinner, and kick off a background task to
-        // perform the user login attempt.
-        showProgress(true);
-        mAuthTask = new UserLoginTask(email, password);
-        mAuthTask.execute((Void) null);
-*//*
-
-        ServiceProvider sp = new ServiceProvider();
-        sp.setfName(mFirstName.getText().toString());
-        sp.setlName(mLastName.getText().toString());
-        sp.setPhone(mCellphoneview.getText().toString());
-        sp.setGender(mRadioButtonGender.getText().toString());
-        sp.setRegNo(mRegistrationNumber.getText().toString());
-        sp.setPasswd(mPasswdView.getText().toString());
-
-        LoginHolder.servLoginRef = sp;
-
-        Intent intent = new Intent(this, AddWorkPlaceActivity.class);
-        startActivity(intent);
-    }
-
-    */
-/*public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new com.extenprise.mapp.util.DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }*//*
-
 
     private boolean isValidInput() {
         boolean cancel = false;
@@ -245,13 +136,13 @@ public class ServProvSignUpActivity extends FragmentActivity {
         int genderID = mRadioGroupGender.getCheckedRadioButtonId();
         if(genderID == -1) {
             //UIUtility.showAlert(this, "", "Please Select Gender.");
-            RadioButton mFemale = (RadioButton)findViewById(R.id.radioButtonFemale);
+            RadioButton mFemale = (RadioButton)mRootView.findViewById(R.id.radioButtonFemale);
             mFemale.setError("Please select Gender.");
             focusView = mFemale;
             cancel = true;
             //return;
         } else {
-            mRadioButtonGender = (RadioButton)findViewById(genderID);
+            mRadioButtonGender = (RadioButton)mRootView.findViewById(genderID);
         }
 
         String regNo = mRegistrationNumber.getText().toString();
@@ -275,7 +166,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
     }
 
     private boolean isPhoneRegistered(String phone) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        MappDbHelper dbHelper = new MappDbHelper(getActivity());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -296,7 +187,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
     }
 
     private boolean isRegNoExist(String regNo) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        MappDbHelper dbHelper = new MappDbHelper(getActivity());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -364,25 +255,4 @@ public class ServProvSignUpActivity extends FragmentActivity {
 
         return mediaFile;
     }
-*/
-    public void showtimeFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
-        fragment.showtimeFields(view);
-    }
-
-    public void showFeeFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
-        fragment.showFeeFields(view);
-    }
-
-    public void showDaysFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
-        fragment.showDaysFields(view);
-    }
-
-    public void showWorkFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
-        fragment.showWorkFields(view);
-    }
-
 }
