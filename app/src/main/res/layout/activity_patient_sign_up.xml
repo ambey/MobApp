@@ -98,6 +98,8 @@
                 android:id="@+id/textViewDOB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:layout_toRightOf="@id/textViewDOBLbl"
                 android:layout_toEndOf="@id/textViewDOBLbl"
                 android:layout_alignTop="@id/textViewDOBLbl"
@@ -107,6 +109,8 @@
             <Spinner
                 android:id="@+id/spinGender"
                 android:layout_width="140dp"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -184,6 +188,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/editTextLoc"
                 android:layout_alignParentRight="true"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/spinner"
                 android:entries="@array/city"
@@ -209,6 +215,8 @@
                 android:background="@drawable/spinner"
                 android:entries="@array/state"
                 android:padding="5dp"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:prompt="@string/state" />
 
             <Button

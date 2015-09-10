@@ -208,7 +208,7 @@ public abstract class SearchServProv {
         if(!consultFee.equals("")) {
             if(consultFee.contains("<")) {
                 whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " < ? ";
-                argList.add(consultFee.replaceAll("<", ""));
+                argList.add(consultFee.replaceAll("<", "").trim());
             } else if(consultFee.contains("-")) {
                 String range[] = consultFee.split("-");
                 whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " >= ? ";
@@ -216,8 +216,8 @@ public abstract class SearchServProv {
                 whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " <= ? ";
                 argList.add(range[1]);
             } else if(consultFee.contains(">")) {
-                whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " <= ? ";
-                argList.add(consultFee.replaceAll(">", ""));
+                whereClause += "and " + MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + " > ? ";
+                argList.add(consultFee.replaceAll(">", "").trim());
             }
         }
 

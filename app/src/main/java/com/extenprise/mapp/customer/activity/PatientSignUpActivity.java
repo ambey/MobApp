@@ -37,7 +37,7 @@ public class PatientSignUpActivity extends Activity {
     private EditText mEditTextHeight;
     private EditText mEditTextWeight;
     private EditText mEditTextLoc;
-    private EditText mEditTextZipCode;
+    private EditText mEditTextPinCode;
     private Spinner mEditTextCity;
     private Spinner mEditTextState;
 
@@ -59,7 +59,7 @@ public class PatientSignUpActivity extends Activity {
         mEditTextHeight = (EditText)findViewById(R.id.editTextHeight);
         mEditTextWeight = (EditText)findViewById(R.id.editTextWeight);
         mEditTextLoc = (EditText)findViewById(R.id.editTextLoc);
-        mEditTextZipCode = (EditText)findViewById(R.id.editTextZipCode);
+        mEditTextPinCode = (EditText)findViewById(R.id.editTextZipCode);
         mSpinGender = (Spinner)findViewById(R.id.spinGender);
         mEditTextCity = (Spinner)findViewById(R.id.editTextCity);
         mEditTextState = (Spinner)findViewById(R.id.editTextState);
@@ -121,7 +121,7 @@ public class PatientSignUpActivity extends Activity {
         String height = mEditTextHeight.getText().toString().trim();
         String weight = mEditTextWeight.getText().toString().trim();
         String loc = mEditTextLoc.getText().toString().trim();
-        String zipCode = mEditTextZipCode.getText().toString().trim();
+        String pinCode = mEditTextPinCode.getText().toString().trim();
 
         if (TextUtils.isEmpty(fName)) {
             mEditTextCustomerFName.setError(getString(R.string.error_field_required));
@@ -189,9 +189,13 @@ public class PatientSignUpActivity extends Activity {
             focusView = mEditTextLoc;
             valid = false;
         }
-        if (TextUtils.isEmpty(zipCode)) {
-            mEditTextZipCode.setError(getString(R.string.error_field_required));
-            focusView = mEditTextZipCode;
+        if (TextUtils.isEmpty(pinCode)) {
+            mEditTextPinCode.setError(getString(R.string.error_field_required));
+            focusView = mEditTextPinCode;
+            valid = false;
+        } else if(Validator.isPinCodeValid(pinCode)) {
+            mEditTextPinCode.setError("Invalid Pin Code.");
+            focusView = mEditTextPinCode;
             valid = false;
         }
 
@@ -249,7 +253,7 @@ public class PatientSignUpActivity extends Activity {
             values.put(MappContract.Customer.COLUMN_NAME_CELLPHONE, mEditTextCellphone.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_PASSWD, mEditTextPasswd.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_LOCATION, mEditTextLoc.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_ZIPCODE, mEditTextZipCode.getText().toString().trim());
+            values.put(MappContract.Customer.COLUMN_NAME_PIN_CODE, mEditTextPinCode.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mEditTextCity.getSelectedItem().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mEditTextState.getSelectedItem().toString().trim());
 

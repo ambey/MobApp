@@ -82,7 +82,7 @@ public class MappDbHelper extends SQLiteOpenHelper {
                     MappContract.Customer.COLUMN_NAME_AGE + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_WEIGHT + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_LOCATION + TEXT_TYPE + COMMA_SEP +
-                    MappContract.Customer.COLUMN_NAME_ZIPCODE + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Customer.COLUMN_NAME_PIN_CODE + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_GENDER + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_ID_CITY + TEXT_TYPE + COMMA_SEP +
                     MappContract.Customer.COLUMN_NAME_ID_STATE + TEXT_TYPE + COMMA_SEP +

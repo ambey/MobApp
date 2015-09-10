@@ -121,6 +121,8 @@
             <RadioGroup
                 android:id="@+id/radioGroupGender"
                 android:layout_width="wrap_content"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
@@ -129,6 +131,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Male"
+
+                    android:focusable="true"
                     android:id="@+id/radioButtonMale"
                     />
 
@@ -136,6 +140,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Female"
+
+                    android:focusable="true"
                     android:id="@+id/radioButtonFemale"
                     android:layout_marginLeft="30dp"
                     />

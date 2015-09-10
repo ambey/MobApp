@@ -115,6 +115,7 @@
                 android:onClick="viewFlipper"
                 android:text="View Flipper"
                 android:textColor="#ff0000ff"
+                android:visibility="invisible"
                 android:textSize="16sp" />
 
             <!--

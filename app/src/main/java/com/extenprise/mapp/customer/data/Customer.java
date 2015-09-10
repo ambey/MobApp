@@ -21,6 +21,15 @@ public class Customer {
     private String city;
     private String state;
     private String country;
+    private String pinCode;
+
+    public String getPinCode() {
+        return pinCode;
+    }
+
+    public void setPinCode(String pinCode) {
+        this.pinCode = pinCode;
+    }
 
     private String status;
 

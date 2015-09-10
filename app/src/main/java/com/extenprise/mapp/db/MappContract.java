@@ -64,7 +64,7 @@ public class MappContract {
         public static final String COLUMN_NAME_AGE = "age";
         public static final String COLUMN_NAME_WEIGHT = "weight";
         public static final String COLUMN_NAME_LOCATION = "location";
-        public static final String COLUMN_NAME_ZIPCODE = "zipCode";
+        public static final String COLUMN_NAME_PIN_CODE = "pinCode";
         public static final String COLUMN_NAME_CELLPHONE = "cellphone";
         public static final String COLUMN_NAME_HEIGHT = "height";
         public static final String COLUMN_NAME_EMAIL_ID = "emailID";

@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -430,6 +432,38 @@ public class AddWorkPlaceActivity extends Activity {
                 }, hour, minute, false);
         tpd.show();
     }
+
+    /*public void setSpinnerError(String errorMessagem, Spinner spnMySpinner)
+    {
+        View view = spnMySpinner.getSelectedView();
+
+        // Set TextView in Secondary Unit spinner to be in error so that red (!) icon
+        // appears, and then shake control if in error
+        TextView tvListItem = (TextView)view;
+
+        // Set fake TextView to be in error so that the error message appears
+        TextView tvInvisibleError = (TextView)findViewById(R.id.tvInvisibleError);
+
+        // Shake and set error if in error state, otherwise clear error
+        if(errorMessage != null)
+        {
+            tvListItem.setError(errorMessage);
+            tvListItem.requestFocus();
+
+            // Shake the spinner to highlight that current selection
+            // is invalid -- SEE COMMENT BELOW
+            Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+            spnMySpinner.startAnimation(shake);
+
+            tvInvisibleError.requestFocus();
+            tvInvisibleError.setError(errorMessage);
+        }
+        else
+        {
+            tvListItem.setSpinnerError(null, null);
+            tvInvisibleError.setSpinnerError(null, null);
+        }
+    }*/
 
     private boolean isValidInput() {
         boolean valid = true;

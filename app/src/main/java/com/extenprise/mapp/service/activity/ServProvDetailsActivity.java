@@ -66,7 +66,7 @@ public class ServProvDetailsActivity extends Activity {
 
         //mTextViewReviews.setText("11");
         mTextViewDocQualification.setText(serviceProvider.getQualification());
-        mTextViewFees.setText("120");
+        mTextViewFees.setText("" + spsspt.getConsultFee());
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
         if(UIUtility.findDocAvailability(spsspt.getWeeklyOff(), Calendar.getInstance())) {

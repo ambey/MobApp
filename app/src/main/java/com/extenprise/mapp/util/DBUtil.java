@@ -332,7 +332,7 @@ public abstract class DBUtil {
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_DOB + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_GENDER + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_LOCATION + ", " +
-                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_ZIPCODE + ", " +
+                MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_PIN_CODE + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_CELLPHONE + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_WEIGHT + ", " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_HEIGHT + ", " +
