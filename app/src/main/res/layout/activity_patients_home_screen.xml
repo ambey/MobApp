@@ -6,6 +6,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
+
     tools:context="com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity">
 
 
@@ -62,30 +64,30 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/linenView"
-        android:layout_marginLeft="25dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp">
+     >
 
         <Button
             android:id="@+id/buttonDoctorsAppointment"
-            style="@style/RoundSquareButton"
-            android:layout_width="140dp"
+            android:background="@drawable/square_round_button"
+            android:layout_width="120dp"
             android:layout_height="80dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
             android:text="@string/doc_appoint"
-            android:textSize="16sp" />
-
-        <Button
+            android:textSize="16sp"
+            android:textColor="#b0171f"/>
+       <Button
             android:id="@+id/buttonViewReport"
-            android:layout_width="140dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/square_round_button"
+           android:layout_marginRight="25dp"
+           android:layout_marginTop="10dp"
             android:enabled="false"
             android:text="@string/my_report"
             android:textColor="#888"
@@ -102,17 +104,18 @@
 
         <Button
             android:id="@+id/buttonViewRx"
-            android:layout_width="140dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
             android:layout_below="@+id/linenView1"
             android:background="@drawable/square_round_button"
             android:text="@string/my_rx"
             android:textColor="#888"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginLeft="25dp"/>
 
         <Button
             android:id="@+id/buttonView4"
-            android:layout_width="140dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
             android:layout_alignEnd="@+id/buttonViewReport"
             android:layout_alignRight="@+id/buttonViewReport"
@@ -125,7 +128,7 @@
         <View
             android:id="@+id/linenView2"
             android:layout_width="0.4dp"
-            android:layout_height="210dp"
+            android:layout_height="200dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="#9d9d9d" />
@@ -134,7 +137,7 @@
             android:id="@+id/linenView4"
             android:layout_width="fill_parent"
             android:layout_height="0.4dp"
-            android:layout_marginTop="210dp"
+            android:layout_marginTop="200dp"
             android:background="#9d9d9d" />
 
         <View

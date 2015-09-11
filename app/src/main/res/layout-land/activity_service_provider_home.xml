@@ -7,17 +7,20 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ServiceProviderHomeActivity">
+    tools:context=".ServiceProviderHomeActivity"
+    android:gravity="start">
 
     <TextView
         android:id="@+id/viewWelcomeLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
+        android:layout_marginStart="100dp"
         android:text="@string/helloDr"
         android:textSize="18sp" />
 
     <ImageView
+        android:id="@+id/imageDoctor"
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:src="@drawable/dr" />
@@ -27,7 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginLeft="100dp"
+        android:layout_toEndOf="@+id/imageDoctor"
+        android:layout_toRightOf="@+id/imageDoctor"
         android:layout_marginTop="40dp"
         android:text="@string/lastModified" />
 
@@ -37,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewWelcomeLbl"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="40dp"
         android:layout_toEndOf="@+id/textView1"
         android:layout_toRightOf="@+id/textView1"
@@ -48,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewWelcomeLbl"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="40dp"
         android:layout_toEndOf="@+id/textViewDate"
         android:layout_toRightOf="@+id/textViewDate"
@@ -60,10 +66,15 @@
         android:layout_marginTop="120dp"
         android:background="#9d9d9d" />
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linenView"
+
+        >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
 
         >
 
@@ -72,8 +83,11 @@
             android:id="@+id/buttonDoctorsAppointment"
             android:layout_width="120dp"
             android:layout_height="80dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginLeft="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="12dp"
             android:background="@drawable/square_round_button"
             android:enabled="true"
             android:onClick="viewAppointment"
@@ -88,7 +102,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/buttonDoctorsAppointment"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="70dp"
             android:layout_marginEnd="25dp"
             android:background="@drawable/square_round_button"
             android:enabled="false"
@@ -112,7 +126,8 @@
             android:layout_width="120dp"
             android:layout_height="80dp"
             android:layout_below="@+id/linenView1"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="0dp"
             android:background="@drawable/square_round_button"
             android:enabled="true"
@@ -131,7 +146,11 @@
             android:enabled="true"
             android:textColor="#fff"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="70dp"
+            android:layout_marginEnd="70dp"/>
 
         <View
             android:id="@+id/linenView2"
@@ -157,6 +176,7 @@
 
 
     </RelativeLayout>
+    </ScrollView>
 
 
 </RelativeLayout>
