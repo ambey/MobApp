@@ -16,7 +16,7 @@
     <string name="dob">Date of Birth</string>
     <string name="dob_label">Date of Birth:</string>
     <string name="dob_with_format">Date of Birth: (dd/mm/YYYY)</string>
-    <string name="dobFormat">dd/mm/YYYY</string>
+    <string name="dobFormat">dd/mm/YYYY *</string>
 
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
@@ -164,7 +164,7 @@
     <string name="time_desc">AM/PM</string>
     <string name="age">Age</string>
     <string name="year">Years</string>
-    <string name="weight">Weight</string>
+    <string name="weight">Weight *</string>
     <string name="kg">Kg</string>
     <string name="practice_days">Practice Days *</string>
     <string name="add">Add</string>
@@ -192,7 +192,7 @@
     <string name="clinic_name">Clinic Name</string>
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
-    <string name="pincode">Pincode</string>
+    <string name="pincode">Pin Code *</string>
     <string name="rs_sign">\u20B9</string>
     <string name="doc_appoint">View Doctor Appointments</string>
     <string name="my_report">View My Reports</string>

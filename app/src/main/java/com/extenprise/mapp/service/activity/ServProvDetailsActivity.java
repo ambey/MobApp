@@ -62,7 +62,7 @@ public class ServProvDetailsActivity extends Activity {
         mTextViewClinicTime.setText(UIUtility.getTimeString(spsspt.getStartTime()) + " to "
                 + UIUtility.getTimeString(spsspt.getEndTime()));
         mTextViewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
-        mTextViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
+        mTextViewDocSpeciality.setText("(" + spsspt.getServProvHasService().getService().getSpeciality() + ")");
 
         //mTextViewReviews.setText("11");
         mTextViewDocQualification.setText(serviceProvider.getQualification());

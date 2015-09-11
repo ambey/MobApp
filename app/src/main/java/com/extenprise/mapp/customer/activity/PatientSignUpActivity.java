@@ -38,8 +38,8 @@ public class PatientSignUpActivity extends Activity {
     private EditText mEditTextWeight;
     private EditText mEditTextLoc;
     private EditText mEditTextPinCode;
-    private Spinner mEditTextCity;
-    private Spinner mEditTextState;
+    private Spinner mSpinCity;
+    private Spinner mSpinState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +61,8 @@ public class PatientSignUpActivity extends Activity {
         mEditTextLoc = (EditText)findViewById(R.id.editTextLoc);
         mEditTextPinCode = (EditText)findViewById(R.id.editTextZipCode);
         mSpinGender = (Spinner)findViewById(R.id.spinGender);
-        mEditTextCity = (Spinner)findViewById(R.id.editTextCity);
-        mEditTextState = (Spinner)findViewById(R.id.editTextState);
+        mSpinCity = (Spinner)findViewById(R.id.editTextCity);
+        mSpinState = (Spinner)findViewById(R.id.editTextState);
 
         mTextViewDOB.setOnClickListener(new OnClickListener() {
             @Override
@@ -92,6 +92,50 @@ public class PatientSignUpActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showPersonalFields(View view) {
+        TextView dobLbl = (TextView) findViewById(R.id.textViewDOBLbl);
+        TextView heightUnit = (TextView) findViewById(R.id.viewHeightUnit);
+        TextView weightUnit = (TextView) findViewById(R.id.viewWeightUnit);
+
+        if(mEditTextCustomerFName.getVisibility() == View.VISIBLE) {
+            mEditTextCustomerFName.setVisibility(View.GONE);
+            mEditTextCustomerLName.setVisibility(View.GONE);
+            mEditTextCustomerEmail.setVisibility(View.GONE);
+            dobLbl.setVisibility(View.GONE);
+            heightUnit.setVisibility(View.GONE);
+            weightUnit.setVisibility(View.GONE);
+            mTextViewDOB.setVisibility(View.GONE);
+            mSpinGender.setVisibility(View.GONE);
+            mEditTextHeight.setVisibility(View.GONE);
+            mEditTextWeight.setVisibility(View.GONE);
+        } else {
+            mEditTextCustomerFName.setVisibility(View.VISIBLE);
+            mEditTextCustomerLName.setVisibility(View.VISIBLE);
+            mEditTextCustomerEmail.setVisibility(View.VISIBLE);
+            dobLbl.setVisibility(View.VISIBLE);
+            heightUnit.setVisibility(View.VISIBLE);
+            weightUnit.setVisibility(View.VISIBLE);
+            mTextViewDOB.setVisibility(View.VISIBLE);
+            mSpinGender.setVisibility(View.VISIBLE);
+            mEditTextHeight.setVisibility(View.VISIBLE);
+            mEditTextWeight.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showAddressFields(View view) {
+        if(mEditTextLoc.getVisibility() == View.VISIBLE) {
+            mEditTextLoc.setVisibility(View.GONE);
+            mEditTextPinCode.setVisibility(View.GONE);
+            mSpinState.setVisibility(View.GONE);
+            mSpinCity.setVisibility(View.GONE);
+        } else {
+            mEditTextLoc.setVisibility(View.VISIBLE);
+            mEditTextPinCode.setVisibility(View.VISIBLE);
+            mSpinState.setVisibility(View.VISIBLE);
+            mSpinCity.setVisibility(View.VISIBLE);
+        }
     }
 
     public void showDatePicker(View view) {
@@ -254,8 +298,8 @@ public class PatientSignUpActivity extends Activity {
             values.put(MappContract.Customer.COLUMN_NAME_PASSWD, mEditTextPasswd.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_LOCATION, mEditTextLoc.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_PIN_CODE, mEditTextPinCode.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mEditTextCity.getSelectedItem().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mEditTextState.getSelectedItem().toString().trim());
+            values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mSpinCity.getSelectedItem().toString().trim());
+            values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mSpinState.getSelectedItem().toString().trim());
 
             db.insert(MappContract.Customer.TABLE_NAME, null, values);
             return null;

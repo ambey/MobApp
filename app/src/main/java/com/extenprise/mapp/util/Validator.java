@@ -11,31 +11,33 @@ public abstract class Validator {
     public static boolean isEmailValid(String email) {
         //int i = email.indexOf("@");
         //int j = email.lastIndexOf(".");
-
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-
-        //return !(i == -1 || i == 0 || j == -1 || j <= (i + 1) || (j + 2) >= email.length());
     }
-    /*public static boolean isEmailValid(String email) {
-        //String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        Pattern p = Pattern.compile(ePattern);
-        Matcher m = p.matcher(email);
-        return m.matches();
-    }*/
 
     public static boolean isPasswordValid(String password) {
         return password.length() > 5;
     }
 
     public static boolean isPhoneValid(String phoneNo) {
-        //return !(phoneNo == null || phoneNo.length() < 10);
+        //All special characters except '+'
+        if(phoneNo != null) {
+            if (phoneNo.startsWith("+")) {
+                phoneNo = phoneNo.substring(1);
+            }
+        }
+        String []specChars = { "`","~","!","@","#","$","%","^","&","*","(",")","-","+","_","=","[","]","{","}",";",":","\"","\'",",","<",".",">","/","?","\\","|"};
+        for(int i = 0; i < specChars.length; i++) {
+            if(phoneNo != null) {
+                if (phoneNo.contains(specChars[i])) {
+                    return false;
+                }
+            }
+        }
         return !(phoneNo == null || phoneNo.length() > 13 || phoneNo.length() < 10);
         //return android.util.Patterns.PHONE.matcher(phoneNo).matches(); /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/
     }
 
     public static boolean isPinCodeValid(String pinCode) {
-        //String reg = "^d{5}(?:[-s]d{4})?$";
         return !(pinCode == null || pinCode.length() == 6);
     }
 

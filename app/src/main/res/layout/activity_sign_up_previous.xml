@@ -94,7 +94,7 @@
             android:src="@drawable/doctor"
             android:layout_toEndOf="@id/medicalStoreImage"
             android:layout_toRightOf="@id/medicalStoreImage"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@+id/serviceProviderTextView"/>
 
         <TextView
@@ -103,7 +103,7 @@
             android:layout_below="@id/doctorImage"
             android:layout_marginTop="0dp"
             android:text="@string/practitionar"
-            android:layout_marginLeft="130dp"
+            android:layout_marginLeft="120dp"
             android:textColor="#000"/>
 
         <ImageView
@@ -123,9 +123,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/medicalStoreImage"
+
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+
             android:layout_marginTop="1dp"
             android:text="@string/diagnosticCenter"
-            android:layout_marginLeft="235dp"
             android:textColor="#000"
             />
 

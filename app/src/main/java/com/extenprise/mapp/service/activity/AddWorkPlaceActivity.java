@@ -495,7 +495,7 @@ public class AddWorkPlaceActivity extends Activity {
             valid = false;
         }
 
-        String exp = mExperience.getText().toString();
+        String exp = mExperience.getText().toString().trim();
         if (TextUtils.isEmpty(exp)) {
             mExperience.setError(getString(R.string.error_field_required));
             focusView = mExperience;
@@ -508,26 +508,26 @@ public class AddWorkPlaceActivity extends Activity {
                 valid = false;
             }
         }
-        String qualification = mQualification.getText().toString();
+        String qualification = mQualification.getText().toString().trim();
         if (TextUtils.isEmpty(qualification)) {
             mQualification.setError(getString(R.string.error_field_required));
             focusView = mQualification;
             valid = false;
         }
 
-        String name = mName.getText().toString();
+        String name = mName.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             mName.setError(getString(R.string.error_field_required));
             focusView = mName;
             valid = false;
         }
-        String location = mLoc.getText().toString();
+        String location = mLoc.getText().toString().trim();
         if (TextUtils.isEmpty(location)) {
             mLoc.setError(getString(R.string.error_field_required));
             focusView = mLoc;
             valid = false;
         }
-        String phone1 = mPhone1.getText().toString();
+        String phone1 = mPhone1.getText().toString().trim();
         if (TextUtils.isEmpty(phone1)) {
             mPhone1.setError(getString(R.string.error_field_required));
             focusView = mPhone1;
@@ -537,13 +537,13 @@ public class AddWorkPlaceActivity extends Activity {
             focusView = mPhone1;
             valid = false;
         }
-        String phone2 = mPhone2.getText().toString();
+        String phone2 = mPhone2.getText().toString().trim();
         if (!TextUtils.isEmpty(phone2) && !Validator.isPhoneValid(phone2)) {
             mPhone2.setError(getString(R.string.error_invalid_phone));
             focusView = mPhone2;
             valid = false;
         }
-        String email = mEmailId.getText().toString();
+        String email = mEmailId.getText().toString().trim();
         if (!TextUtils.isEmpty(email) && !Validator.isEmailValid(mEmailId.getText().toString())) {
             mEmailId.setError(getString(R.string.error_invalid_email));
             focusView = mEmailId;
@@ -573,7 +573,7 @@ public class AddWorkPlaceActivity extends Activity {
             focusView = mMultiSpinnerDays;
             valid = false;
         }
-        String cosultFee = mConsultFee.getText().toString();
+        String cosultFee = mConsultFee.getText().toString().trim();
         if (TextUtils.isEmpty(cosultFee)) {
             mConsultFee.setError(getString(R.string.error_field_required));
             focusView = mConsultFee;

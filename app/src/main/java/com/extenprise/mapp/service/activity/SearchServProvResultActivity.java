@@ -126,6 +126,7 @@ public class SearchServProvResultActivity extends Activity {
                 spt.setName(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_NAME)));
                 spt.setLocation(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_LOCATION)));
 
+                LoginHolder.spsspt.setConsultFee(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE))));
                 LoginHolder.spsspt.setStartTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME)));
                 LoginHolder.spsspt.setEndTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME)));
                 LoginHolder.spsspt.setWeeklyOff(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF)));

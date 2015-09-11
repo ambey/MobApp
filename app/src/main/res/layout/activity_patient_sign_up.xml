@@ -29,17 +29,21 @@
                 android:id="@+id/editTextCustomerFName"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/editTextCnfPasswd"
-                android:layout_below="@+id/editTextCnfPasswd"
+                android:layout_below="@+id/textViewPersonalFields"
+                android:layout_marginTop="20dp"
                 android:ems="10"
+                android:visibility="gone"
                 android:hint="@string/fnm"
                 android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/editTextCustomerLName"
                 android:layout_width="170dp"
+                android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
+                android:visibility="gone"
+                android:layout_below="@+id/textViewPersonalFields"
                 android:layout_toRightOf="@+id/editTextCustomerFName"
                 android:ems="10"
                 android:hint="@string/lnm"
@@ -49,7 +53,6 @@
                 android:id="@+id/editTextCellphone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextCustomerFName"
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/cellPhoneNo"
@@ -59,8 +62,9 @@
                 android:id="@+id/editTextCustomerEmail"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextCellphone"
+                android:layout_below="@+id/editTextCustomerFName"
                 android:layout_marginTop="10dp"
+               android:visibility="gone"
                 android:ems="10"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress" />
@@ -69,7 +73,7 @@
                 android:id="@+id/editTextPasswd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextCustomerEmail"
+                android:layout_below="@+id/editTextCellphone"
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWd"
@@ -89,17 +93,19 @@
                 android:id="@+id/textViewDOBLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/editTextConPasswd"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/editTextCustomerEmail"
+                android:layout_marginTop="30dp"
+
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
                 android:text="@string/dob_label"/>
             <TextView
                 android:id="@+id/textViewDOB"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
                 android:focusable="true"
+
                 android:layout_toRightOf="@id/textViewDOBLbl"
                 android:layout_toEndOf="@id/textViewDOBLbl"
                 android:layout_alignTop="@id/textViewDOBLbl"
@@ -108,10 +114,12 @@
 
             <Spinner
                 android:id="@+id/spinGender"
-                android:layout_width="140dp"
+                android:layout_width="90dp"
                 android:focusableInTouchMode="true"
                 android:focusable="true"
+
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextCustomerEmail"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/textViewDOB"
@@ -124,8 +132,8 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spinGender"
+
                 android:layout_marginTop="10dp"
-                android:background="@drawable/spinner"
                 android:hint="@string/height"
                 android:inputType="number"
                 />
@@ -135,6 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/editTextHeight"
                 android:layout_toRightOf="@id/editTextHeight"
@@ -144,20 +153,25 @@
 
             <EditText
                 android:id="@+id/editTextWeight"
-                android:layout_width="80dp"
+
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/spinGender"
-                android:layout_alignStart="@+id/spinGender"
+                android:layout_marginLeft="30dp"
+
+                android:layout_toEndOf="@id/viewHeightUnit"
+                android:layout_toRightOf="@id/viewHeightUnit"
+
                 android:layout_alignTop="@id/editTextHeight"
-                android:background="@drawable/spinner"
                 android:hint="@string/weight"
                 android:inputType="number" />
 
             <TextView
                 android:id="@+id/viewWeightUnit"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+
                 android:layout_toEndOf="@id/editTextWeight"
                 android:layout_toRightOf="@id/editTextWeight"
                 android:layout_alignBottom="@id/editTextWeight"
@@ -166,11 +180,14 @@
             <TextView
                 android:id="@+id/viewAddress"
                 android:layout_width="fill_parent"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_below="@+id/editTextHeight"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/label"
                 android:text="@string/address"
+                android:textSize="18dp"
+                android:onClick="showAddressFields"
+                android:clickable="true"
                 android:textColor="#fff" />
 
             <EditText
@@ -179,6 +196,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewAddress"
                 android:layout_marginTop="5dp"
+               android:visibility="gone"
                 android:hint="@string/loc"
                 android:inputType="textAutoComplete" />
 
@@ -190,6 +208,7 @@
                 android:layout_alignParentRight="true"
                 android:focusableInTouchMode="true"
                 android:focusable="true"
+                android:visibility="gone"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/spinner"
                 android:entries="@array/city"
@@ -199,15 +218,17 @@
             <EditText
                 android:id="@+id/editTextZipCode"
                 android:layout_width="150dp"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextCity"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:hint="@string/pincode"
                 android:inputType="number" />
 
             <Spinner
                 android:id="@+id/editTextState"
                 android:layout_width="140dp"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/editTextZipCode"
                 android:layout_alignParentRight="true"
@@ -224,11 +245,24 @@
                 style="@style/RoundButton"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextState"
+                android:layout_below="@+id/viewAddress"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="130dp"
                 android:text="@string/done"
                 android:onClick="registerPatient"/>
+
+            <TextView
+                android:id="@+id/textViewPersonalFields"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/label"
+                android:text="@string/personalDetails"
+                android:layout_below="@+id/editTextConPasswd"
+                android:textSize="18dp"
+                android:layout_marginTop="30dp"
+                android:onClick="showPersonalFields"
+                android:clickable="true"
+                android:textColor="#fff" />
 
         </RelativeLayout>
     </ScrollView>
