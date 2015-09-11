@@ -62,6 +62,8 @@
             android:background="#fff"
             android:text="@string/areYouServProv"
             android:textColor="#0000ff"
+            android:clickable="true"
+            android:onClick="signUpServProv"
             android:textSize="18sp"
             android:visibility="visible"
             android:layout_below="@+id/lnView"

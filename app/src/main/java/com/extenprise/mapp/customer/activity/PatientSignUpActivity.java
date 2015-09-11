@@ -2,18 +2,23 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
@@ -40,6 +45,10 @@ public class PatientSignUpActivity extends Activity {
     private EditText mEditTextPinCode;
     private Spinner mSpinCity;
     private Spinner mSpinState;
+    private ImageView mImgView;
+
+    private static int RESULT_LOAD_IMG = 1;
+    String imgDecodableString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +72,7 @@ public class PatientSignUpActivity extends Activity {
         mSpinGender = (Spinner)findViewById(R.id.spinGender);
         mSpinCity = (Spinner)findViewById(R.id.editTextCity);
         mSpinState = (Spinner)findViewById(R.id.editTextState);
-
-        mTextViewDOB.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UIUtility.datePicker(view, mTextViewDOB);
-            }
-        });
+        mImgView = (ImageView) findViewById(R.id.uploadimageview);
     }
 
     @Override
@@ -141,6 +144,95 @@ public class PatientSignUpActivity extends Activity {
     public void showDatePicker(View view) {
         UIUtility.datePicker(view, mTextViewDOB);
     }
+
+    public void uploadImg(View view) {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivity(intent);
+    }
+
+    public void loadImagefromGallery(View view) {
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            // When an Image is picked
+            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
+
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgDecodableString = cursor.getString(columnIndex);
+                cursor.close();
+                // Set the Image in ImageView after decoding the String
+                mImgView.setImageBitmap(BitmapFactory
+                        .decodeFile(imgDecodableString));
+
+            } else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
+        }
+
+    }
+
+
+
+    /*public void openGallery(int req_code){
+        Intent intent = new Intent();
+        intent.setType("image*//*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select file to upload "), req_code);
+    }*/
+
+    /*public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            if (requestCode == SELECT_FILE1) {
+                selectedPath1 = getPath(selectedImageUri);
+                System.out.println("selectedPath1 : " + selectedPath1);
+            }
+            if (requestCode == SELECT_FILE2) {
+                selectedPath2 = getPath(selectedImageUri);
+                System.out.println("selectedPath2 : " + selectedPath2);
+            }
+            tv.setText("Selected File paths : " + selectedPath1 + "," + selectedPath2);
+        }
+    }*/
+
+    /*public String getPath(Uri uri) {
+
+        String[] projection = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
+
+    }*/
+
+
 
     public void registerPatient(View view) {
         if(!isValidInput()) {

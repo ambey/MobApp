@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/uploadimage"
-                android:text="Upload Image"
+                android:text="@string/uploadImg"
                 android:layout_marginLeft="15dp"
                 android:textSize="15sp"
                 android:layout_below="@+id/uploadimageview"

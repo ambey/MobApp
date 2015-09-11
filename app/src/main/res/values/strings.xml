@@ -218,4 +218,6 @@
     <string name="consult_fees">Consultation Fees</string>
     <string name="title_activity_first_flipper">FirstFlipperActivity</string>
 
+    <string name="uploadImg">Upload Image</string>
+
 </resources>

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientSignUpActivity;
 import com.extenprise.mapp.service.activity.SearchServProvActivity;
@@ -22,7 +20,7 @@ public class SignUpPreviousActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_previous);
 
-        TextView mRegisterButton = (TextView) findViewById(R.id.serviceProviderTextView);
+        /*TextView mRegisterButton = (TextView) findViewById(R.id.serviceProviderTextView);
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,11 +28,16 @@ public class SignUpPreviousActivity extends Activity {
                 Intent intent = new Intent(getApplicationContext(), ServProvSignUpActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     public void signUpPatient(View view) {
         Intent intent = new Intent(this, PatientSignUpActivity.class);
+        startActivity(intent);
+    }
+
+    public void signUpServProv(View view) {
+        Intent intent = new Intent(this, ServProvSignUpActivity.class);
         startActivity(intent);
     }
 
@@ -69,6 +72,8 @@ public class SignUpPreviousActivity extends Activity {
                 startActivity(intent);
                 return true;
             case R.id.action_sign_in:
+                Intent intent1 = new Intent(this, LoginActivity.class);
+                startActivity(intent1);
                 return true;
         }
         return super.onOptionsItemSelected(item);
