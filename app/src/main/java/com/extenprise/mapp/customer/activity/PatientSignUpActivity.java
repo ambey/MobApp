@@ -1,7 +1,9 @@
 package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -145,17 +147,26 @@ public class PatientSignUpActivity extends Activity {
         UIUtility.datePicker(view, mTextViewDOB);
     }
 
-    public void uploadImg(View view) {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivity(intent);
-    }
-
-    public void loadImagefromGallery(View view) {
-        // Create intent to Open Image applications like Gallery, Google Photos
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // Start the Intent
-        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+    public void showImageUploadOptions(View view) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("");
+        alertDialog.setMessage("Please Select option to upload image.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "From Camera",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                        startActivity(intent);
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "From Gallery",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+                    }
+                });
+        alertDialog.show();
     }
 
     @Override
