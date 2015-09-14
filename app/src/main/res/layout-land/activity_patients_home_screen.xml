@@ -83,7 +83,7 @@
         <Button
             android:id="@+id/buttonDoctorsAppointment"
             android:background="@drawable/square_round_button"
-            android:layout_width="130dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:text="@string/doc_appoint"
             android:textSize="16sp"
@@ -92,57 +92,6 @@
             android:layout_alignParentStart="true"
             android:layout_alignBottom="@+id/linenView2"
             android:layout_alignParentTop="true" />
-
-       <Button
-            android:id="@+id/buttonViewReport"
-            android:layout_width="130dp"
-            android:layout_height="80dp"
-            android:layout_toEndOf="@+id/linenView2"
-            android:layout_toRightOf="@+id/linenView2"
-            android:background="@drawable/square_round_button"
-           android:enabled="false"
-            android:text="@string/my_report"
-            android:textColor="#888"
-            android:textSize="16sp"
-
-           android:layout_alignParentTop="true"
-           android:layout_above="@+id/linenView1" />
-
-        <View
-            android:id="@+id/linenView1"
-            android:layout_width="fill_parent"
-            android:layout_height="0.4dp"
-            android:layout_below="@+id/buttonDoctorsAppointment"
-            android:layout_marginTop="20dp"
-            android:background="@android:color/black"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/buttonViewRx"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/square_round_button"
-            android:text="@string/my_rx"
-            android:textColor="#888"
-            android:textSize="16sp"
-            android:layout_toRightOf="@+id/linenView4"
-            android:layout_toEndOf="@+id/linenView4"
-            android:layout_alignParentTop="true"
-            android:layout_above="@+id/linenView1" />
-
-        <Button
-            android:id="@+id/buttonView4"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/linenView6"
-            android:layout_toRightOf="@+id/linenView6"
-            android:layout_alignTop="@+id/buttonViewRx"
-            android:background="@drawable/square_round_button"
-            android:textColor="#888"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_above="@+id/linenView1" />
-
         <View
             android:id="@+id/linenView2"
             android:layout_width="0.4dp"
@@ -153,6 +102,20 @@
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/linenView5" />
 
+
+        <Button
+            android:id="@+id/buttonViewReport"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/linenView2"
+            android:layout_toRightOf="@+id/linenView2"
+            android:background="@drawable/square_round_button"
+           android:enabled="false"
+            android:text="@string/my_report"
+            android:textColor="#888"
+            android:textSize="16sp"
+           android:layout_alignParentTop="true"
+           android:layout_alignBottom="@+id/linenView2" />
         <View
             android:id="@+id/linenView4"
             android:layout_width="0.4dp"
@@ -162,6 +125,21 @@
             android:layout_toEndOf="@+id/buttonViewReport"
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/linenView5"/>
+
+
+
+        <Button
+            android:id="@+id/buttonViewRx"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/square_round_button"
+            android:text="@string/my_rx"
+            android:textColor="#888"
+            android:textSize="16sp"
+            android:layout_toRightOf="@+id/linenView4"
+            android:layout_toEndOf="@+id/linenView4"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/linenView2" />
         <View
             android:id="@+id/linenView6"
             android:layout_width="0.4dp"
@@ -171,15 +149,22 @@
             android:layout_toEndOf="@+id/buttonViewRx"
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/linenView5"/>
-        <View
-            android:id="@+id/linenView7"
-            android:layout_width="0.4dp"
+
+
+        <Button
+            android:id="@+id/buttonView4"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:background="#9d9d9d"
-            android:layout_toRightOf="@+id/buttonView4"
-            android:layout_toEndOf="@+id/buttonView4"
+            android:background="@drawable/square_round_button"
+            android:textColor="#888"
+            android:textSize="16sp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/linenView5"
             android:layout_alignParentTop="true"
-            android:layout_alignBottom="@+id/linenView5"/>
+             />
+
+
 
 
 
