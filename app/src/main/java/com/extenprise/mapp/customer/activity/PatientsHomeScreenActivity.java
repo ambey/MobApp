@@ -5,10 +5,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.util.UIUtility;
 
 
 public class PatientsHomeScreenActivity extends Activity {
@@ -24,6 +26,11 @@ public class PatientsHomeScreenActivity extends Activity {
                 LoginHolder.custLoginRef.getlName();
 
         welcomeView.setText(label);
+
+        ImageView img = (ImageView) findViewById(R.id.imagePatient);
+        if(LoginHolder.custLoginRef.getImg() != null) {
+            img.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
+        }
     }
 
     @Override

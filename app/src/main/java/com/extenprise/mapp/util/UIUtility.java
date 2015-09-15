@@ -8,6 +8,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -18,8 +20,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -102,6 +106,7 @@ public abstract class UIUtility {
                 });
         //alertDialog.isShowing()
 
+        alertDialog.setIcon(R.drawable.med_logo_final);
         alertDialog.show();
         //return true;
     }
@@ -312,6 +317,17 @@ public abstract class UIUtility {
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateInterpolator(0.5f));
         v.startAnimation(anim);
+    }
+
+    public static byte[] getBytesFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        return stream.toByteArray();
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getBitmapFromBytes(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
 }

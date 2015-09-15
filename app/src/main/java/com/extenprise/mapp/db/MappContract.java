@@ -19,6 +19,7 @@ public class MappContract {
         public static final String COLUMN_NAME_GENDER = "gender";
         public static final String COLUMN_NAME_QUALIFICATION = "qualification";
         public static final String COLUMN_NAME_REGISTRATION_NUMBER = "registrationNumber";
+        public static final String COLUMN_NAME_IMAGE = "img";
     }
 
     public static abstract class ServProvHasServ implements BaseColumns {
@@ -71,6 +72,7 @@ public class MappContract {
         public static final String COLUMN_NAME_ID_STATE = "idState";
         public static final String COLUMN_NAME_ID_CITY = "idCity";
         public static final String COLUMN_NAME_DOB = "dob";
+        public static final String COLUMN_NAME_IMAGE = "img";
     }
 
     public static abstract class Appointment implements BaseColumns {

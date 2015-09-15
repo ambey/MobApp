@@ -45,6 +45,7 @@ import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -307,7 +308,8 @@ public class LoginActivity extends Activity {
                     MappContract.Customer.COLUMN_NAME_FNAME,
                     MappContract.Customer.COLUMN_NAME_LNAME,
                     MappContract.Customer.COLUMN_NAME_EMAIL_ID,
-                    MappContract.Customer.COLUMN_NAME_CELLPHONE
+                    MappContract.Customer.COLUMN_NAME_CELLPHONE,
+                    MappContract.Customer.COLUMN_NAME_IMAGE
             };
 
             String selection = MappContract.Customer.COLUMN_NAME_CELLPHONE + "=? and " +
@@ -329,6 +331,8 @@ public class LoginActivity extends Activity {
                 p.setlName(c.getString(2));
                 p.setEmailId(c.getString(3));
                 p.setPhone(c.getString(4));
+                p.setImg(c.getBlob(5));
+
 
                 if(LoginHolder.custLoginRef != null) {
                     if(LoginHolder.custLoginRef.getStatus() != null) {
@@ -345,7 +349,9 @@ public class LoginActivity extends Activity {
                     MappContract.ServiceProvider._ID,
                     MappContract.ServiceProvider.COLUMN_NAME_FNAME,
                     MappContract.ServiceProvider.COLUMN_NAME_LNAME,
-                    MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID
+                    MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID,
+                    MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE,
+                    MappContract.ServiceProvider.COLUMN_NAME_IMAGE
             };
 
             String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=? and " +
@@ -366,6 +372,8 @@ public class LoginActivity extends Activity {
                 sp.setfName(c.getString(1));
                 sp.setlName(c.getString(2));
                 sp.setEmailId(c.getString(3));
+                sp.setPhone(c.getString(4));
+                sp.setImg(c.getBlob(5));
 
                 LoginHolder.servLoginRef = sp;
             }

@@ -22,6 +22,15 @@ public class Customer {
     private String state;
     private String country;
     private String pinCode;
+    private byte[] img;
+
+    public byte[] getImg() {
+        return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
+    }
 
     public String getPinCode() {
         return pinCode;

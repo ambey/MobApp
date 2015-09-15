@@ -7,10 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -27,6 +30,12 @@ import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 public class PatientSignUpActivity extends Activity {
@@ -50,6 +59,7 @@ public class PatientSignUpActivity extends Activity {
     private ImageView mImgView;
 
     private static int RESULT_LOAD_IMG = 1;
+    private static int REQUEST_CAMERA = 1;
     String imgDecodableString;
 
     @Override
@@ -148,25 +158,36 @@ public class PatientSignUpActivity extends Activity {
     }
 
     public void showImageUploadOptions(View view) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("");
-        alertDialog.setMessage("Please Select option to upload image.");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "From Camera",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                        startActivity(intent);
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "From Gallery",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+
+        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Upload Image ");
+        dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File f = new File(android.os.Environment
+                                .getExternalStorageDirectory(), "temp.jpg");
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                        startActivityForResult(intent, REQUEST_CAMERA);
+                        break;
+
+                    case 1:
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-                    }
-                });
-        alertDialog.show();
+                        break;
+
+                    case 2:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+
+        });
+        dialogBuilder.create().show();
     }
 
     @Override
@@ -174,29 +195,73 @@ public class PatientSignUpActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             // When an Image is picked
-            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
-                    && null != data) {
-                // Get the Image from data
+            if (resultCode == RESULT_OK) {
+                if (requestCode == RESULT_LOAD_IMG
+                        && null != data) {
+                    // Get the Image from data
 
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(selectedImage,
-                        filePathColumn, null, null, null);
-                // Move to first row
-                cursor.moveToFirst();
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
 
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                imgDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-                // Set the Image in ImageView after decoding the String
-                mImgView.setImageBitmap(BitmapFactory
-                        .decodeFile(imgDecodableString));
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+                    // Set the Image in ImageView after decoding the String
+                    mImgView.setImageBitmap(BitmapFactory
+                            .decodeFile(imgDecodableString));
 
-            } else {
-                Toast.makeText(this, "You haven't picked Image",
-                        Toast.LENGTH_LONG).show();
+                } else if (requestCode == REQUEST_CAMERA) {
+                    File f = new File(Environment.getExternalStorageDirectory()
+                            .toString());
+                    for (File temp : f.listFiles()) {
+                        if (temp.getName().equals("temp.jpg")) {
+                            f = temp;
+                            break;
+                        }
+                    }
+                    try {
+                        Bitmap bm;
+                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
+
+                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                                btmapOptions);
+
+                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
+                        mImgView.setImageBitmap(bm);
+
+                        String path = android.os.Environment
+                                .getExternalStorageDirectory()
+                                + File.separator
+                                + "Phoenix" + File.separator + "default";
+                        f.delete();
+                        OutputStream fOut = null;
+                        File file = new File(path, String.valueOf(System
+                                .currentTimeMillis()) + ".jpg");
+                        try {
+                            fOut = new FileOutputStream(file);
+                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+                            fOut.flush();
+                            fOut.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(this, "You haven't picked Image",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         } catch (Exception e) {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
@@ -205,31 +270,7 @@ public class PatientSignUpActivity extends Activity {
 
     }
 
-
-
-    /*public void openGallery(int req_code){
-        Intent intent = new Intent();
-        intent.setType("image*//*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select file to upload "), req_code);
-    }*/
-
-    /*public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            if (requestCode == SELECT_FILE1) {
-                selectedPath1 = getPath(selectedImageUri);
-                System.out.println("selectedPath1 : " + selectedPath1);
-            }
-            if (requestCode == SELECT_FILE2) {
-                selectedPath2 = getPath(selectedImageUri);
-                System.out.println("selectedPath2 : " + selectedPath2);
-            }
-            tv.setText("Selected File paths : " + selectedPath1 + "," + selectedPath2);
-        }
-    }*/
-
-    /*public String getPath(Uri uri) {
+    public String getPath(Uri uri) {
 
         String[] projection = { MediaStore.Images.Media.DATA };
 
@@ -241,7 +282,7 @@ public class PatientSignUpActivity extends Activity {
 
         return cursor.getString(column_index);
 
-    }*/
+    }
 
 
 
@@ -403,6 +444,13 @@ public class PatientSignUpActivity extends Activity {
             values.put(MappContract.Customer.COLUMN_NAME_PIN_CODE, mEditTextPinCode.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mSpinCity.getSelectedItem().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mSpinState.getSelectedItem().toString().trim());
+            /*if(!imgDecodableString.equals("") || imgDecodableString != null) {
+                values.put(MappContract.Customer.COLUMN_NAME_IMAGE, UIUtility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
+            }*/
+            values.put(MappContract.Customer.COLUMN_NAME_IMAGE, UIUtility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
+
+            //Bitmap bitmap = ((BitmapDrawable)mImgView.getDrawable()).getBitmap();
+
 
             db.insert(MappContract.Customer.TABLE_NAME, null, values);
             return null;

@@ -19,7 +19,15 @@ public class ServiceProvider {
     private boolean subscribed;
     private Date subsDate;
     private ArrayList<ServProvHasService> services;
+    private byte[] img;
 
+    public byte[] getImg() {
+        return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
+    }
 
     public String getRegNo() {
         return regNo;
