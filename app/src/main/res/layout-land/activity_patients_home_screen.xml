@@ -15,8 +15,10 @@
         android:id="@+id/viewWelcomeLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/imageDoctor"
-        android:layout_toRightOf="@+id/imageDoctor"
+        android:layout_toEndOf="@+id/imagePatient"
+        android:layout_toRightOf="@+id/imagePatient"
+        android:layout_alignParentTop="true"
+
         android:text="@string/hello"
         android:textSize="18sp" />
 
