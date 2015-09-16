@@ -200,7 +200,7 @@ public class SearchServProvActivity extends Activity {
                 Intent intent = new Intent(mActivity, SearchServProvResultActivity.class);
                 startActivity(intent);
             } else {
-                UIUtility.showAlert(mActivity,"No Results Found","Sorry, No result matches to your criteria!");
+                UIUtility.showAlert(mActivity,"","Sorry, No result matches to your criteria!");
             }
         }
 

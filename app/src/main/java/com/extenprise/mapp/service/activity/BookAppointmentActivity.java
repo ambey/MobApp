@@ -91,10 +91,10 @@ public class BookAppointmentActivity extends Activity
                 SaveAppointData task = new SaveAppointData(this);
                 task.execute((Void) null);
             } else {
-                UIUtility.showAlert(this, "Sorry!", "The time slot is already booked.");
+                UIUtility.showAlert(this, "", "The time slot is already booked.");
             }
         } else {
-            UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
+            UIUtility.showAlert(this, "", "Doctor is not available on the given date.");
         }
     }
 
@@ -129,7 +129,7 @@ public class BookAppointmentActivity extends Activity
         }
 
         if (!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
-            UIUtility.showAlert(this, "Sorry!", "Doctor is not available on the given date.");
+            UIUtility.showAlert(this, "", "Doctor is not available on the given date.");
             return;
         }
 
@@ -220,7 +220,7 @@ public class BookAppointmentActivity extends Activity
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showAlert(myActivity, "Thanks You..!", "Your Appointment has been fixed.");
+            UIUtility.showAlert(myActivity, "", "Your Appointment has been fixed.");
             mBookButton.setEnabled(false);
             mBookButton.setBackgroundResource(R.drawable.inactive_button);
             /*Intent intent = new Intent(myActivity, SearchServProvActivity.class);

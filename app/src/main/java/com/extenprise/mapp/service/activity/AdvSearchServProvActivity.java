@@ -409,7 +409,7 @@ public class AdvSearchServProvActivity extends Activity {
             } else {
                     /*Intent intent = new Intent(mActivity, AdvSearchServProvActivity.class);
                     startActivity(intent);*/
-                UIUtility.showAlert(mActivity, "No Results Found","Sorry, No result matches to your criteria!");
+                UIUtility.showAlert(mActivity, "","Sorry, No result matches to your criteria!");
             }
         }
 
