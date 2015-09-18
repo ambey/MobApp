@@ -75,7 +75,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/med_store"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="0dp"
             android:layout_below="@+id/serviceProviderTextView"
             android:layout_alignLeft="@+id/serviceProviderTextView"
             android:layout_alignStart="@+id/serviceProviderTextView"/>
@@ -86,8 +86,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/medicalStoreImage"
             android:text="@string/medicalStore"
-            android:layout_alignLeft="@+id/serviceProviderTextView"
-            android:layout_alignStart="@+id/serviceProviderTextView"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
             android:textColor="#000"/>
 
 

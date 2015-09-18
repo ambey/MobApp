@@ -199,22 +199,24 @@
                 android:id="@+id/textview3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewFirstClinic"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="15dp"
+
                 android:text="@string/consultFee"
 
-
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:layout_alignTop="@+id/textView4"
+                android:layout_alignLeft="@+id/buttonBookAppointment"
+                android:layout_alignStart="@+id/buttonBookAppointment" />
 
             <TextView
                 android:id="@+id/textviewFees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textviewFirstClinic"
-                android:layout_marginLeft="180dp"
+                android:layout_toEndOf="@+id/textview3"
+                android:layout_toRightOf="@+id/textview3"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:hint="@string/consultFee"
+                android:hint="@string/value"
                 android:textSize="15sp" />
             <TextView
                 android:layout_width="wrap_content"
@@ -225,7 +227,8 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="5dp"
                 android:layout_toEndOf="@+id/textview3"
-                android:layout_toRightOf="@+id/textview3"/>
+                android:layout_toRightOf="@+id/textview3"
+                android:id="@+id/textView4" />
 
             <Button
                 android:id="@+id/buttonBookAppointment"
@@ -234,8 +237,8 @@
                 android:layout_alignLeft="@+id/imageviewLike"
                 android:layout_alignStart="@+id/imageviewLike"
                 android:layout_below="@+id/textview3"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
                 android:background="@drawable/button"
                 android:onClick="bookAppointment"
                 android:padding="10dp"
