@@ -19,16 +19,6 @@ public class SignUpPreviousActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_previous);
-
-        /*TextView mRegisterButton = (TextView) findViewById(R.id.serviceProviderTextView);
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //registerServProv();
-                Intent intent = new Intent(getApplicationContext(), ServProvSignUpActivity.class);
-                startActivity(intent);
-            }
-        });*/
     }
 
     public void signUpPatient(View view) {

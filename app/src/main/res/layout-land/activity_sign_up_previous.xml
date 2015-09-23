@@ -32,7 +32,7 @@
             android:layout_centerHorizontal="true"/>
 
         <Button
-            android:id="@+id/signUpButton"
+            android:id="@+id/signUpButton1"
             style="?android:textAppearanceSmall"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -44,7 +44,19 @@
             android:textStyle="bold"
             android:layout_below="@+id/imageViewMlogo"
             android:layout_centerHorizontal="true"
-            android:onClick="signUpPatient"/>
+            android:onClick="signUpPatient"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/signUpButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_below="@+id/imageViewMlogo"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/patient_portal"
+            android:clickable="true"
+            android:onClick="signUpPatient" />
 
         <View
             android:id="@+id/lnView"

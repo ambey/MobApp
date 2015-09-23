@@ -42,7 +42,20 @@
             android:textStyle="bold"
             android:layout_below="@+id/imageViewMlogo"
             android:layout_centerHorizontal="true"
-            android:onClick="signUpPatient"/>
+            android:onClick="signUpPatient"
+            />
+
+        <ImageView
+            android:id="@+id/signUpButton1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_below="@+id/imageViewMlogo"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/patient_portal"
+            android:clickable="true"
+            android:onClick="signUpPatient"
+            android:visibility="gone"/>
 
         <View
             android:id="@+id/lnView"
@@ -96,6 +109,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:onClick="signUpServProv"
             android:src="@drawable/doctor"
             android:layout_toEndOf="@id/medicalStoreImage"
             android:layout_toRightOf="@id/medicalStoreImage"
@@ -108,6 +123,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/doctorImage"
             android:text="@string/practitionar"
+            android:clickable="true"
+            android:onClick="signUpServProv"
             android:textColor="#000"
             android:layout_toEndOf="@+id/mStoreTextView"
             android:layout_toRightOf="@+id/mStoreTextView"

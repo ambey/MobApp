@@ -58,6 +58,8 @@ public class PatientSignUpActivity extends Activity {
     private Spinner mSpinState;
     private ImageView mImgView;
 
+
+    private Uri mRxUri;
     private static int RESULT_LOAD_IMG = 1;
     private static int REQUEST_CAMERA = 2;
     String imgDecodableString;
@@ -167,11 +169,12 @@ public class PatientSignUpActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         File f = new File(android.os.Environment
                                 .getExternalStorageDirectory(), "temp.jpg");
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                        startActivityForResult(intent, REQUEST_CAMERA);
+                        startActivityForResult(intent, REQUEST_CAMERA);*/
+                        startImageCapture();
                         break;
 
                     case 1:
@@ -188,6 +191,17 @@ public class PatientSignUpActivity extends Activity {
 
         });
         dialogBuilder.create().show();
+    }
+
+    public void startImageCapture() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo = new File(Environment.getExternalStorageDirectory(), "rxCopy.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photo));
+        mRxUri = Uri.fromFile(photo);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 2);
+        }
     }
 
     @Override
