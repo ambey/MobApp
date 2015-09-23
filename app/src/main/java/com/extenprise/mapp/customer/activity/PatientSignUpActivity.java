@@ -169,12 +169,12 @@ public class PatientSignUpActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         File f = new File(android.os.Environment
                                 .getExternalStorageDirectory(), "temp.jpg");
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                        startActivityForResult(intent, REQUEST_CAMERA);*/
-                        startImageCapture();
+                        startActivityForResult(intent, REQUEST_CAMERA);
+                        //startImageCapture();
                         break;
 
                     case 1:
