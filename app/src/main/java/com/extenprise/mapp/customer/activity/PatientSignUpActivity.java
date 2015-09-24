@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,11 +59,10 @@ public class PatientSignUpActivity extends Activity {
     private Spinner mSpinState;
     private ImageView mImgView;
 
-
-    private Uri mRxUri;
     private static int RESULT_LOAD_IMG = 1;
     private static int REQUEST_CAMERA = 2;
     String imgDecodableString;
+    private Bitmap mImgCopy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +87,16 @@ public class PatientSignUpActivity extends Activity {
         mSpinCity = (Spinner)findViewById(R.id.editTextCity);
         mSpinState = (Spinner)findViewById(R.id.editTextState);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
+
+        if (savedInstanceState != null) {
+            Bitmap bitmap = savedInstanceState.getParcelable("image");
+            mImgView.setImageBitmap(bitmap);
+        } else {
+            mImgCopy = (Bitmap) getLastNonConfigurationInstance();
+            if (mImgCopy != null) {
+                mImgView.setImageBitmap(mImgCopy);
+            }
+        }
     }
 
     @Override
@@ -141,6 +151,21 @@ public class PatientSignUpActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        BitmapDrawable drawable = (BitmapDrawable) mImgView.getDrawable();
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            outState.putParcelable("image", bitmap);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return mImgCopy;
+    }
+
     public void showAddressFields(View view) {
         if(mEditTextLoc.getVisibility() == View.VISIBLE) {
             mEditTextLoc.setVisibility(View.GONE);
@@ -193,7 +218,7 @@ public class PatientSignUpActivity extends Activity {
         dialogBuilder.create().show();
     }
 
-    public void startImageCapture() {
+    /*public void startImageCapture() {
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         File photo = new File(Environment.getExternalStorageDirectory(), "rxCopy.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
@@ -202,7 +227,7 @@ public class PatientSignUpActivity extends Activity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 2);
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

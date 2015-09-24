@@ -30,6 +30,8 @@
                 android:layout_height="120dp"
                 android:id="@+id/uploadimageview"
                 android:layout_marginTop="0dp"
+                android:clickable="true"
+                android:onClick="showImageUploadOptions"
                 android:src="@drawable/patient"
                 />
             <TextView
