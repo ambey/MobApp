@@ -219,5 +219,11 @@
     <string name="title_activity_first_flipper">FirstFlipperActivity</string>
 
     <string name="uploadImg">Upload Image</string>
+    <string name="profile_text">View your profile</string>
+    <string name="title_activity_view_profile_main">ViewProfileMain</string>
 
+    <string name="edit_info">Edit Info</string>
+    <string name="edit_wrk">Edit Work\nDetails</string>
+    <string name="edit1">EDIT</string>
+    <string name="education">Education</string>
 </resources>

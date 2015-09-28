@@ -1,0 +1,249 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.extenprise.mapp.service.activity.ViewProfileMain"
+    >
+
+    <TextView
+        android:id="@+id/viewdrLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drLbl"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_alignTop="@+id/imageViewDoctor"
+        android:layout_toRightOf="@+id/imageViewDoctor"
+        android:layout_toEndOf="@+id/imageViewDoctor"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <ImageView
+        android:id="@+id/imageViewDoctor"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:src="@drawable/dr" />
+
+    <TextView
+        android:id="@+id/textViewEditImage"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/p12"
+        android:layout_alignBottom="@+id/imageViewDoctor"
+        android:layout_alignRight="@+id/imageViewDoctor"
+        android:layout_alignEnd="@+id/imageViewDoctor" />
+
+    <TextView
+        android:id="@+id/textviewDocname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/viewdrLbl"
+        android:layout_toRightOf="@+id/viewdrLbl"
+        android:hint="@string/drName"
+        android:textColor="#006600"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"/>
+
+    <View
+        android:id="@+id/linenView"
+        android:layout_width="fill_parent"
+        android:layout_height="0.4dp"
+        android:layout_below="@+id/imageViewDoctor"
+        android:layout_marginTop="20dp"
+        android:background="#9d9d9d" />
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/editpen"
+        android:id="@+id/imageViewEdit1"
+        android:layout_below="@+id/linenView"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/textViewEditImage"
+        android:layout_alignEnd="@+id/textViewEditImage"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_info"
+        android:id="@+id/textViewEdit1"
+        android:layout_below="@+id/imageViewEdit1"
+        android:layout_alignLeft="@+id/imageViewEdit1"
+        android:layout_alignStart="@+id/imageViewEdit1"
+        />
+   <ImageView
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:src="@drawable/editpen"
+    android:id="@+id/imageViewEdit2"
+    android:layout_toEndOf="@+id/textViewEdit1"
+    android:layout_toRightOf="@+id/textViewEdit1"
+    android:layout_below="@+id/linenView"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="70dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_wrk"
+        android:id="@+id/textViewEdit2"
+        android:layout_below="@+id/imageViewEdit2"
+        android:layout_toEndOf="@+id/textViewEdit1"
+        android:layout_toRightOf="@+id/textViewEdit1"
+        android:layout_marginLeft="70dp"
+         />
+
+<ScrollView
+    android:id="@+id/scroll1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/textViewEdit1"
+    android:layout_marginTop="30dp"
+    >
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       >
+
+
+
+       <TextView
+           android:id="@+id/textViewDoc"
+           android:layout_width="fill_parent"
+           android:layout_height="30dp"
+           android:text="@string/drName"
+           android:textSize="16sp"
+           android:background="@drawable/text_backg"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true"
+           android:layout_marginTop="10dp"/>
+       <TextView
+           android:id="@+id/textViewEditDocName"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="12sp"
+           android:text="@string/edit1"
+           android:layout_alignParentTop="true"
+           android:layout_marginTop="18dp"
+           android:layout_toLeftOf="@+id/ViewEditDocName"
+           android:layout_toStartOf="@+id/ViewEditDocName" />
+       <TextView
+           android:id="@+id/ViewEditDocName"
+           android:layout_width="15dp"
+           android:layout_height="15dp"
+           android:background="@drawable/pencil"
+
+           android:layout_marginRight="30dp"
+           android:layout_marginEnd="30dp"
+           android:layout_alignBottom="@+id/textViewEditDocName"
+           android:layout_alignParentRight="true"
+           android:layout_alignParentEnd="true"
+           android:layout_marginLeft="5dp"
+           />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/first_name"
+           android:id="@+id/viewFname"
+           android:layout_below="@+id/textViewDoc"
+           android:layout_marginTop="10dp"
+           android:textSize="14sp"
+           />
+       <TextView
+           android:id="@+id/textViewFName"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/textViewDoc"
+           android:layout_alignParentEnd="true"
+           android:layout_alignParentRight="true"
+           android:hint="@string/first_name"
+           android:layout_marginTop="10dp"
+           android:textSize="14sp"
+           android:textStyle="bold"
+           />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/last_name"
+           android:id="@+id/viewLname"
+           android:layout_below="@+id/viewFname"
+           android:layout_marginTop="5dp"
+           android:textSize="14sp"
+           />
+
+       <TextView
+           android:id="@+id/textViewLName"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/textViewFName"
+           android:layout_alignParentEnd="true"
+           android:layout_alignParentRight="true"
+           android:hint="@string/last_name"
+           android:layout_marginTop="5dp"
+           android:textSize="14sp"
+           android:textStyle="bold"
+         />
+
+       <TextView
+           android:id="@+id/viewEducation"
+           android:layout_width="fill_parent"
+           android:layout_height="30dp"
+           android:text="@string/education"
+           android:textSize="16sp"
+           android:layout_below="@+id/viewLname"
+           android:background="@drawable/text_backg"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true"
+           android:layout_marginTop="20dp"/>
+
+       <TextView
+           android:id="@+id/textViewEditEducation"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="12sp"
+           android:text="@string/edit1"
+           android:layout_marginTop="8dp"
+            android:layout_alignTop="@+id/viewEducation"
+           android:layout_toLeftOf="@+id/viewEditEducation"
+           android:layout_toStartOf="@+id/viewEditEducation"
+        />
+       <TextView
+           android:id="@+id/viewEditEducation"
+           android:layout_width="15dp"
+           android:layout_height="15dp"
+           android:background="@drawable/pencil"
+           android:layout_marginRight="30dp"
+           android:layout_marginEnd="30dp"
+           android:layout_alignTop="@+id/viewEducation"
+           android:layout_alignParentRight="true"
+           android:layout_alignParentEnd="true"
+           android:layout_marginLeft="5dp"
+           android:layout_marginTop="8dp"
+           />
+       <TextView
+           android:id="@+id/textViewEducation"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/viewEducation"
+           android:layout_alignParentStart="true"
+           android:layout_alignParentLeft="true"
+           android:hint="@string/education"
+           android:layout_marginTop="10dp"
+           android:textSize="14sp"
+           android:textStyle="bold"
+           />
+
+
+
+
+
+   </RelativeLayout>
+
+</ScrollView>
+</RelativeLayout>

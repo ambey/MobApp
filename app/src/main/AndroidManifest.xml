@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!--
@@ -232,6 +232,10 @@
         <activity
             android:name=".activity.FirstFlipperActivity"
             android:label="@string/title_activity_first_flipper" >
+        </activity>
+        <activity
+            android:name=".service.activity.ViewProfileMain"
+            android:label="@string/title_activity_view_profile_main" >
         </activity>
     </application>
 
