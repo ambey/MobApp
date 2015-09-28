@@ -226,4 +226,6 @@
     <string name="edit_wrk">Edit Work\nDetails</string>
     <string name="edit1">EDIT</string>
     <string name="education">Education</string>
+    <string name="wrkxp">Work Experience</string>
+
 </resources>
