@@ -237,6 +237,14 @@
             android:name=".service.activity.ViewProfileMain"
             android:label="@string/title_activity_view_profile_main" >
         </activity>
+        <activity
+            android:name=".service.activity.ViewProfileBasicInfo"
+            android:label="@string/title_activity_view_profile_basic_info" >
+        </activity>
+        <activity
+            android:name=".service.activity.ViewProfileWorkDetail"
+            android:label="@string/title_activity_view_profile_work_detail" >
+        </activity>
     </application>
 
 </manifest>

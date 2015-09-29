@@ -228,5 +228,8 @@
     <string name="education">Education</string>
     <string name="wrkxp">Work Experience</string>
     <string name="update">Edited</string>
+    <string name="title_activity_view_profile_basic_info">ViewProfileBasicInfo</string>
+    <string name="con_info">Contact Info</string>
+    <string name="title_activity_view_profile_work_detail">ViewProfileWorkDetail</string>
 
 </resources>
