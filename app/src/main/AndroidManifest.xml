@@ -234,15 +234,15 @@
             android:label="@string/title_activity_first_flipper" >
         </activity>
         <activity
-            android:name=".service.activity.ViewProfileMain"
+            android:name=".service.activity.ServProvViewProfile"
             android:label="@string/title_activity_view_profile_main" >
         </activity>
         <activity
-            android:name=".service.activity.ViewProfileBasicInfo"
+            android:name=".service.activity.ServProvBasicInfo"
             android:label="@string/title_activity_view_profile_basic_info" >
         </activity>
         <activity
-            android:name=".service.activity.ViewProfileWorkDetail"
+            android:name=".service.activity.ServProvViewWorkDetails"
             android:label="@string/title_activity_view_profile_work_detail" >
         </activity>
     </application>

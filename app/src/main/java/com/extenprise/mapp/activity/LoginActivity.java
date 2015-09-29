@@ -309,7 +309,16 @@ public class LoginActivity extends Activity {
                     MappContract.Customer.COLUMN_NAME_LNAME,
                     MappContract.Customer.COLUMN_NAME_EMAIL_ID,
                     MappContract.Customer.COLUMN_NAME_CELLPHONE,
-                    MappContract.Customer.COLUMN_NAME_IMAGE
+                    MappContract.Customer.COLUMN_NAME_IMAGE,
+                    MappContract.Customer.COLUMN_NAME_LOCATION,
+                    MappContract.Customer.COLUMN_NAME_PIN_CODE,
+                    MappContract.Customer.COLUMN_NAME_ID_CITY,
+                    MappContract.Customer.COLUMN_NAME_ID_STATE,
+                    MappContract.Customer.COLUMN_NAME_ID_CUSTOMER,
+                    MappContract.Customer.COLUMN_NAME_WEIGHT,
+                    MappContract.Customer.COLUMN_NAME_AGE,
+                    MappContract.Customer.COLUMN_NAME_DOB,
+                    MappContract.Customer.COLUMN_NAME_HEIGHT
             };
 
             String selection = MappContract.Customer.COLUMN_NAME_CELLPHONE + "=? and " +
@@ -351,7 +360,10 @@ public class LoginActivity extends Activity {
                     MappContract.ServiceProvider.COLUMN_NAME_LNAME,
                     MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID,
                     MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE,
-                    MappContract.ServiceProvider.COLUMN_NAME_IMAGE
+                    MappContract.ServiceProvider.COLUMN_NAME_IMAGE,
+                    MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION,
+                    MappContract.ServiceProvider.COLUMN_NAME_GENDER,
+                    MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER,
             };
 
             String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=? and " +
@@ -374,6 +386,9 @@ public class LoginActivity extends Activity {
                 sp.setEmailId(c.getString(3));
                 sp.setPhone(c.getString(4));
                 sp.setImg(c.getBlob(5));
+                sp.setQualification(c.getString(6));
+                sp.setGender(c.getString(7));
+                sp.setRegNo(c.getString(8));
 
                 LoginHolder.servLoginRef = sp;
             }
