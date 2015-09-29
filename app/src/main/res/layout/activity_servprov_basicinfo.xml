@@ -22,6 +22,98 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <TextView
+            android:id="@+id/viewSpecCatLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:text="@string/spec_cat"
+            android:textSize="16sp"
+            android:background="@drawable/text_backg"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"/>
+        <TextView
+            android:id="@+id/textViewEditSpecCat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="@string/edit1"
+            android:layout_marginTop="8dp"
+            android:layout_alignTop="@+id/viewSpecCatLabel"
+            android:layout_toLeftOf="@+id/viewEditSpecCat"
+            android:layout_toStartOf="@+id/viewEditSpecCat"
+
+            />
+        <TextView
+            android:id="@+id/viewEditSpecCat"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/pencil"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_alignTop="@+id/viewSpecCatLabel"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/viewCategoryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewSpecCatLabel"
+            android:text="@string/cate"
+            android:layout_marginTop="20dp"
+            android:textSize="14sp"/>
+        <Spinner
+            android:id="@+id/spinServProvCategory"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:focusableInTouchMode="true"
+            android:spinnerMode="dropdown"
+            android:layout_below="@+id/viewSpecCatLabel"
+            android:layout_marginBottom="5dp"
+            android:focusable="true"
+            android:background="@drawable/spinner"
+            android:entries="@array/serviceCategory"
+            android:prompt="@string/speciality_doc"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            />
+        <TextView
+            android:id="@+id/viewSpecialityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewCategoryLabel"
+            android:text="@string/speciality_doc"
+            android:layout_marginTop="25dp"
+            android:textSize="14sp"/>
+        <Spinner
+            android:id="@+id/editTextSpeciality"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:spinnerMode="dropdown"
+            android:background="@drawable/spinner"
+            android:layout_marginBottom="5dp"
+            android:choiceMode="singleChoice"
+            android:layout_below="@+id/spinServProvCategory"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+
+            />
+
+
+
+
+
+
         <TextView
             android:id="@+id/viewContinfoLabel"
             android:layout_width="fill_parent"
@@ -31,7 +123,10 @@
             android:background="@drawable/text_backg"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/viewSpecialityLabel"/>
+
+
 
         <TextView
             android:id="@+id/textViewEditContInfo"
@@ -117,7 +212,7 @@
             android:layout_below="@+id/viewEmailLabel"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="30dp"/>
         <TextView
             android:id="@+id/textViewEditBasicInfo"
             android:layout_width="wrap_content"
@@ -170,68 +265,45 @@
             android:enabled="false"
             />
         <TextView
-            android:id="@+id/viewDobLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/viewRegNumLabel"
-            android:text="@string/dob_with_format"
-            android:layout_marginTop="15dp"
-            android:textSize="14sp"/>
-        <EditText
-            android:id="@+id/editTextDob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextRegNum"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:hint="@string/dob"
-            android:layout_marginTop="0dp"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:enabled="false"
-            />
-        <TextView
             android:id="@+id/viewGenderLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/viewDobLabel"
+            android:layout_below="@+id/viewRegNumLabel"
             android:text="@string/gender"
             android:layout_marginTop="15dp"
             android:textSize="14sp"/>
-        <EditText
-            android:id="@+id/editTextGender"
+
+        <RadioGroup
+            android:id="@+id/radioGroupGender"
             android:layout_width="wrap_content"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextDob"
+            android:orientation="horizontal"
+            android:layout_below="@+id/editTextRegNum"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:hint="@string/gender"
-            android:layout_marginTop="0dp"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:enabled="false"
-            />
-        <TextView
-            android:id="@+id/viewCityLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/viewGenderLabel"
-            android:text="@string/live_city"
-            android:layout_marginTop="15dp"
-            android:textSize="14sp"/>
-        <EditText
-            android:id="@+id/editTextCity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextGender"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:hint="@string/live_city"
-            android:layout_marginTop="0dp"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:enabled="false"
-            />
+            >
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male"
+
+                android:focusable="true"
+                android:id="@+id/radioButtonMale"
+                />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Female"
+
+                android:focusable="true"
+                android:id="@+id/radioButtonFemale"
+                android:layout_marginLeft="30dp"
+                />
+        </RadioGroup>
+
 
         <Button
             android:id="@+id/buttonViewUpdate"
@@ -239,7 +311,7 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/viewBasicinfoLabel"
-            android:layout_marginTop="170dp"
+            android:layout_marginTop="100dp"
             android:layout_centerHorizontal="true"
             android:text="@string/update"
             android:background="@drawable/button"

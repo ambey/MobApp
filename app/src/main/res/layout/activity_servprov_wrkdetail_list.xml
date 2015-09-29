@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.extenprise.mapp.service.activity.ServProvWorkDetailList">
+
+    <TextView
+        android:id="@+id/viewWorkDetCount"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:text="@string/count"
+        android:textSize="18sp"
+        android:background="@drawable/text_backg"
+        android:textStyle="bold"
+       />
+    <TextView
+        android:id="@+id/textViewEditWrkDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="@string/edit1"
+        android:layout_marginTop="8dp"
+        android:layout_alignTop="@+id/viewWorkDetCount"
+        android:layout_toLeftOf="@+id/viewEditWrkDetail"
+        android:layout_toStartOf="@+id/viewEditWrkDetail"
+        />
+    <TextView
+        android:id="@+id/viewEditWrkDetail"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/pencil"
+        android:layout_marginRight="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_alignTop="@+id/viewWorkDetCount"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="8dp"
+        />
+    <Spinner
+        android:id="@+id/viewWrkPlaceType"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:spinnerMode="dropdown"
+        android:layout_below="@+id/viewWorkDetCount"
+        android:background="@drawable/spinner"
+        android:entries="@array/work_place_type"
+        android:prompt="@string/work_place_type"
+        />
+    <EditText
+        android:id="@+id/editTextWorkPlaceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewWorkDetCount"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:hint="@string/wrkplace_name"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:enabled="false"
+        />
+
+
+    <Spinner
+        android:id="@+id/viewWrkPlaceCity"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/viewWrkPlaceType"
+        android:spinnerMode="dropdown"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/spinner"
+        android:entries="@array/city"
+        android:prompt="@string/city"
+        />
+
+    <EditText
+        android:id="@+id/editTextWorkPlaceLoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextWorkPlaceName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:hint="@string/wrkplace_loc"
+        android:textSize="14sp"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:enabled="false"
+        />
+
+
+
+
+
+</RelativeLayout>

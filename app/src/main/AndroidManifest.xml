@@ -245,6 +245,10 @@
             android:name=".service.activity.ServProvViewWorkDetails"
             android:label="@string/title_activity_view_profile_work_detail" >
         </activity>
+        <activity
+            android:name=".service.activity.ServProvWorkDetailList"
+            android:label="@string/title_activity_serv_prov_work_detail_list" >
+        </activity>
     </application>
 
 </manifest>

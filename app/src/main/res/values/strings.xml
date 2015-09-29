@@ -236,5 +236,12 @@
     <string name="bas_info">Basic Info</string>
     <string name="reg_num">Registration Number</string>
     <string name="live_city">Lived City</string>
+    <string name="wrk_det">Work Details</string>
+    <string name="spec_cat">Speciality and Category</string>
+    <string name="cate">Category</string>
+    <string name="title_activity_serv_prov_work_detail_list">ServProvWorkDetailList</string>
+    <string name="wrkplace_name">Work Place Name</string>
+    <string name="wrkplace_loc">Work Place Location</string>
+
 
 </resources>
