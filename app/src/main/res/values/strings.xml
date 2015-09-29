@@ -231,5 +231,10 @@
     <string name="title_activity_view_profile_basic_info">ViewProfileBasicInfo</string>
     <string name="con_info">Contact Info</string>
     <string name="title_activity_view_profile_work_detail">ViewProfileWorkDetail</string>
+    <string name="mob_num">Mobile Number</string>
+    <string name="mail_id">Email Id</string>
+    <string name="bas_info">Basic Info</string>
+    <string name="reg_num">Registration Number</string>
+    <string name="live_city">Lived City</string>
 
 </resources>

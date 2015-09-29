@@ -1,7 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ public class ServProvBasicInfo extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_profile_basicinfo);
+        setContentView(R.layout.activity_servprov_basicinfo);
     }
 
     @Override
