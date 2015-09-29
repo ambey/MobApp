@@ -227,5 +227,6 @@
     <string name="edit1">EDIT</string>
     <string name="education">Education</string>
     <string name="wrkxp">Work Experience</string>
+    <string name="update">Edited</string>
 
 </resources>

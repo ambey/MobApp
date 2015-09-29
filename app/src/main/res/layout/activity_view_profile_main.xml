@@ -7,7 +7,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.service.activity.ViewProfileMain"
-    >
+   >
 
     <TextView
         android:id="@+id/viewdrLbl"
@@ -66,8 +66,10 @@
         android:id="@+id/imageViewEdit1"
         android:layout_below="@+id/linenView"
         android:layout_marginTop="10dp"
-        android:layout_alignRight="@+id/textViewEditImage"
-        android:layout_alignEnd="@+id/textViewEditImage"/>
+        android:layout_alignRight="@+id/imageViewDoctor"
+        android:layout_alignEnd="@+id/imageViewDoctor"
+        
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,8 +88,8 @@
     android:layout_toRightOf="@+id/textViewEdit1"
     android:layout_below="@+id/linenView"
     android:layout_marginTop="10dp"
-    android:layout_marginLeft="70dp"
-       android:layout_marginStart="70dp"/>
+    android:layout_marginLeft="60dp"
+       android:layout_marginStart="60dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,8 +98,8 @@
         android:layout_below="@+id/imageViewEdit2"
         android:layout_toEndOf="@+id/textViewEdit1"
         android:layout_toRightOf="@+id/textViewEdit1"
-        android:layout_marginLeft="70dp"
-        android:layout_marginStart="70dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginStart="60dp"
          />
 
 <ScrollView
@@ -305,7 +307,19 @@
            android:layout_marginStart="5dp"
            android:layout_marginLeft="5dp"
            />
-
+       <Button
+            android:id="@+id/buttonViewUpdate"
+           style="?android:textAppearanceSmall"
+           android:layout_width="250dp"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/viewWorkExp"
+           android:layout_marginTop="50dp"
+           android:layout_centerHorizontal="true"
+           android:text="@string/update"
+           android:background="@drawable/button"
+           android:textColor="#fff"
+           android:textSize="18sp"
+           android:textStyle="bold"/>
 
 
    </RelativeLayout>
