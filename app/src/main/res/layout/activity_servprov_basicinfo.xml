@@ -43,6 +43,8 @@
             android:layout_alignTop="@+id/viewContinfoLabel"
             android:layout_toLeftOf="@+id/viewEditContInfo"
             android:layout_toStartOf="@+id/viewEditContInfo"
+            android:clickable="true"
+            android:onClick="editConInfo"
             />
 
         <TextView
@@ -58,6 +60,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:onClick="editConInfo"
             />
         <TextView
             android:id="@+id/viewMobNumLabel"
@@ -78,7 +82,7 @@
             android:layout_marginTop="0dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:editable="false"
+            android:enabled="false"
             android:inputType="number"
             />
 
@@ -101,7 +105,7 @@
             android:layout_marginTop="0dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:editable="false"
+            android:enabled="false"
             />
         <TextView
             android:id="@+id/viewBasicinfoLabel"
@@ -124,6 +128,8 @@
             android:layout_alignTop="@+id/viewBasicinfoLabel"
             android:layout_toLeftOf="@+id/viewEditBasicInfo"
             android:layout_toStartOf="@+id/viewEditBasicInfo"
+            android:clickable="true"
+            android:onClick="editBasicInfo"
             />
 
         <TextView
@@ -139,6 +145,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:onClick="editBasicInfo"
             />
         <TextView
             android:id="@+id/viewRegNumLabel"
@@ -159,7 +167,7 @@
             android:layout_marginTop="0dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:editable="false"
+            android:enabled="false"
             />
         <TextView
             android:id="@+id/viewDobLabel"
@@ -180,7 +188,7 @@
             android:layout_marginTop="0dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:editable="false"
+            android:enabled="false"
             />
         <TextView
             android:id="@+id/viewGenderLabel"
@@ -201,7 +209,7 @@
             android:layout_marginTop="0dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:editable="false"
+            android:enabled="false"
             />
         <TextView
             android:id="@+id/viewCityLabel"
@@ -222,7 +230,7 @@
             android:layout_marginTop="0dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:editable="false"
+            android:enabled="false"
             />
 
         <Button

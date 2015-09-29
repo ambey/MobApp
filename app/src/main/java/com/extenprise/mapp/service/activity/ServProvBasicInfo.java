@@ -4,16 +4,29 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 
 
 public class ServProvBasicInfo extends Activity {
 
+    EditText mMobNo, mEmailID, mRegNo;
+    Spinner mGender;
+    TextView mDOB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_servprov_basicinfo);
+
+        mMobNo = (EditText) findViewById(R.id.editTextMobNum);
+        mEmailID = (EditText) findViewById(R.id.editTextEmail);
+        mDOB = (TextView) findViewById(R.id.editTextDob);
+        //mGender = (Spinner) findViewById(R.id.editTextGender);
+        mRegNo = (EditText) findViewById(R.id.editTextRegNum);
     }
 
     @Override

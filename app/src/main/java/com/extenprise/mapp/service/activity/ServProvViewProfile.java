@@ -13,6 +13,7 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 
 
@@ -38,7 +39,7 @@ public class ServProvViewProfile extends Activity {
         mLname.setText(LoginHolder.servLoginRef.getlName());
         mQualification.setText(LoginHolder.servLoginRef.getQualification());
 
-        LoginHolder.spsspt = DBUtil.getSPSSPT(new MappDbHelper(getApplicationContext()));
+        LoginHolder.spsspt = SearchServProv.getSPSSPT(new MappDbHelper(getApplicationContext()));
         mExp.setText("" + LoginHolder.spsspt.getServProvHasService().getExperience());
     }
 

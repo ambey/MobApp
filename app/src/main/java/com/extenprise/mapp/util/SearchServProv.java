@@ -4,9 +4,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.ArrayAdapter;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasService;
+import com.extenprise.mapp.service.data.Service;
+import com.extenprise.mapp.service.data.ServicePoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -225,6 +230,92 @@ public abstract class SearchServProv {
             return whereClause.substring(3);
         }
         return whereClause;
+    }
+
+    public static ServProvHasServHasServPt getSPSSPT(MappDbHelper dbHelper) {
+
+        ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
+        ServProvHasService sps = new ServProvHasService();
+        Service s = new Service();
+        ServicePoint sp = new ServicePoint();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] selectionArgs = {
+                "" + LoginHolder.servLoginRef.getIdServiceProvider()
+        };
+        Cursor c = db.rawQuery(getSPSSPTQuery(), selectionArgs);
+
+        int count = c.getCount();
+        if (count > 0) {
+            c.moveToFirst();
+            spsspt.setWeeklyOff(c.getString(0));
+            spsspt.setStartTime(Integer.parseInt(c.getString(1)));
+            spsspt.setEndTime(Integer.parseInt(c.getString(2)));
+            spsspt.setServPointType(c.getString(3));
+            spsspt.setConsultFee(Float.parseFloat(c.getString(4)));
+
+            s.setSpeciality(c.getString(6));
+            sps.setExperience(Float.parseFloat(c.getString(7)));
+            s.setServCatagory(c.getString(8));
+            sps.setService(s);
+
+            sp.setEmailId(c.getString(9));
+            sp.setCity(c.getString(10));
+            sp.setPhone(c.getString(11));
+            sp.setAltPhone(c.getString(12));
+            sp.setName(c.getString(13));
+            sp.setLocation(c.getString(14));
+
+            spsspt.setServicePoint(sp);
+            spsspt.setServProvHasService(sps);
+        }
+        c.close();
+
+        return spsspt;
+    }
+
+    private static String getSPSSPTQuery() {
+        return "select " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + ", " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME + ", " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + ", " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + ", " +
+
+                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME + ", " +
+                MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + ", " +
+                MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE + ", " +
+                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + ", " +
+
+                MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID + ", " +
+                MappContract.ServicePoint.COLUMN_NAME_ID_CITY + ", " +
+                MappContract.ServicePoint.COLUMN_NAME_PHONE + ", " +
+                MappContract.ServicePoint.COLUMN_NAME_ALT_PHONE + ", " +
+                MappContract.ServicePoint.COLUMN_NAME_NAME + ", " +
+                MappContract.ServicePoint.COLUMN_NAME_LOCATION +
+
+                " from " +
+                MappContract.ServProvHasServ.TABLE_NAME + ", " +
+                MappContract.ServicePoint.TABLE_NAME + ", " +
+                MappContract.ServProvHasServHasServPt.TABLE_NAME +
+
+                " where " +
+                MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV + " = ? and " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV + " = " +
+                MappContract.ServProvHasServ.TABLE_NAME + "." +
+                MappContract.ServProvHasServ._ID + " and " +
+                MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT + " = " +
+                MappContract.ServicePoint.TABLE_NAME + "." +
+                MappContract.ServicePoint._ID;
+    }
+
+    public static boolean viewWorkPlaces(MappDbHelper dbHelper) {
+        String[] selectionArgs = {
+                "" + LoginHolder.servLoginRef.getIdServiceProvider()
+        };
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        cursor = db.rawQuery(getSPSSPTQuery(), selectionArgs);
+        return (cursor.getCount() > 0);
     }
 
 }
