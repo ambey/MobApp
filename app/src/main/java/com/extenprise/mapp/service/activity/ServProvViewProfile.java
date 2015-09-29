@@ -1,7 +1,9 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
@@ -69,11 +72,31 @@ public class ServProvViewProfile extends Activity {
     public void updateProfile(View view) {
 
 
-        mFname.setEnabled(false);
-        mLname.setEnabled(false);
-        mQualification.setEnabled(false);
-        mExp.setEnabled(false);
-        UIUtility.showAlert(this, "", "Updated");
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String where = MappContract.ServiceProvider._ID + " = ? ";
+        String[] selectionArgs = {
+                "" + LoginHolder.servLoginRef.getIdServiceProvider()
+        };
+
+        ContentValues values = new ContentValues();
+        values.put(MappContract.ServiceProvider.COLUMN_NAME_FNAME, mFname.getText().toString());
+        values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, mLname.getText().toString());
+        values.put(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION, mQualification.getText().toString());
+
+        int affectedRows = db.update(MappContract.ServiceProvider.TABLE_NAME, values, where, selectionArgs);
+
+        if(affectedRows != 0) {
+            mFname.setEnabled(false);
+            mLname.setEnabled(false);
+            mQualification.setEnabled(false);
+
+
+            UIUtility.showAlert(this, "", "Updated");
+        } else {
+            UIUtility.showAlert(this, "", "Not Updated");
+        }
     }
 
     @Override
