@@ -227,7 +227,7 @@
     <string name="edit1">EDIT</string>
     <string name="education">Education</string>
     <string name="wrkxp">Work Experience</string>
-    <string name="update">Edited</string>
+    <string name="update">Update</string>
     <string name="title_activity_view_profile_basic_info">ViewProfileBasicInfo</string>
     <string name="con_info">Contact Info</string>
     <string name="title_activity_view_profile_work_detail">ViewProfileWorkDetail</string>
@@ -249,6 +249,9 @@
     <string name="end_tm">End Time</string>
     <string name="pract_day">Practise Days</string>
     <string name="title_activity_serv_prove_profile">ServProveProfile</string>
+
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
 
 </resources>

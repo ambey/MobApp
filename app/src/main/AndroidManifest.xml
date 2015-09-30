@@ -251,7 +251,11 @@
         </activity>
         <activity
             android:name=".service.activity.ServProvProfile"
-            android:label="@string/title_activity_serv_prove_profile" >
+            android:label="@string/title_activity_serv_prove_profile"
+            android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.extenprise.mapp.service.activity.ServiceProviderHomeActivity" />
         </activity>
     </application>
 

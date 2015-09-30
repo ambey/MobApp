@@ -61,7 +61,7 @@ public class PatientSignUpActivity extends Activity {
 
     private static int RESULT_LOAD_IMG = 1;
     private static int REQUEST_CAMERA = 2;
-    String imgDecodableString;
+    private String imgDecodableString;
     private Bitmap mImgCopy;
 
     @Override
