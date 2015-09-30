@@ -249,6 +249,7 @@
     <string name="end_tm">End Time</string>
     <string name="pract_day">Practise Days</string>
     <string name="title_activity_serv_prove_profile">ServProveProfile</string>
+    <string name="conf">Confirm</string>
 
     <string name="male">Male</string>
     <string name="female">Female</string>

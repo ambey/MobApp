@@ -105,5 +105,16 @@
             android:onClick="showScannedRxScreen"
             android:text="@string/upload_rx" />
 
+
     </LinearLayout>
+    <Button
+        android:id="@+id/confirmDocAppButton"
+        style="@style/RoundButton"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonLayout"
+        android:text="@string/conf"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>
