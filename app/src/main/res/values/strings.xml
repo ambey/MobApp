@@ -242,6 +242,12 @@
     <string name="title_activity_serv_prov_work_detail_list">ServProvWorkDetailList</string>
     <string name="wrkplace_name">Work Place Name</string>
     <string name="wrkplace_loc">Work Place Location</string>
+    <string name="phn_num1">Phone Number 1</string>
+    <string name="phn_num2">Phone Number 2</string>
+    <string name="wrkhrs">Work Hours</string>
+    <string name="strt_tm">Start Time</string>
+    <string name="end_tm">End Time</string>
+    <string name="pract_day">Practise Days</string>
     <string name="title_activity_serv_prove_profile">ServProveProfile</string>
 
 

@@ -178,7 +178,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:enabled="false"
-            android:inputType="number"
+            android:inputType="phone"
             />
 
         <TextView

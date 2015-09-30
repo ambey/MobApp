@@ -73,7 +73,6 @@
         android:layout_marginTop="5dp"
         android:layout_below="@+id/viewWrkPlaceType"
         android:spinnerMode="dropdown"
-        android:layout_marginBottom="5dp"
         android:background="@drawable/spinner"
         android:entries="@array/city"
         android:prompt="@string/city"
@@ -91,7 +90,165 @@
         android:layout_marginTop="15dp"
         android:textStyle="bold"
         android:enabled="false"
+
         />
+
+
+    <TextView
+        android:id="@+id/viewPhnum1Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewWrkPlaceCity"
+        android:text="@string/phn_num1"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"/>
+    <EditText
+        android:id="@+id/editTextPhnum1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextWorkPlaceLoc"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:hint="@string/phn_num1"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:enabled="false"
+        android:inputType="phone"
+        />
+
+    <TextView
+        android:id="@+id/viewPhnum2Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewPhnum1Label"
+        android:text="@string/phn_num2"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"/>
+    <EditText
+        android:id="@+id/editTextPhnum2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPhnum1"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:hint="@string/phn_num1"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:enabled="false"
+        android:inputType="phone"
+        />
+    <TextView
+        android:id="@+id/viewEmailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewPhnum2Label"
+        android:text="@string/mail_id"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"/>
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPhnum2"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:hint="@string/mail_id"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:enabled="false"
+        android:inputType="phone"
+        />
+    <TextView
+        android:id="@+id/viewWorkHrsLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:text="@string/wrkhrs"
+        android:textSize="16sp"
+        android:background="@drawable/text_backg"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/viewEmailLabel"
+        />
+    <Button
+        android:id="@+id/buttonStartTime"
+        android:layout_width="160dp"
+
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_height="40dp"
+        android:layout_below="@+id/viewWorkHrsLabel"
+        android:text="@string/strt_tm"
+        android:onClick="showStartTimePicker"
+        />
+    <Button
+        android:id="@+id/buttonEndTime"
+        android:layout_width="160dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_height="40dp"
+        android:layout_below="@+id/viewWorkHrsLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/end_tm"
+        android:onClick="showEndTimePicker"
+        />
+    <TextView
+        android:id="@+id/viewpractDaysLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonStartTime"
+        android:text="@string/pract_day"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"/>
+    <TextView
+        android:id="@+id/textViewPractiseDays"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/pract_day"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/buttonEndTime"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        />
+    <Button
+        android:id="@+id/buttonPractDays"
+        android:background="@drawable/spinner"
+        android:layout_width="160dp"
+        android:text="@string/select_days"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewPractiseDays"
+        android:layout_marginTop="10dp"
+        />
+    <TextView
+        android:id="@+id/viewConsFeesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonPractDays"
+        android:text="@string/consult_fees"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"/>
+    <EditText
+        android:id="@+id/editTextConsFees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonPractDays"
+        android:layout_alignLeft="@+id/buttonPractDays"
+        android:hint="@string/mail_id"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:enabled="false"
+        android:inputType="number"
+        />
+
+
+
+
+
+
 
 
 

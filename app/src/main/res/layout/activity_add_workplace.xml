@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/background"
     tools:context=".ServProvSignUpActivity">
 
 
@@ -14,30 +14,30 @@
         android:id="@+id/spinServiceProvCategory"
         android:layout_width="170dp"
         android:layout_height="40dp"
-        android:padding="5dp"
-        android:focusableInTouchMode="true"
-        android:spinnerMode="dropdown"
         android:layout_marginBottom="5dp"
-        android:focusable="true"
         android:background="@drawable/spinner"
         android:entries="@array/serviceCategory"
-        android:prompt="@string/speciality_doc" />
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="5dp"
+        android:prompt="@string/speciality_doc"
+        android:spinnerMode="dropdown" />
 
 
     <Spinner
         android:id="@+id/editTextSpeciality"
         android:layout_width="170dp"
         android:layout_height="40dp"
-        android:padding="5dp"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/spinner"
         android:layout_marginBottom="5dp"
-        android:choiceMode="singleChoice"
         android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/spinServiceProvCategory"
-        android:layout_toRightOf="@+id/spinServiceProvCategory"/>
+        android:layout_toRightOf="@+id/spinServiceProvCategory"
+        android:background="@drawable/spinner"
+        android:choiceMode="singleChoice"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="5dp"
+        android:spinnerMode="dropdown" />
     <!-- <EditText
          android:id="@+id/editTextSpeciality"
          android:layout_width="220dp"
@@ -52,15 +52,15 @@
         android:id="@+id/editTextExperience"
         android:layout_width="170dp"
         android:layout_height="25dp"
-        android:hint="@string/experience"
-        android:background="@drawable/text"
-        android:textSize="18dp"
-        android:inputType="number"
         android:layout_below="@+id/editTextSpeciality"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/editTextQualification"
         android:layout_toRightOf="@+id/editTextQualification"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="8dp"/>
+        android:background="@drawable/text"
+        android:hint="@string/experience"
+        android:inputType="number"
+        android:textSize="18dp" />
 
 
     <EditText
@@ -69,38 +69,37 @@
         android:layout_height="25dp"
         android:layout_below="@+id/spinServiceProvCategory"
         android:layout_marginTop="20dp"
-        android:padding="4dp"
-        android:hint="@string/qualification"
         android:background="@drawable/text"
-        android:textSize="18dp"/>
-
+        android:hint="@string/qualification"
+        android:padding="4dp"
+        android:textSize="18dp" />
 
 
     <TextView
         android:id="@+id/viewWorkPlaceDetLbl"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
-        android:textSize="20dp"
         android:layout_below="@+id/editTextQualification"
-        android:text="@string/work_place_details"
-        android:onClick="showWorkFields"
-        android:clickable="true"
-        android:background="@drawable/label"
         android:layout_marginTop="30dp"
-        android:textColor="#fff"/>
+        android:background="@drawable/label"
+        android:clickable="true"
+        android:onClick="showWorkFields"
+        android:text="@string/work_place_details"
+        android:textColor="#fff"
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/viewWorkPlaceCount"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:text="@string/count"
-        android:onClick="showWorkFields"
-        android:clickable="true"
-        android:textSize="18dp"
-        android:textColor="#fff"
-        android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
         android:layout_alignLeft="@+id/editTextSpeciality"
-        android:layout_alignStart="@+id/editTextSpeciality" />
+        android:layout_alignStart="@+id/editTextSpeciality"
+        android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
+        android:clickable="true"
+        android:onClick="showWorkFields"
+        android:text="@string/count"
+        android:textColor="#fff"
+        android:textSize="18dp" />
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -116,251 +115,259 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewWorkPlaceDetLbl">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editTextName"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/name"
-                android:inputType="textAutoComplete"
-                android:visibility="gone"
-                />
-
-            <Spinner
-                android:id="@+id/viewWorkPlaceType"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/editTextName"
-                android:layout_toRightOf="@+id/editTextName"
-                android:spinnerMode="dropdown"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/spinner"
-                android:entries="@array/work_place_type"
-                android:prompt="@string/work_place_type"
-                android:visibility="gone"/>
-
-            <EditText
-                android:id="@+id/editTextLoc"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextName"
-                android:hint="@string/loc"
-
-                android:inputType="textAutoComplete"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"
-               />
-
-            <Spinner
-                android:id="@+id/editTextCity"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/editTextLoc"
-                android:layout_toRightOf="@+id/editTextLoc"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@+id/viewWorkPlaceType"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
-
-                android:spinnerMode="dropdown"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/spinner"
-                android:entries="@array/city"
-                android:prompt="@string/city"
-                android:visibility="gone"
-                />
-
-            <EditText
-                android:id="@+id/editTextPhone1"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextLoc"
-                android:hint="@string/phone1"
-                android:inputType="phone"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
-
-            <EditText
-                android:id="@+id/editTextPhone2"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextCity"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/editTextPhone1"
-                android:layout_toEndOf="@+id/editTextPhone1"
-                android:hint="@string/phone2"
-                android:layout_marginTop="10dp"
-                android:inputType="phone"
-                android:visibility="gone"/>
-
-            <EditText
-                android:id="@+id/editTextEmail"
+            <RelativeLayout
+                android:id="@+id/relLayout2"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextPhone1"
-                android:hint="@string/email"
+                android:layout_height="wrap_content">
 
-                android:inputType="textEmailAddress"
-                android:visibility="gone"/>
+                <EditText
+                    android:id="@+id/editTextName"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/name"
+                    android:inputType="textAutoComplete" />
+
+                <Spinner
+                    android:id="@+id/viewWorkPlaceType"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+     android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@+id/editTextName"
+                    android:background="@drawable/spinner"
+                    android:entries="@array/work_place_type"
+                    android:padding="5dp"
+                    android:prompt="@string/work_place_type"
+                    android:spinnerMode="dropdown" />
+
+                <EditText
+                    android:id="@+id/editTextLoc"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextName"
+                    android:layout_marginTop="10dp"
+
+                    android:hint="@string/loc"
+                    android:inputType="textAutoComplete" />
+
+                <Spinner
+                    android:id="@+id/editTextCity"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/viewWorkPlaceType"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/editTextLoc"
+                    android:layout_toRightOf="@+id/editTextLoc"
+android:layout_alignBottom="@+id/editTextLoc"
+                    android:background="@drawable/spinner"
+                    android:entries="@array/city"
+                    android:padding="5dp"
+                    android:prompt="@string/city"
+                    android:spinnerMode="dropdown" />
+
+                <EditText
+                    android:id="@+id/editTextPhone1"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextLoc"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/phone1"
+                    android:inputType="phone" />
+
+                <EditText
+                    android:id="@+id/editTextPhone2"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextCity"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/editTextPhone1"
+                    android:layout_toRightOf="@id/editTextPhone1"
+                    android:hint="@string/phone2"
+                    android:inputType="phone" />
+
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextPhone1"
+                    android:hint="@string/email"
+
+                    android:inputType="textEmailAddress" />
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
-                android:textSize="20dp"
                 android:layout_below="@id/editTextEmail"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/label"
+                android:clickable="true"
                 android:onClick="showtimeFields"
-                android:clickable="true"
                 android:text="@string/work_hrs"
-                android:background="@drawable/label"
-                android:textColor="#fff" />
-
-            <Button
-                android:id="@+id/buttonStartTime"
-                android:layout_width="170dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/viewWorkHrsLbl"
-                android:text="@string/start_time"
-                android:onClick="showStartTimePicker"
-                android:visibility="gone"
-
-                />
-
-            <Button
-                android:id="@+id/buttonEndTime"
-                android:layout_width="170dp"
-                android:focusableInTouchMode="true"
-                android:focusable="true"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/buttonStartTime"
-                android:layout_toRightOf="@+id/buttonStartTime"
-                android:layout_marginLeft="8dp"
-                android:text="@string/end_time"
-                android:onClick="showEndTimePicker"
-                android:layout_below="@+id/viewWorkHrsLbl"
-                android:visibility="gone"
-                />
-
-            <TextView
-                android:id="@+id/viewWeeklyOffLbl"
-                android:layout_width="160dp"
-                android:layout_below="@id/buttonStartTime"
-                android:layout_height="30dp"
-                android:textSize="20dp"
-                android:layout_marginTop="30dp"
-                android:onClick="showDaysFields"
-                android:clickable="true"
-                android:text="@string/practice_days"
-                android:background="@drawable/label"
                 android:textColor="#fff"
-                />
+                android:textSize="20dp" />
 
-            <!--<Spinner
-                android:id="@+id/editTextWeeklyOff"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/viewWeeklyOffLbl"
-                android:background="@drawable/spinner"
+                android:orientation="vertical">
 
-                android:entries="@array/days"
-                android:prompt="@string/weekly_off" />-->
-            <TextView
-                android:id="@+id/viewConsultationFees"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:textSize="20dp"
-                android:text="@string/consult_fees"
-                android:background="@drawable/label"
-                android:textColor="#fff"
-                android:onClick="showFeeFields"
-                android:clickable="true"
-                android:layout_below="@+id/buttonStartTime"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="8dp"
-                android:layout_toEndOf="@+id/viewWeeklyOffLbl"
-                android:layout_toRightOf="@+id/viewWeeklyOffLbl"/>
+                <LinearLayout
+                    android:id="@+id/layoutWorkHrs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editTextEmail"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/viewRsSign"
-                android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/buttonStartTime"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:onClick="showStartTimePicker"
+
+                        android:text="@string/start_time" />
+
+                    <Button
+                        android:id="@+id/buttonEndTime"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:onClick="showEndTimePicker"
+                        android:text="@string/end_time" />
+                </LinearLayout>
+
+                <!--
+                            <TextView
+                                android:id="@+id/viewWeeklyOffLbl"
+                                android:layout_width="160dp"
+                                android:layout_height="30dp"
+                                android:layout_below="@id/buttonStartTime"
+                                android:layout_marginTop="30dp"
+                                android:background="@drawable/label"
+                                android:clickable="true"
+                                android:onClick="showDaysFields"
+                                android:text="@string/practice_days"
+                                android:textColor="#fff"
+                                android:textSize="20dp" />
+                -->
+
+                <!--<Spinner
+                    android:id="@+id/editTextWeeklyOff"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/viewWeeklyOffLbl"
+                    android:background="@drawable/spinner"
+
+                    android:entries="@array/days"
+                    android:prompt="@string/weekly_off" />-->
+                <!--
+                            <TextView
+                                android:id="@+id/viewConsultationFees"
+                                android:layout_width="170dp"
+                                android:layout_height="30dp"
+                                android:layout_below="@+id/buttonStartTime"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="30dp"
+                                android:layout_toEndOf="@+id/viewWeeklyOffLbl"
+                                android:layout_toRightOf="@+id/viewWeeklyOffLbl"
+                                android:background="@drawable/label"
+                                android:clickable="true"
+                                android:onClick="showFeeFields"
+                                android:text="@string/consult_fees"
+                                android:textColor="#fff"
+                                android:textSize="20dp" />
+                -->
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layoutWorkHrs"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        android:id="@+id/editTextWeeklyOff"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/spinner"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:text="@string/practice_days" />
+
+
+                    <TextView
+                        android:id="@+id/viewRsSign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/editTextConsultationFees"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/editTextWeeklyOff"
+                        android:layout_toRightOf="@+id/editTextWeeklyOff"
+                        android:text="@string/rs_sign"
+                        android:textSize="15sp" />
+
+                    <EditText
+
+                        android:id="@+id/editTextConsultationFees"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/viewRsSign"
+                        android:layout_toRightOf="@+id/viewRsSign"
+                        android:hint="@string/consult_fees"
+                        android:inputType="number" />
+
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_below="@+id/viewConsultationFees"
-                android:text="@string/rs_sign"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="180dp"
-                android:visibility="gone"
-                />
+                android:orientation="horizontal">
 
-            <EditText
+                <Button
+                    android:id="@+id/buttonAddWorkPlace"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button"
+                    android:onClick="addNewWorkPlace"
+                    android:text="@string/add_another"
+                    android:textColor="#fff" />
 
-                android:id="@+id/editTextConsultationFees"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/consult_fees"
-                android:inputType="number"
-                android:layout_marginLeft="0dp"
-                android:visibility="gone"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/viewRsSign"
-                android:layout_toRightOf="@+id/viewRsSign"
-                android:layout_below="@+id/viewConsultationFees"
+                <Button
+                    android:id="@+id/buttonDone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
 
-                 />
-
-
-            <Button
-                android:id="@+id/editTextWeeklyOff"
-                android:background="@drawable/spinner"
-                android:layout_width="160.0dip"
-                android:text="@string/select_days"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_height="30dp"
-                android:visibility="gone"
-                android:layout_below="@+id/viewWeeklyOffLbl"
-                android:layout_marginTop="10dp"
-               />
-
-            <Button
-                android:id="@+id/buttonAddWorkPlace"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/editTextWeeklyOff"
-                android:padding="10dp"
-                android:background="@drawable/button"
-                android:onClick="addNewWorkPlace"
-                android:text="@string/add_another"
-                android:textColor="#fff"
-                android:layout_marginTop="50dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"/>
-
-            <Button
-                android:id="@+id/buttonDone"
-                android:layout_width="150dp"
-                android:layout_height="65dp"
-                android:padding="10dp"
-                android:background="@drawable/button"
-                android:onClick="registerDone"
-                android:text="@string/done1"
-                android:textColor="#fff"
-                android:layout_marginLeft="30dp"
-                android:layout_toRightOf="@+id/buttonAddWorkPlace"
-                android:layout_toEndOf="@+id/buttonAddWorkPlace"
-                android:layout_alignTop="@+id/buttonAddWorkPlace" />
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button"
+                    android:onClick="registerDone"
+                    android:text="@string/done1"
+                    android:textColor="#fff" />
+            </LinearLayout>
 
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>
