@@ -57,27 +57,7 @@ public abstract class SearchServProv {
     }
 
     private static String getQuery(String whereClause) {
-        String query = "select " +
-                MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider._ID + ", " +
-                MappContract.ServiceProvider.COLUMN_NAME_FNAME + ", " +
-                MappContract.ServiceProvider.COLUMN_NAME_LNAME + ", " +
-                MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + ", " +
-                MappContract.ServiceProvider.COLUMN_NAME_GENDER + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + ", " +
-                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME + ", " +
-                MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + ", " +
-                MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE + ", " +
-                MappContract.ServicePoint.COLUMN_NAME_NAME + ", " +
-                MappContract.ServicePoint.COLUMN_NAME_LOCATION + " from " +
-
-                MappContract.ServiceProvider.TABLE_NAME + ", " +
-                MappContract.ServProvHasServ.TABLE_NAME + ", " +
-                MappContract.ServicePoint.TABLE_NAME + ", " +
-                MappContract.ServProvHasServHasServPt.TABLE_NAME + " where ";
+        String query = select_from_where() ;
 
         if (!whereClause.equals("")) {
             query += whereClause + " and ";
@@ -234,6 +214,14 @@ public abstract class SearchServProv {
 
     public static ServProvHasServHasServPt getSPSSPT(MappDbHelper dbHelper) {
 
+        String id = "";
+        String whereClause = MappContract.ServiceProvider.TABLE_NAME + "." +
+                MappContract.ServiceProvider._ID + " = ? ";
+
+        if(LoginHolder.servLoginRef != null) {
+            id = "" + LoginHolder.servLoginRef.getIdServiceProvider();
+        }
+
         ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
         ServProvHasService sps = new ServProvHasService();
         Service s = new Service();
@@ -241,9 +229,9 @@ public abstract class SearchServProv {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] selectionArgs = {
-                "" + LoginHolder.servLoginRef.getIdServiceProvider()
+                id
         };
-        Cursor c = db.rawQuery(getSPSSPTQuery(), selectionArgs);
+        Cursor c = db.rawQuery(getQuery(whereClause), selectionArgs);
 
         int count = c.getCount();
         if (count > 0) {
@@ -269,13 +257,31 @@ public abstract class SearchServProv {
             spsspt.setServicePoint(sp);
             spsspt.setServProvHasService(sps);
         }
+        cursor = c;
         c.close();
-
         return spsspt;
     }
 
-    private static String getSPSSPTQuery() {
+    public static boolean viewWorkPlaces(MappDbHelper dbHelper) {
+        String id = "";
+        String whereClause = MappContract.ServiceProvider.TABLE_NAME + "." +
+                MappContract.ServiceProvider._ID + " = ? ";
+
+        if(LoginHolder.servLoginRef != null) {
+            id = "" + LoginHolder.servLoginRef.getIdServiceProvider();
+        }
+        String[] selectionArgs = {
+                id
+        };
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        cursor = db.rawQuery(getQuery(whereClause), selectionArgs);
+        return (cursor.getCount() > 0);
+    }
+
+    private static String select_from_where() {
+
         return "select " +
+
                 MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + ", " +
                 MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME + ", " +
                 MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + ", " +
@@ -292,30 +298,22 @@ public abstract class SearchServProv {
                 MappContract.ServicePoint.COLUMN_NAME_PHONE + ", " +
                 MappContract.ServicePoint.COLUMN_NAME_ALT_PHONE + ", " +
                 MappContract.ServicePoint.COLUMN_NAME_NAME + ", " +
-                MappContract.ServicePoint.COLUMN_NAME_LOCATION +
+                MappContract.ServicePoint.COLUMN_NAME_LOCATION + ", " +
 
-                " from " +
+                MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider._ID + ", " +
+                MappContract.ServiceProvider.COLUMN_NAME_FNAME + ", " +
+                MappContract.ServiceProvider.COLUMN_NAME_LNAME + ", " +
+                MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID + ", " +
+                MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + ", " +
+                MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER + ", " +
+                MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + ", " +
+                MappContract.ServiceProvider.COLUMN_NAME_GENDER
+
+                + " from " +
+                MappContract.ServiceProvider.TABLE_NAME + ", " +
                 MappContract.ServProvHasServ.TABLE_NAME + ", " +
                 MappContract.ServicePoint.TABLE_NAME + ", " +
-                MappContract.ServProvHasServHasServPt.TABLE_NAME +
-
-                " where " +
-                MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV + " = ? and " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV + " = " +
-                MappContract.ServProvHasServ.TABLE_NAME + "." +
-                MappContract.ServProvHasServ._ID + " and " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT + " = " +
-                MappContract.ServicePoint.TABLE_NAME + "." +
-                MappContract.ServicePoint._ID;
-    }
-
-    public static boolean viewWorkPlaces(MappDbHelper dbHelper) {
-        String[] selectionArgs = {
-                "" + LoginHolder.servLoginRef.getIdServiceProvider()
-        };
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        cursor = db.rawQuery(getSPSSPTQuery(), selectionArgs);
-        return (cursor.getCount() > 0);
+                MappContract.ServProvHasServHasServPt.TABLE_NAME + " where ";
     }
 
 }

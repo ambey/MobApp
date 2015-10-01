@@ -2,31 +2,35 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.database.MergeCursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +38,8 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
 import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchServProv;
@@ -46,18 +50,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 
-public class ServProvProfile extends Activity {
+public class ServProvProfileMain extends Activity {
 
     private EditText mMobNo, mEmailID, mRegNo;
     private TextView mDocName;
     private EditText mFname, mLname, mQualification, mExp;
     private RadioGroup mGender;
-    private RadioButton mMale, mFemale;
+    private RadioButton mMale, mFemale, mGenderBtn;
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
-
+    private ListView listView;
+    private View mFormView;
+    private View mProgressView;
     private ImageView mImgView;
 
     private static int RESULT_LOAD_IMG = 1;
@@ -68,8 +74,13 @@ public class ServProvProfile extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_serv_prove_profile);
+        setContentView(R.layout.activity_serv_prov_profile_main);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //LoginHolder.spsspt = SearchServProv.getSPSSPT(new MappDbHelper(getApplicationContext()));
+
+        mFormView = findViewById(R.id.updateServProvform);
+        mProgressView = findViewById(R.id.progressView);
 
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
@@ -86,6 +97,7 @@ public class ServProvProfile extends Activity {
         mMale = (RadioButton) findViewById(R.id.radioButtonMale);
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
+        listView = (ListView) findViewById(R.id.workDetailListView);
 
         showPersonalInfo();
         showWorkPlaceList();
@@ -117,12 +129,12 @@ public class ServProvProfile extends Activity {
         } else {
             mFemale.setSelected(true);
         }
-
-        LoginHolder.spsspt = SearchServProv.getSPSSPT(new MappDbHelper(getApplicationContext()));
-        mExp.setText("" + LoginHolder.spsspt.getServProvHasService().getExperience());
+        Cursor cursor = SearchServProv.getCursor();
+        mExp.setText(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE)));
     }
 
     private void showWorkPlaceList() {
+
         final Cursor cursor = SearchServProv.getCursor();
 
         String[] values = new String[] {
@@ -176,13 +188,17 @@ public class ServProvProfile extends Activity {
                 TextView mTextViewEdit = (TextView) findViewById(R.id.textViewEditWrkDetail);
                 TextView mViewEdit = (TextView) findViewById(R.id.viewEditWrkDetail);
 
-
-
+                mTextViewEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editWorkPlaceInfo();
+                    }
+                });
                 return view;
             }
         };
 
-        ListView listView = (ListView) findViewById(R.id.workDetailListView);
+
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
         listView.setAdapter(adapter);
     }
@@ -201,18 +217,103 @@ public class ServProvProfile extends Activity {
         openPersonalInfo(view);
     }
 
-    public void editWorkPlaceInfo(View view) {
-        mFname.setEnabled(true);
-        mLname.setEnabled(true);
-        mMobNo.setEnabled(true);
-        mEmailID.setEnabled(true);
-        mQualification.setEnabled(true);
-        mExp.setEnabled(true);
-        mRegNo.setEnabled(true);
+    public void editWorkPlaceInfo() {
+
+        int[] editTxtIds = new int[] {
+                R.id.editTextQualification,
+                R.id.editTextExperience,
+                R.id.editTextName,
+                R.id.editTextLoc,
+                R.id.editTextPhone1,
+                R.id.editTextPhone2,
+                R.id.editTextEmail,
+                R.id.editTextConsultationFees
+        };
+        for (int editTxtId : editTxtIds) {
+            EditText txt = (EditText) findViewById(editTxtId);
+            txt.setEnabled(true);
+        }
+
+        int[] buttonIds = new int[] {
+                R.id.buttonStartTime,
+                R.id.buttonEndTime,
+                R.id.editTextWeeklyOff
+        };
+        for (int buttonId : buttonIds) {
+            Button btn = (Button) findViewById(buttonId);
+            btn.setEnabled(true);
+        }
+
+        int[] spinnerIds = new int[] {
+                R.id.spinServiceProvCategory,
+                R.id.editTextSpeciality,
+                R.id.viewWorkPlaceType,
+                R.id.editTextCity
+        };
+        for (int spinnerId : spinnerIds) {
+            Button btn = (Button) findViewById(spinnerId);
+            btn.setEnabled(true);
+        }
     }
 
     public void addNewWorkPlace(View view) {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
 
+        //TO DO
+
+        //adapter.add("another row");
+
+        //ListAdapter adp = listView.getAdapter();
+
+
+
+        /*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
+        extras.addRow(new String[] { "-1", "New Template" });
+        extras.addRow(new String[] { "-2", "Empty Template" });
+        Cursor[] cursors = { extras, SearchServProv.getCursor() };
+        Cursor extendedCursor = new MergeCursor(cursors);
+*/
+        adapter.notifyDataSetChanged();
+
+
+    }
+
+    public void removeWorkPlace(View view) {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
+
+        //TO DO
+
+        //adapter.add("another row");
+
+        //ListAdapter adp = listView.getAdapter();
+
+
+
+        /*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
+        extras.addRow(new String[] { "-1", "New Template" });
+        extras.addRow(new String[] { "-2", "Empty Template" });
+        Cursor[] cursors = { extras, SearchServProv.getCursor() };
+        Cursor extendedCursor = new MergeCursor(cursors);
+*/
+        adapter.notifyDataSetChanged();
+
+
+    }
+
+    public void updateProfile(View view) {
+
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        int count = adapter.getCount();
+
+        //TO DO
+
+        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        int uTypeID = mGender.getCheckedRadioButtonId();
+        mGenderBtn = (RadioButton)findViewById(uTypeID);
+        SaveServiceData task = new SaveServiceData(this);
+        task.execute((Void) null);
     }
 
     @Override
@@ -385,5 +486,102 @@ public class ServProvProfile extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class SaveServiceData extends AsyncTask<Void, Void, Void> {
+
+        private Activity myActivity;
+
+        public SaveServiceData(Activity activity) {
+            myActivity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ServiceProvider sp = LoginHolder.servLoginRef; // TO DO
+            ArrayList<ServProvHasService> spsList = sp.getServices();
+
+            if (spsList == null) {
+                return null;
+            }
+            String where = MappContract.ServiceProvider._ID + " = ? ";
+            String[] selectionArgs = {
+                    "" + LoginHolder.servLoginRef.getIdServiceProvider()
+            };
+
+            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_FNAME, mFname.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, mLname.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION, mQualification.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_GENDER, mGenderBtn.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER, mRegNo.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID, mEmailID.getText().toString());
+
+            db.update(MappContract.ServiceProvider.TABLE_NAME, values, where, selectionArgs);
+
+            for (ServProvHasService sps : spsList) {
+                values = new ContentValues();
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService().getSpeciality());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE, sps.getExperience());
+
+                //long spsId = db.insert(MappContract.ServProvHasServ.TABLE_NAME, null, values);
+                where = MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV + " = ? ";
+                long spsId = db.update(MappContract.ServProvHasServ.TABLE_NAME, values, where, selectionArgs);
+
+                ArrayList<ServProvHasServHasServPt> spssptList = sps.getServProvHasServHasServPts();
+                for (ServProvHasServHasServPt spsspt : spssptList) {
+                    ServicePoint spt = spsspt.getServicePoint();
+
+                    values = new ContentValues();
+                    values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
+                    values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
+                    values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
+                    values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity());
+
+                    long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
+
+
+
+                    values = new ContentValues();
+                    try {
+                        values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME, spsspt.getStartTime());
+                        values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME, spsspt.getEndTime());
+                    } catch (Exception x) {
+                        x.printStackTrace();
+                    }
+                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
+                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE, spsspt.getConsultFee());
+                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF, spsspt.getWeeklyOff());
+
+                    where = MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV + " = ? and " +
+                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT + " = ? ";
+                    String[] args = {
+                            "" + spsId, "" + sptId
+                    };
+                    db.update(MappContract.ServProvHasServHasServPt.TABLE_NAME, values, where, args);
+                    //db.insert(MappContract.ServProvHasServHasServPt.TABLE_NAME, null, values);
+
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            UIUtility.showRegistrationAlert(myActivity, "", "Profile updated.");
+            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            //Intent intent = new Intent(myActivity, LoginActivity.class);
+            //startActivity(intent);
+        }
+
+        @Override
+        protected void onCancelled() {
+            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+        }
+
     }
 }

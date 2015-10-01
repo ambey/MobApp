@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.util.SearchServProv;
+import com.extenprise.mapp.util.UIUtility;
 
 public class ServiceProviderHomeActivity extends Activity {
 
@@ -24,6 +28,11 @@ public class ServiceProviderHomeActivity extends Activity {
                 LoginHolder.servLoginRef.getlName();
 
         welcomeView.setText(label);
+
+        ImageView img = (ImageView) findViewById(R.id.imageDoctor);
+        if(LoginHolder.servLoginRef.getImg() != null) {
+            img.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
+        }
     }
 
     public void viewAppointment(View view) {
@@ -32,8 +41,13 @@ public class ServiceProviderHomeActivity extends Activity {
     }
 
     public void viewProfile(View view) {
-        Intent intent = new Intent(this, ServProvViewProfile.class);
-        startActivity(intent);
+        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        if(SearchServProv.viewWorkPlaces(dbHelper)) {
+            Intent intent = new Intent(this, ServProvProfileMain.class);
+            startActivity(intent);
+        } else {
+            UIUtility.showAlert(this, "", "Sorry, Some problem occurs in viewing profile.");
+        }
     }
 
     @Override

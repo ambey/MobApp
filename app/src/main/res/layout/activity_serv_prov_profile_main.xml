@@ -6,8 +6,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.service.activity.ServProvProfile"
+    tools:context="com.extenprise.mapp.service.activity.ServProvProfileMain"
     >
+
+    <ProgressBar
+        android:id="@+id/progressView"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/viewdrLbl"
@@ -66,7 +74,7 @@
 
 
     <ScrollView
-        android:id="@+id/scroll1"
+        android:id="@+id/updateServProvform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linenView"
@@ -99,6 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
+                android:textColor="#fff"
                 android:text="@string/edit1"
                 android:clickable="true"
                 android:onClick="editPersonalInfo"
@@ -129,6 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewDoc"
+                android:visibility="gone"
                >
 
             <TextView
@@ -372,7 +382,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewWorkDetails"
-            android:visibility="gone"
+
            >
 
             <ListView
@@ -386,14 +396,30 @@
                 android:id="@+id/textViewAddNewWork"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/workDetailListView"
                 android:text="@string/add_new_work_place"
+                android:clickable="true"
+                android:onClick="addNewWorkPlace"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="82dp"
+                android:layout_marginStart="82dp" />
+
+            <TextView
+                android:id="@+id/textViewRemoveWork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/workDetailListView"
+                android:layout_toEndOf="@+id/textViewAddNewWork"
+                android:layout_toRightOf="@+id/textViewAddNewWork"
+                android:layout_marginLeft="20dp"
+                android:text="@string/remove_work_place"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:clickable="true"
-                android:onClick="addNewWorkPlace"
-
+                android:onClick="removeWorkPlace"
                 />
+
                 </RelativeLayout>
             <Button
                 android:id="@+id/buttonViewUpdate"

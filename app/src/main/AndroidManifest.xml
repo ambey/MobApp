@@ -250,7 +250,7 @@
             android:label="@string/title_activity_serv_prov_work_detail_list" >
         </activity>
         <activity
-            android:name=".service.activity.ServProvProfile"
+            android:name=".service.activity.ServProvProfileMain"
             android:label="@string/title_activity_serv_prove_profile"
             android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
             <meta-data
