@@ -253,6 +253,10 @@
 
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="title_activity_patient_profile">PatientProfile</string>
+    <string name="pinfo">Personal Info</string>
+    <string name="addinfo">Address Info</string>
+    <string name="wght">Weight</string>
 
 
 

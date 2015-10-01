@@ -257,6 +257,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.extenprise.mapp.service.activity.ServiceProviderHomeActivity" />
         </activity>
+        <activity
+            android:name=".service.activity.PatientProfile"
+            android:label="@string/title_activity_patient_profile" >
+        </activity>
     </application>
 
 </manifest>
