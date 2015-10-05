@@ -258,7 +258,7 @@
                 android:value="com.extenprise.mapp.service.activity.ServiceProviderHomeActivity" />
         </activity>
         <activity
-            android:name=".service.activity.PatientProfile"
+            android:name=".customer.activity.PatientProfile"
             android:label="@string/title_activity_patient_profile" >
         </activity>
     </application>
