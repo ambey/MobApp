@@ -110,7 +110,7 @@
 
                 <include
                     android:id="@+id/customerInfo"
-                    layout="@layout/layoutpatientdetail"
+                    layout="@layout/layout_patient_detail"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </RelativeLayout>

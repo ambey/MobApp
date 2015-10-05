@@ -1,7 +1,10 @@
 package com.extenprise.mapp.service.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,14 +17,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,7 +38,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
@@ -42,6 +51,7 @@ import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
 import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 
@@ -51,6 +61,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class ServProvProfileMain extends Activity {
@@ -70,6 +81,23 @@ public class ServProvProfileMain extends Activity {
     private static int REQUEST_CAMERA = 2;
     private String imgDecodableString;
     private Bitmap mImgCopy;
+
+    private EditText mName;
+    private EditText mLoc;
+    private Spinner mCity;
+    private EditText mPhone1;
+    private EditText mPhone2;
+    private EditText mEmailIdwork;
+    private EditText mConsultFee;
+    private Spinner mServPtType;
+    private Button mStartTime;
+    private Button mEndTime;
+
+    private Button mMultiSpinnerDays;
+    protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    protected boolean[] selections = new boolean[options.length];
+    //String []selectedDays = new String[_options.length];
+    String selectedDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +127,7 @@ public class ServProvProfileMain extends Activity {
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
         listView = (ListView) findViewById(R.id.workDetailListView);
 
+        editPersonalInfo(null);
         showPersonalInfo();
         showWorkPlaceList();
 
@@ -115,6 +144,7 @@ public class ServProvProfileMain extends Activity {
     }
 
     private void showPersonalInfo() {
+
         mMobNo.setText(LoginHolder.servLoginRef.getPhone());
         mEmailID.setText(LoginHolder.servLoginRef.getEmailId());
         mRegNo.setText(LoginHolder.servLoginRef.getRegNo());
@@ -185,13 +215,23 @@ public class ServProvProfileMain extends Activity {
                 View view =super.getView(position, convertView, parent);
                 cursor.moveToPosition(position);
 
+                TextView mWorkHrsLbl = (TextView) findViewById(R.id.viewWorkHrsLbl);
+                mWorkHrsLbl.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showtimeFields(v);
+                            }
+                        }
+                );
+
                 TextView mTextViewEdit = (TextView) findViewById(R.id.textViewEditWrkDetail);
                 TextView mViewEdit = (TextView) findViewById(R.id.viewEditWrkDetail);
 
                 mTextViewEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        editWorkPlaceInfo();
+                        editWorkPlaceInfo(true);
                     }
                 });
                 return view;
@@ -203,21 +243,40 @@ public class ServProvProfileMain extends Activity {
         listView.setAdapter(adapter);
     }
 
+    public void showtimeFields(View view) {
+        int[] buttonIds = new int[] {
+                R.id.buttonStartTime,
+                R.id.buttonEndTime,
+        };
+        for (int buttonId : buttonIds) {
+            Button btn = (Button) findViewById(buttonId);
+            if(btn.getVisibility() == View.GONE) {
+                btn.setVisibility(View.VISIBLE);
+            } else {
+                btn.setVisibility(View.GONE);
+            }
+        }
+    }
+
     public void editPersonalInfo(View view) {
-        mFname.setEnabled(true);
-        mLname.setEnabled(true);
+        boolean set = false;
+        if(!mFname.isEnabled()) {
+            set = true;
+        }
+        mFname.setEnabled(set);
+        mLname.setEnabled(set);
         //mMobNo.setEnabled(true);
-        mEmailID.setEnabled(true);
-        mQualification.setEnabled(true);
-        mExp.setEnabled(true);
-        mRegNo.setEnabled(true);
-        mMale.setEnabled(true);
-        mFemale.setEnabled(true);
+        mEmailID.setEnabled(set);
+        mQualification.setEnabled(set);
+        mExp.setEnabled(set);
+        mRegNo.setEnabled(set);
+        mMale.setEnabled(set);
+        mFemale.setEnabled(set);
 
         openPersonalInfo(view);
     }
 
-    public void editWorkPlaceInfo() {
+    public void editWorkPlaceInfo(boolean set) {
 
         int[] editTxtIds = new int[] {
                 R.id.editTextQualification,
@@ -231,7 +290,7 @@ public class ServProvProfileMain extends Activity {
         };
         for (int editTxtId : editTxtIds) {
             EditText txt = (EditText) findViewById(editTxtId);
-            txt.setEnabled(true);
+            txt.setEnabled(set);
         }
 
         int[] buttonIds = new int[] {
@@ -241,7 +300,7 @@ public class ServProvProfileMain extends Activity {
         };
         for (int buttonId : buttonIds) {
             Button btn = (Button) findViewById(buttonId);
-            btn.setEnabled(true);
+            btn.setEnabled(set);
         }
 
         int[] spinnerIds = new int[] {
@@ -252,12 +311,185 @@ public class ServProvProfileMain extends Activity {
         };
         for (int spinnerId : spinnerIds) {
             Button btn = (Button) findViewById(spinnerId);
-            btn.setEnabled(true);
+            btn.setEnabled(set);
         }
     }
 
+    public void timePicker(View view, final Button button) {
+        // Process to get Current Time
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog tpd = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        // Display Selected time in textbox
+                        button.setText(String.format("%02d:%02d", hourOfDay, minute));
+                    }
+                }, hour, minute, false);
+        tpd.show();
+    }
+
+    public class ButtonClickHandler implements View.OnClickListener {
+        public void onClick(View view) {
+            if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+                setupSelection();
+            }
+            showDialog(0);
+        }
+    }
+
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        super.onPrepareDialog(id, dialog);
+        if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            setupSelection();
+        }
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        return new AlertDialog.Builder(this)
+                .setTitle("Available Days")
+                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
+                .setPositiveButton("OK", new DialogButtonClickHandler())
+                .create();
+    }
+
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
+        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
+            if(options[clicked].toString().equalsIgnoreCase("All Days")) {
+                for (CharSequence option : options) {
+                    Log.i("ME", option + " selected: " + selected);
+                }
+            } else {
+                Log.i("ME", options[clicked] + " selected: " + selected);
+            }
+        }
+    }
+
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int clicked) {
+            switch (clicked) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    printSelectedDays();
+                    mMultiSpinnerDays.setText(selectedDays);
+                    break;
+            }
+        }
+    }
+
+    protected void printSelectedDays() {
+        if(selections[0]) {
+            setupAllDaysSelected();
+            return;
+        }
+        int i = 1;
+        selectedDays = getString(R.string.select_days);
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
+
+            if (selections[i]) {
+                selectedDays = options[i++].toString();
+                break;
+            }
+        }
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
+
+            if (selections[i]) {
+                selectedDays += "," + options[i].toString();
+            }
+        }
+    }
+
+    private void setupSelection() {
+        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
+        selections[0] = false;
+        for(String d : selectedDays) {
+            selections[getDayIndex(d)] = true;
+        }
+    }
+
+    private int getDayIndex(String day) {
+        for(int i = 0; i < options.length; i++) {
+            if(day.equals(options[i])) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void setupAllDaysSelected() {
+        selections[0] = false;
+        selectedDays = options[1].toString();
+        for(int i = 2; i < options.length; i++){
+            selectedDays += "," + options[i];
+        }
+    }
+
+    private boolean isValidDetails(View v) {
+        return true;
+    }
+
+    private AlertDialog openDialog() {
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.layout_workplace_details, null);
+
+         mName = (EditText) dialogView.findViewById(R.id.editTextName);
+         mLoc = (EditText) dialogView.findViewById(R.id.editTextLoc);
+         mPhone1 = (EditText) dialogView.findViewById(R.id.editTextPhone1);
+         mPhone2 = (EditText) dialogView.findViewById(R.id.editTextPhone2);
+         mEmailIdwork = (EditText) dialogView.findViewById(R.id.editTextEmail);
+         mConsultFee = (EditText) dialogView.findViewById(R.id.editTextConsultationFees);
+         mServPtType = (Spinner) dialogView.findViewById(R.id.viewWorkPlaceType);
+         mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
+         mStartTime = (Button) dialogView.findViewById(R.id.buttonStartTime);
+         mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
+         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
+
+        mStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker(v, mStartTime);
+            }
+        });
+
+        mEndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker(v, mEndTime);
+            }
+        });
+
+        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+
+        return new AlertDialog.Builder(this)
+                .setTitle("Add New Work Place")
+                .setView(dialogView)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        if (isValidDetails(dialogView)) {
+
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
     public void addNewWorkPlace(View view) {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
         adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
 
         //TO DO
@@ -268,35 +500,21 @@ public class ServProvProfileMain extends Activity {
 
 
 
-        /*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
+        *//*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
         extras.addRow(new String[] { "-1", "New Template" });
         extras.addRow(new String[] { "-2", "Empty Template" });
         Cursor[] cursors = { extras, SearchServProv.getCursor() };
         Cursor extendedCursor = new MergeCursor(cursors);
-*/
+*//*
         adapter.notifyDataSetChanged();
 
-
+*/
+        openDialog();
     }
 
     public void removeWorkPlace(View view) {
         SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
-        adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
 
-        //TO DO
-
-        //adapter.add("another row");
-
-        //ListAdapter adp = listView.getAdapter();
-
-
-
-        /*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
-        extras.addRow(new String[] { "-1", "New Template" });
-        extras.addRow(new String[] { "-2", "Empty Template" });
-        Cursor[] cursors = { extras, SearchServProv.getCursor() };
-        Cursor extendedCursor = new MergeCursor(cursors);
-*/
         adapter.notifyDataSetChanged();
 
 
