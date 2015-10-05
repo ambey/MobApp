@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textViewPersonalFields"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/label"
+        android:clickable="true"
+        android:onClick="showPersonalFields"
+        android:text="@string/personalDetails"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+
+    <LinearLayout
+        android:id="@+id/contLay"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextCustomerFName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:ems="10"
+                android:hint="@string/fnm"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/editTextCustomerLName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.5"
+                android:ems="10"
+                android:hint="@string/lnm"
+                android:inputType="textPersonName" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editTextCustomerEmail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewDOBLbl"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_weight="0.90"
+                android:text="@string/dob_label" />
+
+            <TextView
+                android:id="@+id/textViewDOB"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.75"
+                android:background="@drawable/spinner"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="@string/dobFormat"
+                android:onClick="showDatePicker" />
+
+            <Spinner
+                android:id="@+id/spinGender"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.75"
+                android:background="@drawable/spinner"
+                android:entries="@array/genderType"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:prompt="@string/gender" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextHeight"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.80"
+                android:hint="@string/height"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/viewHeightUnit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1.3"
+                android:text="@string/cm" />
+
+
+            <EditText
+                android:id="@+id/editTextWeight"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.80"
+                android:hint="@string/weight"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/viewWeightUnit"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1.3"
+                android:text="@string/kg" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+    <TextView
+        android:id="@+id/viewAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/contLay"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/label"
+        android:clickable="true"
+        android:onClick="showAddressFields"
+        android:text="@string/address"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/addrLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewAddress"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextLoc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.5"
+                android:hint="@string/loc"
+                android:inputType="textAutoComplete" />
+
+            <Spinner
+                android:id="@+id/editTextCity"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/spinner"
+                android:entries="@array/city"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="5dp"
+                android:prompt="@string/city" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextZipCode"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.5"
+                android:hint="@string/pincode"
+                android:inputType="number" />
+
+            <Spinner
+                android:id="@+id/editTextState"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/spinner"
+                android:entries="@array/state"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="5dp"
+                android:prompt="@string/state" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -17,34 +17,42 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <Spinner
-        android:id="@+id/spinServiceProvCategory"
-        android:layout_width="170dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/spinner"
-        android:entries="@array/serviceCategorySearch"
-        android:spinnerMode="dropdown" />
+    <LinearLayout
+        android:id="@+id/servProLay1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <Spinner
+            android:id="@+id/spinServiceProvCategory"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/spinner"
+            android:entries="@array/serviceCategorySearch"
+            android:spinnerMode="dropdown" />
+
+
+        <Spinner
+            android:id="@+id/viewSpeciality"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/spinner"
+            android:choiceMode="singleChoice"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/editSearchDr"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinServiceProvCategory"
+        android:layout_below="@+id/servProLay1"
         android:layout_marginTop="10dp"
         android:hint="@string/searchDrHint" />
 
-    <Spinner
-        android:id="@+id/viewSpeciality"
-        android:layout_width="170dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="8dp"
-        android:layout_toEndOf="@+id/spinServiceProvCategory"
-        android:layout_toRightOf="@+id/spinServiceProvCategory"
-        android:background="@drawable/spinner"
-        android:choiceMode="singleChoice"
-        android:spinnerMode="dropdown" />
 
     <EditText
         android:id="@+id/viewLocation"
@@ -67,73 +75,107 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/editTextQualification"
-                android:layout_width="170dp"
+
+            <LinearLayout
+                android:id="@+id/servProLay2"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="@string/qualification1" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextExp"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/editTextQualification"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/editTextQualification"
-                android:hint="@string/minExp"
-                android:inputType="phone" />
+                <EditText
+                    android:id="@+id/editTextQualification"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:hint="@string/qualification1" />
+
+                <EditText
+                    android:id="@+id/editTextExp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="0.5"
+                    android:hint="@string/minExp"
+                    android:inputType="phone" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
-                android:layout_below="@+id/editTextQualification"
+                android:layout_below="@+id/servProLay2"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/label"
                 android:clickable="true"
                 android:onClick="showtimeFields"
                 android:text="@string/workHrsLbl"
-                android:textSize="20dp"
                 android:textColor="#ffffffff"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/buttonStartTime"
-                android:layout_width="170dp"
+            <LinearLayout
+                android:id="@+id/servProLay3"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewWorkHrsLbl"
-                android:layout_marginTop="10dp"
-                android:hint="@string/strtTime"
-                android:onClick="showStartTimePicker"
-                android:visibility="gone" />
+                android:layout_marginTop="10dp">
 
-            <Button
-                android:id="@+id/buttonEndTime"
-                android:layout_width="170dp"
+                <Button
+                    android:id="@+id/buttonStartTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:hint="@string/strtTime"
+                    android:onClick="showStartTimePicker" />
+
+                <Button
+                    android:id="@+id/buttonEndTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.5"
+                    android:hint="@string/endTime"
+                    android:onClick="showEndTimePicker" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/servProLay4"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/viewWorkHrsLbl"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/buttonStartTime"
-                android:layout_toRightOf="@+id/buttonStartTime"
-                android:hint="@string/endTime"
-                android:onClick="showEndTimePicker"
-                android:visibility="gone" />
+                android:layout_below="@+id/servProLay3"
+                android:layout_marginTop="30dp">
 
-            <TextView
-                android:id="@+id/viewWeeklyOffLbl"
-                android:layout_width="160.0dip"
-                android:layout_height="30dp"
-                android:textSize="20dp"
-                android:layout_below="@+id/buttonStartTime"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/label"
-                android:clickable="true"
-                android:onClick="showDaysField"
-                android:text="@string/avail_days"
-                android:textColor="#ffffffff"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/viewWeeklyOffLbl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/label"
+                    android:clickable="true"
+                    android:onClick="showDaysField"
+                    android:text="@string/avail_days"
+                    android:textColor="#ffffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/viewGender"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="0.5"
+
+
+                    android:background="@drawable/label"
+                    android:clickable="true"
+                    android:onClick="showGenderField"
+                    android:text="@string/gender"
+                    android:textColor="#ffffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
             <!--<Spinner
                 android:entries="@array/days"
                 android:id="@+id/spinAvailDays"
@@ -143,71 +185,77 @@
                 android:prompt="@string/weekly_off"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="20dp"/>-->
-            <Button
-                android:id="@+id/spinAvailDays"
-                android:layout_width="160.0dip"
-                android:layout_height="30dp"
-                android:layout_below="@+id/viewWeeklyOffLbl"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/spinner"
-                android:text="@string/select_days"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/viewGender"
-                android:layout_width="160.0dip"
-                android:layout_height="30dp"
-                android:textSize="20dp"
-                android:layout_below="@+id/buttonEndTime"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="30dp"
-                android:layout_toEndOf="@+id/viewWeeklyOffLbl"
-                android:layout_toRightOf="@+id/viewWeeklyOffLbl"
-                android:background="@drawable/label"
-                android:clickable="true"
-                android:onClick="showGenderField"
-                android:text="@string/gender"
-                android:textColor="#ffffffff"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textViewConsultationFees"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="80dp"
-                android:layout_below="@+id/viewWeeklyOffLbl"
-                android:text="@string/consult_fees"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/servProLay5"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/rs_sign"
-                android:layout_alignTop="@+id/textViewConsultationFees"
-                android:layout_toLeftOf="@+id/spinConsultationFees"
-                android:layout_toStartOf="@+id/spinConsultationFees" />
+                android:layout_below="@+id/servProLay4"
+                android:layout_marginTop="10dp">
 
-            <Spinner
-                android:id="@+id/spinConsultationFees"
-                android:layout_width="160dp"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/textViewConsultationFees"
-                android:layout_alignParentEnd="true"
+                <Button
+                    android:id="@+id/spinAvailDays"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/spinner"
+                    android:text="@string/select_days" />
 
-                android:layout_alignParentRight="true"
-                android:background="@drawable/spinner"
-                android:entries="@array/consultationFees"
-                android:prompt="@string/consult_fees"
-                android:spinnerMode="dropdown" />
+                <Spinner
+                    android:id="@+id/spinGender"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
 
+                    android:layout_weight="0.5"
+
+                    android:background="@drawable/spinner"
+                    android:entries="@array/genderTypeSearch"
+                    android:prompt="@string/gender"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/servProLay6"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/servProLay5">
+
+                <TextView
+                    android:id="@+id/textViewConsultationFees"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.75"
+                    android:text="@string/consult_fees"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="30dp"/>
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.4"
+                    android:text="@string/rs_sign"
+                    android:layout_marginTop="10dp"/>
+
+                <Spinner
+                    android:id="@+id/spinConsultationFees"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:background="@drawable/spinner"
+                    android:entries="@array/consultationFees"
+                    android:prompt="@string/consult_fees"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/buttonSearch"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewConsultationFees"
+                android:layout_below="@+id/servProLay6"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/button"
@@ -216,22 +264,6 @@
                 android:textColor="#ffffffff"
                 android:textStyle="bold" />
 
-
-            <Spinner
-                android:id="@+id/spinGender"
-                android:layout_width="160.0dip"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/viewGender"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/spinner"
-                android:entries="@array/genderTypeSearch"
-                android:prompt="@string/gender"
-                android:visibility="gone"
-                android:spinnerMode="dropdown"
-                 />
 
         </RelativeLayout>
     </ScrollView>

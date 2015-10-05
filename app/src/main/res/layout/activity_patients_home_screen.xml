@@ -122,16 +122,17 @@
             android:layout_alignEnd="@+id/linenView2" />
 
         <Button
-            android:id="@+id/buttonView4"
+            android:id="@+id/buttonViewProfile"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/square_round_button"
-            android:textColor="#888"
+            android:textColor="#b0171f"
             android:textSize="16sp"
             android:layout_below="@+id/linenView5"
             android:layout_alignBottom="@+id/linenView2"
             android:layout_alignLeft="@+id/linenView2"
-            android:layout_alignStart="@+id/linenView2" />
+            android:layout_alignStart="@+id/linenView2"
+            android:text="@string/profile_text"/>
 
         <View
             android:id="@+id/linenView2"
