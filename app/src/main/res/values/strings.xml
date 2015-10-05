@@ -2,13 +2,24 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
+    <string name="server_name">http://10.0.2.2:8080/mapp</string>
+<!--
+    <string name="server_name">http://208.74.28.39:8080/mapp</string>
+-->
+    <string name="signin_cust">customer/SignIn.action</string>
+    <string name="signup_cust">customer/SignUp.action</string>
+    <string name="check_phone_cust">customer/PhoneExistsCheck.action</string>
+    <string name="signin_serv">service/SignIn.action</string>
+    <string name="signup_serv">service/SignUp.action</string>
+    <string name="check_phone_serv">service/PhoneExistsCheck.action</string>
+    <string name="search_serv_prov">service/Search.action</string>
+    <string name="serv_prov_details">service/Details.action</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
     <string name="action_settings">Settings</string>
     <string name="action_advanceSearch">Advance Search</string>
-    <string name="app_domain">extenprise.com</string>
-    <string name="app_url">http://www.extenprise.com/medico</string>
-    <string name="login_url">http://192.168.0.104:8080/medico/login.do</string>
+    <string name="login_url">login.do</string>
     <string name="search_doctor">Search A Doctor</string>
     <string name="adv_search">Advanced Search</string>
     <string name="location">Pune</string>
@@ -45,12 +56,10 @@
     <string-array name="genderType">
         <item>Male</item>
         <item>Female</item>
-
     </string-array>
     <string-array name="loginOption">
         <item>Patient</item>
         <item>Medical Service Provider</item>
-
     </string-array>
     <string-array name="when">
         <item>@string/before_meal</item>
@@ -59,6 +68,7 @@
 
     <string name="before_meal">Before Meal</string>
     <string name="after_meal">After Meal</string>
+    <string name="reg_no">Registration Number *</string>
 
     <string-array name="drug_type">
         <item>Tablet</item>

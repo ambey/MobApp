@@ -20,7 +20,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
@@ -109,10 +109,8 @@ public class AddSpecialityActivity extends Activity {
 
 
         sps.setService(s);
-        LoginHolder.servLoginRef.addServProvHasService(sps);
 
-        ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
-        spsspt.setServProvHasService(sps);
+        ServProvHasServPt spsspt = new ServProvHasServPt();
         LoginHolder.spsspt = spsspt;
 
         Intent intent = new Intent(this, AddWorkPlaceActivity.class);
@@ -162,25 +160,29 @@ public class AddSpecialityActivity extends Activity {
 
     private void initialize() {
         boolean workPlaceAdded = false;
-        ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
+        ServProvHasServPt spsspt = LoginHolder.spsspt;
         ServProvHasService sps = null;
         ServiceProvider sp = LoginHolder.servLoginRef;
 
-        ArrayList<ServProvHasService> spsList = sp.getServices();
+        ArrayList<ServProvHasServPt> spsList = sp.getServices();
         if (spsList != null) {
+/*
             for (int i = spsList.size() - 1; i >= 0; i--) {
                 if (spsList.get(i).getWorkPlaceCount() == 0) {
                     spsList.remove(i);
                 }
             }
+*/
         }
 
         if (spsspt != null) {
+/*
             sps = spsspt.getServProvHasService();
             if (sps != null) {
                 sp = sps.getServProv();
                 workPlaceAdded = sps.isWorkPlaceAdded();
             }
+*/
         }
 
         TextView specialityLbl = (TextView) findViewById(R.id.viewSpecialityLbl);
@@ -224,7 +226,7 @@ public class AddSpecialityActivity extends Activity {
         @Override
         protected Void doInBackground(Void... voids) {
             ServiceProvider sp = LoginHolder.servLoginRef;
-            ArrayList<ServProvHasService> spsList = sp.getServices();
+            ArrayList<ServProvHasServPt> spsList = sp.getServices();
 
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -239,24 +241,24 @@ public class AddSpecialityActivity extends Activity {
 
             SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getTimeInstance();
 
-            for (ServProvHasService sps : spsList) {
+            for (ServProvHasServPt sps : spsList) {
                 values = new ContentValues();
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV, spId);
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME, sps.getService().getServCatagory());
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService().getSpeciality());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME, sps.getService());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService());
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE, sps.getExperience());
 
                 long spsId = db.insert(MappContract.ServProvHasServ.TABLE_NAME, null, values);
 
-                ArrayList<ServProvHasServHasServPt> spssptList = sps.getServProvHasServHasServPts();
-                for (ServProvHasServHasServPt spsspt : spssptList) {
+                ArrayList<ServProvHasServPt> spssptList = LoginHolder.servLoginRef.getServices();
+                for (ServProvHasServPt spsspt : spssptList) {
                     ServicePoint spt = spsspt.getServicePoint();
 
                     values = new ContentValues();
                     values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
                     values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
                     values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity());
+                    values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity().getIdCity());
 
                     long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
 
@@ -269,7 +271,7 @@ public class AddSpecialityActivity extends Activity {
                     } catch (Exception x) {
                         x.printStackTrace();
                     }
-                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF, spsspt.getWeeklyOff());
+                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF, spsspt.getWorkingDays());
 
                     db.insert(MappContract.ServProvHasServHasServPt.TABLE_NAME, null, values);
 

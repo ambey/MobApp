@@ -1,33 +1,81 @@
 package com.extenprise.mapp.service.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.extenprise.mapp.data.City;
+
 import java.util.ArrayList;
 
-public class ServicePoint {
+public class ServicePoint implements Parcelable {
 
     private int idServicePoint;
     private String name;
     private String location;
+    private String pincode;
     private String phone;
     private String altPhone;
     private String emailId;
-    private String city;
-    private String state;
-    private String country;
-    private ArrayList<ServProvHasServHasServPt> spssptList;
+    private City city;
+    private ArrayList<Integer> idServices;
 
-    public boolean addSpsspt(ServProvHasServHasServPt spsspt) {
-        if (spssptList == null) {
-            spssptList = new ArrayList<ServProvHasServHasServPt>();
+    public ServicePoint() {
+        idServices = new ArrayList<>();
+        city = new City();
+    }
+
+    public ServicePoint(Parcel source) {
+        idServicePoint = source.readInt();
+        String[] fields = new String[8];
+        source.readStringArray(fields);
+
+        city = new City();
+
+        int i = 0;
+        name = fields[i++];
+        location = fields[i++];
+        phone = fields[i++];
+        altPhone = fields[i++];
+        emailId = fields[i++];
+        city.setCity(fields[i++]);
+        city.setState(fields[i++]);
+        city.setCountry(fields[i]);
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public boolean addSpsspt(int idService) {
+        if (idServices == null) {
+            idServices = new ArrayList<>();
         }
-        return this.spssptList.add(spsspt);
+        return this.idServices.add(idService);
     }
 
-    public ArrayList<ServProvHasServHasServPt> getSpsspt() {
-        return spssptList;
+    public boolean addService(int idService) {
+        return idServices.add(idService);
     }
 
-    public void setSpsspt(ArrayList<ServProvHasServHasServPt> spssptList) {
-        this.spssptList = spssptList;
+    public int getServiceId(int position) {
+        try {
+            return idServices.get(position);
+        } catch (IndexOutOfBoundsException x) {
+            x.printStackTrace();
+        }
+        return -1;
+    }
+
+    public ArrayList<Integer> getServices() {
+        return idServices;
+    }
+
+    public void setSpsspt(ArrayList<Integer> idServices) {
+        this.idServices = idServices;
     }
 
     public int getIdServicePoint() {
@@ -78,27 +126,38 @@ public class ServicePoint {
         this.emailId = emailId;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 
-    public String getState() {
-        return state;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idServicePoint);
+        dest.writeStringArray(new String[] {
+                name, location, phone, altPhone,
+                emailId, city.getCity(), city.getState(), city.getCountry()
+        });
     }
 
-    public String getCountry() {
-        return country;
-    }
+    public static final Creator<ServicePoint> CREATOR = new Creator<ServicePoint>() {
+        @Override
+        public ServicePoint createFromParcel(Parcel source) {
+            return new ServicePoint(source);
+        }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+        @Override
+        public ServicePoint[] newArray(int size) {
+            return new ServicePoint[size];
+        }
+    };
+
 }

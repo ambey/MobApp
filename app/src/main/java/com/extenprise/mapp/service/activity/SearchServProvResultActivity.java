@@ -1,103 +1,54 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
-import com.extenprise.mapp.service.data.ServicePoint;
+import com.extenprise.mapp.activity.MappService;
+import com.extenprise.mapp.data.ServProvListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.SearchServProv;
+import com.extenprise.mapp.service.ui.SearchResultListAdapter;
 import com.extenprise.mapp.util.UIUtility;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 
 public class SearchServProvResultActivity extends Activity {
 
-    ArrayList<HashMap<String, Object>> searchResults;
-    LayoutInflater inflater;
+    private Messenger mService;
+    private SearchResponseHandler mRespHandler = new SearchResponseHandler(this);
+
+    private ArrayList<ServProvListItem> mServProvList;
+    private ServProvListItem mSelectedItem;
+    private View mProgressView;
+    private View mSearchResultView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serv_prov_result);
 
-        //TO  VIEW THE LIST OF DOCTORS IN LISTVIEW FROM CURSOR THROUGH ADAPTER
+        mSearchResultView = findViewById(R.id.formServProvResult);
+        mProgressView = findViewById(R.id.progressBar);
 
-        final Cursor cursor = SearchServProv.getCursor();
+        Intent intent = getIntent();
+        mServProvList = intent.getParcelableArrayListExtra("servProvList");
 
-        /* SimpleCursorAdapter(Context context,
-                    int layout,
-                    Cursor c,
-                    String[] from,
-                    int[] to,
-                    int flags);*/
-
-
-        //ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.activity_search_result);
-
-
-        String[] values = new String[] {
-                MappContract.ServiceProvider.COLUMN_NAME_FNAME,
-                MappContract.ServiceProvider.COLUMN_NAME_LNAME,
-                MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY,
-                MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE,
-                MappContract.ServicePoint.COLUMN_NAME_NAME,
-                MappContract.ServicePoint.COLUMN_NAME_LOCATION
-        };
-
-        int[] viewIds = new int[] {
-                R.id.viewFirstName,
-                R.id.viewLastName,
-                R.id.viewDocSpeciality,
-                R.id.viewExpValue,
-                R.id.viewClinicName,
-                R.id.viewLocation
-        };
-
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                R.layout.activity_search_result,
-                cursor,
-                values,
-                viewIds, 0){
-            @Override
-            public View getView(int position, View convertView,
-                                ViewGroup parent) {
-
-                View view =super.getView(position, convertView, parent);
-                cursor.moveToPosition(position);
-                String docAvailDays = cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF));
-
-                ImageView mImageViewAvailable = (ImageView) view.findViewById(R.id.imageViewAvailability);
-
-                if(UIUtility.findDocAvailability(docAvailDays, Calendar.getInstance())) {
-                    mImageViewAvailable.setImageResource(R.drawable.gcircle);
-                } else {
-                    mImageViewAvailable.setImageResource(R.drawable.rcircle);
-                }
-
-            /*YOUR CHOICE OF COLOR*/
-                //textView.setTextColor(Color.BLUE);
-
-                return view;
-            }
-        };
+        ArrayAdapter<ServProvListItem> adapter = new SearchResultListAdapter(this,
+                R.layout.activity_search_result, mServProvList);
 
         ListView listView = (ListView) findViewById(R.id.docListView);
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
@@ -106,36 +57,11 @@ public class SearchServProvResultActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                cursor.moveToPosition(position);
+                mSelectedItem = mServProvList.get(position);
+                UIUtility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
+                Intent intent = new Intent(view.getContext(), MappService.class);
+                bindService(intent, mConnection, 0);
 
-                ServiceProvider sp = new ServiceProvider();
-                sp.setIdServiceProvider(cursor.getInt(cursor.getColumnIndex(MappContract.ServiceProvider._ID)));
-                sp.setfName(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_FNAME)));
-                sp.setlName(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_LNAME)));
-                sp.setQualification(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION)));
-
-                Service s = new Service();
-                s.setSpeciality(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY)));
-
-                ServProvHasService sps = new ServProvHasService();
-                sps.setServProv(sp);
-                sps.setExperience(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE))));
-                sps.setService(s);
-
-                ServicePoint spt = new ServicePoint();
-                spt.setName(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_NAME)));
-                spt.setLocation(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_LOCATION)));
-
-                LoginHolder.spsspt.setConsultFee(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE))));
-                LoginHolder.spsspt.setStartTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME)));
-                LoginHolder.spsspt.setEndTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME)));
-                LoginHolder.spsspt.setWeeklyOff(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF)));
-                LoginHolder.spsspt.setServPointType(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE)));
-                LoginHolder.spsspt.setServProvHasService(sps);
-                LoginHolder.spsspt.setServicePoint(spt);
-
-                Intent i = new Intent(getApplicationContext(), ServProvDetailsActivity.class);
-                startActivity(i);
             }
         });
         listView.setAdapter(adapter);
@@ -163,6 +89,61 @@ public class SearchServProvResultActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void gotDetails(Bundle data) {
+        UIUtility.showProgress(this, mSearchResultView, mProgressView, false);
+        unbindService(mConnection);
+        Intent intent = new Intent(this, ServProvDetailsActivity.class);
+        intent.putParcelableArrayListExtra("servProvList", mServProvList);
+        intent.putExtra("service", data.getParcelable("service"));
+        startActivity(intent);
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("form", mSelectedItem);
+            Message msg = Message.obtain(null, MappService.DO_SEARCH_SERV_PROV);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    private static class SearchResponseHandler extends Handler {
+        private SearchServProvResultActivity mActivity;
+
+        public SearchResponseHandler(SearchServProvResultActivity activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_SEARCH_SERV_PROV:
+                    mActivity.gotDetails(msg.getData());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
 
 
     /*private class CustomAdapter extends ArrayAdapter<HashMap<String, Object>>

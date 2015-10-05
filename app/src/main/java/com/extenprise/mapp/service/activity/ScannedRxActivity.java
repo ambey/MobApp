@@ -37,7 +37,7 @@ import java.io.RandomAccessFile;
 public class ScannedRxActivity extends Activity {
 
     private int mAppontId;
-    private int mCustId;
+    private String mCustId;
     private Bitmap mRxCopy;
     private ImageView mRxView;
     private Uri mRxUri;
@@ -49,7 +49,7 @@ public class ScannedRxActivity extends Activity {
 
         Intent intent = getIntent();
         mAppontId = intent.getIntExtra("appont_id", -1);
-        mCustId = intent.getIntExtra("cust_id", -1);
+        mCustId = intent.getStringExtra("cust_id");
 
         mRxView = (ImageView) findViewById(R.id.rxCopyImageView);
         if (savedInstanceState != null) {

@@ -48,7 +48,7 @@ import java.util.List;
 public class AppointmentDetailsActivity extends Activity {
 
     private int mAppontId;
-    private int mCustId;
+    private String mCustId;
     private int mLastAppontId;
 
     @Override
@@ -69,7 +69,7 @@ public class AppointmentDetailsActivity extends Activity {
 
         Intent intent = getIntent();
         mAppontId = intent.getIntExtra("appont_id", -1);
-        mCustId = intent.getIntExtra("cust_id", -1);
+        mCustId = intent.getStringExtra("cust_id");
 
         MappDbHelper dbHelper = new MappDbHelper(this);
         Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);

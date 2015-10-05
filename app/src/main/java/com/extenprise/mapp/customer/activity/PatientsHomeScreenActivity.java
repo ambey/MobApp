@@ -1,6 +1,7 @@
 package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,26 +11,32 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.util.UIUtility;
 
 
 public class PatientsHomeScreenActivity extends Activity {
+
+    private Customer mCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
 
+        Intent intent = getIntent();
+        mCustomer = intent.getParcelableExtra("customer");
+
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +
-                LoginHolder.custLoginRef.getfName() + " " +
-                LoginHolder.custLoginRef.getlName();
+                mCustomer.getfName() + " " +
+                mCustomer.getlName();
 
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imagePatient);
-        if(LoginHolder.custLoginRef.getImg() != null) {
-            img.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
+        if(mCustomer.getImg() != null) {
+            img.setImageBitmap(UIUtility.getBitmapFromBytes(mCustomer.getImg()));
         }
     }
 

@@ -1,70 +1,24 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+//import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.Validator;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServProvSignUpActivity extends FragmentActivity {
-
-/*
-    private EditText mFirstName;
-    private EditText mLastName;
-    private EditText mCellphoneview;
-    private EditText mPasswdView;
-    private EditText mCnfPasswdView;
-    private RadioGroup mRadioGroupGender;
-    private RadioButton mRadioButtonGender;
-    private EditText mRegistrationNumber;
-    private ImageView mImgView;
-    private TextView mImgTxtView;
-*/
-
-    // LogCat tag
-/*
-    private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
-
-    // Camera activity request codes
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
-
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-
-    private Uri fileUri; // file url to store image/video
-
-    private Button btnCapturePicture, btnRecordVideo;
-*/
 
     private ServProvsignUpPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
@@ -74,9 +28,19 @@ public class ServProvSignUpActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_pager);
 
-        mPagerAdapter = new ServProvsignUpPagerAdapter(getSupportFragmentManager());
+        List<Fragment> fragments = new ArrayList<>();
+        Bundle fragmentBundle = new Bundle();
+        fragments.add(Fragment.instantiate(this, ServProvSignUpFragment.class.getName(), fragmentBundle));
+        fragments.add(Fragment.instantiate(this, ServProvWorkPlaceFragment.class.getName(), fragmentBundle));
+
+        mPagerAdapter = new ServProvsignUpPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPager = (ViewPager) findViewById(R.id.signUpViewPager);
         mViewPager.setAdapter(mPagerAdapter);
+
+/*
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.slidingTabs);
+        tabLayout.setupWithViewPager(mViewPager);
+*/
 
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -118,19 +82,13 @@ public class ServProvSignUpActivity extends FragmentActivity {
         } catch (NullPointerException x) {
             x.printStackTrace();
         }
-        /*
-        LoginHolder.servLoginRef = new ServiceProvider();
+    }
 
-        mFirstName = (EditText) findViewById(R.id.editTextFName);
-        mLastName = (EditText) findViewById(R.id.editTextLName);
-        mCellphoneview = (EditText) findViewById(R.id.editTextCellphone);
-        mPasswdView = (EditText) findViewById(R.id.editTextPasswd);
-        mCnfPasswdView = (EditText) findViewById(R.id.editTextCnfPasswd);
-        mImgView = (ImageView) findViewById(R.id.uploadimageview);
-        mImgTxtView = (TextView) findViewById(R.id.uploadimage);
-        mRadioGroupGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-        mRegistrationNumber = (EditText) findViewById(R.id.editTextRegistrationNumber);
-        */
+    public boolean isValidInput() {
+        List<Fragment> fragments = mPagerAdapter.getFragments();
+        ServProvSignUpFragment f1 = (ServProvSignUpFragment)fragments.get(0);
+        ServProvWorkPlaceFragment f2 = (ServProvWorkPlaceFragment)fragments.get(1);
+        return (f1.isValidInput(mViewPager) && f2.isValidInput());
     }
 
     @Override
@@ -365,6 +323,32 @@ public class ServProvSignUpActivity extends FragmentActivity {
         return mediaFile;
     }
 */
+
+    public void saveData() {
+        ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
+        fragment.saveData();
+        ServProvWorkPlaceFragment fragment2 = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
+        fragment2.saveData();
+    }
+
+    public void captureImage(View view) {
+        ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
+        fragment.captureImage(view);
+    }
+
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        super.onPrepareDialog(id, dialog);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        fragment.onPrepareDialog(id, dialog);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        return fragment.onCreateDialog(id);
+    }
+
     public void showtimeFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
         fragment.showtimeFields(view);
@@ -385,4 +369,23 @@ public class ServProvSignUpActivity extends FragmentActivity {
         fragment.showWorkFields(view);
     }
 
+    public void showStartTimePicker(View view) {
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        fragment.showStartTimePicker(view);
+    }
+
+    public void showEndTimePicker(View view) {
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        fragment.showEndTimePicker(view);
+    }
+
+    public void addNewWorkPlace(View view) {
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        fragment.addNewWorkPlace(view);
+    }
+
+    public void registerDone(View view) {
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        fragment.registerDone(view);
+    }
 }

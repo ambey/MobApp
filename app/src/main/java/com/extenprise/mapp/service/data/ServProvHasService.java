@@ -7,7 +7,7 @@ public class ServProvHasService {
     private String idServProvHasServ;
     private float experience;
     private Service service;
-    private ArrayList<ServProvHasServHasServPt> servProvHasServHasServPts;
+    private ArrayList<ServProvHasServPt> servProvHasServHasServPts;
     private ServiceProvider servProv;
 
     public String getIdServProvHasServ() {
@@ -18,7 +18,7 @@ public class ServProvHasService {
         this.idServProvHasServ = idServProvHasServ;
     }
 
-    public boolean addServProvHasServHasSaervPt(ServProvHasServHasServPt spsspt) {
+    public boolean addServProvHasServHasSaervPt(ServProvHasServPt spsspt) {
         if (servProvHasServHasServPts == null) {
             servProvHasServHasServPts = new ArrayList<>();
         }
@@ -61,11 +61,4 @@ public class ServProvHasService {
         this.service = service;
     }
 
-    public ArrayList<ServProvHasServHasServPt> getServProvHasServHasServPts() {
-        return servProvHasServHasServPts;
-    }
-
-    public void setServProvHasServHasServPts(ArrayList<ServProvHasServHasServPt> servProvHasServHasServPts) {
-        this.servProvHasServHasServPts = servProvHasServHasServPts;
-    }
 }

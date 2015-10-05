@@ -11,6 +11,6 @@ import com.extenprise.mapp.service.data.*;
 public abstract class LoginHolder {
     public static Customer custLoginRef;
     public static ServiceProvider servLoginRef;
-    public static ServProvHasServHasServPt spsspt;
+    public static ServProvHasServPt spsspt;
     public static Appointment appointment;
 }

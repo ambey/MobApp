@@ -1,32 +1,74 @@
 package com.extenprise.mapp.service.data;
 
-import java.sql.Date;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.extenprise.mapp.data.SignInData;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
-public class ServiceProvider {
+public class ServiceProvider implements Parcelable {
 
     private int idServiceProvider;
+    private SignInData signInData;
     private String fName;
     private String lName;
-    private String phone;
-    private String altPhone;
     private String emailId;
-    private String passwd;
     private String gender;
     private String qualification;
     private String regNo;
-    private boolean subscribed;
+    private int subscribed;
     private Date subsDate;
-    private ArrayList<ServProvHasService> services;
-    private byte[] img;
+    private ArrayList<ServProvHasServPt> services;
+    //private ArrayList<ServiceProvider> links;
+    //private byte[] img;
 
+    public ServiceProvider() {
+        signInData = new SignInData();
+        services = new ArrayList<>();
+        //links = new ArrayList<>();
+    }
+/*
     public byte[] getImg() {
         return img;
     }
 
     public void setImg(byte[] img) {
         this.img = img;
+    }
+*/
+
+    public ServiceProvider(Parcel source) {
+        signInData = new SignInData();
+        services = new ArrayList<>();
+        //links = new ArrayList<>();
+
+        idServiceProvider = source.readInt();
+        subscribed = source.readInt();
+
+        String[] fields = new String[9];
+        int i = 0;
+        source.readStringArray(fields);
+        fName = fields[i++];
+        lName = fields[i++];
+        signInData.setPhone(fields[i++]);
+        signInData.setPasswd(fields[i++]);
+        emailId = fields[i++];
+        gender = fields[i++];
+        qualification = fields[i++];
+        regNo = fields[i++];
+
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        try {
+            subsDate = sdf.parse(fields[i]);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getRegNo() {
@@ -45,11 +87,11 @@ public class ServiceProvider {
         this.qualification = qualification;
     }
 
-    public void addServProvHasService(ServProvHasService sps) {
+    public void addServProvHasServPt(ServProvHasServPt spspt) {
         if (services == null) {
             services = new ArrayList<>();
         }
-        services.add(sps);
+        services.add(spspt);
     }
 
     public int getServiceCount() {
@@ -59,13 +101,30 @@ public class ServiceProvider {
         return services.size();
     }
 
-    public ServProvHasService getServProvHasService(String name, String speciality) {
-        for (ServProvHasService sps: services) {
-            Service s = sps.getService();
-            if(s.getServCatagory().equals(name) && s.getSpeciality().equals(speciality)) {
-                return sps;
-            }
+    public ServProvHasServPt getServProvHasServPt(int position) {
+        try {
+            return services.get(position);
+        } catch (IndexOutOfBoundsException x) {
+            x.printStackTrace();
         }
+        return null;
+    }
+
+    public boolean addLink(ServiceProvider sp) {
+/*
+        return links.add(sp);
+*/
+        return false;
+    }
+
+    public ServiceProvider getLink(int position) {
+/*
+        try {
+            return links.get(position);
+        } catch (IndexOutOfBoundsException x) {
+            x.printStackTrace();
+        }
+*/
         return null;
     }
 
@@ -94,19 +153,11 @@ public class ServiceProvider {
     }
 
     public String getPhone() {
-        return phone;
+        return signInData.getPhone();
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAltPhone() {
-        return altPhone;
-    }
-
-    public void setAltPhone(String altPhone) {
-        this.altPhone = altPhone;
+        signInData.setPhone(phone);
     }
 
     public String getEmailId() {
@@ -118,11 +169,11 @@ public class ServiceProvider {
     }
 
     public String getPasswd() {
-        return passwd;
+        return signInData.getPasswd();
     }
 
     public void setPasswd(String passwd) {
-        this.passwd = passwd;
+        signInData.setPasswd(passwd);
     }
 
     public String getGender() {
@@ -133,11 +184,11 @@ public class ServiceProvider {
         this.gender = gender;
     }
 
-    public boolean isSubscribed() {
+    public int isSubscribed() {
         return subscribed;
     }
 
-    public void setSubscribed(boolean subscribed) {
+    public void setSubscribed(int subscribed) {
         this.subscribed = subscribed;
     }
 
@@ -149,11 +200,49 @@ public class ServiceProvider {
         this.subsDate = subsDate;
     }
 
-    public ArrayList<ServProvHasService> getServices() {
+    public ArrayList<ServProvHasServPt> getServices() {
         return services;
     }
 
-    public void setServices(ArrayList<ServProvHasService> services) {
+    public void setServices(ArrayList<ServProvHasServPt> services) {
         this.services = services;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idServiceProvider);
+        dest.writeInt(subscribed);
+
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        dest.writeStringArray(new String[]{
+                fName, lName, getPhone(), getPasswd(), emailId,
+                gender, qualification, regNo, sdf.format(subsDate)
+        });
+    }
+
+    public static final Creator<ServiceProvider> CREATOR = new Creator<ServiceProvider>() {
+        @Override
+        public ServiceProvider createFromParcel(Parcel source) {
+            return new ServiceProvider(source);
+        }
+
+        @Override
+        public ServiceProvider[] newArray(int size) {
+            return new ServiceProvider[size];
+        }
+    };
+
+    public SignInData getSignInData() {
+        return signInData;
+    }
+
+    public void setSignInData(SignInData signInData) {
+        this.signInData = signInData;
     }
 }

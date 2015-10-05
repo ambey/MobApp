@@ -261,6 +261,12 @@
             android:name=".customer.activity.PatientProfile"
             android:label="@string/title_activity_patient_profile" >
         </activity>
+
+        <service
+            android:name="com.extenprise.mapp.activity.MappService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

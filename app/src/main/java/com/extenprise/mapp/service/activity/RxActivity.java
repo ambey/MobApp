@@ -49,7 +49,7 @@ public class RxActivity extends Activity {
 
     private String mParentActivity;
     private int mAppontId;
-    private int mCustId;
+    private String mCustId;
     private Appointment mAppont;
 
     @Override
@@ -60,7 +60,7 @@ public class RxActivity extends Activity {
         Intent intent = getIntent();
         mParentActivity = intent.getStringExtra("parent-activity");
         mAppontId = intent.getIntExtra("appont_id", -1);
-        mCustId = intent.getIntExtra("cust_id", -1);
+        mCustId = intent.getStringExtra("cust_id");
 
         mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);

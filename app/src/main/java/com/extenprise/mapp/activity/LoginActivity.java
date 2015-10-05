@@ -1,15 +1,21 @@
 package com.extenprise.mapp.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
@@ -33,19 +39,15 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.activity.BookAppointmentActivity;
+import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.activity.SearchServProvActivity;
-import com.extenprise.mapp.service.activity.ServProvSignUpActivity;
 import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
-import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -53,11 +55,14 @@ import java.util.Map;
  */
 public class LoginActivity extends Activity {
 
+    private Messenger mService;
+    private LoginResponseHandler mRespHandler = new LoginResponseHandler(this);
+    private int mLoginType;
+    private SignInData mSignInData;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mMobileNumber;
     private EditText mPasswordView;
@@ -65,11 +70,6 @@ public class LoginActivity extends Activity {
     private View mLoginFormView;
     private CheckBox mSaveLoginCheckBox;
     private RadioGroup mRadioGroupUType;
-    private RadioButton mRadioButtonUType;
-
-    private SharedPreferences loginPreferences;
-    private SharedPreferences.Editor loginPrefsEditor;
-    private Boolean saveLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mSignInData = new SignInData();
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
         // Set up the login form.
@@ -113,14 +114,12 @@ public class LoginActivity extends Activity {
             }
         });
 
-        mSaveLoginCheckBox = (CheckBox)findViewById(R.id.rememberMe);
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
+        mSaveLoginCheckBox = (CheckBox) findViewById(R.id.rememberMe);
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
-        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
             mMobileNumber.setText(loginPreferences.getString("username", ""));
-            mPasswordView.setText(loginPreferences.getString("password", ""));
             mSaveLoginCheckBox.setChecked(true);
         }
 
@@ -163,12 +162,14 @@ public class LoginActivity extends Activity {
         }
     }
 
+/*
     public void registerServProv() {
         mMobileNumber.setError(null);
         mPasswordView.setError(null);
         Intent intent = new Intent(this, ServProvSignUpActivity.class);
         startActivity(intent);
     }
+*/
 
 
     /**
@@ -177,16 +178,13 @@ public class LoginActivity extends Activity {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
-        if(uTypeID == -1) {
+        RadioButton mRadioButtonUType;
+        if (uTypeID == -1) {
             UIUtility.showAlert(this, "", "Please Select user type.");
             return;
         } else {
-            mRadioButtonUType = (RadioButton)findViewById(uTypeID);
+            mRadioButtonUType = (RadioButton) findViewById(uTypeID);
         }
 
         // Reset errors.
@@ -194,34 +192,25 @@ public class LoginActivity extends Activity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String mobile = mMobileNumber.getText().toString();
-        String password = mPasswordView.getText().toString();
+        if (mRadioButtonUType.getText().toString().trim().equalsIgnoreCase(getString(R.string.patient))) {
+            mLoginType = MappService.CUSTOMER_LOGIN;
+        } else if (mRadioButtonUType.getText().toString().trim().equalsIgnoreCase(getString(R.string.servProv))) {
+            mLoginType = MappService.SERVICE_LOGIN;
+        }
+        String phone = mMobileNumber.getText().toString().trim();
+        String passwd = mPasswordView.getText().toString();
 
         boolean cancel = false;
-        //boolean passwd = false;
         View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        /*if (!TextUtils.isEmpty(password)) {
-            passwd = true;
-            if (!Validator.isPasswordValid(password)) {
-            if (!Validator.isPasswordValid(password)) {
-                mPasswordView.setError(getString(R.string.error_invalid_password));
-                focusView = mPasswordView;
-                cancel = true;
-            }
-        }*/
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(mobile)) {
+        if (TextUtils.isEmpty(phone)) {
             mMobileNumber.setError(getString(R.string.error_field_required));
             focusView = mMobileNumber;
             cancel = true;
-        } else if (!Validator.isPhoneValid(mobile)) {
+        } else if (!Validator.isPhoneValid(phone)) {
             mMobileNumber.setError(getString(R.string.error_invalid_phone));
             focusView = mMobileNumber;
             cancel = true;
-        } else if (TextUtils.isEmpty(password)) {
+        } else if (TextUtils.isEmpty(passwd)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
@@ -231,36 +220,35 @@ public class LoginActivity extends Activity {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } /*else if (!passwd) {
-            *//* check if the email ID is already registered *//*
-
-            showProgress(true);
-            mAuthTask = new UserLoginTask(this, email, null);
-            mAuthTask.execute((Void) null);
-
-            //Intent intent = new Intent(this, ServProvSignUpActivity.class);
-            //startActivity(intent);
-        }*/ else {
-
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        } else {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
 
+            mSignInData.setPhone(phone);
+            mSignInData.setPasswd(EncryptUtil.encrypt(passwd));
+
+            SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
             if (mSaveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.putBoolean("saveLogin", true);
-                loginPrefsEditor.putString("username", mobile);
-                loginPrefsEditor.putString("password", password);
-                loginPrefsEditor.commit();
+                loginPrefsEditor.putString("username", mSignInData.getPhone());
+                loginPrefsEditor.apply();
             } else {
                 loginPrefsEditor.clear();
-                loginPrefsEditor.commit();
+                loginPrefsEditor.apply();
             }
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             UIUtility.showProgress(this, mLoginFormView, mProgressView, true);
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+/*
             mAuthTask = new UserLoginTask(this, mobile, password);
             mAuthTask.execute((Void) null);
+*/
         }
     }
+
     class SetupEmailAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
 
         @Override
@@ -296,238 +284,85 @@ public class LoginActivity extends Activity {
         mMobileNumber.setAdapter(adapter);
     }
 
-    private boolean isLoginValid(String mobile, String passwd) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        int count = 0;
-
-        if(mRadioButtonUType.getText().toString().trim().equalsIgnoreCase("Patient")) {
-
-            String[] projection = {
-                    MappContract.Customer._ID,
-                    MappContract.Customer.COLUMN_NAME_FNAME,
-                    MappContract.Customer.COLUMN_NAME_LNAME,
-                    MappContract.Customer.COLUMN_NAME_EMAIL_ID,
-                    MappContract.Customer.COLUMN_NAME_CELLPHONE,
-                    MappContract.Customer.COLUMN_NAME_IMAGE,
-                    MappContract.Customer.COLUMN_NAME_LOCATION,
-                    MappContract.Customer.COLUMN_NAME_PIN_CODE,
-                    MappContract.Customer.COLUMN_NAME_ID_CITY,
-                    MappContract.Customer.COLUMN_NAME_ID_STATE,
-                    MappContract.Customer.COLUMN_NAME_ID_CUSTOMER,
-                    MappContract.Customer.COLUMN_NAME_WEIGHT,
-                    MappContract.Customer.COLUMN_NAME_AGE,
-                    MappContract.Customer.COLUMN_NAME_DOB,
-                    MappContract.Customer.COLUMN_NAME_HEIGHT
-            };
-
-            String selection = MappContract.Customer.COLUMN_NAME_CELLPHONE + "=? and " +
-                    MappContract.Customer.COLUMN_NAME_PASSWD + "=?";
-
-            String[] selectionArgs = {
-                    mobile,
-                    passwd
-            };
-            Cursor c = db.query(MappContract.Customer.TABLE_NAME,
-                    projection, selection, selectionArgs, null, null, null);
-
-            count = c.getCount();
-            if (count > 0) {
-                c.moveToFirst();
-                Customer p = new Customer();
-                p.setIdCustomer(Integer.parseInt(c.getString(0)));
-                p.setfName(c.getString(1));
-                p.setlName(c.getString(2));
-                p.setEmailId(c.getString(3));
-                p.setPhone(c.getString(4));
-                p.setImg(c.getBlob(5));
-
-
-                if(LoginHolder.custLoginRef != null) {
-                    if(LoginHolder.custLoginRef.getStatus() != null) {
-                        p.setStatus(LoginHolder.custLoginRef.getStatus());
-                    }
-                }
-                LoginHolder.custLoginRef = p;
-            }
-            c.close();
-
-        } else {
-
-            String[] projection = {
-                    MappContract.ServiceProvider._ID,
-                    MappContract.ServiceProvider.COLUMN_NAME_FNAME,
-                    MappContract.ServiceProvider.COLUMN_NAME_LNAME,
-                    MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID,
-                    MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE,
-                    MappContract.ServiceProvider.COLUMN_NAME_IMAGE,
-                    MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION,
-                    MappContract.ServiceProvider.COLUMN_NAME_GENDER,
-                    MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER,
-            };
-
-            String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=? and " +
-                    MappContract.ServiceProvider.COLUMN_NAME_PASSWD + "=?";
-
-            String[] selectionArgs = {
-                    mobile,
-                    passwd
-            };
-            Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
-                    projection, selection, selectionArgs, null, null, null);
-
-            count = c.getCount();
-            if (count > 0) {
-                c.moveToFirst();
-                ServiceProvider sp = new ServiceProvider();
-                sp.setIdServiceProvider(Integer.parseInt(c.getString(0)));
-                sp.setfName(c.getString(1));
-                sp.setlName(c.getString(2));
-                sp.setEmailId(c.getString(3));
-                sp.setPhone(c.getString(4));
-                sp.setImg(c.getBlob(5));
-                sp.setQualification(c.getString(6));
-                sp.setGender(c.getString(7));
-                sp.setRegNo(c.getString(8));
-
-                LoginHolder.servLoginRef = sp;
-            }
-            c.close();
-        }
-
-        return (count > 0);
-    }
-
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final Activity mActivity;
-        private final String mCellphone;
-        private final String mPassword;
-
-        UserLoginTask(Activity activity, String cellphone, String password) {
-            mActivity = activity;
-            mCellphone = cellphone;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            /*if (mPassword == null) {
-                return isEmailIdRegistered(mEmail);
-            }*/
-            return isLoginValid(mCellphone, mPassword);
-
-            // attempt authentication against a network service.
-/*
-            HttpURLConnection connection = null;
-            try {
-                String urlParams = "email=" + URLEncoder.encode(mEmail, "UTF-8") +
-                        "&passwd=" + URLEncoder.encode(mPassword, "UTF-8");
-
-                URL url = new URL(getResources().getString(R.string.login_url));
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setDoOutput(true);
-                connection.setChunkedStreamingMode(0);
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type",
-                        "application/x-www-form-urlencoded");
-                connection.setRequestProperty("Content-Length",
-                        Integer.toString(urlParams.getBytes().length));
-                connection.setRequestProperty("Content-Language", "en-US");
-
-                connection.setUseCaches(false);
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-
-                //Send request
-                DataOutputStream wr = new DataOutputStream(
-                        connection.getOutputStream());
-                wr.writeBytes(urlParams);
-                wr.flush();
-                wr.close();
-
-                //Get Response
-                int responseCode = connection.getResponseCode();
-                if (responseCode != -1) {
-                    InputStream is = connection.getInputStream();
-                    BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                    String line = null;
-                    StringBuffer responseBuf = new StringBuffer();
-                    while ((line = rd.readLine()) != null) {
-                        responseBuf.append(line);
-                    }
-                    rd.close();
-
-                    Gson gson = new Gson();
-                    Response response = gson.fromJson(responseBuf.toString(), Response.class);
-                    if (response.getStatus() == 0) {
-                        if (response.getType().equals("Customer")) {
-
-                        } else if (response.getType().equals("ServiceProvider")) {
-                            ServiceProvider sp = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-
-            } finally {
-
-                if (connection != null) {
-                    connection.disconnect();
-                }
-            }
-*/
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            UIUtility.showProgress(mActivity, mLoginFormView, mProgressView, false);
-
-            if (success) {
-                /*if (mPassword == null) {
-                    mPasswordView.setError(getString(R.string.error_email_exists));
-                    mPasswordView.requestFocus();
-                    return;
-                }*/
-                //finish();
-                if(mRadioButtonUType.getText().toString().trim().equalsIgnoreCase("Patient")) {
-                    if(LoginHolder.custLoginRef.getStatus() != null) {
-                        if(LoginHolder.custLoginRef.getStatus().equals("Appointment")) {
-                            Intent intent = new Intent(mActivity, BookAppointmentActivity.class);
-                            startActivity(intent);
-                        }
-                    } else {
-                        Intent intent = new Intent(mActivity, PatientsHomeScreenActivity.class);
-                        startActivity(intent);
+    protected void loginDone(Bundle msgData) {
+        UIUtility.showProgress(this, mLoginFormView, mProgressView, false);
+        unbindService(mConnection);
+        boolean success = msgData.getBoolean("status");
+        if (success) {
+            Intent intent;
+            if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                Customer customer = msgData.getParcelable("customer");
+                String targetActivity = getIntent().getStringExtra("parent-activity");
+                if (targetActivity != null) {
+                    try {
+                        intent = new Intent(this, Class.forName(targetActivity));
+                        intent.putExtra("customer", customer);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        return;
                     }
                 } else {
-                    Intent intent = new Intent(mActivity, ServiceProviderHomeActivity.class);
-                    startActivity(intent);
+                    intent = new Intent(this, PatientsHomeScreenActivity.class);
+                    intent.putExtra("customer", customer);
                 }
             } else {
-                /*if(mPassword == null) {
-                    Intent intent = new Intent(mActivity, ServProvSignUpActivity.class);
-                    startActivity(intent);
-                    return;
-                }*/
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                intent = new Intent(this, ServiceProviderHomeActivity.class);
+                intent.putExtra("service", msgData.getParcelable("service"));
+            }
+            startActivity(intent);
+        } else {
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();
+        }
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", mLoginType);
+            bundle.putString("phoneNo", mSignInData.getPhone());
+            bundle.putString("passwd", mSignInData.getPasswd());
+            Message msg = Message.obtain(null, MappService.DO_LOGIN);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
 
         @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            UIUtility.showProgress(mActivity, mLoginFormView, mProgressView, false);
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    private static class LoginResponseHandler extends Handler {
+        private LoginActivity mActivity;
+
+        public LoginResponseHandler(LoginActivity activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_LOGIN:
+                    mActivity.loginDone(msg.getData());
+                default:
+                    super.handleMessage(msg);
+            }
         }
     }
+
 }
 

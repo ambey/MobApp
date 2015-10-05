@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,12 +37,12 @@ public abstract class UIUtility {
     /**
      * Shows the progress UI and hides the login form.
      */
-    public static void showProgress(Activity activity, final View formView, final View progressView, final boolean show) {
+    public static void showProgress(Context context, final View formView, final View progressView, final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = activity.getResources().getInteger(android.R.integer.config_shortAnimTime);
+            int shortAnimTime = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             formView.setVisibility(show ? View.GONE : View.VISIBLE);
             formView.animate().setDuration(shortAnimTime).alpha(
@@ -162,7 +163,7 @@ public abstract class UIUtility {
             searchDay = "Saturday";
         }
 
-        ArrayList<String> availDaysList = new ArrayList<String>();
+        ArrayList<String> availDaysList = new ArrayList<>();
         availDaysList.add(availDays);
         if (availDays.contains(",")) {
             availDaysList = new ArrayList<>(Arrays.asList(availDays.trim().split(",")));
@@ -294,7 +295,7 @@ public abstract class UIUtility {
     }
 
     public static void expandOrCollapse(final View v, String exp_or_colpse) {
-        TranslateAnimation anim = null;
+        TranslateAnimation anim;
         if(exp_or_colpse.equals("expand")) {
             anim = new TranslateAnimation(0.0f, 0.0f, -v.getHeight(), 0.0f);
             v.setVisibility(View.VISIBLE);

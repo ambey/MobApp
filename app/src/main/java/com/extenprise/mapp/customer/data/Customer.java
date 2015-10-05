@@ -1,27 +1,33 @@
 package com.extenprise.mapp.customer.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.extenprise.mapp.data.City;
+import com.extenprise.mapp.data.SignInData;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import java.lang.reflect.Type;
 import java.util.*;
 
 
-public class Customer {
+public class Customer implements Parcelable {
 
     private int idCustomer;
+    private SignInData signInData;
     private String fName;
     private String lName;
-    private String phone;
-    private String altPhone;
     private String emailId;
-    private String passwd;
     private String gender;
     private int age;
     private float weight;
     private float height;
     private String location;
     private Date dob;
-    private String city;
-    private String state;
-    private String country;
-    private String pinCode;
+    private City city;
+    private String pincode;
     private byte[] img;
 
     public byte[] getImg() {
@@ -32,22 +38,42 @@ public class Customer {
         this.img = img;
     }
 
-    public String getPinCode() {
-        return pinCode;
+    public Customer() {
+        signInData = new SignInData();
+        city = new City();
     }
 
-    public void setPinCode(String pinCode) {
-        this.pinCode = pinCode;
+    public Customer(Parcel source) {
+        signInData = new SignInData();
+        city = new City();
+        idCustomer = source.readInt();
+
+        String[] fields = new String[11];
+        source.readStringArray(fields);
+        int i = 0;
+        fName = fields[i++];
+        lName = fields[i++];
+        signInData.setPhone(fields[i++]);
+        signInData.setPasswd(fields[i++]);
+        emailId = fields[i++];
+        gender = fields[i++];
+        location = fields[i++];
+        pincode = fields[i++];
+        city.setCity(fields[i++]);
+        city.setState(fields[i++]);
+        city.setCountry(fields[i]);
+
+        age = source.readInt();
+        weight = source.readFloat();
+        height = source.readFloat();
     }
 
-    private String status;
-
-    public String getStatus() {
-        return status;
+    public String getPincode() {
+        return pincode;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
     }
 
     public int getAge() {
@@ -98,22 +124,6 @@ public class Customer {
         this.lName = lName;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAltPhone() {
-        return altPhone;
-    }
-
-    public void setAltPhone(String altPhone) {
-        this.altPhone = altPhone;
-    }
-
     public String getEmailId() {
         return emailId;
     }
@@ -122,12 +132,20 @@ public class Customer {
         this.emailId = emailId;
     }
 
+    public String getPhone() {
+        return signInData.getPhone();
+    }
+
+    public void setPhone(String phone) {
+        signInData.setPhone(phone);
+    }
+
     public String getPasswd() {
-        return passwd;
+        return signInData.getPasswd();
     }
 
     public void setPasswd(String passwd) {
-        this.passwd = passwd;
+        signInData.setPasswd(passwd);
     }
 
     public String getGender() {
@@ -154,27 +172,65 @@ public class Customer {
         this.dob = dob;
     }
 
+    public int getIdCity() {
+        return city.getIdCity();
+    }
+
+    public void setIdCity(int id) {
+        city.setIdCity(id);
+    }
+
     public String getCity() {
-        return city;
+        return city.getCity();
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.city.setCity(city);
     }
 
     public String getState() {
-        return state;
+        return city.getState();
     }
 
     public void setState(String state) {
-        this.state = state;
+        city.setState(state);
     }
 
     public String getCountry() {
-        return country;
+        return city.getCountry();
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        city.setCountry(country);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idCustomer);
+        dest.writeStringArray(new String[]{
+                fName, lName, signInData.getPhone(), signInData.getPasswd(), emailId, gender,
+                location, pincode, city.getCity(), city.getState(), city.getCountry()
+        });
+        dest.writeInt(age);
+        dest.writeFloat(weight);
+        dest.writeFloat(height);
+    }
+
+    public static final Creator<Customer> CREATOR = new Creator<Customer>() {
+
+        @Override
+        public Customer createFromParcel(Parcel source) {
+            return new Customer(source);
+        }
+
+        @Override
+        public Customer[] newArray(int size) {
+            return new Customer[size];
+        }
+    };
 }

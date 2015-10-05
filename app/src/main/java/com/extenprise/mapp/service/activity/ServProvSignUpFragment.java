@@ -1,14 +1,23 @@
 package com.extenprise.mapp.service.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,9 +32,13 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.MappService;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.ui.TitleFragment;
+import com.extenprise.mapp.util.EncryptUtil;
+import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
@@ -36,7 +49,9 @@ import java.util.Locale;
 /**
  * Created by ambey on 10/9/15.
  */
-public class ServProvSignUpFragment extends Fragment {
+public class ServProvSignUpFragment extends Fragment implements TitleFragment {
+    private SignUpHandler mResponseHandler = new SignUpHandler(this);
+
     private View mRootView;
     private EditText mFirstName;
     private EditText mLastName;
@@ -48,6 +63,9 @@ public class ServProvSignUpFragment extends Fragment {
     private EditText mRegistrationNumber;
     private ImageView mImgView;
     private TextView mImgTxtView;
+
+    private View mFormView;
+    private View mProgressView;
 
     // LogCat tag
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
@@ -69,9 +87,21 @@ public class ServProvSignUpFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.activity_sign_up, container, false);
         LoginHolder.servLoginRef = new ServiceProvider();
 
+        mRootView.findViewById(R.id.next).setVisibility(View.GONE);
+        mFormView = mRootView.findViewById(R.id.signUpForm);
+        mProgressView = mRootView.findViewById(R.id.progressView);
+
         mFirstName = (EditText) mRootView.findViewById(R.id.editTextFName);
         mLastName = (EditText) mRootView.findViewById(R.id.editTextLName);
         mCellphoneview = (EditText) mRootView.findViewById(R.id.editTextCellphone);
+        mCellphoneview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    checkPhoneExistence();
+                }
+            }
+        });
         mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
         mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
         mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
@@ -81,13 +111,13 @@ public class ServProvSignUpFragment extends Fragment {
         return mRootView;
     }
 
-    private boolean isValidInput() {
+    public boolean isValidInput(ViewPager pager) {
         boolean cancel = false;
         View focusView = null;
 
         String cnfPasswd = mCnfPasswdView.getText().toString();
         String passwd = mPasswdView.getText().toString();
-        if(TextUtils.isEmpty(cnfPasswd)) {
+        if (TextUtils.isEmpty(cnfPasswd)) {
             mCnfPasswdView.setError(getString(R.string.error_field_required));
             focusView = mCnfPasswdView;
             cancel = true;
@@ -127,32 +157,26 @@ public class ServProvSignUpFragment extends Fragment {
             cancel = true;
         }
 
-        if(isPhoneRegistered(phone)) {
-            mCellphoneview.setError(getString(R.string.error_phone_registered));
-            focusView = mCellphoneview;
-            cancel = true;
-        }
-
         int genderID = mRadioGroupGender.getCheckedRadioButtonId();
-        if(genderID == -1) {
+        if (genderID == -1) {
             //UIUtility.showAlert(this, "", "Please Select Gender.");
-            RadioButton mFemale = (RadioButton)mRootView.findViewById(R.id.radioButtonFemale);
+            RadioButton mFemale = (RadioButton) mRootView.findViewById(R.id.radioButtonFemale);
             mFemale.setError("Please select Gender.");
             focusView = mFemale;
             cancel = true;
             //return;
         } else {
-            mRadioButtonGender = (RadioButton)mRootView.findViewById(genderID);
+            mRadioButtonGender = (RadioButton) mRootView.findViewById(genderID);
         }
 
         String regNo = mRegistrationNumber.getText().toString();
-        if(TextUtils.isEmpty(regNo)) {
+        if (TextUtils.isEmpty(regNo)) {
             mRegistrationNumber.setError(getString(R.string.error_field_required));
             focusView = mRegistrationNumber;
             cancel = true;
         }
 
-        if(isRegNoExist(regNo)) {
+        if (isRegNoExist(regNo)) {
             mRegistrationNumber.setError("This Registration Number is already Registered.");
             focusView = mRegistrationNumber;
             cancel = true;
@@ -160,30 +184,25 @@ public class ServProvSignUpFragment extends Fragment {
 
         if (cancel) {
             focusView.requestFocus();
+            pager.setCurrentItem(0);
             return false;
         }
         return true;
     }
 
-    private boolean isPhoneRegistered(String phone) {
-        MappDbHelper dbHelper = new MappDbHelper(getActivity());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+    private void checkPhoneExistence() {
+        UIUtility.showProgress(getActivity(), mFormView, mProgressView, true);
+        Intent intent = new Intent(getActivity(), MappService.class);
+        getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
+    }
 
-        String[] projection = {
-                MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE
-        };
-
-        String selection = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + "=?";
-
-        String[] selectionArgs = {
-                phone
-        };
-        Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
-                projection, selection, selectionArgs, null, null, null);
-        int count = c.getCount();
-        c.close();
-
-        return (count > 0);
+    public void phoneCheckDone(Bundle data) {
+        UIUtility.showProgress(getActivity(), mFormView, mProgressView, false);
+        getActivity().unbindService(mConnection);
+        if(data.getBoolean("exists")) {
+            mCellphoneview.setError(getString(R.string.error_phone_registered));
+            mCellphoneview.requestFocus();
+        }
     }
 
     private boolean isRegNoExist(String regNo) {
@@ -255,4 +274,76 @@ public class ServProvSignUpFragment extends Fragment {
 
         return mediaFile;
     }
+
+    public void saveData() {
+        ServiceProvider sp = LoginHolder.servLoginRef;
+        sp.setfName(mFirstName.getText().toString());
+        sp.setlName(mLastName.getText().toString());
+        sp.setPhone(mCellphoneview.getText().toString());
+        sp.setGender(mRadioButtonGender.getText().toString());
+        sp.setRegNo(mRegistrationNumber.getText().toString());
+        sp.setPasswd(EncryptUtil.encrypt(mPasswdView.getText().toString()));
+    }
+
+    @Override
+    public CharSequence getPageTitle() {
+        return getString(R.string.personalDetails);
+    }
+
+    @Override
+    public int getPageIconResId() {
+        return 0;
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        private Messenger mService;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            bundle.putString("phone", mCellphoneview.getText().toString().trim());
+            bundle.putParcelable("service", LoginHolder.servLoginRef);
+            Message msg = Message.obtain(null, MappService.DO_SIGNUP);
+            msg.replyTo = new Messenger(mResponseHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    private static class SignUpHandler extends Handler {
+        private ServProvSignUpFragment mFragment;
+
+        public SignUpHandler(ServProvSignUpFragment fragment) {
+            mFragment = fragment;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_SIGNUP:
+                    mFragment.phoneCheckDone(msg.getData());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
 }

@@ -3,6 +3,8 @@ package com.extenprise.mapp.data;
 //import com.extenprise.mapp.customer.data.CustomerHistoryData;
 //import com.extenprise.mapp.common.Appointment;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.extenprise.mapp.customer.data.Customer;
@@ -14,14 +16,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class Appointment implements Comparable<Appointment> {
+public class Appointment implements Comparable<Appointment>, Parcelable {
     private int id;
     private String servPointType;
     private String date;
     private int fromTime; //as minutes
     private int toTime;//as minutes
-    private ServicePoint servicePoint;
-    private ServProvHasService servProvHasService;
+    private ServProvHasServPt service;
     private Customer customer;
     private ArrayList<Report> reports;
 
@@ -77,22 +78,6 @@ public class Appointment implements Comparable<Appointment> {
         this.toTime = toTime;
     }
 
-    public ServicePoint getServicePoint() {
-        return servicePoint;
-    }
-
-    public void setServicePoint(ServicePoint servicePoint) {
-        this.servicePoint = servicePoint;
-    }
-
-    public ServProvHasService getServProvHasService() {
-        return servProvHasService;
-    }
-
-    public void setServProvHasService(ServProvHasService servProvHasService) {
-        this.servProvHasService = servProvHasService;
-    }
-
     public Customer getCustomer() {
         return customer;
     }
@@ -116,5 +101,30 @@ public class Appointment implements Comparable<Appointment> {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(fromTime);
+        dest.writeInt(toTime);
+        dest.writeStringArray(new String[] {
+                servPointType, date
+        });
+        if(customer != null) {
+            dest.writeInt(customer.getIdCustomer());
+        } else {
+            dest.writeInt(-1);
+        }
+        if(service != null) {
+            dest.writeInt(service.getIdServProvHasServPt());
+        } else {
+            dest.writeInt(-1);
+        }
     }
 }

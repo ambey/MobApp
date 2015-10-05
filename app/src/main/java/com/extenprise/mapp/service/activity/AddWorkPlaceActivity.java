@@ -4,22 +4,22 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.os.AsyncTask;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -29,11 +29,10 @@ import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.db.MappContract;
+import com.extenprise.mapp.activity.MappService;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DBUtil;
@@ -44,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddWorkPlaceActivity extends Activity {
+
+    private SignUpHandler mResponseHandler = new SignUpHandler(this);
 
     private EditText mName;
     private EditText mLoc;
@@ -76,7 +77,7 @@ public class AddWorkPlaceActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_workplace);
-        LoginHolder.spsspt = new ServProvHasServHasServPt();
+        LoginHolder.spsspt = new ServProvHasServPt();
 
         mFormView = findViewById(R.id.addWorkPlaceForm);
         mProgressView = findViewById(R.id.progressView);
@@ -114,15 +115,15 @@ public class AddWorkPlaceActivity extends Activity {
         });
 
 
-
         mSpeciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String spec = mSpeciality.getSelectedItem().toString();
-                if(spec.equals("Other")) {
+                if (spec.equals("Other")) {
                     openDialog();
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
@@ -156,7 +157,7 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void showtimeFields(View view) {
-        if(mStartTime.getVisibility() == View.VISIBLE) {
+        if (mStartTime.getVisibility() == View.VISIBLE) {
             mStartTime.setVisibility(View.GONE);
             mEndTime.setVisibility(View.GONE);
         } else {
@@ -166,8 +167,8 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void showFeeFields(View view) {
-        TextView rupeeSign = (TextView)findViewById(R.id.viewRsSign);
-        if(mConsultFee.getVisibility() == View.VISIBLE) {
+        TextView rupeeSign = (TextView) findViewById(R.id.viewRsSign);
+        if (mConsultFee.getVisibility() == View.VISIBLE) {
             mConsultFee.setVisibility(View.GONE);
             rupeeSign.setVisibility(View.GONE);
         } else {
@@ -177,7 +178,7 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void showDaysFields(View view) {
-        if(mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
+        if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
             mMultiSpinnerDays.setVisibility(View.GONE);
         } else {
             //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
@@ -186,7 +187,7 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void showWorkFields(View view) {
-        if(mName.getVisibility() == View.VISIBLE) {
+        if (mName.getVisibility() == View.VISIBLE) {
             /*UIUtility.expandOrCollapse(mName, "");
             UIUtility.expandOrCollapse(mLoc, "");
             UIUtility.expandOrCollapse(mPhone1, "");
@@ -223,7 +224,7 @@ public class AddWorkPlaceActivity extends Activity {
 
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
-            if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
                 setupSelection();
             }
             showDialog(0);
@@ -233,7 +234,7 @@ public class AddWorkPlaceActivity extends Activity {
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
-        if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
             setupSelection();
         }
     }
@@ -249,7 +250,7 @@ public class AddWorkPlaceActivity extends Activity {
 
     public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
         public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if(options[clicked].toString().equalsIgnoreCase("All Days")) {
+            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
                 for (CharSequence option : options) {
                     Log.i("ME", option + " selected: " + selected);
                 }
@@ -271,7 +272,7 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     protected void printSelectedDays() {
-        if(selections[0]) {
+        if (selections[0]) {
             setupAllDaysSelected();
             return;
         }
@@ -297,14 +298,14 @@ public class AddWorkPlaceActivity extends Activity {
     private void setupSelection() {
         String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
         selections[0] = false;
-        for(String d : selectedDays) {
+        for (String d : selectedDays) {
             selections[getDayIndex(d)] = true;
         }
     }
 
     private int getDayIndex(String day) {
-        for(int i = 0; i < options.length; i++) {
-            if(day.equals(options[i])) {
+        for (int i = 0; i < options.length; i++) {
+            if (day.equals(options[i])) {
                 return i;
             }
         }
@@ -314,7 +315,7 @@ public class AddWorkPlaceActivity extends Activity {
     private void setupAllDaysSelected() {
         selections[0] = false;
         selectedDays = options[1].toString();
-        for(int i = 2; i < options.length; i++){
+        for (int i = 2; i < options.length; i++) {
             selectedDays += "," + options[i];
         }
     }
@@ -357,39 +358,29 @@ public class AddWorkPlaceActivity extends Activity {
         LoginHolder.servLoginRef.setQualification(mQualification.getText().toString().trim());
         //LoginHolder.servLoginRef.setGender(mGender.getSelectedItem().toString());
 
-        ServProvHasService sps = new ServProvHasService();
-        sps.setServProv(LoginHolder.servLoginRef);
-        sps.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
-
-        Service s = new Service();
-        s.setSpeciality(mSpeciality.getSelectedItem().toString());
-        s.setServCatagory(mServCatagory.getSelectedItem().toString());
-        sps.setService(s);
-
         ServicePoint spt = new ServicePoint();
-        ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
+        ServProvHasServPt spsspt = new ServProvHasServPt();
 
         spt.setName(mName.getText().toString().trim());
         spt.setLocation(mLoc.getText().toString().trim());
-        spt.setCity(mCity.getSelectedItem().toString().trim());
+        spt.getCity().setCity(mCity.getSelectedItem().toString().trim());
         spt.setPhone(mPhone1.getText().toString().trim());
         spt.setAltPhone(mPhone2.getText().toString().trim());
         spt.setEmailId(mEmailId.getText().toString().trim());
 
+        spsspt.setService(mSpeciality.getSelectedItem().toString());
+        spsspt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
         spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
         spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
-        spsspt.setWeeklyOff(mMultiSpinnerDays.getText().toString());
+        spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
         spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         spsspt.setServicePoint(spt);
-        spsspt.setServProvHasService(sps);
-        spt.addSpsspt(spsspt);
-        sps.addServProvHasServHasSaervPt(spsspt);
 
-        LoginHolder.servLoginRef.addServProvHasService(sps);
+        LoginHolder.servLoginRef.addServProvHasServPt(spsspt);
 
         clearWorkPlace();
-        int count = sps.getWorkPlaceCount() + 1;
+        int count = LoginHolder.servLoginRef.getServiceCount() + 1;
         TextView countView = (TextView) findViewById(R.id.viewWorkPlaceCount);
         countView.setText("#" + count);
         return true;
@@ -470,7 +461,7 @@ public class AddWorkPlaceActivity extends Activity {
         View focusView = null;
 
         String category = mServCatagory.getSelectedItem().toString();
-        if(category.equalsIgnoreCase("Select Category")) {
+        if (category.equalsIgnoreCase("Select Category")) {
             //UIUtility.showAlert(this, "", "Please select service category.");
             View selectedView = mServCatagory.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
@@ -483,7 +474,7 @@ public class AddWorkPlaceActivity extends Activity {
         }
 
         String spec = mSpeciality.getSelectedItem().toString();
-        if(spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
+        if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
             //UIUtility.showAlert(this, "", "Please select speciality.");
             View selectedView = mSpeciality.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
@@ -605,25 +596,29 @@ public class AddWorkPlaceActivity extends Activity {
 
     private void initialize() {
         boolean workPlaceAdded = false;
-        ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
+        ServProvHasServPt spsspt = LoginHolder.spsspt;
         ServProvHasService sps = null;
         ServiceProvider sp = LoginHolder.servLoginRef;
 
-        ArrayList<ServProvHasService> spsList = sp.getServices();
+        ArrayList<ServProvHasServPt> spsList = sp.getServices();
         if (spsList != null) {
             for (int i = spsList.size() - 1; i >= 0; i--) {
+/*
                 if (spsList.get(i).getWorkPlaceCount() == 0) {
                     spsList.remove(i);
                 }
+*/
             }
         }
 
         if (spsspt != null) {
+/*
             sps = spsspt.getServProvHasService();
             if (sps != null) {
                 sp = sps.getServProv();
                 workPlaceAdded = sps.isWorkPlaceAdded();
             }
+*/
         }
 
         if (!workPlaceAdded) {
@@ -648,11 +643,58 @@ public class AddWorkPlaceActivity extends Activity {
 
     public void saveData(View view) {
         UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
 
+/*
         SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);
+*/
     }
 
+    private void signUpDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        private Messenger mService;
+        private boolean mBound;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            mBound = true;
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            bundle.putParcelable("service", LoginHolder.servLoginRef);
+            Message msg = Message.obtain(null, MappService.DO_LOGIN);
+            msg.replyTo = new Messenger(mResponseHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+            mBound = false;
+        }
+    };
+
+/*
     class SaveServiceData extends AsyncTask<Void, Void, Void> {
 
         private Activity myActivity;
@@ -664,7 +706,7 @@ public class AddWorkPlaceActivity extends Activity {
         @Override
         protected Void doInBackground(Void... voids) {
             ServiceProvider sp = LoginHolder.servLoginRef;
-            ArrayList<ServProvHasService> spsList = sp.getServices();
+            ArrayList<ServProvHasServPt> spsList = sp.getServices();
 
             if (spsList == null) {
                 return null;
@@ -685,17 +727,17 @@ public class AddWorkPlaceActivity extends Activity {
 
             //SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getTimeInstance();
 
-            for (ServProvHasService sps : spsList) {
+            for (ServProvHasServPt sps : spsList) {
                 values = new ContentValues();
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV, spId);
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService().getSpeciality());
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService());
+                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY, sps.getService());
                 values.put(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE, sps.getExperience());
 
                 long spsId = db.insert(MappContract.ServProvHasServ.TABLE_NAME, null, values);
 
-                ArrayList<ServProvHasServHasServPt> spssptList = sps.getServProvHasServHasServPts();
-                for (ServProvHasServHasServPt spsspt : spssptList) {
+                ArrayList<ServProvHasServPt> spssptList = sp.getServices();
+                for (ServProvHasServPt spsspt : spssptList) {
                     ServicePoint spt = spsspt.getServicePoint();
 
                     values = new ContentValues();
@@ -739,6 +781,26 @@ public class AddWorkPlaceActivity extends Activity {
         protected void onCancelled() {
             UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
         }
-
     }
+*/
+
+    private static class SignUpHandler extends Handler {
+        private AddWorkPlaceActivity mActivity;
+
+        public SignUpHandler(AddWorkPlaceActivity activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_SIGNUP:
+                    mActivity.signUpDone(msg.getData());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
 }

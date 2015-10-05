@@ -1,9 +1,12 @@
 package com.extenprise.mapp.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ambey on 31/8/15.
  */
-public class Report {
+public class Report implements Parcelable {
     private String date;
     private String type;
     private String id;
@@ -39,5 +42,18 @@ public class Report {
 
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{
+                id, type, date
+        });
+        dest.writeInt(appointment.getId());
     }
 }

@@ -1,9 +1,15 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,26 +22,30 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
+import com.extenprise.mapp.activity.MappService;
+import com.extenprise.mapp.data.SearchServProvForm;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 
 
 public class SearchServProvActivity extends Activity {
 
-    private UserSearchTask mSearchTask = null;
+    private Messenger mService;
+    private SearchResponseHandler mRespHandler = new SearchResponseHandler(this);
+
     private EditText mDrClinicName;
     private Spinner mSpeciality;
     private Spinner mServProvCategory;
     private EditText mLocation;
     private View mProgressView;
     private View mSearchFormView;
+    SearchServProvForm mForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +54,7 @@ public class SearchServProvActivity extends Activity {
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         //getActionBar().setDisplayShowTitleEnabled(false);
 
-        LoginHolder.spsspt = new ServProvHasServHasServPt();
+        LoginHolder.spsspt = new ServProvHasServPt();
         LoginHolder.servLoginRef = new ServiceProvider();//spinServiceProvCategory
 
         mDrClinicName = (EditText) findViewById(R.id.editTextSearchDr);
@@ -84,7 +94,7 @@ public class SearchServProvActivity extends Activity {
         String sp = mSpeciality.getSelectedItem().toString();
         String sc = mServProvCategory.getSelectedItem().toString();
 
-        ServProvHasServHasServPt spsspt = new ServProvHasServHasServPt();
+        ServProvHasServPt spsspt = new ServProvHasServPt();
 
         ServicePoint spoint = new ServicePoint();
         spoint.setName(name);
@@ -97,7 +107,7 @@ public class SearchServProvActivity extends Activity {
         sps.setService(s);
 
         spsspt.setServicePoint(spoint);
-        spsspt.setServProvHasService(sps);
+        //spsspt.setServiceProvider(PHasService(sps));
         LoginHolder.spsspt = spsspt;
 
         Intent i = new Intent(this, AdvSearchServProvActivity.class);
@@ -144,10 +154,12 @@ public class SearchServProvActivity extends Activity {
         if(sp.equals("Select Speciality") || sp.equals("Other")) {
             sp = "";
         }
+/*
         String sc = mServProvCategory.getSelectedItem().toString();
         if(sc.equals("Select Category")) {
             sc = "";
         }
+*/
 
         String dr = name, clinic = name;
 
@@ -161,12 +173,23 @@ public class SearchServProvActivity extends Activity {
             }
         }
 
+        mForm = new SearchServProvForm();
+        mForm.setName(dr);
+        mForm.setClinic(clinic);
+        mForm.setSpeciality(sp);
+        mForm.setLocation(loc);
+
         /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
         UIUtility.showProgress(this, mSearchFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, 0);
+/*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc);
         mSearchTask.execute((Void) null);
+*/
     }
 
+/*
     public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity mActivity;
@@ -194,20 +217,77 @@ public class SearchServProvActivity extends Activity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mSearchTask = null;
             UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
             if (success) {
                 Intent intent = new Intent(mActivity, SearchServProvResultActivity.class);
                 startActivity(intent);
             } else {
-                UIUtility.showAlert(mActivity,"","Sorry, No result matches to your criteria!");
+                UIUtility.showAlert(mActivity,"","Sorry, No result matches your search criteria!");
             }
         }
 
         @Override
         protected void onCancelled() {
-            mSearchTask = null;
             UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
+        }
+    }
+*/
+
+    protected void searchDone(Bundle msgData) {
+        UIUtility.showProgress(this, mSearchFormView, mProgressView, false);
+        unbindService(mConnection);
+        boolean success = msgData.getBoolean("status");
+        if (success) {
+            Intent intent = new Intent(this, SearchServProvResultActivity.class);
+            intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("form", mForm);
+            Message msg = Message.obtain(null, MappService.DO_SEARCH_SERV_PROV);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    private static class SearchResponseHandler extends Handler {
+        private SearchServProvActivity mActivity;
+
+        public SearchResponseHandler(SearchServProvActivity activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_SEARCH_SERV_PROV:
+                    mActivity.searchDone(msg.getData());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
         }
     }
 

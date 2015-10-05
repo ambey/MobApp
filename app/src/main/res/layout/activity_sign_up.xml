@@ -11,7 +11,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/ame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clickable="false"
             android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin"
@@ -27,15 +27,15 @@
                 android:id="@+id/uploadimageview"
                 android:layout_marginTop="0dp"
                 android:src="@drawable/dr"
-                />
+                android:contentDescription="@string/uploadImg" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/uploadimage"
                 android:text="@string/uploadImg"
                 android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:textSize="15sp"
-                android:layout_below="@+id/uploadimageview"
                 android:layout_marginTop="5dp"
                 android:textColor="#009f6b"
                 android:clickable="true"
@@ -46,10 +46,19 @@
                 android:layout_height="1dp"
                 android:background="#009f6b"
                 android:layout_marginLeft="22dp"
-                android:layout_below="@+id/uploadimage"
+                android:layout_marginStart="22dp"
                 android:visibility="invisible"/>
 
+            <ProgressBar
+                android:id="@+id/progressView"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+
             <LinearLayout
+                android:id="@+id/signUpForm"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -59,10 +68,8 @@
                     android:id="@+id/editTextFName"
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/editTextCnfPasswd"
-                    android:layout_below="@+id/editTextCnfPasswd"
                     android:ems="10"
-                    android:hint="First Name *"
+                    android:hint="@string/first_name"
                     android:inputType="textPersonName"
                     android:textColor="@color/black"/>
 
@@ -70,13 +77,11 @@
                     android:id="@+id/editTextLName"
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/editTextCnfPasswd"
-                    android:layout_below="@+id/editTextCnfPasswd"
-                    android:layout_toRightOf="@+id/editTextFName"
                     android:ems="10"
-                    android:hint="Last Name *"
+                    android:hint="@string/last_name"
                     android:inputType="textPersonName"
-                    android:layout_marginLeft="12dp"/>
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"/>
 
             </LinearLayout>
 
@@ -85,7 +90,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Cellphone Number *"
+                android:hint="@string/cellPhoneNo"
                 android:inputType="phone"
                 android:layout_marginTop="10dp" />
             <EditText
@@ -93,7 +98,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Email Id"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:layout_marginTop="10dp" />
 
@@ -101,9 +106,8 @@
                 android:id="@+id/editTextPasswd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextEmail"
                 android:ems="10"
-                android:hint="Password *"
+                android:hint="@string/passWd"
                 android:inputType="textPassword"
                 android:text=""
                 android:layout_marginTop="10dp"/>
@@ -112,9 +116,8 @@
                 android:id="@+id/editTextCnfPasswd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextPasswd"
                 android:ems="10"
-                android:hint="Confirm Password *"
+                android:hint="@string/passWdCon"
                 android:inputType="textPassword"
                 android:text=""
                 android:layout_marginTop="10dp"/>
@@ -145,6 +148,7 @@
                     android:focusable="true"
                     android:id="@+id/radioButtonFemale"
                     android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
                     />
             </RadioGroup>
             <EditText
@@ -152,18 +156,15 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Registration Number *"
+                android:hint="@string/reg_no"
                 android:layout_marginTop="5dp" />
 
             <Button
-                android:id="@+id/Register"
+                android:id="@+id/next"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextCountry"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/button"
-                android:onClick="showAddWorkPlaceScreen"
                 android:text="@string/next"
                 android:textColor="#fff"
                 android:textSize="18sp"

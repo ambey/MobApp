@@ -1,56 +1,74 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/background"
     android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.service.activity.SearchServProvResultActivity">
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/gcircle"
-        android:id="@+id/imageViewAvailable"/>
-    <TextView
-        android:id="@+id/textViewAvailable"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/availToday"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/rcircle"
-        android:id="@+id/imageViewUnAvailable"
-        android:layout_above="@+id/docListView"
-        android:layout_toLeftOf="@+id/textViewUnAvailable"
-        android:layout_toStartOf="@+id/textViewUnAvailable" />
-    <TextView
-        android:id="@+id/textViewUnAvailable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/unavailToday"
-        android:layout_alignTop="@+id/textViewAvailable"
-        android:layout_alignRight="@+id/docListView"
-        android:layout_alignEnd="@+id/docListView" />
-    <View
-        android:id="@+id/lnView"
+    <RelativeLayout
+        android:id="@+id/formServProvResult"
         android:layout_width="fill_parent"
-        android:layout_height="0.4dp"
-        android:background="@android:color/black"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/imageViewAvailable"/>
+        android:layout_height="fill_parent">
 
-    <ListView
-        android:layout_below="@+id/imageViewAvailable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/docListView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+        <ImageView
+            android:id="@+id/imageViewAvailable"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/gcircle" />
 
+        <TextView
+            android:id="@+id/textViewAvailable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/availToday" />
+
+        <ImageView
+            android:id="@+id/imageViewUnAvailable"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_above="@+id/docListView"
+            android:layout_toLeftOf="@+id/textViewUnAvailable"
+            android:layout_toStartOf="@+id/textViewUnAvailable"
+            android:src="@drawable/rcircle" />
+
+        <TextView
+            android:id="@+id/textViewUnAvailable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/docListView"
+            android:layout_alignRight="@+id/docListView"
+            android:layout_alignTop="@+id/textViewAvailable"
+            android:text="@string/unavailToday" />
+
+        <View
+            android:id="@+id/lnView"
+            android:layout_width="fill_parent"
+            android:layout_height="0.4dp"
+            android:layout_below="@+id/imageViewAvailable"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/black" />
+
+        <ListView
+            android:id="@+id/docListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageViewAvailable"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+    </RelativeLayout>
 </RelativeLayout>

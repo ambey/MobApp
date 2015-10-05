@@ -81,8 +81,8 @@ public class AdvSearchServProvActivity extends Activity {
             mLocation.setText(LoginHolder.spsspt.getServicePoint().getLocation());
             //mSpeciality.setSelection(LoginHolder.spsspt.getServProvHasService().getService().getSpeciality());
             //mSpeciality.setSelection();
-            mSpeciality.setSelection(UIUtility.getSpinnerIndex(mSpeciality, LoginHolder.spsspt.getServProvHasService().getService().getSpeciality()));
-            mServProvCategory.setSelection(UIUtility.getSpinnerIndex(mServProvCategory, LoginHolder.spsspt.getServProvHasService().getService().getSpeciality()));
+            mSpeciality.setSelection(UIUtility.getSpinnerIndex(mSpeciality, LoginHolder.spsspt.getService()));
+            mServProvCategory.setSelection(UIUtility.getSpinnerIndex(mServProvCategory, LoginHolder.spsspt.getService()                                                                                                     ));
             mDrClinicName.setText(LoginHolder.spsspt.getServicePoint().getName());
         }
 

@@ -2,9 +2,11 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -14,8 +16,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,19 +35,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.MappService;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class PatientSignUpActivity extends Activity {
+
+    private SignUpHandler mRespHandler = new SignUpHandler(this);
+    private int mServiceAction;
 
     private View mFormView;
     private View mProgressView;
@@ -76,6 +91,14 @@ public class PatientSignUpActivity extends Activity {
         mEditTextCustomerFName = (EditText)findViewById(R.id.editTextCustomerFName);
         mEditTextCustomerLName = (EditText) findViewById(R.id.editTextCustomerLName);
         mEditTextCellphone = (EditText)findViewById(R.id.editTextCellphone);
+        mEditTextCellphone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    checkPhoneExistence();
+                }
+            }
+        });
         mEditTextCustomerEmail = (EditText)findViewById(R.id.editTextCustomerEmail);
         mEditTextPasswd = (EditText)findViewById(R.id.editTextPasswd);
         mEditTextConPasswd = (EditText)findViewById(R.id.editTextConPasswd);
@@ -287,10 +310,6 @@ public class PatientSignUpActivity extends Activity {
                             bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
                             fOut.flush();
                             fOut.close();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -309,7 +328,7 @@ public class PatientSignUpActivity extends Activity {
 
     }
 
-    public String getPath(Uri uri) {
+/*
 
         String[] projection = { MediaStore.Images.Media.DATA };
 
@@ -322,6 +341,7 @@ public class PatientSignUpActivity extends Activity {
         return cursor.getString(column_index);
 
     }
+*/
 
 
 
@@ -330,8 +350,125 @@ public class PatientSignUpActivity extends Activity {
             return;
         }
         UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        mServiceAction = MappService.DO_SIGNUP;
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+/*
         SaveCustomerData task = new SaveCustomerData(this);
         task.execute((Void) null);
+*/
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+        private Messenger mService;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+            bundle.putParcelable("customer", getSignUpData());
+            Message msg = Message.obtain(null, mServiceAction);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    private static class SignUpHandler extends Handler {
+        private PatientSignUpActivity mActivity;
+
+        public SignUpHandler(PatientSignUpActivity activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_SIGNUP:
+                    mActivity.signUpDone(msg.getData());
+                    break;
+                case MappService.DO_PHONE_EXIST_CHECK:
+                    mActivity.phoneCheckComplete(msg.getData());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+    private void phoneCheckComplete(Bundle data) {
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+        if(!data.getBoolean("status")) {
+            mEditTextCellphone.setError(getString(R.string.error_phone_registered));
+            mEditTextCellphone.requestFocus();
+        }
+    }
+
+    private void signUpDone(Bundle data) {
+        if(data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    private Customer getSignUpData() {
+        Customer c = new Customer();
+        if(mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
+            c.setPhone(mEditTextCellphone.getText().toString().trim());
+            return c;
+        }
+        c.setfName(mEditTextCustomerFName.getText().toString().trim());
+        c.setlName(mEditTextCustomerLName.getText().toString().trim());
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        try {
+            Date dob = sdf.parse(mTextViewDOB.getText().toString().trim());
+            c.setDob(dob);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        c.setAge(UIUtility.getAge(mTextViewDOB.getText().toString().trim()));
+        c.setEmailId(mEditTextCustomerEmail.getText().toString().trim());
+        c.setGender(mSpinGender.getSelectedItem().toString().trim());
+        float height = 0;
+        try {
+            height = Float.parseFloat(mEditTextHeight.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        c.setHeight(height);
+        float weight = 0;
+        try {
+            weight = Float.parseFloat(mEditTextWeight.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        c.setWeight(weight);
+        c.setPasswd(EncryptUtil.encrypt(mEditTextPasswd.getText().toString()));
+        c.setLocation(mEditTextLoc.getText().toString().trim());
+        c.setPincode(mEditTextPinCode.getText().toString().trim());
+        c.setCity(mSpinCity.getSelectedItem().toString());
+        c.setState(mSpinState.getSelectedItem().toString());
+        c.setCountry("India");
+
+        return c;
     }
 
     private boolean isValidInput() {
@@ -508,5 +645,12 @@ public class PatientSignUpActivity extends Activity {
             UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
         }
 
+    }
+
+    private void checkPhoneExistence() {
+        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
     }
 }

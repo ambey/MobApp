@@ -13,7 +13,7 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.UIUtility;
 
@@ -33,7 +33,7 @@ public class ServProvDetailsActivity extends Activity {
     private ImageView mImageViewAvailable;
     private View mFormView;
     private View mProgressView;
-    private ServProvHasServHasServPt spsspt;
+    private ServiceProvider mServProv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,8 @@ public class ServProvDetailsActivity extends Activity {
         mFormView = findViewById(R.id.bookAppointmentForm);
         mProgressView = findViewById(R.id.progressView);
 
-        spsspt = LoginHolder.spsspt;
-        ServiceProvider serviceProvider = LoginHolder.spsspt.getServProvHasService().getServProv();
+        Intent intent = getIntent();
+        mServProv = intent.getParcelableExtra("servProv");
 
         mTextViewClinic = (TextView)findViewById(R.id.textviewFirstClinic);
         mTextViewDocExperience = (TextView)findViewById(R.id.textviewDocExperience);
@@ -57,19 +57,20 @@ public class ServProvDetailsActivity extends Activity {
         mTextViewReviews = (TextView)findViewById(R.id.textviewReviews);
         mTextViewDocQualification = (TextView)findViewById(R.id.textviewDocQualification);
 
+        ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         mTextViewClinic.setText(spsspt.getServicePoint().getName());
-        mTextViewDocExperience.setText("" + spsspt.getServProvHasService().getExperience());
+        mTextViewDocExperience.setText("" + spsspt.getExperience());
         mTextViewClinicTime.setText(UIUtility.getTimeString(spsspt.getStartTime()) + " to "
                 + UIUtility.getTimeString(spsspt.getEndTime()));
-        mTextViewDocname.setText(serviceProvider.getfName() + " " + serviceProvider.getlName());
-        mTextViewDocSpeciality.setText("(" + spsspt.getServProvHasService().getService().getSpeciality() + ")");
+        mTextViewDocname.setText(mServProv.getfName() + " " + mServProv.getlName());
+        mTextViewDocSpeciality.setText("(" + spsspt.getService() + ")");
 
         //mTextViewReviews.setText("11");
-        mTextViewDocQualification.setText(serviceProvider.getQualification());
+        mTextViewDocQualification.setText(mServProv.getQualification());
         mTextViewFees.setText("" + spsspt.getConsultFee());
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
-        if(UIUtility.findDocAvailability(spsspt.getWeeklyOff(), Calendar.getInstance())) {
+        if(UIUtility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
             mImageViewAvailable.setImageResource(R.drawable.g_circle);
             availability.setText(getString(R.string.available));
         } else {
@@ -89,16 +90,13 @@ public class ServProvDetailsActivity extends Activity {
         LoginHolder.spsspt.setStartTime(spsspt.getStartTime());
         LoginHolder.spsspt.setEndTime(spsspt.getEndTime());*/
 
-        if(LoginHolder.custLoginRef != null) {
-            Intent intent = new Intent(this, BookAppointmentActivity.class);
-            startActivity(intent);
-        } else {
-            Customer c = new Customer();
-            c.setStatus("Appointment");
-            LoginHolder.custLoginRef = c;
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+        Intent intent = new Intent(this, BookAppointmentActivity.class);
+        if(LoginHolder.custLoginRef == null) {
+            intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
         }
+        intent.putExtra("servProv", mServProv);
+        startActivity(intent);
     }
 
     @Override

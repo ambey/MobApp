@@ -2,6 +2,7 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -19,7 +20,7 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
+import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.UIUtility;
@@ -37,11 +38,15 @@ public class BookAppointmentActivity extends Activity
     private Spinner mSpinnerTimeSlots;
     private TextView mTextViewDate;
     private Button mBookButton;
+    private ServiceProvider mServProv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_appointment);
+
+        Intent intent = getIntent();
+        mServProv = intent.getParcelableExtra("servProv");
 
         TextView textViewDocFName = (TextView) findViewById(R.id.tvDocFName);
         TextView textViewDocLName = (TextView) findViewById(R.id.tvDocLName);
@@ -51,13 +56,12 @@ public class BookAppointmentActivity extends Activity
         mTextViewDate = (TextView) findViewById(R.id.tvDate);
         mBookButton = (Button) findViewById(R.id.buttonBook);
 
-        ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
-        ServiceProvider serviceProvider = LoginHolder.spsspt.getServProvHasService().getServProv();
+        ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
 
-        textViewDocFName.setText(serviceProvider.getfName());
-        textViewDocLName.setText(serviceProvider.getlName());
-        textViewDocSpeciality.setText(spsspt.getServProvHasService().getService().getSpeciality());
-        textViewQualification.setText("(" + serviceProvider.getQualification() + ")");
+        textViewDocFName.setText(mServProv.getfName());
+        textViewDocLName.setText(mServProv.getlName());
+        textViewDocSpeciality.setText(spsspt.getService());
+        textViewQualification.setText("(" + mServProv.getQualification() + ")");
 
         String date = UIUtility.getDaAsString("/");
         mTextViewDate.setText(date);
@@ -128,7 +132,7 @@ public class BookAppointmentActivity extends Activity
             e.printStackTrace();
         }
 
-        if (!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWeeklyOff(), cal))) {
+        if (!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWorkingDays(), cal))) {
             UIUtility.showAlert(this, "", "Doctor is not available on the given date.");
             return;
         }
@@ -196,8 +200,7 @@ public class BookAppointmentActivity extends Activity
 
         @Override
         protected Void doInBackground(Void... voids) {
-            ServProvHasServHasServPt spsspt = LoginHolder.spsspt;
-            ServiceProvider sp = LoginHolder.spsspt.getServProvHasService().getServProv();
+            ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
 
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -209,9 +212,9 @@ public class BookAppointmentActivity extends Activity
             values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, UIUtility.getMinutes(selectedItem) + 30);
             values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTextViewDate.getText().toString());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
-            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServProvHasService().getService().getServCatagory());
-            values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getServProvHasService().getService().getSpeciality());
-            values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, sp.getIdServiceProvider());
+            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServPointType());
+            values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getService());
+            values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, mServProv.getIdServiceProvider());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, LoginHolder.custLoginRef.getIdCustomer());
 
             db.insert(MappContract.Appointment.TABLE_NAME, null, values);
