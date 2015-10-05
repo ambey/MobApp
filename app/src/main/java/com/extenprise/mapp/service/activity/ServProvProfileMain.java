@@ -477,6 +477,7 @@ public class ServProvProfileMain extends Activity {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (isValidDetails(dialogView)) {
 
+
                         }
                     }
                 })
