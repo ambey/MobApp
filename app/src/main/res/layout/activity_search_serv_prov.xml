@@ -20,7 +20,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -34,37 +34,45 @@
                 android:layout_marginTop="40dp"
                 android:src="@drawable/med1" />
 
-            <Spinner
-                android:id="@+id/spinServiceProvCategory"
-                android:layout_width="165dp"
-                android:layout_height="35dp"
+            <LinearLayout
+                android:id="@+id/docSearchL1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/imageViewLogo"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/spinner"
-                android:entries="@array/serviceCategorySearch"
-                android:spinnerMode="dropdown" />
+                android:layout_marginTop="40dp">
+
+                <Spinner
+                    android:id="@+id/spinServiceProvCategory"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/spinner"
+                    android:entries="@array/serviceCategorySearch"
+                    android:spinnerMode="dropdown" />
+
+                <Spinner
+                    android:id="@+id/editTextSearchSp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+
+                    android:layout_weight="0.5"
+                    android:background="@drawable/spinner"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
 
             <EditText
                 android:id="@+id/editTextSearchDr"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinServiceProvCategory"
+                android:layout_below="@+id/docSearchL1"
                 android:layout_marginTop="20dp"
 
                 android:hint="@string/searchDrHint" />
 
-            <Spinner
-                android:id="@+id/editTextSearchSp"
-                android:layout_width="165dp"
-                android:layout_height="35dp"
-                android:layout_below="@+id/imageViewLogo"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="40dp"
-                android:layout_toEndOf="@+id/spinServiceProvCategory"
-                android:layout_toRightOf="@+id/spinServiceProvCategory"
-                android:background="@drawable/spinner"
-                android:spinnerMode="dropdown" />
 
             <EditText
                 android:id="@+id/editTextSearchLoc"
@@ -115,8 +123,8 @@
                 android:onClick="viewFlipper"
                 android:text="View Flipper"
                 android:textColor="#ff0000ff"
-                android:visibility="invisible"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="invisible" />
 
             <!--
                         <TextView
