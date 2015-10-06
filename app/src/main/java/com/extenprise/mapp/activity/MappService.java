@@ -13,6 +13,7 @@ import android.os.RemoteException;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.ServProvListItem;
+import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchServProv;
 import com.google.gson.Gson;
@@ -62,15 +63,12 @@ public class MappService extends Service {
     public void doLogin(Message msg) {
         Bundle data = msg.getData();
         mLoginType = data.getInt("loginType");
-        Object object = data.getParcelable("service");
-        if (mLoginType == CUSTOMER_LOGIN) {
-            object = data.getParcelable("customer");
-        }
+        SignInData signInData = data.getParcelable("signInData");
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         try {
-            task = new MappAsyncTask(getURL(DO_LOGIN), gson.toJson(object));
+            task = new MappAsyncTask(getURL(DO_LOGIN), gson.toJson(signInData));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(DO_LOGIN);

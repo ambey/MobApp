@@ -35,7 +35,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
@@ -327,8 +326,7 @@ public class LoginActivity extends Activity {
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", mLoginType);
-            bundle.putString("phoneNo", mSignInData.getPhone());
-            bundle.putString("passwd", mSignInData.getPasswd());
+            bundle.putParcelable("signInData", mSignInData);
             Message msg = Message.obtain(null, MappService.DO_LOGIN);
             msg.replyTo = new Messenger(mRespHandler);
             msg.setData(bundle);
@@ -358,6 +356,7 @@ public class LoginActivity extends Activity {
             switch (msg.what) {
                 case MappService.DO_LOGIN:
                     mActivity.loginDone(msg.getData());
+                    break;
                 default:
                     super.handleMessage(msg);
             }

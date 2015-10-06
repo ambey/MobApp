@@ -5,38 +5,26 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AdvSearchServProvActivity extends Activity {
-
-    private UserSearchTask mSearchTask = null;
 
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
     private EditText mDrClinicName;
@@ -356,11 +344,14 @@ public class AdvSearchServProvActivity extends Activity {
             }
         }
         UIUtility.showProgress(this, mSearchFormView, mProgressView, true);
+/*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
         mSearchTask.execute((Void) null);
+*/
     }
 
+/*
     public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity mActivity;
@@ -407,8 +398,10 @@ public class AdvSearchServProvActivity extends Activity {
                 startActivity(intent);
 
             } else {
-                    /*Intent intent = new Intent(mActivity, AdvSearchServProvActivity.class);
-                    startActivity(intent);*/
+                    */
+/*Intent intent = new Intent(mActivity, AdvSearchServProvActivity.class);
+                    startActivity(intent);*//*
+
                 UIUtility.showAlert(mActivity, "","Sorry, No result matches to your criteria!");
             }
         }
@@ -419,4 +412,5 @@ public class AdvSearchServProvActivity extends Activity {
             UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
         }
     }
+*/
 }

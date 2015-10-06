@@ -16,8 +16,6 @@ import android.widget.SimpleCursorAdapter;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchServProv;
@@ -49,8 +47,8 @@ public class ServProvViewWorkDetails extends Activity {
         String[] values = new String[] {
                 MappContract.ServiceProvider.COLUMN_NAME_FNAME,
                 MappContract.ServiceProvider.COLUMN_NAME_LNAME,
-                MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY,
-                MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE,
+                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE,
+                MappContract.ServProvHasServPt.COLUMN_NAME_EXP,
                 MappContract.ServicePoint.COLUMN_NAME_NAME,
                 MappContract.ServicePoint.COLUMN_NAME_LOCATION
         };
@@ -75,7 +73,7 @@ public class ServProvViewWorkDetails extends Activity {
 
                 View view =super.getView(position, convertView, parent);
                 cursor.moveToPosition(position);
-                String docAvailDays = cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF));
+                String docAvailDays = cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS));
 
                 ImageView mImageViewAvailable = (ImageView) view.findViewById(R.id.imageViewAvailability);
 
@@ -107,24 +105,17 @@ public class ServProvViewWorkDetails extends Activity {
                 sp.setlName(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_LNAME)));
                 sp.setQualification(cursor.getString(cursor.getColumnIndex(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION)));
 
-                Service s = new Service();
-                s.setSpeciality(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY)));
-
-                ServProvHasService sps = new ServProvHasService();
-                sps.setServProv(sp);
-                sps.setExperience(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE))));
-                sps.setService(s);
-
                 ServicePoint spt = new ServicePoint();
                 spt.setName(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_NAME)));
                 spt.setLocation(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_LOCATION)));
 
-                LoginHolder.spsspt.setConsultFee(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE))));
-                LoginHolder.spsspt.setStartTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME)));
-                LoginHolder.spsspt.setEndTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME)));
-                LoginHolder.spsspt.setWeeklyOff(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF)));
-                LoginHolder.spsspt.setServPointType(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE)));
-                LoginHolder.spsspt.setServProvHasService(sps);
+                LoginHolder.spsspt.setService(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE)));
+                LoginHolder.spsspt.setExperience(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_EXP))));
+                LoginHolder.spsspt.setConsultFee(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE))));
+                LoginHolder.spsspt.setStartTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME)));
+                LoginHolder.spsspt.setEndTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME)));
+                LoginHolder.spsspt.setWorkingDays(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS)));
+                LoginHolder.spsspt.setServPointType(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE)));
                 LoginHolder.spsspt.setServicePoint(spt);
 
                 Intent i = new Intent(getApplicationContext(), ServProvDetailsActivity.class);

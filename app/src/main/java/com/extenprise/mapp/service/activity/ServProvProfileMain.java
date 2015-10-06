@@ -1,6 +1,5 @@
 package com.extenprise.mapp.service.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,30 +8,25 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.MatrixCursor;
-import android.database.MergeCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -47,11 +41,9 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServProvHasService;
+import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 
@@ -154,38 +146,37 @@ public class ServProvProfileMain extends Activity {
         mLname.setText(LoginHolder.servLoginRef.getlName());
         mQualification.setText(LoginHolder.servLoginRef.getQualification());
 
-        if(LoginHolder.servLoginRef.getGender().equals("Male")) {
+        if (LoginHolder.servLoginRef.getGender().equals("Male")) {
             mMale.setSelected(true);
         } else {
             mFemale.setSelected(true);
         }
         Cursor cursor = SearchServProv.getCursor();
-        mExp.setText(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE)));
+        mExp.setText(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_EXP)));
     }
 
     private void showWorkPlaceList() {
 
         final Cursor cursor = SearchServProv.getCursor();
 
-        String[] values = new String[] {
-                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY,
-                MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY,
+        String[] values = new String[]{
+                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE,
                 MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION,
-                MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE,
+                MappContract.ServProvHasServPt.COLUMN_NAME_EXP,
                 MappContract.ServicePoint.COLUMN_NAME_NAME,
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE,
+                MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE,
                 MappContract.ServicePoint.COLUMN_NAME_LOCATION,
                 MappContract.ServicePoint.COLUMN_NAME_ID_CITY,
                 MappContract.ServicePoint.COLUMN_NAME_PHONE,
                 MappContract.ServicePoint.COLUMN_NAME_ALT_PHONE,
                 MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID,
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME,
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME,
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF,
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE
+                MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME,
+                MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME,
+                MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS,
+                MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE
         };
 
-        int[] viewIds = new int[] {
+        int[] viewIds = new int[]{
                 R.id.spinServiceProvCategory,
                 R.id.editTextSpeciality,
                 R.id.editTextQualification,
@@ -207,12 +198,12 @@ public class ServProvProfileMain extends Activity {
                 R.layout.activity_servprov_wrkdetail_list,
                 cursor,
                 values,
-                viewIds, 0){
+                viewIds, 0) {
             @Override
             public View getView(int position, View convertView,
                                 ViewGroup parent) {
 
-                View view =super.getView(position, convertView, parent);
+                View view = super.getView(position, convertView, parent);
                 cursor.moveToPosition(position);
 
                 TextView mWorkHrsLbl = (TextView) findViewById(R.id.viewWorkHrsLbl);
@@ -244,13 +235,13 @@ public class ServProvProfileMain extends Activity {
     }
 
     public void showtimeFields(View view) {
-        int[] buttonIds = new int[] {
+        int[] buttonIds = new int[]{
                 R.id.buttonStartTime,
                 R.id.buttonEndTime,
         };
         for (int buttonId : buttonIds) {
             Button btn = (Button) findViewById(buttonId);
-            if(btn.getVisibility() == View.GONE) {
+            if (btn.getVisibility() == View.GONE) {
                 btn.setVisibility(View.VISIBLE);
             } else {
                 btn.setVisibility(View.GONE);
@@ -260,7 +251,7 @@ public class ServProvProfileMain extends Activity {
 
     public void editPersonalInfo(View view) {
         boolean set = false;
-        if(!mFname.isEnabled()) {
+        if (!mFname.isEnabled()) {
             set = true;
         }
         mFname.setEnabled(set);
@@ -278,7 +269,7 @@ public class ServProvProfileMain extends Activity {
 
     public void editWorkPlaceInfo(boolean set) {
 
-        int[] editTxtIds = new int[] {
+        int[] editTxtIds = new int[]{
                 R.id.editTextQualification,
                 R.id.editTextExperience,
                 R.id.editTextName,
@@ -293,7 +284,7 @@ public class ServProvProfileMain extends Activity {
             txt.setEnabled(set);
         }
 
-        int[] buttonIds = new int[] {
+        int[] buttonIds = new int[]{
                 R.id.buttonStartTime,
                 R.id.buttonEndTime,
                 R.id.editTextWeeklyOff
@@ -303,7 +294,7 @@ public class ServProvProfileMain extends Activity {
             btn.setEnabled(set);
         }
 
-        int[] spinnerIds = new int[] {
+        int[] spinnerIds = new int[]{
                 R.id.spinServiceProvCategory,
                 R.id.editTextSpeciality,
                 R.id.viewWorkPlaceType,
@@ -337,7 +328,7 @@ public class ServProvProfileMain extends Activity {
 
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
-            if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
                 setupSelection();
             }
             showDialog(0);
@@ -347,7 +338,7 @@ public class ServProvProfileMain extends Activity {
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
-        if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
             setupSelection();
         }
     }
@@ -363,7 +354,7 @@ public class ServProvProfileMain extends Activity {
 
     public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
         public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if(options[clicked].toString().equalsIgnoreCase("All Days")) {
+            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
                 for (CharSequence option : options) {
                     Log.i("ME", option + " selected: " + selected);
                 }
@@ -385,7 +376,7 @@ public class ServProvProfileMain extends Activity {
     }
 
     protected void printSelectedDays() {
-        if(selections[0]) {
+        if (selections[0]) {
             setupAllDaysSelected();
             return;
         }
@@ -411,14 +402,14 @@ public class ServProvProfileMain extends Activity {
     private void setupSelection() {
         String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
         selections[0] = false;
-        for(String d : selectedDays) {
+        for (String d : selectedDays) {
             selections[getDayIndex(d)] = true;
         }
     }
 
     private int getDayIndex(String day) {
-        for(int i = 0; i < options.length; i++) {
-            if(day.equals(options[i])) {
+        for (int i = 0; i < options.length; i++) {
+            if (day.equals(options[i])) {
                 return i;
             }
         }
@@ -428,7 +419,7 @@ public class ServProvProfileMain extends Activity {
     private void setupAllDaysSelected() {
         selections[0] = false;
         selectedDays = options[1].toString();
-        for(int i = 2; i < options.length; i++){
+        for (int i = 2; i < options.length; i++) {
             selectedDays += "," + options[i];
         }
     }
@@ -442,17 +433,17 @@ public class ServProvProfileMain extends Activity {
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.layout_workplace_details, null);
 
-         mName = (EditText) dialogView.findViewById(R.id.editTextName);
-         mLoc = (EditText) dialogView.findViewById(R.id.editTextLoc);
-         mPhone1 = (EditText) dialogView.findViewById(R.id.editTextPhone1);
-         mPhone2 = (EditText) dialogView.findViewById(R.id.editTextPhone2);
-         mEmailIdwork = (EditText) dialogView.findViewById(R.id.editTextEmail);
-         mConsultFee = (EditText) dialogView.findViewById(R.id.editTextConsultationFees);
-         mServPtType = (Spinner) dialogView.findViewById(R.id.viewWorkPlaceType);
-         mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
-         mStartTime = (Button) dialogView.findViewById(R.id.buttonStartTime);
-         mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
-         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
+        mName = (EditText) dialogView.findViewById(R.id.editTextName);
+        mLoc = (EditText) dialogView.findViewById(R.id.editTextLoc);
+        mPhone1 = (EditText) dialogView.findViewById(R.id.editTextPhone1);
+        mPhone2 = (EditText) dialogView.findViewById(R.id.editTextPhone2);
+        mEmailIdwork = (EditText) dialogView.findViewById(R.id.editTextEmail);
+        mConsultFee = (EditText) dialogView.findViewById(R.id.editTextConsultationFees);
+        mServPtType = (Spinner) dialogView.findViewById(R.id.viewWorkPlaceType);
+        mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
+        mStartTime = (Button) dialogView.findViewById(R.id.buttonStartTime);
+        mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
+        mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
 
         mStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -530,7 +521,7 @@ public class ServProvProfileMain extends Activity {
 
         UIUtility.showProgress(this, mFormView, mProgressView, true);
         int uTypeID = mGender.getCheckedRadioButtonId();
-        mGenderBtn = (RadioButton)findViewById(uTypeID);
+        mGenderBtn = (RadioButton) findViewById(uTypeID);
         SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);
     }
@@ -552,7 +543,7 @@ public class ServProvProfileMain extends Activity {
 
     public void changeImage(View view) {
 
-        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Upload Image ");
         dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
@@ -583,6 +574,7 @@ public class ServProvProfileMain extends Activity {
         });
         dialogBuilder.create().show();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -664,22 +656,22 @@ public class ServProvProfileMain extends Activity {
     }
 
     public void openPersonalInfo(View view) {
-        if(mPersonalInfo.getVisibility() == View.VISIBLE) {
+        if (mPersonalInfo.getVisibility() == View.VISIBLE) {
             mPersonalInfo.setVisibility(View.GONE);
         } else {
             mPersonalInfo.setVisibility(View.VISIBLE);
-            if(mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
+            if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
                 mWorkPlaceInfo.setVisibility(View.GONE);
             }
         }
     }
 
     public void openWorkPlaceInfo(View view) {
-        if(mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
+        if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
             mWorkPlaceInfo.setVisibility(View.GONE);
         } else {
             mWorkPlaceInfo.setVisibility(View.VISIBLE);
-            if(mPersonalInfo.getVisibility() == View.VISIBLE) {
+            if (mPersonalInfo.getVisibility() == View.VISIBLE) {
                 mPersonalInfo.setVisibility(View.GONE);
             }
         }
@@ -718,14 +710,14 @@ public class ServProvProfileMain extends Activity {
         @Override
         protected Void doInBackground(Void... voids) {
             ServiceProvider sp = LoginHolder.servLoginRef; // TO DO
-            ArrayList<ServProvHasService> spsList = sp.getServices();
+            ArrayList<ServProvHasServPt> spsList = sp.getServices();
 
             if (spsList == null) {
                 return null;
             }
-            String where = MappContract.ServiceProvider._ID + " = ? ";
+            String where = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = ? ";
             String[] selectionArgs = {
-                    "" + LoginHolder.servLoginRef.getIdServiceProvider()
+                    "" + LoginHolder.servLoginRef.getPhone()
             };
 
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
@@ -741,50 +733,38 @@ public class ServProvProfileMain extends Activity {
 
             db.update(MappContract.ServiceProvider.TABLE_NAME, values, where, selectionArgs);
 
-            for (ServProvHasService sps : spsList) {
+            for (ServProvHasServPt sps : spsList) {
+                ServicePoint spt = sps.getServicePoint();
+
                 values = new ContentValues();
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService().getSpeciality());
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE, sps.getExperience());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity().getIdCity());
 
-                //long spsId = db.insert(MappContract.ServProvHasServ.TABLE_NAME, null, values);
-                where = MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV + " = ? ";
-                long spsId = db.update(MappContract.ServProvHasServ.TABLE_NAME, values, where, selectionArgs);
-
-                ArrayList<ServProvHasServHasServPt> spssptList = sps.getServProvHasServHasServPts();
-                for (ServProvHasServHasServPt spsspt : spssptList) {
-                    ServicePoint spt = spsspt.getServicePoint();
-
-                    values = new ContentValues();
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity());
-
-                    long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
+                long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
 
 
+                values = new ContentValues();
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, sps.getService());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_EXP, sps.getExperience());
 
-                    values = new ContentValues();
-                    try {
-                        values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME, spsspt.getStartTime());
-                        values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME, spsspt.getEndTime());
-                    } catch (Exception x) {
-                        x.printStackTrace();
-                    }
-                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
-                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE, spsspt.getConsultFee());
-                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF, spsspt.getWeeklyOff());
-
-                    where = MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV + " = ? and " +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT + " = ? ";
-                    String[] args = {
-                            "" + spsId, "" + sptId
-                    };
-                    db.update(MappContract.ServProvHasServHasServPt.TABLE_NAME, values, where, args);
-                    //db.insert(MappContract.ServProvHasServHasServPt.TABLE_NAME, null, values);
-
+                try {
+                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME, sps.getStartTime());
+                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME, sps.getEndTime());
+                } catch (Exception x) {
+                    x.printStackTrace();
                 }
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE, sps.getServPointType());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE, sps.getConsultFee());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS, sps.getWorkingDays());
+
+                where = MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " = ? and " +
+                        MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = ? ";
+                String[] args = {
+                        "" + sp.getPhone(), "" + sptId
+                };
+                db.update(MappContract.ServProvHasServPt.TABLE_NAME, values, where, args);
             }
             return null;
         }

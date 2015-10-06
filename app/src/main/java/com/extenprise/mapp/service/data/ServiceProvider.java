@@ -25,14 +25,14 @@ public class ServiceProvider implements Parcelable {
     private Date subsDate;
     private ArrayList<ServProvHasServPt> services;
     //private ArrayList<ServiceProvider> links;
-    //private byte[] img;
+    private byte[] img;
 
     public ServiceProvider() {
         signInData = new SignInData();
         services = new ArrayList<>();
         //links = new ArrayList<>();
     }
-/*
+
     public byte[] getImg() {
         return img;
     }
@@ -40,7 +40,6 @@ public class ServiceProvider implements Parcelable {
     public void setImg(byte[] img) {
         this.img = img;
     }
-*/
 
     public ServiceProvider(Parcel source) {
         signInData = new SignInData();

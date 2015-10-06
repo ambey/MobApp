@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ambey on 23/7/15.
  */
 public class MappDbHelper extends SQLiteOpenHelper {
-    public static final int DB_VERSION = 12;
+    public static final int DB_VERSION = 13;
     public static final String DB_NAME = "Mapp.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INT";
@@ -32,31 +32,30 @@ public class MappDbHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_SERV_PROV =
             "DROP TABLE IF EXISTS " + MappContract.ServiceProvider.TABLE_NAME;
 
-    private static final String SQL_CREATE_SERV_PROV_HAS_SERV =
-            "CREATE TABLE " + MappContract.ServProvHasServ.TABLE_NAME + " (" +
-                    MappContract.ServProvHasServ._ID + " INTEGER PRIMARY KEY," +
-                    MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE + FLOAT_TYPE + ")";
+    private static final String SQL_CREATE_SERVICE =
+            "CREATE TABLE " + MappContract.Service.TABLE_NAME + " (" +
+                    MappContract.Service._ID + " INTEGER PRIMARY KEY," +
+                    MappContract.Service.COLUMN_NAME_SERVICE_NAME + TEXT_TYPE + COMMA_SEP +
+                    MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY + TEXT_TYPE + ")";
 
-    private static final String SQL_DELETE_SERV_PROV_HAS_SERV =
-            "DROP TABLE IF EXISTS " + MappContract.ServProvHasServ.TABLE_NAME;
+    private static final String SQL_DELETE_SERVICE =
+            "DROP TABLE IF EXISTS " + MappContract.Service.TABLE_NAME;
 
     private static final String SQL_CREATE_SERV_PROV_HAS_SERV_HAS_SERV_PT =
-            "CREATE TABLE " + MappContract.ServProvHasServHasServPt.TABLE_NAME + " (" +
-                    MappContract.ServProvHasServHasServPt._ID + " INTEGER PRIMARY KEY," +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + TEXT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME + INT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + INT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + FLOAT_TYPE + COMMA_SEP +
-                    MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + TEXT_TYPE + ")";
+            "CREATE TABLE " + MappContract.ServProvHasServPt.TABLE_NAME + " (" +
+                    MappContract.ServProvHasServPt._ID + " INTEGER PRIMARY KEY," +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + TEXT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + TEXT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + TEXT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE + INT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME + INT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME + INT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE + FLOAT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_EXP + FLOAT_TYPE + COMMA_SEP +
+                    MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS + TEXT_TYPE + ")";
 
     private static final String SQL_DELETE_SERV_PROV_HAS_SERV_HAS_SERV_PT =
-            "DROP TABLE IF EXISTS " + MappContract.ServProvHasServHasServPt.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + MappContract.ServProvHasServPt.TABLE_NAME;
 
     private static final String SQL_CREATE_SERV_PT =
             "CREATE TABLE " + MappContract.ServicePoint.TABLE_NAME + " (" +
@@ -142,7 +141,6 @@ public class MappDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_SERV_PROV);
-        db.execSQL(SQL_CREATE_SERV_PROV_HAS_SERV);
         db.execSQL(SQL_CREATE_SERV_PROV_HAS_SERV_HAS_SERV_PT);
         db.execSQL(SQL_CREATE_SERV_PT);
         db.execSQL(SQL_CREATE_CUSTOMER);
@@ -153,7 +151,6 @@ public class MappDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DELETE_SERV_PROV);
-        db.execSQL(SQL_DELETE_SERV_PROV_HAS_SERV);
         db.execSQL(SQL_DELETE_SERV_PROV_HAS_SERV_HAS_SERV_PT);
         db.execSQL(SQL_DELETE_SERV_PT);
         db.execSQL(SQL_DELETE_CUSTOMER);

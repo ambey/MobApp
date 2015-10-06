@@ -46,7 +46,7 @@ public class ServProvViewProfile extends Activity {
         /*LoginHolder.spsspt = SearchServProv.getSPSSPT(new MappDbHelper(getApplicationContext()));
         mExp.setText("" + LoginHolder.spsspt.getServProvHasService().getExperience());*/
         Cursor cursor = SearchServProv.getCursor();
-        mExp.setText(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE)));
+        mExp.setText(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_EXP)));
     }
 
     public void viewBasicInfo(View view) {

@@ -2,19 +2,10 @@ package com.extenprise.mapp.util;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.ArrayAdapter;
 
 import com.extenprise.mapp.LoginHolder;
-import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
-import com.extenprise.mapp.service.data.ServicePoint;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by ambey on 23/7/15.
@@ -43,6 +34,7 @@ public abstract class SearchServProv {
 */
 
 
+/*
     public static boolean searchByAll(MappDbHelper dbHelper, String name, String clinic, String spec, String servCategory, String loc,
                                       String qualification, String exp, String startTime, String endTime,
                                       String availDay, String gender, String consultFee) {
@@ -54,28 +46,6 @@ public abstract class SearchServProv {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         cursor = db.rawQuery(query, selectionArgs);
         return (cursor.getCount() > 0);
-    }
-
-    private static String getQuery(String whereClause) {
-        String query = select_from_where() ;
-
-        if (!whereClause.equals("")) {
-            query += whereClause + " and ";
-        }
-
-        query += MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV + " = " +
-                MappContract.ServiceProvider.TABLE_NAME + "." +
-                MappContract.ServiceProvider._ID + " and " +
-
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV + " = " +
-                MappContract.ServProvHasServ.TABLE_NAME + "." +
-                MappContract.ServProvHasServ._ID + " and " +
-
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT + " = " +
-                MappContract.ServicePoint.TABLE_NAME + "." +
-                MappContract.ServicePoint._ID;
-
-        return query;
     }
 
     private static String getWhereClause(String name, String clinic, String spec, String servCategory, String loc, String qualification,
@@ -173,14 +143,16 @@ public abstract class SearchServProv {
             }
         }
 
-        /*if (!availDay.equals("")) {
+        */
+/*if (!availDay.equals("")) {
             if(availDay.contains(",")) {
                 availDay = availDay.replaceAll(",", "%");
             }
             //availDay = "%" + availDay + "%";
             whereClause += MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + " like ? ";
             argList.add("%" + availDay + "%");
-        }*/
+        }*//*
+
 
         if(!qualification.equals("")) {
             whereClause += "and lower(" + MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + ") like ? ";
@@ -211,7 +183,9 @@ public abstract class SearchServProv {
         }
         return whereClause;
     }
+*/
 
+/*
     public static ServProvHasServHasServPt getSPSSPT(MappDbHelper dbHelper) {
 
         String id = "";
@@ -261,6 +235,7 @@ public abstract class SearchServProv {
         c.close();
         return spsspt;
     }
+*/
 
     public static boolean viewWorkPlaces(MappDbHelper dbHelper) {
         String id = "";
@@ -278,20 +253,32 @@ public abstract class SearchServProv {
         return (cursor.getCount() > 0);
     }
 
+    private static String getQuery(String whereClause) {
+        String query = select_from_where() ;
+
+        if (!whereClause.equals("")) {
+            query += whereClause + " and ";
+        }
+
+        query += MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " and " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = " +
+                MappContract.ServicePoint.TABLE_NAME + "." +
+                MappContract.ServicePoint._ID;
+
+        return query;
+    }
+
     private static String select_from_where() {
 
         return "select " +
 
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
-                MappContract.ServProvHasServHasServPt.COLUMN_NAME_CONSULTATION_FEE + ", " +
-
-                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME + ", " +
-                MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + ", " +
-                MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE + ", " +
-                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + ", " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS + ", " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME + ", " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME + ", " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE + ", " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE + "," +
 
                 MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID + ", " +
                 MappContract.ServicePoint.COLUMN_NAME_ID_CITY + ", " +
@@ -311,9 +298,8 @@ public abstract class SearchServProv {
 
                 + " from " +
                 MappContract.ServiceProvider.TABLE_NAME + ", " +
-                MappContract.ServProvHasServ.TABLE_NAME + ", " +
                 MappContract.ServicePoint.TABLE_NAME + ", " +
-                MappContract.ServProvHasServHasServPt.TABLE_NAME + " where ";
+                MappContract.ServProvHasServPt.TABLE_NAME + " where ";
     }
 
 }

@@ -152,7 +152,7 @@ public class AddSpecialityActivity extends Activity {
             focusView = mSpeciality;
             valid = false;
         }
-        if(focusView != null) {
+        if (focusView != null) {
             focusView.requestFocus();
         }
         return valid;
@@ -237,46 +237,38 @@ public class AddSpecialityActivity extends Activity {
             values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, sp.getlName());
             values.put(MappContract.ServiceProvider.COLUMN_NAME_PASSWD, sp.getPasswd());
 
-            long spId = db.insert(MappContract.ServiceProvider.TABLE_NAME, null, values);
+            db.insert(MappContract.ServiceProvider.TABLE_NAME, null, values);
 
             SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getTimeInstance();
 
             for (ServProvHasServPt sps : spsList) {
+                ServicePoint spt = sps.getServicePoint();
+
                 values = new ContentValues();
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_ID_SERV_PROV, spId);
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_NAME, sps.getService());
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY, sps.getService());
-                values.put(MappContract.ServProvHasServ.COLUMN_NAME_EXPERIENCE, sps.getExperience());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity().getIdCity());
 
-                long spsId = db.insert(MappContract.ServProvHasServ.TABLE_NAME, null, values);
+                long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
 
-                ArrayList<ServProvHasServPt> spssptList = LoginHolder.servLoginRef.getServices();
-                for (ServProvHasServPt spsspt : spssptList) {
-                    ServicePoint spt = spsspt.getServicePoint();
-
-                    values = new ContentValues();
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
-                    values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity().getIdCity());
-
-                    long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
-
-                    values = new ContentValues();
-                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PROV_HAS_SERV, spsId);
-                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_ID_SERV_PT, sptId);
-                    try {
-                        values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_START_TIME, sdf.format(spsspt.getStartTime()));
-                        values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_END_TIME, sdf.format(spsspt.getEndTime()));
-                    } catch (Exception x) {
-                        x.printStackTrace();
-                    }
-                    values.put(MappContract.ServProvHasServHasServPt.COLUMN_NAME_WEEKLY_OFF, spsspt.getWorkingDays());
-
-                    db.insert(MappContract.ServProvHasServHasServPt.TABLE_NAME, null, values);
-
+                values = new ContentValues();
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE, sp.getPhone());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, sps.getService());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_EXP, sps.getExperience());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT, sptId);
+                try {
+                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME, sdf.format(sps.getStartTime()));
+                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME, sdf.format(sps.getEndTime()));
+                } catch (Exception x) {
+                    x.printStackTrace();
                 }
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS, sps.getWorkingDays());
+
+                db.insert(MappContract.ServProvHasServPt.TABLE_NAME, null, values);
+
             }
+
             return null;
         }
 

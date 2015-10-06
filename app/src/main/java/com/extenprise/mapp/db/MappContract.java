@@ -14,7 +14,7 @@ public class MappContract {
         public static final String COLUMN_NAME_FNAME = "fName";
         public static final String COLUMN_NAME_LNAME = "lName";
         public static final String COLUMN_NAME_EMAIL_ID = "emailId";
-        public static final String COLUMN_NAME_CELLPHONE = "cellphone";
+        public static final String COLUMN_NAME_CELLPHONE = "phone";
         public static final String COLUMN_NAME_PASSWD = "passwd";
         public static final String COLUMN_NAME_GENDER = "gender";
         public static final String COLUMN_NAME_QUALIFICATION = "qualification";
@@ -22,26 +22,25 @@ public class MappContract {
         public static final String COLUMN_NAME_IMAGE = "img";
     }
 
-    public static abstract class ServProvHasServ implements BaseColumns {
-        public static final String TABLE_NAME = "ServProvHasServ";
+    public static abstract class Service implements BaseColumns {
+        public static final String TABLE_NAME = "Service";
 
-        public static final String COLUMN_NAME_ID_SERV_PROV = "idServProv";
-        public static final String COLUMN_NAME_SERVICE_NAME = "serviceName";
-        public static final String COLUMN_NAME_SPECIALITY = "speciality";
-        public static final String COLUMN_NAME_SERVICE_CATAGORY = "serviceCatagory";
-        public static final String COLUMN_NAME_EXPERIENCE = "experience";
+        public static final String COLUMN_NAME_SERVICE_NAME = "name";
+        public static final String COLUMN_NAME_SERVICE_CATAGORY = "catagory";
     }
 
-    public static abstract class ServProvHasServHasServPt implements BaseColumns {
-        public static final String TABLE_NAME = "ServProvHasServHasServPt";
+    public static abstract class ServProvHasServPt implements BaseColumns {
+        public static final String TABLE_NAME = "ServProvHasServPt";
 
-        public static final String COLUMN_NAME_ID_SERV_PROV_HAS_SERV = "idServProvHasServ";
+        public static final String COLUMN_NAME_SERV_PROV_PHONE = "servProvPhone";
         public static final String COLUMN_NAME_ID_SERV_PT = "idServPt";
+        public static final String COLUMN_NAME_ID_SERVICE = "idService";
         public static final String COLUMN_NAME_SERVICE_POINT_TYPE = "servicePointType";
-        public static final String COLUMN_NAME_WEEKLY_OFF = "weeklyOff";
+        public static final String COLUMN_NAME_WORKING_DAYS = "workingDays";
         public static final String COLUMN_NAME_START_TIME = "startTime";
         public static final String COLUMN_NAME_END_TIME = "endTime";
-        public static final String COLUMN_NAME_CONSULTATION_FEE = "consultationFee";
+        public static final String COLUMN_NAME_EXP = "experience";
+        public static final String COLUMN_NAME_CONSULTATION_FEE = "consultFee";
     }
 
     public static abstract class ServicePoint implements BaseColumns {
@@ -49,6 +48,7 @@ public class MappContract {
 
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_LOCATION = "location";
+        public static final String COLUMN_NAME_PINCODE = "pincode";
         public static final String COLUMN_NAME_PHONE = "phone";
         public static final String COLUMN_NAME_ALT_PHONE = "altPhone";
         public static final String COLUMN_NAME_EMAIL_ID = "emailID";

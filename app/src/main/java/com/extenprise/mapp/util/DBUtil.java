@@ -1,6 +1,5 @@
 package com.extenprise.mapp.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +7,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
@@ -16,11 +14,6 @@ import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.data.ServProvHasServHasServPt;
-import com.extenprise.mapp.service.data.ServProvHasService;
-import com.extenprise.mapp.service.data.Service;
-import com.extenprise.mapp.service.data.ServicePoint;
-import com.extenprise.mapp.service.data.ServiceProvider;
 
 import java.util.ArrayList;
 
@@ -297,9 +290,9 @@ public abstract class DBUtil {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = {servCategory};
-        String query = "select DISTINCT " + MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY + " from " +
-                MappContract.ServProvHasServ.TABLE_NAME + " where " +
-                MappContract.ServProvHasServ.COLUMN_NAME_SERVICE_CATAGORY + " = ? ";
+        String query = "select DISTINCT " + MappContract.Service.COLUMN_NAME_SERVICE_NAME + " from " +
+                MappContract.Service.TABLE_NAME + " where " +
+                MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY + " = ? ";
 
         Cursor cursor = db.rawQuery(query, selectionArgs);
 
@@ -309,7 +302,7 @@ public abstract class DBUtil {
         if (cursor.getCount() > 0) {
             do {
                 cursor.moveToNext();
-                specs.add(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServ.COLUMN_NAME_SPECIALITY)));
+                specs.add(cursor.getString(cursor.getColumnIndex(MappContract.Service.COLUMN_NAME_SERVICE_NAME)));
             } while (!cursor.isLast());
         }
         cursor.close();
