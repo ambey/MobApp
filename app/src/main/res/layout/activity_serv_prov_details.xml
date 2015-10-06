@@ -89,7 +89,7 @@
             <View
                 android:id="@+id/ln"
                 android:layout_width="fill_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_below="@+id/imageViewAvailable"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/black" />
@@ -245,6 +245,7 @@
                 android:text="@string/title_activity_book_appointment"
                 android:textColor="#fff"
                 android:textStyle="bold" />
+
         </RelativeLayout>
     </ScrollView>
 

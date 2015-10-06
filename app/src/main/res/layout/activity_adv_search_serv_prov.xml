@@ -39,6 +39,7 @@
             android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_weight="0.5"
             android:background="@drawable/spinner"
             android:choiceMode="singleChoice"
@@ -95,6 +96,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="0.5"
                     android:hint="@string/minExp"
                     android:inputType="phone" />
@@ -111,7 +113,7 @@
                 android:onClick="showtimeFields"
                 android:text="@string/workHrsLbl"
                 android:textColor="#ffffffff"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -134,6 +136,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:layout_weight="0.5"
                     android:hint="@string/endTime"
                     android:onClick="showEndTimePicker" />
@@ -156,7 +159,7 @@
                     android:onClick="showDaysField"
                     android:text="@string/avail_days"
                     android:textColor="#ffffffff"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -164,6 +167,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="0.5"
 
 
@@ -172,7 +176,7 @@
                     android:onClick="showGenderField"
                     android:text="@string/gender"
                     android:textColor="#ffffffff"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -205,6 +209,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
 
                     android:layout_weight="0.5"
 
@@ -225,19 +230,22 @@
                     android:id="@+id/textViewConsultationFees"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="0.75"
                     android:text="@string/consult_fees"
-                    android:textStyle="bold"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="30dp"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1.4"
                     android:text="@string/rs_sign"
-                    android:layout_marginTop="10dp"/>
+
+                    />
 
                 <Spinner
                     android:id="@+id/spinConsultationFees"
@@ -247,7 +255,8 @@
                     android:background="@drawable/spinner"
                     android:entries="@array/consultationFees"
                     android:prompt="@string/consult_fees"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown"
+                    />
 
             </LinearLayout>
 
