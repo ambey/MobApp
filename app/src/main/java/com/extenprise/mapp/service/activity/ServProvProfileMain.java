@@ -160,7 +160,8 @@ public class ServProvProfileMain extends Activity {
         final Cursor cursor = SearchServProv.getCursor();
 
         String[] values = new String[]{
-                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE,
+                MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY,
+                MappContract.Service.COLUMN_NAME_SERVICE_NAME,
                 MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION,
                 MappContract.ServProvHasServPt.COLUMN_NAME_EXP,
                 MappContract.ServicePoint.COLUMN_NAME_NAME,
@@ -746,7 +747,12 @@ public class ServProvProfileMain extends Activity {
 
 
                 values = new ContentValues();
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, sps.getService());
+                values.put(MappContract.Service.COLUMN_NAME_SERVICE_NAME, sps.getService().getSpeciality());
+                values.put(MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
+                long idService = db.insert(MappContract.Service.TABLE_NAME, null, values);
+
+                values = new ContentValues();
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, idService);
                 values.put(MappContract.ServProvHasServPt.COLUMN_NAME_EXP, sps.getExperience());
 
                 try {

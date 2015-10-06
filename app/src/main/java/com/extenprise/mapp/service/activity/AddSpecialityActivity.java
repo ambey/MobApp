@@ -254,7 +254,7 @@ public class AddSpecialityActivity extends Activity {
 
                 values = new ContentValues();
                 values.put(MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE, sp.getPhone());
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, sps.getService());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, sps.getService().getIdService());
                 values.put(MappContract.ServProvHasServPt.COLUMN_NAME_EXP, sps.getExperience());
                 values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT, sptId);
                 try {

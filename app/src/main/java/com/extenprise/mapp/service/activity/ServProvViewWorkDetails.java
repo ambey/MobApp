@@ -47,7 +47,7 @@ public class ServProvViewWorkDetails extends Activity {
         String[] values = new String[] {
                 MappContract.ServiceProvider.COLUMN_NAME_FNAME,
                 MappContract.ServiceProvider.COLUMN_NAME_LNAME,
-                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE,
+                MappContract.Service.COLUMN_NAME_SERVICE_NAME,
                 MappContract.ServProvHasServPt.COLUMN_NAME_EXP,
                 MappContract.ServicePoint.COLUMN_NAME_NAME,
                 MappContract.ServicePoint.COLUMN_NAME_LOCATION
@@ -109,7 +109,7 @@ public class ServProvViewWorkDetails extends Activity {
                 spt.setName(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_NAME)));
                 spt.setLocation(cursor.getString(cursor.getColumnIndex(MappContract.ServicePoint.COLUMN_NAME_LOCATION)));
 
-                LoginHolder.spsspt.setService(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE)));
+                LoginHolder.spsspt.getService().setSpeciality(cursor.getString(cursor.getColumnIndex(MappContract.Service.COLUMN_NAME_SERVICE_NAME)));
                 LoginHolder.spsspt.setExperience(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_EXP))));
                 LoginHolder.spsspt.setConsultFee(Float.parseFloat(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE))));
                 LoginHolder.spsspt.setStartTime(cursor.getInt(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME)));

@@ -14,7 +14,7 @@ public class ServProvHasServPt implements Parcelable {
 
     private int idServProvHasServPt;
     private String servPointType;
-    private String service;
+    private Service service;
     private float experience;
     private String workingDays;
     private float consultFee;
@@ -26,20 +26,24 @@ public class ServProvHasServPt implements Parcelable {
     private String servProvPhone;
 
     public ServProvHasServPt() {
+        service = new Service();
         appointment = new ArrayList<>();
     }
 
     public ServProvHasServPt(Parcel source) {
+        service = new Service();
+
         idServProvHasServPt = source.readInt();
         startTime = source.readInt();
         endTime = source.readInt();
         experience = source.readFloat();
         consultFee = source.readFloat();
 
-        String[] fields = new String[3];
+        String[] fields = new String[4];
         source.readStringArray(fields);
         servPointType = fields[0];
-        service = fields[1];
+        service.setServCatagory(fields[1]);
+        service.setSpeciality(fields[2]);
         workingDays = fields[2];
     }
 
@@ -67,11 +71,11 @@ public class ServProvHasServPt implements Parcelable {
         this.idServProvHasServPt = idServProvHasServPt;
     }
 
-    public String getService() {
+    public Service getService() {
         return service;
     }
 
-    public void setService(String service) {
+    public void setService(Service service) {
         this.service = service;
     }
 
@@ -152,7 +156,7 @@ public class ServProvHasServPt implements Parcelable {
         dest.writeFloat(experience);
         dest.writeFloat(consultFee);
         dest.writeStringArray(new String[]{
-                servPointType, service, workingDays
+                servPointType, service.getServCatagory(), service.getSpeciality(), workingDays
         });
     }
 

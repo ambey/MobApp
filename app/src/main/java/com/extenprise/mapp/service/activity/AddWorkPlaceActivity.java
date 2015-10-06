@@ -368,7 +368,7 @@ public class AddWorkPlaceActivity extends Activity {
         spt.setAltPhone(mPhone2.getText().toString().trim());
         spt.setEmailId(mEmailId.getText().toString().trim());
 
-        spsspt.setService(mSpeciality.getSelectedItem().toString());
+        spsspt.getService().setSpeciality(mSpeciality.getSelectedItem().toString());
         spsspt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
         spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));

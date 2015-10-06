@@ -240,10 +240,10 @@ public abstract class SearchServProv {
     public static boolean viewWorkPlaces(MappDbHelper dbHelper) {
         String id = "";
         String whereClause = MappContract.ServiceProvider.TABLE_NAME + "." +
-                MappContract.ServiceProvider._ID + " = ? ";
+                MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = ? ";
 
-        if(LoginHolder.servLoginRef != null) {
-            id = "" + LoginHolder.servLoginRef.getIdServiceProvider();
+        if (LoginHolder.servLoginRef != null) {
+            id = "" + LoginHolder.servLoginRef.getPhone();
         }
         String[] selectionArgs = {
                 id
@@ -254,7 +254,7 @@ public abstract class SearchServProv {
     }
 
     private static String getQuery(String whereClause) {
-        String query = select_from_where() ;
+        String query = select_from_where();
 
         if (!whereClause.equals("")) {
             query += whereClause + " and ";
@@ -264,7 +264,9 @@ public abstract class SearchServProv {
                 MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " and " +
                 MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = " +
                 MappContract.ServicePoint.TABLE_NAME + "." +
-                MappContract.ServicePoint._ID;
+                MappContract.ServicePoint._ID + " and " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE + " = " +
+                MappContract.Service.TABLE_NAME + "." + MappContract.Service._ID;
 
         return query;
     }
@@ -278,7 +280,9 @@ public abstract class SearchServProv {
                 MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME + ", " +
                 MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
                 MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE + ", " +
-                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE + "," +
+
+                MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY + "," +
+                MappContract.Service.COLUMN_NAME_SERVICE_NAME + "," +
 
                 MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID + ", " +
                 MappContract.ServicePoint.COLUMN_NAME_ID_CITY + ", " +
@@ -298,6 +302,7 @@ public abstract class SearchServProv {
 
                 + " from " +
                 MappContract.ServiceProvider.TABLE_NAME + ", " +
+                MappContract.Service.TABLE_NAME + ", " +
                 MappContract.ServicePoint.TABLE_NAME + ", " +
                 MappContract.ServProvHasServPt.TABLE_NAME + " where ";
     }

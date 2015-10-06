@@ -60,7 +60,7 @@ public class BookAppointmentActivity extends Activity
 
         textViewDocFName.setText(mServProv.getfName());
         textViewDocLName.setText(mServProv.getlName());
-        textViewDocSpeciality.setText(spsspt.getService());
+        textViewDocSpeciality.setText(spsspt.getService().getSpeciality());
         textViewQualification.setText("(" + mServProv.getQualification() + ")");
 
         String date = UIUtility.getDaAsString("/");
@@ -213,7 +213,7 @@ public class BookAppointmentActivity extends Activity
             values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTextViewDate.getText().toString());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
             values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServPointType());
-            values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getService());
+            values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getService().getSpeciality());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, mServProv.getIdServiceProvider());
             values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, LoginHolder.custLoginRef.getIdCustomer());
 

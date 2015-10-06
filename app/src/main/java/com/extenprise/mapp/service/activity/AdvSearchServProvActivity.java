@@ -41,8 +41,8 @@ public class AdvSearchServProvActivity extends Activity {
     private View mSearchFormView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options = { "All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-    protected boolean[] selections =  new boolean[ options.length ];
+    protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    protected boolean[] selections = new boolean[options.length];
     String selectedDays;
 
     @Override
@@ -50,13 +50,13 @@ public class AdvSearchServProvActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adv_search_serv_prov);
 
-        mDrClinicName = (EditText)findViewById(R.id.editSearchDr);
-        mSpeciality = (Spinner)findViewById(R.id.viewSpeciality);
-        mServProvCategory = (Spinner)findViewById(R.id.spinServiceProvCategory);
-        mLocation = (EditText)findViewById(R.id.viewLocation);
-        mQualification = (EditText)findViewById(R.id.editTextQualification);
-        mButtonStartTime = (Button)findViewById(R.id.buttonStartTime);
-        mButttonEndTime = (Button)findViewById(R.id.buttonEndTime);
+        mDrClinicName = (EditText) findViewById(R.id.editSearchDr);
+        mSpeciality = (Spinner) findViewById(R.id.viewSpeciality);
+        mServProvCategory = (Spinner) findViewById(R.id.spinServiceProvCategory);
+        mLocation = (EditText) findViewById(R.id.viewLocation);
+        mQualification = (EditText) findViewById(R.id.editTextQualification);
+        mButtonStartTime = (Button) findViewById(R.id.buttonStartTime);
+        mButttonEndTime = (Button) findViewById(R.id.buttonEndTime);
         //mAvaildays = (Spinner) findViewById(R.id.spinAvailDays);
         mGender = (Spinner) findViewById(R.id.spinGender);
         mExperience = (EditText) findViewById(R.id.editTextExp);
@@ -65,17 +65,17 @@ public class AdvSearchServProvActivity extends Activity {
         mSearchFormView = findViewById(R.id.advSearchForm);
         mProgressView = findViewById(R.id.search_progress);
 
-        if(LoginHolder.spsspt != null) {
+        if (LoginHolder.spsspt != null) {
             mLocation.setText(LoginHolder.spsspt.getServicePoint().getLocation());
             //mSpeciality.setSelection(LoginHolder.spsspt.getServProvHasService().getService().getSpeciality());
             //mSpeciality.setSelection();
-            mSpeciality.setSelection(UIUtility.getSpinnerIndex(mSpeciality, LoginHolder.spsspt.getService()));
-            mServProvCategory.setSelection(UIUtility.getSpinnerIndex(mServProvCategory, LoginHolder.spsspt.getService()                                                                                                     ));
+            mSpeciality.setSelection(UIUtility.getSpinnerIndex(mSpeciality, LoginHolder.spsspt.getService().getSpeciality()));
+            mServProvCategory.setSelection(UIUtility.getSpinnerIndex(mServProvCategory, LoginHolder.spsspt.getService().getServCatagory()));
             mDrClinicName.setText(LoginHolder.spsspt.getServicePoint().getName());
         }
 
-        mMultiSpinnerDays = (Button)findViewById(R.id.spinAvailDays);
-        mMultiSpinnerDays.setOnClickListener( new ButtonClickHandler() );
+        mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
+        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
 
         mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -85,6 +85,7 @@ public class AdvSearchServProvActivity extends Activity {
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
                 //setSpecs(specs);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
@@ -93,7 +94,7 @@ public class AdvSearchServProvActivity extends Activity {
     }
 
     public void showtimeFields(View view) {
-        if(mButtonStartTime.getVisibility() == View.VISIBLE) {
+        if (mButtonStartTime.getVisibility() == View.VISIBLE) {
             mButtonStartTime.setVisibility(View.GONE);
             mButttonEndTime.setVisibility(View.GONE);
             //view.setBackgroundColor(Color.parseColor("#b0171f"));
@@ -105,7 +106,7 @@ public class AdvSearchServProvActivity extends Activity {
     }
 
     public void showGenderField(View view) {
-        if(mGender.getVisibility() == View.VISIBLE) {
+        if (mGender.getVisibility() == View.VISIBLE) {
             //UIUtility.expandOrCollapse(mGender, "");
             mGender.setVisibility(View.GONE);
 
@@ -116,7 +117,7 @@ public class AdvSearchServProvActivity extends Activity {
     }
 
     public void showDaysField(View view) {
-        if(mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
+        if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
             //UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
             mMultiSpinnerDays.setVisibility(View.GONE);
         } else {
@@ -134,7 +135,7 @@ public class AdvSearchServProvActivity extends Activity {
 
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
-            if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
                 setupSelection();
             }
             showDialog(0);
@@ -144,7 +145,7 @@ public class AdvSearchServProvActivity extends Activity {
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
-        if(!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
             setupSelection();
         }
     }
@@ -160,7 +161,7 @@ public class AdvSearchServProvActivity extends Activity {
 
     public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
         public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if(options[clicked].toString().equalsIgnoreCase("All Days")) {
+            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
                 for (CharSequence option : options) {
                     Log.i("ME", option + " selected: " + selected);
                 }
@@ -182,7 +183,7 @@ public class AdvSearchServProvActivity extends Activity {
     }
 
     protected void printSelectedDays() {
-        if(selections[0]) {
+        if (selections[0]) {
             setupAllDaysSelected();
             return;
         }
@@ -208,14 +209,14 @@ public class AdvSearchServProvActivity extends Activity {
     private void setupSelection() {
         String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
         selections[0] = false;
-        for(String d : selectedDays) {
+        for (String d : selectedDays) {
             selections[getDayIndex(d)] = true;
         }
     }
 
     private int getDayIndex(String day) {
-        for(int i = 0; i < options.length; i++) {
-            if(day.equals(options[i])) {
+        for (int i = 0; i < options.length; i++) {
+            if (day.equals(options[i])) {
                 return i;
             }
         }
@@ -225,7 +226,7 @@ public class AdvSearchServProvActivity extends Activity {
     private void setupAllDaysSelected() {
         selections[0] = false;
         selectedDays = options[1].toString();
-        for(int i = 2; i < options.length; i++){
+        for (int i = 2; i < options.length; i++) {
             selectedDays += "," + options[i];
         }
     }
@@ -292,11 +293,11 @@ public class AdvSearchServProvActivity extends Activity {
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
         String sp = mSpeciality.getSelectedItem().toString();
-        if(sp.equals("Select Speciality") || sp.equals("Other")) {
+        if (sp.equals("Select Speciality") || sp.equals("Other")) {
             sp = "";
         }
         String sc = mServProvCategory.getSelectedItem().toString();
-        if(sc.equals("Select Category")) {
+        if (sc.equals("Select Category")) {
             sc = "";
         }
 
@@ -304,7 +305,7 @@ public class AdvSearchServProvActivity extends Activity {
 
         String qualification = mQualification.getText().toString().trim();
         String gender = mGender.getSelectedItem().toString();
-        if(gender.equals("Both")) {
+        if (gender.equals("Both")) {
             gender = "";
         }
         String exp = mExperience.getText().toString().trim();
@@ -313,11 +314,11 @@ public class AdvSearchServProvActivity extends Activity {
         //String availDay = UIUtility.getCommaSepparatedString(selectedDays);
 
         String availDay = mMultiSpinnerDays.getText().toString();
-        if(availDay.equalsIgnoreCase("Select Days")) {
+        if (availDay.equalsIgnoreCase("Select Days")) {
             availDay = "";
         }
         String consultFee = mConsultFee.getSelectedItem().toString();
-        if(consultFee.equals("-")) {
+        if (consultFee.equals("-")) {
             consultFee = "";
         }
         /*if(selectedDays != null && !(selectedDays.equals(""))) {
@@ -325,7 +326,7 @@ public class AdvSearchServProvActivity extends Activity {
         }*/
 
         if (!(endTime.equals("")) &&
-                !(startTime.equals("")) ) {
+                !(startTime.equals(""))) {
             if (UIUtility.getMinutes(startTime) >= UIUtility.getMinutes(endTime)) {
                 mButttonEndTime.setError("End Time Can't be similar or less than to Start Time.");
                 focusView = mButttonEndTime;
@@ -334,11 +335,11 @@ public class AdvSearchServProvActivity extends Activity {
             }
         }
 
-        if(!name.equals("")) {
-            if(name.contains(",")) {
+        if (!name.equals("")) {
+            if (name.contains(",")) {
                 String[] str = name.trim().split(",");
                 dr = str[0];
-                if(str.length > 1) {
+                if (str.length > 1) {
                     clinic = str[1];
                 }
             }
