@@ -30,6 +30,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +57,9 @@ public class PatientSignUpActivity extends Activity {
 
     private SignUpHandler mRespHandler = new SignUpHandler(this);
     private int mServiceAction;
+
+    private LinearLayout mContLay;
+    private LinearLayout mAddrLayout;
 
     private View mFormView;
     private View mProgressView;
@@ -84,6 +89,9 @@ public class PatientSignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_sign_up);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mContLay = (LinearLayout) findViewById(R.id.contLay);
+        mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
 
         mFormView = findViewById(R.id.scrollView);
         mProgressView = findViewById(R.id.progressView);
@@ -145,6 +153,16 @@ public class PatientSignUpActivity extends Activity {
     }
 
     public void showPersonalFields(View view) {
+
+        if(mAddrLayout.getVisibility() == View.VISIBLE) {
+            mAddrLayout.setVisibility(View.GONE);
+        } else {
+            mAddrLayout.setVisibility(View.VISIBLE);
+            if(mContLay.getVisibility() == View.VISIBLE) {
+                mContLay.setVisibility(View.GONE);
+            }
+        }
+        /*
         TextView dobLbl = (TextView) findViewById(R.id.textViewDOBLbl);
         TextView heightUnit = (TextView) findViewById(R.id.viewHeightUnit);
         TextView weightUnit = (TextView) findViewById(R.id.viewWeightUnit);
@@ -171,7 +189,7 @@ public class PatientSignUpActivity extends Activity {
             mSpinGender.setVisibility(View.VISIBLE);
             mEditTextHeight.setVisibility(View.VISIBLE);
             mEditTextWeight.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     @Override
@@ -190,7 +208,15 @@ public class PatientSignUpActivity extends Activity {
     }
 
     public void showAddressFields(View view) {
-        if(mEditTextLoc.getVisibility() == View.VISIBLE) {
+        if(mContLay.getVisibility() == View.VISIBLE) {
+            mContLay.setVisibility(View.GONE);
+        } else {
+            mContLay.setVisibility(View.VISIBLE);
+            if(mAddrLayout.getVisibility() == View.VISIBLE) {
+                mAddrLayout.setVisibility(View.GONE);
+            }
+        }
+        /*if(mEditTextLoc.getVisibility() == View.VISIBLE) {
             mEditTextLoc.setVisibility(View.GONE);
             mEditTextPinCode.setVisibility(View.GONE);
             mSpinState.setVisibility(View.GONE);
@@ -200,7 +226,7 @@ public class PatientSignUpActivity extends Activity {
             mEditTextPinCode.setVisibility(View.VISIBLE);
             mSpinState.setVisibility(View.VISIBLE);
             mSpinCity.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     public void showDatePicker(View view) {

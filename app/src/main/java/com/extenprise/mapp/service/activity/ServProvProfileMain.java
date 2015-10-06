@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -16,8 +18,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,6 +47,7 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.MappService;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
@@ -46,6 +55,7 @@ import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,6 +67,8 @@ import java.util.Calendar;
 
 
 public class ServProvProfileMain extends Activity {
+
+    private UpdateHandler mResponseHandler = new UpdateHandler(this);
 
     private EditText mMobNo, mEmailID, mRegNo;
     private TextView mDocName;
@@ -425,86 +437,6 @@ public class ServProvProfileMain extends Activity {
         }
     }
 
-    private boolean isValidDetails(View v) {
-        return true;
-    }
-
-    private AlertDialog openDialog() {
-
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.layout_workplace_details, null);
-
-        mName = (EditText) dialogView.findViewById(R.id.editTextName);
-        mLoc = (EditText) dialogView.findViewById(R.id.editTextLoc);
-        mPhone1 = (EditText) dialogView.findViewById(R.id.editTextPhone1);
-        mPhone2 = (EditText) dialogView.findViewById(R.id.editTextPhone2);
-        mEmailIdwork = (EditText) dialogView.findViewById(R.id.editTextEmail);
-        mConsultFee = (EditText) dialogView.findViewById(R.id.editTextConsultationFees);
-        mServPtType = (Spinner) dialogView.findViewById(R.id.viewWorkPlaceType);
-        mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
-        mStartTime = (Button) dialogView.findViewById(R.id.buttonStartTime);
-        mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
-        mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
-
-        mStartTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker(v, mStartTime);
-            }
-        });
-
-        mEndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker(v, mEndTime);
-            }
-        });
-
-        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
-
-        return new AlertDialog.Builder(this)
-                .setTitle("Add New Work Place")
-                .setView(dialogView)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (isValidDetails(dialogView)) {
-
-
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    public void addNewWorkPlace(View view) {
-        /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
-        adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
-
-        //TO DO
-
-        //adapter.add("another row");
-
-        //ListAdapter adp = listView.getAdapter();
-
-
-
-        *//*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
-        extras.addRow(new String[] { "-1", "New Template" });
-        extras.addRow(new String[] { "-2", "Empty Template" });
-        Cursor[] cursors = { extras, SearchServProv.getCursor() };
-        Cursor extendedCursor = new MergeCursor(cursors);
-*//*
-        adapter.notifyDataSetChanged();
-
-*/
-        openDialog();
-    }
-
     public void removeWorkPlace(View view) {
         SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
 
@@ -788,5 +720,234 @@ public class ServProvProfileMain extends Activity {
             UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
         }
 
+    }
+
+
+
+    ///////////////////////////////Add New Work Place Details/////////////////////////////////
+
+    public void addNewWorkPlace(View view) {
+        /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
+
+        *//*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
+        extras.addRow(new String[] { "-1", "New Template" });
+        extras.addRow(new String[] { "-2", "Empty Template" });
+        Cursor[] cursors = { extras, SearchServProv.getCursor() };
+        Cursor extendedCursor = new MergeCursor(cursors);
+        adapter.notifyDataSetChanged();
+*/
+        openDialog();
+    }
+
+    private AlertDialog openDialog() {
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.layout_workplace_details, null);
+
+        mName = (EditText) dialogView.findViewById(R.id.editTextName);
+        mLoc = (EditText) dialogView.findViewById(R.id.editTextLoc);
+        mPhone1 = (EditText) dialogView.findViewById(R.id.editTextPhone1);
+        mPhone2 = (EditText) dialogView.findViewById(R.id.editTextPhone2);
+        mEmailIdwork = (EditText) dialogView.findViewById(R.id.editTextEmail);
+        mConsultFee = (EditText) dialogView.findViewById(R.id.editTextConsultationFees);
+        mServPtType = (Spinner) dialogView.findViewById(R.id.viewWorkPlaceType);
+        mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
+        mStartTime = (Button) dialogView.findViewById(R.id.buttonStartTime);
+        mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
+        mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
+        mStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker(v, mStartTime);
+            }
+        });
+        mEndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker(v, mEndTime);
+            }
+        });
+        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+
+        return new AlertDialog.Builder(this)
+                .setTitle("Add New Work Place")
+                .setView(dialogView)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        if (isValidWorkPlaceInput()) {
+                            addWorkPlace();
+                            saveData(dialogView);
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private boolean isValidWorkPlaceInput() {
+        boolean valid = true;
+        View focusView = null;
+
+        String name = mName.getText().toString().trim();
+        if (TextUtils.isEmpty(name)) {
+            mName.setError(getString(R.string.error_field_required));
+            focusView = mName;
+            valid = false;
+        }
+        String location = mLoc.getText().toString().trim();
+        if (TextUtils.isEmpty(location)) {
+            mLoc.setError(getString(R.string.error_field_required));
+            focusView = mLoc;
+            valid = false;
+        }
+        String phone1 = mPhone1.getText().toString().trim();
+        if (TextUtils.isEmpty(phone1)) {
+            mPhone1.setError(getString(R.string.error_field_required));
+            focusView = mPhone1;
+            valid = false;
+        } else if (!Validator.isPhoneValid(phone1)) {
+            mPhone1.setError(getString(R.string.error_invalid_phone));
+            focusView = mPhone1;
+            valid = false;
+        }
+        String phone2 = mPhone2.getText().toString().trim();
+        if (!TextUtils.isEmpty(phone2) && !Validator.isPhoneValid(phone2)) {
+            mPhone2.setError(getString(R.string.error_invalid_phone));
+            focusView = mPhone2;
+            valid = false;
+        }
+        String email = mEmailIdwork.getText().toString().trim();
+        if (!TextUtils.isEmpty(email) && !Validator.isEmailValid(mEmailIdwork.getText().toString())) {
+            mEmailIdwork.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailIdwork;
+            valid = false;
+        }
+        if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {
+            mEndTime.setError(getString(R.string.error_field_required));
+            focusView = mEndTime;
+            valid = false;
+        }
+        if (mStartTime.getText().toString().equals(getString(R.string.start_time))) {
+            mStartTime.setError(getString(R.string.error_field_required));
+            focusView = mStartTime;
+            valid = false;
+        }
+        if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
+                !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
+            if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
+                mEndTime.setError(getString(R.string.error_endtime));
+                focusView = mEndTime;
+                valid = false;
+            }
+        }
+        String days = mMultiSpinnerDays.getText().toString();
+        if (days.equalsIgnoreCase("Select Days")) {
+            mMultiSpinnerDays.setError(getString(R.string.error_field_required));
+            focusView = mMultiSpinnerDays;
+            valid = false;
+        }
+        String cosultFee = mConsultFee.getText().toString().trim();
+        if (TextUtils.isEmpty(cosultFee)) {
+            mConsultFee.setError(getString(R.string.error_field_required));
+            focusView = mConsultFee;
+            valid = false;
+        }
+
+
+        if (focusView != null) {
+            focusView.requestFocus();
+        }
+        return valid;
+    }
+
+    private void addWorkPlace() {
+        ServicePoint spt = new ServicePoint();
+        ServProvHasServPt spsspt = new ServProvHasServPt();
+
+        spt.setName(mName.getText().toString().trim());
+        spt.setLocation(mLoc.getText().toString().trim());
+        spt.getCity().setCity(mCity.getSelectedItem().toString().trim());
+        spt.setPhone(mPhone1.getText().toString().trim());
+        spt.setAltPhone(mPhone2.getText().toString().trim());
+        spt.setEmailId(mEmailIdwork.getText().toString().trim());
+
+        spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
+        spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
+        spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
+        spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+        spsspt.setServicePoint(spt);
+
+        LoginHolder.spsspt = spsspt;
+    }
+
+    public void saveData(View view) {
+        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        private Messenger mService;
+        private boolean mBound;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            mBound = true;
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            bundle.putParcelable("service", LoginHolder.spsspt);
+            Message msg = Message.obtain(null, MappService.DO_UPDATE);
+            msg.replyTo = new Messenger(mResponseHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+            mBound = false;
+        }
+    };
+
+    private static class UpdateHandler extends Handler {
+        private ServProvProfileMain mActivity;
+
+        public UpdateHandler(ServProvProfileMain activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_UPDATE:
+                    mActivity.addWorkPlaceDone(msg.getData());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+    private void addWorkPlaceDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Work Place Added");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
     }
 }

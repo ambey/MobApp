@@ -42,6 +42,7 @@ public class MappService extends Service {
     public static final int DO_PHONE_EXIST_CHECK = 3;
     public static final int DO_SEARCH_SERV_PROV = 4;
     public static final int DO_SERV_PROV_DETAILS = 5;
+    public static final int DO_UPDATE = 6;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -93,6 +94,27 @@ public class MappService extends Service {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(DO_SIGNUP);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    public void doUpdate(Message msg) {
+        Bundle data = msg.getData();
+        mLoginType = data.getInt("loginType");
+
+        Object object = data.getParcelable("service");
+        if (mLoginType == CUSTOMER_LOGIN) {
+            object = data.getParcelable("customer");
+        }
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        try {
+            task = new MappAsyncTask(getURL(DO_UPDATE), gson.toJson(object));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(DO_UPDATE);
             return;
         }
         task.execute((Void) null);
@@ -178,6 +200,12 @@ public class MappService extends Service {
                     urlId = R.string.signup_cust;
                 }
                 break;
+            case DO_UPDATE:
+                urlId = R.string.update_serv;
+                if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                    urlId = R.string.update_cust;
+                }
+                break;
             case DO_PHONE_EXIST_CHECK:
                 urlId = R.string.check_phone_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
@@ -213,6 +241,9 @@ public class MappService extends Service {
                     break;
                 case DO_SIGNUP:
                     mService.doSignup(msg);
+                    break;
+                case DO_UPDATE:
+                    mService.doUpdate(msg);
                     break;
                 case DO_PHONE_EXIST_CHECK:
                     mService.doPhoneExistsCheck(msg);
@@ -291,6 +322,13 @@ public class MappService extends Service {
                     switch (mAction) {
                         case DO_LOGIN:
                         case DO_SIGNUP:
+                        case DO_UPDATE:
+                            if (mLoginType == CUSTOMER_LOGIN) {
+                                mCustomer = gson.fromJson(responseBuf.toString(), Customer.class);
+                            } else {
+                                mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
+                            }
+                            break;
                         case DO_PHONE_EXIST_CHECK:
                             if (mLoginType == CUSTOMER_LOGIN) {
                                 mCustomer = gson.fromJson(responseBuf.toString(), Customer.class);

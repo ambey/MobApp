@@ -2,9 +2,11 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -13,6 +15,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
@@ -23,34 +30,48 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.MappService;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.activity.ServProvProfileMain;
+import com.extenprise.mapp.util.EncryptUtil;
+import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class PatientProfile extends Activity {
 
-    private RadioGroup mGender;
-    private RadioButton mBtnMale, mBtnFemale;
+    private UpdateHandler mRespHandler = new UpdateHandler(this);
+    private int mServiceAction;
 
+    private LinearLayout mContLay;
+    private LinearLayout mAddrLayout;
     private View mFormView;
     private View mProgressView;
 
-    private TextView mPname, mTextViewDOB;
+    private TextView mPname, mTextViewDOB, mMobNo;
     private EditText mEditTextCustomerFName;
     private EditText mEditTextCustomerLName;
     private EditText mEditTextCustomerEmail;
@@ -60,6 +81,7 @@ public class PatientProfile extends Activity {
     private EditText mEditTextPinCode;
     private Spinner mSpinCity;
     private Spinner mSpinState;
+    private Spinner mSpinGender;
     private ImageView mImgView;
 
     private static int RESULT_LOAD_IMG = 1;
@@ -73,22 +95,30 @@ public class PatientProfile extends Activity {
         setContentView(R.layout.activity_patient_profile);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mContLay = (LinearLayout) findViewById(R.id.contLay);
+        mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
+
         mFormView = findViewById(R.id.scrollView);
         mProgressView = findViewById(R.id.progressView);
+
+        mPname = (TextView) findViewById(R.id.textviewPname);
+        mMobNo = (TextView) findViewById(R.id.mobnumValue);
+        mImgView = (ImageView) findViewById(R.id.imageViewPatient);
+
         mTextViewDOB = (TextView) findViewById(R.id.textViewDOB);
         mEditTextCustomerFName = (EditText)findViewById(R.id.editTextCustomerFName);
         mEditTextCustomerLName = (EditText) findViewById(R.id.editTextCustomerLName);
-
         mEditTextCustomerEmail = (EditText)findViewById(R.id.editTextCustomerEmail);
-
         mEditTextHeight = (EditText)findViewById(R.id.editTextHeight);
         mEditTextWeight = (EditText)findViewById(R.id.editTextWeight);
         mEditTextLoc = (EditText)findViewById(R.id.editTextLoc);
         mEditTextPinCode = (EditText)findViewById(R.id.editTextZipCode);
-
         mSpinCity = (Spinner)findViewById(R.id.editTextCity);
         mSpinState = (Spinner)findViewById(R.id.editTextState);
-        mImgView = (ImageView) findViewById(R.id.uploadimageview);
+        mSpinGender = (Spinner) findViewById(R.id.spinGender);
+
+        viewProfile();
+        editPatientProf(null);
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -100,6 +130,177 @@ public class PatientProfile extends Activity {
             }
         }
 
+    }
+
+    private void viewProfile() {
+        mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName());
+        mMobNo.setText(LoginHolder.custLoginRef.getPhone());
+        if(LoginHolder.custLoginRef.getImg() != null) {
+            mImgView.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
+        }
+        mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
+        mEditTextCustomerLName.setText(LoginHolder.custLoginRef.getlName());
+        mEditTextCustomerEmail.setText(LoginHolder.custLoginRef.getEmailId());
+        mTextViewDOB.setText((CharSequence) LoginHolder.custLoginRef.getDob());
+        mSpinGender.setSelection(UIUtility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
+        mEditTextHeight.setText("" + LoginHolder.custLoginRef.getHeight());
+        mEditTextWeight.setText("" + LoginHolder.custLoginRef.getWeight());
+        mEditTextLoc.setText(LoginHolder.custLoginRef.getLocation());
+        mEditTextPinCode.setText(LoginHolder.custLoginRef.getPincode());
+        mSpinCity.setSelection(UIUtility.getSpinnerIndex(mSpinCity, LoginHolder.custLoginRef.getCity()));
+        mSpinState.setSelection(UIUtility.getSpinnerIndex(mSpinState, LoginHolder.custLoginRef.getState()));
+    }
+
+    public void showPersonalFields(View view) {
+
+        if (mAddrLayout.getVisibility() == View.VISIBLE) {
+            mAddrLayout.setVisibility(View.GONE);
+        } else {
+            mAddrLayout.setVisibility(View.VISIBLE);
+            if (mContLay.getVisibility() == View.VISIBLE) {
+                mContLay.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void showAddressFields(View view) {
+        if (mContLay.getVisibility() == View.VISIBLE) {
+            mContLay.setVisibility(View.GONE);
+        } else {
+            mContLay.setVisibility(View.VISIBLE);
+            if (mAddrLayout.getVisibility() == View.VISIBLE) {
+                mAddrLayout.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void editPatientProf(View v) {
+        if(mEditTextCustomerFName.isEnabled()) {
+            mEditTextCustomerFName.setEnabled(false);
+            mEditTextCustomerLName.setEnabled(false);
+            mEditTextCustomerEmail.setEnabled(false);
+            mEditTextPinCode.setEnabled(false);
+            mEditTextWeight.setEnabled(false);
+            mEditTextHeight.setEnabled(false);
+            mTextViewDOB.setEnabled(false);
+            mSpinCity.setEnabled(false);
+            mSpinState.setEnabled(false);
+            mSpinGender.setEnabled(false);
+        } else {
+            mEditTextCustomerFName.setEnabled(true);
+            mEditTextCustomerLName.setEnabled(true);
+            mEditTextCustomerEmail.setEnabled(true);
+            mEditTextPinCode.setEnabled(true);
+            mEditTextWeight.setEnabled(true);
+            mEditTextHeight.setEnabled(true);
+            mTextViewDOB.setEnabled(true);
+            mSpinCity.setEnabled(true);
+            mSpinState.setEnabled(true);
+            mSpinGender.setEnabled(true);
+        }
+    }
+
+    public void updateProfile(View v) {
+        if(!isValidInput()) {
+            return;
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        mServiceAction = MappService.DO_UPDATE;
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        private Messenger mService;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+            bundle.putParcelable("customer", getUpdateData());
+            Message msg = Message.obtain(null, mServiceAction);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    private static class UpdateHandler extends Handler {
+        private PatientProfile mActivity;
+
+        public UpdateHandler(PatientProfile activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MappService.DO_UPDATE:
+                    mActivity.updateDone(msg.getData());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+    private void updateDone(Bundle data) {
+        if(data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Profile Updated.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    private Customer getUpdateData() {
+        Customer c = new Customer();
+        c.setPhone(mMobNo.getText().toString());
+        c.setfName(mEditTextCustomerFName.getText().toString().trim());
+        c.setlName(mEditTextCustomerLName.getText().toString().trim());
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        try {
+            Date dob = sdf.parse(mTextViewDOB.getText().toString().trim());
+            c.setDob(dob);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        c.setAge(UIUtility.getAge(mTextViewDOB.getText().toString().trim()));
+        c.setEmailId(mEditTextCustomerEmail.getText().toString().trim());
+        c.setGender(mSpinGender.getSelectedItem().toString().trim());
+        float height = 0;
+        try {
+            height = Float.parseFloat(mEditTextHeight.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        c.setHeight(height);
+        float weight = 0;
+        try {
+            weight = Float.parseFloat(mEditTextWeight.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        c.setWeight(weight);
+        c.setLocation(mEditTextLoc.getText().toString().trim());
+        c.setPincode(mEditTextPinCode.getText().toString().trim());
+        c.setCity(mSpinCity.getSelectedItem().toString());
+        c.setState(mSpinState.getSelectedItem().toString());
+        c.setCountry("India");
+
+        return c;
     }
 
     @Override
@@ -143,7 +344,7 @@ public class PatientProfile extends Activity {
         UIUtility.datePicker(view, mTextViewDOB);
     }
 
-    public void showImageUploadOptions(View view) {
+    public void changeImg(View view) {
 
         final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -176,17 +377,6 @@ public class PatientProfile extends Activity {
         });
         dialogBuilder.create().show();
     }
-
-    /*public void startImageCapture() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(), "rxCopy.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        mRxUri = Uri.fromFile(photo);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 2);
-        }
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -268,22 +458,6 @@ public class PatientProfile extends Activity {
 
     }
 
-    public String getPath(Uri uri) {
-
-        String[] projection = { MediaStore.Images.Media.DATA };
-
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
-
-    }
-
-
-
     public void registerPatient(View view) {
         if(!isValidInput()) {
             return;
@@ -299,9 +473,7 @@ public class PatientProfile extends Activity {
 
         String fName = mEditTextCustomerFName.getText().toString().trim();
         String lName = mEditTextCustomerLName.getText().toString().trim();
-
         String emailId = mEditTextCustomerEmail.getText().toString().trim();
-
         String dob = mTextViewDOB.getText().toString().trim();
         String height = mEditTextHeight.getText().toString().trim();
         String weight = mEditTextWeight.getText().toString().trim();
@@ -318,16 +490,11 @@ public class PatientProfile extends Activity {
             focusView = mEditTextCustomerLName;
             valid = false;
         }
-
-
         if (!TextUtils.isEmpty(emailId) && !Validator.isEmailValid(emailId)) {
             mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEditTextCustomerEmail;
             valid = false;
         }
-
-
-
         if (TextUtils.isEmpty(dob)) {
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
@@ -358,32 +525,10 @@ public class PatientProfile extends Activity {
             valid = false;
         }
 
-
         if (focusView != null) {
             focusView.requestFocus();
         }
         return valid;
-    }
-
-    private boolean isPhoneRegistered(String phone) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                MappContract.Customer.COLUMN_NAME_CELLPHONE
-        };
-
-        String selection = MappContract.Customer.COLUMN_NAME_CELLPHONE + "=?";
-
-        String[] selectionArgs = {
-                phone
-        };
-        Cursor c = db.query(MappContract.Customer.TABLE_NAME,
-                projection, selection, selectionArgs, null, null, null);
-        int count = c.getCount();
-        c.close();
-
-        return (count > 0);
     }
 
     class SaveCustomerData extends AsyncTask<Void, Void, Void> {

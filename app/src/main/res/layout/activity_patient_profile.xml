@@ -12,12 +12,16 @@
         android:id="@+id/imageViewPatient"
         android:layout_width="120dp"
         android:layout_height="100dp"
+        android:clickable="true"
+        android:onClick="changeImg"
         android:src="@drawable/patient" />
 
     <TextView
         android:id="@+id/textViewEditImage"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:clickable="true"
+        android:onClick="changeImg"
         android:layout_alignBottom="@+id/imageViewPatient"
         android:layout_alignEnd="@+id/imageViewPatient"
         android:layout_alignRight="@+id/imageViewPatient"
@@ -76,7 +80,6 @@
             android:layout_height="wrap_content">
 
             <ImageView
-
                 android:id="@+id/imageViewEdit1"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -84,8 +87,7 @@
                 android:layout_marginTop="10dp"
                 android:src="@drawable/editpen"
                 android:clickable="true"
-                android:onClick="viewBasicInfo"
-
+                android:onClick="editPatientProf"
                 />
 
             <TextView
@@ -97,7 +99,7 @@
                 android:layout_below="@+id/imageViewEdit1"
                 android:layout_centerHorizontal="true"
                 android:clickable="true"
-                android:onClick="viewBasicInfo"
+                android:onClick="editPatientProf"
                 android:text="@string/edit_info"
                 android:textSize="12sp"/>
 
@@ -126,6 +128,7 @@
                 android:layout_marginTop="30dp"
                 android:background="@drawable/button"
                 android:text="@string/update"
+                android:onClick="updateProfile"
                 android:textColor="#fff"
                 android:textSize="18sp"
                 android:textStyle="bold" />

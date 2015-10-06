@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ public class PatientsHomeScreenActivity extends Activity {
         Intent intent = getIntent();
         mCustomer = intent.getParcelableExtra("customer");
 
+        LoginHolder.custLoginRef = mCustomer;
+
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +
                 mCustomer.getfName() + " " +
@@ -38,6 +41,11 @@ public class PatientsHomeScreenActivity extends Activity {
         if(mCustomer.getImg() != null) {
             img.setImageBitmap(UIUtility.getBitmapFromBytes(mCustomer.getImg()));
         }
+    }
+
+    public void viewProfile(View view) {
+        Intent intent = new Intent(this, PatientProfile.class);
+        startActivity(intent);
     }
 
     @Override
