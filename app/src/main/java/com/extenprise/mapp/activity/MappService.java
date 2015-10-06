@@ -43,6 +43,7 @@ public class MappService extends Service {
     public static final int DO_SEARCH_SERV_PROV = 4;
     public static final int DO_SERV_PROV_DETAILS = 5;
     public static final int DO_UPDATE = 6;
+    public static final int ADD_WORK_PLACE = 7;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -115,6 +116,24 @@ public class MappService extends Service {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(DO_UPDATE);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    public void addWorkPlace(Message msg) {
+        Bundle data = msg.getData();
+        mLoginType = data.getInt("loginType");
+        Object object = data.getParcelable("service");
+
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        try {
+            task = new MappAsyncTask(getURL(ADD_WORK_PLACE), gson.toJson(object));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(ADD_WORK_PLACE);
             return;
         }
         task.execute((Void) null);
@@ -206,6 +225,9 @@ public class MappService extends Service {
                     urlId = R.string.update_cust;
                 }
                 break;
+            case ADD_WORK_PLACE:
+                urlId = R.string.addwork_place;
+                break;
             case DO_PHONE_EXIST_CHECK:
                 urlId = R.string.check_phone_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
@@ -244,6 +266,9 @@ public class MappService extends Service {
                     break;
                 case DO_UPDATE:
                     mService.doUpdate(msg);
+                    break;
+                case ADD_WORK_PLACE:
+                    mService.addWorkPlace(msg);
                     break;
                 case DO_PHONE_EXIST_CHECK:
                     mService.doPhoneExistsCheck(msg);
@@ -328,6 +353,9 @@ public class MappService extends Service {
                             } else {
                                 mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             }
+                            break;
+                        case ADD_WORK_PLACE:
+                            mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             break;
                         case DO_PHONE_EXIST_CHECK:
                             if (mLoginType == CUSTOMER_LOGIN) {

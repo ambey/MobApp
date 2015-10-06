@@ -12,6 +12,7 @@
     <string name="signin_serv">service/SignIn.action</string>
     <string name="signup_serv">service/SignUp.action</string>
     <string name="update_serv">service/Update.action</string>
+    <string name="addwork_place">service/AddWorkPlace.action</string>
     <string name="update_cust">customer/Update.action</string>
     <string name="check_phone_serv">service/PhoneExistsCheck.action</string>
     <string name="search_serv_prov">service/Search.action</string>

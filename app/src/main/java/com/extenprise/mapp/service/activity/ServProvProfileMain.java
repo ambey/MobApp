@@ -101,7 +101,8 @@ public class ServProvProfileMain extends Activity {
     protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     protected boolean[] selections = new boolean[options.length];
     //String []selectedDays = new String[_options.length];
-    String selectedDays;
+    private String selectedDays;
+    private String submit = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,7 @@ public class ServProvProfileMain extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         //LoginHolder.spsspt = SearchServProv.getSPSSPT(new MappDbHelper(getApplicationContext()));
+        submit = "profile";
 
         mFormView = findViewById(R.id.updateServProvform);
         mProgressView = findViewById(R.id.progressView);
@@ -776,6 +778,7 @@ public class ServProvProfileMain extends Activity {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (isValidWorkPlaceInput()) {
                             addWorkPlace();
+                            submit = "Work Place";
                             saveData(dialogView);
                         }
                     }
@@ -881,7 +884,9 @@ public class ServProvProfileMain extends Activity {
         spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         spsspt.setServicePoint(spt);
 
-        LoginHolder.spsspt = spsspt;
+        ArrayList<ServProvHasServPt> spssptList = new ArrayList<ServProvHasServPt>();
+        spssptList.add(spsspt);
+        LoginHolder.servLoginRef.setServices(spssptList);
     }
 
     public void saveData(View view) {
@@ -903,10 +908,15 @@ public class ServProvProfileMain extends Activity {
                                        IBinder service) {
             mService = new Messenger(service);
             mBound = true;
+            Message msg = null;
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            bundle.putParcelable("service", LoginHolder.spsspt);
-            Message msg = Message.obtain(null, MappService.DO_UPDATE);
+            bundle.putParcelable("service", LoginHolder.servLoginRef);
+            if(submit.equals("Work Place")) {
+                msg = Message.obtain(null, MappService.ADD_WORK_PLACE);
+            } else {
+                msg = Message.obtain(null, MappService.DO_UPDATE);
+            }
             msg.replyTo = new Messenger(mResponseHandler);
             msg.setData(bundle);
 
@@ -934,8 +944,11 @@ public class ServProvProfileMain extends Activity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MappService.DO_UPDATE:
+                case MappService.ADD_WORK_PLACE:
                     mActivity.addWorkPlaceDone(msg.getData());
+                    break;
+                case MappService.DO_UPDATE:
+                    mActivity.updateDone(msg.getData());
                     break;
                 default:
                     super.handleMessage(msg);
@@ -945,7 +958,15 @@ public class ServProvProfileMain extends Activity {
 
     private void addWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Work Place Added");
+            UIUtility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    private void updateDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
         }
         UIUtility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
