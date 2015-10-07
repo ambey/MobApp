@@ -97,10 +97,12 @@ public class AdvSearchServProvActivity extends Activity {
         if (mButtonStartTime.getVisibility() == View.VISIBLE) {
             mButtonStartTime.setVisibility(View.GONE);
             mButttonEndTime.setVisibility(View.GONE);
+            view.setBackgroundResource(R.drawable.label);
             //view.setBackgroundColor(Color.parseColor("#b0171f"));
         } else {
             mButtonStartTime.setVisibility(View.VISIBLE);
             mButttonEndTime.setVisibility(View.VISIBLE);
+            view.setBackgroundResource(R.drawable.spinner);
             //view.setBackgroundColor(Color.TRANSPARENT);
         }
     }
@@ -109,10 +111,12 @@ public class AdvSearchServProvActivity extends Activity {
         if (mGender.getVisibility() == View.VISIBLE) {
             //UIUtility.expandOrCollapse(mGender, "");
             mGender.setVisibility(View.GONE);
+            view.setBackgroundResource(R.drawable.label);
 
         } else {
             //UIUtility.expandOrCollapse(mGender, "expand");
             mGender.setVisibility(View.VISIBLE);
+            view.setBackgroundResource(R.drawable.spinner);
         }
     }
 
@@ -120,9 +124,11 @@ public class AdvSearchServProvActivity extends Activity {
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
             //UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
             mMultiSpinnerDays.setVisibility(View.GONE);
+            view.setBackgroundResource(R.drawable.label);
         } else {
             //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
             mMultiSpinnerDays.setVisibility(View.VISIBLE);
+            view.setBackgroundResource(R.drawable.spinner);
         }
     }
 

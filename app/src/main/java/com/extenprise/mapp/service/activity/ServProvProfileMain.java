@@ -25,6 +25,8 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,11 +51,15 @@ import android.widget.Toast;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.MappService;
+import com.extenprise.mapp.data.ServProvListItem;
+import com.extenprise.mapp.data.WorkPlaceListItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.UIUtility;
 import com.extenprise.mapp.util.Validator;
@@ -69,10 +76,12 @@ import java.util.Calendar;
 public class ServProvProfileMain extends Activity {
 
     private UpdateHandler mResponseHandler = new UpdateHandler(this);
+    private ArrayList<WorkPlaceListItem> mWorkPlaceList;
+    private WorkPlaceListItem mSelectedItem;
 
     private EditText mMobNo, mEmailID, mRegNo;
     private TextView mDocName;
-    private EditText mFname, mLname, mQualification, mExp;
+    private EditText mFname, mLname;
     private RadioGroup mGender;
     private RadioButton mMale, mFemale, mGenderBtn;
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
@@ -94,8 +103,12 @@ public class ServProvProfileMain extends Activity {
     private EditText mEmailIdwork;
     private EditText mConsultFee;
     private Spinner mServPtType;
+    private Spinner mServCatagory;
     private Button mStartTime;
     private Button mEndTime;
+    private Spinner mSpeciality;
+    private EditText mExperience;
+    private EditText mQualification;
 
     private Button mMultiSpinnerDays;
     protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -110,12 +123,9 @@ public class ServProvProfileMain extends Activity {
         setContentView(R.layout.activity_serv_prov_profile_main);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //LoginHolder.spsspt = SearchServProv.getSPSSPT(new MappDbHelper(getApplicationContext()));
         submit = "profile";
-
         mFormView = findViewById(R.id.updateServProvform);
         mProgressView = findViewById(R.id.progressView);
-
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
 
@@ -126,8 +136,6 @@ public class ServProvProfileMain extends Activity {
         mDocName = (TextView) findViewById(R.id.textviewDocname);
         mFname = (EditText) findViewById(R.id.textViewFName);
         mLname = (EditText) findViewById(R.id.textViewLName);
-        mQualification = (EditText) findViewById(R.id.textViewEducation);
-        mExp = (EditText) findViewById(R.id.textViewWorkExp);
         mMale = (RadioButton) findViewById(R.id.radioButtonMale);
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
@@ -146,27 +154,47 @@ public class ServProvProfileMain extends Activity {
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_serv_prove_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void showPersonalInfo() {
-
+        mDocName.setText(LoginHolder.servLoginRef.getfName() + " " +
+                LoginHolder.servLoginRef.getlName());
+        if(LoginHolder.servLoginRef.getImg() != null) {
+            mImgView.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
+        }
+        mFname.setText(LoginHolder.servLoginRef.getfName());
+        mLname.setText(LoginHolder.servLoginRef.getlName());
         mMobNo.setText(LoginHolder.servLoginRef.getPhone());
         mEmailID.setText(LoginHolder.servLoginRef.getEmailId());
         mRegNo.setText(LoginHolder.servLoginRef.getRegNo());
-        mDocName.setText(LoginHolder.servLoginRef.getfName() + " " +
-                LoginHolder.servLoginRef.getlName());
-        mFname.setText(LoginHolder.servLoginRef.getfName());
-        mLname.setText(LoginHolder.servLoginRef.getlName());
-        mQualification.setText(LoginHolder.servLoginRef.getQualification());
 
         if (LoginHolder.servLoginRef.getGender().equals("Male")) {
             mMale.setSelected(true);
         } else {
             mFemale.setSelected(true);
         }
-        Cursor cursor = SearchServProv.getCursor();
-        mExp.setText(cursor.getString(cursor.getColumnIndex(MappContract.ServProvHasServPt.COLUMN_NAME_EXP)));
     }
 
     private void showWorkPlaceList() {
@@ -221,16 +249,6 @@ public class ServProvProfileMain extends Activity {
                 View view = super.getView(position, convertView, parent);
                 cursor.moveToPosition(position);
 
-                TextView mWorkHrsLbl = (TextView) findViewById(R.id.viewWorkHrsLbl);
-                mWorkHrsLbl.setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showtimeFields(v);
-                            }
-                        }
-                );
-
                 TextView mTextViewEdit = (TextView) findViewById(R.id.textViewEditWrkDetail);
                 TextView mViewEdit = (TextView) findViewById(R.id.viewEditWrkDetail);
 
@@ -240,12 +258,22 @@ public class ServProvProfileMain extends Activity {
                         editWorkPlaceInfo(true);
                     }
                 });
+
                 return view;
             }
         };
 
 
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+            }
+
+        });
         listView.setAdapter(adapter);
     }
 
@@ -273,8 +301,6 @@ public class ServProvProfileMain extends Activity {
         mLname.setEnabled(set);
         //mMobNo.setEnabled(true);
         mEmailID.setEnabled(set);
-        mQualification.setEnabled(set);
-        mExp.setEnabled(set);
         mRegNo.setEnabled(set);
         mMale.setEnabled(set);
         mFemale.setEnabled(set);
@@ -321,6 +347,36 @@ public class ServProvProfileMain extends Activity {
         }
     }
 
+    public void openPersonalInfo(View view) {
+        if (mPersonalInfo.getVisibility() == View.VISIBLE) {
+            mPersonalInfo.setVisibility(View.GONE);
+        } else {
+            mPersonalInfo.setVisibility(View.VISIBLE);
+            if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
+                mWorkPlaceInfo.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void openWorkPlaceInfo(View view) {
+        if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
+            mWorkPlaceInfo.setVisibility(View.GONE);
+        } else {
+            mWorkPlaceInfo.setVisibility(View.VISIBLE);
+            if (mPersonalInfo.getVisibility() == View.VISIBLE) {
+                mPersonalInfo.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void removeWorkPlace(View view) {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+
+        adapter.notifyDataSetChanged();
+
+
+    }
+
     public void timePicker(View view, final Button button) {
         // Process to get Current Time
         final Calendar c = Calendar.getInstance();
@@ -340,6 +396,33 @@ public class ServProvProfileMain extends Activity {
                 }, hour, minute, false);
         tpd.show();
     }
+
+    private AlertDialog openSpecDialog() {
+        final EditText txtSpec = new EditText(this);
+        txtSpec.setHint("Add Speciality");
+
+        return new AlertDialog.Builder(this)
+                .setTitle("Add Speciality")
+                .setView(txtSpec)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String newSpec = txtSpec.getText().toString();
+                        ArrayList<String> specs = new ArrayList<String>();
+                        specs.add(newSpec);
+                        DBUtil.setNewSpec(getApplicationContext(), specs, mSpeciality);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+
+
+    ///////////////////////////Multi spinner..../////////////////////////////
 
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
@@ -439,27 +522,12 @@ public class ServProvProfileMain extends Activity {
         }
     }
 
-    public void removeWorkPlace(View view) {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
-
-        adapter.notifyDataSetChanged();
+    ////////////////////////////////////////////////////////////////////////////
 
 
-    }
 
-    public void updateProfile(View view) {
 
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
-        int count = adapter.getCount();
-
-        //TO DO
-
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
-        int uTypeID = mGender.getCheckedRadioButtonId();
-        mGenderBtn = (RadioButton) findViewById(uTypeID);
-        SaveServiceData task = new SaveServiceData(this);
-        task.execute((Void) null);
-    }
+    /////////////////////////////Image Upload/////////////////////////////
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -590,139 +658,9 @@ public class ServProvProfileMain extends Activity {
 
     }
 
-    public void openPersonalInfo(View view) {
-        if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-            mPersonalInfo.setVisibility(View.GONE);
-        } else {
-            mPersonalInfo.setVisibility(View.VISIBLE);
-            if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-                mWorkPlaceInfo.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    public void openWorkPlaceInfo(View view) {
-        if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-            mWorkPlaceInfo.setVisibility(View.GONE);
-        } else {
-            mWorkPlaceInfo.setVisibility(View.VISIBLE);
-            if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-                mPersonalInfo.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_serv_prove_profile, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    class SaveServiceData extends AsyncTask<Void, Void, Void> {
-
-        private Activity myActivity;
-
-        public SaveServiceData(Activity activity) {
-            myActivity = activity;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            ServiceProvider sp = LoginHolder.servLoginRef; // TO DO
-            ArrayList<ServProvHasServPt> spsList = sp.getServices();
-
-            if (spsList == null) {
-                return null;
-            }
-            String where = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = ? ";
-            String[] selectionArgs = {
-                    "" + LoginHolder.servLoginRef.getPhone()
-            };
-
-            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_FNAME, mFname.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, mLname.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION, mQualification.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_GENDER, mGenderBtn.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER, mRegNo.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID, mEmailID.getText().toString());
-
-            db.update(MappContract.ServiceProvider.TABLE_NAME, values, where, selectionArgs);
-
-            for (ServProvHasServPt sps : spsList) {
-                ServicePoint spt = sps.getServicePoint();
-
-                values = new ContentValues();
-                values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
-                values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
-                values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
-                values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity().getIdCity());
-
-                long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
+    ////////////////////////////////////////////////////////////////////////
 
 
-                values = new ContentValues();
-                values.put(MappContract.Service.COLUMN_NAME_SERVICE_NAME, sps.getService().getSpeciality());
-                values.put(MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
-                long idService = db.insert(MappContract.Service.TABLE_NAME, null, values);
-
-                values = new ContentValues();
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, idService);
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_EXP, sps.getExperience());
-
-                try {
-                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME, sps.getStartTime());
-                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME, sps.getEndTime());
-                } catch (Exception x) {
-                    x.printStackTrace();
-                }
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE, sps.getServPointType());
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE, sps.getConsultFee());
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS, sps.getWorkingDays());
-
-                where = MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " = ? and " +
-                        MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = ? ";
-                String[] args = {
-                        "" + sp.getPhone(), "" + sptId
-                };
-                db.update(MappContract.ServProvHasServPt.TABLE_NAME, values, where, args);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            UIUtility.showRegistrationAlert(myActivity, "", "Profile updated.");
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
-            //Intent intent = new Intent(myActivity, LoginActivity.class);
-            //startActivity(intent);
-        }
-
-        @Override
-        protected void onCancelled() {
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
-        }
-
-    }
 
 
 
@@ -739,12 +677,12 @@ public class ServProvProfileMain extends Activity {
         Cursor extendedCursor = new MergeCursor(cursors);
         adapter.notifyDataSetChanged();
 */
-        openDialog();
+        addWorkPlaceScreen();
     }
 
-    private AlertDialog openDialog() {
+    private AlertDialog addWorkPlaceScreen() {
         LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.layout_workplace_details, null);
+        final View dialogView = inflater.inflate(R.layout.activity_servprov_wrkdetail_list, null);
 
         mName = (EditText) dialogView.findViewById(R.id.editTextName);
         mLoc = (EditText) dialogView.findViewById(R.id.editTextLoc);
@@ -756,7 +694,12 @@ public class ServProvProfileMain extends Activity {
         mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
         mStartTime = (Button) dialogView.findViewById(R.id.buttonStartTime);
         mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
+        mSpeciality = (Spinner) dialogView.findViewById(R.id.editTextSpeciality);
+        mExperience = (EditText) dialogView.findViewById(R.id.editTextExperience);
+        mQualification = (EditText) dialogView.findViewById(R.id.editTextQualification);
         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
+        mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
+
         mStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -770,16 +713,42 @@ public class ServProvProfileMain extends Activity {
             }
         });
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+        mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String servCategory = mServCatagory.getSelectedItem().toString();
+                MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+                DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+        mSpeciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String spec = mSpeciality.getSelectedItem().toString();
+                if (spec.equals("Other")) {
+                    openSpecDialog();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
 
         return new AlertDialog.Builder(this)
                 .setTitle("Add New Work Place")
                 .setView(dialogView)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        if (isValidWorkPlaceInput()) {
+                        if (isValidWorkPlace()) {
                             addWorkPlace();
                             submit = "Work Place";
-                            saveData(dialogView);
+                            saveData();
                         }
                     }
                 })
@@ -791,9 +760,55 @@ public class ServProvProfileMain extends Activity {
                 .show();
     }
 
-    private boolean isValidWorkPlaceInput() {
+    private boolean isValidWorkPlace() {
         boolean valid = true;
         View focusView = null;
+
+        String category = mServCatagory.getSelectedItem().toString();
+        if (category.equalsIgnoreCase("Select Category")) {
+            //UIUtility.showAlert(this, "", "Please select service category.");
+            View selectedView = mServCatagory.getSelectedView();
+            if (selectedView != null && selectedView instanceof TextView) {
+                TextView selectedTextView = (TextView) selectedView;
+                String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
+                selectedTextView.setError(errorString);
+            }
+            focusView = mServCatagory;
+            valid = false;
+        }
+
+        String spec = mSpeciality.getSelectedItem().toString();
+        if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
+            //UIUtility.showAlert(this, "", "Please select speciality.");
+            View selectedView = mSpeciality.getSelectedView();
+            if (selectedView != null && selectedView instanceof TextView) {
+                TextView selectedTextView = (TextView) selectedView;
+                String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
+                selectedTextView.setError(errorString);
+            }
+            focusView = mSpeciality;
+            valid = false;
+        }
+
+        String exp = mExperience.getText().toString().trim();
+        if (TextUtils.isEmpty(exp)) {
+            mExperience.setError(getString(R.string.error_field_required));
+            focusView = mExperience;
+            valid = false;
+        } else {
+            double exp2 = Double.parseDouble(mExperience.getText().toString());
+            if (exp2 < 0 || exp2 > 99) {
+                mExperience.setError(getString(R.string.error_invalid_experience));
+                focusView = mExperience;
+                valid = false;
+            }
+        }
+        String qualification = mQualification.getText().toString().trim();
+        if (TextUtils.isEmpty(qualification)) {
+            mQualification.setError(getString(R.string.error_field_required));
+            focusView = mQualification;
+            valid = false;
+        }
 
         String name = mName.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
@@ -889,7 +904,207 @@ public class ServProvProfileMain extends Activity {
         LoginHolder.servLoginRef.setServices(spssptList);
     }
 
-    public void saveData(View view) {
+    private void addWorkPlaceDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+    //////////////////////////////////////////Update Profile///////////////////////////////////
+
+    private void updateDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    public void updateProfile(View view) {
+        if(!isValidInput()) {
+            return;
+        }
+        ServiceProvider sp = new ServiceProvider();
+        sp.setImg(UIUtility.getBytesFromBitmap(mImgView.getDrawingCache()));
+        sp.setfName(mFname.getText().toString());
+        sp.setlName(mLname.getText().toString());
+        sp.setPhone(mEmailID.getText().toString());
+        sp.setGender(mGenderBtn.getText().toString());
+        sp.setRegNo(mRegNo.getText().toString());
+
+        submit = "profile";
+        LoginHolder.servLoginRef = sp;
+        saveData();
+        /*SaveServiceData task = new SaveServiceData(this);
+        task.execute((Void) null);*/
+    }
+
+    public boolean isValidInput() {
+        boolean cancel = false;
+        View focusView = null;
+
+        if (TextUtils.isEmpty(mLname.getText().toString())) {
+            mLname.setError(getString(R.string.error_field_required));
+            focusView = mLname;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(mFname.getText().toString())) {
+            mFname.setError(getString(R.string.error_field_required));
+            focusView = mFname;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(mEmailID.getText().toString())) {
+            mEmailID.setError(getString(R.string.error_field_required));
+            focusView = mEmailID;
+            cancel = true;
+        }
+
+        if(Validator.isEmailValid(mEmailID.getText().toString().trim())) {
+            mEmailID.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailID;
+            cancel = true;
+        }
+
+        int genderID = mGender.getCheckedRadioButtonId();
+        if (genderID == -1) {
+            mFemale.setError("Please select Gender.");
+            focusView = mFemale;
+            cancel = true;
+        } else {
+            mGenderBtn = (RadioButton)findViewById(genderID);
+        }
+
+        String regNo = mRegNo.getText().toString();
+        if (TextUtils.isEmpty(regNo)) {
+            mRegNo.setError(getString(R.string.error_field_required));
+            focusView = mRegNo;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusView.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    public void regNoCheckDone(Bundle data) {
+        if(data.getBoolean("exists")) {
+            mRegNo.setError("This Registration Number is already Registered.");
+            mRegNo.requestFocus();
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    class SaveServiceData extends AsyncTask<Void, Void, Void> {
+
+        private Activity myActivity;
+
+        public SaveServiceData(Activity activity) {
+            myActivity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ServiceProvider sp = LoginHolder.servLoginRef; // TO DO
+            ArrayList<ServProvHasServPt> spsList = sp.getServices();
+
+            if (spsList == null) {
+                return null;
+            }
+            String where = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = ? ";
+            String[] selectionArgs = {
+                    "" + LoginHolder.servLoginRef.getPhone()
+            };
+
+            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_FNAME, mFname.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, mLname.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION, mQualification.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_GENDER, mGenderBtn.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER, mRegNo.getText().toString());
+            values.put(MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID, mEmailID.getText().toString());
+
+            db.update(MappContract.ServiceProvider.TABLE_NAME, values, where, selectionArgs);
+
+            for (ServProvHasServPt sps : spsList) {
+                ServicePoint spt = sps.getServicePoint();
+
+                values = new ContentValues();
+                values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
+                values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity().getIdCity());
+
+                long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
+
+
+                values = new ContentValues();
+                values.put(MappContract.Service.COLUMN_NAME_SERVICE_NAME, sps.getService().getSpeciality());
+                values.put(MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
+                long idService = db.insert(MappContract.Service.TABLE_NAME, null, values);
+
+                values = new ContentValues();
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, idService);
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_EXP, sps.getExperience());
+
+                try {
+                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME, sps.getStartTime());
+                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME, sps.getEndTime());
+                } catch (Exception x) {
+                    x.printStackTrace();
+                }
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE, sps.getServPointType());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE, sps.getConsultFee());
+                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS, sps.getWorkingDays());
+
+                where = MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " = ? and " +
+                        MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = ? ";
+                String[] args = {
+                        "" + sp.getPhone(), "" + sptId
+                };
+                db.update(MappContract.ServProvHasServPt.TABLE_NAME, values, where, args);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            UIUtility.showRegistrationAlert(myActivity, "", "Profile updated.");
+            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            //Intent intent = new Intent(myActivity, LoginActivity.class);
+            //startActivity(intent);
+        }
+
+        @Override
+        protected void onCancelled() {
+            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+        }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+    //////////////////////////////////////////Connection & handler////////////////////////////////////
+    public void saveData() {
         UIUtility.showProgress(this, mFormView, mProgressView, true);
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, BIND_AUTO_CREATE);
@@ -912,8 +1127,11 @@ public class ServProvProfileMain extends Activity {
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
             bundle.putParcelable("service", LoginHolder.servLoginRef);
+            bundle.putString("regno", mRegNo.getText().toString().trim());
             if(submit.equals("Work Place")) {
                 msg = Message.obtain(null, MappService.ADD_WORK_PLACE);
+            } else if(submit.equals("checkRegNo")) {
+                msg = Message.obtain(null, MappService.DO_REG_NO_CHECK);
             } else {
                 msg = Message.obtain(null, MappService.DO_UPDATE);
             }
@@ -950,25 +1168,15 @@ public class ServProvProfileMain extends Activity {
                 case MappService.DO_UPDATE:
                     mActivity.updateDone(msg.getData());
                     break;
+                case MappService.DO_REG_NO_CHECK:
+                    mActivity.regNoCheckDone(msg.getData());
+                    break;
                 default:
                     super.handleMessage(msg);
             }
         }
     }
 
-    private void addWorkPlaceDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
-        }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
-    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void updateDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
-        }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
-    }
 }

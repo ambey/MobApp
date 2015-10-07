@@ -15,6 +15,7 @@
     <string name="addwork_place">service/AddWorkPlace.action</string>
     <string name="update_cust">customer/Update.action</string>
     <string name="check_phone_serv">service/PhoneExistsCheck.action</string>
+    <string name="check_reg_no_serv">service/RegNoExistsCheck.action</string>
     <string name="search_serv_prov">service/Search.action</string>
     <string name="serv_prov_details">service/Details.action</string>
 

@@ -44,6 +44,7 @@ public class MappService extends Service {
     public static final int DO_SERV_PROV_DETAILS = 5;
     public static final int DO_UPDATE = 6;
     public static final int ADD_WORK_PLACE = 7;
+    public static final int DO_REG_NO_CHECK = 8;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -123,7 +124,6 @@ public class MappService extends Service {
 
     public void addWorkPlace(Message msg) {
         Bundle data = msg.getData();
-        mLoginType = data.getInt("loginType");
         Object object = data.getParcelable("service");
 
         mReplyTo = msg.replyTo;
@@ -160,6 +160,22 @@ public class MappService extends Service {
         task.execute((Void) null);
     }
 
+    public void doRegNoExistsCheck(Message msg) {
+        Bundle data = msg.getData();
+        Object object = data.getParcelable("service");
+
+        mReplyTo = msg.replyTo;
+        Gson gson = new Gson();
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(DO_REG_NO_CHECK), gson.toJson(object));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(DO_REG_NO_CHECK);
+            return;
+        }
+        task.execute((Void) null);
+    }
     public void doSearchServProv(Message msg) {
         Bundle data = msg.getData();
         SearchServProv form = data.getParcelable("form");
@@ -234,6 +250,9 @@ public class MappService extends Service {
                     urlId = R.string.check_phone_cust;
                 }
                 break;
+            case DO_REG_NO_CHECK:
+                urlId = R.string.check_reg_no_serv;
+                break;
             case DO_SEARCH_SERV_PROV:
                 urlId = R.string.search_serv_prov;
                 break;
@@ -272,6 +291,9 @@ public class MappService extends Service {
                     break;
                 case DO_PHONE_EXIST_CHECK:
                     mService.doPhoneExistsCheck(msg);
+                    break;
+                case DO_REG_NO_CHECK:
+                    mService.doRegNoExistsCheck(msg);
                     break;
                 case DO_SEARCH_SERV_PROV:
                     mService.doSearchServProv(msg);
@@ -363,6 +385,9 @@ public class MappService extends Service {
                             } else {
                                 mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             }
+                            break;
+                        case DO_REG_NO_CHECK:
+                            mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             break;
                         case DO_SEARCH_SERV_PROV:
                             mList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<ServProvListItem>>(){}.getType());

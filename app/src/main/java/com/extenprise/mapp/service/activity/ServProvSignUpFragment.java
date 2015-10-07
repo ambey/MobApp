@@ -277,6 +277,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment {
 
     public void saveData() {
         ServiceProvider sp = LoginHolder.servLoginRef;
+        sp.setImg(UIUtility.getBytesFromBitmap(mImgView.getDrawingCache()));
         sp.setfName(mFirstName.getText().toString());
         sp.setlName(mLastName.getText().toString());
         sp.setPhone(mCellphoneview.getText().toString());
@@ -309,6 +310,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment {
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
             bundle.putString("phone", mCellphoneview.getText().toString().trim());
+            bundle.putString("regno", mRegistrationNumber.getText().toString().trim());
             bundle.putParcelable("service", LoginHolder.servLoginRef);
             Message msg = Message.obtain(null, MappService.DO_SIGNUP);
             msg.replyTo = new Messenger(mResponseHandler);
@@ -340,10 +342,22 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment {
                 case MappService.DO_SIGNUP:
                     mFragment.phoneCheckDone(msg.getData());
                     break;
+                case MappService.DO_REG_NO_CHECK:
+                    mFragment.regNoCheckDone(msg.getData());
+                    break;
                 default:
                     super.handleMessage(msg);
             }
         }
+    }
+
+    public void regNoCheckDone(Bundle data) {
+        if(data.getBoolean("exists")) {
+            mRegistrationNumber.setError("This Registration Number is already Registered.");
+            mRegistrationNumber.requestFocus();
+        }
+        UIUtility.showProgress(getActivity(), mFormView, mProgressView, false);
+        getActivity().unbindService(mConnection);
     }
 
 }
