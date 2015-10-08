@@ -14,6 +14,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.ServProvListItem;
 import com.extenprise.mapp.data.SignInData;
+import com.extenprise.mapp.data.WorkPlaceListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchServProv;
 import com.google.gson.Gson;
@@ -45,6 +46,7 @@ public class MappService extends Service {
     public static final int DO_UPDATE = 6;
     public static final int ADD_WORK_PLACE = 7;
     public static final int DO_REG_NO_CHECK = 8;
+    public static final int REMOVE_WORK_PLACE = 9;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -134,6 +136,23 @@ public class MappService extends Service {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(ADD_WORK_PLACE);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    public void removeWorkPlace(Message msg) {
+        Bundle data = msg.getData();
+        Object object = data.getParcelable("service");
+
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        try {
+            task = new MappAsyncTask(getURL(REMOVE_WORK_PLACE), gson.toJson(object));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(REMOVE_WORK_PLACE);
             return;
         }
         task.execute((Void) null);
@@ -244,6 +263,9 @@ public class MappService extends Service {
             case ADD_WORK_PLACE:
                 urlId = R.string.addwork_place;
                 break;
+            case REMOVE_WORK_PLACE:
+                urlId = R.string.remove_work_place;
+                break;
             case DO_PHONE_EXIST_CHECK:
                 urlId = R.string.check_phone_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
@@ -289,6 +311,9 @@ public class MappService extends Service {
                 case ADD_WORK_PLACE:
                     mService.addWorkPlace(msg);
                     break;
+                case REMOVE_WORK_PLACE:
+                    mService.removeWorkPlace(msg);
+                    break;
                 case DO_PHONE_EXIST_CHECK:
                     mService.doPhoneExistsCheck(msg);
                     break;
@@ -316,6 +341,7 @@ public class MappService extends Service {
         private String mData;
         private Customer mCustomer;
         private ServiceProvider mServProv;
+        private WorkPlaceListItem mWorkPlace;
         private ArrayList<ServProvListItem> mList;
 
         public MappAsyncTask(URL url, String data) {
@@ -377,7 +403,10 @@ public class MappService extends Service {
                             }
                             break;
                         case ADD_WORK_PLACE:
-                            mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
+                            mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlaceListItem.class);
+                            break;
+                        case REMOVE_WORK_PLACE:
+                            mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlaceListItem.class);
                             break;
                         case DO_PHONE_EXIST_CHECK:
                             if (mLoginType == CUSTOMER_LOGIN) {
@@ -420,6 +449,9 @@ public class MappService extends Service {
             }
             if(mList != null) {
                 bundle.putParcelableArrayList("servProvList", mList);
+            }
+            if(mWorkPlace != null) {
+                bundle.putParcelable("workPlace", mWorkPlace);
             }
             Message msg = Message.obtain(null, mAction);
             msg.setData(bundle);

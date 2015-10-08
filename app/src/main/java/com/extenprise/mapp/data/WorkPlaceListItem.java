@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.extenprise.mapp.service.data.Service;
 
 /**
- * Created by ambey on 4/10/15.
+ * Created by avinash on 4/10/15.
  */
 public class WorkPlaceListItem implements Parcelable {
 
@@ -200,5 +200,13 @@ public class WorkPlaceListItem implements Parcelable {
 
     public void setEndTime(int endTime) {
         this.endTime = endTime;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

@@ -29,12 +29,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +45,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -58,6 +62,8 @@ import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.service.ui.SearchResultListAdapter;
+import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.SearchServProv;
@@ -141,9 +147,7 @@ public class ServProvProfileMain extends Activity {
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
         listView = (ListView) findViewById(R.id.workDetailListView);
 
-        editPersonalInfo(null);
-        showPersonalInfo();
-        showWorkPlaceList();
+        viewProfile();
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -178,7 +182,7 @@ public class ServProvProfileMain extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showPersonalInfo() {
+    private void viewProfile() {
         mDocName.setText(LoginHolder.servLoginRef.getfName() + " " +
                 LoginHolder.servLoginRef.getlName());
         if(LoginHolder.servLoginRef.getImg() != null) {
@@ -195,6 +199,24 @@ public class ServProvProfileMain extends Activity {
         } else {
             mFemale.setSelected(true);
         }
+
+        Intent intent = getIntent();
+        mWorkPlaceList = intent.getParcelableArrayListExtra("workPlaceList");
+        ArrayAdapter<WorkPlaceListItem> adapter = new WorkPlaceListAdapter(this,
+                R.layout.activity_servprov_wrkdetail_list, mWorkPlaceList);
+        listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedItem = mWorkPlaceList.get(position);
+                UIUtility.showProgress(view.getContext(), mFormView, mProgressView, true);
+                Intent intent = new Intent(view.getContext(), MappService.class);
+                bindService(intent, mConnection, 0);
+
+            }
+        });
+        listView.setAdapter(adapter);
+        registerForContextMenu(listView);
     }
 
     private void showWorkPlaceList() {
@@ -237,6 +259,8 @@ public class ServProvProfileMain extends Activity {
                 R.id.editTextConsultationFees
         };
 
+        //ArrayAdapter arrayAdapter = new ArrayAdapter();
+
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.activity_servprov_wrkdetail_list,
                 cursor,
@@ -255,7 +279,7 @@ public class ServProvProfileMain extends Activity {
                 mTextViewEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        editWorkPlaceInfo(true);
+                        editWorkPlaceInfo(v);
                     }
                 });
 
@@ -265,17 +289,49 @@ public class ServProvProfileMain extends Activity {
 
 
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-
             }
 
-        });
+        });*/
         listView.setAdapter(adapter);
+        registerForContextMenu(listView);
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.workDetailListView) {
+            menu.setHeaderTitle("Item Operations");
+            menu.add(0, v.getId(), 0, "Edit");
+            menu.add(0, v.getId(), 0, "Remove");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        if (item.getTitle() == "Edit") {
+            editWorkPlaceInfo(item.getActionView());
+            return true;
+        } else if (item.getTitle() == "Remove") {
+            //ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
+            //this.resultsList.remove((int) info.id);
+            //adapter.removeItem(adapter.getItem(position));
+            //adapter.remove(item);
+            //item.getActionView().setVisibility(View.GONE);
+            submit = "Remove";
+            mSelectedItem = mWorkPlaceList.get(item.getItemId());
+            saveData();
+            //adapter.notifyDataSetChanged();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
 
     public void showtimeFields(View view) {
         int[] buttonIds = new int[]{
@@ -308,8 +364,12 @@ public class ServProvProfileMain extends Activity {
         openPersonalInfo(view);
     }
 
-    public void editWorkPlaceInfo(boolean set) {
-
+    public void editWorkPlaceInfo(View v) {
+        boolean set = true;
+        EditText nm = (EditText) v.findViewById(R.id.editTextName);
+        if(nm.isEnabled()) {
+            set = false;
+        }
         int[] editTxtIds = new int[]{
                 R.id.editTextQualification,
                 R.id.editTextExperience,
@@ -321,7 +381,7 @@ public class ServProvProfileMain extends Activity {
                 R.id.editTextConsultationFees
         };
         for (int editTxtId : editTxtIds) {
-            EditText txt = (EditText) findViewById(editTxtId);
+            EditText txt = (EditText) v.findViewById(editTxtId);
             txt.setEnabled(set);
         }
 
@@ -331,7 +391,7 @@ public class ServProvProfileMain extends Activity {
                 R.id.editTextWeeklyOff
         };
         for (int buttonId : buttonIds) {
-            Button btn = (Button) findViewById(buttonId);
+            Button btn = (Button) v.findViewById(buttonId);
             btn.setEnabled(set);
         }
 
@@ -342,7 +402,7 @@ public class ServProvProfileMain extends Activity {
                 R.id.editTextCity
         };
         for (int spinnerId : spinnerIds) {
-            Button btn = (Button) findViewById(spinnerId);
+            Button btn = (Button) v.findViewById(spinnerId);
             btn.setEnabled(set);
         }
     }
@@ -370,11 +430,6 @@ public class ServProvProfileMain extends Activity {
     }
 
     public void removeWorkPlace(View view) {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
-
-        adapter.notifyDataSetChanged();
-
-
     }
 
     public void timePicker(View view, final Button button) {
@@ -747,8 +802,6 @@ public class ServProvProfileMain extends Activity {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (isValidWorkPlace()) {
                             addWorkPlace();
-                            submit = "Work Place";
-                            saveData();
                         }
                     }
                 })
@@ -883,25 +936,28 @@ public class ServProvProfileMain extends Activity {
     }
 
     private void addWorkPlace() {
-        ServicePoint spt = new ServicePoint();
-        ServProvHasServPt spsspt = new ServProvHasServPt();
+        WorkPlaceListItem wpt = new WorkPlaceListItem();
 
-        spt.setName(mName.getText().toString().trim());
-        spt.setLocation(mLoc.getText().toString().trim());
-        spt.getCity().setCity(mCity.getSelectedItem().toString().trim());
-        spt.setPhone(mPhone1.getText().toString().trim());
-        spt.setAltPhone(mPhone2.getText().toString().trim());
-        spt.setEmailId(mEmailIdwork.getText().toString().trim());
+        wpt.setName(mName.getText().toString().trim());
+        wpt.setLocation(mLoc.getText().toString().trim());
+        wpt.setCity(mCity.getSelectedItem().toString().trim());
+        wpt.setPhone(mPhone1.getText().toString().trim());
+        wpt.setAltPhone(mPhone2.getText().toString().trim());
+        wpt.setEmailId(mEmailIdwork.getText().toString().trim());
+        wpt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
+        wpt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
+        wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
+        wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+        wpt.setServCatagory(mServCatagory.getSelectedItem().toString());
+        wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
+        wpt.setServPointType(mServPtType.getSelectedItem().toString());
+        wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+        wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
+        wpt.setQualification(mQualification.getText().toString().trim());
 
-        spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
-        spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
-        spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
-        spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-        spsspt.setServicePoint(spt);
-
-        ArrayList<ServProvHasServPt> spssptList = new ArrayList<ServProvHasServPt>();
-        spssptList.add(spsspt);
-        LoginHolder.servLoginRef.setServices(spssptList);
+        mSelectedItem = wpt;
+        submit = "Work Place";
+        saveData();
     }
 
     private void addWorkPlaceDone(Bundle data) {
@@ -1126,13 +1182,16 @@ public class ServProvProfileMain extends Activity {
             Message msg = null;
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            bundle.putParcelable("service", LoginHolder.servLoginRef);
-            bundle.putString("regno", mRegNo.getText().toString().trim());
+
             if(submit.equals("Work Place")) {
+                bundle.putParcelable("service", mSelectedItem);
                 msg = Message.obtain(null, MappService.ADD_WORK_PLACE);
-            } else if(submit.equals("checkRegNo")) {
-                msg = Message.obtain(null, MappService.DO_REG_NO_CHECK);
+            } else if(submit.equals("Remove")) {
+                bundle.putParcelable("service", mSelectedItem);
+                msg = Message.obtain(null, MappService.REMOVE_WORK_PLACE);
             } else {
+                bundle.putString("regno", mRegNo.getText().toString().trim());
+                bundle.putParcelable("service", LoginHolder.servLoginRef);
                 msg = Message.obtain(null, MappService.DO_UPDATE);
             }
             msg.replyTo = new Messenger(mResponseHandler);

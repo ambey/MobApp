@@ -17,6 +17,7 @@
         android:textSize="18sp"
         android:background="@drawable/text_backg"
         android:textStyle="bold"
+        android:visibility="gone"
         />
     <TextView
         android:id="@+id/textViewEditWrkDetail"
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:text="@string/edit1"
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         android:clickable="true"
         android:layout_alignTop="@+id/viewWorkDetCount"
@@ -37,6 +39,7 @@
         android:background="@drawable/pencil"
         android:layout_marginRight="30dp"
         android:layout_marginEnd="30dp"
+        android:visibility="gone"
         android:layout_alignTop="@+id/viewWorkDetCount"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
