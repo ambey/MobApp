@@ -12,7 +12,10 @@ public class SignInData implements Parcelable {
     private String phone;
     private String passwd;
 
-    public SignInData() {}
+    public SignInData() {
+        phone = "";
+        passwd = "";
+    }
 
     public SignInData(Parcel source) {
         String[] fields = new String[2];
@@ -44,7 +47,7 @@ public class SignInData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {phone, passwd});
+        dest.writeStringArray(new String[]{phone, passwd});
     }
 
     public static final Creator<SignInData> CREATOR = new Creator<SignInData>() {

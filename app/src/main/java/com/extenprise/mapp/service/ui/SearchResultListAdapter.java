@@ -23,6 +23,14 @@ public class SearchResultListAdapter extends ArrayAdapter<ServProvListItem> {
         this.list = list;
     }
 
+    public int getCount() {
+        try {
+            return list.size();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;

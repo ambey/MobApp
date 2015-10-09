@@ -209,9 +209,9 @@ public class ScannedRxActivity extends Activity {
             }
             ContentValues values = new ContentValues();
             Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);
-            String rxId = "a" + appointment.getId() + "r" + (appointment.getReportCount() + 1);
+            String rxId = "a" + appointment.getIdAppointment() + "r" + (appointment.getReportCount() + 1);
 
-            values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getId());
+            values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getIdAppointment());
             values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
             values.put(MappContract.Prescription.COLUMN_NAME_SCANNED_COPY, bytes);
             db.insert(MappContract.Prescription.TABLE_NAME, null, values);

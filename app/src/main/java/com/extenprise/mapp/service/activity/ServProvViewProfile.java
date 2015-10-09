@@ -18,7 +18,7 @@ import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 
 public class ServProvViewProfile extends Activity {
@@ -96,9 +96,9 @@ public class ServProvViewProfile extends Activity {
             mQualification.setEnabled(false);
 
 
-            UIUtility.showAlert(this, "", "Updated");
+            Utility.showAlert(this, "", "Updated");
         } else {
-            UIUtility.showAlert(this, "", "Not Updated");
+            Utility.showAlert(this, "", "Not Updated");
         }
     }
 

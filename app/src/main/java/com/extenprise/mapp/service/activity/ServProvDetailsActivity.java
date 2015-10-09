@@ -12,10 +12,9 @@ import android.widget.TextView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.Calendar;
 
@@ -44,7 +43,7 @@ public class ServProvDetailsActivity extends Activity {
         mProgressView = findViewById(R.id.progressView);
 
         Intent intent = getIntent();
-        mServProv = intent.getParcelableExtra("servProv");
+        mServProv = intent.getParcelableExtra("service");
 
         mTextViewClinic = (TextView)findViewById(R.id.textviewFirstClinic);
         mTextViewDocExperience = (TextView)findViewById(R.id.textviewDocExperience);
@@ -60,17 +59,17 @@ public class ServProvDetailsActivity extends Activity {
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         mTextViewClinic.setText(spsspt.getServicePoint().getName());
         mTextViewDocExperience.setText("" + spsspt.getExperience());
-        mTextViewClinicTime.setText(UIUtility.getTimeString(spsspt.getStartTime()) + " to "
-                + UIUtility.getTimeString(spsspt.getEndTime()));
+        mTextViewClinicTime.setText(Utility.getTimeString(spsspt.getStartTime()) + " to "
+                + Utility.getTimeString(spsspt.getEndTime()));
         mTextViewDocname.setText(mServProv.getfName() + " " + mServProv.getlName());
-        mTextViewDocSpeciality.setText("(" + spsspt.getService() + ")");
+        mTextViewDocSpeciality.setText("(" + spsspt.getService().getSpeciality() + ")");
 
         //mTextViewReviews.setText("11");
         mTextViewDocQualification.setText(mServProv.getQualification());
         mTextViewFees.setText("" + spsspt.getConsultFee());
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
-        if(UIUtility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
+        if(Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
             mImageViewAvailable.setImageResource(R.drawable.g_circle);
             availability.setText(getString(R.string.available));
         } else {
@@ -81,15 +80,6 @@ public class ServProvDetailsActivity extends Activity {
     }
 
     public void bookAppointment(View view) {
-        /*UIUtility.showProgress(this, mFormView, mProgressView, true);
-
-        SaveAppointData task = new SaveAppointData(this);
-        task.execute((Void) null);*/
-
-        /*LoginHolder.servLoginRef.setfName(mTextViewDocname.getText().toString());
-        LoginHolder.spsspt.setStartTime(spsspt.getStartTime());
-        LoginHolder.spsspt.setEndTime(spsspt.getEndTime());*/
-
         Intent intent = new Intent(this, BookAppointmentActivity.class);
         if(LoginHolder.custLoginRef == null) {
             intent = new Intent(this, LoginActivity.class);
@@ -121,4 +111,9 @@ public class ServProvDetailsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
+        intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+        return intent;
+    }
 }

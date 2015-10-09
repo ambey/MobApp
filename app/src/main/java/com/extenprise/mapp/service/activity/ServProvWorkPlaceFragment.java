@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -27,14 +26,16 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.MappService;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.ui.TitleFragment;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
@@ -42,8 +43,8 @@ import java.util.ArrayList;
 /**
  * Created by ambey on 10/9/15.
  */
-public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment {
-    private SignUpHandler mResponseHandler = new SignUpHandler(this);
+public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler {
+    private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
 
     private View mRootview;
     private EditText mName;
@@ -159,11 +160,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void showStartTimePicker(View view) {
-        UIUtility.timePicker(view, mStartTime);
+        Utility.timePicker(view, mStartTime);
     }
 
     public void showEndTimePicker(View view) {
-        UIUtility.timePicker(view, mEndTime);
+        Utility.timePicker(view, mEndTime);
     }
 
     public void showtimeFields(View view) {
@@ -266,6 +267,15 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         return 0;
     }
 
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if (action == MappService.DO_SIGNUP) {
+            signUpDone(data);
+            return true;
+        }
+        return false;
+    }
+
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
             if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
@@ -345,7 +355,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         if (!activity.isValidInput()) {
             return false;
         }
-        if(LoginHolder.servLoginRef == null) {
+        if (LoginHolder.servLoginRef == null) {
             LoginHolder.servLoginRef = new ServiceProvider();
         }
         LoginHolder.servLoginRef.setQualification(mQualification.getText().toString().trim());
@@ -361,11 +371,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         spt.setEmailId(mEmailId.getText().toString().trim());
 
         spsspt.getService().setSpeciality(mSpeciality.getSelectedItem().toString());
+        spsspt.getService().setCategory(mServCatagory.getSelectedItem().toString());
         spsspt.setServProvPhone(LoginHolder.servLoginRef.getPhone());
         spsspt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
-        spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
-        spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
+        spsspt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+        spsspt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
         spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
         spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         spsspt.setServicePoint(spt);
@@ -475,7 +486,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         }
         if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
                 !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
-            if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
+            if (Utility.getMinutes(mStartTime.getText().toString()) >= Utility.getMinutes(mEndTime.getText().toString())) {
                 mEndTime.setError(getString(R.string.error_endtime));
                 focusView = mEndTime;
                 valid = false;
@@ -525,7 +536,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void saveData() {
-        UIUtility.showProgress(getActivity(), mFormView, mProgressView, true);
+        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
         Intent intent = new Intent(getActivity(), MappService.class);
         getActivity().bindService(intent, mConnection, getActivity().BIND_AUTO_CREATE);
 
@@ -537,9 +548,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(getActivity(), "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showRegistrationAlert(getActivity(), "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
-        UIUtility.showProgress(getActivity(), mFormView, mProgressView, false);
+        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
         getActivity().unbindService(mConnection);
     }
 
@@ -576,24 +587,5 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             mBound = false;
         }
     };
-
-    private static class SignUpHandler extends Handler {
-        private ServProvWorkPlaceFragment mFragment;
-
-        public SignUpHandler(ServProvWorkPlaceFragment fragment) {
-            mFragment = fragment;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MappService.DO_SIGNUP:
-                    mFragment.signUpDone(msg.getData());
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
-        }
-    }
 
 }

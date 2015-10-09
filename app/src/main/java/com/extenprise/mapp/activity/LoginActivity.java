@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -35,14 +34,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.SignInData;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.activity.SearchServProvActivity;
 import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.util.EncryptUtil;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
@@ -52,10 +55,10 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements ResponseHandler {
 
     private Messenger mService;
-    private LoginResponseHandler mRespHandler = new LoginResponseHandler(this);
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
     private int mLoginType;
     private SignInData mSignInData;
 
@@ -180,7 +183,7 @@ public class LoginActivity extends Activity {
         int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
         RadioButton mRadioButtonUType;
         if (uTypeID == -1) {
-            UIUtility.showAlert(this, "", "Please Select user type.");
+            Utility.showAlert(this, "", "Please Select user type.");
             return;
         } else {
             mRadioButtonUType = (RadioButton) findViewById(uTypeID);
@@ -238,7 +241,7 @@ public class LoginActivity extends Activity {
             }
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            UIUtility.showProgress(this, mLoginFormView, mProgressView, true);
+            Utility.showProgress(this, mLoginFormView, mProgressView, true);
             Intent intent = new Intent(this, MappService.class);
             bindService(intent, mConnection, BIND_AUTO_CREATE);
 /*
@@ -246,6 +249,15 @@ public class LoginActivity extends Activity {
             mAuthTask.execute((Void) null);
 */
         }
+    }
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if(action == MappService.DO_LOGIN) {
+            loginDone(data);
+            return true;
+        }
+        return false;
     }
 
     class SetupEmailAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
@@ -284,26 +296,27 @@ public class LoginActivity extends Activity {
     }
 
     protected void loginDone(Bundle msgData) {
-        UIUtility.showProgress(this, mLoginFormView, mProgressView, false);
+        Utility.showProgress(this, mLoginFormView, mProgressView, false);
         unbindService(mConnection);
         boolean success = msgData.getBoolean("status");
         if (success) {
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
-                String targetActivity = getIntent().getStringExtra("parent-activity");
+                String targetActivity = getIntent().getStringExtra("target-activity");
                 if (targetActivity != null) {
                     try {
                         intent = new Intent(this, Class.forName(targetActivity));
-                        intent.putExtra("customer", customer);
+                        intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                         return;
                     }
                 } else {
                     intent = new Intent(this, PatientsHomeScreenActivity.class);
-                    intent.putExtra("customer", customer);
                 }
+                intent.putExtra("customer", customer);
+                LoginHolder.custLoginRef = customer;
             } else {
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
                 intent.putExtra("service", msgData.getParcelable("service"));
@@ -343,25 +356,6 @@ public class LoginActivity extends Activity {
             mService = null;
         }
     };
-
-    private static class LoginResponseHandler extends Handler {
-        private LoginActivity mActivity;
-
-        public LoginResponseHandler(LoginActivity activity) {
-            mActivity = activity;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MappService.DO_LOGIN:
-                    mActivity.loginDone(msg.getData());
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
-        }
-    }
 
 }
 

@@ -15,7 +15,7 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 
 public class ServProvBasicInfo extends Activity {
@@ -69,9 +69,9 @@ public class ServProvBasicInfo extends Activity {
             mMobNo.setEnabled(false);
             mEmailID.setEnabled(false);
 
-            UIUtility.showAlert(this, "", "Done");
+            Utility.showAlert(this, "", "Done");
         } else {
-            UIUtility.showAlert(this, "", "Not Done");
+            Utility.showAlert(this, "", "Not Done");
         }
 
 

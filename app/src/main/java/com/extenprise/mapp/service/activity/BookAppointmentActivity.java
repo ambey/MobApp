@@ -1,12 +1,17 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,14 +21,18 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DateChangeListener;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,12 +42,18 @@ import java.util.Date;
 
 
 public class BookAppointmentActivity extends Activity
-        implements DateChangeListener {
+        implements DateChangeListener, ResponseHandler {
+
+    private Messenger mService;
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private int mAction;
 
     private Spinner mSpinnerTimeSlots;
     private TextView mTextViewDate;
     private Button mBookButton;
     private ServiceProvider mServProv;
+    private Customer mCust;
+    private Date mSelectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +62,7 @@ public class BookAppointmentActivity extends Activity
 
         Intent intent = getIntent();
         mServProv = intent.getParcelableExtra("servProv");
+        mCust = intent.getParcelableExtra("customer");
 
         TextView textViewDocFName = (TextView) findViewById(R.id.tvDocFName);
         TextView textViewDocLName = (TextView) findViewById(R.id.tvDocLName);
@@ -63,21 +79,24 @@ public class BookAppointmentActivity extends Activity
         textViewDocSpeciality.setText(spsspt.getService().getSpeciality());
         textViewQualification.setText("(" + mServProv.getQualification() + ")");
 
-        String date = UIUtility.getDaAsString("/");
-        mTextViewDate.setText(date);
-        setTimeSlots(date);
+        mSelectedDate = new Date();
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        mTextViewDate.setText(sdf.format(mSelectedDate));
+        setTimeSlots();
     }
 
+/*
     private boolean isTimeSlotsBooked(String selectedItem) {
         MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {
-                MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV
+                MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV_SERV_PT
         };
         String selection = MappContract.Appointment.COLUMN_NAME_FROM_TIME + "=? and " +
                 MappContract.Appointment.COLUMN_NAME_DATE + "=?";
         String[] selectionArgs = {
-                "" + UIUtility.getMinutes(selectedItem),
+                "" + Utility.getMinutes(selectedItem),
                 mTextViewDate.getText().toString()
         };
         Cursor c = db.query(MappContract.Appointment.TABLE_NAME,
@@ -86,23 +105,30 @@ public class BookAppointmentActivity extends Activity
         c.close();
         return (count > 0);
     }
+*/
 
     public void bookAppointment(View view) {
-        //UIUtility.showProgress(this, mFormView, mProgressView, true);
+        //Utility.showProgress(this, mFormView, mProgressView, true);
+/*
         if(mSpinnerTimeSlots.getSelectedItem() != null && !(mSpinnerTimeSlots.getSelectedItem().toString().equals(""))) {
 
             if (!isTimeSlotsBooked(mSpinnerTimeSlots.getSelectedItem().toString())) {
                 SaveAppointData task = new SaveAppointData(this);
                 task.execute((Void) null);
             } else {
-                UIUtility.showAlert(this, "", "The time slot is already booked.");
+                Utility.showAlert(this, "", "The time slot is already booked.");
             }
         } else {
-            UIUtility.showAlert(this, "", "Doctor is not available on the given date.");
+            Utility.showAlert(this, "", "Doctor is not available on the given date.");
         }
+*/
+        /* Send request to book appointment */
+        mAction = MappService.DO_BOOK_APPONT;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
-    public void setTimeSlots(String dateStr) {
+    public void setTimeSlots() {
         mBookButton.setEnabled(false);
         mBookButton.setBackgroundResource(R.drawable.inactive_button);
 
@@ -110,53 +136,52 @@ public class BookAppointmentActivity extends Activity
         Calendar cal = Calendar.getInstance();
         int minutes = cal.get(Calendar.HOUR_OF_DAY) * 60 +
                 cal.get(Calendar.MINUTE);// +
-                //120; // For todays appointment, available time slots would start two hours from now
+        //120; // For todays appointment, available time slots would start two hours from now
         // Set the hour, minute and other components to zero, so that we can compare the date.
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date today = cal.getTime();
-        boolean todayAppont = false;
-        try {
-            Date date = sdf.parse(dateStr);
-            cal.setTime(date);
-            if(date.compareTo(today) < 0) {
-                UIUtility.showAlert(this, getString(R.string.title_activity_book_appointment),
-                        getString(R.string.error_past_date));
-                return;
-            } else if(date.compareTo(today) == 0) {
-                todayAppont = true;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (!(UIUtility.findDocAvailability(LoginHolder.spsspt.getWorkingDays(), cal))) {
-            UIUtility.showAlert(this, "", "Doctor is not available on the given date.");
+        cal.setTime(mSelectedDate);
+        if (mSelectedDate.compareTo(today) < 0) {
+            Utility.showAlert(this, getString(R.string.title_activity_book_appointment),
+                    getString(R.string.error_past_date));
             return;
         }
 
-        int startTime = LoginHolder.spsspt.getStartTime();
-        if(todayAppont) {
-            while (startTime < minutes) {
-                startTime += 30;
-            }
-        }
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = startTime; i < LoginHolder.spsspt.getEndTime(); i += 30) {
-            String from = UIUtility.getTimeString(i);
-            if (!isTimeSlotsBooked(from)) {
-                list.add(from);
-            }
+        ServProvHasServPt spspt = mServProv.getServProvHasServPt(0);
+        if (!(Utility.findDocAvailability(spspt.getWorkingDays(), cal))) {
+            Utility.showAlert(this, "", "Doctor is not available on the given date.");
+            return;
         }
 
+        /* get Appointment time slots */
+        mAction = MappService.DO_APPONT_TIME_SLOTS;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    private void gotTimeSlots(Bundle data) {
+        unbindService(mConnection);
+        ArrayList<String> list = data.getStringArrayList("timeSlots");
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
-        if(list.size() > 0) {
+        if (list.size() > 0) {
             mBookButton.setEnabled(true);
             mBookButton.setBackgroundResource(R.drawable.button);
         }
+    }
+
+    private void gotAppont(Bundle data) {
+        unbindService(mConnection);
+        Utility.showAlert(this, "", "Your Appointment has been booked.");
+        Appointment appointment = data.getParcelable("form");
+        mCust.getAppointments().add(appointment);
+        mServProv.getServProvHasServPt(0).getAppointments().add(appointment);
+
+        mBookButton.setEnabled(false);
+        mBookButton.setBackgroundResource(R.drawable.inactive_button);
     }
 
     @Override
@@ -182,12 +207,19 @@ public class BookAppointmentActivity extends Activity
     }
 
     public void showDatePicker(View view) {
-        UIUtility.datePicker(view, mTextViewDate, this);
+        Utility.datePicker(view, mTextViewDate, this);
     }
 
     @Override
     public void datePicked(String date) {
-        setTimeSlots(date);
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        try {
+            mSelectedDate = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        setTimeSlots();
     }
 
     class SaveAppointData extends AsyncTask<Void, Void, Void> {
@@ -207,15 +239,12 @@ public class BookAppointmentActivity extends Activity
 
             String selectedItem = mSpinnerTimeSlots.getSelectedItem().toString();
             ContentValues values = new ContentValues();
-            values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME, UIUtility.getMinutes(selectedItem));
+            values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME, Utility.getMinutes(selectedItem));
             values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME_STR, selectedItem);
-            values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, UIUtility.getMinutes(selectedItem) + 30);
+            values.put(MappContract.Appointment.COLUMN_NAME_TO_TIME, Utility.getMinutes(selectedItem) + 30);
             values.put(MappContract.Appointment.COLUMN_NAME_DATE, mTextViewDate.getText().toString());
-            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE, spsspt.getServPointType());
-            values.put(MappContract.Appointment.COLUMN_NAME_SERVICE_NAME, spsspt.getServPointType());
-            values.put(MappContract.Appointment.COLUMN_NAME_SPECIALITY, spsspt.getService().getSpeciality());
-            values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV, mServProv.getIdServiceProvider());
-            values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, LoginHolder.custLoginRef.getIdCustomer());
+            values.put(MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV_SERV_PT, spsspt.getIdServProvHasServPt());
+            values.put(MappContract.Appointment.COLUMN_NAME_ID_CUSTOMER, mCust.getIdCustomer());
 
             db.insert(MappContract.Appointment.TABLE_NAME, null, values);
             return null;
@@ -223,7 +252,7 @@ public class BookAppointmentActivity extends Activity
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showAlert(myActivity, "", "Your Appointment has been fixed.");
+            Utility.showAlert(myActivity, "", "Your Appointment has been fixed.");
             mBookButton.setEnabled(false);
             mBookButton.setBackgroundResource(R.drawable.inactive_button);
             /*Intent intent = new Intent(myActivity, SearchServProvActivity.class);
@@ -234,5 +263,64 @@ public class BookAppointmentActivity extends Activity
         @Override
         protected void onCancelled() {
         }
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            if (mAction == MappService.DO_APPONT_TIME_SLOTS) {
+                SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+                sdf.applyPattern("dd/MM/yyyy");
+                bundle.putInt("id", mServProv.getServProvHasServPt(0).getIdServProvHasServPt());
+                bundle.putString("date", sdf.format(mSelectedDate));
+            } else if (mAction == MappService.DO_BOOK_APPONT) {
+                Appointment form = new Appointment();
+                form.setIdCustomer(mCust.getIdCustomer());
+                form.setIdServProvHasServPt(mServProv.getServices().get(0).getIdServProvHasServPt());
+                form.setDate(mSelectedDate);
+                form.setFrom(Utility.getMinutes(mSpinnerTimeSlots.getSelectedItem().toString()));
+                bundle.putParcelable("form", form);
+            }
+            Message msg = Message.obtain(null, mAction);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if (action == MappService.DO_APPONT_TIME_SLOTS) {
+            gotTimeSlots(data);
+            return true;
+        } else if (action == MappService.DO_BOOK_APPONT) {
+            gotAppont(data);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
+        intent.putExtra("service", getIntent().getParcelableExtra("servProv"));
+        return intent;
     }
 }

@@ -17,6 +17,8 @@ import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
 
+import java.text.SimpleDateFormat;
+
 public class ViewRxActivity extends Activity {
 
     private String mParentActivity;
@@ -52,11 +54,13 @@ public class ViewRxActivity extends Activity {
 
         Customer customer = DBUtil.getCustomer(dbHelper, mCustId);
         Appointment appointment = DBUtil.getAppointment(dbHelper, appontId);
-        date.setText(appointment.getDateOfAppointment());
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        date.setText(sdf.format(appointment.getDate()));
         fname.setText(customer.getfName());
         lname.setText(customer.getlName());
-        time.setText(String.format("%02d:%02d", appointment.getFromTime() / 60,
-                appointment.getFromTime() % 60));
+        time.setText(String.format("%02d:%02d", appointment.getFrom() / 60,
+                appointment.getFrom() % 60));
         gender.setText(customer.getGender());
         age.setText("" + customer.getAge());
         weight.setText("" + customer.getWeight());

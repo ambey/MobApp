@@ -1,17 +1,28 @@
 package com.extenprise.mapp.service.data;
 
-public class Service {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Service implements Parcelable {
 
     private int idService;
-    private String servCatagory;
+    private String category;
     private String speciality;
 
-    public String getServCatagory() {
-        return servCatagory;
+    public Service() {}
+
+    public Service(Parcel source) {
+        idService = source.readInt();
+        category = source.readString();
+        speciality = source.readString();
     }
 
-    public void setServCatagory(String servCatagory) {
-        this.servCatagory = servCatagory;
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String servCategory) {
+        this.category = servCategory;
     }
 
     public int getIdService() {
@@ -31,4 +42,26 @@ public class Service {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idService);
+        dest.writeString(category);
+        dest.writeString(speciality);
+    }
+    public static final Creator<Service> CREATOR = new Creator<Service>() {
+        @Override
+        public Service createFromParcel(Parcel source) {
+            return new Service(source);
+        }
+
+        @Override
+        public Service[] newArray(int size) {
+            return new Service[size];
+        }
+    };
 }

@@ -1,4 +1,4 @@
-package com.extenprise.mapp.activity;
+package com.extenprise.mapp.net;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,11 +12,12 @@ import android.os.RemoteException;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.data.Appointment;
+import com.extenprise.mapp.data.SearchServProvForm;
 import com.extenprise.mapp.data.ServProvListItem;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.data.WorkPlaceListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.SearchServProv;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -26,7 +27,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -47,6 +47,8 @@ public class MappService extends Service {
     public static final int ADD_WORK_PLACE = 7;
     public static final int DO_REG_NO_CHECK = 8;
     public static final int REMOVE_WORK_PLACE = 9;
+    public static final int DO_APPONT_TIME_SLOTS = 10;
+    public static final int DO_BOOK_APPONT = 11;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -162,15 +164,12 @@ public class MappService extends Service {
         Bundle data = msg.getData();
         mLoginType = data.getInt("loginType");
 
-        Object object = data.getParcelable("service");
-        if (mLoginType == CUSTOMER_LOGIN) {
-            object = data.getParcelable("customer");
-        }
+        SignInData signInData = data.getParcelable("signInData");
         mReplyTo = msg.replyTo;
         Gson gson = new Gson();
         MappAsyncTask task;
         try {
-            task = new MappAsyncTask(getURL(DO_PHONE_EXIST_CHECK), gson.toJson(object));
+            task = new MappAsyncTask(getURL(DO_PHONE_EXIST_CHECK), gson.toJson(signInData));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(DO_PHONE_EXIST_CHECK);
@@ -197,7 +196,7 @@ public class MappService extends Service {
     }
     public void doSearchServProv(Message msg) {
         Bundle data = msg.getData();
-        SearchServProv form = data.getParcelable("form");
+        SearchServProvForm form = data.getParcelable("form");
         mReplyTo = msg.replyTo;
         Gson gson = new Gson();
         MappAsyncTask task;
@@ -221,7 +220,38 @@ public class MappService extends Service {
             task = new MappAsyncTask(getURL(DO_SERV_PROV_DETAILS), gson.toJson(form));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            onError(DO_SEARCH_SERV_PROV);
+            onError(DO_SERV_PROV_DETAILS);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    public void doGetTimeSlots(Message msg) {
+        Bundle data = msg.getData();
+        String requestData = "{ \"idService\": \"" + data.getInt("id") + "\", \"dateStr\": \"" + data.getString("date") + "\"}";
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(DO_APPONT_TIME_SLOTS), requestData);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(DO_APPONT_TIME_SLOTS);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    public void doBookAppont(Message msg) {
+        Bundle data = msg.getData();
+        Appointment form = data.getParcelable("form");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(DO_BOOK_APPONT), gson.toJson(form));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(DO_BOOK_APPONT);
             return;
         }
         task.execute((Void) null);
@@ -243,43 +273,49 @@ public class MappService extends Service {
         int urlId;
         switch (action) {
             case DO_LOGIN:
-                urlId = R.string.signin_serv;
+                urlId = R.string.action_signin_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
-                    urlId = R.string.signin_cust;
+                    urlId = R.string.action_signin_cust;
                 }
                 break;
             case DO_SIGNUP:
-                urlId = R.string.signup_serv;
+                urlId = R.string.action_signup_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
-                    urlId = R.string.signup_cust;
+                    urlId = R.string.action_signup_cust;
                 }
                 break;
             case DO_UPDATE:
-                urlId = R.string.update_serv;
+                urlId = R.string.action_update_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
-                    urlId = R.string.update_cust;
+                    urlId = R.string.action_update_cust;
                 }
                 break;
             case ADD_WORK_PLACE:
-                urlId = R.string.addwork_place;
+                urlId = R.string.action_addwork_place;
                 break;
             case REMOVE_WORK_PLACE:
                 urlId = R.string.remove_work_place;
                 break;
             case DO_PHONE_EXIST_CHECK:
-                urlId = R.string.check_phone_serv;
+                urlId = R.string.action_check_phone_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
-                    urlId = R.string.check_phone_cust;
+                    urlId = R.string.action_check_phone_cust;
                 }
                 break;
             case DO_REG_NO_CHECK:
-                urlId = R.string.check_reg_no_serv;
+                urlId = R.string.action_check_reg_no_serv;
                 break;
             case DO_SEARCH_SERV_PROV:
-                urlId = R.string.search_serv_prov;
+                urlId = R.string.action_search_serv_prov;
                 break;
             case DO_SERV_PROV_DETAILS:
-                urlId = R.string.serv_prov_details;
+                urlId = R.string.action_serv_prov_details;
+                break;
+            case DO_APPONT_TIME_SLOTS:
+                urlId = R.string.action_get_time_slots;
+                break;
+            case DO_BOOK_APPONT:
+                urlId = R.string.action_book_appont;
                 break;
             default:
                 return null;
@@ -326,6 +362,12 @@ public class MappService extends Service {
                 case DO_SERV_PROV_DETAILS:
                     mService.doGetServProvDetails(msg);
                     break;
+                case DO_APPONT_TIME_SLOTS:
+                    mService.doGetTimeSlots(msg);
+                    break;
+                case DO_BOOK_APPONT:
+                    mService.doBookAppont(msg);
+                    break;
                 default:
                     super.handleMessage(msg);
             }
@@ -343,6 +385,8 @@ public class MappService extends Service {
         private ServiceProvider mServProv;
         private WorkPlaceListItem mWorkPlace;
         private ArrayList<ServProvListItem> mList;
+        private ArrayList<String> mTimeSlots;
+        private Appointment mForm;
 
         public MappAsyncTask(URL url, String data) {
             mUrl = url;
@@ -419,10 +463,18 @@ public class MappService extends Service {
                             mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             break;
                         case DO_SEARCH_SERV_PROV:
-                            mList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<ServProvListItem>>(){}.getType());
+                            mList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<ServProvListItem>>() {
+                            }.getType());
                             break;
                         case DO_SERV_PROV_DETAILS:
                             mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
+                            break;
+                        case DO_APPONT_TIME_SLOTS:
+                            mTimeSlots = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<String>>() {
+                            }.getType());
+                            break;
+                        case DO_BOOK_APPONT:
+                            mForm = gson.fromJson(responseBuf.toString(), Appointment.class);
                             break;
                     }
                     status = true;
@@ -441,14 +493,20 @@ public class MappService extends Service {
         protected void onPostExecute(final Boolean success) {
             Bundle bundle = new Bundle();
             bundle.putBoolean("status", success);
-            if(mCustomer != null) {
+            if (mCustomer != null) {
                 bundle.putParcelable("customer", mCustomer);
             }
-            if(mServProv != null) {
+            if (mServProv != null) {
                 bundle.putParcelable("service", mServProv);
             }
-            if(mList != null) {
+            if (mList != null) {
                 bundle.putParcelableArrayList("servProvList", mList);
+            }
+            if (mTimeSlots != null) {
+                bundle.putStringArrayList("timeSlots", mTimeSlots);
+            }
+            if(mForm != null) {
+                bundle.putParcelable("appontForm", mForm);
             }
             if(mWorkPlace != null) {
                 bundle.putParcelable("workPlace", mWorkPlace);

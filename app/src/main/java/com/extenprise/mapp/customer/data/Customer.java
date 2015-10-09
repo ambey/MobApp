@@ -3,6 +3,7 @@ package com.extenprise.mapp.customer.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.City;
 import com.extenprise.mapp.data.SignInData;
 import com.google.gson.JsonElement;
@@ -29,6 +30,7 @@ public class Customer implements Parcelable {
     private City city;
     private String pincode;
     private byte[] img;
+    private ArrayList<Appointment> appointments;
 
     public byte[] getImg() {
         return img;
@@ -41,11 +43,14 @@ public class Customer implements Parcelable {
     public Customer() {
         signInData = new SignInData();
         city = new City();
+        appointments = new ArrayList<>();
     }
 
     public Customer(Parcel source) {
         signInData = new SignInData();
         city = new City();
+        appointments = new ArrayList<>();
+
         idCustomer = source.readInt();
 
         String[] fields = new String[11];
@@ -66,6 +71,14 @@ public class Customer implements Parcelable {
         age = source.readInt();
         weight = source.readFloat();
         height = source.readFloat();
+    }
+
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(ArrayList<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
     public String getPincode() {
@@ -132,20 +145,20 @@ public class Customer implements Parcelable {
         this.emailId = emailId;
     }
 
-    public String getPhone() {
-        return signInData.getPhone();
+    public SignInData getSignInData() {
+        return signInData;
     }
 
-    public void setPhone(String phone) {
-        signInData.setPhone(phone);
+    public void setSignInData(SignInData signInData) {
+        this.signInData = signInData;
     }
 
-    public String getPasswd() {
-        return signInData.getPasswd();
+    public void setCity(City city) {
+        this.city = city;
     }
 
-    public void setPasswd(String passwd) {
-        signInData.setPasswd(passwd);
+    public City getCity() {
+        return city;
     }
 
     public String getGender() {
@@ -170,38 +183,6 @@ public class Customer implements Parcelable {
 
     public void setDob(Date dob) {
         this.dob = dob;
-    }
-
-    public int getIdCity() {
-        return city.getIdCity();
-    }
-
-    public void setIdCity(int id) {
-        city.setIdCity(id);
-    }
-
-    public String getCity() {
-        return city.getCity();
-    }
-
-    public void setCity(String city) {
-        this.city.setCity(city);
-    }
-
-    public String getState() {
-        return city.getState();
-    }
-
-    public void setState(String state) {
-        city.setState(state);
-    }
-
-    public String getCountry() {
-        return city.getCountry();
-    }
-
-    public void setCountry(String country) {
-        city.setCountry(country);
     }
 
     @Override

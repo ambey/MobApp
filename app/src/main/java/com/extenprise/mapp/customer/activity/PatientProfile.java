@@ -39,14 +39,14 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.MappService;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.activity.ServProvProfileMain;
 import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.SearchServProv;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import org.w3c.dom.Text;
@@ -134,21 +134,21 @@ public class PatientProfile extends Activity {
 
     private void viewProfile() {
         mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName());
-        mMobNo.setText(LoginHolder.custLoginRef.getPhone());
+        mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
         if(LoginHolder.custLoginRef.getImg() != null) {
-            mImgView.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
         }
         mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
         mEditTextCustomerLName.setText(LoginHolder.custLoginRef.getlName());
         mEditTextCustomerEmail.setText(LoginHolder.custLoginRef.getEmailId());
         mTextViewDOB.setText((CharSequence) LoginHolder.custLoginRef.getDob());
-        mSpinGender.setSelection(UIUtility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
+        mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
         mEditTextHeight.setText("" + LoginHolder.custLoginRef.getHeight());
         mEditTextWeight.setText("" + LoginHolder.custLoginRef.getWeight());
         mEditTextLoc.setText(LoginHolder.custLoginRef.getLocation());
         mEditTextPinCode.setText(LoginHolder.custLoginRef.getPincode());
-        mSpinCity.setSelection(UIUtility.getSpinnerIndex(mSpinCity, LoginHolder.custLoginRef.getCity()));
-        mSpinState.setSelection(UIUtility.getSpinnerIndex(mSpinState, LoginHolder.custLoginRef.getState()));
+        mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, LoginHolder.custLoginRef.getCity().getCity()));
+        mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, LoginHolder.custLoginRef.getCity().getState()));
     }
 
     public void showPersonalFields(View view) {
@@ -204,7 +204,7 @@ public class PatientProfile extends Activity {
         if(!isValidInput()) {
             return;
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Utility.showProgress(this, mFormView, mProgressView, true);
         Intent intent = new Intent(this, MappService.class);
         mServiceAction = MappService.DO_UPDATE;
         bindService(intent, mConnection, BIND_AUTO_CREATE);
@@ -258,15 +258,15 @@ public class PatientProfile extends Activity {
 
     private void updateDone(Bundle data) {
         if(data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Profile Updated.");
+            Utility.showRegistrationAlert(this, "", "Profile Updated.");
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
     }
 
     private Customer getUpdateData() {
         Customer c = new Customer();
-        c.setPhone(mMobNo.getText().toString());
+        c.getSignInData().setPhone(mMobNo.getText().toString());
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
         c.setlName(mEditTextCustomerLName.getText().toString().trim());
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -277,7 +277,7 @@ public class PatientProfile extends Activity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        c.setAge(UIUtility.getAge(mTextViewDOB.getText().toString().trim()));
+        c.setAge(Utility.getAge(mTextViewDOB.getText().toString().trim()));
         c.setEmailId(mEditTextCustomerEmail.getText().toString().trim());
         c.setGender(mSpinGender.getSelectedItem().toString().trim());
         float height = 0;
@@ -296,9 +296,9 @@ public class PatientProfile extends Activity {
         c.setWeight(weight);
         c.setLocation(mEditTextLoc.getText().toString().trim());
         c.setPincode(mEditTextPinCode.getText().toString().trim());
-        c.setCity(mSpinCity.getSelectedItem().toString());
-        c.setState(mSpinState.getSelectedItem().toString());
-        c.setCountry("India");
+        c.getCity().setCity(mSpinCity.getSelectedItem().toString());
+        c.getCity().setState(mSpinState.getSelectedItem().toString());
+        c.getCity().setCountry("India");
 
         return c;
     }
@@ -341,7 +341,7 @@ public class PatientProfile extends Activity {
     }
 
     public void showDatePicker(View view) {
-        UIUtility.datePicker(view, mTextViewDOB);
+        Utility.datePicker(view, mTextViewDOB);
     }
 
     public void changeImg(View view) {
@@ -462,7 +462,7 @@ public class PatientProfile extends Activity {
         if(!isValidInput()) {
             return;
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Utility.showProgress(this, mFormView, mProgressView, true);
         SaveCustomerData task = new SaveCustomerData(this);
         task.execute((Void) null);
     }
@@ -549,7 +549,7 @@ public class PatientProfile extends Activity {
             values.put(MappContract.Customer.COLUMN_NAME_FNAME, mEditTextCustomerFName.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_LNAME, mEditTextCustomerLName.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_DOB, mTextViewDOB.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_AGE, UIUtility.getAge(mTextViewDOB.getText().toString().trim()));
+            values.put(MappContract.Customer.COLUMN_NAME_AGE, Utility.getAge(mTextViewDOB.getText().toString().trim()));
             values.put(MappContract.Customer.COLUMN_NAME_EMAIL_ID, mEditTextCustomerEmail.getText().toString().trim());
 
             values.put(MappContract.Customer.COLUMN_NAME_WEIGHT, mEditTextWeight.getText().toString().trim());
@@ -560,9 +560,9 @@ public class PatientProfile extends Activity {
             values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mSpinCity.getSelectedItem().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mSpinState.getSelectedItem().toString().trim());
             /*if(!imgDecodableString.equals("") || imgDecodableString != null) {
-                values.put(MappContract.Customer.COLUMN_NAME_IMAGE, UIUtility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
+                values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
             }*/
-            values.put(MappContract.Customer.COLUMN_NAME_IMAGE, UIUtility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
+            values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
 
             //Bitmap bitmap = ((BitmapDrawable)mImgView.getDrawable()).getBitmap();
 
@@ -573,15 +573,15 @@ public class PatientProfile extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
             /*Intent intent = new Intent(myActivity, LoginActivity.class);
             startActivity(intent);*/
         }
 
         @Override
         protected void onCancelled() {
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
         }
 
     }

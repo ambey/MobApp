@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -18,18 +17,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.MappService;
+import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.data.ServProvListItem;
-import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.ui.SearchResultListAdapter;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 
-public class SearchServProvResultActivity extends Activity {
+public class SearchServProvResultActivity extends Activity implements ResponseHandler {
 
     private Messenger mService;
-    private SearchResponseHandler mRespHandler = new SearchResponseHandler(this);
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
 
     private ArrayList<ServProvListItem> mServProvList;
     private ServProvListItem mSelectedItem;
@@ -58,9 +58,9 @@ public class SearchServProvResultActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 mSelectedItem = mServProvList.get(position);
-                UIUtility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
+                Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
                 Intent intent = new Intent(view.getContext(), MappService.class);
-                bindService(intent, mConnection, 0);
+                bindService(intent, mConnection, BIND_AUTO_CREATE);
 
             }
         });
@@ -90,7 +90,7 @@ public class SearchServProvResultActivity extends Activity {
     }
 
     public void gotDetails(Bundle data) {
-        UIUtility.showProgress(this, mSearchResultView, mProgressView, false);
+        Utility.showProgress(this, mSearchResultView, mProgressView, false);
         unbindService(mConnection);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
         intent.putParcelableArrayListExtra("servProvList", mServProvList);
@@ -109,7 +109,7 @@ public class SearchServProvResultActivity extends Activity {
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
             bundle.putParcelable("form", mSelectedItem);
-            Message msg = Message.obtain(null, MappService.DO_SEARCH_SERV_PROV);
+            Message msg = Message.obtain(null, MappService.DO_SERV_PROV_DETAILS);
             msg.replyTo = new Messenger(mRespHandler);
             msg.setData(bundle);
 
@@ -126,80 +126,26 @@ public class SearchServProvResultActivity extends Activity {
         }
     };
 
-    private static class SearchResponseHandler extends Handler {
-        private SearchServProvResultActivity mActivity;
-
-        public SearchResponseHandler(SearchServProvResultActivity activity) {
-            mActivity = activity;
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if(action == MappService.DO_SERV_PROV_DETAILS) {
+            gotDetails(data);
+            return true;
         }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MappService.DO_SEARCH_SERV_PROV:
-                    mActivity.gotDetails(msg.getData());
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
-        }
+        return false;
     }
-
-
-    /*private class CustomAdapter extends ArrayAdapter<HashMap<String, Object>>
-    {
-
-        public CustomAdapter(Context context, int textViewResourceId,
-                             ArrayList<HashMap<String, Object>> Strings) {
-
-            //let android do the initializing :)
-            super(context, textViewResourceId, Strings);
+    
+    @Override
+    public Intent getParentActivityIntent() {
+        Class parentClass = getIntent().getParcelableExtra("parent-activity");
+        Intent intent;
+        if(parentClass != null) {
+            intent = new Intent(this, parentClass);
+        } else {
+            intent = super.getParentActivityIntent();
         }
-
-
-        //class for caching the views in a row
-        private class ViewHolder
-        {
-            ImageView photo;
-            TextView name,team;
-
-        }
-
-        ViewHolder viewHolder;
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            if(convertView==null)
-            {
-                convertView=inflater.inflate(R.layout.activity_search_result, null);
-                viewHolder=new ViewHolder();
-
-                //cache the views
-                *//*viewHolder.photo=(ImageView) convertView.findViewById(R.drawable.g_circle);
-                viewHolder.name=(TextView) convertView.findViewById(R.id.name);
-                viewHolder.team=(TextView) convertView.findViewById(R.id.team);*//*
-
-                //link the cached views to the convertview
-                convertView.setTag(viewHolder);
-
-            }
-            else
-                viewHolder=(ViewHolder) convertView.getTag();
-
-
-            int photoId=(Integer) searchResults.get(position).get("photo");
-
-            //set the data to be displayed
-            viewHolder.photo.setImageDrawable(getResources().getDrawable(photoId));
-            viewHolder.name.setText(searchResults.get(position).get("name").toString());
-            viewHolder.team.setText(searchResults.get(position).get("team").toString());
-
-            //return the view to be displayed
-            return convertView;
-        }
-
-    }*/
+        return intent;
+    }
 }
 
 

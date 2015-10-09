@@ -25,7 +25,7 @@ import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class AddSpecialityActivity extends Activity {
         sps.setExperience(Float.parseFloat(mExperience.getText().toString()));
 
         Service s = new Service();
-        s.setServCatagory(mService.getSelectedItem().toString());
+        s.setCategory(mService.getSelectedItem().toString());
         s.setSpeciality(mSpeciality.getText().toString());
 
 
@@ -122,7 +122,7 @@ public class AddSpecialityActivity extends Activity {
     }
 
     public void saveData(View view) {
-        UIUtility.showProgress(this, mformView, mprogressView, true);
+        Utility.showProgress(this, mformView, mprogressView, true);
 
         SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);
@@ -274,14 +274,14 @@ public class AddSpecialityActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showProgress(myActivity, mformView, mprogressView, false);
+            Utility.showProgress(myActivity, mformView, mprogressView, false);
             Intent intent = new Intent(myActivity, LoginActivity.class);
             startActivity(intent);
         }
 
         @Override
         protected void onCancelled() {
-            UIUtility.showProgress(myActivity, mformView, mprogressView, false);
+            Utility.showProgress(myActivity, mformView, mprogressView, false);
         }
 
     }

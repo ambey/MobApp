@@ -19,7 +19,7 @@ import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchServProv;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.Calendar;
 
@@ -77,7 +77,7 @@ public class ServProvViewWorkDetails extends Activity {
 
                 ImageView mImageViewAvailable = (ImageView) view.findViewById(R.id.imageViewAvailability);
 
-                if(UIUtility.findDocAvailability(docAvailDays, Calendar.getInstance())) {
+                if(Utility.findDocAvailability(docAvailDays, Calendar.getInstance())) {
                     mImageViewAvailable.setImageResource(R.drawable.gcircle);
                 } else {
                     mImageViewAvailable.setImageResource(R.drawable.rcircle);

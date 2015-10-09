@@ -82,12 +82,8 @@ public class MappContract {
         public static final String COLUMN_NAME_FROM_TIME_STR = "fromTimeStr";
         public static final String COLUMN_NAME_FROM_TIME = "fromTime";
         public static final String COLUMN_NAME_TO_TIME = "toTime";
-        public static final String COLUMN_NAME_ID_SERV_PT = "idServPt";
         public static final String COLUMN_NAME_ID_CUSTOMER = "idCustomer";
-        public static final String COLUMN_NAME_SERVICE_POINT_TYPE = "servicePointType";
-        public static final String COLUMN_NAME_ID_SERV_PROV = "idServProv";
-        public static final String COLUMN_NAME_SERVICE_NAME = "serviceName";
-        public static final String COLUMN_NAME_SPECIALITY = "speciality";
+        public static final String COLUMN_NAME_ID_SERV_PROV_SERV_PT = "idServProvHasServPt";
     }
 
     public static abstract class Report implements BaseColumns {

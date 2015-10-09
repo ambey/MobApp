@@ -6,19 +6,21 @@
 <!--
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
 -->
-    <string name="signin_cust">customer/SignIn.action</string>
-    <string name="signup_cust">customer/SignUp.action</string>
-    <string name="check_phone_cust">customer/PhoneExistsCheck.action</string>
-    <string name="signin_serv">service/SignIn.action</string>
-    <string name="signup_serv">service/SignUp.action</string>
-    <string name="update_serv">service/Update.action</string>
-    <string name="addwork_place">service/AddWorkPlace.action</string>
-    <string name="remove_work_place">service/RemoveWorkPlace.action</string>
-    <string name="update_cust">customer/Update.action</string>
-    <string name="check_phone_serv">service/PhoneExistsCheck.action</string>
-    <string name="check_reg_no_serv">service/RegNoExistsCheck.action</string>
-    <string name="search_serv_prov">service/Search.action</string>
-    <string name="serv_prov_details">service/Details.action</string>
+    <string name="action_signin_cust">customer/SignIn.action</string>
+    <string name="action_signup_cust">customer/SignUp.action</string>
+    <string name="action_check_phone_cust">customer/PhoneExistsCheck.action</string>
+    <string name="action_signin_serv">service/SignIn.action</string>
+    <string name="action_signup_serv">service/SignUp.action</string>
+    <string name="action_update_serv">service/Update.action</string>
+    <string name="action_addwork_place">service/AddWorkPlace.action</string>
+    <string name="action_remove_work_place">service/RemoveWorkPlace.action</string>
+    <string name="action_update_cust">customer/Update.action</string>
+    <string name="action_check_phone_serv">service/PhoneExistsCheck.action</string>
+    <string name="action_check_reg_no_serv">service/RegNoExistsCheck.action</string>
+    <string name="action_search_serv_prov">service/Search.action</string>
+    <string name="action_serv_prov_details">service/GetDetails.action</string>
+    <string name="action_get_time_slots">service/GetTimeSlots.action</string>
+    <string name="action_book_appont">service/BookAppont.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
@@ -84,8 +86,12 @@
     <string-array name="state">
         <item>Maharashtra</item>
     </string-array>
+
+    <string name="select_speciality">Select Speciality</string>
+    <string name="other">Other</string>
+
     <string-array name="speciality">
-        <item>Select Speciality</item>
+        <item>@string/select_speciality</item>
         <item>Cardiologist</item>
         <item>Oncologist</item>
         <item>Gynaecologist</item>
@@ -98,8 +104,10 @@
         <item>Urologist</item>
     </string-array>
 
+    <string name="select_category">Select Category</string>
+
     <string-array name="serviceCategory">
-        <item>Select Category</item>
+        <item>@string/select_category</item>
         <item>Physician</item>
         <item>Pharmacist</item>
         <item>Diagnostic Center</item>

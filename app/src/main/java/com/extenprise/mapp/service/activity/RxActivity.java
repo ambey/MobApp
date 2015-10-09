@@ -23,7 +23,7 @@ import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 public class RxActivity extends Activity {
     private View mForm;
@@ -92,12 +92,12 @@ public class RxActivity extends Activity {
             mRx = new Rx();
         }
         mAppont = DBUtil.getAppointment(dbHelper, mAppontId);
-        Customer customer = mAppont.getCustomer();
+        //Customer customer = mAppont.getCustomer();
         mRx.setAppointment(mAppont);
 
-        fName.setText(customer.getfName());
-        lName.setText(customer.getlName());
-        date.setText(mAppont.getDateOfAppointment());
+        //fName.setText(customer.getfName());
+        //lName.setText(customer.getlName());
+        //date.setText(mAppont.getDateOfAppointment());
         mSrNo.setText("" + (mRx.getRxItemCount() + 1));
 
     }
@@ -125,15 +125,15 @@ public class RxActivity extends Activity {
     }
 
     public void showMTimePicker(View view) {
-        UIUtility.timePicker(view, mMTime);
+        Utility.timePicker(view, mMTime);
     }
 
     public void showATimePicker(View view) {
-        UIUtility.timePicker(view, mATime);
+        Utility.timePicker(view, mATime);
     }
 
     public void showETimePicker(View view) {
-        UIUtility.timePicker(view, mETime);
+        Utility.timePicker(view, mETime);
     }
 
     public void addRxItem(View view) {
@@ -150,7 +150,7 @@ public class RxActivity extends Activity {
     }
 
     private void addRxToDB() {
-        UIUtility.showProgress(this, mForm, mProgressBar, true);
+        Utility.showProgress(this, mForm, mProgressBar, true);
         RxDBTask task = new RxDBTask(this);
         task.execute();
     }
@@ -271,10 +271,10 @@ public class RxActivity extends Activity {
 
             ContentValues values = new ContentValues();
             Appointment appointment = mRx.getAppointment();
-            String rxId = "a" + appointment.getId() + "r" + appointment.getReportCount();
+            String rxId = "a" + appointment.getIdAppointment() + "r" + appointment.getReportCount();
             DBUtil.deleteRx(dbHelper, rxId);
 
-            values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getId());
+            values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getIdAppointment());
             values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
             for (RxItem item : mRx.getItems()) {
                 values.put(MappContract.Prescription.COLUMN_NAME_SR_NO, item.getSrno());
@@ -307,7 +307,7 @@ public class RxActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             try {
-                UIUtility.showProgress(myActivity, mForm, mProgressBar, false);
+                Utility.showProgress(myActivity, mForm, mProgressBar, false);
                 Intent intent = new Intent(myActivity, Class.forName(mParentActivity));
                 intent.putExtra("appont_id", mAppontId);
                 intent.putExtra("cust_id", mCustId);

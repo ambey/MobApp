@@ -2,7 +2,6 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 
 public class PatientsHomeScreenActivity extends Activity {
@@ -39,7 +38,7 @@ public class PatientsHomeScreenActivity extends Activity {
 
         ImageView img = (ImageView) findViewById(R.id.imagePatient);
         if(mCustomer.getImg() != null) {
-            img.setImageBitmap(UIUtility.getBitmapFromBytes(mCustomer.getImg()));
+            img.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getImg()));
         }
     }
 

@@ -14,7 +14,7 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.ServProvListItem;
 import com.extenprise.mapp.data.WorkPlaceListItem;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 
@@ -60,14 +60,14 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlaceListItem> {
         mPhone2.setText(item.getAltPhone());
         mEmailIdwork.setText(item.getEmailId());
         mConsultFee.setText("" + item.getConsultFee());
-        mServPtType.setSelection(UIUtility.getSpinnerIndex(mServPtType, item.getServPointType()));
-        mCity.setSelection(UIUtility.getSpinnerIndex(mCity, item.getCity()));
+        mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
+        mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity()));
         mStartTime.setText(item.getStartTime());
         mEndTime.setText(item.getEndTime());
         mQualification.setText(item.getQualification());
         mMultiSpinnerDays.setText(item.getWorkingDays());
-        mServCatagory.setSelection(UIUtility.getSpinnerIndex(mServCatagory, item.getServCatagory()));
-        mSpeciality.setSelection(UIUtility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
+        mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCatagory()));
+        mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
         mExperience.setText(String.format("%.01f", item.getExperience()));
 
         return v;

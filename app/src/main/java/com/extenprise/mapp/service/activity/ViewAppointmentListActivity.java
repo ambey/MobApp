@@ -14,23 +14,20 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.DateChangeListener;
-import com.extenprise.mapp.util.SearchAppointment;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ViewAppointmentListActivity extends Activity
         implements DateChangeListener {
+
+    private ServiceProvider mServiceProv;
 
     private TextView mAppointmentDateTextView;
     private ListView mAppointmentListView;
@@ -39,6 +36,9 @@ public class ViewAppointmentListActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_appointment_list);
+
+        Intent intent = getIntent();
+        mServiceProv = intent.getParcelableExtra("service");
 
         mAppointmentDateTextView = (TextView) findViewById(R.id.appointmentDateTextView);
         mAppointmentListView = (ListView) findViewById(R.id.appointmentListView);
@@ -59,7 +59,7 @@ public class ViewAppointmentListActivity extends Activity
 
     private void setAppointmentList(String date) {
         MappDbHelper dbHelper = new MappDbHelper(this);
-        final Cursor cursor = DBUtil.getServProvAppointmentsCursor(dbHelper, LoginHolder.servLoginRef.getIdServiceProvider(), date);
+        final Cursor cursor = DBUtil.getServProvAppointmentsCursor(dbHelper, mServiceProv.getIdServiceProvider(), date);
         if (cursor.getCount() <= 0) {
             return;
         }
@@ -160,7 +160,7 @@ public class ViewAppointmentListActivity extends Activity
     }
 
     public void showDatePicker(View view) {
-        UIUtility.datePicker(view, mAppointmentDateTextView, this);
+        Utility.datePicker(view, mAppointmentDateTextView, this);
     }
 
     @Override

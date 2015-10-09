@@ -9,34 +9,40 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.SearchServProv;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 public class ServiceProviderHomeActivity extends Activity {
+
+    private ServiceProvider mServiceProv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
+        Intent intent = getIntent();
+        mServiceProv = intent.getParcelableExtra("service");
+
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +
-                LoginHolder.servLoginRef.getfName() + " " +
-                LoginHolder.servLoginRef.getlName();
+                mServiceProv.getfName() + " " +
+                mServiceProv.getlName();
 
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imageDoctor);
-        if(LoginHolder.servLoginRef.getImg() != null) {
-            img.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
+        if(mServiceProv.getImg() != null) {
+            img.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getImg()));
         }
     }
 
     public void viewAppointment(View view) {
         Intent intent = new Intent(this, ViewAppointmentListActivity.class);
+        intent.putExtra("service", mServiceProv);
         startActivity(intent);
     }
 
@@ -44,9 +50,10 @@ public class ServiceProviderHomeActivity extends Activity {
         MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
         if(SearchServProv.viewWorkPlaces(dbHelper)) {
             Intent intent = new Intent(this, ServProvProfileMain.class);
+            intent.putExtra("service", mServiceProv);
             startActivity(intent);
         } else {
-            UIUtility.showAlert(this, "", "Sorry, Some problem occurs in viewing profile.");
+            Utility.showAlert(this, "", "Sorry, Some problem occurs in viewing profile.");
         }
     }
 

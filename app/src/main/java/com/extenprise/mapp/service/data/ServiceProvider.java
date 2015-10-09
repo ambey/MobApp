@@ -33,29 +33,17 @@ public class ServiceProvider implements Parcelable {
         //links = new ArrayList<>();
     }
 
-    public byte[] getImg() {
-        return img;
-    }
-
-    public void setImg(byte[] img) {
-        this.img = img;
-    }
-
     public ServiceProvider(Parcel source) {
-        signInData = new SignInData();
-        services = new ArrayList<>();
         //links = new ArrayList<>();
 
         idServiceProvider = source.readInt();
         subscribed = source.readInt();
 
-        String[] fields = new String[9];
+        String[] fields = new String[7];
         int i = 0;
         source.readStringArray(fields);
         fName = fields[i++];
         lName = fields[i++];
-        signInData.setPhone(fields[i++]);
-        signInData.setPasswd(fields[i++]);
         emailId = fields[i++];
         gender = fields[i++];
         qualification = fields[i++];
@@ -64,10 +52,27 @@ public class ServiceProvider implements Parcelable {
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         try {
-            subsDate = sdf.parse(fields[i]);
+            if(fields[i] != null) {
+                subsDate = sdf.parse(fields[i]);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        signInData = new SignInData(source);
+        services = new ArrayList<>();
+        int count = source.readInt();
+        for(i = 0; i < count; i++) {
+            ServProvHasServPt s = new ServProvHasServPt(source);
+            services.add(s);
+        }
+    }
+
+    public byte[] getImg() {
+        return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
     }
 
     public String getRegNo() {
@@ -219,10 +224,18 @@ public class ServiceProvider implements Parcelable {
 
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
+        String subsDate = null;
+        if(this.subsDate != null) {
+            subsDate = sdf.format(this.subsDate);
+        }
         dest.writeStringArray(new String[]{
-                fName, lName, getPhone(), getPasswd(), emailId,
-                gender, qualification, regNo, sdf.format(subsDate)
+                fName, lName, emailId, gender, qualification, regNo, subsDate
         });
+        signInData.writeToParcel(dest, flags);
+        dest.writeInt(services.size());
+        for(ServProvHasServPt s : services) {
+            s.writeToParcel(dest, flags);
+        }
     }
 
     public static final Creator<ServiceProvider> CREATOR = new Creator<ServiceProvider>() {

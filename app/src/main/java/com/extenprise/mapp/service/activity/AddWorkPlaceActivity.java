@@ -29,14 +29,14 @@ import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.MappService;
+import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServProvHasService;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
@@ -181,20 +181,20 @@ public class AddWorkPlaceActivity extends Activity {
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
             mMultiSpinnerDays.setVisibility(View.GONE);
         } else {
-            //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+            //Utility.expandOrCollapse(mMultiSpinnerDays, "expand");
             mMultiSpinnerDays.setVisibility(View.VISIBLE);
         }
     }
 
     public void showWorkFields(View view) {
         if (mName.getVisibility() == View.VISIBLE) {
-            /*UIUtility.expandOrCollapse(mName, "");
-            UIUtility.expandOrCollapse(mLoc, "");
-            UIUtility.expandOrCollapse(mPhone1, "");
-            UIUtility.expandOrCollapse(mPhone2, "");
-            UIUtility.expandOrCollapse(mEmailId, "");
-            UIUtility.expandOrCollapse(mCity, "");
-            UIUtility.expandOrCollapse(mServPtType, "");*/
+            /*Utility.expandOrCollapse(mName, "");
+            Utility.expandOrCollapse(mLoc, "");
+            Utility.expandOrCollapse(mPhone1, "");
+            Utility.expandOrCollapse(mPhone2, "");
+            Utility.expandOrCollapse(mEmailId, "");
+            Utility.expandOrCollapse(mCity, "");
+            Utility.expandOrCollapse(mServPtType, "");*/
 
             mName.setVisibility(View.GONE);
             mLoc.setVisibility(View.GONE);
@@ -204,13 +204,13 @@ public class AddWorkPlaceActivity extends Activity {
             mCity.setVisibility(View.GONE);
             mServPtType.setVisibility(View.GONE);
         } else {
-            /*UIUtility.expandOrCollapse(mName, "expand");
-            UIUtility.expandOrCollapse(mLoc, "expand");
-            UIUtility.expandOrCollapse(mPhone1, "expand");
-            UIUtility.expandOrCollapse(mPhone2, "expand");
-            UIUtility.expandOrCollapse(mEmailId, "expand");
-            UIUtility.expandOrCollapse(mCity, "expand");
-            UIUtility.expandOrCollapse(mServPtType, "expand");*/
+            /*Utility.expandOrCollapse(mName, "expand");
+            Utility.expandOrCollapse(mLoc, "expand");
+            Utility.expandOrCollapse(mPhone1, "expand");
+            Utility.expandOrCollapse(mPhone2, "expand");
+            Utility.expandOrCollapse(mEmailId, "expand");
+            Utility.expandOrCollapse(mCity, "expand");
+            Utility.expandOrCollapse(mServPtType, "expand");*/
             mName.setVisibility(View.VISIBLE);
             mLoc.setVisibility(View.VISIBLE);
             mPhone1.setVisibility(View.VISIBLE);
@@ -371,8 +371,8 @@ public class AddWorkPlaceActivity extends Activity {
         spsspt.getService().setSpeciality(mSpeciality.getSelectedItem().toString());
         spsspt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
-        spsspt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
-        spsspt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
+        spsspt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+        spsspt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
         spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
         spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         spsspt.setServicePoint(spt);
@@ -462,7 +462,7 @@ public class AddWorkPlaceActivity extends Activity {
 
         String category = mServCatagory.getSelectedItem().toString();
         if (category.equalsIgnoreCase("Select Category")) {
-            //UIUtility.showAlert(this, "", "Please select service category.");
+            //Utility.showAlert(this, "", "Please select service category.");
             View selectedView = mServCatagory.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
                 TextView selectedTextView = (TextView) selectedView;
@@ -475,7 +475,7 @@ public class AddWorkPlaceActivity extends Activity {
 
         String spec = mSpeciality.getSelectedItem().toString();
         if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
-            //UIUtility.showAlert(this, "", "Please select speciality.");
+            //Utility.showAlert(this, "", "Please select speciality.");
             View selectedView = mSpeciality.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
                 TextView selectedTextView = (TextView) selectedView;
@@ -552,7 +552,7 @@ public class AddWorkPlaceActivity extends Activity {
         }
         if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
                 !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
-            if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
+            if (Utility.getMinutes(mStartTime.getText().toString()) >= Utility.getMinutes(mEndTime.getText().toString())) {
                 mEndTime.setError(getString(R.string.error_endtime));
                 focusView = mEndTime;
                 valid = false;
@@ -642,7 +642,7 @@ public class AddWorkPlaceActivity extends Activity {
     }
 
     public void saveData(View view) {
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Utility.showProgress(this, mFormView, mProgressView, true);
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, BIND_AUTO_CREATE);
 
@@ -654,9 +654,9 @@ public class AddWorkPlaceActivity extends Activity {
 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
     }
 
@@ -771,15 +771,15 @@ public class AddWorkPlaceActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
             //Intent intent = new Intent(myActivity, LoginActivity.class);
             //startActivity(intent);
         }
 
         @Override
         protected void onCancelled() {
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
         }
     }
 */

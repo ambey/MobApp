@@ -33,7 +33,7 @@ public class WorkPlaceListItem implements Parcelable {
     }
 
     public WorkPlaceListItem(Parcel source) {
-        String[] fields = new String[5];
+        String[] fields = new String[12];
         signInData = new SignInData();
 
         source.readStringArray(fields);

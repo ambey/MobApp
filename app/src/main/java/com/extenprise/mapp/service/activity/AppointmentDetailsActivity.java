@@ -1,14 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,23 +14,9 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
-import com.extenprise.mapp.data.RxItem;
-import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.UIUtility;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,55 +53,50 @@ public class AppointmentDetailsActivity extends Activity {
 
         MappDbHelper dbHelper = new MappDbHelper(this);
         Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);
-        Customer customer = appointment.getCustomer();
+        Customer customer = new Customer(); //appointment.getCustomer();
 
-        String dateStr = appointment.getDateOfAppointment();
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        try {
-            Date date = sdf.parse(dateStr);
-            date.setTime(date.getTime() + appointment.getFromTime() * 60 * 1000);
-            if (date.after(today)) {
+        Date date = appointment.getDate();
+        date.setTime(date.getTime() + appointment.getFrom() * 60 * 1000);
+        if (date.after(today)) {
+            rxButton.setEnabled(false);
+            uploadRxButton.setEnabled(false);
+
+            rxButton.setBackgroundResource(R.drawable.inactive_button);
+            uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
+        } else if (date.before(today)) {
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            cal.setTime(date);
+            int apptDay = cal.get(Calendar.DAY_OF_MONTH);
+            if (apptDay != day) {
                 rxButton.setEnabled(false);
-                uploadRxButton.setEnabled(false);
+                uploadRxButton.setEnabled(true);
 
                 rxButton.setBackgroundResource(R.drawable.inactive_button);
-                uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
-            } else if (date.before(today)) {
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                cal.setTime(date);
-                int apptDay = cal.get(Calendar.DAY_OF_MONTH);
-                if (apptDay != day) {
-                    rxButton.setEnabled(false);
-                    uploadRxButton.setEnabled(true);
-
-                    rxButton.setBackgroundResource(R.drawable.inactive_button);
-                    uploadRxButton.setBackgroundResource(R.drawable.button);
-                } else {
-                    rxButton.setEnabled(true);
-                    uploadRxButton.setEnabled(true);
-
-                    rxButton.setBackgroundResource(R.drawable.button);
-                    uploadRxButton.setBackgroundResource(R.drawable.button);
-                }
+                uploadRxButton.setBackgroundResource(R.drawable.button);
             } else {
-                rxButton.setEnabled(false);
-                uploadRxButton.setEnabled(false);
+                rxButton.setEnabled(true);
+                uploadRxButton.setEnabled(true);
 
-                rxButton.setBackgroundResource(R.drawable.inactive_button);
-                uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
+                rxButton.setBackgroundResource(R.drawable.button);
+                uploadRxButton.setBackgroundResource(R.drawable.button);
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } else {
+            rxButton.setEnabled(false);
+            uploadRxButton.setEnabled(false);
+
+            rxButton.setBackgroundResource(R.drawable.inactive_button);
+            uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
         }
 
-        dateView.setText(dateStr);
+        dateView.setText(sdf.format(date));
         fNameView.setText(customer.getfName());
         lNameView.setText(customer.getlName());
         timeView.setText(String.format("%02d:%02d",
-                appointment.getFromTime() / 60, appointment.getFromTime() % 60));
+                appointment.getFrom() / 60, appointment.getFrom() % 60));
         genderView.setText(customer.getGender());
         ageView.setText("" + customer.getAge());
         wtView.setText(String.format("%.1f", customer.getWeight()));
@@ -136,11 +111,11 @@ public class AppointmentDetailsActivity extends Activity {
         mLastAppontId = -1;
         if(pastApponts != null) {
             Appointment lastAppont = pastApponts.get(pastApponts.size() - 1);
-            mLastAppontId = lastAppont.getId();
+            mLastAppontId = lastAppont.getIdAppointment();
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
             TextView idOthView = (TextView) pastAppontLayout.findViewById(R.id.appontIdTextView);
-            dateOthView.setText(lastAppont.getDateOfAppointment());
-            idOthView.setText("" + lastAppont.getId());
+            dateOthView.setText(sdf.format(lastAppont.getDate()));
+            idOthView.setText("" + lastAppont.getIdAppointment());
         } else {
             pastAppontLayout.setVisibility(View.INVISIBLE);
             TextView msgView = (TextView) findViewById(R.id.viewMsg);
@@ -209,7 +184,7 @@ public class AppointmentDetailsActivity extends Activity {
 
     private List<Appointment> getPastAppointments(Appointment appointment) {
         ArrayList<Appointment> othApponts = DBUtil.getOtherAppointments(new MappDbHelper(this),
-                appointment.getId());
+                appointment.getIdAppointment());
         Collections.sort(othApponts);
         int i = 0;
         boolean found = false;

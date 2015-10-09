@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -37,12 +36,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.MappService;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.util.EncryptUtil;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
@@ -53,9 +54,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class PatientSignUpActivity extends Activity {
+public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
-    private SignUpHandler mRespHandler = new SignUpHandler(this);
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
     private int mServiceAction;
 
     private LinearLayout mContLay;
@@ -230,7 +231,7 @@ public class PatientSignUpActivity extends Activity {
     }
 
     public void showDatePicker(View view) {
-        UIUtility.datePicker(view, mTextViewDOB);
+        Utility.datePicker(view, mTextViewDOB);
     }
 
     public void showImageUploadOptions(View view) {
@@ -375,7 +376,7 @@ public class PatientSignUpActivity extends Activity {
         if(!isValidInput()) {
             return;
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Utility.showProgress(this, mFormView, mProgressView, true);
         Intent intent = new Intent(this, MappService.class);
         mServiceAction = MappService.DO_SIGNUP;
         bindService(intent, mConnection, BIND_AUTO_CREATE);
@@ -397,7 +398,11 @@ public class PatientSignUpActivity extends Activity {
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-            bundle.putParcelable("customer", getSignUpData());
+            if(mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
+                bundle.putParcelable("signInData", getSignUpData().getSignInData());
+            } else {
+                bundle.putParcelable("customer", getSignUpData());
+            }
             Message msg = Message.obtain(null, mServiceAction);
             msg.replyTo = new Messenger(mRespHandler);
             msg.setData(bundle);
@@ -415,30 +420,21 @@ public class PatientSignUpActivity extends Activity {
         }
     };
 
-    private static class SignUpHandler extends Handler {
-        private PatientSignUpActivity mActivity;
-
-        public SignUpHandler(PatientSignUpActivity activity) {
-            mActivity = activity;
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if(action == MappService.DO_SIGNUP) {
+            signUpDone(data);
+            return true;
         }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MappService.DO_SIGNUP:
-                    mActivity.signUpDone(msg.getData());
-                    break;
-                case MappService.DO_PHONE_EXIST_CHECK:
-                    mActivity.phoneCheckComplete(msg.getData());
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
+        if(action == MappService.DO_PHONE_EXIST_CHECK) {
+            phoneCheckComplete(data);
+            return true;
         }
+        return false;
     }
 
     private void phoneCheckComplete(Bundle data) {
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
         if(!data.getBoolean("status")) {
             mEditTextCellphone.setError(getString(R.string.error_phone_registered));
@@ -448,16 +444,16 @@ public class PatientSignUpActivity extends Activity {
 
     private void signUpDone(Bundle data) {
         if(data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
     }
 
     private Customer getSignUpData() {
         Customer c = new Customer();
+        c.getSignInData().setPhone(mEditTextCellphone.getText().toString().trim());
         if(mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
-            c.setPhone(mEditTextCellphone.getText().toString().trim());
             return c;
         }
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
@@ -470,7 +466,7 @@ public class PatientSignUpActivity extends Activity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        c.setAge(UIUtility.getAge(mTextViewDOB.getText().toString().trim()));
+        c.setAge(Utility.getAge(mTextViewDOB.getText().toString().trim()));
         c.setEmailId(mEditTextCustomerEmail.getText().toString().trim());
         c.setGender(mSpinGender.getSelectedItem().toString().trim());
         float height = 0;
@@ -487,12 +483,12 @@ public class PatientSignUpActivity extends Activity {
             e.printStackTrace();
         }
         c.setWeight(weight);
-        c.setPasswd(EncryptUtil.encrypt(mEditTextPasswd.getText().toString()));
+        c.getSignInData().setPasswd(EncryptUtil.encrypt(mEditTextPasswd.getText().toString()));
         c.setLocation(mEditTextLoc.getText().toString().trim());
         c.setPincode(mEditTextPinCode.getText().toString().trim());
-        c.setCity(mSpinCity.getSelectedItem().toString());
-        c.setState(mSpinState.getSelectedItem().toString());
-        c.setCountry("India");
+        c.getCity().setCity(mSpinCity.getSelectedItem().toString());
+        c.getCity().setState(mSpinState.getSelectedItem().toString());
+        c.getCity().setCountry("India");
 
         return c;
     }
@@ -635,7 +631,7 @@ public class PatientSignUpActivity extends Activity {
             values.put(MappContract.Customer.COLUMN_NAME_FNAME, mEditTextCustomerFName.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_LNAME, mEditTextCustomerLName.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_DOB, mTextViewDOB.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_AGE, UIUtility.getAge(mTextViewDOB.getText().toString().trim()));
+            values.put(MappContract.Customer.COLUMN_NAME_AGE, Utility.getAge(mTextViewDOB.getText().toString().trim()));
             values.put(MappContract.Customer.COLUMN_NAME_EMAIL_ID, mEditTextCustomerEmail.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_GENDER, mSpinGender.getSelectedItem().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_WEIGHT, mEditTextWeight.getText().toString().trim());
@@ -647,9 +643,9 @@ public class PatientSignUpActivity extends Activity {
             values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mSpinCity.getSelectedItem().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mSpinState.getSelectedItem().toString().trim());
             /*if(!imgDecodableString.equals("") || imgDecodableString != null) {
-                values.put(MappContract.Customer.COLUMN_NAME_IMAGE, UIUtility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
+                values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
             }*/
-            values.put(MappContract.Customer.COLUMN_NAME_IMAGE, UIUtility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
+            values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
 
             //Bitmap bitmap = ((BitmapDrawable)mImgView.getDrawable()).getBitmap();
 
@@ -660,21 +656,21 @@ public class PatientSignUpActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
             /*Intent intent = new Intent(myActivity, LoginActivity.class);
             startActivity(intent);*/
         }
 
         @Override
         protected void onCancelled() {
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
         }
 
     }
 
     private void checkPhoneExistence() {
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Utility.showProgress(this, mFormView, mProgressView, true);
         mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);

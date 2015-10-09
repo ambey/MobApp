@@ -25,14 +25,11 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +42,6 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -54,20 +50,17 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.MappService;
-import com.extenprise.mapp.data.ServProvListItem;
 import com.extenprise.mapp.data.WorkPlaceListItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.service.ui.SearchResultListAdapter;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.SearchServProv;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
@@ -194,7 +187,7 @@ public class ServProvProfileMain extends Activity {
         mDocName.setText(LoginHolder.servLoginRef.getfName() + " " +
                 LoginHolder.servLoginRef.getlName());
         if(LoginHolder.servLoginRef.getImg() != null) {
-            mImgView.setImageBitmap(UIUtility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
         }
         mFname.setText(LoginHolder.servLoginRef.getfName());
         mLname.setText(LoginHolder.servLoginRef.getlName());
@@ -823,7 +816,7 @@ public class ServProvProfileMain extends Activity {
 
         String category = mServCatagory.getSelectedItem().toString();
         if (category.equalsIgnoreCase("Select Category")) {
-            //UIUtility.showAlert(this, "", "Please select service category.");
+            //Utility.showAlert(this, "", "Please select service category.");
             View selectedView = mServCatagory.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
                 TextView selectedTextView = (TextView) selectedView;
@@ -836,7 +829,7 @@ public class ServProvProfileMain extends Activity {
 
         String spec = mSpeciality.getSelectedItem().toString();
         if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
-            //UIUtility.showAlert(this, "", "Please select speciality.");
+            //Utility.showAlert(this, "", "Please select speciality.");
             View selectedView = mSpeciality.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
                 TextView selectedTextView = (TextView) selectedView;
@@ -913,7 +906,7 @@ public class ServProvProfileMain extends Activity {
         }
         if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
                 !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
-            if (UIUtility.getMinutes(mStartTime.getText().toString()) >= UIUtility.getMinutes(mEndTime.getText().toString())) {
+            if (Utility.getMinutes(mStartTime.getText().toString()) >= Utility.getMinutes(mEndTime.getText().toString())) {
                 mEndTime.setError(getString(R.string.error_endtime));
                 focusView = mEndTime;
                 valid = false;
@@ -948,8 +941,8 @@ public class ServProvProfileMain extends Activity {
         wpt.setPhone(mPhone1.getText().toString().trim());
         wpt.setAltPhone(mPhone2.getText().toString().trim());
         wpt.setEmailId(mEmailIdwork.getText().toString().trim());
-        wpt.setStartTime(UIUtility.getMinutes(mStartTime.getText().toString()));
-        wpt.setEndTime(UIUtility.getMinutes(mEndTime.getText().toString()));
+        wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+        wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
         wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
         wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         wpt.setServCatagory(mServCatagory.getSelectedItem().toString());
@@ -977,7 +970,7 @@ public class ServProvProfileMain extends Activity {
             return;
         }
         ServiceProvider sp = new ServiceProvider();
-        sp.setImg(UIUtility.getBytesFromBitmap(mImgView.getDrawingCache()));
+        sp.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
         sp.setfName(mFname.getText().toString());
         sp.setlName(mLname.getText().toString());
         sp.setPhone(mEmailID.getText().toString());
@@ -1121,7 +1114,7 @@ public class ServProvProfileMain extends Activity {
 
                 values = new ContentValues();
                 values.put(MappContract.Service.COLUMN_NAME_SERVICE_NAME, sps.getService().getSpeciality());
-                values.put(MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getServCatagory());
+                values.put(MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getCategory());
                 long idService = db.insert(MappContract.Service.TABLE_NAME, null, values);
 
                 values = new ContentValues();
@@ -1150,15 +1143,15 @@ public class ServProvProfileMain extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            UIUtility.showRegistrationAlert(myActivity, "", "Profile updated.");
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showRegistrationAlert(myActivity, "", "Profile updated.");
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
             //Intent intent = new Intent(myActivity, LoginActivity.class);
             //startActivity(intent);
         }
 
         @Override
         protected void onCancelled() {
-            UIUtility.showProgress(myActivity, mFormView, mProgressView, false);
+            Utility.showProgress(myActivity, mFormView, mProgressView, false);
         }
 
     }
@@ -1172,7 +1165,7 @@ public class ServProvProfileMain extends Activity {
 
     //////////////////////////////////////////Connection & handler////////////////////////////////////
     public void performAction() {
-        UIUtility.showProgress(this, mFormView, mProgressView, true);
+        Utility.showProgress(this, mFormView, mProgressView, true);
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
@@ -1251,31 +1244,31 @@ public class ServProvProfileMain extends Activity {
             mRegNo.setError("This Registration Number is already Registered.");
             mRegNo.requestFocus();
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
     }
 
     private void updateDone(Bundle data) {
         if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
+            Utility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
     }
 
     private void addWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
+            Utility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
     }
 
     private void removeWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Work Place Removed Successfully.");
+            Utility.showRegistrationAlert(this, "", "Work Place Removed Successfully.");
         }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgress(this, mFormView, mProgressView, false);
         unbindService(mConnection);
     }
 

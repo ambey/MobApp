@@ -21,30 +21,29 @@ public class ServProvHasServPt implements Parcelable {
     private int startTime; //as minutes
     private int endTime;//as minutes
     //private ArrayList<CustomerHistoryData> historyData;
-    private ArrayList<Appointment> appointment;
+    private ArrayList<Appointment> appointments;
     private ServicePoint servicePoint;
     private String servProvPhone;
 
     public ServProvHasServPt() {
         service = new Service();
-        appointment = new ArrayList<>();
+        appointments = new ArrayList<>();
     }
 
     public ServProvHasServPt(Parcel source) {
         service = new Service();
+        appointments = new ArrayList<>();
 
         idServProvHasServPt = source.readInt();
+        servProvPhone = source.readString();
         startTime = source.readInt();
         endTime = source.readInt();
         experience = source.readFloat();
         consultFee = source.readFloat();
-
-        String[] fields = new String[4];
-        source.readStringArray(fields);
-        servPointType = fields[0];
-        service.setServCatagory(fields[1]);
-        service.setSpeciality(fields[2]);
-        workingDays = fields[2];
+        servPointType = source.readString();
+        workingDays = source.readString();
+        service = new Service(source);
+        servicePoint = new ServicePoint(source);
     }
 
     public ServicePoint getServicePoint() {
@@ -135,13 +134,13 @@ public class ServProvHasServPt implements Parcelable {
         this.historyData = historyData;
     }*/
 
-   /* public ArrayList<Appointment> getAppointment() {
-        return appointment;
-    }*/
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
+    }
 
-   /* public void setAppointment(ArrayList<Appointment> appointment) {
-        this.appointment = appointment;
-    }*/
+    public void setAppointment(ArrayList<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 
     @Override
     public int describeContents() {
@@ -151,13 +150,15 @@ public class ServProvHasServPt implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(idServProvHasServPt);
+        dest.writeString(servProvPhone);
         dest.writeInt(startTime);
         dest.writeInt(endTime);
         dest.writeFloat(experience);
         dest.writeFloat(consultFee);
-        dest.writeStringArray(new String[]{
-                servPointType, service.getServCatagory(), service.getSpeciality(), workingDays
-        });
+        dest.writeString(servPointType);
+        dest.writeString(workingDays);
+        service.writeToParcel(dest, flags);
+        servicePoint.writeToParcel(dest, flags);
     }
 
     public static final Creator<ServProvHasServPt> CREATOR = new Creator<ServProvHasServPt>() {

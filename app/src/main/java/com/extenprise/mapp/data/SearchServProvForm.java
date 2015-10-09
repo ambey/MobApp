@@ -12,6 +12,7 @@ public class SearchServProvForm implements Parcelable {
     private String name;
     private String clinic;
     private String location;
+    private String category;
     private String speciality;
     private String qualification;
     private String experience;
@@ -25,13 +26,14 @@ public class SearchServProvForm implements Parcelable {
     }
 
     public SearchServProvForm(Parcel source) {
-        String[] fields = new String[11];
+        String[] fields = new String[parcelStringArray().length];
 
         source.readStringArray(fields);
         int count = 0;
         name = fields[count++];
         clinic = fields[count++];
         location = fields[count++];
+        category = fields[count++];
         speciality = fields[count++];
         qualification = fields[count++];
         experience = fields[count++];
@@ -65,6 +67,14 @@ public class SearchServProvForm implements Parcelable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getSpeciality() {
@@ -138,8 +148,7 @@ public class SearchServProvForm implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {name, clinic, location, speciality, qualification, experience,
-        startTime, endTime, workDays, consultFee, gender});
+        dest.writeStringArray(parcelStringArray());
     }
 
     public static final Creator<SearchServProvForm> CREATOR = new Creator<SearchServProvForm>() {
@@ -154,4 +163,9 @@ public class SearchServProvForm implements Parcelable {
             return new SearchServProvForm[size];
         }
     };
+
+    private String[] parcelStringArray() {
+        return new String[] {name, clinic, location, category, speciality, qualification, experience,
+                startTime, endTime, workDays, consultFee, gender};
+    }
 }

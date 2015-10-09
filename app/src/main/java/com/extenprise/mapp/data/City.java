@@ -1,9 +1,12 @@
 package com.extenprise.mapp.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ambey on 21/9/15.
  */
-public class City {
+public class City implements Parcelable {
     private int idCity;
     private String city;
     private String state;
@@ -12,6 +15,13 @@ public class City {
     public City() {
         country = "India";
         state = "Maharashtra";
+    }
+
+    public City(Parcel source) {
+        idCity = source.readInt();
+        city = source.readString();
+        state = source.readString();
+        country = source.readString();
     }
 
     public String getCountry() {
@@ -45,4 +55,28 @@ public class City {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idCity);
+        dest.writeString(city);
+        dest.writeString(state);
+        dest.writeString(country);
+    }
+    public static final Creator<City> CREATOR = new Creator<City>() {
+        @Override
+        public City createFromParcel(Parcel source) {
+            return new City(source);
+        }
+
+        @Override
+        public City[] newArray(int size) {
+            return new City[size];
+        }
+    };
 }

@@ -17,19 +17,17 @@ public class ServicePoint implements Parcelable {
     private String altPhone;
     private String emailId;
     private City city;
-    private ArrayList<Integer> idServices;
+    //private ArrayList<Integer> idServices;
 
     public ServicePoint() {
-        idServices = new ArrayList<>();
+        //idServices = new ArrayList<>();
         city = new City();
     }
 
     public ServicePoint(Parcel source) {
         idServicePoint = source.readInt();
-        String[] fields = new String[8];
+        String[] fields = new String[5];
         source.readStringArray(fields);
-
-        city = new City();
 
         int i = 0;
         name = fields[i++];
@@ -37,9 +35,7 @@ public class ServicePoint implements Parcelable {
         phone = fields[i++];
         altPhone = fields[i++];
         emailId = fields[i++];
-        city.setCity(fields[i++]);
-        city.setState(fields[i++]);
-        city.setCountry(fields[i]);
+        city = new City(source);
     }
 
     public String getPincode() {
@@ -51,19 +47,23 @@ public class ServicePoint implements Parcelable {
     }
 
     public boolean addSpsspt(int idService) {
+/*
         if (idServices == null) {
             idServices = new ArrayList<>();
         }
         return this.idServices.add(idService);
+*/
+        return true;
     }
 
     public boolean addService(int idService) {
-        return idServices.add(idService);
+        //return idServices.add(idService);
+        return true;
     }
 
     public int getServiceId(int position) {
         try {
-            return idServices.get(position);
+            //return idServices.get(position);
         } catch (IndexOutOfBoundsException x) {
             x.printStackTrace();
         }
@@ -71,11 +71,12 @@ public class ServicePoint implements Parcelable {
     }
 
     public ArrayList<Integer> getServices() {
-        return idServices;
+        //return idServices;
+        return null;
     }
 
     public void setSpsspt(ArrayList<Integer> idServices) {
-        this.idServices = idServices;
+        //this.idServices = idServices;
     }
 
     public int getIdServicePoint() {
@@ -143,9 +144,9 @@ public class ServicePoint implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(idServicePoint);
         dest.writeStringArray(new String[] {
-                name, location, phone, altPhone,
-                emailId, city.getCity(), city.getState(), city.getCountry()
+                name, location, phone, altPhone, emailId
         });
+        city.writeToParcel(dest, flags);
     }
 
     public static final Creator<ServicePoint> CREATOR = new Creator<ServicePoint>() {

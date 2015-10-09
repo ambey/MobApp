@@ -267,7 +267,7 @@
         </activity>
 
         <service
-            android:name="com.extenprise.mapp.activity.MappService"
+            android:name=".net.MappService"
             android:enabled="true"
             android:exported="true">
         </service>

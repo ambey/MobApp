@@ -26,12 +26,12 @@ public abstract class DBUtil {
         String query = getSelectClauseForAppointment() + " where ";
 
         String[] args = null;
-        if (serviceProvId != 1 || date != null) {
+        if (serviceProvId != -1 || date != null) {
             ArrayList<String> argList = new ArrayList<>();
             if (serviceProvId != -1) {
                 argList.add("" + serviceProvId);
                 query += MappContract.Appointment.TABLE_NAME + "." +
-                        MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV + "=? and ";
+                        MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV_SERV_PT + "=? and ";
             }
             if (date != null) {
                 argList.add(date);
@@ -57,9 +57,9 @@ public abstract class DBUtil {
             do {
                 cursor.moveToNext();
                 Appointment appointment = new Appointment();
-                appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
-                appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-                appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.TABLE_NAME + "." +
+                appointment.setFrom(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+                //appointment.setDate(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+                appointment.setIdAppointment(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.TABLE_NAME + "." +
                         MappContract.Appointment._ID)));
                 Customer customer = new Customer();
                 customer.setIdCustomer(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.TABLE_NAME + "." +
@@ -70,8 +70,8 @@ public abstract class DBUtil {
                 customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
                 customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
                 customer.setAge(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE)));
-                customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
-                appointment.setCustomer(customer);
+                customer.getSignInData().setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
+                appointment.setIdCustomer(customer.getIdCustomer());
                 appointments.add(appointment);
             } while (!cursor.isLast());
         }
@@ -103,9 +103,9 @@ public abstract class DBUtil {
         if (cursor.getCount() > 0) {
             cursor.moveToNext();
             appointment = new Appointment();
-            appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
-            appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-            appointment.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+            appointment.setFrom(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+            //appointment.setDate(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+            appointment.setIdAppointment(cursor.getInt(cursor.getColumnIndex("_id")));
             Customer customer = new Customer();
             customer.setIdCustomer(cursor.getInt(cursor.getColumnIndex("CUST_ID")));
             customer.setGender(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_GENDER)));
@@ -114,8 +114,8 @@ public abstract class DBUtil {
             customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
             customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
             customer.setAge(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE)));
-            customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
-            appointment.setCustomer(customer);
+            customer.getSignInData().setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
+            appointment.setIdCustomer(customer.getIdCustomer());
         }
         cursor.close();
         return appointment;
@@ -134,7 +134,7 @@ public abstract class DBUtil {
             args = new String[1];
             args[0] = "" + serviceProvId;
 
-            selection = MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV + "<>?";
+            selection = MappContract.Appointment.COLUMN_NAME_ID_SERV_PROV_SERV_PT + "<>?";
         }
 
         return db.query(MappContract.Appointment.TABLE_NAME, projection, selection
@@ -148,9 +148,9 @@ public abstract class DBUtil {
             do {
                 cursor.moveToNext();
                 Appointment appointment = new Appointment();
-                appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
-                appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-                appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
+                appointment.setFrom(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+                //appointment.setDate(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+                appointment.setIdAppointment(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
                 appointments.add(appointment);
             } while (!cursor.isLast());
         }
@@ -181,9 +181,9 @@ public abstract class DBUtil {
             do {
                 cursor.moveToNext();
                 Appointment appointment = new Appointment();
-                appointment.setFromTime(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
-                appointment.setDateOfAppointment(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
-                appointment.setId(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
+                appointment.setFrom(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_FROM_TIME)));
+                //appointment.setDate(cursor.getString(cursor.getColumnIndex(MappContract.Appointment.COLUMN_NAME_DATE)));
+                appointment.setIdAppointment(cursor.getInt(cursor.getColumnIndex(MappContract.Appointment._ID)));
                 appointments.add(appointment);
             } while (!cursor.isLast());
         }
@@ -220,7 +220,7 @@ public abstract class DBUtil {
             customer.setIdCustomer(custId);
             customer.setfName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_FNAME)));
             customer.setlName(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_LNAME)));
-            customer.setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
+            customer.getSignInData().setPhone(cursor.getString(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_CELLPHONE)));
             customer.setAge(cursor.getInt(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_AGE)));
             customer.setWeight(cursor.getFloat(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_WEIGHT)));
             customer.setHeight(cursor.getFloat(cursor.getColumnIndex(MappContract.Customer.COLUMN_NAME_HEIGHT)));
@@ -286,6 +286,14 @@ public abstract class DBUtil {
         return db.delete(MappContract.Prescription.TABLE_NAME, MappContract.Prescription.COLUMN_NAME_ID_RX + "=?", args);
     }
 
+    public static Cursor getSpecialityList(MappDbHelper dbHelper, String category) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selection = MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY + "=?";
+        String[] args = {category};
+        return db.query(MappContract.Service.TABLE_NAME, new String[] {MappContract.Service.COLUMN_NAME_SERVICE_NAME},
+                selection, args,null,null,null);
+    }
+
     public static void setSpecOfCategory(Context activity, MappDbHelper dbHelper, String servCategory, Spinner speciality) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -322,7 +330,6 @@ public abstract class DBUtil {
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_FROM_TIME + ", " +
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_FROM_TIME_STR + ", " +
                 MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_TO_TIME + ", " +
-                MappContract.Appointment.TABLE_NAME + "." + MappContract.Appointment.COLUMN_NAME_SERVICE_POINT_TYPE + ", " +
 
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer._ID + " AS CUST_ID, " +
                 MappContract.Customer.TABLE_NAME + "." + MappContract.Customer.COLUMN_NAME_FNAME + ", " +

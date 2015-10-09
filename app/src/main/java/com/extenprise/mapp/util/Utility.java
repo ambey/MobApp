@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -33,7 +35,7 @@ import java.util.GregorianCalendar;
 /**
  * Created by ambey on 23/7/15.
  */
-public abstract class UIUtility {
+public abstract class Utility {
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -123,30 +125,6 @@ public abstract class UIUtility {
     }
 
     public static boolean findDocAvailability(String availDays, Calendar calendar) {
-        //Calendar calendar = Calendar.getInstance();
-        /*int day = calendar.get(Calendar.DAY_OF_WEEK);
-        int weekOffDay = 1; // for sunday
-        boolean flag = false;
-
-        if (weekOff.equalsIgnoreCase("Monday")) {
-            weekOffDay = 2;
-        } else if (weekOff.equalsIgnoreCase("Tuesday")) {
-            weekOffDay = 3;
-        } else if (weekOff.equalsIgnoreCase("Wednesday")) {
-            weekOffDay = 4;
-        } else if (weekOff.equalsIgnoreCase("Thursday")) {
-            weekOffDay = 5;
-        } else if (weekOff.equalsIgnoreCase("Friday")) {
-            weekOffDay = 6;
-        } else if (weekOff.equalsIgnoreCase("Saturday")) {
-            weekOffDay = 7;
-        }
-
-        if (weekOffDay != day) {
-            flag = true;
-        }
-        return flag;*/
-
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         String searchDay = "Sunday";
         if (day == 2) {
@@ -330,5 +308,4 @@ public abstract class UIUtility {
     public static Bitmap getBitmapFromBytes(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
-
 }

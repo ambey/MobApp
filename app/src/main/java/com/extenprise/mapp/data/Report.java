@@ -54,6 +54,6 @@ public class Report implements Parcelable {
         dest.writeStringArray(new String[]{
                 id, type, date
         });
-        dest.writeInt(appointment.getId());
+        dest.writeInt(appointment.getIdAppointment());
     }
 }

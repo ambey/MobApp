@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.Calendar;
 
@@ -25,7 +25,7 @@ public class SearchResult extends Activity {
         ServProvHasServPt spsspt = LoginHolder.spsspt;
         mImageViewAvailable = (ImageView)findViewById(R.id.imageViewAvailability);
 
-        if(UIUtility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
+        if(Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
             mImageViewAvailable.setImageResource(R.drawable.g_circle);
         } else {
             mImageViewAvailable.setImageResource(R.drawable.r_circle);

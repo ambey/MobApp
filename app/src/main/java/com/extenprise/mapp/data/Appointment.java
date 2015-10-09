@@ -7,9 +7,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.service.data.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,25 +14,87 @@ import java.util.Date;
 
 
 public class Appointment implements Comparable<Appointment>, Parcelable {
-    private int id;
-    private String servPointType;
-    private String date;
-    private int fromTime; //as minutes
-    private int toTime;//as minutes
-    private ServProvHasServPt service;
-    private Customer customer;
+    private int idAppointment;
+    private Date date;
+    private int from; //as minutes
+    private int to;//as minutes
+    private int idServProvHasServPt;
+    private int idCustomer;
     private ArrayList<Report> reports;
 
     public Appointment() {
-        reports = new ArrayList<>();
     }
 
-    public int getId() {
-        return id;
+    public Appointment(Parcel source) {
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+
+        idAppointment = source.readInt();
+        try {
+            date = sdf.parse(source.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        from = source.readInt();
+        to = source.readInt();
+        idServProvHasServPt = source.readInt();
+        idCustomer = source.readInt();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getIdAppointment() {
+        return idAppointment;
+    }
+
+    public void setIdAppointment(int idAppointment) {
+        this.idAppointment = idAppointment;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getFrom() {
+        return from;
+    }
+
+    public void setFrom(int from) {
+        this.from = from;
+    }
+
+    public int getTo() {
+        return to;
+    }
+
+    public void setTo(int to) {
+        this.to = to;
+    }
+
+    public int getIdServProvHasServPt() {
+        return idServProvHasServPt;
+    }
+
+    public void setIdServProvHasServPt(int idServProvHasServPt) {
+        this.idServProvHasServPt = idServProvHasServPt;
+    }
+
+    public int getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(int idCustomer) {
+        this.idCustomer = idCustomer;
+    }
+
+    public ArrayList<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(ArrayList<Report> reports) {
+        this.reports = reports;
     }
 
     public boolean addReport(Report report) {
@@ -46,61 +105,13 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         return reports.size();
     }
 
-    public String getServPointType() {
-        return servPointType;
-    }
-
-    public void setServPointType(String servPointType) {
-        this.servPointType = servPointType;
-    }
-
-    public String getDateOfAppointment() {
-        return date;
-    }
-
-    public void setDateOfAppointment(String dateOfAppointment) {
-        this.date = dateOfAppointment;
-    }
-
-    public int getFromTime() {
-        return fromTime;
-    }
-
-    public void setFromTime(int fromTime) {
-        this.fromTime = fromTime;
-    }
-
-    public int getToTime() {
-        return toTime;
-    }
-
-    public void setToTime(int toTime) {
-        this.toTime = toTime;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     @Override
     public int compareTo(@NonNull Appointment another) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            Date thisDate = sdf.parse(this.getDateOfAppointment());
-            Date otherDate = sdf.parse(another.getDateOfAppointment());
-            int compareValue = thisDate.compareTo(otherDate);
-            if (compareValue == 0) {
-                return (this.getFromTime() - another.getFromTime());
-            }
-            return compareValue;
-        } catch (ParseException e) {
-            e.printStackTrace();
+        int compareValue = date.compareTo(another.getDate());
+        if (compareValue == 0) {
+            return (this.getFrom() - another.getFrom());
         }
-        return 0;
+        return compareValue;
     }
 
     @Override
@@ -110,21 +121,26 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(fromTime);
-        dest.writeInt(toTime);
-        dest.writeStringArray(new String[] {
-                servPointType, date
-        });
-        if(customer != null) {
-            dest.writeInt(customer.getIdCustomer());
-        } else {
-            dest.writeInt(-1);
-        }
-        if(service != null) {
-            dest.writeInt(service.getIdServProvHasServPt());
-        } else {
-            dest.writeInt(-1);
-        }
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        dest.writeInt(idAppointment);
+        dest.writeString(sdf.format(date));
+        dest.writeInt(from);
+        dest.writeInt(to);
+        dest.writeInt(idServProvHasServPt);
+        dest.writeInt(idCustomer);
     }
+
+    public static final Creator<Appointment> CREATOR = new Creator<Appointment>() {
+
+        @Override
+        public Appointment createFromParcel(Parcel source) {
+            return new Appointment(source);
+        }
+
+        @Override
+        public Appointment[] newArray(int size) {
+            return new Appointment[size];
+        }
+    };
 }

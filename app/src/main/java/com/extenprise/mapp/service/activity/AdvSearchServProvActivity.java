@@ -4,8 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,13 +25,21 @@ import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.SearchServProvForm;
+import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.util.DBUtil;
-import com.extenprise.mapp.util.UIUtility;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.Calendar;
 
-public class AdvSearchServProvActivity extends Activity {
+public class AdvSearchServProvActivity extends Activity implements ResponseHandler {
+
+    private SearchServProvForm mForm;
+    private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
 
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
     private EditText mDrClinicName;
@@ -65,14 +80,11 @@ public class AdvSearchServProvActivity extends Activity {
         mSearchFormView = findViewById(R.id.advSearchForm);
         mProgressView = findViewById(R.id.search_progress);
 
-        if (LoginHolder.spsspt != null) {
-            mLocation.setText(LoginHolder.spsspt.getServicePoint().getLocation());
-            //mSpeciality.setSelection(LoginHolder.spsspt.getServProvHasService().getService().getSpeciality());
-            //mSpeciality.setSelection();
-            mSpeciality.setSelection(UIUtility.getSpinnerIndex(mSpeciality, LoginHolder.spsspt.getService().getSpeciality()));
-            mServProvCategory.setSelection(UIUtility.getSpinnerIndex(mServProvCategory, LoginHolder.spsspt.getService().getServCatagory()));
-            mDrClinicName.setText(LoginHolder.spsspt.getServicePoint().getName());
-        }
+        mForm = getIntent().getParcelableExtra("form");
+        mLocation.setText(mForm.getLocation());
+        mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
+        mServProvCategory.setSelection(Utility.getSpinnerIndex(mServProvCategory, mForm.getCategory()));
+        mDrClinicName.setText(mForm.getName());
 
         mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
@@ -109,12 +121,12 @@ public class AdvSearchServProvActivity extends Activity {
 
     public void showGenderField(View view) {
         if (mGender.getVisibility() == View.VISIBLE) {
-            //UIUtility.expandOrCollapse(mGender, "");
+            //Utility.expandOrCollapse(mGender, "");
             mGender.setVisibility(View.GONE);
             view.setBackgroundResource(R.drawable.label);
 
         } else {
-            //UIUtility.expandOrCollapse(mGender, "expand");
+            //Utility.expandOrCollapse(mGender, "expand");
             mGender.setVisibility(View.VISIBLE);
             view.setBackgroundResource(R.drawable.spinner);
         }
@@ -122,16 +134,36 @@ public class AdvSearchServProvActivity extends Activity {
 
     public void showDaysField(View view) {
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
-            //UIUtility.expandOrCollapse(mMultiSpinnerDays, "");
+            //Utility.expandOrCollapse(mMultiSpinnerDays, "");
             mMultiSpinnerDays.setVisibility(View.GONE);
             view.setBackgroundResource(R.drawable.label);
         } else {
-            //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
+            //Utility.expandOrCollapse(mMultiSpinnerDays, "expand");
             mMultiSpinnerDays.setVisibility(View.VISIBLE);
             view.setBackgroundResource(R.drawable.spinner);
         }
     }
 
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if(action == MappService.DO_SEARCH_SERV_PROV) {
+            searchDone(data);
+            return true;
+        }
+        return false;
+    }
+
+    private void searchDone(Bundle data) {
+        Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        unbindService(mConnection);
+        boolean success = data.getBoolean("status");
+        if (success) {
+            Intent intent = new Intent(this, SearchServProvResultActivity.class);
+            intent.putParcelableArrayListExtra("servProvList", data.getParcelableArrayList("servProvList"));
+            intent.putExtra("parent-activity", this.getClass());
+            startActivity(intent);
+        }
+    }
 
 
     /*private void setSpecs(ArrayList<String> specs) {
@@ -317,7 +349,7 @@ public class AdvSearchServProvActivity extends Activity {
         String exp = mExperience.getText().toString().trim();
         String startTime = mButtonStartTime.getText().toString();
         String endTime = mButttonEndTime.getText().toString();
-        //String availDay = UIUtility.getCommaSepparatedString(selectedDays);
+        //String availDay = Utility.getCommaSepparatedString(selectedDays);
 
         String availDay = mMultiSpinnerDays.getText().toString();
         if (availDay.equalsIgnoreCase("Select Days")) {
@@ -333,7 +365,7 @@ public class AdvSearchServProvActivity extends Activity {
 
         if (!(endTime.equals("")) &&
                 !(startTime.equals(""))) {
-            if (UIUtility.getMinutes(startTime) >= UIUtility.getMinutes(endTime)) {
+            if (Utility.getMinutes(startTime) >= Utility.getMinutes(endTime)) {
                 mButttonEndTime.setError("End Time Can't be similar or less than to Start Time.");
                 focusView = mButttonEndTime;
                 focusView.requestFocus();
@@ -350,13 +382,61 @@ public class AdvSearchServProvActivity extends Activity {
                 }
             }
         }
-        UIUtility.showProgress(this, mSearchFormView, mProgressView, true);
+
+        mForm.setClinic(clinic);
+        mForm.setName(name);
+        mForm.setStartTime(startTime);
+        mForm.setEndTime(endTime);
+        mForm.setConsultFee(consultFee);
+        mForm.setWorkDays(availDay);
+        mForm.setExperience(exp);
+        mForm.setGender(gender);
+        mForm.setQualification(qualification);
+        mForm.setCategory(sc);
+        mForm.setSpeciality(sp);
+        mForm.setLocation(loc);
+
+        Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        intent.putExtra("form", mForm);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
         mSearchTask.execute((Void) null);
 */
     }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        private Messenger mService;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("form", mForm);
+            Message msg = Message.obtain(null, MappService.DO_SEARCH_SERV_PROV);
+            msg.replyTo = new Messenger(mResponseHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
 
 /*
     public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
@@ -398,7 +478,7 @@ public class AdvSearchServProvActivity extends Activity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mSearchTask = null;
-            UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
+            Utility.showProgress(mActivity, mSearchFormView, mProgressView, false);
 
             if (success) {
                 Intent intent = new Intent(mActivity, SearchServProvResultActivity.class);
@@ -409,14 +489,14 @@ public class AdvSearchServProvActivity extends Activity {
 /*Intent intent = new Intent(mActivity, AdvSearchServProvActivity.class);
                     startActivity(intent);*//*
 
-                UIUtility.showAlert(mActivity, "","Sorry, No result matches to your criteria!");
+                Utility.showAlert(mActivity, "","Sorry, No result matches to your criteria!");
             }
         }
 
         @Override
         protected void onCancelled() {
             mSearchTask = null;
-            UIUtility.showProgress(mActivity, mSearchFormView, mProgressView, false);
+            Utility.showProgress(mActivity, mSearchFormView, mProgressView, false);
         }
     }
 */
