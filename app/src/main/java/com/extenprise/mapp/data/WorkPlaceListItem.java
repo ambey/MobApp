@@ -10,6 +10,7 @@ import com.extenprise.mapp.service.data.Service;
  */
 public class WorkPlaceListItem implements Parcelable {
 
+    private SignInData signInData;
     private String name;
     private String location;
     private String pincode;
@@ -28,10 +29,12 @@ public class WorkPlaceListItem implements Parcelable {
     private int endTime;//as minutes
 
     public WorkPlaceListItem() {
+        signInData = new SignInData();
     }
 
     public WorkPlaceListItem(Parcel source) {
         String[] fields = new String[5];
+        signInData = new SignInData();
 
         source.readStringArray(fields);
         int count = 0;
@@ -46,6 +49,8 @@ public class WorkPlaceListItem implements Parcelable {
         servPointType = fields[count++];
         servCatagory = fields[count++];
         qualification = fields[count++];
+        signInData.setPhone(fields[count++]);
+        signInData.setPasswd(fields[count++]);
         workingDays = fields[count];
 
         experience = source.readFloat();
@@ -53,6 +58,7 @@ public class WorkPlaceListItem implements Parcelable {
         endTime = source.readInt();
         consultFee = source.readFloat();
     }
+
 
     @Override
     public int describeContents() {
@@ -208,5 +214,13 @@ public class WorkPlaceListItem implements Parcelable {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public SignInData getSignInData() {
+        return signInData;
+    }
+
+    public void setSignInData(SignInData signInData) {
+        this.signInData = signInData;
     }
 }

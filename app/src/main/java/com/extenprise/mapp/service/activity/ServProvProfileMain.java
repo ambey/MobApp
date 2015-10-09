@@ -81,6 +81,7 @@ import java.util.Calendar;
 
 public class ServProvProfileMain extends Activity {
 
+    private int mServiceAction;
     private UpdateHandler mResponseHandler = new UpdateHandler(this);
     private ArrayList<WorkPlaceListItem> mWorkPlaceList;
     private WorkPlaceListItem mSelectedItem;
@@ -121,7 +122,6 @@ public class ServProvProfileMain extends Activity {
     protected boolean[] selections = new boolean[options.length];
     //String []selectedDays = new String[_options.length];
     private String selectedDays;
-    private String submit = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +129,6 @@ public class ServProvProfileMain extends Activity {
         setContentView(R.layout.activity_serv_prov_profile_main);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        submit = "profile";
         mFormView = findViewById(R.id.updateServProvform);
         mProgressView = findViewById(R.id.progressView);
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
@@ -158,6 +157,15 @@ public class ServProvProfileMain extends Activity {
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
+
+        mRegNo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    checkRegNoExistence();
+                }
+            }
+        });
     }
 
     @Override
@@ -208,11 +216,6 @@ public class ServProvProfileMain extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedItem = mWorkPlaceList.get(position);
-                UIUtility.showProgress(view.getContext(), mFormView, mProgressView, true);
-                Intent intent = new Intent(view.getContext(), MappService.class);
-                bindService(intent, mConnection, 0);
-
             }
         });
         listView.setAdapter(adapter);
@@ -323,9 +326,9 @@ public class ServProvProfileMain extends Activity {
             //adapter.removeItem(adapter.getItem(position));
             //adapter.remove(item);
             //item.getActionView().setVisibility(View.GONE);
-            submit = "Remove";
+            mServiceAction = MappService.REMOVE_WORK_PLACE;
             mSelectedItem = mWorkPlaceList.get(item.getItemId());
-            saveData();
+            performAction();
             //adapter.notifyDataSetChanged();
             return true;
         }
@@ -789,6 +792,7 @@ public class ServProvProfileMain extends Activity {
                     openSpecDialog();
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
@@ -956,16 +960,8 @@ public class ServProvProfileMain extends Activity {
         wpt.setQualification(mQualification.getText().toString().trim());
 
         mSelectedItem = wpt;
-        submit = "Work Place";
-        saveData();
-    }
-
-    private void addWorkPlaceDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
-        }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
+        mServiceAction = MappService.ADD_WORK_PLACE;
+        performAction();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -975,14 +971,6 @@ public class ServProvProfileMain extends Activity {
 
 
     //////////////////////////////////////////Update Profile///////////////////////////////////
-
-    private void updateDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            UIUtility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
-        }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
-    }
 
     public void updateProfile(View view) {
         if(!isValidInput()) {
@@ -996,9 +984,36 @@ public class ServProvProfileMain extends Activity {
         sp.setGender(mGenderBtn.getText().toString());
         sp.setRegNo(mRegNo.getText().toString());
 
-        submit = "profile";
+        for(WorkPlaceListItem wp: mWorkPlaceList) {
+            LoginHolder.servLoginRef.setQualification(wp.getQualification());
+            //LoginHolder.servLoginRef.setGender(mGender.getSelectedItem().toString());
+
+            ServicePoint spt = new ServicePoint();
+            ServProvHasServPt spsspt = new ServProvHasServPt();
+
+            spt.setName(wp.getName());
+            spt.setLocation(wp.getLocation());
+            spt.getCity().setCity(wp.getCity());
+            spt.setPhone(wp.getPhone());
+            spt.setAltPhone(wp.getAltPhone());
+            spt.setEmailId(wp.getEmailId());
+
+            spsspt.getService().setSpeciality(wp.getSpeciality());
+            spsspt.setExperience(wp.getExperience());
+            spsspt.setServPointType(wp.getServPointType());
+            spsspt.setStartTime(wp.getStartTime());
+            spsspt.setEndTime(wp.getEndTime());
+            spsspt.setWorkingDays(wp.getWorkingDays());
+            spsspt.setConsultFee(wp.getConsultFee());
+            spsspt.setServicePoint(spt);
+
+            LoginHolder.servLoginRef.addServProvHasServPt(spsspt);
+            int count = LoginHolder.servLoginRef.getServiceCount() + 1;
+        }
+
+        mServiceAction = MappService.DO_UPDATE;
         LoginHolder.servLoginRef = sp;
-        saveData();
+        performAction();
         /*SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);*/
     }
@@ -1053,13 +1068,9 @@ public class ServProvProfileMain extends Activity {
         return true;
     }
 
-    public void regNoCheckDone(Bundle data) {
-        if(data.getBoolean("exists")) {
-            mRegNo.setError("This Registration Number is already Registered.");
-            mRegNo.requestFocus();
-        }
-        UIUtility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
+    public void checkRegNoExistence() {
+        mServiceAction = MappService.DO_REG_NO_CHECK;
+        performAction();
     }
 
     class SaveServiceData extends AsyncTask<Void, Void, Void> {
@@ -1160,7 +1171,7 @@ public class ServProvProfileMain extends Activity {
 
 
     //////////////////////////////////////////Connection & handler////////////////////////////////////
-    public void saveData() {
+    public void performAction() {
         UIUtility.showProgress(this, mFormView, mProgressView, true);
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, BIND_AUTO_CREATE);
@@ -1177,23 +1188,19 @@ public class ServProvProfileMain extends Activity {
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
+            mSelectedItem.setSignInData(LoginHolder.servLoginRef.getSignInData());
             mService = new Messenger(service);
             mBound = true;
             Message msg = null;
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-
-            if(submit.equals("Work Place")) {
-                bundle.putParcelable("service", mSelectedItem);
-                msg = Message.obtain(null, MappService.ADD_WORK_PLACE);
-            } else if(submit.equals("Remove")) {
-                bundle.putParcelable("service", mSelectedItem);
-                msg = Message.obtain(null, MappService.REMOVE_WORK_PLACE);
-            } else {
+            if(mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
                 bundle.putString("regno", mRegNo.getText().toString().trim());
                 bundle.putParcelable("service", LoginHolder.servLoginRef);
-                msg = Message.obtain(null, MappService.DO_UPDATE);
+            } else {
+                bundle.putParcelable("service", mSelectedItem);
             }
+            msg = Message.obtain(null, mServiceAction);
             msg.replyTo = new Messenger(mResponseHandler);
             msg.setData(bundle);
 
@@ -1224,6 +1231,9 @@ public class ServProvProfileMain extends Activity {
                 case MappService.ADD_WORK_PLACE:
                     mActivity.addWorkPlaceDone(msg.getData());
                     break;
+                case MappService.REMOVE_WORK_PLACE:
+                    mActivity.removeWorkPlaceDone(msg.getData());
+                    break;
                 case MappService.DO_UPDATE:
                     mActivity.updateDone(msg.getData());
                     break;
@@ -1234,6 +1244,39 @@ public class ServProvProfileMain extends Activity {
                     super.handleMessage(msg);
             }
         }
+    }
+
+    public void regNoCheckDone(Bundle data) {
+        if(data.getBoolean("exists")) {
+            mRegNo.setError("This Registration Number is already Registered.");
+            mRegNo.requestFocus();
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    private void updateDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    private void addWorkPlaceDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
+    }
+
+    private void removeWorkPlaceDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            UIUtility.showRegistrationAlert(this, "", "Work Place Removed Successfully.");
+        }
+        UIUtility.showProgress(this, mFormView, mProgressView, false);
+        unbindService(mConnection);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
