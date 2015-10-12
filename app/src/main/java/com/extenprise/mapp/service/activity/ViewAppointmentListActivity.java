@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,7 +97,7 @@ public class ViewAppointmentListActivity extends Activity
 
     private void gotAppontList(Bundle data) {
         ArrayList<AppointmentListItem> list = data.getParcelableArrayList("appontList");
-        AppointmentListAdapter adapter = new AppointmentListAdapter(this, R.layout.activity_view_appointment, list);
+        AppointmentListAdapter adapter = new AppointmentListAdapter(this, R.layout.activity_view_appointment, list, mServiceProv);
         mAppointmentListView.setAdapter(adapter);
         mAppointmentListView.setOnItemClickListener(adapter);
     }
@@ -113,7 +114,7 @@ public class ViewAppointmentListActivity extends Activity
             Bundle bundle = new Bundle();
 
             AppointmentListItem form = new AppointmentListItem();
-            SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
             sdf.applyPattern("dd/MM/yyyy");
             Date date = new Date();
             try {
@@ -154,10 +155,20 @@ public class ViewAppointmentListActivity extends Activity
     @Override
     public boolean gotResponse(int action, Bundle data) {
         unbindService(mConnection);
-        if(action == MappService.DO_APPONT_LIST) {
+        if (action == MappService.DO_APPONT_LIST) {
             gotAppontList(data);
             return true;
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
+        if (intent != null) {
+            intent.putExtra("service", mServiceProv);
+        }
+        return intent;
     }
 }

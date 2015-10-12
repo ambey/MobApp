@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
@@ -36,6 +38,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     private int mAction;
 
     private AppointmentListItem mAppont;
+    private ServiceProvider mServProv;
     private ArrayList<AppointmentListItem> mPastApponts;
     private Button mConfirmAppontButton;
     private Button mCancelAppontButton;
@@ -60,6 +63,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
         Intent intent = getIntent();
         mAppont = intent.getParcelableExtra("appont");
+        mServProv = intent.getParcelableExtra("service");
 
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
@@ -147,6 +151,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void fillPastAppointements() {
+        mAction = MappService.DO_PAST_APPONT_LIST;
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
@@ -253,11 +258,21 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             mAppont.setConfirmed(true);
             statusChangeDone(getString(R.string.msg_appont_confirmed));
             return true;
-        } else if(action == MappService.DO_CANCEL_APPONT) {
+        } else if (action == MappService.DO_CANCEL_APPONT) {
             mAppont.setCanceled(true);
             statusChangeDone(getString(R.string.msg_appont_canceled));
             return true;
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
+        if (intent != null) {
+            intent.putExtra("service", mServProv);
+        }
+        return intent;
     }
 }

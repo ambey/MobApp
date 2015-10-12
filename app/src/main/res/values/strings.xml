@@ -22,6 +22,7 @@
     <string name="action_get_time_slots">service/GetTimeSlots.action</string>
     <string name="action_book_appont">service/BookAppont.action</string>
     <string name="action_appont_list">service/AppontList.action</string>
+    <string name="action_past_appont_list">service/PastAppontList.action</string>
     <string name="action_confirm_appont">service/ConfirmAppont.action</string>
     <string name="action_cancel_appont">service/CancelAppont.action</string>
 

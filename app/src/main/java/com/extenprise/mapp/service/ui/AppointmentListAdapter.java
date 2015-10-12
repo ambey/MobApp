@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.service.activity.AppointmentDetailsActivity;
 import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.service.data.ServiceProvider;
 
 import java.util.ArrayList;
 
@@ -20,10 +21,12 @@ import java.util.ArrayList;
  */
 public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> implements AdapterView.OnItemClickListener {
     private ArrayList<AppointmentListItem> mList;
+    private ServiceProvider mServProv;
 
-    public AppointmentListAdapter(Context context, int resource, ArrayList<AppointmentListItem> list) {
+    public AppointmentListAdapter(Context context, int resource, ArrayList<AppointmentListItem> list, ServiceProvider servProv) {
         super(context, resource);
         mList = list;
+        mServProv = servProv;
     }
 
     @Override
@@ -65,6 +68,7 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
         intent.putExtra("appont", mList.get(position));
+        intent.putExtra("service", mServProv);
         getContext().startActivity(intent);
     }
 }

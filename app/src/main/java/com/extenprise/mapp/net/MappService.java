@@ -275,7 +275,23 @@ public class MappService extends Service {
             task = new MappAsyncTask(getURL(DO_APPONT_LIST), gson.toJson(form));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            onError(DO_BOOK_APPONT);
+            onError(DO_APPONT_LIST);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    public void doPastAppontList(Message msg) {
+        Bundle data = msg.getData();
+        AppointmentListItem form = data.getParcelable("form");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(DO_PAST_APPONT_LIST), gson.toJson(form));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(DO_PAST_APPONT_LIST);
             return;
         }
         task.execute((Void) null);
@@ -368,6 +384,9 @@ public class MappService extends Service {
             case DO_APPONT_LIST:
                 urlId = R.string.action_appont_list;
                 break;
+            case DO_PAST_APPONT_LIST:
+                urlId = R.string.action_past_appont_list;
+                break;
             case DO_CONFIRM_APPONT:
                 urlId = R.string.action_confirm_appont;
                 break;
@@ -427,6 +446,9 @@ public class MappService extends Service {
                     break;
                 case DO_APPONT_LIST:
                     mService.doAppontList(msg);
+                    break;
+                case DO_PAST_APPONT_LIST:
+                    mService.doPastAppontList(msg);
                     break;
                 case DO_CONFIRM_APPONT:
                 case DO_CANCEL_APPONT:
