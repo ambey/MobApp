@@ -163,7 +163,6 @@ public class BookAppointmentActivity extends Activity
     }
 
     private void gotTimeSlots(Bundle data) {
-        unbindService(mConnection);
         ArrayList<String> list = data.getStringArrayList("timeSlots");
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
@@ -174,7 +173,6 @@ public class BookAppointmentActivity extends Activity
     }
 
     private void gotAppont(Bundle data) {
-        unbindService(mConnection);
         Utility.showAlert(this, "", "Your Appointment has been booked.");
         Appointment appointment = data.getParcelable("form");
         mCust.getAppointments().add(appointment);
@@ -307,6 +305,7 @@ public class BookAppointmentActivity extends Activity
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        unbindService(mConnection);
         if (action == MappService.DO_APPONT_TIME_SLOTS) {
             gotTimeSlots(data);
             return true;

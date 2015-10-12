@@ -422,6 +422,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        unbindService(mConnection);
         if(action == MappService.DO_SIGNUP) {
             signUpDone(data);
             return true;
@@ -435,7 +436,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     private void phoneCheckComplete(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
         if(!data.getBoolean("status")) {
             mEditTextCellphone.setError(getString(R.string.error_phone_registered));
             mEditTextCellphone.requestFocus();
@@ -447,7 +447,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             Utility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
     }
 
     private Customer getSignUpData() {

@@ -1,4 +1,4 @@
-package com.extenprise.mapp.data;
+package com.extenprise.mapp.service.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

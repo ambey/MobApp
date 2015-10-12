@@ -1,30 +1,40 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.data.Appointment;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.data.Rx;
+import com.extenprise.mapp.data.RxItem;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.service.ui.RxItemListAdapter;
 
 import java.text.SimpleDateFormat;
 
-public class ViewRxActivity extends Activity {
+public class ViewRxActivity extends Activity implements ResponseHandler {
+
+    private Messenger mService;
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
 
     private String mParentActivity;
-    private int mCustId;
-    private int mServProvId;
-    private int mAppontId;
+    private AppointmentListItem mOrigAppont;
+    private AppointmentListItem mAppont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,51 +50,27 @@ public class ViewRxActivity extends Activity {
         TextView age = (TextView) layout.findViewById(R.id.patientAgeTextView);
         TextView weight = (TextView) layout.findViewById(R.id.patientWeightTextView);
 
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
         Intent intent = getIntent();
 
         mParentActivity = intent.getStringExtra("parent-activity");
 
-        mCustId = intent.getIntExtra("cust_id", -1);
-        mServProvId = intent.getIntExtra("sp_id", -1);
-        mAppontId = intent.getIntExtra("appont_id", -1);
+        mOrigAppont = intent.getParcelableExtra("appont");
+        mAppont = intent.getParcelableExtra("pastAppont");
 
-        int lastAppontId = intent.getIntExtra("last_appont_id", -1);
-        int appontId = (lastAppontId != -1) ? lastAppontId : mAppontId;
-
-        Customer customer = DBUtil.getCustomer(dbHelper, mCustId);
-        Appointment appointment = DBUtil.getAppointment(dbHelper, appontId);
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        date.setText(sdf.format(appointment.getDate()));
-        fname.setText(customer.getfName());
-        lname.setText(customer.getlName());
-        time.setText(String.format("%02d:%02d", appointment.getFrom() / 60,
-                appointment.getFrom() % 60));
-        gender.setText(customer.getGender());
-        age.setText("" + customer.getAge());
-        weight.setText("" + customer.getWeight());
+        date.setText(sdf.format(mAppont.getDate()));
+        fname.setText(mAppont.getFirstName());
+        lname.setText(mAppont.getLastName());
+        time.setText(mAppont.getTime());
+        gender.setText(mAppont.getGender());
+        age.setText("" + mAppont.getAge());
+        weight.setText("" + mAppont.getWeight());
 
-        String[] values = {
-                MappContract.Prescription.COLUMN_NAME_SR_NO,
-                MappContract.Prescription.COLUMN_NAME_DRUG_NAME,
-                MappContract.Prescription.COLUMN_NAME_DOSE_QTY,
-                MappContract.Prescription.COLUMN_NAME_COURSE_DUR
-        };
-        int[] viewIds = {
-                R.id.viewSrNo,
-                R.id.viewDrugName,
-                R.id.viewDoseQty,
-                R.id.viewCourseDur
-        };
+        fillRxItems();
+    }
 
-        ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                R.layout.layout_rx_item,
-                DBUtil.getRxCursor(new MappDbHelper(this), appontId),
-                values,
-                viewIds, 0);
-        rxItemsList.setAdapter(adapter);
+    private void fillRxItems() {
     }
 
     @Override
@@ -113,9 +99,7 @@ public class ViewRxActivity extends Activity {
         if (mParentActivity != null) {
             try {
                 Intent intent = new Intent(this, Class.forName(mParentActivity));
-                intent.putExtra("appont_id", mAppontId);
-                intent.putExtra("cust_id", mCustId);
-                intent.putExtra("sp_id", mServProvId);
+                intent.putExtra("appont", mOrigAppont);
                 return intent;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -123,5 +107,51 @@ public class ViewRxActivity extends Activity {
             }
         }
         return super.getParentActivityIntent();
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+
+            bundle.putParcelable("form", mAppont);
+            Message msg = Message.obtain(null, MappService.DO_GET_RX);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
+    private void gotRx(Bundle data) {
+        Rx rx = data.getParcelable("rx");
+        ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
+        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, rx);
+        rxItemsList.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        unbindService(mConnection);
+        if (action == MappService.DO_GET_RX) {
+            gotRx(data);
+            return true;
+        }
+        return false;
     }
 }

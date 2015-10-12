@@ -200,7 +200,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
     public void phoneCheckDone(Bundle data) {
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
-        getActivity().unbindService(mConnection);
         if(data.getBoolean("exists")) {
             mCellphoneview.setError(getString(R.string.error_phone_registered));
             mCellphoneview.requestFocus();
@@ -339,6 +338,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        getActivity().unbindService(mConnection);
         if(action == MappService.DO_PHONE_EXIST_CHECK) {
             phoneCheckDone(data);
             return true;
@@ -357,7 +357,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             mRegistrationNumber.requestFocus();
         }
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
-        getActivity().unbindService(mConnection);
     }
 
 }

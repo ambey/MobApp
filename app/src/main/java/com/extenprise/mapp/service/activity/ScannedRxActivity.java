@@ -1,10 +1,10 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +12,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,24 +27,27 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.data.Appointment;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.AppointmentListItem;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
-public class ScannedRxActivity extends Activity {
+public class ScannedRxActivity extends Activity implements ResponseHandler{
 
-    private int mAppontId;
-    private String mCustId;
+    private Messenger mService;
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+
+    private AppointmentListItem mAppont;
     private Bitmap mRxCopy;
     private ImageView mRxView;
     private Uri mRxUri;
+    private Intent mData;
+    private byte[] mBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +55,7 @@ public class ScannedRxActivity extends Activity {
         setContentView(R.layout.activity_scanned_rx);
 
         Intent intent = getIntent();
-        mAppontId = intent.getIntExtra("appont_id", -1);
-        mCustId = intent.getStringExtra("cust_id");
+        mAppont = intent.getParcelableExtra("appont");
 
         mRxView = (ImageView) findViewById(R.id.rxCopyImageView);
         if (savedInstanceState != null) {
@@ -102,11 +108,11 @@ public class ScannedRxActivity extends Activity {
         startActivityForResult(intent, 1);
     }
 
-    protected void displayScanCopy(Intent data) {
+    protected void displayScanCopy() {
         try {
-            if (data != null) {
+            if (mData != null) {
                 InputStream stream = getContentResolver().openInputStream(
-                        data.getData());
+                        mData.getData());
                 mRxCopy = BitmapFactory.decodeStream(stream);
                 mRxView.setImageBitmap(mRxCopy);
                 stream.close();
@@ -116,7 +122,7 @@ public class ScannedRxActivity extends Activity {
                 ContentResolver cr = getContentResolver();
                 Bitmap bitmap;
                 try {
-                    bitmap = android.provider.MediaStore.Images.Media
+                    bitmap = MediaStore.Images.Media
                             .getBitmap(cr, selectedImage);
 
                     mRxView.setImageBitmap(bitmap);
@@ -149,6 +155,7 @@ public class ScannedRxActivity extends Activity {
         return mRxCopy;
     }
 
+/*
     protected byte[] getData(Intent imgData) throws IOException {
         InputStream stream = getContentResolver().openInputStream(
                 imgData.getData());
@@ -165,6 +172,7 @@ public class ScannedRxActivity extends Activity {
         baos.close();
         return bytes;
     }
+*/
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -175,11 +183,47 @@ public class ScannedRxActivity extends Activity {
         }
     }
 
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if(action == MappService.DO_SAVE_SCANNED_RX_COPY) {
+            displayScanCopy();
+        }
+        return false;
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+
+            bundle.putParcelable("form", mAppont);
+            bundle.putByteArray("image", mBytes);
+            Message msg = Message.obtain(null, MappService.DO_SAVE_SCANNED_RX_COPY);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
 
     private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
 
         private Activity mActivity;
-        private Intent mData;
 
         public SaveBlobTask(Activity activity, Intent data) {
             mData = data;
@@ -188,9 +232,6 @@ public class ScannedRxActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            MappDbHelper dbHelper = new MappDbHelper(mActivity);
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            byte[] bytes = null;
             String path;
             if (mData != null) {
                 path = mData.getDataString();
@@ -200,13 +241,14 @@ public class ScannedRxActivity extends Activity {
             try {
                 if (path != null) {
                     RandomAccessFile raf = new RandomAccessFile(path, "r");
-                    bytes = new byte[(int) raf.length()];
-                    raf.readFully(bytes);
+                    mBytes = new byte[(int) raf.length()];
+                    raf.readFully(mBytes);
                     raf.close();
                 }
             } catch (IOException x) {
                 x.printStackTrace();
             }
+/*
             ContentValues values = new ContentValues();
             Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);
             String rxId = "a" + appointment.getIdAppointment() + "r" + (appointment.getReportCount() + 1);
@@ -215,12 +257,15 @@ public class ScannedRxActivity extends Activity {
             values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
             values.put(MappContract.Prescription.COLUMN_NAME_SCANNED_COPY, bytes);
             db.insert(MappContract.Prescription.TABLE_NAME, null, values);
+*/
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            displayScanCopy(mData);
+            //displayScanCopy(mData);
+            Intent intent = new Intent(mActivity, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
         }
 
         @Override
@@ -234,8 +279,7 @@ public class ScannedRxActivity extends Activity {
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
         assert intent != null;
-        intent.putExtra("cust_id", mCustId);
-        intent.putExtra("appont_id", mAppontId);
+        intent.putExtra("appont", mAppont);
         return intent;
     }
 }

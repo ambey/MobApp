@@ -24,14 +24,12 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.data.SearchServProvForm;
+import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
-import com.extenprise.mapp.service.data.Service;
-import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
@@ -254,7 +252,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     protected void searchDone(Bundle msgData) {
         Utility.showProgress(this, mSearchFormView, mProgressView, false);
-        unbindService(mConnection);
         boolean success = msgData.getBoolean("status");
         if (success) {
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
@@ -293,6 +290,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        unbindService(mConnection);
         if(action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
             return true;

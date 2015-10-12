@@ -18,7 +18,7 @@ import android.widget.ListView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.net.MappService;
-import com.extenprise.mapp.data.ServProvListItem;
+import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.ui.SearchResultListAdapter;
@@ -91,7 +91,6 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
 
     public void gotDetails(Bundle data) {
         Utility.showProgress(this, mSearchResultView, mProgressView, false);
-        unbindService(mConnection);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
         intent.putParcelableArrayListExtra("servProvList", mServProvList);
         intent.putExtra("service", data.getParcelable("service"));
@@ -128,6 +127,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        unbindService(mConnection);
         if(action == MappService.DO_SERV_PROV_DETAILS) {
             gotDetails(data);
             return true;

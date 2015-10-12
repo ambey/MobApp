@@ -8,12 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.data.ServProvListItem;
-import com.extenprise.mapp.data.WorkPlaceListItem;
+import com.extenprise.mapp.service.data.WorkPlaceListItem;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;

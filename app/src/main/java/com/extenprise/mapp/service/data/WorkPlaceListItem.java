@@ -1,9 +1,9 @@
-package com.extenprise.mapp.data;
+package com.extenprise.mapp.service.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.extenprise.mapp.service.data.Service;
+import com.extenprise.mapp.data.SignInData;
 
 /**
  * Created by avinash on 4/10/15.

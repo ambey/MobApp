@@ -1,9 +1,7 @@
-package com.extenprise.mapp.data;
+package com.extenprise.mapp.service.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.extenprise.mapp.util.SearchServProv;
 
 /**
  * Created by ambey on 4/10/15.

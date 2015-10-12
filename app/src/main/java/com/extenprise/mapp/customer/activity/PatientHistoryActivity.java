@@ -2,28 +2,24 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.service.activity.ViewRxActivity;
-import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.service.ui.AppontHistListAdapter;
+
+import java.util.ArrayList;
 
 
 public class PatientHistoryActivity extends Activity {
     private String mParentActivity;
-    private int mServProvId;
-    private int mCustId;
-    private int mAppontId;
+    private ArrayList<AppointmentListItem> mApponts;
+    private AppointmentListItem mAppont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,37 +29,19 @@ public class PatientHistoryActivity extends Activity {
         TextView viewFName = (TextView) findViewById(R.id.textViewFName);
         TextView viewLName = (TextView) findViewById(R.id.textViewLName);
         ListView lvMyAppont = (ListView) findViewById(R.id.listViewMyAppont);
-        ListView lvOthAppont = (ListView) findViewById(R.id.listViewOtherData);
+        //ListView lvOthAppont = (ListView) findViewById(R.id.listViewOtherData);
 
         Intent intent = getIntent();
         mParentActivity = intent.getStringExtra("parent-activity");
-        mServProvId = intent.getIntExtra("sp_id", -1);
-        mCustId = intent.getIntExtra("cust_id", -1);
-        mAppontId = intent.getIntExtra("appont_id", -1);
+        mAppont = intent.getParcelableExtra("appont");
+        mApponts = intent.getParcelableArrayListExtra("appontList");
 
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        Customer customer = DBUtil.getCustomer(dbHelper, mCustId);
-        viewFName.setText(customer.getfName());
-        viewLName.setText(customer.getlName());
+        viewFName.setText(mApponts.get(0).getFirstName());
+        viewLName.setText(mApponts.get(0).getLastName());
 
-        Cursor myCursor = DBUtil.getServProvAppointmentsCursor(dbHelper, mServProvId, null);
-        Cursor othCursor = DBUtil.getOtherServProvAppointmentsCursor(dbHelper, mServProvId);
-
-        String[] columns = {
-                MappContract.Appointment.COLUMN_NAME_DATE,
-                MappContract.Appointment._ID
-        };
-        int[] viewIds = {
-                R.id.dateTextView,
-                R.id.appontIdTextView
-        };
-        SimpleCursorAdapter myAdapter = new SimpleCursorAdapter(this,
-                R.layout.layout_appont_row,
-                myCursor,
-                columns,
-                viewIds,
-                0);
-        lvMyAppont.setAdapter(myAdapter);
+        AppontHistListAdapter adapter = new AppontHistListAdapter(this, 0, mAppont, mApponts);
+        lvMyAppont.setAdapter(adapter);
+/*
 
         SimpleCursorAdapter othAdapter = new SimpleCursorAdapter(this,
                 R.layout.layout_appont_row,
@@ -72,6 +50,7 @@ public class PatientHistoryActivity extends Activity {
                 viewIds,
                 0);
         lvOthAppont.setAdapter(othAdapter);
+*/
     }
 
     @Override
@@ -99,14 +78,11 @@ public class PatientHistoryActivity extends Activity {
     public void showRxDetails(View view) {
         View parent = (View) view.getParent();
         TextView b = (TextView) parent.findViewById(R.id.appontIdTextView);
-        int appontId = Integer.parseInt(b.getText().toString());
-        Intent intent = new Intent(this, ViewRxActivity.class);
-        intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("appont_id", mAppontId);
-        intent.putExtra("last_appont_id", appontId);
-        intent.putExtra("cust_id", mCustId);
-        intent.putExtra("sp_id", mServProvId);
-        startActivity(intent);
+        int position = Integer.parseInt(b.getText().toString());
+
+        ListView lvMyAppont = (ListView) findViewById(R.id.listViewMyAppont);
+        AppontHistListAdapter adapter = (AppontHistListAdapter) lvMyAppont.getAdapter();
+        adapter.showRxDetails(position);
     }
 
     public Intent getParentActivityIntent() {
@@ -122,9 +98,8 @@ public class PatientHistoryActivity extends Activity {
             intent = super.getParentActivityIntent();
         }
         if (intent != null) {
-            intent.putExtra("appont_id", mAppontId);
-            intent.putExtra("cust_id", mCustId);
-            intent.putExtra("sp_id", mServProvId);
+            intent.putExtra("appont", mAppont);
+            intent.putExtra("appontList", mApponts);
         }
         return intent;
     }

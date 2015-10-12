@@ -23,10 +23,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.data.SearchServProvForm;
-import com.extenprise.mapp.data.SignInData;
+import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;

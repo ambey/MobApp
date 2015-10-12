@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.data.ServProvListItem;
+import com.extenprise.mapp.service.data.ServProvListItem;
 
 import java.util.ArrayList;
 
@@ -23,6 +23,7 @@ public class SearchResultListAdapter extends ArrayAdapter<ServProvListItem> {
         this.list = list;
     }
 
+    @Override
     public int getCount() {
         try {
             return list.size();

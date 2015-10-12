@@ -18,6 +18,8 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     private Date date;
     private int from; //as minutes
     private int to;//as minutes
+    private boolean confirmed;
+    private boolean canceled;
     private int idServProvHasServPt;
     private int idCustomer;
     private ArrayList<Report> reports;
@@ -37,8 +39,26 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         }
         from = source.readInt();
         to = source.readInt();
+        confirmed = source.readInt() > 0;
+        canceled = source.readInt() > 0;
         idServProvHasServPt = source.readInt();
         idCustomer = source.readInt();
+    }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public void setCanceled(boolean canceled) {
+        this.canceled = canceled;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public int getIdAppointment() {
@@ -127,6 +147,8 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         dest.writeString(sdf.format(date));
         dest.writeInt(from);
         dest.writeInt(to);
+        dest.writeInt(confirmed ? 1 : 0);
+        dest.writeInt(canceled ? 1 : 0);
         dest.writeInt(idServProvHasServPt);
         dest.writeInt(idCustomer);
     }

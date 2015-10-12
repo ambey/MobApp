@@ -269,6 +269,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        getActivity().unbindService(mConnection);
         if (action == MappService.DO_SIGNUP) {
             signUpDone(data);
             return true;
@@ -551,7 +552,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             Utility.showRegistrationAlert(getActivity(), "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
-        getActivity().unbindService(mConnection);
     }
 
     /**

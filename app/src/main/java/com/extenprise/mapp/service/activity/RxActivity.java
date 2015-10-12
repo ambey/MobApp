@@ -1,11 +1,17 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,16 +22,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 
-public class RxActivity extends Activity {
+public class RxActivity extends Activity implements ResponseHandler {
+    private Messenger mService;
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+
     private View mForm;
     private View mProgressBar;
     private TextView mSrNo;
@@ -48,9 +60,8 @@ public class RxActivity extends Activity {
     private Rx mRx;
 
     private String mParentActivity;
-    private int mAppontId;
-    private String mCustId;
-    private Appointment mAppont;
+    private AppointmentListItem mAppont;
+    private int mAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +70,7 @@ public class RxActivity extends Activity {
 
         Intent intent = getIntent();
         mParentActivity = intent.getStringExtra("parent-activity");
-        mAppontId = intent.getIntExtra("appont_id", -1);
-        mCustId = intent.getStringExtra("cust_id");
+        mAppont = intent.getParcelableExtra("appont");
 
         mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);
@@ -86,20 +96,22 @@ public class RxActivity extends Activity {
         mAltDrugStrength = (TextView) findViewById(R.id.altDrugStrengthEditText);
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
 
+        fillRx();
+/*
         MappDbHelper dbHelper = new MappDbHelper(this);
         mRx = DBUtil.getRx(dbHelper, mAppontId);
         if(mRx == null) {
             mRx = new Rx();
         }
-        mAppont = DBUtil.getAppointment(dbHelper, mAppontId);
-        //Customer customer = mAppont.getCustomer();
-        mRx.setAppointment(mAppont);
-
-        //fName.setText(customer.getfName());
-        //lName.setText(customer.getlName());
-        //date.setText(mAppont.getDateOfAppointment());
         mSrNo.setText("" + (mRx.getRxItemCount() + 1));
+*/
 
+    }
+
+    private void fillRx() {
+        mAction = MappService.DO_GET_RX;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -144,7 +156,6 @@ public class RxActivity extends Activity {
 
     public void doneRx(View view) {
         if (addRxItem()) {
-            mAppont.addReport(mRx);
             addRxToDB();
         }
     }
@@ -256,6 +267,21 @@ public class RxActivity extends Activity {
         return valid;
     }
 
+    private void gotRx(Bundle data) {
+        mRx = data.getParcelable("rx");
+        mSrNo.setText("" + (mRx.getRxItemCount() + 1));
+    }
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        unbindService(mConnection);
+        if(action == MappService.DO_GET_RX) {
+            gotRx(data);
+            return true;
+        }
+        return false;
+    }
+
     private class RxDBTask extends AsyncTask<Void, Void, Void> {
 
         private Activity myActivity;
@@ -309,8 +335,7 @@ public class RxActivity extends Activity {
             try {
                 Utility.showProgress(myActivity, mForm, mProgressBar, false);
                 Intent intent = new Intent(myActivity, Class.forName(mParentActivity));
-                intent.putExtra("appont_id", mAppontId);
-                intent.putExtra("cust_id", mCustId);
+                intent.putExtra("appont", mAppont);
                 startActivity(intent);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -322,13 +347,41 @@ public class RxActivity extends Activity {
         }
     }
 
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+
+            bundle.putParcelable("form", mAppont);
+            Message msg = Message.obtain(null, mAction);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
         try {
             Intent intent = new Intent(this, Class.forName(mParentActivity));
-            intent.putExtra("appont_id", mAppontId);
-            intent.putExtra("cust_id", mCustId);
+            intent.putExtra("appont", mAppont);
             return intent;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

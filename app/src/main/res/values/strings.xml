@@ -21,6 +21,9 @@
     <string name="action_serv_prov_details">service/GetDetails.action</string>
     <string name="action_get_time_slots">service/GetTimeSlots.action</string>
     <string name="action_book_appont">service/BookAppont.action</string>
+    <string name="action_appont_list">service/AppontList.action</string>
+    <string name="action_confirm_appont">service/ConfirmAppont.action</string>
+    <string name="action_cancel_appont">service/CancelAppont.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
@@ -273,6 +276,7 @@
     <string name="pract_day">Practise Days</string>
     <string name="title_activity_serv_prove_profile">ServProveProfile</string>
     <string name="conf">Confirm</string>
+    <string name="cancel">Cancel</string>
 
     <string name="male">Male</string>
     <string name="female">Female</string>
@@ -281,6 +285,7 @@
     <string name="addinfo">Address Info</string>
     <string name="wght">Weight</string>
 
-
+    <string name="msg_appont_confirmed">The appointment has been confirmed</string>
+    <string name="msg_appont_canceled">The appointment has been canceled</string>
 
 </resources>

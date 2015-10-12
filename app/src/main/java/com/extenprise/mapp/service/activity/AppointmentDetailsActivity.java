@@ -1,35 +1,44 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
-import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.data.Appointment;
-import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 
-public class AppointmentDetailsActivity extends Activity {
+public class AppointmentDetailsActivity extends Activity implements ResponseHandler {
 
-    private int mAppontId;
-    private String mCustId;
-    private int mLastAppontId;
+    private Messenger mService;
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private int mAction;
+
+    private AppointmentListItem mAppont;
+    private ArrayList<AppointmentListItem> mPastApponts;
+    private Button mConfirmAppontButton;
+    private Button mCancelAppontButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +55,19 @@ public class AppointmentDetailsActivity extends Activity {
         TextView dateView = (TextView) findViewById(R.id.appointmentDateTextView);
         Button rxButton = (Button) findViewById(R.id.rXButton);
         Button uploadRxButton = (Button) findViewById(R.id.uploadScanRxButton);
+        mConfirmAppontButton = (Button) findViewById(R.id.confirmButton);
+        mCancelAppontButton = (Button) findViewById(R.id.cancelButton);
 
         Intent intent = getIntent();
-        mAppontId = intent.getIntExtra("appont_id", -1);
-        mCustId = intent.getStringExtra("cust_id");
-
-        MappDbHelper dbHelper = new MappDbHelper(this);
-        Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);
-        Customer customer = new Customer(); //appointment.getCustomer();
+        mAppont = intent.getParcelableExtra("appont");
 
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        Date date = appointment.getDate();
-        date.setTime(date.getTime() + appointment.getFrom() * 60 * 1000);
+        Date date = mAppont.getDate();
+        int fromTime = Utility.getMinutes(mAppont.getTime());
+        date.setTime(date.getTime() + fromTime * 60 * 1000);
         if (date.after(today)) {
             rxButton.setEnabled(false);
             uploadRxButton.setEnabled(false);
@@ -92,39 +99,56 @@ public class AppointmentDetailsActivity extends Activity {
             uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
         }
 
-        dateView.setText(sdf.format(date));
-        fNameView.setText(customer.getfName());
-        lNameView.setText(customer.getlName());
-        timeView.setText(String.format("%02d:%02d",
-                appointment.getFrom() / 60, appointment.getFrom() % 60));
-        genderView.setText(customer.getGender());
-        ageView.setText("" + customer.getAge());
-        wtView.setText(String.format("%.1f", customer.getWeight()));
+        if (mAppont.isConfirmed() || mAppont.isCanceled()) {
+            mConfirmAppontButton.setEnabled(false);
+            mCancelAppontButton.setEnabled(false);
+        }
 
+        dateView.setText(sdf.format(date));
+        fNameView.setText(mAppont.getFirstName());
+        lNameView.setText(mAppont.getLastName());
+        timeView.setText(mAppont.getTime());
+        genderView.setText(mAppont.getGender());
+        ageView.setText("" + mAppont.getAge());
+        wtView.setText(String.format("%.1f", mAppont.getWeight()));
+
+        fillPastAppointements();
+    }
+
+    private void statusChangeDone(String msg) {
+        mConfirmAppontButton.setEnabled(false);
+        mCancelAppontButton.setEnabled(false);
+        Utility.showAlert(this, "", msg);
+    }
+
+    private void gotPastAppointments(Bundle data) {
+        mPastApponts = data.getParcelableArrayList("pastApponts");
         View pastAppontLayout = findViewById(R.id.pastAppointmentLayout);
         Button viewMoreButton = (Button) findViewById(R.id.viewMoreButton);
         if (viewMoreButton == null) {
             viewMoreButton = (Button) pastAppontLayout.findViewById(R.id.viewMoreButton);
         }
         viewMoreButton.setVisibility(View.VISIBLE);
-        List<Appointment> pastApponts = getPastAppointments(appointment);
-        mLastAppontId = -1;
-        if(pastApponts != null) {
-            Appointment lastAppont = pastApponts.get(pastApponts.size() - 1);
-            mLastAppontId = lastAppont.getIdAppointment();
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        if (mPastApponts != null && mPastApponts.size() > 0) {
+            AppointmentListItem lastAppont = mPastApponts.get(0);
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
-            TextView idOthView = (TextView) pastAppontLayout.findViewById(R.id.appontIdTextView);
             dateOthView.setText(sdf.format(lastAppont.getDate()));
-            idOthView.setText("" + lastAppont.getIdAppointment());
         } else {
             pastAppontLayout.setVisibility(View.INVISIBLE);
             TextView msgView = (TextView) findViewById(R.id.viewMsg);
             msgView.setVisibility(View.VISIBLE);
         }
-        if (pastApponts == null || pastApponts.size() <= 1) {
+        if (mPastApponts == null || mPastApponts.size() <= 1) {
             viewMoreButton.setEnabled(false);
             viewMoreButton.setBackgroundResource(R.drawable.inactive_button);
         }
+    }
+
+    private void fillPastAppointements() {
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -149,55 +173,91 @@ public class AppointmentDetailsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void confirmAppointment(View view) {
+        mAction = MappService.DO_CONFIRM_APPONT;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    public void cancelAppointment(View view) {
+        mAction = MappService.DO_CANCEL_APPONT;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
     public void showRxActivity(View view) {
         Intent intent = new Intent(this, RxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("appont_id", mAppontId);
-        intent.putExtra("cust_id", mCustId);
+        intent.putExtra("appont", mAppont);
         startActivity(intent);
     }
 
     public void showRxDetails(View view) {
         Intent intent = new Intent(this, ViewRxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("appont_id", mAppontId);
-        intent.putExtra("last_appont_id", mLastAppontId);
-        intent.putExtra("cust_id", mCustId);
+        intent.putExtra("appont", mAppont);
+        intent.putExtra("pastAppont", mPastApponts.get(0));
         startActivity(intent);
     }
 
     public void showPatientHistory(View view) {
         Intent intent = new Intent(this, PatientHistoryActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("sp_id", LoginHolder.servLoginRef.getIdServiceProvider());
-        intent.putExtra("cust_id", mCustId);
-        intent.putExtra("appont_id", mAppontId);
+        intent.putExtra("appont", mAppont);
+        intent.putParcelableArrayListExtra("appontList", mPastApponts);
         startActivity(intent);
     }
 
     public void showScannedRxScreen(View view) {
         Intent intent = new Intent(this, ScannedRxActivity.class);
-        intent.putExtra("cust_id", mCustId);
-        intent.putExtra("appont_id", mAppontId);
+        intent.putExtra("appont", mAppont);
         startActivity(intent);
     }
 
-    private List<Appointment> getPastAppointments(Appointment appointment) {
-        ArrayList<Appointment> othApponts = DBUtil.getOtherAppointments(new MappDbHelper(this),
-                appointment.getIdAppointment());
-        Collections.sort(othApponts);
-        int i = 0;
-        boolean found = false;
-        for (; i < othApponts.size(); i++) {
-            if (appointment.compareTo(othApponts.get(i)) >= 0) {
-                found = true;
-            } else {
-                break;
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+
+            bundle.putParcelable("form", mAppont);
+            Message msg = Message.obtain(null, mAction);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
-        if (found) {
-            return othApponts.subList(0, i);
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
         }
-        return null;
+    };
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        unbindService(mConnection);
+        if (action == MappService.DO_PAST_APPONT_LIST) {
+            gotPastAppointments(data);
+            return true;
+        } else if (action == MappService.DO_CONFIRM_APPONT) {
+            mAppont.setConfirmed(true);
+            statusChangeDone(getString(R.string.msg_appont_confirmed));
+            return true;
+        } else if(action == MappService.DO_CANCEL_APPONT) {
+            mAppont.setCanceled(true);
+            statusChangeDone(getString(R.string.msg_appont_canceled));
+            return true;
+        }
+        return false;
     }
 }
