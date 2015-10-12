@@ -22,7 +22,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -31,8 +30,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,13 +40,8 @@ import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
-import com.extenprise.mapp.service.activity.ServProvProfileMain;
-import com.extenprise.mapp.util.EncryptUtil;
-import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,7 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class PatientProfile extends Activity {
+public class PatientProfileActivity extends Activity {
 
     private UpdateHandler mRespHandler = new UpdateHandler(this);
     private int mServiceAction;
@@ -118,7 +110,6 @@ public class PatientProfile extends Activity {
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
 
         viewProfile();
-        editPatientProf(null);
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -149,54 +140,51 @@ public class PatientProfile extends Activity {
         mEditTextPinCode.setText(LoginHolder.custLoginRef.getPincode());
         mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, LoginHolder.custLoginRef.getCity().getCity()));
         mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, LoginHolder.custLoginRef.getCity().getState()));
+
+        setFieldsEnability(false);
     }
 
     public void showPersonalFields(View view) {
 
-        if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            mAddrLayout.setVisibility(View.GONE);
-        } else {
-            mAddrLayout.setVisibility(View.VISIBLE);
-            if (mContLay.getVisibility() == View.VISIBLE) {
-                mContLay.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    public void showAddressFields(View view) {
-        if (mContLay.getVisibility() == View.VISIBLE) {
+        if(mContLay.getVisibility() == View.VISIBLE) {
             mContLay.setVisibility(View.GONE);
         } else {
             mContLay.setVisibility(View.VISIBLE);
-            if (mAddrLayout.getVisibility() == View.VISIBLE) {
+            if(mAddrLayout.getVisibility() == View.VISIBLE) {
                 mAddrLayout.setVisibility(View.GONE);
             }
         }
     }
 
+    public void showAddressFields(View view) {
+        if(mAddrLayout.getVisibility() == View.VISIBLE) {
+            mAddrLayout.setVisibility(View.GONE);
+        } else {
+            mAddrLayout.setVisibility(View.VISIBLE);
+            if(mContLay.getVisibility() == View.VISIBLE) {
+                mContLay.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void setFieldsEnability(boolean set) {
+        mEditTextCustomerFName.setEnabled(set);
+        mEditTextCustomerLName.setEnabled(set);
+        mEditTextCustomerEmail.setEnabled(set);
+        mEditTextPinCode.setEnabled(set);
+        mEditTextWeight.setEnabled(set);
+        mEditTextHeight.setEnabled(set);
+        mTextViewDOB.setEnabled(set);
+        mSpinCity.setEnabled(set);
+        mSpinState.setEnabled(set);
+        mSpinGender.setEnabled(set);
+    }
+
     public void editPatientProf(View v) {
         if(mEditTextCustomerFName.isEnabled()) {
-            mEditTextCustomerFName.setEnabled(false);
-            mEditTextCustomerLName.setEnabled(false);
-            mEditTextCustomerEmail.setEnabled(false);
-            mEditTextPinCode.setEnabled(false);
-            mEditTextWeight.setEnabled(false);
-            mEditTextHeight.setEnabled(false);
-            mTextViewDOB.setEnabled(false);
-            mSpinCity.setEnabled(false);
-            mSpinState.setEnabled(false);
-            mSpinGender.setEnabled(false);
+            setFieldsEnability(false);
         } else {
-            mEditTextCustomerFName.setEnabled(true);
-            mEditTextCustomerLName.setEnabled(true);
-            mEditTextCustomerEmail.setEnabled(true);
-            mEditTextPinCode.setEnabled(true);
-            mEditTextWeight.setEnabled(true);
-            mEditTextHeight.setEnabled(true);
-            mTextViewDOB.setEnabled(true);
-            mSpinCity.setEnabled(true);
-            mSpinState.setEnabled(true);
-            mSpinGender.setEnabled(true);
+            setFieldsEnability(true);
         }
     }
 
@@ -238,9 +226,9 @@ public class PatientProfile extends Activity {
     };
 
     private static class UpdateHandler extends Handler {
-        private PatientProfile mActivity;
+        private PatientProfileActivity mActivity;
 
-        public UpdateHandler(PatientProfile activity) {
+        public UpdateHandler(PatientProfileActivity activity) {
             mActivity = activity;
         }
 
@@ -458,15 +446,6 @@ public class PatientProfile extends Activity {
 
     }
 
-    public void registerPatient(View view) {
-        if(!isValidInput()) {
-            return;
-        }
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        SaveCustomerData task = new SaveCustomerData(this);
-        task.execute((Void) null);
-    }
-
     private boolean isValidInput() {
         boolean valid = true;
         View focusView = null;
@@ -531,58 +510,4 @@ public class PatientProfile extends Activity {
         return valid;
     }
 
-    class SaveCustomerData extends AsyncTask<Void, Void, Void> {
-
-        private Activity myActivity;
-
-        public SaveCustomerData(Activity activity) {
-            myActivity = activity;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(MappContract.Customer.COLUMN_NAME_FNAME, mEditTextCustomerFName.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_LNAME, mEditTextCustomerLName.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_DOB, mTextViewDOB.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_AGE, Utility.getAge(mTextViewDOB.getText().toString().trim()));
-            values.put(MappContract.Customer.COLUMN_NAME_EMAIL_ID, mEditTextCustomerEmail.getText().toString().trim());
-
-            values.put(MappContract.Customer.COLUMN_NAME_WEIGHT, mEditTextWeight.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_HEIGHT, mEditTextHeight.getText().toString().trim());
-
-            values.put(MappContract.Customer.COLUMN_NAME_LOCATION, mEditTextLoc.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_PIN_CODE, mEditTextPinCode.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mSpinCity.getSelectedItem().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mSpinState.getSelectedItem().toString().trim());
-            /*if(!imgDecodableString.equals("") || imgDecodableString != null) {
-                values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
-            }*/
-            values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
-
-            //Bitmap bitmap = ((BitmapDrawable)mImgView.getDrawable()).getBitmap();
-
-
-            db.insert(MappContract.Customer.TABLE_NAME, null, values);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Utility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
-            Utility.showProgress(myActivity, mFormView, mProgressView, false);
-            /*Intent intent = new Intent(myActivity, LoginActivity.class);
-            startActivity(intent);*/
-        }
-
-        @Override
-        protected void onCancelled() {
-            Utility.showProgress(myActivity, mFormView, mProgressView, false);
-        }
-
-    }
 }

@@ -49,7 +49,7 @@ public class ServiceProviderHomeActivity extends Activity {
     public void viewProfile(View view) {
         MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
         if(SearchServProv.viewWorkPlaces(dbHelper)) {
-            Intent intent = new Intent(this, ServProvProfileMain.class);
+            Intent intent = new Intent(this, ServProvProfileActivity.class);
             intent.putExtra("service", mServiceProv);
             startActivity(intent);
         } else {

@@ -155,12 +155,12 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showPersonalFields(View view) {
 
-        if(mAddrLayout.getVisibility() == View.VISIBLE) {
-            mAddrLayout.setVisibility(View.GONE);
+        if(mContLay.getVisibility() == View.VISIBLE) {
+            mContLay.setVisibility(View.GONE);
         } else {
-            mAddrLayout.setVisibility(View.VISIBLE);
-            if(mContLay.getVisibility() == View.VISIBLE) {
-                mContLay.setVisibility(View.GONE);
+            mContLay.setVisibility(View.VISIBLE);
+            if(mAddrLayout.getVisibility() == View.VISIBLE) {
+                mAddrLayout.setVisibility(View.GONE);
             }
         }
         /*
@@ -209,12 +209,12 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     }
 
     public void showAddressFields(View view) {
-        if(mContLay.getVisibility() == View.VISIBLE) {
-            mContLay.setVisibility(View.GONE);
+        if(mAddrLayout.getVisibility() == View.VISIBLE) {
+            mAddrLayout.setVisibility(View.GONE);
         } else {
-            mContLay.setVisibility(View.VISIBLE);
-            if(mAddrLayout.getVisibility() == View.VISIBLE) {
-                mAddrLayout.setVisibility(View.GONE);
+            mAddrLayout.setVisibility(View.VISIBLE);
+            if(mContLay.getVisibility() == View.VISIBLE) {
+                mContLay.setVisibility(View.GONE);
             }
         }
         /*if(mEditTextLoc.getVisibility() == View.VISIBLE) {

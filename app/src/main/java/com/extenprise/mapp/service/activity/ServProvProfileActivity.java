@@ -72,7 +72,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class ServProvProfileMain extends Activity {
+public class ServProvProfileActivity extends Activity {
 
     private int mServiceAction;
     private UpdateHandler mResponseHandler = new UpdateHandler(this);
@@ -1207,14 +1207,15 @@ public class ServProvProfileMain extends Activity {
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             mService = null;
+
             mBound = false;
         }
     };
 
     private static class UpdateHandler extends Handler {
-        private ServProvProfileMain mActivity;
+        private ServProvProfileActivity mActivity;
 
-        public UpdateHandler(ServProvProfileMain activity) {
+        public UpdateHandler(ServProvProfileActivity activity) {
             mActivity = activity;
         }
 

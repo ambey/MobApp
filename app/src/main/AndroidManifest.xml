@@ -250,7 +250,7 @@
             android:label="@string/title_activity_serv_prov_work_detail_list" >
         </activity>
         <activity
-            android:name=".service.activity.ServProvProfileMain"
+            android:name=".service.activity.ServProvProfileActivity"
             android:label="@string/title_activity_serv_prove_profile"
             android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
             <meta-data
@@ -258,7 +258,7 @@
                 android:value="com.extenprise.mapp.service.activity.ServiceProviderHomeActivity" />
         </activity>
         <activity
-            android:name=".customer.activity.PatientProfile"
+            android:name=".customer.activity.PatientProfileActivity"
             android:label="@string/title_activity_patient_profile"
             android:parentActivityName=".customer.activity.PatientsHomeScreenActivity" >
             <meta-data
