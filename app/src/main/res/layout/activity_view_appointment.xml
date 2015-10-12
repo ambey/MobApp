@@ -36,12 +36,12 @@
         android:id="@+id/patientAgeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/patientFNameTextView"
-        android:layout_toRightOf="@id/patientGenderTextView"
-        android:layout_toEndOf="@id/patientGenderTextView"
         android:layout_alignBaseline="@id/patientGenderTextView"
+        android:layout_below="@+id/patientFNameTextView"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/patientGenderTextView"
+        android:layout_toRightOf="@id/patientGenderTextView"
         android:text="@string/age"
         android:textSize="15sp" />
 
@@ -62,7 +62,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/patientAgeTextView"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/yearTextView"
         android:layout_toRightOf="@id/yearTextView"
         android:text="@string/weight"
@@ -74,20 +75,32 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/patientAgeTextView"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/patientWeightTextView"
         android:layout_toRightOf="@+id/patientWeightTextView"
         android:text="@string/kg"
         android:textSize="15sp" />
 
     <TextView
+        android:id="@+id/statusTextView"
+        style="@style/mediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/appointmentTimeTextView"
+        android:layout_alignEnd="@+id/appointmentTimeTextView"
+        android:layout_alignBaseline="@id/patientAgeTextView"
+        android:layout_below="@+id/appointmentTimeTextView" />
+
+
+    <TextView
         android:id="@+id/appointmentTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/patientLNameTextView"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
         android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/time"
         android:textSize="15sp" />
 
@@ -96,10 +109,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/patientLNameTextView"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@id/appointmentTimeTextView"
         android:layout_toStartOf="@id/appointmentTimeTextView"
-        android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"
         android:text="@string/time"
         android:textSize="15sp" />
 

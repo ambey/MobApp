@@ -42,6 +42,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     private ArrayList<AppointmentListItem> mPastApponts;
     private Button mConfirmAppontButton;
     private Button mCancelAppontButton;
+    private TextView mStatusView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Button uploadRxButton = (Button) findViewById(R.id.uploadScanRxButton);
         mConfirmAppontButton = (Button) findViewById(R.id.confirmButton);
         mCancelAppontButton = (Button) findViewById(R.id.cancelButton);
+        mStatusView = (TextView) findViewById(R.id.statusTextView);
 
         Intent intent = getIntent();
         mAppont = intent.getParcelableExtra("appont");
@@ -103,9 +105,19 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
         }
 
+        if(mAppont.isConfirmed()) {
+            mStatusView.setText(getString(R.string.confirmed));
+        } else if(mAppont.isCanceled()) {
+            mStatusView.setText(getString(R.string.canceled));
+        } else {
+            mStatusView.setText(getString(R.string.not_confirmed));
+        }
+
         if (mAppont.isConfirmed() || mAppont.isCanceled()) {
             mConfirmAppontButton.setEnabled(false);
             mCancelAppontButton.setEnabled(false);
+            mConfirmAppontButton.setBackgroundResource(R.drawable.inactive_button);
+            mCancelAppontButton.setBackgroundResource(R.drawable.inactive_button);
         }
 
         dateView.setText(sdf.format(date));
@@ -122,6 +134,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     private void statusChangeDone(String msg) {
         mConfirmAppontButton.setEnabled(false);
         mCancelAppontButton.setEnabled(false);
+        mConfirmAppontButton.setBackgroundResource(R.drawable.inactive_button);
+        mCancelAppontButton.setBackgroundResource(R.drawable.inactive_button);
         Utility.showAlert(this, "", msg);
     }
 
@@ -256,10 +270,12 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             return true;
         } else if (action == MappService.DO_CONFIRM_APPONT) {
             mAppont.setConfirmed(true);
+            mStatusView.setText(getString(R.string.confirmed));
             statusChangeDone(getString(R.string.msg_appont_confirmed));
             return true;
         } else if (action == MappService.DO_CANCEL_APPONT) {
             mAppont.setCanceled(true);
+            mStatusView.setText(getString(R.string.canceled));
             statusChangeDone(getString(R.string.msg_appont_canceled));
             return true;
         }

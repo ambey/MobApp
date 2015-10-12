@@ -52,6 +52,7 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         TextView ageView = (TextView) v.findViewById(R.id.patientAgeTextView);
         TextView wtView = (TextView) v.findViewById(R.id.patientWeightTextView);
         TextView timeView = (TextView) v.findViewById(R.id.appointmentTimeTextView);
+        TextView statusView = (TextView)v.findViewById(R.id.statusTextView);
 
         AppointmentListItem item = mList.get(position);
         fnameView.setText(item.getFirstName());
@@ -60,6 +61,14 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         ageView.setText("" + item.getAge());
         wtView.setText(String.format("%.01f", item.getWeight()));
         timeView.setText(item.getTime());
+
+        int stringId = R.string.confirmed;
+        if(! (item.isConfirmed() || item.isCanceled()) ) {
+            stringId = R.string.not_confirmed;
+        } else if(item.isCanceled()) {
+            stringId = R.string.canceled;
+        }
+        statusView.setText(getContext().getString(stringId));
 
         return v;
     }

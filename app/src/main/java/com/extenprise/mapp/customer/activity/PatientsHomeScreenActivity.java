@@ -44,6 +44,7 @@ public class PatientsHomeScreenActivity extends Activity {
 
     public void viewProfile(View view) {
         Intent intent = new Intent(this, PatientProfileActivity.class);
+        intent.putExtra("customer", mCustomer);
         startActivity(intent);
     }
 

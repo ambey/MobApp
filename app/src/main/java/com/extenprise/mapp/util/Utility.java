@@ -299,6 +299,9 @@ public abstract class Utility {
     }
 
     public static byte[] getBytesFromBitmap(Bitmap bitmap) {
+        if(bitmap == null) {
+            return null;
+        }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         return stream.toByteArray();

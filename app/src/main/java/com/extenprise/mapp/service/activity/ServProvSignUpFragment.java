@@ -200,7 +200,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
     public void phoneCheckDone(Bundle data) {
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
-        if(data.getBoolean("exists")) {
+        if (data.getBoolean("exists")) {
             mCellphoneview.setError(getString(R.string.error_phone_registered));
             mCellphoneview.requestFocus();
         }
@@ -278,7 +278,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
     public void saveData() {
         ServiceProvider sp = LoginHolder.servLoginRef;
-        sp.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+        try {
+            sp.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         sp.setfName(mFirstName.getText().toString());
         sp.setlName(mLastName.getText().toString());
         sp.setPhone(mCellphoneview.getText().toString());
@@ -339,11 +343,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     @Override
     public boolean gotResponse(int action, Bundle data) {
         getActivity().unbindService(mConnection);
-        if(action == MappService.DO_PHONE_EXIST_CHECK) {
+        if (action == MappService.DO_PHONE_EXIST_CHECK) {
             phoneCheckDone(data);
             return true;
         }
-        if(action == MappService.DO_REG_NO_CHECK) {
+        if (action == MappService.DO_REG_NO_CHECK) {
             regNoCheckDone(data);
             return true;
         }
@@ -352,7 +356,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public void regNoCheckDone(Bundle data) {
-        if(data.getBoolean("exists")) {
+        if (data.getBoolean("exists")) {
             mRegistrationNumber.setError("This Registration Number is already Registered.");
             mRegistrationNumber.requestFocus();
         }

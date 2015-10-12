@@ -97,7 +97,7 @@ public class ViewAppointmentListActivity extends Activity
 
     private void gotAppontList(Bundle data) {
         ArrayList<AppointmentListItem> list = data.getParcelableArrayList("appontList");
-        AppointmentListAdapter adapter = new AppointmentListAdapter(this, R.layout.activity_view_appointment, list, mServiceProv);
+        AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, list, mServiceProv);
         mAppointmentListView.setAdapter(adapter);
         mAppointmentListView.setOnItemClickListener(adapter);
     }

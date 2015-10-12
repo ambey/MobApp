@@ -282,20 +282,20 @@ public abstract class SearchServProv {
                 MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE + ", " +
 
                 MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY + "," +
-                MappContract.Service.COLUMN_NAME_SERVICE_NAME + "," +
+                MappContract.Service.TABLE_NAME + "." + MappContract.Service.COLUMN_NAME_SERVICE_NAME + "," +
 
-                MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID + ", " +
+                MappContract.ServicePoint.TABLE_NAME + "." + MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID + ", " +
                 MappContract.ServicePoint.COLUMN_NAME_ID_CITY + ", " +
-                MappContract.ServicePoint.COLUMN_NAME_PHONE + ", " +
+                MappContract.ServicePoint.TABLE_NAME + "." + MappContract.ServicePoint.COLUMN_NAME_PHONE + ", " +
                 MappContract.ServicePoint.COLUMN_NAME_ALT_PHONE + ", " +
-                MappContract.ServicePoint.COLUMN_NAME_NAME + ", " +
+                MappContract.ServicePoint.TABLE_NAME + "." + MappContract.ServicePoint.COLUMN_NAME_NAME + ", " +
                 MappContract.ServicePoint.COLUMN_NAME_LOCATION + ", " +
 
                 MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider._ID + ", " +
                 MappContract.ServiceProvider.COLUMN_NAME_FNAME + ", " +
                 MappContract.ServiceProvider.COLUMN_NAME_LNAME + ", " +
                 MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID + ", " +
-                MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + ", " +
+                MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + ", " +
                 MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER + ", " +
                 MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION + ", " +
                 MappContract.ServiceProvider.COLUMN_NAME_GENDER

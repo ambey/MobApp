@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ambey on 23/7/15.
  */
 public class MappDbHelper extends SQLiteOpenHelper {
-    public static final int DB_VERSION = 12;
+    public static final int DB_VERSION = 13;
     public static final String DB_NAME = "Mapp.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INT";

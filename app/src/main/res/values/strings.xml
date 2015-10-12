@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-    <string name="server_name">http://10.0.2.2:8080/mapp</string>
 <!--
-    <string name="server_name">http://208.74.28.39:8080/mapp</string>
+    <string name="server_name">http://10.0.2.2:8080/mapp</string>
 -->
+    <string name="server_name">http://208.74.28.39:8080/mapp</string>
     <string name="action_signin_cust">customer/SignIn.action</string>
     <string name="action_signup_cust">customer/SignUp.action</string>
     <string name="action_check_phone_cust">customer/PhoneExistsCheck.action</string>
@@ -285,6 +285,10 @@
     <string name="pinfo">Personal Info</string>
     <string name="addinfo">Address Info</string>
     <string name="wght">Weight</string>
+
+    <string name="confirmed">Confirmed</string>
+    <string name="canceled">Canceled</string>
+    <string name="not_confirmed">Not Confirmed</string>
 
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>
     <string name="msg_appont_canceled">The appointment has been canceled</string>

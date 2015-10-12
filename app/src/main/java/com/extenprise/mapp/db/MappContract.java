@@ -26,7 +26,7 @@ public class MappContract {
         public static final String TABLE_NAME = "Service";
 
         public static final String COLUMN_NAME_SERVICE_NAME = "name";
-        public static final String COLUMN_NAME_SERVICE_CATAGORY = "catagory";
+        public static final String COLUMN_NAME_SERVICE_CATAGORY = "category";
     }
 
     public static abstract class ServProvHasServPt implements BaseColumns {
