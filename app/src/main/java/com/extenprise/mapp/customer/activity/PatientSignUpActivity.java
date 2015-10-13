@@ -104,7 +104,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    checkPhoneExistence();
+                    if(!TextUtils.isEmpty(mEditTextCellphone.getText().toString().trim())) {
+                        checkPhoneExistence();
+                    }
                 }
             }
         });

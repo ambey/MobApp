@@ -80,7 +80,7 @@ public class ServProvProfileActivity extends Activity {
     private WorkPlaceListItem mSelectedItem;
 
     private EditText mMobNo, mEmailID, mRegNo;
-    private TextView mDocName;
+    private TextView mDocName, workhourLBL;
     private EditText mFname, mLname;
     private RadioGroup mGender;
     private RadioButton mMale, mFemale, mGenderBtn;
@@ -138,6 +138,8 @@ public class ServProvProfileActivity extends Activity {
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
         listView = (ListView) findViewById(R.id.workDetailListView);
+        workhourLBL = (TextView) findViewById(R.id.viewWorkHrsLbl);
+        workhourLBL.setClickable(false);
 
         viewProfile();
 
@@ -750,7 +752,9 @@ public class ServProvProfileActivity extends Activity {
         mQualification = (EditText) dialogView.findViewById(R.id.editTextQualification);
         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
+        workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
+        workhourLBL.setClickable(false);
         mStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

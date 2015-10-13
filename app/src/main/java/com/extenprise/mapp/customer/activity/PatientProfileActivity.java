@@ -134,7 +134,7 @@ public class PatientProfileActivity extends Activity {
         mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
         mEditTextCustomerLName.setText(LoginHolder.custLoginRef.getlName());
         mEditTextCustomerEmail.setText(LoginHolder.custLoginRef.getEmailId());
-        mTextViewDOB.setText((CharSequence) LoginHolder.custLoginRef.getDob());
+        mTextViewDOB.setText("" + LoginHolder.custLoginRef.getDob());
         mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
         mEditTextHeight.setText("" + LoginHolder.custLoginRef.getHeight());
         mEditTextWeight.setText("" + LoginHolder.custLoginRef.getWeight());

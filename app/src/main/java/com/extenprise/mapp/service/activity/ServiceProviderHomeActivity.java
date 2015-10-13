@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -26,6 +27,8 @@ public class ServiceProviderHomeActivity extends Activity {
 
         Intent intent = getIntent();
         mServiceProv = intent.getParcelableExtra("service");
+
+        LoginHolder.servLoginRef = mServiceProv;
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +
@@ -47,14 +50,14 @@ public class ServiceProviderHomeActivity extends Activity {
     }
 
     public void viewProfile(View view) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        if(SearchServProv.viewWorkPlaces(dbHelper)) {
+        /*MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        if(SearchServProv.viewWorkPlaces(dbHelper)) {*/
             Intent intent = new Intent(this, ServProvProfileActivity.class);
             intent.putExtra("service", mServiceProv);
             startActivity(intent);
-        } else {
+        /*} else {
             Utility.showAlert(this, "", "Sorry, Some problem occurs in viewing profile.");
-        }
+        }*/
     }
 
     @Override

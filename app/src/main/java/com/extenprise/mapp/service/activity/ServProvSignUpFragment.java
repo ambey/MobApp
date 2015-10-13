@@ -54,6 +54,7 @@ import java.util.Locale;
 public class ServProvSignUpFragment extends Fragment implements TitleFragment, ResponseHandler {
     private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
 
+    private int check;
     private View mRootView;
     private EditText mFirstName;
     private EditText mLastName;
@@ -100,16 +101,29 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    checkPhoneExistence();
+                    if(!TextUtils.isEmpty(mCellphoneview.getText().toString().trim())) {
+                        check = MappService.DO_PHONE_EXIST_CHECK;
+                        checkExistence();
+                    }
                 }
             }
         });
+
         mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
         mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
         mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
         mImgTxtView = (TextView) mRootView.findViewById(R.id.uploadimage);
         mRadioGroupGender = (RadioGroup) mRootView.findViewById(R.id.radioGroupGender);
         mRegistrationNumber = (EditText) mRootView.findViewById(R.id.editTextRegistrationNumber);
+        mRegistrationNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
+                    check = MappService.DO_REG_NO_CHECK;
+                    checkExistence();
+                }
+            }
+        });
         return mRootView;
     }
 
@@ -304,6 +318,12 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
+    private void checkExistence() {
+        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+        Intent intent = new Intent(getActivity(), MappService.class);
+        getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
+    }
+
     private ServiceConnection mConnection = new ServiceConnection() {
 
         private Messenger mService;
@@ -314,10 +334,16 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            SignInData data = new SignInData();
-            data.setPhone(mCellphoneview.getText().toString().trim());
-            bundle.putParcelable("signInData", data);
-            Message msg = Message.obtain(null, MappService.DO_PHONE_EXIST_CHECK);
+            Message msg = null;
+            if(check == MappService.DO_REG_NO_CHECK) {
+                msg = Message.obtain(null, MappService.DO_REG_NO_CHECK);
+                bundle.putString("regno", mRegistrationNumber.getText().toString().trim());
+            } else if(check == MappService.DO_PHONE_EXIST_CHECK) {
+                SignInData data = new SignInData();
+                data.setPhone(mCellphoneview.getText().toString().trim());
+                bundle.putParcelable("signInData", data);
+                msg = Message.obtain(null, MappService.DO_PHONE_EXIST_CHECK);
+            }
 /*
             bundle.putString("phone", mCellphoneview.getText().toString().trim());
             bundle.putString("regno", mRegistrationNumber.getText().toString().trim());
@@ -344,23 +370,29 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     public boolean gotResponse(int action, Bundle data) {
         getActivity().unbindService(mConnection);
         if (action == MappService.DO_PHONE_EXIST_CHECK) {
-            phoneCheckDone(data);
+            //phoneCheckDone(data);
+            checkDone(data);
             return true;
         }
         if (action == MappService.DO_REG_NO_CHECK) {
-            regNoCheckDone(data);
+            //regNoCheckDone(data);
+            checkDone(data);
             return true;
         }
-
         return false;
     }
 
-    public void regNoCheckDone(Bundle data) {
-        if (data.getBoolean("exists")) {
-            mRegistrationNumber.setError("This Registration Number is already Registered.");
-            mRegistrationNumber.requestFocus();
-        }
+    public void checkDone(Bundle data) {
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        if (data.getBoolean("exists")) {
+            if(check == MappService.DO_PHONE_EXIST_CHECK) {
+                mCellphoneview.setError(getString(R.string.error_phone_registered));
+                mCellphoneview.requestFocus();
+            } else if(check == MappService.DO_REG_NO_CHECK) {
+                mRegistrationNumber.setError("This Registration Number is already Registered.");
+                mRegistrationNumber.requestFocus();
+            }
+        }
     }
 
 }

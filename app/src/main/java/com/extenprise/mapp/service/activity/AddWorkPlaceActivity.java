@@ -398,6 +398,7 @@ public class AddWorkPlaceActivity extends Activity {
         timeDialog.show(getSupportFragmentManager(), "" + R.id.buttonStartTime);*/
 
         timePicker(view, mStartTime);
+
     }
 
     public void showEndTimePicker(View view) {
