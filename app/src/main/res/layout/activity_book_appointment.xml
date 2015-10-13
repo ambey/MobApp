@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/spinner"
+        android:background="@drawable/label1"
         android:padding="5dp"
         android:text="@string/title_activity_book_appointment"
         android:textSize="20sp"
