@@ -138,8 +138,8 @@ public class ServProvProfileActivity extends Activity {
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
         listView = (ListView) findViewById(R.id.workDetailListView);
-        workhourLBL = (TextView) findViewById(R.id.viewWorkHrsLbl);
-        workhourLBL.setClickable(false);
+        //workhourLBL = (TextView) findViewById(R.id.viewWorkHrsLbl);
+        //workhourLBL.setClickable(false);
 
         viewProfile();
 
@@ -204,7 +204,33 @@ public class ServProvProfileActivity extends Activity {
         }
 
         Intent intent = getIntent();
-        mWorkPlaceList = intent.getParcelableArrayListExtra("workPlaceList");
+        //mWorkPlaceList = intent.getParcelableArrayListExtra("workPlaceList");
+        ArrayList<ServProvHasServPt> services = LoginHolder.servLoginRef.getServices();
+        for(ServProvHasServPt s : services) {
+            WorkPlaceListItem wp = new WorkPlaceListItem();
+
+            wp.setPincode(s.getServicePoint().getPincode());
+            wp.setSpeciality(s.getService().getSpeciality());
+            wp.setLocation(s.getServicePoint().getLocation());
+            wp.setQualification(LoginHolder.servLoginRef.getQualification());
+            wp.setExperience(s.getExperience());
+            wp.setServCatagory(s.getService().getCategory());
+            wp.setAltPhone(s.getServicePoint().getAltPhone());
+            wp.setCity(s.getServicePoint().getCity().getCity());
+            wp.setConsultFee(s.getConsultFee());
+            wp.setEmailId(s.getServicePoint().getEmailId());
+            wp.setEndTime(s.getEndTime());
+            wp.setStartTime(s.getStartTime());
+            wp.setServPointType(s.getServPointType());
+            wp.setName(s.getServicePoint().getName());
+            wp.setPhone(s.getServicePoint().getPhone());
+            wp.setWorkingDays(s.getWorkingDays());
+            wp.setSignInData(LoginHolder.servLoginRef.getSignInData());
+
+            mWorkPlaceList.add(wp);
+        }
+        //mWorkPlaceList = LoginHolder.servLoginRef.getServices();
+        //TODO
         ArrayAdapter<WorkPlaceListItem> adapter = new WorkPlaceListAdapter(this,
                 R.layout.activity_servprov_wrkdetail_list, mWorkPlaceList);
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
