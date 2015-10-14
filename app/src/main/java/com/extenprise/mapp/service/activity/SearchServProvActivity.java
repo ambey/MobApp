@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -24,14 +23,12 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.service.data.SearchServProvForm;
-import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
@@ -41,6 +38,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     private Messenger mService;
     private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private int mAction;
 
     private EditText mDrClinicName;
     private Spinner mSpeciality;
@@ -70,15 +68,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String servCategory = mServProvCategory.getSelectedItem().toString();
-                MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-                Cursor cursor = DBUtil.getSpecialityList(dbHelper, servCategory);
-                ArrayList<String> spList = new ArrayList<>();
-                while (!cursor.isAfterLast() && cursor.moveToNext()) {
-                    spList.add(cursor.getString(1));
-                }
-                SpinnerAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.layout_spinner, spList);
-                mSpeciality.setAdapter(adapter);
+                getSpeciality();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
@@ -89,6 +79,21 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         /*ArrayList<String> list = new ArrayList<>();
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpeciality.setAdapter(spinnerAdapter);*/
+    }
+
+    private void getSpeciality() {
+        mAction = MappService.DO_GET_SPECIALITY;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    private void gotSpecialities(Bundle data) {
+        ArrayList<String> list = data.getStringArrayList("specialities");
+        if(list == null) {
+            list = new ArrayList<>();
+        }
+        SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
+        mSpeciality.setAdapter(adapter);
     }
 
     public void viewFlipper(View view) {
@@ -198,6 +203,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
         /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
         Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        mAction = MappService.DO_SEARCH_SERV_PROV;
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, BIND_AUTO_CREATE);
 /*
@@ -270,8 +276,12 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
                                        IBinder service) {
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
+            if(mAction == MappService.DO_GET_SPECIALITY) {
+                mForm = new SearchServProvForm();
+                mForm.setCategory(mServProvCategory.getSelectedItem().toString());
+            }
             bundle.putParcelable("form", mForm);
-            Message msg = Message.obtain(null, MappService.DO_SEARCH_SERV_PROV);
+            Message msg = Message.obtain(null, mAction);
             msg.replyTo = new Messenger(mRespHandler);
             msg.setData(bundle);
 
@@ -293,6 +303,9 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         unbindService(mConnection);
         if(action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
+            return true;
+        } else if(action == MappService.DO_GET_SPECIALITY) {
+            gotSpecialities(data);
             return true;
         }
         return false;

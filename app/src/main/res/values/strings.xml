@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-<!--
     <string name="server_name">http://10.0.2.2:8080/mapp</string>
--->
+<!--
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
+-->
     <string name="action_signin_cust">customer/SignIn.action</string>
     <string name="action_signup_cust">customer/SignUp.action</string>
     <string name="action_check_phone_cust">customer/PhoneExistsCheck.action</string>
@@ -25,6 +25,8 @@
     <string name="action_past_appont_list">service/PastAppontList.action</string>
     <string name="action_confirm_appont">service/ConfirmAppont.action</string>
     <string name="action_cancel_appont">service/CancelAppont.action</string>
+    <string name="action_save_rx_copy">service/SaveRxCopy.action</string>
+    <string name="action_get_speciality">service/GetSpeciality.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>

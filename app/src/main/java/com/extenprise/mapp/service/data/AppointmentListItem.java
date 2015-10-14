@@ -3,6 +3,8 @@ package com.extenprise.mapp.service.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.extenprise.mapp.util.ByteArrayToJSONAdapter;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +26,7 @@ public class AppointmentListItem implements Parcelable {
     private int reportCount;
     private boolean confirmed;
     private boolean canceled;
+    private byte[] rxCopy;
 
     public AppointmentListItem() {
     }
@@ -54,6 +57,11 @@ public class AppointmentListItem implements Parcelable {
         weight = source.readFloat();
         confirmed = source.readInt() > 0;
         canceled = source.readInt() > 0;
+        int size = source.readInt();
+        if(size > 0) {
+            rxCopy = new byte[size];
+            source.readByteArray(rxCopy);
+        }
     }
 
     public boolean isCanceled() {
@@ -110,6 +118,14 @@ public class AppointmentListItem implements Parcelable {
 
     public void setIdServProvHasServPt(int idServProvHasServPt) {
         this.idServProvHasServPt = idServProvHasServPt;
+    }
+
+    public byte[] getRxCopy() {
+        return rxCopy;
+    }
+
+    public void setRxCopy(byte[] rxCopy) {
+        this.rxCopy = rxCopy;
     }
 
     public String getFirstName() {
@@ -180,6 +196,14 @@ public class AppointmentListItem implements Parcelable {
         dest.writeFloat(weight);
         dest.writeInt(confirmed ? 1 : 0);
         dest.writeInt(canceled ? 1 : 0);
+        int size = 0;
+        if(rxCopy != null) {
+            size = rxCopy.length;
+        }
+        dest.writeInt(size);
+        if(size > 0) {
+            dest.writeByteArray(rxCopy);
+        }
     }
 
     public static final Creator<AppointmentListItem> CREATOR = new Creator<AppointmentListItem>() {

@@ -24,7 +24,7 @@
         android:id="@+id/imageDoctor"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:src="@drawable/dr" />
+        android:src="@drawable/dr_avatar" />
 
     <TextView
         android:id="@+id/textView1"

@@ -19,6 +19,8 @@ import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.data.WorkPlaceListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.ByteArrayToJSONAdapter;
+import com.extenprise.mapp.util.SearchServProv;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -56,6 +58,7 @@ public class MappService extends Service {
     public static final int DO_SAVE_SCANNED_RX_COPY = 15;
     public static final int DO_CONFIRM_APPONT = 16;
     public static final int DO_CANCEL_APPONT = 17;
+    public static final int DO_GET_SPECIALITY = 18;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -300,9 +303,19 @@ public class MappService extends Service {
     public void doSaveScannedRxCopy(Message msg) {
         Bundle data = msg.getData();
         AppointmentListItem form = data.getParcelable("form");
-        byte[] image = data.getByteArray("image");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-
+        GsonBuilder gsonBuilder = new GsonBuilder().registerTypeHierarchyAdapter(byte[].class, new ByteArrayToJSONAdapter());
+        gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = new GsonBuilder().create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
     }
 
     private void doChangeAppontStatus(Message msg) {
@@ -315,7 +328,23 @@ public class MappService extends Service {
             task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            onError(DO_BOOK_APPONT);
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    private void doGetSpeciality(Message msg) {
+        Bundle data = msg.getData();
+        SearchServProvForm form = data.getParcelable("form");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
             return;
         }
         task.execute((Void) null);
@@ -393,6 +422,12 @@ public class MappService extends Service {
             case DO_CANCEL_APPONT:
                 urlId = R.string.action_cancel_appont;
                 break;
+            case DO_SAVE_SCANNED_RX_COPY:
+                urlId = R.string.action_save_rx_copy;
+                break;
+            case DO_GET_SPECIALITY:
+                urlId = R.string.action_get_speciality;
+                break;
             default:
                 return null;
         }
@@ -454,6 +489,12 @@ public class MappService extends Service {
                 case DO_CANCEL_APPONT:
                     mService.doChangeAppontStatus(msg);
                     break;
+                case DO_SAVE_SCANNED_RX_COPY:
+                    mService.doSaveScannedRxCopy(msg);
+                    break;
+                case DO_GET_SPECIALITY:
+                    mService.doGetSpeciality(msg);
+                    break;
                 default:
                     super.handleMessage(msg);
             }
@@ -471,7 +512,7 @@ public class MappService extends Service {
         private ServiceProvider mServProv;
         private WorkPlaceListItem mWorkPlace;
         private ArrayList<ServProvListItem> mServProvList;
-        private ArrayList<String> mTimeSlots;
+        private ArrayList<String> mStringList;
         private ArrayList<AppointmentListItem> mAppontList;
         private Appointment mForm;
 
@@ -557,7 +598,8 @@ public class MappService extends Service {
                             mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             break;
                         case DO_APPONT_TIME_SLOTS:
-                            mTimeSlots = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<String>>() {
+                        case DO_GET_SPECIALITY:
+                            mStringList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<String>>() {
                             }.getType());
                             break;
                         case DO_BOOK_APPONT:
@@ -593,8 +635,12 @@ public class MappService extends Service {
             if (mServProvList != null) {
                 bundle.putParcelableArrayList("servProvList", mServProvList);
             }
-            if (mTimeSlots != null) {
-                bundle.putStringArrayList("timeSlots", mTimeSlots);
+            if (mStringList != null) {
+                String key = "timeslots";
+                if(mAction == DO_GET_SPECIALITY) {
+                    key = "specialities";
+                }
+                bundle.putStringArrayList(key, mStringList);
             }
             if (mForm != null) {
                 bundle.putParcelable("appontForm", mForm);

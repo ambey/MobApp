@@ -561,11 +561,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             focusView = mTextViewDOB;
             valid = false;
         }
+/*
         if (TextUtils.isEmpty(height)) {
             mEditTextHeight.setError(getString(R.string.error_field_required));
             focusView = mEditTextHeight;
             valid = false;
         }
+*/
         if (TextUtils.isEmpty(weight)) {
             mEditTextWeight.setError(getString(R.string.error_field_required));
             focusView = mEditTextWeight;

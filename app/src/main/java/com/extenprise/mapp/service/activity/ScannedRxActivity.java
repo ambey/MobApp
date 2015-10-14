@@ -203,7 +203,6 @@ public class ScannedRxActivity extends Activity implements ResponseHandler{
             Bundle bundle = new Bundle();
 
             bundle.putParcelable("form", mAppont);
-            bundle.putByteArray("image", mBytes);
             Message msg = Message.obtain(null, MappService.DO_SAVE_SCANNED_RX_COPY);
             msg.replyTo = new Messenger(mRespHandler);
             msg.setData(bundle);
@@ -244,6 +243,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler{
                     mBytes = new byte[(int) raf.length()];
                     raf.readFully(mBytes);
                     raf.close();
+                    mAppont.setRxCopy(mBytes);
                 }
             } catch (IOException x) {
                 x.printStackTrace();

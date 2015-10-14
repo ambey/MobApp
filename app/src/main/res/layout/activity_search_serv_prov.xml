@@ -32,7 +32,7 @@
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
-                android:src="@drawable/med1" />
+                android:src="@drawable/med_logo_final" />
 
             <LinearLayout
                 android:id="@+id/docSearchL1"

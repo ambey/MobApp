@@ -26,7 +26,7 @@
             android:layout_marginTop="40dp"
             android:layout_weight="0.44"
 
-            android:src="@drawable/med1"
+            android:src="@drawable/med_logo_final"
             android:layout_centerHorizontal="true"/>
 
         <Button
@@ -87,7 +87,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/med_store"
+            android:src="@drawable/medstore"
             android:layout_marginLeft="0dp"
             android:layout_below="@+id/serviceProviderTextView"
             android:layout_alignLeft="@+id/serviceProviderTextView"
@@ -137,7 +137,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/diag_centre"
+            android:src="@drawable/diagcenter"
             android:layout_toEndOf="@id/doctorImage"
             android:layout_toRightOf="@id/doctorImage"
             android:layout_marginLeft="60dp"

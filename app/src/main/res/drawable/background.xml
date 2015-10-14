@@ -32,7 +32,7 @@
 
         <item>
 
-            <bitmap  android:scaleType="centerCrop" android:gravity="center" android:src="@drawable/s53" />
+            <bitmap android:gravity="fill" android:src="@drawable/stetho_wmark" />
 
         </item>
 
