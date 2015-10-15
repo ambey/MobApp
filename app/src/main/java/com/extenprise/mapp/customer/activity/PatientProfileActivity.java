@@ -50,6 +50,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -126,6 +127,12 @@ public class PatientProfileActivity extends Activity {
     }
 
     private void viewProfile() {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String dob = "";
+        if(LoginHolder.custLoginRef.getDob() != null) {
+            dob = df.format(LoginHolder.custLoginRef.getDob());
+        }
+
         mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName());
         mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
         if(LoginHolder.custLoginRef.getImg() != null) {
@@ -134,7 +141,7 @@ public class PatientProfileActivity extends Activity {
         mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
         mEditTextCustomerLName.setText(LoginHolder.custLoginRef.getlName());
         mEditTextCustomerEmail.setText(LoginHolder.custLoginRef.getEmailId());
-        mTextViewDOB.setText("" + LoginHolder.custLoginRef.getDob());
+        mTextViewDOB.setText(dob);
         mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
         mEditTextHeight.setText("" + LoginHolder.custLoginRef.getHeight());
         mEditTextWeight.setText("" + LoginHolder.custLoginRef.getWeight());
@@ -174,6 +181,7 @@ public class PatientProfileActivity extends Activity {
         mEditTextCustomerLName.setEnabled(set);
         mEditTextCustomerEmail.setEnabled(set);
         mEditTextPinCode.setEnabled(set);
+        mEditTextLoc.setEnabled(set);
         mEditTextWeight.setEnabled(set);
         mEditTextHeight.setEnabled(set);
         mTextViewDOB.setEnabled(set);
@@ -262,14 +270,14 @@ public class PatientProfileActivity extends Activity {
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         try {
-            Date dob = sdf.parse(mTextViewDOB.getText().toString().trim());
+            Date dob = sdf.parse(mTextViewDOB.getText().toString());
             c.setDob(dob);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        c.setAge(Utility.getAge(mTextViewDOB.getText().toString().trim()));
+        c.setAge(Utility.getAge(mTextViewDOB.getText().toString()));
         c.setEmailId(mEditTextCustomerEmail.getText().toString().trim());
-        c.setGender(mSpinGender.getSelectedItem().toString().trim());
+        c.setGender(mSpinGender.getSelectedItem().toString());
         float height = 0;
         try {
             height = Float.parseFloat(mEditTextHeight.getText().toString().trim());
@@ -455,7 +463,7 @@ public class PatientProfileActivity extends Activity {
         String fName = mEditTextCustomerFName.getText().toString().trim();
         String lName = mEditTextCustomerLName.getText().toString().trim();
         String emailId = mEditTextCustomerEmail.getText().toString().trim();
-        String dob = mTextViewDOB.getText().toString().trim();
+        String dob = mTextViewDOB.getText().toString();
         String height = mEditTextHeight.getText().toString().trim();
         String weight = mEditTextWeight.getText().toString().trim();
         String loc = mEditTextLoc.getText().toString().trim();

@@ -67,7 +67,10 @@
         android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/mobnumLabel"
         android:layout_toRightOf="@+id/mobnumLabel"
-        android:text="@string/mob_num" />
+        android:hint="@string/mob_num"
+        android:textColor="#006600"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
 
     <ScrollView
@@ -116,11 +119,14 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
-
+            <!--style="?android:textAppearanceSmall"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"-->
 
             <Button
                 android:id="@+id/buttonViewUpdate"
-                style="?android:textAppearanceSmall"
+                style="@style/MyButton"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/custinfoLay"
@@ -129,9 +135,7 @@
                 android:background="@drawable/button"
                 android:text="@string/update"
                 android:onClick="updateProfile"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                 />
 
 
         </RelativeLayout>

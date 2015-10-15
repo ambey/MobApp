@@ -129,6 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="@string/strtTime"
+                    android:visibility="gone"
                     android:onClick="showStartTimePicker" />
 
                 <Button
@@ -136,6 +137,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:visibility="gone"
                     android:layout_marginStart="5dp"
                     android:layout_weight="0.5"
                     android:hint="@string/endTime"
@@ -193,14 +195,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/servProLay4"
-                android:layout_marginTop="10dp"
-                android:visibility="gone">
+                android:layout_marginTop="10dp">
 
                 <Button
                     android:id="@+id/spinAvailDays"
                     android:layout_width="165dp"
                     android:layout_height="30dp"
-
+                    android:visibility="gone"
                     android:background="@drawable/spinner"
                     android:text="@string/select_days" />
 
@@ -210,8 +211,7 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-
-
+                    android:visibility="gone"
                     android:background="@drawable/spinner"
                     android:entries="@array/genderTypeSearch"
                     android:prompt="@string/gender"
