@@ -154,16 +154,20 @@
 
 
         <Button
-            android:id="@+id/buttonView4"
+
+            android:id="@+id/buttonViewProfile"
+
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:background="@drawable/square_round_button"
-            android:textColor="#888"
+            android:textColor="#b0171f"
+            android:onClick="viewProfile"
             android:textSize="16sp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/linenView6"
+            android:layout_toEndOf="@+id/linenView6"
             android:layout_alignBottom="@id/linenView5"
             android:layout_alignParentTop="true"
+            android:text="@string/profile_text"
              />
 
 
