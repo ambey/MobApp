@@ -5,48 +5,56 @@
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
-<!--
-        <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
--->
-        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_white_24dp</item>
-        <item name="homeAsUpIndicator">@drawable/ic_arrow_back_white_24dp</item>
+        <!--
+                <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
+        -->
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_red_24dp</item>
+        <item name="homeAsUpIndicator">@drawable/ic_arrow_back_red_24dp</item>
         <item name="android:spinnerStyle">@style/SpinnerTheme</item>
         <!--<item name="android:buttonStyle">@style/MyButton</item>-->
     </style>
 
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/actionbar_bg</item>
+        <item name="android:background">@drawable/stroked_rect</item>
         <item name="android:displayOptions">useLogo</item>
         <item name="displayOptions">useLogo</item>
     </style>
 
-<!--
-    <style name="MyActionBarTabs" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
-        &lt;!&ndash; tab indicator &ndash;&gt;
-        <item name="android:background">@color/actionbar_bg</item>
+    <color name="ThemeColor">#c00000</color>
+    <color name="PassiveColor">#cdcdcd</color>
+    <!--
+        <style name="MyActionBarTabs" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
+            &lt;!&ndash; tab indicator &ndash;&gt;
+            <item name="android:background">@color/actionbar_bg</item>
 
-        &lt;!&ndash; Support library compatibility &ndash;&gt;
-        <item name="background">@color/actionbar_bg</item>
+            &lt;!&ndash; Support library compatibility &ndash;&gt;
+            <item name="background">@color/actionbar_bg</item>
+        </style>
+    -->
+
+    <style name="MyButton">
+        <item name="android:background">@drawable/button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ThemeColor</item>
     </style>
--->
 
     <style name="RoundSquareButton">
         <item name="android:background">@drawable/square_round_button</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#b0171f</item>
+        <item name="android:textColor">@color/ThemeColor</item>
     </style>
 
     <style name="RoundButton">
         <item name="android:background">@drawable/button</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/ThemeColor</item>
     </style>
 
     <style name="RectButton">
         <item name="android:background">@drawable/rect_button</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/ThemeColor</item>
     </style>
 
     <style name="LinkButton">
@@ -55,27 +63,13 @@
         <item name="android:textColor">#00f</item>
     </style>
 
-    <style name="clear">
-        <item name="android:opacity">transparent</item>
-    </style>
-
-    <style name="TextLight">
-        <item name="android:textColor">#fff</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextDark">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#000</item>
-    </style>
-
-    <style name="titleText">
+    <style name="TitleText">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#000</item>
     </style>
 
-    <style name="largeText">
+    <style name="LargeText">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#060</item>
         <item name="android:textSize">18sp</item>
@@ -84,8 +78,20 @@
     <style name="mediumText">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#00a</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="LargeLabel">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#00f</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="MediumLabel">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!--<style name="spinner_style" >
         <item name="android:background">@drawable/spinner</item>
         <item name="android:layout_marginLeft">10dp</item>

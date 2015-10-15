@@ -75,34 +75,22 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         int fromTime = Utility.getMinutes(mAppont.getTime());
         date.setTime(date.getTime() + fromTime * 60 * 1000);
         if (date.after(today)) {
-            rxButton.setEnabled(false);
-            uploadRxButton.setEnabled(false);
-
-            rxButton.setBackgroundResource(R.drawable.inactive_button);
-            uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
+            Utility.setEnabledButton(this, rxButton, false);
+            Utility.setEnabledButton(this, uploadRxButton, false);
         } else if (date.before(today)) {
             int day = cal.get(Calendar.DAY_OF_MONTH);
             cal.setTime(date);
             int apptDay = cal.get(Calendar.DAY_OF_MONTH);
             if (apptDay != day) {
-                rxButton.setEnabled(false);
-                uploadRxButton.setEnabled(true);
-
-                rxButton.setBackgroundResource(R.drawable.inactive_button);
-                uploadRxButton.setBackgroundResource(R.drawable.button);
+                Utility.setEnabledButton(this, rxButton, false);
+                Utility.setEnabledButton(this, uploadRxButton, true);
             } else {
-                rxButton.setEnabled(true);
-                uploadRxButton.setEnabled(true);
-
-                rxButton.setBackgroundResource(R.drawable.button);
-                uploadRxButton.setBackgroundResource(R.drawable.button);
+                Utility.setEnabledButton(this, rxButton, true);
+                Utility.setEnabledButton(this, uploadRxButton, true);
             }
         } else {
-            rxButton.setEnabled(false);
-            uploadRxButton.setEnabled(false);
-
-            rxButton.setBackgroundResource(R.drawable.inactive_button);
-            uploadRxButton.setBackgroundResource(R.drawable.inactive_button);
+            Utility.setEnabledButton(this, rxButton, false);
+            Utility.setEnabledButton(this, uploadRxButton, false);
         }
 
         if(mAppont.isConfirmed()) {
@@ -114,10 +102,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         }
 
         if (mAppont.isConfirmed() || mAppont.isCanceled()) {
-            mConfirmAppontButton.setEnabled(false);
-            mCancelAppontButton.setEnabled(false);
-            mConfirmAppontButton.setBackgroundResource(R.drawable.inactive_button);
-            mCancelAppontButton.setBackgroundResource(R.drawable.inactive_button);
+            Utility.setEnabledButton(this, mConfirmAppontButton, false);
+            Utility.setEnabledButton(this, mCancelAppontButton, false);
         }
 
         dateView.setText(sdf.format(date));
@@ -132,10 +118,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void statusChangeDone(String msg) {
-        mConfirmAppontButton.setEnabled(false);
-        mCancelAppontButton.setEnabled(false);
-        mConfirmAppontButton.setBackgroundResource(R.drawable.inactive_button);
-        mCancelAppontButton.setBackgroundResource(R.drawable.inactive_button);
+        Utility.setEnabledButton(this, mConfirmAppontButton, false);
+        Utility.setEnabledButton(this, mCancelAppontButton, false);
         Utility.showAlert(this, "", msg);
     }
 
@@ -159,8 +143,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             msgView.setVisibility(View.VISIBLE);
         }
         if (mPastApponts == null || mPastApponts.size() <= 1) {
-            viewMoreButton.setEnabled(false);
-            viewMoreButton.setBackgroundResource(R.drawable.inactive_button);
+            Utility.setEnabledButton(this, viewMoreButton, false);
         }
     }
 

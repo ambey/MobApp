@@ -170,7 +170,6 @@
                     android:layout_marginStart="10dp"
 
 
-
                     android:background="@drawable/label"
                     android:clickable="true"
                     android:onClick="showGenderField"
@@ -211,7 +210,6 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-
 
 
                     android:background="@drawable/spinner"
@@ -257,24 +255,20 @@
                     android:background="@drawable/spinner"
                     android:entries="@array/consultationFees"
                     android:prompt="@string/consult_fees"
-                    android:spinnerMode="dropdown"
-                    />
+                    android:spinnerMode="dropdown" />
 
             </LinearLayout>
 
             <Button
                 android:id="@+id/buttonSearch"
+                style="@style/MyButton"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/servProLay6"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/button"
                 android:onClick="searchDr"
-                android:text="@string/search"
-                android:textColor="#ffffffff"
-                android:textStyle="bold" />
-
+                android:text="@string/search" />
 
         </RelativeLayout>
     </ScrollView>

@@ -10,14 +10,14 @@
 
     <TextView
         android:id="@+id/appointmentDetailsTextView"
-        style="@style/titleText"
+        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/appointLbl" />
 
     <TextView
         android:id="@+id/appointmentDateTextView"
-        style="@style/titleText"
+        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/appointmentDetailsTextView"

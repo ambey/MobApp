@@ -190,61 +190,58 @@
                 android:layout_below="@id/textviewClinicName"
                 android:layout_marginTop="1dp"
                 android:background="@drawable/text"
+                android:paddingLeft="10dp"
                 android:text="@string/time"
-                android:textSize="15sp"
-                android:paddingLeft="10dp"/>
+                android:textSize="15sp" />
 
 
             <TextView
                 android:id="@+id/textview3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:text="@string/consultFee"
-
-                android:textSize="15sp"
-                android:layout_alignTop="@+id/textView4"
                 android:layout_alignLeft="@+id/buttonBookAppointment"
-                android:layout_alignStart="@+id/buttonBookAppointment" />
+                android:layout_alignStart="@+id/buttonBookAppointment"
+                android:layout_alignTop="@+id/textView4"
+                android:text="@string/consultFee"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/textviewFees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textviewFirstClinic"
-                android:layout_toEndOf="@+id/textview3"
-                android:layout_toRightOf="@+id/textview3"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:hint="@string/value"
-                android:textSize="15sp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_below="@+id/textviewFirstClinic"
-                android:text="@string/rs_sign"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="5dp"
                 android:layout_toEndOf="@+id/textview3"
                 android:layout_toRightOf="@+id/textview3"
-                android:id="@+id/textView4" />
+                android:hint="@string/value"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textviewFirstClinic"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/textview3"
+                android:layout_toRightOf="@+id/textview3"
+                android:text="@string/rs_sign"
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/buttonBookAppointment"
+                style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/imageviewLike"
                 android:layout_alignStart="@+id/imageviewLike"
                 android:layout_below="@+id/textview3"
-                android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/button"
+                android:layout_marginTop="30dp"
                 android:onClick="bookAppointment"
                 android:padding="10dp"
-                android:text="@string/title_activity_book_appointment"
-                android:textColor="#fff"
-                android:textStyle="bold" />
+                android:text="@string/title_activity_book_appointment" />
 
         </RelativeLayout>
     </ScrollView>

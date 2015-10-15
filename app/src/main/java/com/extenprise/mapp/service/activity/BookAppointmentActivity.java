@@ -129,8 +129,7 @@ public class BookAppointmentActivity extends Activity
     }
 
     public void setTimeSlots() {
-        mBookButton.setEnabled(false);
-        mBookButton.setBackgroundResource(R.drawable.inactive_button);
+        Utility.setEnabledButton(this, mBookButton, false);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
@@ -164,11 +163,13 @@ public class BookAppointmentActivity extends Activity
 
     private void gotTimeSlots(Bundle data) {
         ArrayList<String> list = data.getStringArrayList("timeSlots");
+        if(list == null) {
+            return;
+        }
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
         if (list.size() > 0) {
-            mBookButton.setEnabled(true);
-            mBookButton.setBackgroundResource(R.drawable.button);
+            Utility.setEnabledButton(this, mBookButton, true);
         }
     }
 
@@ -251,8 +252,7 @@ public class BookAppointmentActivity extends Activity
         @Override
         protected void onPostExecute(Void aVoid) {
             Utility.showAlert(myActivity, "", "Your Appointment has been fixed.");
-            mBookButton.setEnabled(false);
-            mBookButton.setBackgroundResource(R.drawable.inactive_button);
+            Utility.setEnabledButton(myActivity, mBookButton, false);
             /*Intent intent = new Intent(myActivity, SearchServProvActivity.class);
             startActivity(intent);*/
             //return;

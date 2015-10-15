@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <!--
     <item android:icon="@drawable/abc_ic_ab_back_mtrl_am_alpha"
         android:enabled="true" android:id="@+id/action_back"
@@ -7,15 +8,17 @@
         android:showAsAction="always" />
 -->
     <item android:id="@+id/action_search" android:title="@string/action_search"
-        android:icon="@drawable/ic_search_white_24dp"
+        android:icon="@drawable/ic_search_red_24dp"
         android:orderInCategory="100"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_sign_in" android:title="@string/action_sign_in"
-        android:icon="@drawable/ic_account_box_white_24dp"
+        android:icon="@drawable/ic_account_box_red_24dp"
         android:orderInCategory="100"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        app:showAsAction="never" />
 </menu>

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -309,4 +310,17 @@ public abstract class Utility {
     public static Bitmap getBitmapFromBytes(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
+
+    public static void setEnabledButton(Context context, Button button, boolean enabled) {
+        button.setEnabled(enabled);
+        if(enabled) {
+            button.setBackgroundResource(R.drawable.button);
+            button.setTextColor(context.getResources().getColor(R.color.ThemeColor));
+        } else {
+            button.setBackgroundResource(R.drawable.inactive_button);
+            button.setTextColor(context.getResources().getColor(R.color.PassiveColor));
+        }
+    }
+
+
 }
