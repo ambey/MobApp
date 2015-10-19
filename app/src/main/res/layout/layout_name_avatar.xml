@@ -12,6 +12,8 @@
             android:id="@+id/imageViewDoctor"
             android:layout_width="120dp"
             android:layout_height="100dp"
+            android:clickable="true"
+            android:onClick="changeImage"
             android:contentDescription="@string/profile_text"
             android:src="@drawable/dr_avatar" />
 
@@ -22,6 +24,8 @@
             android:layout_alignBottom="@id/imageViewDoctor"
             android:layout_alignRight="@id/imageViewDoctor"
             android:layout_alignEnd="@id/imageViewDoctor"
+            android:clickable="true"
+            android:onClick="changeImage"
             android:background="@drawable/p12" />
 
     </RelativeLayout>

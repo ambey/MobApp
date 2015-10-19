@@ -252,6 +252,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/personalInfo"
                 android:layout_marginTop="30dp"
+                android:clickable="true"
                 android:onClick="openWorkPlaceInfo"
                 android:text="@string/wrk_det"/>
 

@@ -48,6 +48,7 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -122,10 +123,16 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
     }
 
     private void viewProfile() {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String dob = "";
+        //DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String dob = "" + Calendar.getInstance();
+        int d=0, m=0, y=0;
         if(LoginHolder.custLoginRef.getDob() != null) {
-            dob = df.format(LoginHolder.custLoginRef.getDob());
+            //dob = df.format(LoginHolder.custLoginRef.getDob());
+            Date dd = LoginHolder.custLoginRef.getDob();
+            d = dd.getDay();
+            m = dd.getMonth();
+            y = dd.getYear();
+            dob = String.format("%02d/%02d/%4d", d, m + 1, y);
         }
 
         mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName());
@@ -191,6 +198,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         } else {
             setFieldsEnability(true);
         }
+
+        mContLay.setVisibility(View.VISIBLE);
     }
 
     public void updateProfile(View v) {

@@ -198,10 +198,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mEmailID.setText(LoginHolder.servLoginRef.getEmailId());
         mRegNo.setText(LoginHolder.servLoginRef.getRegNo());
 
-        if (LoginHolder.servLoginRef.getGender().equals("Male")) {
-            mMale.setSelected(true);
+        if (LoginHolder.servLoginRef.getGender().equalsIgnoreCase("Male")) {
+            mMale.setChecked(true);
         } else {
-            mFemale.setSelected(true);
+            mFemale.setChecked(true);
         }
 
         Intent intent = getIntent();
@@ -386,7 +386,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mMale.setEnabled(set);
         mFemale.setEnabled(set);
 
-        openPersonalInfo(view);
+        //openPersonalInfo(view);
+        mPersonalInfo.setVisibility(View.VISIBLE);
     }
 
     public void editWorkPlaceInfo(View v) {
@@ -759,6 +760,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     private AlertDialog addWorkPlaceScreen() {
+        //Dialog d = new Dialog(this);
+
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_servprov_wrkdetail_list, null);
 
@@ -826,9 +829,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 .setView(dialogView)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        if (isValidWorkPlace()) {
-                            addWorkPlace();
+                        if (!isValidWorkPlace()) {
+                            return;
                         }
+                        addWorkPlace();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -1055,18 +1059,18 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(mEmailID.getText().toString())) {
+        /*if (TextUtils.isEmpty(mEmailID.getText().toString())) {
             mEmailID.setError(getString(R.string.error_field_required));
             focusView = mEmailID;
             cancel = true;
+        }*/
+        if (!TextUtils.isEmpty(mEmailID.getText().toString())) {
+            if (Validator.isEmailValid(mEmailID.getText().toString().trim())) {
+                mEmailID.setError(getString(R.string.error_invalid_email));
+                focusView = mEmailID;
+                cancel = true;
+            }
         }
-
-        if(Validator.isEmailValid(mEmailID.getText().toString().trim())) {
-            mEmailID.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailID;
-            cancel = true;
-        }
-
         int genderID = mGender.getCheckedRadioButtonId();
         if (genderID == -1) {
             mFemale.setError("Please select Gender.");
