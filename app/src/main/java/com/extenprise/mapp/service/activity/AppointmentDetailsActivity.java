@@ -247,7 +247,11 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        unbindService(mConnection);
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (action == MappService.DO_PAST_APPONT_LIST) {
             gotPastAppointments(data);
             return true;

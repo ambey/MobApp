@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -50,13 +49,15 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.service.data.WorkPlaceListItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.service.data.WorkPlaceListItem;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
@@ -72,10 +73,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class ServProvProfileActivity extends Activity {
+public class ServProvProfileActivity extends Activity implements ResponseHandler {
 
     private int mServiceAction;
-    private UpdateHandler mResponseHandler = new UpdateHandler(this);
+    private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
     private ArrayList<WorkPlaceListItem> mWorkPlaceList;
     private WorkPlaceListItem mSelectedItem;
 
@@ -498,8 +499,6 @@ public class ServProvProfileActivity extends Activity {
                 })
                 .show();
     }
-
-
 
     ///////////////////////////Multi spinner..../////////////////////////////
 
@@ -1096,6 +1095,7 @@ public class ServProvProfileActivity extends Activity {
         performAction();
     }
 
+/*
     class SaveServiceData extends AsyncTask<Void, Void, Void> {
 
         private Activity myActivity;
@@ -1185,6 +1185,7 @@ public class ServProvProfileActivity extends Activity {
         }
 
     }
+*/
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1242,33 +1243,26 @@ public class ServProvProfileActivity extends Activity {
         }
     };
 
-    private static class UpdateHandler extends Handler {
-        private ServProvProfileActivity mActivity;
-
-        public UpdateHandler(ServProvProfileActivity activity) {
-            mActivity = activity;
-        }
-
         @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
+        public boolean gotResponse(int action, Bundle data) {
+            switch (action) {
                 case MappService.ADD_WORK_PLACE:
-                    mActivity.addWorkPlaceDone(msg.getData());
+                    addWorkPlaceDone(data);
                     break;
                 case MappService.REMOVE_WORK_PLACE:
-                    mActivity.removeWorkPlaceDone(msg.getData());
+                    removeWorkPlaceDone(data);
                     break;
                 case MappService.DO_UPDATE:
-                    mActivity.updateDone(msg.getData());
+                    updateDone(data);
                     break;
                 case MappService.DO_REG_NO_CHECK:
-                    mActivity.regNoCheckDone(msg.getData());
+                    regNoCheckDone(data);
                     break;
                 default:
-                    super.handleMessage(msg);
+                    return false;
             }
+            return true;
         }
-    }
 
     public void regNoCheckDone(Bundle data) {
         if(data.getBoolean("exists")) {
@@ -1276,7 +1270,6 @@ public class ServProvProfileActivity extends Activity {
             mRegNo.requestFocus();
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
     }
 
     private void updateDone(Bundle data) {
@@ -1284,7 +1277,6 @@ public class ServProvProfileActivity extends Activity {
             Utility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
     }
 
     private void addWorkPlaceDone(Bundle data) {
@@ -1292,7 +1284,6 @@ public class ServProvProfileActivity extends Activity {
             Utility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
     }
 
     private void removeWorkPlaceDone(Bundle data) {
@@ -1300,7 +1291,6 @@ public class ServProvProfileActivity extends Activity {
             Utility.showRegistrationAlert(this, "", "Work Place Removed Successfully.");
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

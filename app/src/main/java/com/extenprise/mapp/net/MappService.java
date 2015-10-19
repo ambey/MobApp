@@ -305,7 +305,7 @@ public class MappService extends Service {
         AppointmentListItem form = data.getParcelable("form");
         GsonBuilder gsonBuilder = new GsonBuilder().registerTypeHierarchyAdapter(byte[].class, new ByteArrayToJSONAdapter());
         gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Gson gson = new GsonBuilder().create();
+        Gson gson = gsonBuilder.create();
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         try {

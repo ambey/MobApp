@@ -269,7 +269,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        getActivity().unbindService(mConnection);
+        try {
+            getActivity().unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (action == MappService.DO_SIGNUP) {
             signUpDone(data);
             return true;

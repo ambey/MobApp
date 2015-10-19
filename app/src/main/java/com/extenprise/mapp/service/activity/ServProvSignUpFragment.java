@@ -368,7 +368,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        getActivity().unbindService(mConnection);
+        try {
+            getActivity().unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (action == MappService.DO_PHONE_EXIST_CHECK) {
             //phoneCheckDone(data);
             checkDone(data);

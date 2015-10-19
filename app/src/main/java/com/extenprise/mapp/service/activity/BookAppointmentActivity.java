@@ -221,6 +221,7 @@ public class BookAppointmentActivity extends Activity
         setTimeSlots();
     }
 
+/*
     class SaveAppointData extends AsyncTask<Void, Void, Void> {
 
         private Activity myActivity;
@@ -253,8 +254,10 @@ public class BookAppointmentActivity extends Activity
         protected void onPostExecute(Void aVoid) {
             Utility.showAlert(myActivity, "", "Your Appointment has been fixed.");
             Utility.setEnabledButton(myActivity, mBookButton, false);
-            /*Intent intent = new Intent(myActivity, SearchServProvActivity.class);
-            startActivity(intent);*/
+            */
+/*Intent intent = new Intent(myActivity, SearchServProvActivity.class);
+            startActivity(intent);*//*
+
             //return;
         }
 
@@ -262,6 +265,7 @@ public class BookAppointmentActivity extends Activity
         protected void onCancelled() {
         }
     }
+*/
 
     /**
      * Defines callbacks for service binding, passed to bindService()
@@ -305,7 +309,11 @@ public class BookAppointmentActivity extends Activity
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        unbindService(mConnection);
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (action == MappService.DO_APPONT_TIME_SLOTS) {
             gotTimeSlots(data);
             return true;

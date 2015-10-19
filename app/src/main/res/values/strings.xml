@@ -40,7 +40,7 @@
     <string name="dob">Date of Birth</string>
     <string name="dob_label">Date of Birth:</string>
     <string name="dob_with_format">Date of Birth: (dd/mm/YYYY)</string>
-    <string name="dobFormat">dd/mm/YYYY *</string>
+    <string name="dob_format">dd/mm/YYYY *</string>
 
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
@@ -66,11 +66,11 @@
         <item>Friday</item>
         <item>Saturday</item>
     </string-array>
-    <string-array name="genderType">
+    <string-array name="gender_type">
         <item>Male</item>
         <item>Female</item>
     </string-array>
-    <string-array name="loginOption">
+    <string-array name="login_option">
         <item>Patient</item>
         <item>Medical Service Provider</item>
     </string-array>
@@ -112,28 +112,28 @@
 
     <string name="select_category">Select Category</string>
 
-    <string-array name="serviceCategory">
+    <string-array name="service_category">
         <item>@string/select_category</item>
         <item>Physician</item>
         <item>Pharmacist</item>
         <item>Diagnostic Center</item>
     </string-array>
 
-    <string-array name="genderTypeSearch">
+    <string-array name="gender_search">
         <item>Both</item>
         <item>Male</item>
         <item>Female</item>
 
     </string-array>
 
-    <string-array name="consultationFees">
+    <string-array name="consultation_fees">
         <item>&#45;</item>
         <item>&lt;200</item>
         <item>200&#45;500</item>
         <item>500&gt;</item>
 
     </string-array>
-    <string-array name="specialitySearch">
+    <string-array name="speciality_search">
         <item>Select Speciality</item>
         <item>Speciality</item>
         <item>Cardiologist</item>
@@ -148,7 +148,7 @@
         <item>Urologist</item>
     </string-array>
 
-    <string-array name="serviceCategorySearch">
+    <string-array name="service_category_search">
         <item>Select Category</item>
         <item>Physician</item>
         <item>Pharmacist</item>
@@ -227,14 +227,14 @@
     <string name="my_report">View My Reports</string>
     <string name="my_rx">View My Rx</string>
     <string name="medico">Medico</string>
-    <string name="historyData">History Data</string>
-    <string name="myAppointment">My Appointments</string>
-    <string name="othAppointment">Other Appointments</string>
-    <string name="otherData">Other Data</string>
-    <string name="lastModified">Last Visited : </string>
+    <string name="history_data">History Data</string>
+    <string name="past_apponts">Past Appointments</string>
+    <string name="other_apponts">Other Appointments</string>
+    <string name="other_data">Other Data</string>
+    <string name="last_modified">Last Visited : </string>
     <string name="hello">Hello</string>
-    <string name="helloDr">Hello Dr</string>
-    <string name="dateFormat">dd/mm/yyyy</string>
+    <string name="hello_dr">Hello Dr</string>
+    <string name="date_format">dd/mm/yyyy</string>
     <string name="rx_details">Rx Details</string>
     <string name="scan_rx_now">Scan Rx Copy Now!</string>
     <string name="already_scanned">It\'s Already Scanned</string>

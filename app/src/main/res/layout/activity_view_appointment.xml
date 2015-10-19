@@ -83,7 +83,7 @@
 
     <TextView
         android:id="@+id/statusTextView"
-        style="@style/mediumText"
+        style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/appointmentTimeTextView"

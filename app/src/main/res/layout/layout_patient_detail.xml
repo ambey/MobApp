@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textViewPersonalFields"
@@ -22,8 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
-      android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -85,7 +85,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:hint="@string/dobFormat"
+                android:hint="@string/dob_format"
                 android:onClick="showDatePicker" />
 
             <Spinner
@@ -96,7 +96,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="0.75"
                 android:background="@drawable/spinner"
-                android:entries="@array/genderType"
+                android:entries="@array/gender_type"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:prompt="@string/gender" />
@@ -150,8 +150,6 @@
     </LinearLayout>
 
 
-
-
     <TextView
         android:id="@+id/viewAddress"
         android:layout_width="fill_parent"
@@ -171,8 +169,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewAddress"
         android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -234,7 +231,6 @@
                 android:prompt="@string/state" />
         </LinearLayout>
     </LinearLayout>
-
 
 
 </LinearLayout>

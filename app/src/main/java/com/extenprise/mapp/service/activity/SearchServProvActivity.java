@@ -300,7 +300,11 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        unbindService(mConnection);
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
             return true;

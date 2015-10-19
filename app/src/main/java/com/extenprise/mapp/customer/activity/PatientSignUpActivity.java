@@ -424,7 +424,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        unbindService(mConnection);
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(action == MappService.DO_SIGNUP) {
             signUpDone(data);
             return true;
@@ -616,6 +620,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         return (count > 0);
     }
 
+/*
     class SaveCustomerData extends AsyncTask<Void, Void, Void> {
 
         private Activity myActivity;
@@ -645,9 +650,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             values.put(MappContract.Customer.COLUMN_NAME_PIN_CODE, mEditTextPinCode.getText().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mSpinCity.getSelectedItem().toString().trim());
             values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mSpinState.getSelectedItem().toString().trim());
-            /*if(!imgDecodableString.equals("") || imgDecodableString != null) {
+            */
+/*if(!imgDecodableString.equals("") || imgDecodableString != null) {
                 values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
-            }*/
+            }*//*
+
             values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
 
             //Bitmap bitmap = ((BitmapDrawable)mImgView.getDrawable()).getBitmap();
@@ -661,8 +668,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         protected void onPostExecute(Void aVoid) {
             Utility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
             Utility.showProgress(myActivity, mFormView, mProgressView, false);
-            /*Intent intent = new Intent(myActivity, LoginActivity.class);
-            startActivity(intent);*/
+            */
+/*Intent intent = new Intent(myActivity, LoginActivity.class);
+            startActivity(intent);*//*
+
         }
 
         @Override
@@ -671,6 +680,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         }
 
     }
+*/
 
     private void checkPhoneExistence() {
         Utility.showProgress(this, mFormView, mProgressView, true);

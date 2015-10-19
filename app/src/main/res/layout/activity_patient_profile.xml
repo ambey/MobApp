@@ -20,12 +20,12 @@
         android:id="@+id/textViewEditImage"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:clickable="true"
-        android:onClick="changeImg"
         android:layout_alignBottom="@+id/imageViewPatient"
         android:layout_alignEnd="@+id/imageViewPatient"
         android:layout_alignRight="@+id/imageViewPatient"
-        android:background="@drawable/p12" />
+        android:background="@drawable/p12"
+        android:clickable="true"
+        android:onClick="changeImg" />
 
     <TextView
         android:id="@+id/textviewPname"
@@ -53,12 +53,13 @@
         android:id="@+id/mobnumLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linenView"
+        android:layout_alignBottom="@+id/mobnumValue"
         android:layout_marginTop="20dp"
         android:text="@string/mob_num" />
 
     <TextView
         android:id="@+id/mobnumValue"
+        style="@style/LargeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linenView"
@@ -67,10 +68,7 @@
         android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/mobnumLabel"
         android:layout_toRightOf="@+id/mobnumLabel"
-        android:hint="@string/mob_num"
-        android:textColor="#006600"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:hint="@string/mob_num"/>
 
 
     <ScrollView
@@ -78,70 +76,45 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mobnumLabel">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageViewEdit1"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/editpen"
-                android:clickable="true"
+                android:layout_gravity="center_horizontal"
                 android:onClick="editPatientProf"
-                />
+                android:src="@drawable/editpen" />
 
             <TextView
                 android:id="@+id/textViewEdit1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/imageViewEdit1"
-                android:layout_alignStart="@+id/imageViewEdit1"
-                android:layout_below="@+id/imageViewEdit1"
-                android:layout_centerHorizontal="true"
-                android:clickable="true"
+                android:layout_gravity="center_horizontal"
                 android:onClick="editPatientProf"
                 android:text="@string/edit_info"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
-
-            <RelativeLayout
-                android:id="@+id/custinfoLay"
+            <include
+                android:id="@+id/customerInfo"
+                layout="@layout/layout_patient_detail"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewEdit1">
-
-                <include
-                    android:id="@+id/customerInfo"
-                    layout="@layout/layout_patient_detail"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
-            <!--style="?android:textAppearanceSmall"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:textStyle="bold"-->
+                android:layout_gravity="center_horizontal" />
 
             <Button
                 android:id="@+id/buttonViewUpdate"
-                style="@style/MyButton"
-                android:layout_width="250dp"
+                style="@style/ExtraWideButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/custinfoLay"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/button"
-                android:text="@string/update"
                 android:onClick="updateProfile"
-                 />
-
-
-        </RelativeLayout>
-
-
+                android:text="@string/update" />
+        </LinearLayout>
     </ScrollView>
-
-
 </RelativeLayout>

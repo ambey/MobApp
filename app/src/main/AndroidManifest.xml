@@ -87,17 +87,6 @@
             android:name=".service.activity.MainActivity"
             android:label="Medico" />
         <activity
-            android:name=".service.activity.AddSpecialityActivity"
-            android:label="@string/title_activity_add_speciality" />
-        <activity
-            android:name=".service.activity.AddWorkPlaceActivity"
-            android:label="@string/title_activity_add_workplace"
-            android:parentActivityName=".service.activity.ServProvSignUpActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.ServProvSignUpActivity" />
-        </activity>
-        <activity
             android:name=".service.activity.ServiceProviderHomeActivity"
             android:label="@string/title_activity_service_provider_home" />
         <activity

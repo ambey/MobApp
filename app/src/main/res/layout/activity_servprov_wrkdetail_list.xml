@@ -13,51 +13,50 @@
         android:id="@+id/viewWorkDetCount"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
+        android:background="@drawable/text_backg"
         android:text="@string/count"
         android:textSize="18sp"
-        android:background="@drawable/text_backg"
         android:textStyle="bold"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/textViewEditWrkDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="@string/edit1"
-        android:visibility="gone"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
         android:layout_alignTop="@+id/viewWorkDetCount"
+        android:layout_marginTop="8dp"
         android:layout_toLeftOf="@+id/viewEditWrkDetail"
         android:layout_toStartOf="@+id/viewEditWrkDetail"
-        />
+        android:clickable="true"
+        android:text="@string/edit1"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/viewEditWrkDetail"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:background="@drawable/pencil"
-        android:layout_marginRight="30dp"
-        android:layout_marginEnd="30dp"
-        android:visibility="gone"
-        android:layout_alignTop="@+id/viewWorkDetCount"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/viewWorkDetCount"
+        android:layout_marginEnd="30dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/pencil"
         android:clickable="true"
-        />
+        android:visibility="gone" />
 
     <Spinner
         android:id="@+id/spinServiceProvCategory"
         android:layout_width="170dp"
         android:layout_height="40dp"
+        android:layout_below="@+id/viewWorkDetCount"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/viewWorkDetCount"
         android:background="@drawable/spinner"
-        android:entries="@array/serviceCategory"
+        android:entries="@array/service_category"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:padding="5dp"
@@ -69,10 +68,11 @@
         android:id="@+id/editTextSpeciality"
         android:layout_width="170dp"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
         android:layout_below="@+id/viewWorkDetCount"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/spinServiceProvCategory"
         android:layout_toRightOf="@+id/spinServiceProvCategory"
         android:background="@drawable/spinner"
@@ -88,13 +88,12 @@
         android:layout_height="25dp"
         android:layout_below="@+id/editTextSpeciality"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/editTextQualification"
         android:layout_toRightOf="@+id/editTextQualification"
-        android:background="@drawable/text"
         android:hint="@string/experience"
-        android:inputType="number"
-        android:textSize="18dp" />
+        android:inputType="number"/>
 
 
     <EditText
@@ -103,24 +102,22 @@
         android:layout_height="25dp"
         android:layout_below="@+id/spinServiceProvCategory"
         android:layout_marginTop="20dp"
-        android:background="@drawable/text"
         android:hint="@string/qualification"
-        android:padding="4dp"
-        android:textSize="18dp" />
+        android:padding="4dp"/>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextQualification"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/workPlaceDetailLayout"
+            layout="@layout/layout_workplace_details"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/editTextQualification"
-            android:layout_marginTop="10dp">
-
-            <include
-                android:id="@+id/workPlaceDetailLayout"
-                layout="@layout/layout_workplace_details"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </RelativeLayout>
 

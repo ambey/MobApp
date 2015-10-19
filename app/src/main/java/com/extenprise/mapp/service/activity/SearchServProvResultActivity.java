@@ -127,7 +127,11 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        unbindService(mConnection);
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(action == MappService.DO_SERV_PROV_DETAILS) {
             gotDetails(data);
             return true;

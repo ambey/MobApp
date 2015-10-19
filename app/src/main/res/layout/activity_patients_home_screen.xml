@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/background"
 
     tools:context="com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity">
 
@@ -31,10 +31,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewWelcomeLbl"
+        android:layout_marginTop="40dp"
         android:layout_toEndOf="@+id/imagePatient"
         android:layout_toRightOf="@+id/imagePatient"
-        android:layout_marginTop="40dp"
-        android:text="@string/lastModified" />
+        android:text="@string/last_modified" />
 
     <TextView
         android:id="@+id/textViewDate"
@@ -71,78 +71,68 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/linenView"
-        >
+        android:layout_below="@+id/linenView">
 
         <Button
             android:id="@+id/buttonDoctorsAppointment"
-            android:background="@drawable/square_round_button"
+            style="@style/RectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/linenView5"
+            android:layout_alignEnd="@+id/linenView2"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignBottom="@+id/linenView5"
             android:layout_alignParentTop="true"
-            android:text="@string/doc_appoint"
-            android:textSize="16sp"
-            android:textColor="#b0171f"
             android:layout_alignRight="@+id/linenView2"
-            android:layout_alignEnd="@+id/linenView2" />
+            android:text="@string/doc_appoint" />
 
 
-       <Button
+        <Button
             android:id="@+id/buttonViewReport"
+            style="@style/InactiveRectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/linenView5"
+            android:layout_alignLeft="@+id/linenView2"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-           android:layout_alignBottom="@+id/linenView5"
-           android:layout_alignParentTop="true"
-            android:background="@drawable/square_round_button"
-           android:layout_alignLeft="@+id/linenView2"
-           android:layout_alignStart="@+id/linenView2"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/linenView2"
             android:enabled="false"
-            android:text="@string/my_report"
-            android:textColor="#888"
-            android:textSize="16sp" />
+            android:text="@string/my_report" />
 
 
         <Button
             android:id="@+id/buttonViewRx"
+            style="@style/InactiveRectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-
-            android:background="@drawable/square_round_button"
-            android:text="@string/my_rx"
-            android:textColor="#888"
-            android:textSize="16sp"
-            android:layout_below="@+id/linenView5"
             android:layout_alignBottom="@+id/linenView2"
+            android:layout_alignEnd="@+id/linenView2"
             android:layout_alignRight="@+id/linenView2"
-            android:layout_alignEnd="@+id/linenView2" />
+            android:layout_below="@+id/linenView5"
+            android:text="@string/my_rx" />
 
         <Button
             android:id="@+id/buttonViewProfile"
+            style="@style/RectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_round_button"
-            android:textColor="#b0171f"
-            android:onClick="viewProfile"
-            android:textSize="16sp"
-            android:layout_below="@+id/linenView5"
             android:layout_alignBottom="@+id/linenView2"
             android:layout_alignLeft="@+id/linenView2"
             android:layout_alignStart="@+id/linenView2"
-            android:text="@string/profile_text"/>
+            android:layout_below="@+id/linenView5"
+            android:onClick="viewProfile"
+            android:text="@string/profile_text" />
 
         <View
             android:id="@+id/linenView2"
             android:layout_width="0.4dp"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/linenView4"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="#9d9d9d"
-            android:layout_alignBottom="@+id/linenView4" />
+            android:background="#9d9d9d" />
 
         <View
             android:id="@+id/linenView4"

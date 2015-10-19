@@ -21,50 +21,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/uploadimageview"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_marginTop="0dp"
-                android:clickable="true"
                 android:onClick="showImageUploadOptions"
+                android:layout_gravity="center_horizontal"
                 android:src="@drawable/patient" />
 
             <TextView
                 android:id="@+id/uploadimage"
+                style="@style/MediumLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/uploadimageview"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
-                android:clickable="true"
                 android:onClick="showImageUploadOptions"
-                android:text="@string/uploadImg"
-                android:textColor="#009f6b"
-                android:textSize="15sp" />
-
+                android:layout_gravity="center_horizontal"
+                android:text="@string/uploadImg"/>
 
             <EditText
                 android:id="@+id/editTextCellphone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/uploadimage"
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/cellPhoneNo"
                 android:inputType="phone" />
 
-
             <EditText
                 android:id="@+id/editTextPasswd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextCellphone"
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWd"
@@ -74,44 +66,30 @@
                 android:id="@+id/editTextConPasswd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editTextPasswd"
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWdCon"
                 android:inputType="textPassword" />
 
-            <RelativeLayout
-                android:id="@+id/custLay1"
-                android:layout_below="@+id/editTextConPasswd"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-
-                <include
+            <include
                 android:id="@+id/customerInfo"
                 layout="@layout/layout_patient_detail"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                />
-
-                </RelativeLayout>
-
-
+                android:layout_gravity="center_horizontal"/>
 
             <Button
                 android:id="@+id/buttonCustomerSignUp"
-                style="@style/RoundButton"
-                android:layout_width="250dp"
+                style="@style/ExtraWideButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/custLay1"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
+                android:layout_gravity="center_horizontal"
                 android:onClick="registerPatient"
                 android:text="@string/done" />
 
 
-
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

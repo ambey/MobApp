@@ -13,7 +13,7 @@
         style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/historyData" />
+        android:text="@string/history_data" />
 
     <TextView
         android:id="@+id/textViewFName"
@@ -37,12 +37,12 @@
 
     <TextView
         android:id="@+id/textViewMyAppontLbl"
+        style="@style/LargeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewhistoryLbl"
-        android:layout_marginTop="40dp"
-        android:text="@string/myAppointment"
-        android:textSize="18sp" />
+        android:layout_marginTop="60dp"
+        android:text="@string/past_apponts"/>
 
     <ListView
         android:id="@+id/listViewMyAppont"
@@ -51,13 +51,14 @@
         android:layout_below="@+id/textViewMyAppontLbl"
         android:layout_marginTop="10dp"/>
 
+<!--
     <TextView
         android:id="@+id/textViewOtherDataLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listViewMyAppont"
         android:layout_marginTop="30dp"
-        android:text="@string/otherData"
+        android:text="@string/other_data"
         android:textSize="18sp" />
 
     <ListView
@@ -66,5 +67,6 @@
         android:layout_height="120dp"
         android:layout_below="@+id/textViewOtherDataLbl"
         android:layout_marginTop="10dp"/>
+-->
 
 </RelativeLayout>

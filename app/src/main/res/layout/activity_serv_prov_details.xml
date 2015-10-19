@@ -1,6 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.extenprise.mapp.service.activity.ServProvDetailsActivity">
+
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -10,21 +17,15 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:id="@+id/bookAppointmentForm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="com.extenprise.mapp.service.activity.ServProvDetailsActivity">
+            android:layout_height="wrap_content">
 
 
             <ImageView
@@ -36,55 +37,57 @@
 
             <TextView
                 android:id="@+id/textview"
-                android:layout_width="40dp"
+                style="@style/LargeText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="110dp"
-                android:layout_marginTop="30dp"
-                android:text="@string/drLbl"
-                android:textColor="#006600"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:layout_alignTop="@id/imageViewUser"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@id/imageViewUser"
+                android:layout_toRightOf="@id/imageViewUser"
+                android:text="@string/drLbl" />
 
             <TextView
                 android:id="@+id/textviewDocname"
+                style="@style/LargeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
-                android:layout_marginTop="30dp"
-                android:hint="@string/drName"
-                android:textColor="#006600"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_alignTop="@id/textview"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toRightOf="@id/textview"
+                android:hint="@string/drName" />
 
             <TextView
                 android:id="@+id/textviewDocspeciality"
+                style="@style/MediumText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textviewDocname"
+                android:layout_alignStart="@id/textviewDocname"
                 android:layout_below="@+id/textviewDocname"
-                android:layout_marginLeft="150dp"
                 android:layout_marginTop="10dp"
-                android:hint="@string/speciality"
-                android:textSize="15sp" />
+                android:hint="@string/speciality" />
 
             <ImageView
                 android:id="@+id/imageViewAvailable"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/imageViewUser"
                 android:src="@drawable/g_circle" />
 
             <TextView
                 android:id="@+id/textviewAvailability"
+                style="@style/MediumLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/imageViewAvailable"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="1dp"
                 android:layout_toLeftOf="@id/imageViewAvailable"
-                android:text="@string/available"
-                android:textSize="15sp"
-                android:textStyle="italic" />
+                android:layout_toStartOf="@id/imageViewAvailable"
+                android:text="@string/available" />
 
             <View
                 android:id="@+id/ln"
@@ -96,151 +99,145 @@
 
             <TextView
                 android:id="@+id/textviewDocQualification"
+                style="@style/MediumLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ln"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
-                android:hint="@string/qualification1"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/textview2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ln"
-                android:layout_marginLeft="200dp"
-                android:layout_marginTop="15dp"
-                android:text="@string/expLbl"
-                android:textSize="15sp" />
+                android:hint="@string/qualification1" />
 
             <TextView
                 android:id="@+id/textviewDocExperience"
+                style="@style/MediumLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ln"
-                android:layout_marginLeft="260dp"
-                android:layout_marginTop="15dp"
-                android:hint="@string/year"
-                android:textSize="15sp" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/textviewDocQualification"
+                android:hint="@string/year" />
 
-            <ImageView
-                android:id="@+id/imageviewLike"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+            <TextView
+                android:id="@+id/textview2"
+                style="@style/MediumLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/textviewDocQualification"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/textviewDocExperience"
+                android:layout_toStartOf="@id/textviewDocExperience"
+                android:text="@string/expLbl" />
+
+            <LinearLayout
+                android:id="@+id/layoutLikeReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/textviewDocQualification"
-                android:layout_marginLeft="80dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/like" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp">
 
-            <TextView
-                android:id="@+id/textviewReviews"
+                <ImageView
+                    android:id="@+id/imageviewLike"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/like" />
+
+                <TextView
+                    android:id="@+id/textviewReviews"
+                    style="@style/MediumText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/review" />
+            </LinearLayout>
+
+            <TableLayout
+                android:id="@+id/layoutClinicDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewDocExperience"
-                android:layout_marginLeft="180dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/review"
-                android:textColor="#4166f5"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:layout_below="@id/layoutLikeReview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp">
 
-            <TextView
-                android:id="@+id/textviewClinicName"
-                android:layout_width="160dp"
-                android:layout_height="30dp"
-                android:layout_below="@+id/imageviewLike"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/text"
-                android:paddingLeft="10dp"
-                android:text="@string/clinic_name"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TableRow
+                    style="@style/TableRow"
+                    android:padding="5dp">
 
-            <TextView
-                android:id="@+id/textviewClinicTimes"
-                android:layout_width="160dp"
-                android:layout_height="30dp"
-                android:layout_alignBaseline="@id/textviewClinicName"
-                android:layout_marginTop="25dp"
-                android:layout_toRightOf="@id/textviewClinicName"
-                android:background="@drawable/text"
-                android:paddingLeft="10dp"
-                android:text="@string/time"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/textviewClinicName"
+                        style="@style/TableHead"
+                        android:layout_width="200dp"
+                        android:text="@string/clinic_name" />
 
-            <TextView
-                android:id="@+id/textviewFirstClinic"
-                android:layout_width="160dp"
-                android:layout_height="50dp"
-                android:layout_alignLeft="@id/textviewClinicName"
-                android:layout_below="@+id/textviewClinicName"
-                android:layout_marginTop="1dp"
-                android:background="@drawable/text"
-                android:paddingLeft="10dp"
-                android:text="@string/clinic_name"
-                android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/textviewClinicTimes"
+                        style="@style/TableHead"
+                        android:layout_width="60dp"
+                        android:text="@string/time" />
+                </TableRow>
 
-            <TextView
-                android:id="@+id/textviewFirstclinictime"
-                android:layout_width="160dp"
-                android:layout_height="50dp"
-                android:layout_alignLeft="@id/textviewClinicTimes"
-                android:layout_below="@id/textviewClinicName"
-                android:layout_marginTop="1dp"
-                android:background="@drawable/text"
-                android:paddingLeft="10dp"
-                android:text="@string/time"
-                android:textSize="15sp" />
+                <TableRow
+                    style="@style/TableRow"
+                    android:padding="5dp">
 
+                    <TextView
+                        android:id="@+id/textviewFirstClinic"
+                        style="@style/TableRow"
+                        android:text="@string/clinic_name" />
 
-            <TextView
-                android:id="@+id/textview3"
+                    <TextView
+                        android:id="@+id/textviewFirstclinictime"
+                        style="@style/TableRow"
+                        android:text="@string/time" />
+                </TableRow>
+            </TableLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutConsultFees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/buttonBookAppointment"
-                android:layout_alignStart="@+id/buttonBookAppointment"
-                android:layout_alignTop="@+id/textView4"
-                android:text="@string/consultFee"
-                android:textSize="15sp" />
+                android:layout_below="@id/layoutClinicDetails"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textviewFees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewFirstClinic"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/textview3"
-                android:layout_toRightOf="@+id/textview3"
-                android:hint="@string/value"
-                android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/textview3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/consultFee"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textviewFirstClinic"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/textview3"
-                android:layout_toRightOf="@+id/textview3"
-                android:text="@string/rs_sign"
-                android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/rs_sign"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/textviewFees"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
+                    android:hint="@string/value"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/buttonBookAppointment"
-                style="@style/MyButton"
+                style="@style/WideButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/imageviewLike"
-                android:layout_alignStart="@+id/imageviewLike"
-                android:layout_below="@+id/textview3"
+                android:layout_below="@+id/layoutConsultFees"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:onClick="bookAppointment"
-                android:padding="10dp"
                 android:text="@string/title_activity_book_appointment" />
 
         </RelativeLayout>

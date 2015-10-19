@@ -18,36 +18,38 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context=".SignUpActivity"
-            android:weightSum="1">
+            android:weightSum="1"
+            tools:context=".SignUpActivity">
 
             <ImageView
+                android:id="@+id/uploadimageview"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:id="@+id/uploadimageview"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/dr_avatar"
-                android:contentDescription="@string/uploadImg" />
+                android:contentDescription="@string/uploadImg"
+                android:src="@drawable/dr_avatar" />
+
             <TextView
+                android:id="@+id/uploadimage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/uploadimage"
-                android:text="@string/uploadImg"
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
-                android:textSize="15sp"
                 android:layout_marginTop="5dp"
-                android:textColor="#009f6b"
                 android:clickable="true"
-                android:onClick="captureImage" />
+                android:onClick="captureImage"
+                android:text="@string/uploadImg"
+                android:textColor="#009f6b"
+                android:textSize="15sp" />
+
             <View
                 android:id="@+id/ln"
                 android:layout_width="100dp"
                 android:layout_height="1dp"
-                android:background="#009f6b"
                 android:layout_marginLeft="22dp"
                 android:layout_marginStart="22dp"
-                android:visibility="invisible"/>
+                android:background="#009f6b"
+                android:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/progressView"
@@ -71,17 +73,17 @@
                     android:ems="10"
                     android:hint="@string/first_name"
                     android:inputType="textPersonName"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <EditText
                     android:id="@+id/editTextLName"
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
                     android:ems="10"
                     android:hint="@string/last_name"
-                    android:inputType="textPersonName"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginStart="12dp"/>
+                    android:inputType="textPersonName" />
 
             </LinearLayout>
 
@@ -89,75 +91,75 @@
                 android:id="@+id/editTextCellphone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/cellPhoneNo"
-                android:inputType="phone"
-                android:layout_marginTop="10dp" />
+                android:inputType="phone" />
+
             <EditText
                 android:id="@+id/editTextEmail"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:layout_marginTop="10dp" />
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/editTextPasswd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWd"
                 android:inputType="textPassword"
-                android:text=""
-                android:layout_marginTop="10dp"/>
+                android:text="" />
 
             <EditText
                 android:id="@+id/editTextCnfPasswd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWdCon"
                 android:inputType="textPassword"
-                android:text=""
-                android:layout_marginTop="10dp"/>
+                android:text="" />
 
             <RadioGroup
                 android:id="@+id/radioGroupGender"
                 android:layout_width="wrap_content"
-                android:focusableInTouchMode="true"
-                android:focusable="true"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                >
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/male"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
 
-                    android:focusable="true"
+                <RadioButton
                     android:id="@+id/radioButtonMale"
-                    />
-
-                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/female"
 
                     android:focusable="true"
+                    android:text="@string/male" />
+
+                <RadioButton
                     android:id="@+id/radioButtonFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
                     android:layout_marginLeft="30dp"
                     android:layout_marginStart="30dp"
-                    />
+                    android:focusable="true"
+                    android:text="@string/female" />
             </RadioGroup>
+
             <EditText
                 android:id="@+id/editTextRegistrationNumber"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:ems="10"
-                android:hint="@string/reg_no"
-                android:layout_marginTop="5dp" />
+                android:hint="@string/reg_no" />
 
             <Button
                 android:id="@+id/next"

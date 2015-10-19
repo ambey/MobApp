@@ -253,6 +253,11 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(action == MappService.DO_LOGIN) {
             loginDone(data);
             return true;
@@ -297,7 +302,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     protected void loginDone(Bundle msgData) {
         Utility.showProgress(this, mLoginFormView, mProgressView, false);
-        unbindService(mConnection);
         boolean success = msgData.getBoolean("status");
         if (success) {
             Intent intent;

@@ -47,7 +47,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="0.5"
                     android:background="@drawable/spinner"
-                    android:entries="@array/serviceCategorySearch"
+                    android:entries="@array/service_category_search"
                     android:spinnerMode="dropdown" />
 
                 <Spinner
@@ -84,8 +84,8 @@
 
             <Button
                 android:id="@+id/buttonSearch"
-                style="@style/MyButton"
-                android:layout_width="200dp"
+                style="@style/ExtraWideButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editTextSearchLoc"
                 android:layout_centerHorizontal="true"

@@ -154,7 +154,11 @@ public class ViewAppointmentListActivity extends Activity
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        unbindService(mConnection);
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (action == MappService.DO_APPONT_LIST) {
             gotAppontList(data);
             return true;

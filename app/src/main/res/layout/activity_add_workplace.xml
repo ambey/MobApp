@@ -10,38 +10,38 @@
     tools:context=".ServProvSignUpActivity">
 
     <LinearLayout
+        android:id="@+id/linLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/linLayout1">
-    <Spinner
-        android:id="@+id/spinServiceProvCategory"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/spinner"
-        android:entries="@array/serviceCategory"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:padding="5dp"
-        android:prompt="@string/speciality_doc"
-        android:spinnerMode="dropdown"
-        android:layout_weight="0.5"
-/>
+        android:orientation="horizontal">
 
-    <Spinner
-        android:id="@+id/editTextSpeciality"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/spinner"
-        android:choiceMode="singleChoice"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:padding="5dp"
-        android:spinnerMode="dropdown"
-        android:layout_weight="0.5"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"/>
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/spinServiceProvCategory"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/spinner"
+            android:entries="@array/service_category"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="5dp"
+            android:prompt="@string/speciality_doc"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/editTextSpeciality"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/spinner"
+            android:choiceMode="singleChoice"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="5dp"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
     <!-- <EditText
          android:id="@+id/editTextSpeciality"
          android:layout_width="220dp"
@@ -51,63 +51,55 @@
          android:inputType="textAutoComplete"
          android:textSize="18dp"/> -->
 
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/linLayout2"
-    android:orientation="horizontal"
-    android:layout_marginTop="10dp"
-    android:layout_below="@+id/linLayout1"
-    >
-    <EditText
-        android:id="@+id/editTextExperience"
+    <LinearLayout
+        android:id="@+id/linLayout2"
         android:layout_width="fill_parent"
-        android:layout_height="25dp"
-       android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linLayout1"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
-        android:background="@drawable/text"
-        android:hint="@string/experience"
-        android:inputType="number"
-        android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextExperience"
+            style="@style/LargeText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:hint="@string/experience"
+            android:inputType="number" />
 
 
-    <EditText
-        android:id="@+id/editTextQualification"
-        android:layout_width="fill_parent"
-        android:layout_height="25dp"
-        android:layout_weight="0.5"
-        android:background="@drawable/text"
-        android:hint="@string/qualification"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:textSize="16sp" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/editTextQualification"
+            style="@style/LargeText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="0.5"
+            android:hint="@string/qualification" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/viewWorkPlaceDetLbl"
+        style="@style/CollapseFormHeading"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
         android:layout_below="@+id/linLayout2"
         android:layout_marginTop="20dp"
-        android:background="@drawable/label"
-        android:clickable="true"
         android:onClick="showWorkFields"
-        android:text="@string/work_place_details"
-        android:textColor="#fff"
-        android:textSize="20sp" />
+        android:text="@string/work_place_details" />
 
     <TextView
         android:id="@+id/viewWorkPlaceCount"
+        style="@style/LargeText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/linLayout1"
         android:layout_alignEnd="@+id/linLayout1"
+        android:layout_alignRight="@+id/linLayout1"
         android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
-        android:clickable="true"
         android:onClick="showWorkFields"
-        android:text="@string/count"
-        android:textColor="#fff"
-        android:textSize="18sp" />
+        android:text="@string/count" />
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -126,15 +118,14 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
             <include
                 android:id="@+id/workPlaceDetailLayout"
                 layout="@layout/layout_workplace_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
-
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -144,26 +135,26 @@
 
                 <Button
                     android:id="@+id/buttonAddWorkPlace"
+                    style="@style/MyButton"
                     android:layout_width="fill_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="0.5"
-                    android:background="@drawable/button"
                     android:onClick="addNewWorkPlace"
-                    android:text="@string/add_another"
-                    android:textColor="#fff" />
+                    android:text="@string/add_another" />
 
                 <Button
                     android:id="@+id/buttonDone"
+                    style="@style/MyButton"
                     android:layout_width="fill_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="0.5"
-                    android:background="@drawable/button"
                     android:onClick="registerDone"
-                    android:text="@string/done1"
-                    android:textColor="#fff" />
+                    android:text="@string/done1" />
             </LinearLayout>
-
 
         </LinearLayout>
     </ScrollView>

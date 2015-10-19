@@ -11,22 +11,20 @@
 
     <TextView
         android:id="@+id/appointmentView"
+        style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/appointment"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:text="@string/appointment"/>
 
     <TextView
         android:id="@+id/appointmentDateTextView"
+        style="@style/MediumLabel"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:background="@drawable/spinner"
         android:text="@string/date"
-        android:textSize="20sp"
-        android:clickable="true"
         android:onClick="showDatePicker"/>
 
     <ListView

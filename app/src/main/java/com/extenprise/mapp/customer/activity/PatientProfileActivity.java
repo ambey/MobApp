@@ -3,19 +3,16 @@ package com.extenprise.mapp.customer.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -23,8 +20,6 @@ import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,9 +34,9 @@ import android.widget.Toast;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
@@ -56,9 +51,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class PatientProfileActivity extends Activity {
+public class PatientProfileActivity extends Activity implements ResponseHandler {
 
-    private UpdateHandler mRespHandler = new UpdateHandler(this);
+    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
     private int mServiceAction;
 
     private LinearLayout mContLay;
@@ -235,31 +230,25 @@ public class PatientProfileActivity extends Activity {
         }
     };
 
-    private static class UpdateHandler extends Handler {
-        private PatientProfileActivity mActivity;
-
-        public UpdateHandler(PatientProfileActivity activity) {
-            mActivity = activity;
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MappService.DO_UPDATE:
-                    mActivity.updateDone(msg.getData());
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
+        if(action == MappService.DO_UPDATE) {
+            updateDone(data);
+            return true;
         }
+        return false;
     }
 
     private void updateDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
         if(data.getBoolean("status")) {
             Utility.showRegistrationAlert(this, "", "Profile Updated.");
         }
-        Utility.showProgress(this, mFormView, mProgressView, false);
-        unbindService(mConnection);
     }
 
     private Customer getUpdateData() {

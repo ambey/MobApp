@@ -19,6 +19,7 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+<!--
     <TextView
         android:id="@+id/tvBookApptLbl"
         android:layout_width="wrap_content"
@@ -29,13 +30,13 @@
         android:text="@string/title_activity_book_appointment"
         android:textSize="20sp"
         android:textStyle="bold" />
+-->
 
     <TextView
         android:id="@+id/tvDrLbl"
         style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvBookApptLbl"
         android:layout_marginTop="10dp"
         android:text="@string/drLbl" />
 
@@ -65,7 +66,7 @@
 
     <TextView
         android:id="@+id/tvDocSpec"
-        style="@style/mediumText"
+        style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDrLbl"
@@ -75,7 +76,7 @@
 
     <TextView
         android:id="@+id/tvQualification"
-        style="@style/mediumText"
+        style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tvDocSpec"
@@ -87,36 +88,35 @@
 
     <TextView
         android:id="@+id/tvDateLbl"
+        style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tvDrLbl"
         android:layout_alignStart="@id/tvDrLbl"
-        android:layout_below="@id/tvDocSpec"
-        android:layout_marginTop="20dp"
-        android:hint="@string/date"
-        android:textSize="15sp" />
+        android:layout_alignBottom="@+id/spinnerTimeSlots"
+        android:hint="@string/date"/>
 
     <TextView
         android:id="@+id/tvDate"
+        style="@style/MediumText"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tvDateLbl"
         android:layout_toEndOf="@id/tvDateLbl"
-        android:layout_alignTop="@id/tvDateLbl"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:hint="@string/dateFormat"
-        android:onClick="showDatePicker"
-        android:clickable="true"
-        android:textSize="15sp" />
+        android:layout_alignBottom="@id/spinnerTimeSlots"
+        android:hint="@string/date_format"
+        android:onClick="showDatePicker"/>
 
     <TextView
         android:id="@+id/tvTimeLbl"
+        style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tvDate"
         android:layout_toEndOf="@id/tvDate"
-        android:layout_alignTop="@id/tvDate"
+        android:layout_alignBottom="@+id/spinnerTimeSlots"
         android:text="@string/time"/>
 
     <Spinner
@@ -133,14 +133,13 @@
 
     <Button
         android:id="@+id/buttonBook"
-        style="@style/RoundButton"
+        style="@style/MyButton"
         android:background="@drawable/inactive_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="bookAppointment"
-        android:padding="10dp"
         android:text="@string/title_activity_book_appointment" />
 
 </RelativeLayout>

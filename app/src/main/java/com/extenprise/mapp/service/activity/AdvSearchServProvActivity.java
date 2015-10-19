@@ -144,6 +144,11 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
             return true;
@@ -153,7 +158,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
     private void searchDone(Bundle data) {
         Utility.showProgress(this, mSearchFormView, mProgressView, false);
-        unbindService(mConnection);
         boolean success = data.getBoolean("status");
         if (success) {
             Intent intent = new Intent(this, SearchServProvResultActivity.class);

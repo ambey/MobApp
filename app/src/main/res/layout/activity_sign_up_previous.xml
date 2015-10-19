@@ -26,14 +26,13 @@
                 android:layout_height="100dp"
 
                 android:layout_centerHorizontal="true"
-
                 android:layout_marginTop="40dp"
                 android:src="@drawable/med_logo_final" />
 
             <Button
                 android:id="@+id/signUpButton"
-                style="@style/MyButton"
-                android:layout_width="300dp"
+                style="@style/WideButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageViewMlogo"
                 android:layout_centerHorizontal="true"
@@ -63,6 +62,7 @@
 
             <TextView
                 android:id="@+id/serviceProviderTextView"
+                style="@style/LargeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_below="@+id/lnView"
@@ -75,85 +75,84 @@
                 android:text="@string/areYouServProv"
                 android:visibility="visible" />
 
-            <ImageView
-                android:id="@+id/medicalStoreImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignLeft="@+id/serviceProviderTextView"
-                android:layout_alignStart="@+id/serviceProviderTextView"
-                android:layout_below="@+id/serviceProviderTextView"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/medstore" />
-
-            <TextView
-                android:id="@+id/mStoreTextView"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/medicalStoreImage"
-                android:layout_alignStart="@+id/medicalStoreImage"
-                android:layout_below="@id/medicalStoreImage"
-                android:text="@string/medicalStore"
-                android:textColor="#000"
-                android:textSize="12sp" />
-
-
-            <ImageView
-                android:id="@+id/doctorImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/serviceProviderTextView"
-                android:layout_marginLeft="50dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@id/medicalStoreImage"
-                android:layout_toRightOf="@id/medicalStoreImage"
-                android:clickable="true"
-
-                android:onClick="signUpServProv"
-                android:src="@drawable/doctor" />
-
-            <TextView
-                android:id="@+id/docTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/doctorImage"
+                android:orientation="horizontal"
+                android:layout_below="@id/serviceProviderTextView"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/mStoreTextView"
-                android:layout_toRightOf="@+id/mStoreTextView"
-                android:clickable="true"
-                android:onClick="signUpServProv"
-                android:text="@string/practitionar"
-                android:textColor="#000"
-                android:textSize="12sp" />
+                android:layout_marginTop="25dp">
 
-            <ImageView
-                android:id="@+id/diagnosticImage"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/serviceProviderTextView"
-                android:layout_marginLeft="50dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@id/doctorImage"
-                android:layout_toRightOf="@id/doctorImage"
-                android:src="@drawable/diagcenter" />
+                    <ImageView
+                        android:id="@+id/medicalStoreImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/medstore" />
 
-            <TextView
-                android:id="@+id/diagnosticTextView"
+                    <TextView
+                        android:id="@+id/mStoreTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/medicalStore"
+                        android:textColor="#000" />
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/medicalStoreImage"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/docTextView"
-                android:layout_toRightOf="@+id/docTextView"
-                android:text="@string/diagnosticCenter"
-                android:textColor="#000"
-                android:textSize="12sp" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/doctorImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:onClick="signUpServProv"
+                        android:src="@drawable/doctor" />
+
+                    <TextView
+                        android:id="@+id/docTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="signUpServProv"
+                        android:text="@string/practitionar"
+                        android:textColor="#000" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/diagnosticImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/diagcenter" />
+
+                    <TextView
+                        android:id="@+id/diagnosticTextView"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/diagnosticCenter"
+                        android:textColor="#000" />
+                </LinearLayout>
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

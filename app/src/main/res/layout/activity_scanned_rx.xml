@@ -10,16 +10,16 @@
 
     <Button
         android:id="@+id/scanNowButton"
-        style="@style/RoundButton"
-        android:layout_width="150dp"
+        style="@style/MyButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="startImageCapture"
         android:text="@string/scan_rx_now" />
 
     <Button
         android:id="@+id/uploadButton"
-        style="@style/RoundButton"
-        android:layout_width="150dp"
+        style="@style/MyButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"

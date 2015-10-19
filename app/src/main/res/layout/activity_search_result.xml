@@ -1,123 +1,143 @@
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/searchResultLayout"
     android:layout_width="wrap_content"
     android:layout_height="110dp"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-
     android:layout_marginTop="20dp"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
 
-    android:id="@+id/searchResultLayout"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".SearchResult">
 
     <TextView
         android:id="@+id/viewDr"
+        style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/drLbl"
-        android:layout_marginLeft="5dp"
         android:layout_alignParentLeft="true"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:focusable="false"/>
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:focusable="false"
+        android:text="@string/drLbl" />
+
     <TextView
         android:id="@+id/viewFirstName"
+        style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/viewDr"
         android:layout_marginLeft="10dp"
-        android:text="@string/first_name"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:focusable="false"/>
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/viewDr"
+        android:layout_toRightOf="@id/viewDr"
+        android:focusable="false"
+        android:text="@string/first_name" />
+
     <TextView
         android:id="@+id/viewLastName"
+        style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/last_name"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_toRightOf="@+id/viewFirstName"
-        android:layout_toEndOf="@+id/viewFirstName"
         android:layout_marginLeft="10dp"
-        android:focusable="false"/>
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/viewFirstName"
+        android:layout_toRightOf="@+id/viewFirstName"
+        android:focusable="false"
+        android:text="@string/last_name" />
+
     <TextView
         android:id="@+id/viewClinicName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/viewFirstName"
         android:layout_alignLeft="@id/viewFirstName"
-        android:text="@string/clinic_name"/>
+        android:layout_alignStart="@id/viewFirstName"
+        android:layout_below="@id/viewFirstName"
+        android:text="@string/clinic_name" />
+
     <TextView
         android:id="@+id/viewComma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/viewClinicName"
         android:layout_alignBaseline="@id/viewClinicName"
-        android:text="@string/comma"
-        android:focusable="false"/>
+        android:layout_toRightOf="@id/viewClinicName"
+        android:layout_toEndOf="@id/viewClinicName"
+        android:focusable="false"
+        android:text="@string/comma" />
+
     <TextView
         android:id="@+id/viewLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/viewComma"
         android:layout_alignBaseline="@id/viewClinicName"
         android:layout_marginLeft="10dp"
-        android:text="@string/loc1"
-        android:focusable="false"/>
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/viewComma"
+        android:layout_toRightOf="@id/viewComma"
+        android:focusable="false"
+        android:text="@string/loc1" />
+
     <ImageView
+        android:id="@+id/imageViewAvailability"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:id="@+id/imageViewAvailability"
-        android:src="@drawable/gcircle"
         android:layout_alignBottom="@+id/viewClinicName"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:contentDescription="@string/available"
+        android:src="@drawable/gcircle" />
     <!--android:background="@drawable/button"
     android:backgroundTint="#f00"-->
     <TextView
         android:id="@+id/viewDocSpeciality"
+        style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="@string/speciality"
-        android:layout_below="@id/viewClinicName"
         android:layout_alignLeft="@id/viewDr"
+        android:layout_alignStart="@id/viewDr"
+        android:layout_below="@id/viewClinicName"
         android:layout_marginTop="5dp"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:text="@string/speciality"/>
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginLeft="20dp"
         android:id="@+id/viewExpLabel"
-        android:text="@string/exp_short"
-        android:layout_alignParentBottom="true"
+        style="@style/MediumLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/viewDocSpeciality"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/viewDocSpeciality"
         android:layout_toRightOf="@+id/viewDocSpeciality"
-        android:layout_toEndOf="@+id/viewDocSpeciality"/>
+        android:text="@string/exp_short"/>
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginLeft="5dp"
         android:id="@+id/viewExpValue"
-        android:text="@string/value"
-        android:layout_alignParentBottom="true"
-        android:layout_alignBaseline="@id/viewDocSpeciality"
-        android:layout_toRightOf="@id/viewExpLabel"
-        android:layout_toEndOf="@id/viewExpLabel"/>
-    <TextView
+        style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/year_short"
-        android:textSize="16sp"
+        android:layout_alignBaseline="@id/viewDocSpeciality"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/viewExpLabel"
+        android:layout_toRightOf="@id/viewExpLabel"
+        android:text="@string/value"/>
+
+    <TextView
         android:id="@+id/viewYears"
-        android:layout_toRightOf="@id/viewExpValue"
+        style="@style/MediumLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/viewExpValue"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toRightOf="@id/viewExpValue"
+        android:layout_toEndOf="@id/viewExpValue"
+        android:text="@string/year_short"/>
 
 </RelativeLayout>

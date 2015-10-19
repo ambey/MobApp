@@ -1,76 +1,60 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.service.activity.ServProvViewWorkDetails"
-    android:textAlignment="gravity"
-    >
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+    tools:context="com.extenprise.mapp.service.activity.ServProvViewWorkDetails">
 
     <TextView
         android:id="@+id/viewWrkdetLabel"
+        style="@style/CollapseFormHeading"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
-        android:text="@string/wrk_det"
-        android:textSize="16sp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textStyle="bold"
-        android:background="@drawable/text_backg"
-    />
+        android:text="@string/wrk_det" />
 
     <ListView
         android:id="@+id/workDetailListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewWrkdetLabel"
-        android:layout_marginTop="10dp"
-        />
-    <ImageView
-        android:id="@+id/imageViewAddWork"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/workDetailListView"
-        android:src="@drawable/addw1"
-        android:layout_toLeftOf="@+id/textViewAddNewWork"
-        android:layout_toStartOf="@+id/textViewAddNewWork"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:id="@+id/layoutNewWork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="30dp"
+        android:layout_below="@id/workDetailListView">
 
-        />
-     <TextView
-         android:id="@+id/textViewAddNewWork"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/workDetailListView"
-         android:text="@string/add_new_work_place"
-         android:layout_centerHorizontal="true"
-         android:layout_marginTop="40dp"
+        <ImageView
+            android:id="@+id/imageViewAddWork"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/addw1"
+            android:layout_gravity="center_vertical"/>
 
-         />
+        <TextView
+            android:id="@+id/textViewAddNewWork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_new_work_place"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonViewUpdate"
-                style="?android:textAppearanceSmall"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imageViewAddWork"
-                android:layout_marginTop="40dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/update"
-                android:background="@drawable/button"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-            
+    <Button
+        android:id="@+id/buttonViewUpdate"
+        style="@style/ExtraWideButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutNewWork"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/update" />
 
-        </RelativeLayout>
-</ScrollView>
-    </RelativeLayout>
+</RelativeLayout>

@@ -9,17 +9,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="@string/first_name"
-        android:textSize="20sp" />
+        android:layout_marginStart="10dp"
+        android:text="@string/first_name"/>
 
     <TextView
         android:id="@+id/patientLNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toRightOf="@id/patientFNameTextView"
-        android:text="@string/last_name"
-        android:textSize="20sp" />
+        android:layout_toEndOf="@id/patientFNameTextView"
+        android:text="@string/last_name"/>
 
     <TextView
         android:id="@+id/patientGenderTextView"
@@ -42,8 +43,7 @@
         android:layout_alignBaseline="@id/patientGenderTextView"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:text="@string/age"
-        android:textSize="15sp" />
+        android:text="@string/age"/>
 
     <TextView
         android:id="@+id/yearTextView"
@@ -51,10 +51,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/patientAgeTextView"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/patientAgeTextView"
         android:layout_toRightOf="@+id/patientAgeTextView"
-        android:text="@string/year"
-        android:textSize="15sp" />
+        android:text="@string/year"/>
 
 
     <TextView
@@ -63,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/patientAgeTextView"
         android:layout_marginLeft="60dp"
+        android:layout_marginStart="60dp"
         android:layout_toEndOf="@+id/yearTextView"
         android:layout_toRightOf="@id/yearTextView"
         android:text="@string/weight"
@@ -74,10 +75,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/patientAgeTextView"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/patientWeightTextView"
         android:layout_toRightOf="@+id/patientWeightTextView"
-        android:text="@string/kg"
-        android:textSize="15sp" />
+        android:text="@string/kg"/>
 
     <TextView
         android:id="@+id/appointmentTimeTextView"
@@ -88,8 +89,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="100dp"
         android:layout_marginEnd="100dp"
-        android:text="@string/time"
-        android:textSize="15sp" />
+        android:text="@string/time"/>
 
     <TextView
         android:id="@+id/timeLblTextView"
@@ -100,8 +100,7 @@
         android:layout_toStartOf="@id/appointmentTimeTextView"
         android:layout_marginRight="5dp"
         android:layout_marginEnd="5dp"
-        android:text="@string/time"
-        android:textSize="15sp" />
+        android:text="@string/time"/>
 
 </RelativeLayout>
 

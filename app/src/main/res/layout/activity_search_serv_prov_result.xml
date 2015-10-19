@@ -25,34 +25,36 @@
 
         <ImageView
             android:id="@+id/imageViewAvailable"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/gcircle" />
 
         <TextView
             android:id="@+id/textViewAvailable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/imageViewAvailable"
+            android:layout_toEndOf="@id/imageViewAvailable"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:text="@string/availToday" />
 
         <ImageView
             android:id="@+id/imageViewUnAvailable"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_above="@+id/docListView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_toLeftOf="@+id/textViewUnAvailable"
             android:layout_toStartOf="@+id/textViewUnAvailable"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:src="@drawable/rcircle" />
 
         <TextView
             android:id="@+id/textViewUnAvailable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/docListView"
-            android:layout_alignRight="@+id/docListView"
-            android:layout_alignTop="@+id/textViewAvailable"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:text="@string/unavailToday" />
 
         <View
@@ -65,7 +67,7 @@
 
         <ListView
             android:id="@+id/docListView"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageViewAvailable"
             android:layout_centerHorizontal="true"

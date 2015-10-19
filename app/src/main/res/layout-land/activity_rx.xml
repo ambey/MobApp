@@ -137,6 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:text="@string/morning" />
 
                 <TextView
@@ -144,6 +145,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:onClick="showMTimePicker"
                     android:text="@string/time" />
 
@@ -151,8 +153,8 @@
                     android:id="@+id/noonCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/morningCheckBox"
                     android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:text="@string/afternoon" />
 
                 <TextView
@@ -160,6 +162,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:onClick="showATimePicker"
                     android:text="@string/time" />
 
@@ -167,7 +170,6 @@
                     android:id="@+id/eveningCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/noonCheckBox"
                     android:text="@string/evening" />
 
                 <TextView
@@ -175,6 +177,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:onClick="showETimePicker"
                     android:text="@string/time" />
             </LinearLayout>
@@ -233,7 +236,7 @@
 
                 <Button
                     android:id="@+id/addButton"
-                    style="@style/RoundButton"
+                    style="@style/MyButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="addRxItem"
@@ -241,7 +244,7 @@
 
                 <Button
                     android:id="@+id/doneButton"
-                    style="@style/RoundButton"
+                    style="@style/MyButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"

@@ -16,58 +16,15 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/viewdrLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageViewDoctor"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/imageViewDoctor"
-        android:layout_toRightOf="@+id/imageViewDoctor"
-        android:text="@string/drLbl"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/imageViewDoctor"
-        android:layout_width="120dp"
-        android:layout_height="100dp"
-        android:clickable="true"
-        android:onClick="changeImage"
-        android:src="@drawable/dr_avatar" />
-
-    <TextView
-        android:id="@+id/textViewEditImage"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignBottom="@+id/imageViewDoctor"
-        android:layout_alignEnd="@+id/imageViewDoctor"
-        android:layout_alignRight="@+id/imageViewDoctor"
-        android:background="@drawable/p12"
-        android:clickable="true"
-        android:onClick="changeImage" />
-
-    <TextView
-        android:id="@+id/textviewDocname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/viewdrLbl"
-        android:layout_toRightOf="@+id/viewdrLbl"
-        android:hint="@string/drName"
-        android:textColor="#006600"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    <include
+        android:id="@+id/layoutNameAvatar"
+        layout="@layout/layout_name_avatar"/>
 
     <View
         android:id="@+id/linenView"
         android:layout_width="fill_parent"
         android:layout_height="0.4dp"
-        android:layout_below="@+id/imageViewDoctor"
+        android:layout_below="@+id/layoutNameAvatar"
         android:layout_marginTop="20dp"
         android:background="#9d9d9d" />
 
@@ -110,18 +67,16 @@
 
             <TextView
                 android:id="@+id/textViewDoc"
+                style="@style/CollapseFormHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:layout_alignParentLeft="true"
 
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="60dp"
-                android:background="@drawable/label"
                 android:clickable="true"
                 android:onClick="openPersonalInfo"
-                android:text="@string/personalDetails"
-                android:textColor="#fff"
-                android:textSize="16sp" />
+                android:text="@string/personalDetails"/>
 
 
             <RelativeLayout
@@ -290,18 +245,15 @@
 
             <TextView
                 android:id="@+id/textViewWorkDetails"
+                style="@style/CollapseFormHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/personalInfo"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/label"
-                android:clickable="true"
                 android:onClick="openWorkPlaceInfo"
-                android:text="@string/wrk_det"
-                android:textColor="#fff"
-                android:textSize="16sp" />
+                android:text="@string/wrk_det"/>
 
 
             <RelativeLayout

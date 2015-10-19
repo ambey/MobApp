@@ -147,7 +147,11 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        unbindService(mConnection);
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (action == MappService.DO_GET_RX) {
             gotRx(data);
             return true;
