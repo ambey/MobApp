@@ -62,10 +62,9 @@
 
     <View
         android:id="@+id/linenView"
-        android:layout_width="fill_parent"
-        android:layout_height="0.4dp"
+       style="@style/HorizontalLineview"
         android:layout_marginTop="120dp"
-        android:background="#9d9d9d" />
+      />
 
 
     <RelativeLayout
@@ -127,26 +126,23 @@
 
         <View
             android:id="@+id/linenView2"
-            android:layout_width="0.4dp"
-            android:layout_height="wrap_content"
+           style="@style/VerticallLineview"
             android:layout_alignBottom="@+id/linenView4"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="#9d9d9d" />
+           />
 
         <View
             android:id="@+id/linenView4"
-            android:layout_width="fill_parent"
-            android:layout_height="0.4dp"
+          style="@style/HorizontalLineview"
             android:layout_marginTop="240dp"
-            android:background="#9d9d9d" />
+            />
 
         <View
             android:id="@+id/linenView5"
-            android:layout_width="fill_parent"
-            android:layout_height="0.4dp"
+           style="@style/HorizontalLineview"
             android:layout_marginTop="120dp"
-            android:background="#9d9d9d" />
+            />
 
     </RelativeLayout>
 

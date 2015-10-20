@@ -248,7 +248,7 @@
     <string name="title_activity_first_flipper">FirstFlipperActivity</string>
 
     <string name="uploadImg">Upload Image</string>
-    <string name="profile_text">View/Edit profile</string>
+    <string name="profile_text">View/Edit Profile</string>
     <string name="title_activity_view_profile_main">ViewProfileMain</string>
 
     <string name="edit_info">Edit Info</string>
@@ -291,8 +291,8 @@
     <string name="confirmed">Confirmed</string>
     <string name="canceled">Canceled</string>
     <string name="not_confirmed">Not Confirmed</string>
-    <string name="open_rx">View Open Rx</string>
-    <string name="pend_rx">View Pending Rx</string>
+    <string name="open_rx">View Rx Inbox</string>
+    <string name="pend_rx">To Undelivered Rx</string>
 
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>
     <string name="msg_appont_canceled">The appointment has been canceled</string>
