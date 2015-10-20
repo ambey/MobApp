@@ -121,7 +121,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewWorkHrsLbl"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/buttonStartTime"
@@ -130,7 +131,7 @@
                     android:layout_weight="0.5"
                     android:hint="@string/strtTime"
                     android:onClick="showStartTimePicker"
-                    android:visibility="gone" />
+                   />
 
                 <Button
                     android:id="@+id/buttonEndTime"
@@ -141,21 +142,22 @@
                     android:layout_weight="0.5"
                     android:hint="@string/endTime"
                     android:onClick="showEndTimePicker"
-                    android:visibility="gone" />
+                    />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/servProLay4"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/servProLay3"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:id="@+id/viewWeeklyOffLbl"
-                    android:layout_width="165dp"
+                    android:layout_width="160dp"
                     android:layout_height="30dp"
-
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:background="@drawable/label"
                     android:clickable="true"
                     android:onClick="showDaysField"
@@ -166,10 +168,11 @@
 
                 <TextView
                     android:id="@+id/viewGender"
-                    android:layout_width="165dp"
+                    android:layout_width="160dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
+
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:background="@drawable/label"
                     android:clickable="true"
                     android:onClick="showGenderField"
@@ -177,7 +180,6 @@
                     android:textColor="#ffffffff"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-            </LinearLayout>
 
             <!--<Spinner
                 android:entries="@array/days"
@@ -188,40 +190,44 @@
                 android:prompt="@string/weekly_off"
                 android:layout_below="@+id/viewWeeklyOffLbl"
                 android:layout_marginTop="20dp"/>-->
-            <LinearLayout
-                android:id="@+id/servProLay5"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/servProLay4"
-                android:layout_marginTop="10dp">
+
 
                 <Button
                     android:id="@+id/spinAvailDays"
-                    android:layout_width="165dp"
+                    android:layout_width="160dp"
                     android:layout_height="30dp"
                     android:background="@drawable/spinner"
                     android:text="@string/select_days"
-                    android:visibility="gone" />
+                    android:layout_below="@+id/viewWeeklyOffLbl"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+
+                   />
 
                 <Spinner
                     android:id="@+id/spinGender"
-                    android:layout_width="165dp"
+                    android:layout_width="160dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/viewGender"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:background="@drawable/spinner"
                     android:entries="@array/gender_search"
                     android:prompt="@string/gender"
                     android:spinnerMode="dropdown"
-                    android:visibility="gone" />
-            </LinearLayout>
+                    android:layout_marginTop="10dp"
+
+
+                   />
+            </RelativeLayout>
 
 
             <LinearLayout
                 android:id="@+id/servProLay6"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/servProLay5"
+                android:layout_below="@+id/servProLay4"
                 android:layout_marginTop="10dp">
 
                 <TextView

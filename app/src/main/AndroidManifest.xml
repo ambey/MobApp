@@ -258,8 +258,13 @@
         <service
             android:name=".net.MappService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
         </service>
+
+        <activity
+            android:name=".service.activity.MedicalStoreHomeActivity"
+            android:label="@string/title_activity_medical_store_home" >
+        </activity>
     </application>
 
 </manifest>
