@@ -20,10 +20,10 @@
         android:textSize="18sp" />
 
     <ImageView
-        android:contentDescription="@string/profile_text"
         android:id="@+id/imageDoctor"
         android:layout_width="100dp"
         android:layout_height="80dp"
+        android:contentDescription="@string/profile_text"
         android:src="@drawable/dr_avatar" />
 
     <TextView
@@ -62,15 +62,14 @@
 
     <View
         android:id="@+id/linenView"
-        android:layout_width="fill_parent"
-        android:layout_height="0.4dp"
-        android:layout_marginTop="120dp"
-        android:background="#9d9d9d" />
+        style="@style/HorizontalLineview"
+        android:layout_marginTop="120dp" />
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linenView">
+        android:layout_below="@+id/linenView"
+        >
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -87,17 +86,15 @@
                 android:layout_alignParentTop="true"
                 android:enabled="true"
                 android:onClick="viewAppointment"
-                android:text="@string/view_appoint"/>
+                android:text="@string/view_appoint" />
 
             <View
                 android:id="@+id/linenView2"
-                android:layout_width="0.4dp"
-                android:layout_height="wrap_content"
+                style="@style/VerticallLineview"
                 android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/buttonDoctorsAppointment"
-                android:layout_toRightOf="@+id/buttonDoctorsAppointment"
-                android:background="#9d9d9d" />
+                android:layout_toRightOf="@+id/buttonDoctorsAppointment" />
 
 
             <Button
@@ -110,17 +107,15 @@
                 android:layout_toEndOf="@+id/linenView2"
                 android:layout_toRightOf="@+id/linenView2"
                 android:enabled="false"
-                android:text="@string/viewpatientreport"/>
+                android:text="@string/viewpatientreport" />
 
             <View
                 android:id="@+id/linenView4"
-                android:layout_width="0.4dp"
-                android:layout_height="wrap_content"
+                style="@style/VerticallLineview"
                 android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/buttonViewReport"
-                android:layout_toRightOf="@+id/buttonViewReport"
-                android:background="#9d9d9d" />
+                android:layout_toRightOf="@+id/buttonViewReport" />
 
 
             <Button
@@ -133,17 +128,15 @@
                 android:layout_toEndOf="@+id/linenView4"
                 android:layout_toRightOf="@+id/linenView4"
                 android:enabled="true"
-                android:text="@string/viewpatientrx"/>
+                android:text="@string/viewpatientrx" />
 
             <View
                 android:id="@+id/linenView6"
-                android:layout_width="0.4dp"
-                android:layout_height="wrap_content"
+                style="@style/VerticallLineview"
                 android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/buttonViewRx"
-                android:layout_toRightOf="@+id/buttonViewRx"
-                android:background="#9d9d9d" />
+                android:layout_toRightOf="@+id/buttonViewRx" />
 
 
             <Button
@@ -157,15 +150,13 @@
                 android:layout_toRightOf="@+id/linenView6"
                 android:enabled="true"
                 android:onClick="viewProfile"
-                android:text="@string/profile_text"/>
+                android:text="@string/profile_text" />
 
 
             <View
                 android:id="@+id/linenView5"
-                android:layout_width="fill_parent"
-                android:layout_height="0.4dp"
-                android:layout_marginTop="100dp"
-                android:background="#9d9d9d" />
+                style="@style/HorizontalLineview"
+                android:layout_marginTop="100dp" />
 
 
         </RelativeLayout>

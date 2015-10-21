@@ -1,40 +1,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-
-    tools:context="com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity">
-
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.extenprise.mapp.service.activity.MedicalStoreHomeActivity"
+    android:background="@drawable/background">
 
     <TextView
         android:id="@+id/viewWelcomeLbl"
+        style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/imagePatient"
-        android:layout_toRightOf="@+id/imagePatient"
-        android:text="@string/hello"
-        android:textSize="18sp" />
+        android:layout_toEndOf="@+id/imageMedstore"
+        android:layout_toRightOf="@+id/imageMedstore"
+        android:text="@string/hello" />
 
     <ImageView
-        android:id="@+id/imagePatient"
+        android:id="@+id/imageMedstore"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:src="@drawable/up1" />
+        android:src="@drawable/medstore"
+        />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginLeft="100dp"
-        android:layout_marginStart="100dp"
         android:layout_marginTop="40dp"
+        android:layout_toEndOf="@+id/imageMedstore"
+        android:layout_toRightOf="@+id/imageMedstore"
         android:text="@string/last_modified" />
 
     <TextView
@@ -66,76 +62,77 @@
         style="@style/HorizontalLineview"
         android:layout_marginTop="120dp" />
 
-
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linenView">
+        android:layout_below="@+id/linenView"
+        >
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/buttonDoctorsAppointment"
+                android:id="@+id/buttonOpenRx"
                 style="@style/RectButton"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/linenView2"
+                android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:text="@string/doc_appoint" />
-
+                android:onClick="viewOpenRx"
+                android:text="@string/open_rx"
+                android:enabled="false"/>
             <View
                 android:id="@+id/linenView2"
                 style="@style/VerticallLineview"
                 android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/buttonDoctorsAppointment"
-                android:layout_toRightOf="@+id/buttonDoctorsAppointment" />
+                android:layout_toEndOf="@+id/buttonOpenRx"
+                android:layout_toRightOf="@+id/buttonOpenRx" />
 
 
             <Button
-                android:id="@+id/buttonViewReport"
+                android:id="@+id/buttonViewPendrx"
                 style="@style/InactiveRectButton"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/linenView2"
+                android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/linenView2"
                 android:layout_toRightOf="@+id/linenView2"
                 android:enabled="false"
-                android:text="@string/my_report" />
+                android:text="@string/pend_rx"/>
 
             <View
                 android:id="@+id/linenView4"
                 style="@style/VerticallLineview"
                 android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/buttonViewReport"
-                android:layout_toRightOf="@+id/buttonViewReport" />
+                android:layout_toEndOf="@+id/buttonViewPendrx"
+                android:layout_toRightOf="@+id/buttonViewPendrx" />
 
 
             <Button
-                android:id="@+id/buttonViewRx"
-                style="@style/InactiveRectButton"
+                android:id="@+id/buttonView"
+                style="@style/RectButton"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/linenView2"
+                android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/linenView4"
                 android:layout_toRightOf="@+id/linenView4"
-                android:text="@string/my_rx"
-                android:enabled="false"/>
+                android:enabled="false"
+                />
 
             <View
                 android:id="@+id/linenView6"
                 style="@style/VerticallLineview"
                 android:layout_alignBottom="@+id/linenView5"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/buttonViewRx"
-                android:layout_toRightOf="@+id/buttonViewRx" />
+                android:layout_toEndOf="@+id/buttonView"
+                android:layout_toRightOf="@+id/buttonView" />
 
 
             <Button
@@ -144,9 +141,10 @@
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/linenView5"
-                android:layout_alignParentTop="true"
+                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/linenView6"
                 android:layout_toRightOf="@+id/linenView6"
+                android:enabled="false"
                 android:onClick="viewProfile"
                 android:text="@string/profile_text" />
 
@@ -156,7 +154,9 @@
                 style="@style/HorizontalLineview"
                 android:layout_marginTop="100dp" />
 
+
         </RelativeLayout>
     </ScrollView>
+
 
 </RelativeLayout>

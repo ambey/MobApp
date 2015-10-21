@@ -266,6 +266,14 @@
             android:label="@string/title_activity_medical_store_home" >
         </activity>
         <activity
+            android:name=".service.activity.RxListActivity"
+            android:label="@string/title_activity_rx_list" >
+        </activity>
+        <activity
+            android:name=".service.activity.PendingRxListActivity"
+            android:label="@string/title_activity_pending_rx_list" >
+        </activity>
+        <activity
             android:name=".service.activity.SelectMedicalStoreActivity"
             android:label="@string/title_activity_select_medical_store"
             android:parentActivityName=".service.activity.AppointmentDetailsActivity" >

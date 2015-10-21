@@ -110,7 +110,8 @@
             android:layout_alignEnd="@+id/linenView2"
             android:layout_alignRight="@+id/linenView2"
             android:layout_below="@+id/linenView5"
-            android:text="@string/my_rx" />
+            android:text="@string/my_rx"
+            android:enabled="false"/>
 
         <Button
             android:id="@+id/buttonViewProfile"
