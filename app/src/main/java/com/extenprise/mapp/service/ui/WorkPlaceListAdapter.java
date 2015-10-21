@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.service.data.WorkPlaceListItem;
+import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
@@ -18,12 +18,21 @@ import java.util.ArrayList;
 /**
  * Created by avinash on 8/10/15.
  */
-public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlaceListItem> {
-    private ArrayList<WorkPlaceListItem> list;
+public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> {
+    private ArrayList<WorkPlace> list;
 
-    public WorkPlaceListAdapter(Context context, int resource, ArrayList<WorkPlaceListItem> list) {
+    public WorkPlaceListAdapter(Context context, int resource, ArrayList<WorkPlace> list) {
         super(context, resource);
         this.list = list;
+    }
+
+    @Override
+    public int getCount() {
+        try {
+            return list.size();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
@@ -33,7 +42,7 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlaceListItem> {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.activity_servprov_wrkdetail_list, null);
         }
-        WorkPlaceListItem item = list.get(position);
+        WorkPlace item = list.get(position);
 
         EditText mName = (EditText) v.findViewById(R.id.editTextName);
         EditText mLoc = (EditText) v.findViewById(R.id.editTextLoc);

@@ -5,17 +5,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -33,7 +30,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -57,7 +53,7 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.service.data.WorkPlaceListItem;
+import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
@@ -77,8 +73,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private int mServiceAction;
     private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
-    private ArrayList<WorkPlaceListItem> mWorkPlaceList;
-    private WorkPlaceListItem mSelectedItem;
+    private ArrayList<WorkPlace> mWorkPlaceList;
+    private WorkPlace workPlace;
 
     private EditText mMobNo, mEmailID, mRegNo;
     private TextView mDocName, workhourLBL;
@@ -122,6 +118,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serv_prov_profile_main);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        workPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
 
         mFormView = findViewById(R.id.updateServProvform);
         mProgressView = findViewById(R.id.progressView);
@@ -204,11 +202,15 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mFemale.setChecked(true);
         }
 
-        Intent intent = getIntent();
+        //Get work place list from server
+        mServiceAction = MappService.DO_WORK_PLACE_LIST;
+        performAction();
+
+        /*Intent intent = getIntent();
         //mWorkPlaceList = intent.getParcelableArrayListExtra("workPlaceList");
         ArrayList<ServProvHasServPt> services = LoginHolder.servLoginRef.getServices();
         for(ServProvHasServPt s : services) {
-            WorkPlaceListItem wp = new WorkPlaceListItem();
+            WorkPlace wp = new WorkPlace();
 
             wp.setPincode(s.getServicePoint().getPincode());
             wp.setSpeciality(s.getService().getSpeciality());
@@ -229,19 +231,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             wp.setSignInData(LoginHolder.servLoginRef.getSignInData());
 
             mWorkPlaceList.add(wp);
-        }
+        }*/
         //mWorkPlaceList = LoginHolder.servLoginRef.getServices();
-        //TODO
-        ArrayAdapter<WorkPlaceListItem> adapter = new WorkPlaceListAdapter(this,
-                R.layout.activity_servprov_wrkdetail_list, mWorkPlaceList);
-        listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            }
-        });
-        listView.setAdapter(adapter);
-        registerForContextMenu(listView);
     }
 
     private void showWorkPlaceList() {
@@ -349,7 +340,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             //adapter.remove(item);
             //item.getActionView().setVisibility(View.GONE);
             mServiceAction = MappService.REMOVE_WORK_PLACE;
-            mSelectedItem = mWorkPlaceList.get(item.getItemId());
+            workPlace = mWorkPlaceList.get(item.getItemId());
             performAction();
             //adapter.notifyDataSetChanged();
             return true;
@@ -829,10 +820,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 .setView(dialogView)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        if (!isValidWorkPlace()) {
-                            return;
+                        if (isValidWorkPlace()) {
+                            addWorkPlace();
                         }
-                        addWorkPlace();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -966,7 +956,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     private void addWorkPlace() {
-        WorkPlaceListItem wpt = new WorkPlaceListItem();
+        WorkPlace wpt = new WorkPlace();
 
         wpt.setName(mName.getText().toString().trim());
         wpt.setLocation(mLoc.getText().toString().trim());
@@ -985,7 +975,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
         wpt.setQualification(mQualification.getText().toString().trim());
 
-        mSelectedItem = wpt;
+        workPlace = wpt;
         mServiceAction = MappService.ADD_WORK_PLACE;
         performAction();
     }
@@ -1010,7 +1000,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         sp.setGender(mGenderBtn.getText().toString());
         sp.setRegNo(mRegNo.getText().toString());
 
-        for(WorkPlaceListItem wp: mWorkPlaceList) {
+        for(WorkPlace wp: mWorkPlaceList) {
             LoginHolder.servLoginRef.setQualification(wp.getQualification());
             //LoginHolder.servLoginRef.setGender(mGender.getSelectedItem().toString());
 
@@ -1216,7 +1206,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            mSelectedItem.setSignInData(LoginHolder.servLoginRef.getSignInData());
+            workPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
             mService = new Messenger(service);
             mBound = true;
             Message msg = null;
@@ -1226,7 +1216,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 bundle.putString("regno", mRegNo.getText().toString().trim());
                 bundle.putParcelable("service", LoginHolder.servLoginRef);
             } else {
-                bundle.putParcelable("service", mSelectedItem);
+                bundle.putParcelable("workPlace", workPlace);
+                //for add, remove and get Workplace.
             }
             msg = Message.obtain(null, mServiceAction);
             msg.replyTo = new Messenger(mResponseHandler);
@@ -1262,6 +1253,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 case MappService.DO_REG_NO_CHECK:
                     regNoCheckDone(data);
                     break;
+                case MappService.DO_WORK_PLACE_LIST:
+                    getWorkPlaceListDone(data);
+                    break;
                 default:
                     return false;
             }
@@ -1293,6 +1287,24 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private void removeWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
             Utility.showRegistrationAlert(this, "", "Work Place Removed Successfully.");
+        }
+        Utility.showProgress(this, mFormView, mProgressView, false);
+    }
+
+    private void getWorkPlaceListDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
+            mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
+            WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
+                    R.layout.activity_servprov_wrkdetail_list, mWorkPlaceList);
+            listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                }
+            });
+            listView.setAdapter(adapter);
+            registerForContextMenu(listView);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }

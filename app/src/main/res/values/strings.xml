@@ -13,6 +13,7 @@
     <string name="action_signup_serv">service/SignUp.action</string>
     <string name="action_update_serv">service/Update.action</string>
     <string name="action_addwork_place">service/AddWorkPlace.action</string>
+    <string name="action_getwork_place">service/GetWorkPlace.action</string>
     <string name="action_remove_work_place">service/RemoveWorkPlace.action</string>
     <string name="action_update_cust">customer/Update.action</string>
     <string name="action_check_phone_serv">service/PhoneExistsCheck.action</string>

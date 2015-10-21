@@ -8,7 +8,7 @@ import com.extenprise.mapp.data.SignInData;
 /**
  * Created by avinash on 4/10/15.
  */
-public class WorkPlaceListItem implements Parcelable {
+public class WorkPlace implements Parcelable {
 
     private SignInData signInData;
     private String name;
@@ -28,11 +28,11 @@ public class WorkPlaceListItem implements Parcelable {
     private int startTime; //as minutes
     private int endTime;//as minutes
 
-    public WorkPlaceListItem() {
+    public WorkPlace() {
         signInData = new SignInData();
     }
 
-    public WorkPlaceListItem(Parcel source) {
+    public WorkPlace(Parcel source) {
         String[] fields = new String[12];
         signInData = new SignInData();
 
@@ -75,16 +75,16 @@ public class WorkPlaceListItem implements Parcelable {
         dest.writeInt(endTime);
     }
 
-    public static final Creator<WorkPlaceListItem> CREATOR = new Creator<WorkPlaceListItem>() {
+    public static final Creator<WorkPlace> CREATOR = new Creator<WorkPlace>() {
 
         @Override
-        public WorkPlaceListItem createFromParcel(Parcel source) {
-            return new WorkPlaceListItem(source);
+        public WorkPlace createFromParcel(Parcel source) {
+            return new WorkPlace(source);
         }
 
         @Override
-        public WorkPlaceListItem[] newArray(int size) {
-            return new WorkPlaceListItem[size];
+        public WorkPlace[] newArray(int size) {
+            return new WorkPlace[size];
         }
     };
 
