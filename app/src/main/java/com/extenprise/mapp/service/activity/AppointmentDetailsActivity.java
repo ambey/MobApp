@@ -111,7 +111,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         lNameView.setText(mAppont.getLastName());
         timeView.setText(mAppont.getTime());
         genderView.setText(mAppont.getGender());
-        ageView.setText("" + mAppont.getAge());
+        ageView.setText(String.format("%d", mAppont.getAge()));
         wtView.setText(String.format("%.1f", mAppont.getWeight()));
 
         fillPastAppointements();

@@ -15,10 +15,10 @@ import java.util.ArrayList;
 /**
  * Created by ambey on 4/10/15.
  */
-public class SearchResultListAdapter extends ArrayAdapter<ServProvListItem> {
+public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> {
     private ArrayList<ServProvListItem> list;
 
-    public SearchResultListAdapter(Context context, int resource, ArrayList<ServProvListItem> list) {
+    public ServProvListAdapter(Context context, int resource, ArrayList<ServProvListItem> list) {
         super(context, resource);
         this.list = list;
     }
@@ -55,5 +55,14 @@ public class SearchResultListAdapter extends ArrayAdapter<ServProvListItem> {
         expView.setText(String.format("%.01f", item.getExperience()));
 
         return v;
+    }
+
+    public ServProvListItem getItem(int position) {
+        try {
+            return list.get(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

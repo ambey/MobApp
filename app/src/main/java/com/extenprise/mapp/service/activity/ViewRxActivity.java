@@ -64,8 +64,8 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         lname.setText(mAppont.getLastName());
         time.setText(mAppont.getTime());
         gender.setText(mAppont.getGender());
-        age.setText("" + mAppont.getAge());
-        weight.setText("" + mAppont.getWeight());
+        age.setText(String.format("%d", mAppont.getAge()));
+        weight.setText(String.format("%0.1f", mAppont.getWeight()));
 
         fillRxItems();
     }

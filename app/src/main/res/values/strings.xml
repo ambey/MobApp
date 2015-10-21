@@ -27,6 +27,8 @@
     <string name="action_cancel_appont">service/CancelAppont.action</string>
     <string name="action_save_rx_copy">service/SaveRxCopy.action</string>
     <string name="action_get_speciality">service/GetSpeciality.action</string>
+    <string name="action_get_rx">service/GetRx.action</string>
+    <string name="action_save_rx">service/SaveRx.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
@@ -293,9 +295,12 @@
     <string name="not_confirmed">Not Confirmed</string>
     <string name="open_rx">View Rx Inbox</string>
     <string name="pend_rx">To Undelivered Rx</string>
+    <string name="send">Send</string>
+    <string name="send_rx_to_mstore">Send Rx to a\nMedical Store</string>
 
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>
     <string name="msg_appont_canceled">The appointment has been canceled</string>
     <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>
+    <string name="title_activity_select_medical_store">SelectMedicalStoreActivity</string>
 
 </resources>

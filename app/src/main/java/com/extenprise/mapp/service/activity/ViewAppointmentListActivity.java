@@ -124,6 +124,7 @@ public class ViewAppointmentListActivity extends Activity
             }
             form.setServProvPhone(mServiceProv.getPhone());
             form.setDate(date);
+
             bundle.putParcelable("form", form);
             Message msg = Message.obtain(null, MappService.DO_APPONT_LIST);
             msg.replyTo = new Messenger(mRespHandler);

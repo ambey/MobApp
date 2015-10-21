@@ -13,14 +13,14 @@ import android.os.RemoteException;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
+import com.extenprise.mapp.data.Rx;
+import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvListItem;
-import com.extenprise.mapp.data.SignInData;
-import com.extenprise.mapp.service.data.WorkPlaceListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.service.data.WorkPlaceListItem;
 import com.extenprise.mapp.util.ByteArrayToJSONAdapter;
-import com.extenprise.mapp.util.SearchServProv;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -59,6 +59,9 @@ public class MappService extends Service {
     public static final int DO_CONFIRM_APPONT = 16;
     public static final int DO_CANCEL_APPONT = 17;
     public static final int DO_GET_SPECIALITY = 18;
+    public static final int DO_SAVE_RX = 19;
+    public static final int DO_SEND_RX = 20;
+    public static final int DO_GET_MEDSTORE_LIST = 21;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -239,7 +242,10 @@ public class MappService extends Service {
 
     public void doGetTimeSlots(Message msg) {
         Bundle data = msg.getData();
-        String requestData = "{ \"idService\": \"" + data.getInt("id") + "\", \"dateStr\": \"" + data.getString("date") + "\"}";
+        String requestData = "{ \"idService\": \"" + data.getInt("id") + "\"," +
+                "\"dateStr\": \"" + data.getString("date") + "\"," +
+                "\"todayDateStr\": \"" + data.getString("today") + "\"," +
+                "\"time\": \"" + data.getInt("minutes") + "\"}";
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         try {
@@ -350,6 +356,38 @@ public class MappService extends Service {
         task.execute((Void) null);
     }
 
+    private void doGetRx(Message msg) {
+        Bundle data = msg.getData();
+        AppointmentListItem form = data.getParcelable("form");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
+    private void doSaveRx(Message msg) {
+        Bundle data = msg.getData();
+        Rx rx = data.getParcelable("rx");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(rx));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
     private void onError(int action) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("status", false);
@@ -428,6 +466,12 @@ public class MappService extends Service {
             case DO_GET_SPECIALITY:
                 urlId = R.string.action_get_speciality;
                 break;
+            case DO_GET_RX:
+                urlId = R.string.action_get_rx;
+                break;
+            case DO_SAVE_RX:
+                urlId = R.string.action_save_rx;
+                break;
             default:
                 return null;
         }
@@ -495,6 +539,12 @@ public class MappService extends Service {
                 case DO_GET_SPECIALITY:
                     mService.doGetSpeciality(msg);
                     break;
+                case DO_GET_RX:
+                    mService.doGetRx(msg);
+                    break;
+                case DO_SAVE_RX:
+                    mService.doSaveRx(msg);
+                    break;
                 default:
                     super.handleMessage(msg);
             }
@@ -515,6 +565,7 @@ public class MappService extends Service {
         private ArrayList<String> mStringList;
         private ArrayList<AppointmentListItem> mAppontList;
         private Appointment mForm;
+        private Rx mRx;
 
         public MappAsyncTask(URL url, String data) {
             mUrl = url;
@@ -609,6 +660,10 @@ public class MappService extends Service {
                             mAppontList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<AppointmentListItem>>() {
                             }.getType());
                             break;
+                        case DO_GET_RX:
+                        case DO_SAVE_RX:
+                            mRx = gson.fromJson(responseBuf.toString(), Rx.class);
+                            break;
                     }
                     status = true;
                 }
@@ -636,8 +691,8 @@ public class MappService extends Service {
                 bundle.putParcelableArrayList("servProvList", mServProvList);
             }
             if (mStringList != null) {
-                String key = "timeslots";
-                if(mAction == DO_GET_SPECIALITY) {
+                String key = "timeSlots";
+                if (mAction == DO_GET_SPECIALITY) {
                     key = "specialities";
                 }
                 bundle.putStringArrayList(key, mStringList);
@@ -648,8 +703,11 @@ public class MappService extends Service {
             if (mWorkPlace != null) {
                 bundle.putParcelable("workPlace", mWorkPlace);
             }
-            if(mAppontList != null) {
+            if (mAppontList != null) {
                 bundle.putParcelableArrayList("appontList", mAppontList);
+            }
+            if(mRx != null) {
+                bundle.putParcelable("rx", mRx);
             }
             Message msg = Message.obtain(null, mAction);
             msg.setData(bundle);

@@ -2,11 +2,14 @@ package com.extenprise.mapp.service.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.extenprise.mapp.R;
 
-public class MedicalStoreHomeActivity extends ActionBarActivity {
+
+public class MedicalStoreHomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

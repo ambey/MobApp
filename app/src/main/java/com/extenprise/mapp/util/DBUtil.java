@@ -238,6 +238,7 @@ public abstract class DBUtil {
                 selection, args, null, null, null);
     }
 
+/*
     public static Rx getRx(MappDbHelper dbHelper, int appontId) {
         Cursor cursor = getRxCursor(dbHelper, appontId);
         if (cursor.getCount() <= 0) {
@@ -278,6 +279,7 @@ public abstract class DBUtil {
         cursor.close();
         return rx;
     }
+*/
 
     public static int deleteRx(MappDbHelper dbHelper, String rxId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();

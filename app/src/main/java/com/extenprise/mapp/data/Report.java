@@ -9,8 +9,31 @@ import android.os.Parcelable;
 public class Report implements Parcelable {
     private String date;
     private String type;
-    private String id;
+    private int id;
     private Appointment appointment;
+
+    public Report() {
+        appointment = new Appointment();
+    }
+
+    protected Report(Parcel in) {
+        date = in.readString();
+        type = in.readString();
+        id = in.readInt();
+        appointment = in.readParcelable(Appointment.class.getClassLoader());
+    }
+
+    public static final Creator<Report> CREATOR = new Creator<Report>() {
+        @Override
+        public Report createFromParcel(Parcel in) {
+            return new Report(in);
+        }
+
+        @Override
+        public Report[] newArray(int size) {
+            return new Report[size];
+        }
+    };
 
     public String getDate() {
         return date;
@@ -28,11 +51,11 @@ public class Report implements Parcelable {
         this.type = type;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -51,9 +74,9 @@ public class Report implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{
-                id, type, date
-        });
-        dest.writeInt(appointment.getIdAppointment());
+        dest.writeString(date);
+        dest.writeString(type);
+        dest.writeInt(id);
+        appointment.writeToParcel(dest, flags);
     }
 }

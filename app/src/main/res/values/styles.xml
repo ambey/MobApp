@@ -113,6 +113,12 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="ExtraLargeLabel">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#00f</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
     <style name="LargeLabel">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#00f</item>

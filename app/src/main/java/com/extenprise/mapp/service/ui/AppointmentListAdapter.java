@@ -58,7 +58,7 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         fnameView.setText(item.getFirstName());
         lnameView.setText(item.getLastName());
         genderView.setText(item.getGender());
-        ageView.setText("" + item.getAge());
+        ageView.setText(String.format("%d", item.getAge()));
         wtView.setText(String.format("%.01f", item.getWeight()));
         timeView.setText(item.getTime());
 

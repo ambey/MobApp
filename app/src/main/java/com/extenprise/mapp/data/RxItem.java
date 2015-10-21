@@ -1,9 +1,12 @@
 package com.extenprise.mapp.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ambey on 31/8/15.
  */
-public class RxItem {
+public class RxItem implements Parcelable {
     private int srno;
     private String drugName;
     private String drugStrength;
@@ -21,6 +24,41 @@ public class RxItem {
     private String altDrugName;
     private String altDrugStrength;
     private String altDrugForm;
+
+    public RxItem() {
+    }
+
+    protected RxItem(Parcel in) {
+        srno = in.readInt();
+        drugName = in.readString();
+        drugStrength = in.readString();
+        drugForm = in.readString();
+        doseQty = in.readString();
+        courseDur = in.readInt();
+        beforeMeal = in.readByte() != 0;
+        morning = in.readByte() != 0;
+        afternoon = in.readByte() != 0;
+        evening = in.readByte() != 0;
+        mTime = in.readString();
+        aTime = in.readString();
+        eTime = in.readString();
+        inTakeSteps = in.readString();
+        altDrugName = in.readString();
+        altDrugStrength = in.readString();
+        altDrugForm = in.readString();
+    }
+
+    public static final Creator<RxItem> CREATOR = new Creator<RxItem>() {
+        @Override
+        public RxItem createFromParcel(Parcel in) {
+            return new RxItem(in);
+        }
+
+        @Override
+        public RxItem[] newArray(int size) {
+            return new RxItem[size];
+        }
+    };
 
     public int getSrno() {
         return srno;
@@ -156,5 +194,31 @@ public class RxItem {
 
     public void setAltDrugForm(String altDrugForm) {
         this.altDrugForm = altDrugForm;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(srno);
+        dest.writeString(drugName);
+        dest.writeString(drugStrength);
+        dest.writeString(drugForm);
+        dest.writeString(doseQty);
+        dest.writeInt(courseDur);
+        dest.writeByte((byte) (beforeMeal ? 1 : 0));
+        dest.writeByte((byte) (morning ? 1 : 0));
+        dest.writeByte((byte) (afternoon ? 1 : 0));
+        dest.writeByte((byte) (evening ? 1 : 0));
+        dest.writeString(mTime);
+        dest.writeString(aTime);
+        dest.writeString(eTime);
+        dest.writeString(inTakeSteps);
+        dest.writeString(altDrugName);
+        dest.writeString(altDrugStrength);
+        dest.writeString(altDrugForm);
     }
 }

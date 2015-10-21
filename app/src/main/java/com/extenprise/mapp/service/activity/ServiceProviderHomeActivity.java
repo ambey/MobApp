@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.Utility;
 
 public class ServiceProviderHomeActivity extends Activity {

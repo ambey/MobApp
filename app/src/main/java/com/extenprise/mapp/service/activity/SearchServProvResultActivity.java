@@ -21,7 +21,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
-import com.extenprise.mapp.service.ui.SearchResultListAdapter;
+import com.extenprise.mapp.service.ui.ServProvListAdapter;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         Intent intent = getIntent();
         mServProvList = intent.getParcelableArrayListExtra("servProvList");
 
-        ArrayAdapter<ServProvListItem> adapter = new SearchResultListAdapter(this,
+        ArrayAdapter<ServProvListItem> adapter = new ServProvListAdapter(this,
                 R.layout.activity_search_result, mServProvList);
 
         ListView listView = (ListView) findViewById(R.id.docListView);

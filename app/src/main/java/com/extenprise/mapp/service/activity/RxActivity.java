@@ -34,6 +34,8 @@ import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 
+import java.text.SimpleDateFormat;
+
 public class RxActivity extends Activity implements ResponseHandler {
     private Messenger mService;
     private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
@@ -96,6 +98,12 @@ public class RxActivity extends Activity implements ResponseHandler {
         mAltDrugStrength = (TextView) findViewById(R.id.altDrugStrengthEditText);
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
 
+        fName.setText(mAppont.getFirstName());
+        lName.setText(mAppont.getLastName());
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        date.setText(sdf.format(mAppont.getDate()));
+
         fillRx();
 /*
         MappDbHelper dbHelper = new MappDbHelper(this);
@@ -109,6 +117,7 @@ public class RxActivity extends Activity implements ResponseHandler {
     }
 
     private void fillRx() {
+        Utility.showProgress(this, mForm, mProgressBar, true);
         mAction = MappService.DO_GET_RX;
         Intent intent = new Intent(this, MappService.class);
         bindService(intent, mConnection, BIND_AUTO_CREATE);
@@ -162,8 +171,13 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     private void addRxToDB() {
         Utility.showProgress(this, mForm, mProgressBar, true);
+        mAction = MappService.DO_SAVE_RX;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+/*
         RxDBTask task = new RxDBTask(this);
         task.execute();
+*/
     }
 
     private boolean addRxItem() {
@@ -270,6 +284,13 @@ public class RxActivity extends Activity implements ResponseHandler {
     private void gotRx(Bundle data) {
         mRx = data.getParcelable("rx");
         mSrNo.setText("" + (mRx.getRxItemCount() + 1));
+        Utility.showProgress(this, mForm, mProgressBar, false);
+    }
+
+    private void saveRxDone(Bundle data) {
+        Utility.showProgress(this, mForm, mProgressBar, false);
+        Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -281,6 +302,9 @@ public class RxActivity extends Activity implements ResponseHandler {
         }
         if(action == MappService.DO_GET_RX) {
             gotRx(data);
+            return true;
+        } else if(action == MappService.DO_SAVE_RX) {
+            saveRxDone(data);
             return true;
         }
         return false;
@@ -362,7 +386,11 @@ public class RxActivity extends Activity implements ResponseHandler {
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
 
-            bundle.putParcelable("form", mAppont);
+            if(mAction == MappService.DO_GET_RX) {
+                bundle.putParcelable("form", mAppont);
+            } else if(mAction == MappService.DO_SAVE_RX) {
+                bundle.putParcelable("rx", mRx);
+            }
             Message msg = Message.obtain(null, mAction);
             msg.replyTo = new Messenger(mRespHandler);
             msg.setData(bundle);

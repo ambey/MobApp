@@ -54,6 +54,8 @@ public class BookAppointmentActivity extends Activity
     private ServiceProvider mServProv;
     private Customer mCust;
     private Date mSelectedDate;
+    private Date mTodayDate;
+    private int mMinutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +135,7 @@ public class BookAppointmentActivity extends Activity
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
-        int minutes = cal.get(Calendar.HOUR_OF_DAY) * 60 +
+        mMinutes = cal.get(Calendar.HOUR_OF_DAY) * 60 +
                 cal.get(Calendar.MINUTE);// +
         //120; // For todays appointment, available time slots would start two hours from now
         // Set the hour, minute and other components to zero, so that we can compare the date.
@@ -141,9 +143,9 @@ public class BookAppointmentActivity extends Activity
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        Date today = cal.getTime();
+        mTodayDate = cal.getTime();
         cal.setTime(mSelectedDate);
-        if (mSelectedDate.compareTo(today) < 0) {
+        if (mSelectedDate.compareTo(mTodayDate) < 0) {
             Utility.showAlert(this, getString(R.string.title_activity_book_appointment),
                     getString(R.string.error_past_date));
             return;
@@ -179,8 +181,7 @@ public class BookAppointmentActivity extends Activity
         mCust.getAppointments().add(appointment);
         mServProv.getServProvHasServPt(0).getAppointments().add(appointment);
 
-        mBookButton.setEnabled(false);
-        mBookButton.setBackgroundResource(R.drawable.inactive_button);
+        Utility.setEnabledButton(this, mBookButton, false);
     }
 
     @Override
@@ -237,7 +238,7 @@ public class BookAppointmentActivity extends Activity
             MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            String selectedItem = mSpinnerTimeSlots.getSelectedItem().toString();
+            String selectedItem =  mSpinnerTimeSlots.getSelectedItem().toString();
             ContentValues values = new ContentValues();
             values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME, Utility.getMinutes(selectedItem));
             values.put(MappContract.Appointment.COLUMN_NAME_FROM_TIME_STR, selectedItem);
@@ -282,6 +283,8 @@ public class BookAppointmentActivity extends Activity
                 sdf.applyPattern("dd/MM/yyyy");
                 bundle.putInt("id", mServProv.getServProvHasServPt(0).getIdServProvHasServPt());
                 bundle.putString("date", sdf.format(mSelectedDate));
+                bundle.putString("today", sdf.format(mTodayDate));
+                bundle.putInt("minutes", mMinutes);
             } else if (mAction == MappService.DO_BOOK_APPONT) {
                 Appointment form = new Appointment();
                 form.setIdCustomer(mCust.getIdCustomer());
