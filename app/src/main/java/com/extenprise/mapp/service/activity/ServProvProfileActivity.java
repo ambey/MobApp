@@ -119,7 +119,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         setContentView(R.layout.activity_serv_prov_profile_main);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        workPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
+        //workPlace.setSignInData(LoginHolder.servLoginRef.getPhone());
+        workPlace = new WorkPlace();
+        workPlace.getSignInData().setPhone(LoginHolder.servLoginRef.getPhone());
 
         mFormView = findViewById(R.id.updateServProvform);
         mProgressView = findViewById(R.id.progressView);
@@ -747,12 +749,43 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         Cursor extendedCursor = new MergeCursor(cursors);
         adapter.notifyDataSetChanged();
 */
-        addWorkPlaceScreen();
+        //addWorkPlaceScreen();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add New Work Place");
+        builder.setView(getWPView());
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()  {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                // TODO Auto-generated method stub
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (isValidWorkPlace()) {
+                    addWorkPlace();
+                    dialog.dismiss();
+                }
+            }
+        });
     }
 
-    private AlertDialog addWorkPlaceScreen() {
-        //Dialog d = new Dialog(this);
-
+    private View getWPView() {
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_servprov_wrkdetail_list, null);
 
@@ -815,13 +848,23 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             }
         });
 
+        return dialogView;
+    }
+
+    private AlertDialog addWorkPlaceScreen() {
+        //Dialog d = new Dialog(this);
+
+
+
         return new AlertDialog.Builder(this)
                 .setTitle("Add New Work Place")
-                .setView(dialogView)
+                .setView(getWPView())
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (isValidWorkPlace()) {
                             addWorkPlace();
+                        } else {
+                            dialog.dismiss();
                         }
                     }
                 })
@@ -831,6 +874,12 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     }
                 })
                 .show();
+                /*.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    public void onDismiss(DialogInterface dialog) {
+                        // dialog was just dismissed..
+                    }
+                })*/
+
     }
 
     private boolean isValidWorkPlace() {

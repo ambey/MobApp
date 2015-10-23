@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -46,6 +47,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     private EditText mLocation;
     private EditText mQualification;
     private EditText mExperience;
+    private LinearLayout mServProLay3;
 
     //private Spinner mAvaildays;
     private Spinner mGender;
@@ -74,6 +76,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mGender = (Spinner) findViewById(R.id.spinGender);
         mExperience = (EditText) findViewById(R.id.editTextExp);
         mConsultFee = (Spinner) findViewById(R.id.spinConsultationFees);
+        mServProLay3 = (LinearLayout) findViewById(R.id.servProLay3);
 
         mSearchFormView = findViewById(R.id.advSearchForm);
         mProgressView = findViewById(R.id.search_progress);
@@ -104,14 +107,12 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     }
 
     public void showtimeFields(View view) {
-        if (mButtonStartTime.getVisibility() == View.VISIBLE) {
-            mButtonStartTime.setVisibility(View.GONE);
-            mButttonEndTime.setVisibility(View.GONE);
+        if (mServProLay3.getVisibility() == View.VISIBLE) {
+            mServProLay3.setVisibility(View.GONE);
             view.setBackgroundResource(R.drawable.label);
             //view.setBackgroundColor(Color.parseColor("#b0171f"));
         } else {
-            mButtonStartTime.setVisibility(View.VISIBLE);
-            mButttonEndTime.setVisibility(View.VISIBLE);
+            mServProLay3.setVisibility(View.VISIBLE);
             view.setBackgroundResource(R.drawable.spinner);
             //view.setBackgroundColor(Color.TRANSPARENT);
         }

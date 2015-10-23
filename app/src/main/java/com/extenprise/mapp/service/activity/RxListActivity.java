@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.extenprise.mapp.R;
+
 
 public class RxListActivity extends ActionBarActivity {
 

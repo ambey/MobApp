@@ -202,7 +202,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-
+                    android:visibility="gone"
                    />
 
                 <Spinner
@@ -216,6 +216,7 @@
                     android:entries="@array/gender_search"
                     android:prompt="@string/gender"
                     android:spinnerMode="dropdown"
+                    android:visibility="gone"
                     android:layout_marginTop="10dp"
 
 
