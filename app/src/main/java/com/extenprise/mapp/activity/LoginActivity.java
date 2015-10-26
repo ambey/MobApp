@@ -18,6 +18,7 @@ import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,12 +34,14 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.SignInData;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -241,9 +244,16 @@ public class LoginActivity extends Activity implements ResponseHandler {
             }
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            Utility.showProgress(this, mLoginFormView, mProgressView, true);
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
+
+            if (AppStatus.getInstance(this).isOnline()) {
+                Utility.showProgress(this, mLoginFormView, mProgressView, true);
+                Intent intent = new Intent(this, MappService.class);
+                bindService(intent, mConnection, BIND_AUTO_CREATE);
+            } else {
+                Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+                Log.v("Home", "############################You are not online!!!!");
+            }
+
 /*
             mAuthTask = new UserLoginTask(this, mobile, password);
             mAuthTask.execute((Void) null);

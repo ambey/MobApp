@@ -118,9 +118,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         mRegistrationNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
-                    check = MappService.DO_REG_NO_CHECK;
-                    checkExistence();
+                if (!hasFocus) {
+                    if (!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
+                        check = MappService.DO_REG_NO_CHECK;
+                        checkExistence();
+                    }
                 }
             }
         });
@@ -192,11 +194,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             cancel = true;
         }
 
-        if (isRegNoExist(regNo)) {
+        /*if (isRegNoExist(regNo)) {
             mRegistrationNumber.setError("This Registration Number is already Registered.");
             focusView = mRegistrationNumber;
             cancel = true;
-        }
+        }*/
 
         if (cancel) {
             focusView.requestFocus();

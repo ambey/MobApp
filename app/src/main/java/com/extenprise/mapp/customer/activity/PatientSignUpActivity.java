@@ -24,6 +24,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -378,10 +380,16 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         if(!isValidInput()) {
             return;
         }
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
-        mServiceAction = MappService.DO_SIGNUP;
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+            Intent intent = new Intent(this, MappService.class);
+            mServiceAction = MappService.DO_SIGNUP;
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
 /*
         SaveCustomerData task = new SaveCustomerData(this);
         task.execute((Void) null);
@@ -683,9 +691,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 */
 
     private void checkPhoneExistence() {
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+            mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 }

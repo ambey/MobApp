@@ -18,13 +18,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
@@ -33,12 +37,15 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AdvSearchServProvActivity extends Activity implements ResponseHandler {
 
     private SearchServProvForm mForm;
     private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
+    private int mAction;
+    ArrayList<String> specList;
 
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
     private EditText mDrClinicName;
@@ -82,10 +89,20 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mProgressView = findViewById(R.id.search_progress);
 
         mForm = getIntent().getParcelableExtra("form");
+
+        specList = getIntent().getStringArrayListExtra("specList");
+        if(specList == null) {
+            specList = new ArrayList<>();
+        }
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
+        mSpeciality.setAdapter(spinnerAdapter);
+
         mLocation.setText(mForm.getLocation());
         mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
         mServProvCategory.setSelection(Utility.getSpinnerIndex(mServProvCategory, mForm.getCategory()));
         mDrClinicName.setText(mForm.getName());
+
+        mForm.getSpeciality();
 
         mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
@@ -93,10 +110,11 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String servCategory = mServProvCategory.getSelectedItem().toString();
+                /*String servCategory = mServProvCategory.getSelectedItem().toString();
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
-                //setSpecs(specs);
+                //setSpecs(specs);*/
+                getSpeciality();
             }
 
             @Override
@@ -143,30 +161,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         }
     }
 
-    @Override
-    public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(action == MappService.DO_SEARCH_SERV_PROV) {
-            searchDone(data);
-            return true;
-        }
-        return false;
-    }
 
-    private void searchDone(Bundle data) {
-        Utility.showProgress(this, mSearchFormView, mProgressView, false);
-        boolean success = data.getBoolean("status");
-        if (success) {
-            Intent intent = new Intent(this, SearchServProvResultActivity.class);
-            intent.putParcelableArrayListExtra("servProvList", data.getParcelableArrayList("servProvList"));
-            intent.putExtra("parent-activity", this.getClass());
-            startActivity(intent);
-        }
-    }
 
 
     /*private void setSpecs(ArrayList<String> specs) {
@@ -399,15 +394,34 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mForm.setSpeciality(sp);
         mForm.setLocation(loc);
 
-        Utility.showProgress(this, mSearchFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
-        intent.putExtra("form", mForm);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            mAction = MappService.DO_SEARCH_SERV_PROV;
+            Intent intent = new Intent(this, MappService.class);
+            intent.putExtra("form", mForm);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+        
+
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
         mSearchTask.execute((Void) null);
 */
+    }
+
+    private void getSpeciality() {
+        if (AppStatus.getInstance(this).isOnline()) {
+            mAction = MappService.DO_GET_SPECIALITY;
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     /**
@@ -422,8 +436,12 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
                                        IBinder service) {
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
+            if(mAction == MappService.DO_GET_SPECIALITY) {
+                mForm = new SearchServProvForm();
+                mForm.setCategory(mServProvCategory.getSelectedItem().toString());
+            }
             bundle.putParcelable("form", mForm);
-            Message msg = Message.obtain(null, MappService.DO_SEARCH_SERV_PROV);
+            Message msg = Message.obtain(null, mAction);
             msg.replyTo = new Messenger(mResponseHandler);
             msg.setData(bundle);
 
@@ -439,6 +457,43 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             mService = null;
         }
     };
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(action == MappService.DO_SEARCH_SERV_PROV) {
+            searchDone(data);
+            return true;
+        } else if(action == MappService.DO_GET_SPECIALITY) {
+            gotSpecialities(data);
+            return true;
+        }
+        return false;
+    }
+
+    private void gotSpecialities(Bundle data) {
+        ArrayList<String> list = data.getStringArrayList("specialities");
+        if(list == null) {
+            list = new ArrayList<>();
+        }
+        SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
+        mSpeciality.setAdapter(adapter);
+    }
+
+    private void searchDone(Bundle data) {
+        Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        boolean success = data.getBoolean("status");
+        if (success) {
+            Intent intent = new Intent(this, SearchServProvResultActivity.class);
+            intent.putParcelableArrayListExtra("servProvList", data.getParcelableArrayList("servProvList"));
+            intent.putExtra("parent-activity", this.getClass());
+            startActivity(intent);
+        }
+    }
 
 
 /*

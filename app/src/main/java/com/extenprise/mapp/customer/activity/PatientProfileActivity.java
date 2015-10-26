@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -206,10 +208,16 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         if(!isValidInput()) {
             return;
         }
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
-        mServiceAction = MappService.DO_UPDATE;
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+            Intent intent = new Intent(this, MappService.class);
+            mServiceAction = MappService.DO_UPDATE;
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {

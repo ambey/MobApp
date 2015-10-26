@@ -9,6 +9,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
@@ -21,6 +23,7 @@ import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.ByteArrayToJSONAdapter;
+import com.extenprise.mapp.util.Utility;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -77,8 +80,8 @@ public class MappService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        mAction = intent.getIntExtra("action", -1);
-        return mMessenger.getBinder();
+            mAction = intent.getIntExtra("action", -1);
+            return mMessenger.getBinder();
     }
 
     public void doLogin(Message msg) {

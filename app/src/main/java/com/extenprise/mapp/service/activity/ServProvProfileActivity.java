@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -47,9 +49,11 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -738,6 +742,21 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     ///////////////////////////////Add New Work Place Details/////////////////////////////////
 
+    private void getSpeciality() {
+        mServiceAction = MappService.DO_GET_SPECIALITY;
+        performAction();
+    }
+
+    private void gotSpecialities(Bundle data) {
+        ArrayList<String> list = data.getStringArrayList("specialities");
+        if(list == null) {
+            list = new ArrayList<>();
+        }
+        list.add("Other");
+        SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
+        mSpeciality.setAdapter(adapter);
+    }
+
     public void addNewWorkPlace(View view) {
         /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
         adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
@@ -823,9 +842,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String servCategory = mServCatagory.getSelectedItem().toString();
+                /*String servCategory = mServCatagory.getSelectedItem().toString();
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-                DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
+                DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);*/
+                getSpeciality();
             }
 
             @Override
@@ -1025,8 +1045,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         wpt.setQualification(mQualification.getText().toString().trim());
 
         workPlace = wpt;
-        mServiceAction = MappService.ADD_WORK_PLACE;
-        performAction();
+
+        if (AppStatus.getInstance(this).isOnline()) {
+            mServiceAction = MappService.ADD_WORK_PLACE;
+            performAction();
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1076,9 +1102,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             int count = LoginHolder.servLoginRef.getServiceCount() + 1;
         }
 
-        mServiceAction = MappService.DO_UPDATE;
         LoginHolder.servLoginRef = sp;
-        performAction();
+            mServiceAction = MappService.DO_UPDATE;
+            performAction();
         /*SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);*/
     }
@@ -1134,8 +1160,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     public void checkRegNoExistence() {
-        mServiceAction = MappService.DO_REG_NO_CHECK;
-        performAction();
+            mServiceAction = MappService.DO_REG_NO_CHECK;
+            performAction();
     }
 
 /*
@@ -1239,9 +1265,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     //////////////////////////////////////////Connection & handler////////////////////////////////////
     public void performAction() {
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     /**
@@ -1264,6 +1295,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             if(mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
                 bundle.putString("regno", mRegNo.getText().toString().trim());
                 bundle.putParcelable("service", LoginHolder.servLoginRef);
+            } else if(mServiceAction == MappService.DO_GET_SPECIALITY) {
+                SearchServProvForm mForm = new SearchServProvForm();
+                mForm.setCategory(mServCatagory.getSelectedItem().toString());
+                bundle.putParcelable("form", mForm);
             } else {
                 bundle.putParcelable("workPlace", workPlace);
                 //for add, remove and get Workplace.

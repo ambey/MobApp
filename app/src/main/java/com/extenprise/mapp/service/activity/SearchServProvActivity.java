@@ -10,6 +10,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +19,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -47,6 +50,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     private View mProgressView;
     private View mSearchFormView;
     SearchServProvForm mForm;
+
+    ArrayList<String> specList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,17 +87,22 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     }
 
     private void getSpeciality() {
-        mAction = MappService.DO_GET_SPECIALITY;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            mAction = MappService.DO_GET_SPECIALITY;
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     private void gotSpecialities(Bundle data) {
-        ArrayList<String> list = data.getStringArrayList("specialities");
-        if(list == null) {
-            list = new ArrayList<>();
+        specList = data.getStringArrayList("specialities");
+        if(specList == null) {
+            specList = new ArrayList<>();
         }
-        SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
+        SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
         mSpeciality.setAdapter(adapter);
     }
 
@@ -124,6 +134,12 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         fillSearchForm();
         Intent intent = new Intent(this, AdvSearchServProvActivity.class);
         intent.putExtra("form", mForm);
+        //SpinnerAdapter adp = mSpeciality.getAdapter();
+        /*ArrayList list = new ArrayList();
+        for(int i = 0; i < mSpeciality.getCount(); i++) {
+            list.add(mSpeciality.getItemAtPosition(i));
+        }*/
+        intent.putStringArrayListExtra("specList", specList);
         startActivity(intent);
     }
 
@@ -200,12 +216,19 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     public void searchDr(View view) {
         fillSearchForm();
+        if (AppStatus.getInstance(this).isOnline()) {
+            //Toast.makeText(this, "You are online!!!!", Toast.LENGTH_LONG).show();
+            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            mAction = MappService.DO_SEARCH_SERV_PROV;
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
 
         /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
-        Utility.showProgress(this, mSearchFormView, mProgressView, true);
-        mAction = MappService.DO_SEARCH_SERV_PROV;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc);
         mSearchTask.execute((Void) null);
