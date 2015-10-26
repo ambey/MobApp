@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by ambey on 31/8/15.
  */
-public class Rx extends Report implements Parcelable{
+public class Rx extends Report {
     private ArrayList<RxItem> items;
     private byte[] scannedCopy;
 

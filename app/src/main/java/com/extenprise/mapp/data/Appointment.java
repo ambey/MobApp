@@ -28,10 +28,10 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     }
 
     public Appointment(Parcel source) {
+        idAppointment = source.readInt();
+
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-
-        idAppointment = source.readInt();
         try {
             date = sdf.parse(source.readString());
         } catch (ParseException e) {
@@ -141,10 +141,17 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
         dest.writeInt(idAppointment);
-        dest.writeString(sdf.format(date));
+
+        String dateStr = "";
+        try {
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+            sdf.applyPattern("dd/MM/yyyy");
+            dateStr = sdf.format(date);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        dest.writeString(dateStr);
         dest.writeInt(from);
         dest.writeInt(to);
         dest.writeInt(confirmed ? 1 : 0);

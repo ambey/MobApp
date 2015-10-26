@@ -3,11 +3,15 @@ package com.extenprise.mapp.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by ambey on 31/8/15.
  */
 public class Report implements Parcelable {
-    private String date;
+    private Date date;
     private String type;
     private int id;
     private Appointment appointment;
@@ -17,7 +21,13 @@ public class Report implements Parcelable {
     }
 
     protected Report(Parcel in) {
-        date = in.readString();
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        try {
+            date = sdf.parse(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         type = in.readString();
         id = in.readInt();
         appointment = in.readParcelable(Appointment.class.getClassLoader());
@@ -35,11 +45,11 @@ public class Report implements Parcelable {
         }
     };
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -74,9 +84,17 @@ public class Report implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(date);
+        String dateStr = "";
+        try {
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+            sdf.applyPattern("dd/MM/yyyy");
+            dateStr = sdf.format(date);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        dest.writeString(dateStr);
         dest.writeString(type);
         dest.writeInt(id);
-        appointment.writeToParcel(dest, flags);
+        dest.writeParcelable(appointment, flags);
     }
 }

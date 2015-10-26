@@ -53,8 +53,10 @@ public class AppointmentListItem implements Parcelable {
             }
         }
         idServProvHasServPt = source.readInt();
+        idCustomer = source.readInt();
         age = source.readInt();
         weight = source.readFloat();
+        reportCount = source.readInt();
         confirmed = source.readInt() > 0;
         canceled = source.readInt() > 0;
         int size = source.readInt();
@@ -192,8 +194,10 @@ public class AppointmentListItem implements Parcelable {
         }
         dest.writeString(dateStr);
         dest.writeInt(idServProvHasServPt);
+        dest.writeInt(idCustomer);
         dest.writeInt(age);
         dest.writeFloat(weight);
+        dest.writeInt(reportCount);
         dest.writeInt(confirmed ? 1 : 0);
         dest.writeInt(canceled ? 1 : 0);
         int size = 0;

@@ -3,11 +3,8 @@ package com.extenprise.mapp.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by ambey on 31/8/15.
- */
 public class RxItem implements Parcelable {
-    private int srno;
+    private boolean saved;
     private String drugName;
     private String drugStrength;
     private String drugForm;
@@ -29,7 +26,7 @@ public class RxItem implements Parcelable {
     }
 
     protected RxItem(Parcel in) {
-        srno = in.readInt();
+        saved = (in.readInt() > 0);
         drugName = in.readString();
         drugStrength = in.readString();
         drugForm = in.readString();
@@ -60,12 +57,12 @@ public class RxItem implements Parcelable {
         }
     };
 
-    public int getSrno() {
-        return srno;
+    public boolean isSaved() {
+        return saved;
     }
 
-    public void setSrno(int srno) {
-        this.srno = srno;
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     public String getDrugName() {
@@ -203,7 +200,7 @@ public class RxItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(srno);
+        dest.writeInt(saved ? 1 : 0);
         dest.writeString(drugName);
         dest.writeString(drugStrength);
         dest.writeString(drugForm);

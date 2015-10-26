@@ -406,6 +406,21 @@ public class MappService extends Service {
         task.execute((Void) null);
     }
 
+    public void doGetMedStoreList(Message msg) {
+        Bundle data = msg.getData();
+        int idService = data.getInt("id");
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), "{\"idService\": \"" + idService + "\"}");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
     private void onError(int action) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("status", false);
@@ -493,6 +508,9 @@ public class MappService extends Service {
             case DO_SAVE_RX:
                 urlId = R.string.action_save_rx;
                 break;
+            case DO_GET_MEDSTORE_LIST:
+                urlId = R.string.action_get_medstore_list;
+                break;
             default:
                 return null;
         }
@@ -568,6 +586,9 @@ public class MappService extends Service {
                     break;
                 case DO_SAVE_RX:
                     mService.doSaveRx(msg);
+                    break;
+                case DO_GET_MEDSTORE_LIST:
+                    mService.doGetMedStoreList(msg);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -720,8 +741,8 @@ public class MappService extends Service {
                 bundle.putParcelableArrayList("servProvList", mServProvList);
             }
             if (mStringList != null) {
-                String key = "timeslots";
-                if(mAction == DO_GET_SPECIALITY) {
+                String key = "timeSlots";
+                if (mAction == DO_GET_SPECIALITY) {
                     key = "specialities";
                 }
                 bundle.putStringArrayList(key, mStringList);
@@ -732,14 +753,14 @@ public class MappService extends Service {
             if (mWorkPlace != null) {
                 bundle.putParcelable("workPlace", mWorkPlace);
             }
-            if(mAppontList != null) {
+            if (mAppontList != null) {
                 bundle.putParcelableArrayList("appontList", mAppontList);
             }
 
-            if(mWorkPlaceList != null) {
+            if (mWorkPlaceList != null) {
                 bundle.putParcelableArrayList("workPlaceList", mWorkPlaceList);
             }
-            if(mRx != null) {
+            if (mRx != null) {
                 bundle.putParcelable("rx", mRx);
             }
             Message msg = Message.obtain(null, mAction);

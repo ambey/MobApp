@@ -1,5 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -9,7 +10,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 
@@ -25,7 +25,7 @@ import com.extenprise.mapp.service.ui.ServProvListAdapter;
 
 import java.util.ArrayList;
 
-public class SelectMedicalStoreActivity extends AppCompatActivity implements ResponseHandler {
+public class SelectMedicalStoreActivity extends Activity implements ResponseHandler {
 
     private Messenger mService;
     private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
