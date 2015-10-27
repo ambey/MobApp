@@ -82,6 +82,9 @@ public class LoginActivity extends Activity implements ResponseHandler {
         setContentView(R.layout.activity_login);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+
         mSignInData = new SignInData();
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
@@ -125,13 +128,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
             mMobileNumber.setText(loginPreferences.getString("username", ""));
+            if(loginPreferences.getString("passwd", "") == null) {
+                mPasswordView.setText(loginPreferences.getString("passwd", ""));
+                mLoginType = loginPreferences.getInt("logintype", 0);
+                processLogin();
+            }
             mSaveLoginCheckBox.setChecked(true);
         }
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-
     }
 
     @Override
@@ -237,6 +240,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
             if (mSaveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.putBoolean("saveLogin", true);
                 loginPrefsEditor.putString("username", mSignInData.getPhone());
+                loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
+                loginPrefsEditor.putInt("logintype", mLoginType);
                 loginPrefsEditor.apply();
             } else {
                 loginPrefsEditor.clear();
@@ -244,20 +249,22 @@ public class LoginActivity extends Activity implements ResponseHandler {
             }
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-
-            if (AppStatus.getInstance(this).isOnline()) {
-                Utility.showProgress(this, mLoginFormView, mProgressView, true);
-                Intent intent = new Intent(this, MappService.class);
-                bindService(intent, mConnection, BIND_AUTO_CREATE);
-            } else {
-                Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-                Log.v("Home", "############################You are not online!!!!");
-            }
-
+            processLogin();
 /*
             mAuthTask = new UserLoginTask(this, mobile, password);
             mAuthTask.execute((Void) null);
 */
+        }
+    }
+
+    private void processLogin() {
+        if (AppStatus.getInstance(this).isOnline()) {
+            Utility.showProgress(this, mLoginFormView, mProgressView, true);
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
         }
     }
 

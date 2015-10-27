@@ -2,17 +2,22 @@ package com.extenprise.mapp.service.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.net.AppStatus;
+import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.activity.AppointmentDetailsActivity;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 
@@ -75,9 +80,14 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
-        intent.putExtra("appont", mList.get(position));
-        intent.putExtra("service", mServProv);
-        getContext().startActivity(intent);
+        if (AppStatus.getInstance(getContext()).isOnline()) {
+            Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
+            intent.putExtra("appont", mList.get(position));
+            intent.putExtra("service", mServProv);
+            getContext().startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 }

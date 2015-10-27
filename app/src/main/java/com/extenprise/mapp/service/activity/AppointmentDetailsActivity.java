@@ -10,14 +10,17 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -148,9 +151,14 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void fillPastAppointements() {
-        mAction = MappService.DO_PAST_APPONT_LIST;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            mAction = MappService.DO_PAST_APPONT_LIST;
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     @Override
@@ -176,44 +184,80 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     public void confirmAppointment(View view) {
-        mAction = MappService.DO_CONFIRM_APPONT;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            mAction = MappService.DO_CONFIRM_APPONT;
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     public void cancelAppointment(View view) {
-        mAction = MappService.DO_CANCEL_APPONT;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(this).isOnline()) {
+            mAction = MappService.DO_CANCEL_APPONT;
+            Intent intent = new Intent(this, MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     public void showRxActivity(View view) {
-        Intent intent = new Intent(this, RxActivity.class);
-        intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("appont", mAppont);
-        startActivity(intent);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, RxActivity.class);
+            intent.putExtra("parent-activity", getClass().getName());
+            intent.putExtra("appont", mAppont);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     public void showRxDetails(View view) {
-        Intent intent = new Intent(this, ViewRxActivity.class);
-        intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("appont", mAppont);
-        intent.putExtra("pastAppont", mPastApponts.get(0));
-        startActivity(intent);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, ViewRxActivity.class);
+            intent.putExtra("parent-activity", getClass().getName());
+            intent.putExtra("appont", mAppont);
+            intent.putExtra("pastAppont", mPastApponts.get(0));
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     public void showPatientHistory(View view) {
-        Intent intent = new Intent(this, PatientHistoryActivity.class);
-        intent.putExtra("parent-activity", getClass().getName());
-        intent.putExtra("appont", mAppont);
-        intent.putParcelableArrayListExtra("appontList", mPastApponts);
-        startActivity(intent);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, PatientHistoryActivity.class);
+            intent.putExtra("parent-activity", getClass().getName());
+            intent.putExtra("appont", mAppont);
+            intent.putParcelableArrayListExtra("appontList", mPastApponts);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     public void showScannedRxScreen(View view) {
-        Intent intent = new Intent(this, ScannedRxActivity.class);
-        intent.putExtra("appont", mAppont);
-        startActivity(intent);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, ScannedRxActivity.class);
+            intent.putExtra("appont", mAppont);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     /**

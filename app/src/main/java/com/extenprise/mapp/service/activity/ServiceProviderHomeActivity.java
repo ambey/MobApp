@@ -3,14 +3,18 @@ package com.extenprise.mapp.service.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.net.AppStatus;
+import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
 
@@ -42,17 +46,29 @@ public class ServiceProviderHomeActivity extends Activity {
     }
 
     public void viewAppointment(View view) {
-        Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-        intent.putExtra("service", mServiceProv);
-        startActivity(intent);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, ViewAppointmentListActivity.class);
+            intent.putExtra("service", mServiceProv);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     public void viewProfile(View view) {
-        /*MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        if(SearchServProv.viewWorkPlaces(dbHelper)) {*/
+        if (AppStatus.getInstance(this).isOnline()) {
             Intent intent = new Intent(this, ServProvProfileActivity.class);
             intent.putExtra("service", mServiceProv);
             startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+        /*MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+        if(SearchServProv.viewWorkPlaces(dbHelper)) {*/
+
         /*} else {
             Utility.showAlert(this, "", "Sorry, Some problem occurs in viewing profile.");
         }*/

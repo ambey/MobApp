@@ -9,14 +9,17 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -57,10 +60,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                mSelectedItem = mServProvList.get(position);
-                Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
-                Intent intent = new Intent(view.getContext(), MappService.class);
-                bindService(intent, mConnection, BIND_AUTO_CREATE);
+                getDetails(view, position);
 
             }
         });
@@ -87,6 +87,18 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getDetails(View view, int position) {
+        if (AppStatus.getInstance(this).isOnline()) {
+            mSelectedItem = mServProvList.get(position);
+            Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
+            Intent intent = new Intent(view.getContext(), MappService.class);
+            bindService(intent, mConnection, BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     public void gotDetails(Bundle data) {

@@ -3,15 +3,20 @@ package com.extenprise.mapp.customer.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.net.AppStatus;
+import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.service.activity.SearchServProvActivity;
 import com.extenprise.mapp.util.Utility;
 
 
@@ -43,9 +48,25 @@ public class PatientsHomeScreenActivity extends Activity {
     }
 
     public void viewProfile(View view) {
-        Intent intent = new Intent(this, PatientProfileActivity.class);
-        intent.putExtra("customer", mCustomer);
-        startActivity(intent);
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, PatientProfileActivity.class);
+            intent.putExtra("customer", mCustomer);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+    }
+
+    public void searchDoc(View view) {
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, SearchServProvActivity.class);
+            intent.putExtra("customer", mCustomer);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     @Override

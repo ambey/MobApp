@@ -28,12 +28,14 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -321,9 +323,14 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
      * Defines callbacks for service binding, passed to bindService()
      */
     private void checkExistence() {
-        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
-        Intent intent = new Intent(getActivity(), MappService.class);
-        getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
+        if (AppStatus.getInstance(getActivity()).isOnline()) {
+            Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+            Intent intent = new Intent(getActivity(), MappService.class);
+            getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
+        } else {
+            Toast.makeText(getActivity(), "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {

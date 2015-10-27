@@ -13,6 +13,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +24,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -356,6 +359,15 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     private boolean addNewWorkPlace() {
+
+        //Check For Internet Connectivity
+        if (AppStatus.getInstance(getActivity()).isOnline()) {
+            return false;
+        } else {
+            Toast.makeText(getActivity(), "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
         ServProvSignUpActivity activity = (ServProvSignUpActivity) getActivity();
         if (!activity.isValidInput()) {
             return false;
@@ -541,6 +553,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void saveData() {
+
         Utility.showProgress(getActivity(), mFormView, mProgressView, true);
         Intent intent = new Intent(getActivity(), MappService.class);
         getActivity().bindService(intent, mConnection, getActivity().BIND_AUTO_CREATE);

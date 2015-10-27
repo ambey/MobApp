@@ -3,15 +3,19 @@ package com.extenprise.mapp.service.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
+import com.extenprise.mapp.net.AppStatus;
+import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
@@ -80,13 +84,18 @@ public class ServProvDetailsActivity extends Activity {
     }
 
     public void bookAppointment(View view) {
-        Intent intent = new Intent(this, BookAppointmentActivity.class);
-        if(LoginHolder.custLoginRef == null) {
-            intent = new Intent(this, LoginActivity.class);
-            intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
+        if (AppStatus.getInstance(this).isOnline()) {
+            Intent intent = new Intent(this, BookAppointmentActivity.class);
+            if(LoginHolder.custLoginRef == null) {
+                intent = new Intent(this, LoginActivity.class);
+                intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
+            }
+            intent.putExtra("servProv", mServProv);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
         }
-        intent.putExtra("servProv", mServProv);
-        startActivity(intent);
     }
 
     @Override

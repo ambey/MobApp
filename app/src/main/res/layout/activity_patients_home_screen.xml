@@ -124,6 +124,14 @@
             android:layout_below="@+id/linenView5"
             android:onClick="viewProfile"
             android:text="@string/profile_text" />
+        <Button
+            android:id="@+id/buttonSearchDoc"
+            style="@style/RectButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonViewProfile"
+            android:onClick="searchDoc"
+            android:text="@string/search_doctor" />
 
         <View
             android:id="@+id/linenView2"
