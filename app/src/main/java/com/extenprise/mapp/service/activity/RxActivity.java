@@ -294,6 +294,7 @@ public class RxActivity extends Activity implements ResponseHandler {
     private void saveRxDone() {
         Utility.showProgress(this, mForm, mProgressBar, false);
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
+        intent.putExtra("rx", mRx);
         startActivity(intent);
     }
 

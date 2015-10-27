@@ -49,6 +49,14 @@
         <item name="android:paddingRight">20dp</item>
     </style>
 
+    <style name="InactiveWideButton">
+        <item name="android:background">@drawable/inactive_button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/PassiveColor</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+    </style>
+
     <style name="ExtraWideButton">
         <item name="android:background">@drawable/button</item>
         <item name="android:textStyle">bold</item>
@@ -57,10 +65,12 @@
         <item name="android:paddingRight">40dp</item>
     </style>
 
-    <style name="RoundSquareButton">
-        <item name="android:background">@drawable/square_round_button</item>
+    <style name="InactiveExtraWideButton">
+        <item name="android:background">@drawable/inactive_button</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/ThemeColor</item>
+        <item name="android:textColor">@color/PassiveColor</item>
+        <item name="android:paddingLeft">40dp</item>
+        <item name="android:paddingRight">40dp</item>
     </style>
 
     <style name="RectButton">

@@ -11,6 +11,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.extenprise.mapp.LoginHolder;
@@ -22,6 +23,7 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.MedStoreRxForm;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.ui.ServProvListAdapter;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 
@@ -60,6 +62,10 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         ArrayList<ServProvListItem> list = data.getParcelableArrayList("medStores");
         ServProvListAdapter adapter = new ServProvListAdapter(this, 0, list);
         mMedStoreList.setAdapter(adapter);
+        if (list != null && list.size() > 0) {
+            Button sendButton = (Button) findViewById(R.id.sendRxButton);
+            Utility.setEnabledButton(this, sendButton, true);
+        }
     }
 
     private void rxSentToMedStore() {
@@ -91,11 +97,11 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
 
-            ServProvListItem item = (ServProvListItem) mMedStoreList.getAdapter().getItem(mMedStoreList.getSelectedItemPosition());
-            MedStoreRxForm form = new MedStoreRxForm();
-            form.setIdServProvHasServPt(item.getIdServProvHasServPt());
-            form.setIdRx(mRx.getId());
             if (mAction == MappService.DO_SEND_RX) {
+                ServProvListItem item = (ServProvListItem) mMedStoreList.getAdapter().getItem(mMedStoreList.getSelectedItemPosition());
+                MedStoreRxForm form = new MedStoreRxForm();
+                form.setIdServProvHasServPt(item.getIdServProvHasServPt());
+                form.setIdRx(mRx.getId());
                 bundle.putParcelable("form", form);
             } else if (mAction == MappService.DO_GET_MEDSTORE_LIST) {
                 bundle.putInt("id", mRx.getAppointment().getIdServProvHasServPt());
