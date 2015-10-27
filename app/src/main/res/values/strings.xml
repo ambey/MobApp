@@ -303,6 +303,7 @@
     <string name="send">Send</string>
     <string name="send_rx_to_mstore">Send Rx to a\nMedical Store</string>
 
+    <string name="error_not_online">You are not online!!!!</string>
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>
     <string name="msg_appont_canceled">The appointment has been canceled</string>
     <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>

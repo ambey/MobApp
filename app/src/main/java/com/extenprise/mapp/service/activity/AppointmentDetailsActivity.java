@@ -10,13 +10,11 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
@@ -96,9 +94,9 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             Utility.setEnabledButton(this, uploadRxButton, false);
         }
 
-        if(mAppont.isConfirmed()) {
+        if (mAppont.isConfirmed()) {
             mStatusView.setText(getString(R.string.confirmed));
-        } else if(mAppont.isCanceled()) {
+        } else if (mAppont.isCanceled()) {
             mStatusView.setText(getString(R.string.canceled));
         } else {
             mStatusView.setText(getString(R.string.not_confirmed));
@@ -151,14 +149,13 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void fillPastAppointements() {
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_PAST_APPONT_LIST;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        mAction = MappService.DO_PAST_APPONT_LIST;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -184,80 +181,52 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     public void confirmAppointment(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_CONFIRM_APPONT;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
-
+        mAction = MappService.DO_CONFIRM_APPONT;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     public void cancelAppointment(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_CANCEL_APPONT;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
-
+        mAction = MappService.DO_CANCEL_APPONT;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     public void showRxActivity(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, RxActivity.class);
-            intent.putExtra("parent-activity", getClass().getName());
-            intent.putExtra("appont", mAppont);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-
+        Intent intent = new Intent(this, RxActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
+        intent.putExtra("appont", mAppont);
+        startActivity(intent);
     }
 
     public void showRxDetails(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, ViewRxActivity.class);
-            intent.putExtra("parent-activity", getClass().getName());
-            intent.putExtra("appont", mAppont);
-            intent.putExtra("pastAppont", mPastApponts.get(0));
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-
+        Intent intent = new Intent(this, ViewRxActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
+        intent.putExtra("appont", mAppont);
+        intent.putExtra("pastAppont", mPastApponts.get(0));
+        startActivity(intent);
     }
 
     public void showPatientHistory(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, PatientHistoryActivity.class);
-            intent.putExtra("parent-activity", getClass().getName());
-            intent.putExtra("appont", mAppont);
-            intent.putParcelableArrayListExtra("appontList", mPastApponts);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-
+        Intent intent = new Intent(this, PatientHistoryActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
+        intent.putExtra("appont", mAppont);
+        intent.putParcelableArrayListExtra("appontList", mPastApponts);
+        startActivity(intent);
     }
 
     public void showScannedRxScreen(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, ScannedRxActivity.class);
-            intent.putExtra("appont", mAppont);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-
+        Intent intent = new Intent(this, ScannedRxActivity.class);
+        intent.putExtra("appont", mAppont);
+        startActivity(intent);
     }
 
     /**

@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -21,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
@@ -322,5 +324,9 @@ public abstract class Utility {
         }
     }
 
+    public static void showMessage(Context context, int msgId) {
+        Toast.makeText(context, context.getString(msgId), Toast.LENGTH_LONG).show();
+        Log.v("Home", "############################" + context.getString(msgId));
 
+    }
 }
