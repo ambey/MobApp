@@ -170,15 +170,14 @@ public class RxActivity extends Activity implements ResponseHandler {
     }
 
     private void addRxToDB() {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Utility.showProgress(this, mForm, mProgressBar, true);
-            mAction = MappService.DO_SAVE_RX;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        Utility.showProgress(this, mForm, mProgressBar, true);
+        mAction = MappService.DO_SAVE_RX;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
 
 /*
         RxDBTask task = new RxDBTask(this);

@@ -56,14 +56,13 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
     }
 
     public void sendRxToMedStore(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_SEND_RX;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        mAction = MappService.DO_SEND_RX;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotMedStoreList(Bundle data) {

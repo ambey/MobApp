@@ -107,7 +107,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     if(!TextUtils.isEmpty(mEditTextCellphone.getText().toString().trim())) {
-                        checkPhoneExistence();
+                        mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
+                        performAction();
                     }
                 }
             }
@@ -348,13 +349,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(this, "You haven't picked Image",
-                            Toast.LENGTH_LONG).show();
+                    Utility.showMessage(this, R.string.error_img_not_picked);
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
-                    .show();
+            Utility.showMessage(this, R.string.some_error);
         }
 
     }
@@ -380,20 +379,22 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         if(!isValidInput()) {
             return;
         }
-        if (AppStatus.getInstance(this).isOnline()) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
-            Intent intent = new Intent(this, MappService.class);
-            mServiceAction = MappService.DO_SIGNUP;
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-
+        mServiceAction = MappService.DO_SIGNUP;
+        performAction();
 /*
         SaveCustomerData task = new SaveCustomerData(this);
         task.execute((Void) null);
 */
+    }
+
+    private void performAction() {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
+        }
+        Utility.showProgress(this, mFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     /**
@@ -689,16 +690,4 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     }
 */
-
-    private void checkPhoneExistence() {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
-            mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-    }
 }

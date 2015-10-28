@@ -162,7 +162,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    checkRegNoExistence();
+                    mServiceAction = MappService.DO_REG_NO_CHECK;
+                    performAction();
                 }
             }
         });
@@ -475,27 +476,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         tpd.show();
     }
 
-    private AlertDialog openSpecDialog() {
-        final EditText txtSpec = new EditText(this);
-        txtSpec.setHint("Add Speciality");
-
-        return new AlertDialog.Builder(this)
-                .setTitle("Add Speciality")
-                .setView(txtSpec)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String newSpec = txtSpec.getText().toString();
-                        ArrayList<String> specs = new ArrayList<String>();
-                        specs.add(newSpec);
-                        DBUtil.setNewSpec(getApplicationContext(), specs, mSpeciality);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+    private void openSpecDialog() {
+        Utility.openSpecDialog(this, mSpeciality);
     }
 
     ///////////////////////////Multi spinner..../////////////////////////////
@@ -742,20 +724,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     ///////////////////////////////Add New Work Place Details/////////////////////////////////
 
-    private void getSpeciality() {
-        mServiceAction = MappService.DO_GET_SPECIALITY;
-        performAction();
-    }
 
-    private void gotSpecialities(Bundle data) {
-        ArrayList<String> list = data.getStringArrayList("specialities");
-        if(list == null) {
-            list = new ArrayList<>();
-        }
-        list.add("Other");
-        SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
-        mSpeciality.setAdapter(adapter);
-    }
 
     public void addNewWorkPlace(View view) {
         /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
@@ -770,41 +739,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 */
         //addWorkPlaceScreen();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add New Work Place");
-        builder.setView(getWPView());
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()  {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                // TODO Auto-generated method stub
-            }
-        });
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (isValidWorkPlace()) {
-                    addWorkPlace();
-                    dialog.dismiss();
-                }
-            }
-        });
-    }
-
-    private View getWPView() {
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_servprov_wrkdetail_list, null);
 
@@ -845,7 +779,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 /*String servCategory = mServCatagory.getSelectedItem().toString();
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);*/
-                getSpeciality();
+                mServiceAction = MappService.DO_GET_SPECIALITY;
+                performAction();
             }
 
             @Override
@@ -868,38 +803,56 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             }
         });
 
-        return dialogView;
-    }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add New Work Place");
+        builder.setView(dialogView);
 
-    private AlertDialog addWorkPlaceScreen() {
-        //Dialog d = new Dialog(this);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                // TODO Auto-generated method stub
+            }
+        });
 
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isValidWorkPlace()) {
+                    WorkPlace wpt = new WorkPlace();
+                    wpt.setName(mName.getText().toString().trim());
+                    wpt.setLocation(mLoc.getText().toString().trim());
+                    wpt.setCity(mCity.getSelectedItem().toString().trim());
+                    wpt.setPhone(mPhone1.getText().toString().trim());
+                    wpt.setAltPhone(mPhone2.getText().toString().trim());
+                    wpt.setEmailId(mEmailIdwork.getText().toString().trim());
+                    wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+                    wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
+                    wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setServCatagory(mServCatagory.getSelectedItem().toString());
+                    wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
+                    wpt.setServPointType(mServPtType.getSelectedItem().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
+                    wpt.setQualification(mQualification.getText().toString().trim());
 
-        return new AlertDialog.Builder(this)
-                .setTitle("Add New Work Place")
-                .setView(getWPView())
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (isValidWorkPlace()) {
-                            addWorkPlace();
-                        } else {
-                            dialog.dismiss();
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-                /*.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    public void onDismiss(DialogInterface dialog) {
-                        // dialog was just dismissed..
-                    }
-                })*/
-
+                    workPlace = wpt;
+                    mServiceAction = MappService.ADD_WORK_PLACE;
+                    performAction();
+                    dialog.dismiss();
+                }
+            }
+        });
     }
 
     private boolean isValidWorkPlace() {
@@ -1024,37 +977,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         return valid;
     }
 
-    private void addWorkPlace() {
-        WorkPlace wpt = new WorkPlace();
-
-        wpt.setName(mName.getText().toString().trim());
-        wpt.setLocation(mLoc.getText().toString().trim());
-        wpt.setCity(mCity.getSelectedItem().toString().trim());
-        wpt.setPhone(mPhone1.getText().toString().trim());
-        wpt.setAltPhone(mPhone2.getText().toString().trim());
-        wpt.setEmailId(mEmailIdwork.getText().toString().trim());
-        wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
-        wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
-        wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
-        wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-        wpt.setServCatagory(mServCatagory.getSelectedItem().toString());
-        wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
-        wpt.setServPointType(mServPtType.getSelectedItem().toString());
-        wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-        wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
-        wpt.setQualification(mQualification.getText().toString().trim());
-
-        workPlace = wpt;
-
-        if (AppStatus.getInstance(this).isOnline()) {
-            mServiceAction = MappService.ADD_WORK_PLACE;
-            performAction();
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1103,8 +1025,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
 
         LoginHolder.servLoginRef = sp;
-            mServiceAction = MappService.DO_UPDATE;
-            performAction();
+        mServiceAction = MappService.DO_UPDATE;
+        performAction();
         /*SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);*/
     }
@@ -1157,11 +1079,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             return false;
         }
         return true;
-    }
-
-    public void checkRegNoExistence() {
-            mServiceAction = MappService.DO_REG_NO_CHECK;
-            performAction();
     }
 
 /*
@@ -1265,14 +1182,13 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     //////////////////////////////////////////Connection & handler////////////////////////////////////
     public void performAction() {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        Utility.showProgress(this, mFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     /**
@@ -1340,6 +1256,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 case MappService.DO_WORK_PLACE_LIST:
                     getWorkPlaceListDone(data);
                     break;
+                case MappService.DO_GET_SPECIALITY:
+                    getSpecialitiesDone(data);
                 default:
                     return false;
             }
@@ -1391,6 +1309,16 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             registerForContextMenu(listView);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
+    }
+
+    private void getSpecialitiesDone(Bundle data) {
+        ArrayList<String> list = data.getStringArrayList("specialities");
+        if(list == null) {
+            list = new ArrayList<>();
+        }
+        list.add("Other");
+        SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
+        mSpeciality.setAdapter(adapter);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

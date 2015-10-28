@@ -149,13 +149,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void fillPastAppointements() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         mAction = MappService.DO_PAST_APPONT_LIST;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        performAction();
     }
 
     @Override
@@ -181,23 +176,13 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     public void confirmAppointment(View view) {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         mAction = MappService.DO_CONFIRM_APPONT;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        performAction();
     }
 
     public void cancelAppointment(View view) {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         mAction = MappService.DO_CANCEL_APPONT;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        performAction();
     }
 
     public void showRxActivity(View view) {
@@ -232,6 +217,16 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
+
+    private void performAction() {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
+        }
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override

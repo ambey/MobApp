@@ -87,14 +87,13 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     }
 
     private void getSpeciality() {
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_GET_SPECIALITY;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        mAction = MappService.DO_GET_SPECIALITY;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotSpecialities(Bundle data) {

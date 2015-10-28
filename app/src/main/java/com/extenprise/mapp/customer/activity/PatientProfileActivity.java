@@ -125,6 +125,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
     }
 
     private void viewProfile() {
+
         //DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String dob = "" + Calendar.getInstance();
         int d=0, m=0, y=0;
@@ -208,16 +209,14 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         if(!isValidInput()) {
             return;
         }
-        if (AppStatus.getInstance(this).isOnline()) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
-            Intent intent = new Intent(this, MappService.class);
-            mServiceAction = MappService.DO_UPDATE;
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
-
+        Utility.showProgress(this, mFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        mServiceAction = MappService.DO_UPDATE;
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {

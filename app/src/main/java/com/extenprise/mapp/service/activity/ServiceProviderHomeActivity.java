@@ -46,32 +46,21 @@ public class ServiceProviderHomeActivity extends Activity {
     }
 
     public void viewAppointment(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-            intent.putExtra("service", mServiceProv);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
+        performAction(ViewAppointmentListActivity.class);
+    }
 
+    private void performAction(Class c) {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
+        }
+        Intent intent = new Intent(this, c);
+        intent.putExtra("service", mServiceProv);
+        startActivity(intent);
     }
 
     public void viewProfile(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, ServProvProfileActivity.class);
-            intent.putExtra("service", mServiceProv);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
-        /*MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        if(SearchServProv.viewWorkPlaces(dbHelper)) {*/
-
-        /*} else {
-            Utility.showAlert(this, "", "Sorry, Some problem occurs in viewing profile.");
-        }*/
+        performAction(ServProvProfileActivity.class);
     }
 
     @Override

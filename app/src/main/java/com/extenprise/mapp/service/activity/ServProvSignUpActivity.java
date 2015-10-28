@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.extenprise.mapp.R;
 
@@ -22,6 +23,8 @@ public class ServProvSignUpActivity extends FragmentActivity {
 
     private ServProvsignUpPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
+
+    private RelativeLayout mRelLayout2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

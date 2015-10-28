@@ -20,9 +20,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +74,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private View mFormView;
     private View mProgressView;
 
+    private RelativeLayout mRelLayout2;
+
     private Button mMultiSpinnerDays;
     protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     protected boolean[] selections = new boolean[options.length];
@@ -86,6 +91,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
         mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);
         mProgressView = mRootview.findViewById(R.id.progressView);
+        mRelLayout2 = (RelativeLayout) mRootview.findViewById(R.id.relLayout2);
 
         mName = (EditText) mRootview.findViewById(R.id.editTextName);
         mLoc = (EditText) mRootview.findViewById(R.id.editTextLoc);
@@ -109,7 +115,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String servCategory = mServCatagory.getSelectedItem().toString();
                 MappDbHelper dbHelper = new MappDbHelper(getActivity());
-                DBUtil.setSpecOfCategory(getActivity(), dbHelper, servCategory, mSpeciality);
+                //ArrayList<String> specs = DBUtil.getSpecOfCategory(dbHelper, servCategory);
+                Utility.setNewSpec(getActivity(), DBUtil.getSpecOfCategory(dbHelper, servCategory), mSpeciality);
                 //setSpecs(specs);
             }
 
@@ -125,7 +132,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String spec = mSpeciality.getSelectedItem().toString();
                 if (spec.equals("Other")) {
-                    openDialog();
+                        openSpecDialog();
                 }
             }
 
@@ -139,27 +146,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         return mRootview;
     }
 
-    private AlertDialog openDialog() {
-        final EditText txtSpec = new EditText(getActivity());
-        txtSpec.setHint("Add Speciality");
-
-        return new AlertDialog.Builder(getActivity())
-                .setTitle("Add Speciality")
-                .setView(txtSpec)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String newSpec = txtSpec.getText().toString();
-                        ArrayList<String> specs = new ArrayList<>();
-                        specs.add(newSpec);
-                        DBUtil.setNewSpec(getActivity(), specs, mSpeciality);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+    private void openSpecDialog() {
+        Utility.openSpecDialog(getActivity(), mSpeciality);
     }
 
     public void showStartTimePicker(View view) {
@@ -201,37 +189,10 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void showWorkFields(View view) {
-        if (mName.getVisibility() == View.VISIBLE) {
-            /*UIUtility.expandOrCollapse(mName, "");
-            UIUtility.expandOrCollapse(mLoc, "");
-            UIUtility.expandOrCollapse(mPhone1, "");
-            UIUtility.expandOrCollapse(mPhone2, "");
-            UIUtility.expandOrCollapse(mEmailId, "");
-            UIUtility.expandOrCollapse(mCity, "");
-            UIUtility.expandOrCollapse(mServPtType, "");*/
-
-            mName.setVisibility(View.GONE);
-            mLoc.setVisibility(View.GONE);
-            mPhone1.setVisibility(View.GONE);
-            mPhone2.setVisibility(View.GONE);
-            mEmailId.setVisibility(View.GONE);
-            mCity.setVisibility(View.GONE);
-            mServPtType.setVisibility(View.GONE);
+        if (mRelLayout2.getVisibility() == View.VISIBLE) {
+            mRelLayout2.setVisibility(View.GONE);
         } else {
-            /*UIUtility.expandOrCollapse(mName, "expand");
-            UIUtility.expandOrCollapse(mLoc, "expand");
-            UIUtility.expandOrCollapse(mPhone1, "expand");
-            UIUtility.expandOrCollapse(mPhone2, "expand");
-            UIUtility.expandOrCollapse(mEmailId, "expand");
-            UIUtility.expandOrCollapse(mCity, "expand");
-            UIUtility.expandOrCollapse(mServPtType, "expand");*/
-            mName.setVisibility(View.VISIBLE);
-            mLoc.setVisibility(View.VISIBLE);
-            mPhone1.setVisibility(View.VISIBLE);
-            mPhone2.setVisibility(View.VISIBLE);
-            mEmailId.setVisibility(View.VISIBLE);
-            mCity.setVisibility(View.VISIBLE);
-            mServPtType.setVisibility(View.VISIBLE);
+            mRelLayout2.setVisibility(View.VISIBLE);
         }
     }
 
@@ -361,11 +322,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private boolean addNewWorkPlace() {
 
         //Check For Internet Connectivity
-        if (AppStatus.getInstance(getActivity()).isOnline()) {
+        if (!AppStatus.getInstance(getActivity()).isOnline()) {
+            Utility.showMessage(getActivity(), R.string.error_not_online);
             return false;
-        } else {
-            Toast.makeText(getActivity(), "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
         }
 
         ServProvSignUpActivity activity = (ServProvSignUpActivity) getActivity();
@@ -604,5 +563,4 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             mBound = false;
         }
     };
-
 }

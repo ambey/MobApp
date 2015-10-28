@@ -128,14 +128,8 @@ public class BookAppointmentActivity extends Activity
         }
 */
         /* Send request to book appointment */
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_BOOK_APPONT;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
+        mAction = MappService.DO_BOOK_APPONT;
+        performAction();
     }
 
     public void setTimeSlots() {
@@ -165,16 +159,18 @@ public class BookAppointmentActivity extends Activity
             return;
         }
 
-        /* get Appointment time slots */
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_APPONT_TIME_SLOTS;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
+        //get time slots
+        mAction = MappService.DO_APPONT_TIME_SLOTS;
+        performAction();
+    }
 
+    private void performAction() {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
+        }
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotTimeSlots(Bundle data) {

@@ -80,14 +80,13 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (AppStatus.getInstance(getContext()).isOnline()) {
-            Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
-            intent.putExtra("appont", mList.get(position));
-            intent.putExtra("service", mServProv);
-            getContext().startActivity(intent);
-        } else {
-            Toast.makeText(getContext(), "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(getContext()).isOnline()) {
+            Utility.showMessage(getContext(), R.string.error_not_online);
+            return;
         }
+        Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
+        intent.putExtra("appont", mList.get(position));
+        intent.putExtra("service", mServProv);
+        getContext().startActivity(intent);
     }
 }

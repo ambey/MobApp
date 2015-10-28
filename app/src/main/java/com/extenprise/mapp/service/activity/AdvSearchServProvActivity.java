@@ -114,7 +114,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
                 //setSpecs(specs);*/
-                getSpeciality();
+                getSpecialityList();
             }
 
             @Override
@@ -394,18 +394,15 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mForm.setSpeciality(sp);
         mForm.setLocation(loc);
 
-        if (AppStatus.getInstance(this).isOnline()) {
-            Utility.showProgress(this, mSearchFormView, mProgressView, true);
-            mAction = MappService.DO_SEARCH_SERV_PROV;
-            Intent intent = new Intent(this, MappService.class);
-            intent.putExtra("form", mForm);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
-        
-
+        Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        mAction = MappService.DO_SEARCH_SERV_PROV;
+        Intent intent = new Intent(this, MappService.class);
+        intent.putExtra("form", mForm);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
@@ -413,15 +410,14 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 */
     }
 
-    private void getSpeciality() {
-        if (AppStatus.getInstance(this).isOnline()) {
-            mAction = MappService.DO_GET_SPECIALITY;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+    private void getSpecialityList() {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        mAction = MappService.DO_GET_SPECIALITY;
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     /**

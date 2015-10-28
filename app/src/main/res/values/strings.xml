@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-    <string name="server_name">http://10.0.2.2:8080/mapp</string>
-<!--
+    <!--<string name="server_name">http://10.0.2.2:8080/mapp</string>-->
+
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
--->
+
     <string name="action_signin_cust">customer/SignIn.action</string>
     <string name="action_signup_cust">customer/SignUp.action</string>
     <string name="action_check_phone_cust">customer/PhoneExistsCheck.action</string>
@@ -310,5 +310,7 @@
     <string name="title_activity_rx_list">RxListActivity</string>
     <string name="title_activity_pending_rx_list">PendingRxListActivity</string>
     <string name="title_activity_select_medical_store">SelectMedicalStoreActivity</string>
+    <string name="error_img_not_picked">You haven\'t picked Image</string>
+    <string name="some_error">Something went wrong</string>
 
 </resources>

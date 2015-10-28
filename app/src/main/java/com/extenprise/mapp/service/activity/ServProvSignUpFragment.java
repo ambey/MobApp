@@ -323,14 +323,13 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
      * Defines callbacks for service binding, passed to bindService()
      */
     private void checkExistence() {
-        if (AppStatus.getInstance(getActivity()).isOnline()) {
-            Utility.showProgress(getActivity(), mFormView, mProgressView, true);
-            Intent intent = new Intent(getActivity(), MappService.class);
-            getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(getActivity(), "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(getActivity()).isOnline()) {
+            Utility.showMessage(getActivity(), R.string.error_not_online);
+            return;
         }
+        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+        Intent intent = new Intent(getActivity(), MappService.class);
+        getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {

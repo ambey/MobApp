@@ -48,25 +48,15 @@ public class PatientsHomeScreenActivity extends Activity {
     }
 
     public void viewProfile(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, PatientProfileActivity.class);
-            intent.putExtra("customer", mCustomer);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
+        Intent intent = new Intent(this, PatientProfileActivity.class);
+        intent.putExtra("customer", mCustomer);
+        startActivity(intent);
     }
 
     public void searchDoc(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, SearchServProvActivity.class);
-            intent.putExtra("customer", mCustomer);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
-        }
+        Intent intent = new Intent(this, SearchServProvActivity.class);
+        intent.putExtra("customer", mCustomer);
+        startActivity(intent);
     }
 
     @Override

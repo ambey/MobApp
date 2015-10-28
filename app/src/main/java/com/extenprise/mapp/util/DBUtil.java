@@ -296,7 +296,7 @@ public abstract class DBUtil {
                 selection, args,null,null,null);
     }
 
-    public static void setSpecOfCategory(Context activity, MappDbHelper dbHelper, String servCategory, Spinner speciality) {
+    public static ArrayList<String> getSpecOfCategory(MappDbHelper dbHelper, String servCategory) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] selectionArgs = {servCategory};
@@ -316,14 +316,11 @@ public abstract class DBUtil {
             } while (!cursor.isLast());
         }
         cursor.close();
-        setNewSpec(activity, specs, speciality);
+        return specs;
+        //setNewSpec(activity, specs, speciality);
     }
 
-    public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
-        specs.add("Other");
-        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, specs);
-        speciality.setAdapter(spinnerAdapter);
-    }
+
 
     private static String getSelectClauseForAppointment() {
         return "select " +

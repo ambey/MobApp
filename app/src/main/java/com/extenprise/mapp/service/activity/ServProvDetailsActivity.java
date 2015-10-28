@@ -84,18 +84,17 @@ public class ServProvDetailsActivity extends Activity {
     }
 
     public void bookAppointment(View view) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Intent intent = new Intent(this, BookAppointmentActivity.class);
-            if(LoginHolder.custLoginRef == null) {
-                intent = new Intent(this, LoginActivity.class);
-                intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
-            }
-            intent.putExtra("servProv", mServProv);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        Intent intent = new Intent(this, BookAppointmentActivity.class);
+        if(LoginHolder.custLoginRef == null) {
+            intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
+        }
+        intent.putExtra("servProv", mServProv);
+        startActivity(intent);
     }
 
     @Override

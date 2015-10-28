@@ -17,9 +17,12 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -328,5 +331,34 @@ public abstract class Utility {
         Toast.makeText(context, context.getString(msgId), Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + context.getString(msgId));
 
+    }
+
+    public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
+        specs.add("Other");
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, specs);
+        speciality.setAdapter(spinnerAdapter);
+    }
+
+    public static AlertDialog openSpecDialog(final Activity activity, final Spinner speciality) {
+        final EditText txtSpec = new EditText(activity);
+        txtSpec.setHint("Add Speciality");
+
+        return new AlertDialog.Builder(activity)
+                .setTitle("Add Speciality")
+                .setView(txtSpec)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String newSpec = txtSpec.getText().toString();
+                        ArrayList<String> specs = new ArrayList<String>();
+                        specs.add(newSpec);
+                        setNewSpec(activity, specs, speciality);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

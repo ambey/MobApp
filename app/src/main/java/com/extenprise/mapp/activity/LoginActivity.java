@@ -127,13 +127,19 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
-            mMobileNumber.setText(loginPreferences.getString("username", ""));
-            if(loginPreferences.getString("passwd", "") == null) {
-                mPasswordView.setText(loginPreferences.getString("passwd", ""));
-                mLoginType = loginPreferences.getInt("logintype", 0);
+            if(loginPreferences.getString("passwd", "") != null) {
+                mSignInData.setPhone(loginPreferences.getString("username", ""));
+                mSignInData.setPasswd(loginPreferences.getString("passwd", ""));
+                mLoginType = findLoginType(loginPreferences.getString("logintype", ""));
                 processLogin();
             }
-            mSaveLoginCheckBox.setChecked(true);
+
+            /*mMobileNumber.setText(loginPreferences.getString("username", ""));
+            if(loginPreferences.getString("passwd", "") != null) {
+                mPasswordView.setText(loginPreferences.getString("passwd", ""));
+                mLoginType = loginPreferences.getInt("logintype", 0);
+            }
+            mSaveLoginCheckBox.setChecked(true);*/
         }
     }
 
@@ -185,6 +191,16 @@ public class LoginActivity extends Activity implements ResponseHandler {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+
+    private int findLoginType(String loginType) {
+        if (loginType.equalsIgnoreCase(getString(R.string.patient))) {
+            return MappService.CUSTOMER_LOGIN;
+        } else if (loginType.equalsIgnoreCase(getString(R.string.servProv))) {
+           return MappService.SERVICE_LOGIN;
+        }
+        return -1;
+    }
+
     public void attemptLogin() {
         int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
         RadioButton mRadioButtonUType;
@@ -200,11 +216,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        if (mRadioButtonUType.getText().toString().trim().equalsIgnoreCase(getString(R.string.patient))) {
-            mLoginType = MappService.CUSTOMER_LOGIN;
-        } else if (mRadioButtonUType.getText().toString().trim().equalsIgnoreCase(getString(R.string.servProv))) {
-            mLoginType = MappService.SERVICE_LOGIN;
-        }
+        String uType = mRadioButtonUType.getText().toString().trim();
+        mLoginType = findLoginType(uType);
         String phone = mMobileNumber.getText().toString().trim();
         String passwd = mPasswordView.getText().toString();
 
@@ -241,7 +254,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 loginPrefsEditor.putBoolean("saveLogin", true);
                 loginPrefsEditor.putString("username", mSignInData.getPhone());
                 loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
-                loginPrefsEditor.putInt("logintype", mLoginType);
+                loginPrefsEditor.putString("logintype", uType);
                 loginPrefsEditor.apply();
             } else {
                 loginPrefsEditor.clear();
@@ -258,14 +271,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
     }
 
     private void processLogin() {
-        if (AppStatus.getInstance(this).isOnline()) {
-            Utility.showProgress(this, mLoginFormView, mProgressView, true);
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        Utility.showProgress(this, mLoginFormView, mProgressView, true);
+        Intent intent = new Intent(this, MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override

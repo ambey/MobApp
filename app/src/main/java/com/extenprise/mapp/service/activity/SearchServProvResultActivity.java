@@ -90,15 +90,14 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
     }
 
     private void getDetails(View view, int position) {
-        if (AppStatus.getInstance(this).isOnline()) {
-            mSelectedItem = mServProvList.get(position);
-            Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
-            Intent intent = new Intent(view.getContext(), MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
-        } else {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
         }
+        mSelectedItem = mServProvList.get(position);
+        Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
+        Intent intent = new Intent(view.getContext(), MappService.class);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     public void gotDetails(Bundle data) {
