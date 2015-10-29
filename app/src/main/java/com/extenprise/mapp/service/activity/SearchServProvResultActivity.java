@@ -152,14 +152,15 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
     
     @Override
     public Intent getParentActivityIntent() {
-        Class parentClass = getIntent().getParcelableExtra("parent-activity");
-        Intent intent;
+        String parentClass = getIntent().getStringExtra("parent-activity");
         if(parentClass != null) {
-            intent = new Intent(this, parentClass);
-        } else {
-            intent = super.getParentActivityIntent();
+            try {
+                return new Intent(this, Class.forName(parentClass));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
-        return intent;
+        return super.getParentActivityIntent();
     }
 }
 

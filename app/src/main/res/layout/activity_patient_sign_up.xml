@@ -30,8 +30,8 @@
                 android:id="@+id/uploadimageview"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:onClick="showImageUploadOptions"
                 android:layout_gravity="center_horizontal"
+                android:onClick="showImageUploadOptions"
                 android:src="@drawable/patient" />
 
             <TextView
@@ -39,19 +39,29 @@
                 style="@style/MediumLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
                 android:onClick="showImageUploadOptions"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/uploadImg"/>
+                android:text="@string/uploadImg" />
 
-            <EditText
-                android:id="@+id/editTextCellphone"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:hint="@string/cellPhoneNo"
-                android:inputType="phone" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/country_code"/>
+                <EditText
+                    android:id="@+id/editTextCellphone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/primary_phone_no"
+                    android:inputType="phone" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/editTextPasswd"
@@ -76,15 +86,15 @@
                 layout="@layout/layout_patient_detail"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal" />
 
             <Button
                 android:id="@+id/buttonCustomerSignUp"
                 style="@style/ExtraWideButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
                 android:onClick="registerPatient"
                 android:text="@string/done" />
 

@@ -3,17 +3,14 @@ package com.extenprise.mapp.customer.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -22,25 +19,18 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -99,30 +89,29 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         mFormView = findViewById(R.id.scrollView);
         mProgressView = findViewById(R.id.progressView);
         mTextViewDOB = (TextView) findViewById(R.id.textViewDOB);
-        mEditTextCustomerFName = (EditText)findViewById(R.id.editTextCustomerFName);
+        mEditTextCustomerFName = (EditText) findViewById(R.id.editTextCustomerFName);
         mEditTextCustomerLName = (EditText) findViewById(R.id.editTextCustomerLName);
-        mEditTextCellphone = (EditText)findViewById(R.id.editTextCellphone);
+        mEditTextCellphone = (EditText) findViewById(R.id.editTextCellphone);
         mEditTextCellphone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(!TextUtils.isEmpty(mEditTextCellphone.getText().toString().trim())) {
-                        mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
-                        performAction();
+                    if (!TextUtils.isEmpty(mEditTextCellphone.getText().toString().trim())) {
+                        checkPhoneExistence();
                     }
                 }
             }
         });
-        mEditTextCustomerEmail = (EditText)findViewById(R.id.editTextCustomerEmail);
-        mEditTextPasswd = (EditText)findViewById(R.id.editTextPasswd);
-        mEditTextConPasswd = (EditText)findViewById(R.id.editTextConPasswd);
-        mEditTextHeight = (EditText)findViewById(R.id.editTextHeight);
-        mEditTextWeight = (EditText)findViewById(R.id.editTextWeight);
-        mEditTextLoc = (EditText)findViewById(R.id.editTextLoc);
-        mEditTextPinCode = (EditText)findViewById(R.id.editTextZipCode);
-        mSpinGender = (Spinner)findViewById(R.id.spinGender);
-        mSpinCity = (Spinner)findViewById(R.id.editTextCity);
-        mSpinState = (Spinner)findViewById(R.id.editTextState);
+        mEditTextCustomerEmail = (EditText) findViewById(R.id.editTextCustomerEmail);
+        mEditTextPasswd = (EditText) findViewById(R.id.editTextPasswd);
+        mEditTextConPasswd = (EditText) findViewById(R.id.editTextConPasswd);
+        mEditTextHeight = (EditText) findViewById(R.id.editTextHeight);
+        mEditTextWeight = (EditText) findViewById(R.id.editTextWeight);
+        mEditTextLoc = (EditText) findViewById(R.id.editTextLoc);
+        mEditTextPinCode = (EditText) findViewById(R.id.editTextZipCode);
+        mSpinGender = (Spinner) findViewById(R.id.spinGender);
+        mSpinCity = (Spinner) findViewById(R.id.editTextCity);
+        mSpinState = (Spinner) findViewById(R.id.editTextState);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
 
         if (savedInstanceState != null) {
@@ -160,11 +149,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showPersonalFields(View view) {
 
-        if(mContLay.getVisibility() == View.VISIBLE) {
+        if (mContLay.getVisibility() == View.VISIBLE) {
             mContLay.setVisibility(View.GONE);
         } else {
             mContLay.setVisibility(View.VISIBLE);
-            if(mAddrLayout.getVisibility() == View.VISIBLE) {
+            if (mAddrLayout.getVisibility() == View.VISIBLE) {
                 mAddrLayout.setVisibility(View.GONE);
             }
         }
@@ -214,11 +203,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     }
 
     public void showAddressFields(View view) {
-        if(mAddrLayout.getVisibility() == View.VISIBLE) {
+        if (mAddrLayout.getVisibility() == View.VISIBLE) {
             mAddrLayout.setVisibility(View.GONE);
         } else {
             mAddrLayout.setVisibility(View.VISIBLE);
-            if(mContLay.getVisibility() == View.VISIBLE) {
+            if (mContLay.getVisibility() == View.VISIBLE) {
                 mContLay.setVisibility(View.GONE);
             }
         }
@@ -241,7 +230,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showImageUploadOptions(View view) {
 
-        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Upload Image ");
         dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
@@ -374,27 +363,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 */
 
 
-
     public void registerPatient(View view) {
-        if(!isValidInput()) {
+        if (!isValidInput()) {
             return;
         }
         mServiceAction = MappService.DO_SIGNUP;
-        performAction();
-/*
-        SaveCustomerData task = new SaveCustomerData(this);
-        task.execute((Void) null);
-*/
-    }
-
-    private void performAction() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
         }
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     /**
@@ -409,7 +385,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             mService = new Messenger(service);
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-            if(mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
+            if (mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
                 bundle.putParcelable("signInData", getSignUpData().getSignInData());
             } else {
                 bundle.putParcelable("customer", getSignUpData());
@@ -438,11 +414,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(action == MappService.DO_SIGNUP) {
+        if (action == MappService.DO_SIGNUP) {
             signUpDone(data);
             return true;
         }
-        if(action == MappService.DO_PHONE_EXIST_CHECK) {
+        if (action == MappService.DO_PHONE_EXIST_CHECK) {
             phoneCheckComplete(data);
             return true;
         }
@@ -451,14 +427,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     private void phoneCheckComplete(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
-        if(!data.getBoolean("status")) {
+        if (!data.getBoolean("status")) {
             mEditTextCellphone.setError(getString(R.string.error_phone_registered));
             mEditTextCellphone.requestFocus();
         }
     }
 
     private void signUpDone(Bundle data) {
-        if(data.getBoolean("status")) {
+        if (data.getBoolean("status")) {
             Utility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
@@ -467,7 +443,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     private Customer getSignUpData() {
         Customer c = new Customer();
         c.getSignInData().setPhone(mEditTextCellphone.getText().toString().trim());
-        if(mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
+        if (mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
             return c;
         }
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
@@ -527,9 +503,17 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             mEditTextCustomerFName.setError(getString(R.string.error_field_required));
             focusView = mEditTextCustomerFName;
             valid = false;
+        } else if (!Validator.isOnlyAlpha(fName)) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            focusView = mEditTextCustomerFName;
+            valid = false;
         }
         if (TextUtils.isEmpty(lName)) {
             mEditTextCustomerLName.setError(getString(R.string.error_field_required));
+            focusView = mEditTextCustomerLName;
+            valid = false;
+        } else if (!Validator.isOnlyAlpha(lName)) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerLName;
             valid = false;
         }
@@ -540,10 +524,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             valid = false;
         } else if (!Validator.isPhoneValid(cellPhone)) {
             mEditTextCellphone.setError(getString(R.string.error_invalid_phone));
-            focusView = mEditTextCellphone;
-            valid = false;
-        } else if(isPhoneRegistered(cellPhone)) {
-            mEditTextCellphone.setError(getString(R.string.error_phone_registered));
             focusView = mEditTextCellphone;
             valid = false;
         }
@@ -595,7 +575,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             mEditTextPinCode.setError(getString(R.string.error_field_required));
             focusView = mEditTextPinCode;
             valid = false;
-        } else if(Validator.isPinCodeValid(pinCode)) {
+        } else if (Validator.isPinCodeValid(pinCode)) {
             mEditTextPinCode.setError("Invalid Pin Code.");
             focusView = mEditTextPinCode;
             valid = false;
@@ -608,86 +588,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         return valid;
     }
 
-    private boolean isPhoneRegistered(String phone) {
-        MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                MappContract.Customer.COLUMN_NAME_CELLPHONE
-        };
-
-        String selection = MappContract.Customer.COLUMN_NAME_CELLPHONE + "=?";
-
-        String[] selectionArgs = {
-                phone
-        };
-        Cursor c = db.query(MappContract.Customer.TABLE_NAME,
-                projection, selection, selectionArgs, null, null, null);
-        int count = c.getCount();
-        c.close();
-
-        return (count > 0);
+    private void checkPhoneExistence() {
+        mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+        }
     }
-
-/*
-    class SaveCustomerData extends AsyncTask<Void, Void, Void> {
-
-        private Activity myActivity;
-
-        public SaveCustomerData(Activity activity) {
-            myActivity = activity;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(MappContract.Customer.COLUMN_NAME_FNAME, mEditTextCustomerFName.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_LNAME, mEditTextCustomerLName.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_DOB, mTextViewDOB.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_AGE, Utility.getAge(mTextViewDOB.getText().toString().trim()));
-            values.put(MappContract.Customer.COLUMN_NAME_EMAIL_ID, mEditTextCustomerEmail.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_GENDER, mSpinGender.getSelectedItem().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_WEIGHT, mEditTextWeight.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_HEIGHT, mEditTextHeight.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_CELLPHONE, mEditTextCellphone.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_PASSWD, mEditTextPasswd.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_LOCATION, mEditTextLoc.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_PIN_CODE, mEditTextPinCode.getText().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_ID_CITY, mSpinCity.getSelectedItem().toString().trim());
-            values.put(MappContract.Customer.COLUMN_NAME_ID_STATE, mSpinState.getSelectedItem().toString().trim());
-            */
-/*if(!imgDecodableString.equals("") || imgDecodableString != null) {
-                values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString)));
-            }*//*
-
-            values.put(MappContract.Customer.COLUMN_NAME_IMAGE, Utility.getBytesFromBitmap(((BitmapDrawable)mImgView.getDrawable()).getBitmap()));
-
-            //Bitmap bitmap = ((BitmapDrawable)mImgView.getDrawable()).getBitmap();
-
-
-            db.insert(MappContract.Customer.TABLE_NAME, null, values);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Utility.showRegistrationAlert(myActivity, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
-            Utility.showProgress(myActivity, mFormView, mProgressView, false);
-            */
-/*Intent intent = new Intent(myActivity, LoginActivity.class);
-            startActivity(intent);*//*
-
-        }
-
-        @Override
-        protected void onCancelled() {
-            Utility.showProgress(myActivity, mFormView, mProgressView, false);
-        }
-
-    }
-*/
 }

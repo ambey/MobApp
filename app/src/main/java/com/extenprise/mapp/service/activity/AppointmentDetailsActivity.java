@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -150,7 +149,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
     private void fillPastAppointements() {
         mAction = MappService.DO_PAST_APPONT_LIST;
-        performAction();
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -177,18 +176,19 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
     public void confirmAppointment(View view) {
         mAction = MappService.DO_CONFIRM_APPONT;
-        performAction();
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     public void cancelAppointment(View view) {
         mAction = MappService.DO_CANCEL_APPONT;
-        performAction();
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     public void showRxActivity(View view) {
         Intent intent = new Intent(this, RxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("appont", mAppont);
+        intent.putExtra("service", mServProv);
         startActivity(intent);
     }
 
@@ -217,16 +217,6 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
-
-    private void performAction() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
-    }
-
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override

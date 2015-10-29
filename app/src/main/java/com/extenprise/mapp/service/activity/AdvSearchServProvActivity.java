@@ -29,12 +29,10 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.net.AppStatus;
-import com.extenprise.mapp.service.data.SearchServProvForm;
-import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
-import com.extenprise.mapp.util.DBUtil;
+import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
@@ -328,7 +326,10 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
-        String sp = mSpeciality.getSelectedItem().toString();
+        String sp = "";
+        if(mSpeciality.getSelectedItem() != null) {
+            sp = mSpeciality.getSelectedItem().toString();
+        }
         if (sp.equals("Select Speciality") || sp.equals("Other")) {
             sp = "";
         }
@@ -486,72 +487,8 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         if (success) {
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
             intent.putParcelableArrayListExtra("servProvList", data.getParcelableArrayList("servProvList"));
-            intent.putExtra("parent-activity", this.getClass());
+            intent.putExtra("parent-activity", this.getClass().getName());
             startActivity(intent);
         }
     }
-
-
-/*
-    public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final Activity mActivity;
-        private final String mName, mClinic, mSpec, mServCategory, mLoc,
-                mQualification, mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee;
-
-        public UserSearchTask(Activity mActivity, String mName, String mClinic, String mSpec, String mServCategory, String mLoc,
-                              String mQualification, String mExp, String mStartTime, String mEndTime,
-                              String mAvailDay, String mGender, String mConsultFee) {
-
-            this.mActivity = mActivity;
-            this.mName = mName;
-            this.mClinic = mClinic;
-            this.mSpec = mSpec;
-            this.mLoc = mLoc;
-            this.mQualification = mQualification;
-            this.mExp = mExp;
-            this.mStartTime = mStartTime;
-            this.mEndTime = mEndTime;
-            this.mAvailDay = mAvailDay;
-            this.mGender = mGender;
-            this.mConsultFee = mConsultFee;
-            this.mServCategory = mServCategory;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-            boolean presence = false;
-            if(SearchServProv.searchByAll(dbHelper, mName, mClinic, mSpec, mServCategory, mLoc, mQualification,
-                    mExp, mStartTime, mEndTime, mAvailDay, mGender, mConsultFee)) {
-                presence = true;
-            }
-            return presence;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mSearchTask = null;
-            Utility.showProgress(mActivity, mSearchFormView, mProgressView, false);
-
-            if (success) {
-                Intent intent = new Intent(mActivity, SearchServProvResultActivity.class);
-                startActivity(intent);
-
-            } else {
-                    */
-/*Intent intent = new Intent(mActivity, AdvSearchServProvActivity.class);
-                    startActivity(intent);*//*
-
-                Utility.showAlert(mActivity, "","Sorry, No result matches to your criteria!");
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mSearchTask = null;
-            Utility.showProgress(mActivity, mSearchFormView, mProgressView, false);
-        }
-    }
-*/
 }

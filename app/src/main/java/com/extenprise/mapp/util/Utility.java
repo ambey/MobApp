@@ -9,6 +9,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
+import com.extenprise.mapp.net.AppStatus;
+import com.extenprise.mapp.net.MappService;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -330,7 +333,6 @@ public abstract class Utility {
     public static void showMessage(Context context, int msgId) {
         Toast.makeText(context, context.getString(msgId), Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + context.getString(msgId));
-
     }
 
     public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
@@ -360,5 +362,15 @@ public abstract class Utility {
                     }
                 })
                 .show();
+    }
+
+    public static boolean doServiceAction(Context context, ServiceConnection connection, int flag) {
+        if (!AppStatus.getInstance(context).isOnline()) {
+            showMessage(context, R.string.error_not_online);
+            return false;
+        }
+        Intent intent = new Intent(context, MappService.class);
+        context.bindService(intent, connection, flag);
+        return true;
     }
 }

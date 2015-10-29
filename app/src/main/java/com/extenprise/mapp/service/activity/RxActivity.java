@@ -20,9 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
@@ -305,6 +303,8 @@ public class RxActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mForm, mProgressBar, false);
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
         intent.putExtra("rx", mRx);
+        intent.putExtra("appont", mAppont);
+        intent.putExtra("service", getIntent().getParcelableExtra("service"));
         startActivity(intent);
     }
 

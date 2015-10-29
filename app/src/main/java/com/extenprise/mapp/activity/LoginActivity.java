@@ -45,8 +45,10 @@ import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.activity.MedicalStoreHomeActivity;
 import com.extenprise.mapp.service.activity.SearchServProvActivity;
 import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
+import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
@@ -287,7 +289,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(action == MappService.DO_LOGIN) {
+        if (action == MappService.DO_LOGIN) {
             loginDone(data);
             return true;
         }
@@ -304,13 +306,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
             ContentResolver cr = getContentResolver();
             Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
                     null, null, null);
-            while (emailCur.moveToNext()) {
-                String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
-                        .CommonDataKinds.Email.DATA));
-                emailAddressCollection.add(email);
+            if (emailCur != null) {
+                while (emailCur.moveToNext()) {
+                    String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
+                            .CommonDataKinds.Email.DATA));
+                    emailAddressCollection.add(email);
+                }
+                emailCur.close();
             }
-            emailCur.close();
-
             return emailAddressCollection;
         }
 
@@ -351,7 +354,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 intent.putExtra("customer", customer);
                 LoginHolder.custLoginRef = customer;
             } else {
+                ServiceProvider serviceProvider = msgData.getParcelable("service");
+                assert serviceProvider != null;
+                String serviceCategory = serviceProvider.getServProvHasServPt(0).getService().getCategory();
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
+                if (serviceCategory.equalsIgnoreCase("pharmacist")) {
+                    intent = new Intent(this, MedicalStoreHomeActivity.class);
+                }
                 intent.putExtra("service", msgData.getParcelable("service"));
             }
             startActivity(intent);

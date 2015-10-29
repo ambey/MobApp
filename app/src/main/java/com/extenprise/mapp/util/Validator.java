@@ -19,22 +19,36 @@ public abstract class Validator {
     }
 
     public static boolean isPhoneValid(String phoneNo) {
-        //All special characters except '+'
-        if(phoneNo != null) {
-            if (phoneNo.startsWith("+")) {
-                phoneNo = phoneNo.substring(1);
+        if (phoneNo.length() != 10) {
+            return false;
+        }
+        if (phoneNo.charAt(0) == '0') {
+            return false;
+        }
+        if (!isOnlyDigits(phoneNo)) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isOnlyDigits(String digits) {
+        char[] carray = digits.toCharArray();
+        for (char c : carray) {
+            if (!Character.isDigit(c)) {
+                return false;
             }
         }
-        String []specChars = { "`","~","!","@","#","$","%","^","&","*","(",")","-","+","_","=","[","]","{","}",";",":","\"","\'",",","<",".",">","/","?","\\","|"};
-        for(int i = 0; i < specChars.length; i++) {
-            if(phoneNo != null) {
-                if (phoneNo.contains(specChars[i])) {
-                    return false;
-                }
+        return true;
+    }
+
+    public static boolean isOnlyAlpha(String name) {
+        char[] carray = name.toCharArray();
+        for (char c : carray) {
+            if (!Character.isLetter(c)) {
+                return false;
             }
         }
-        return !(phoneNo == null || phoneNo.length() > 13 || phoneNo.length() < 10);
-        //return android.util.Patterns.PHONE.matcher(phoneNo).matches(); /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/
+        return true;
     }
 
     public static boolean isPinCodeValid(String pinCode) {
@@ -45,17 +59,17 @@ public abstract class Validator {
         //validate phone numbers of format "1234567890"
         if (phoneNo.matches("\\d{10}")) return true;
             //validating phone number with -, . or spaces
-        else if(phoneNo.matches("\\d{3}[-\\.\\s]\\d{3}[-\\.\\s]\\d{4}")) return true;
+        else if (phoneNo.matches("\\d{3}[-\\.\\s]\\d{3}[-\\.\\s]\\d{4}")) return true;
             //validating phone number with extension length from 3 to 5
-        else if(phoneNo.matches("\\d{3}-\\d{3}-\\d{4}\\s(x|(ext))\\d{3,5}")) return true;
+        else if (phoneNo.matches("\\d{3}-\\d{3}-\\d{4}\\s(x|(ext))\\d{3,5}")) return true;
             //validating phone number where area code is in braces ()
-        else if(phoneNo.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}")) return true;
+        else if (phoneNo.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}")) return true;
             //return false if nothing matches the input
         else return false;
 
     }
 
-    public static boolean isEmailValid2(String email){
+    public static boolean isEmailValid2(String email) {
         boolean isValid = false;
 
         //String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -69,7 +83,7 @@ public abstract class Validator {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             isValid = true;
         }
         return isValid;

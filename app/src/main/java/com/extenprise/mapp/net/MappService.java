@@ -9,8 +9,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
@@ -18,12 +16,12 @@ import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.service.data.MedStoreRxForm;
 import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvListItem;
-import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.util.ByteArrayToJSONAdapter;
-import com.extenprise.mapp.util.Utility;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -80,8 +78,8 @@ public class MappService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-            mAction = intent.getIntExtra("action", -1);
-            return mMessenger.getBinder();
+        mAction = intent.getIntExtra("action", -1);
+        return mMessenger.getBinder();
     }
 
     public void doLogin(Message msg) {
@@ -424,6 +422,22 @@ public class MappService extends Service {
         task.execute((Void) null);
     }
 
+    public void doSendRx(Message msg) {
+        Bundle data = msg.getData();
+        MedStoreRxForm form = data.getParcelable("form");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
     private void onError(int action) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("status", false);
@@ -514,6 +528,9 @@ public class MappService extends Service {
             case DO_GET_MEDSTORE_LIST:
                 urlId = R.string.action_get_medstore_list;
                 break;
+            case DO_SEND_RX:
+                urlId = R.string.action_send_rx;
+                break;
             default:
                 return null;
         }
@@ -592,6 +609,9 @@ public class MappService extends Service {
                     break;
                 case DO_GET_MEDSTORE_LIST:
                     mService.doGetMedStoreList(msg);
+                    break;
+                case DO_SEND_RX:
+                    mService.doSendRx(msg);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -691,6 +711,7 @@ public class MappService extends Service {
                             mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             break;
                         case DO_SEARCH_SERV_PROV:
+                        case DO_GET_MEDSTORE_LIST:
                             mServProvList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<ServProvListItem>>() {
                             }.getType());
                             break;

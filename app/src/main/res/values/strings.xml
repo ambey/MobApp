@@ -31,6 +31,7 @@
     <string name="action_get_rx">service/GetRx.action</string>
     <string name="action_save_rx">service/SaveRx.action</string>
     <string name="action_get_medstore_list">service/GetMedStoreList.action</string>
+    <string name="action_send_rx">service/SendRx.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
@@ -48,6 +49,7 @@
 
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
+    <string name="country_code">+91</string>
 
     <string-array name="city">
         <item>Pune</item>
@@ -147,7 +149,7 @@
         <item>Neurologist</item>
         <item>Psychologist</item>
         <item>Hematologist</item>
-        <item>pathologist</item>
+        <item>Pathologist</item>
         <item>Radiologist</item>
         <item>Urologist</item>
     </string-array>
@@ -248,6 +250,7 @@
     <string name="error_num_should_be_positive">This field should be a positive number</string>
     <string name="error_invalid_number">Invalid number</string>
     <string name="error_past_date">Selected date has already passed by</string>
+    <string name="error_only_alpha">Only letters are allowed</string>
     <string name="consult_fees">Consultation Fees</string>
     <string name="title_activity_first_flipper">FirstFlipperActivity</string>
 
@@ -285,6 +288,7 @@
     <string name="conf">Confirm</string>
     <string name="cancel">Cancel</string>
 
+    <string name="primary_phone_no">Primary Phone Number *</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="title_activity_patient_profile">PatientProfile</string>

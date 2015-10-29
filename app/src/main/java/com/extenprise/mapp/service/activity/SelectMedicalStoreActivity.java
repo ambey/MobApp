@@ -10,16 +10,14 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.Rx;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -46,27 +44,33 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mMedStoreList = (ListView) findViewById(R.id.medStoreListView);
+        mMedStoreList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                onNothingSelected(parent);
+                view.setBackgroundColor(getResources().getColor(R.color.ThemeColor));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         Intent intent = getIntent();
         mRx = intent.getParcelableExtra("rx");
 
         mAction = MappService.DO_GET_MEDSTORE_LIST;
-        intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     public void sendRxToMedStore(View view) {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         mAction = MappService.DO_SEND_RX;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotMedStoreList(Bundle data) {
-        ArrayList<ServProvListItem> list = data.getParcelableArrayList("medStores");
+        ArrayList<ServProvListItem> list = data.getParcelableArrayList("servProvList");
         ServProvListAdapter adapter = new ServProvListAdapter(this, 0, list);
         mMedStoreList.setAdapter(adapter);
         if (list != null && list.size() > 0) {
@@ -136,6 +140,7 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         Intent intent = super.getParentActivityIntent();
         if (intent != null) {
             intent.putExtra("appont", getIntent().getParcelableExtra("appont"));
+            intent.putExtra("service", getIntent().getParcelableExtra("service"));
         }
         return intent;
     }

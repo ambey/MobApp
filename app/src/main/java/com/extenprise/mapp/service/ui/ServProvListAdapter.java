@@ -1,9 +1,11 @@
 package com.extenprise.mapp.service.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -15,12 +17,14 @@ import java.util.ArrayList;
 /**
  * Created by ambey on 4/10/15.
  */
-public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> {
+public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implements AdapterView.OnItemSelectedListener {
     private ArrayList<ServProvListItem> list;
+    private int selectedPosition;
 
     public ServProvListAdapter(Context context, int resource, ArrayList<ServProvListItem> list) {
         super(context, resource);
         this.list = list;
+        selectedPosition = -1;
     }
 
     @Override
@@ -35,7 +39,7 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        if (v == null){
+        if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.activity_search_result, null);
         }
@@ -54,6 +58,16 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> {
         specialityView.setText(item.getSpeciality());
         expView.setText(String.format("%.01f", item.getExperience()));
 
+        if(position == selectedPosition) {
+            int textColor = Color.WHITE;
+            v.setBackgroundColor(getContext().getResources().getColor(R.color.ThemeColor));
+            fnameView.setTextColor(textColor);
+            lnameView.setTextColor(textColor);
+            clinicNameView.setTextColor(textColor);
+            locationView.setTextColor(textColor);
+            specialityView.setTextColor(textColor);
+            expView.setTextColor(textColor);
+        }
         return v;
     }
 
@@ -64,5 +78,17 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selectedPosition = position;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        selectedPosition = -1;
+        notifyDataSetChanged();
     }
 }
