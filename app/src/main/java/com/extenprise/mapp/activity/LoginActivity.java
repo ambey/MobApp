@@ -18,7 +18,6 @@ import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,14 +35,12 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.SignInData;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
@@ -86,28 +83,30 @@ public class LoginActivity extends Activity implements ResponseHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
-        Animation rLayoutAnim =  AnimationUtils.loadAnimation(this, R.anim.img_fade);
-        Animation rWelcomeAnim =  AnimationUtils.loadAnimation(this, R.anim.text_fade);
-        rLayoutAnim.setDuration(4000);
-        rWelcomeAnim.setDuration(4000);
-        rWelcomeAnim.setFillEnabled(true);
-        final View welcomeView=findViewById(R.id.welcome);
-        final View layoutView=findViewById(R.id.login_form);
-        layoutView.setEnabled(false);
-        layoutView.startAnimation(rLayoutAnim);
-        welcomeView.startAnimation(rWelcomeAnim);
+        final View welcomeView = findViewById(R.id.welcome);
+        mLoginFormView = findViewById(R.id.login_form);
+        mLoginFormView.setEnabled(false);
+
+        welcomeView.post(new Runnable() {
+            @Override
+            public void run() {
+                Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
+                Animation rWelcomeAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.text_fade);
+                rLayoutAnim.setDuration(3500);
+                rWelcomeAnim.setDuration(4500);
+                rWelcomeAnim.setFillEnabled(true);
+                welcomeView.startAnimation(rWelcomeAnim);
+                mLoginFormView.startAnimation(rLayoutAnim);
+            }
+        });
         welcomeView.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-
-
-
                 welcomeView.setVisibility(View.GONE);
-                layoutView.setEnabled(true);
+                mLoginFormView.setEnabled(true);
             }
-        }, 4000);
-        mLoginFormView = findViewById(R.id.login_form);
+        }, 3500);
+
         mProgressView = findViewById(R.id.login_progress);
 
         mSignInData = new SignInData();
@@ -152,7 +151,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
-            if(loginPreferences.getString("passwd", "") != null) {
+            if (loginPreferences.getString("passwd", null) != null) {
                 mSignInData.setPhone(loginPreferences.getString("username", ""));
                 mSignInData.setPasswd(loginPreferences.getString("passwd", ""));
                 mLoginType = findLoginType(loginPreferences.getString("logintype", ""));
@@ -170,6 +169,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
         return true;
     }
@@ -221,7 +221,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         if (loginType.equalsIgnoreCase(getString(R.string.patient))) {
             return MappService.CUSTOMER_LOGIN;
         } else if (loginType.equalsIgnoreCase(getString(R.string.servProv))) {
-           return MappService.SERVICE_LOGIN;
+            return MappService.SERVICE_LOGIN;
         }
         return -1;
     }
