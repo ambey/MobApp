@@ -35,6 +35,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.util.EncryptUtil;
+import com.extenprise.mapp.util.UploadImage;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
@@ -228,7 +229,20 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         Utility.datePicker(view, mTextViewDOB);
     }
 
+    public void enlargeImg(View view) {
+
+        //Bitmap bitmapScaled = Bitmap.createScaledBitmap(mImgView.getDrawingCache(), 500, 500, true);
+
+        mImgView.setImageBitmap(Utility.scaleBitmap(mImgView.getDrawingCache(), 500, 500));
+
+
+        /*Intent intent = new Intent(this, Qrscanner.class);
+        startActivity(intent);*/
+    }
+
     public void showImageUploadOptions(View view) {
+
+        //UploadImage.uploadImage(this, mImgView);
 
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);

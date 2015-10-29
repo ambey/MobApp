@@ -3,14 +3,8 @@ package com.extenprise.mapp.net;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Message;
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Handler;
 
 /**
  * Created by avinash on 26/10/15.
@@ -26,17 +20,17 @@ public class AppStatus {
     /**
      * Set the number of retries when reestablishing Internet connection.
      */
-    //private static int retryConnectionNumber = 0;
+    /*private static int retryConnectionNumber = 0;
 
-    /**
+    *//**
      * The maximum number of retries allowed for Internet connection.
-     */
-    //private final static int CONNECTION_RETRY_MAX = 5;
+     *//*
+    private final static int CONNECTION_RETRY_MAX = 5;
 
-    /**
+    *//**
      * The timeout of the HTTP request when checking for Internet connection.
-     */
-    //private final static int REQUEST_TIMEOUT = 2000;
+     *//*
+    private final static int REQUEST_TIMEOUT = 2000;*/
 
     public static AppStatus getInstance(Context ctx) {
         context = ctx.getApplicationContext();
@@ -44,14 +38,31 @@ public class AppStatus {
     }
 
     public boolean isOnline() {
+
+        //boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+
         try {
-            connectivityManager = (ConnectivityManager) context
+            /*connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
 
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             connected = networkInfo != null && networkInfo.isAvailable() &&
-                    networkInfo.isConnected();
-            return connected;
+                    networkInfo.isConnected();*/
+
+            connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo[] info = connectivityManager.getAllNetworkInfo();
+            if (info != null) {
+                for (NetworkInfo anInfo : info) {
+                    if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+
+            /*if(connected) {
+
+            }*/
+            //return connected;
 
 
         } catch (Exception e) {
@@ -61,7 +72,7 @@ public class AppStatus {
         return connected;
     }
 
-    /*private static void isNetworkAvailable(final Handler handler,
+/* private static void isNetworkAvailable(final Handler handler,
                                            final int timeout) {
         new Thread() {
             private boolean responded = false;
@@ -128,13 +139,13 @@ public class AppStatus {
                 }
             }
         }.start();
-    }
+    }*/
 
-    *//**
-     * Handler used that receives the connection status for the Internet.
-     * If no active Internet connection will retry #CONNECTION_RETRY_MAX times
-     *//*
-    private static Handler listenForNetworkAvailability = new Handler() {
+
+     /** Handler used that receives the connection status for the Internet.
+     * If no active Internet connection will retry #CONNECTION_RETRY_MAX times*/
+
+    /*private static Handler listenForNetworkAvailability = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what != 1) { // code if not connected
@@ -145,7 +156,25 @@ public class AppStatus {
                     //Here you could disable & re-enable your WIFI/3G connection before retry
 
                     // Start the ping process again with delay
-                    Handler handler = new Handler();
+                    Handler handler = new Handler() {
+                        @Override
+                        public void close() {
+
+                        }
+
+                        @Override
+                        public void flush() {
+
+                        }
+
+                        @Override
+                        public void publish(LogRecord record) {
+
+                        }
+                    };
+
+
+
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {

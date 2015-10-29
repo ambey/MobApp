@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -46,6 +48,10 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -259,6 +265,84 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
+
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            // When an Image is picked
+            if (resultCode == RESULT_OK) {
+                if (requestCode == RESULT_LOAD_IMG
+                        && null != data) {
+                    // Get the Image from data
+
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+                    // Set the Image in ImageView after decoding the String
+                    mImgView.setImageBitmap(BitmapFactory
+                            .decodeFile(imgDecodableString));
+
+                } else if (requestCode == REQUEST_CAMERA) {
+                    File f = new File(Environment.getExternalStorageDirectory()
+                            .toString());
+                    for (File temp : f.listFiles()) {
+                        if (temp.getName().equals("temp.jpg")) {
+                            f = temp;
+                            break;
+                        }
+                    }
+                    try {
+                        Bitmap bm;
+                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
+
+                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                                btmapOptions);
+
+                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
+                        mImgView.setImageBitmap(bm);
+
+                        String path = android.os.Environment
+                                .getExternalStorageDirectory()
+                                + File.separator
+                                + "Phoenix" + File.separator + "default";
+                        f.delete();
+                        OutputStream fOut = null;
+                        File file = new File(path, String.valueOf(System
+                                .currentTimeMillis()) + ".jpg");
+                        try {
+                            fOut = new FileOutputStream(file);
+                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+                            fOut.flush();
+                            fOut.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Utility.showMessage(getActivity(), R.string.error_img_not_picked);
+                }
+            }
+        } catch (Exception e) {
+            Utility.showMessage(getActivity(), R.string.some_error);
+        }
+
+    }*/
 
     private static File getOutputMediaFile(int type) {
 

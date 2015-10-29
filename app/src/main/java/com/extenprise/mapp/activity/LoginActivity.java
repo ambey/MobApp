@@ -296,13 +296,9 @@ public class LoginActivity extends Activity implements ResponseHandler {
     }
 
     private void processLogin() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mLoginFormView, mProgressView, true);
         }
-        Utility.showProgress(this, mLoginFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override

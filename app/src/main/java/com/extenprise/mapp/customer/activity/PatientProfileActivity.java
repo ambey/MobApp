@@ -125,9 +125,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
     }
 
     private void viewProfile() {
-
-        //DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String dob = "" + Calendar.getInstance();
+        /*//DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String dob = "";
         int d=0, m=0, y=0;
         if(LoginHolder.custLoginRef.getDob() != null) {
             //dob = df.format(LoginHolder.custLoginRef.getDob());
@@ -136,7 +135,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
             m = dd.getMonth();
             y = dd.getYear();
             dob = String.format("%02d/%02d/%4d", d, m + 1, y);
-        }
+        }*/
 
         mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName());
         mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
@@ -146,7 +145,14 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
         mEditTextCustomerLName.setText(LoginHolder.custLoginRef.getlName());
         mEditTextCustomerEmail.setText(LoginHolder.custLoginRef.getEmailId());
-        mTextViewDOB.setText(dob);
+
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        Date dt = LoginHolder.custLoginRef.getDob();
+        if(dt != null) {
+            String dob = sdf.format(LoginHolder.custLoginRef.getDob());
+            mTextViewDOB.setText(dob);
+        }
         mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
         mEditTextHeight.setText("" + LoginHolder.custLoginRef.getHeight());
         mEditTextWeight.setText("" + LoginHolder.custLoginRef.getWeight());
@@ -209,14 +215,10 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         if(!isValidInput()) {
             return;
         }
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
         mServiceAction = MappService.DO_UPDATE;
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+        }
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -450,13 +452,11 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(this, "You haven't picked Image",
-                            Toast.LENGTH_LONG).show();
+                    Utility.showMessage(this, R.string.error_img_not_picked);
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
-                    .show();
+            Utility.showMessage(this, R.string.some_error);
         }
 
     }
@@ -494,11 +494,11 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
             focusView = mTextViewDOB;
             valid = false;
         }
-        if (TextUtils.isEmpty(height)) {
+        /*if (TextUtils.isEmpty(height)) {
             mEditTextHeight.setError(getString(R.string.error_field_required));
             focusView = mEditTextHeight;
             valid = false;
-        }
+        }*/
         if (TextUtils.isEmpty(weight)) {
             mEditTextWeight.setError(getString(R.string.error_field_required));
             focusView = mEditTextWeight;
