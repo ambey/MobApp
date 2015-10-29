@@ -24,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -67,6 +69,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
     private int mLoginType;
     private SignInData mSignInData;
 
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -83,7 +86,27 @@ public class LoginActivity extends Activity implements ResponseHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
+        Animation rLayoutAnim =  AnimationUtils.loadAnimation(this, R.anim.img_fade);
+        Animation rWelcomeAnim =  AnimationUtils.loadAnimation(this, R.anim.text_fade);
+        rLayoutAnim.setDuration(4000);
+        rWelcomeAnim.setDuration(4000);
+        rWelcomeAnim.setFillEnabled(true);
+        final View welcomeView=findViewById(R.id.welcome);
+        final View layoutView=findViewById(R.id.login_form);
+        layoutView.setEnabled(false);
+        layoutView.startAnimation(rLayoutAnim);
+        welcomeView.startAnimation(rWelcomeAnim);
+        welcomeView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
+
+
+
+                welcomeView.setVisibility(View.GONE);
+                layoutView.setEnabled(true);
+            }
+        }, 4000);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 

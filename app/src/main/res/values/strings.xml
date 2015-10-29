@@ -316,5 +316,6 @@
     <string name="title_activity_select_medical_store">SelectMedicalStoreActivity</string>
     <string name="error_img_not_picked">You haven\'t picked Image</string>
     <string name="some_error">Something went wrong</string>
+    <string name="title_activity_welcome_acitivity">WelcomeAcitivity</string>
 
 </resources>

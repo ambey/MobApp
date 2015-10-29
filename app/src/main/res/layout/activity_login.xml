@@ -19,7 +19,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
-
+    <include
+        android:id="@+id/welcome"
+        layout="@layout/activity_welcome"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+         />
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
