@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -337,6 +338,11 @@ public class ServProvSignUpActivity extends FragmentActivity {
     public void captureImage(View view) {
         ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
         fragment.captureImage(view);
+    }
+
+    public void enlargeImg(View view) {
+        ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
+        fragment.enlargeImg(view);
     }
 
     @Override

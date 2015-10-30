@@ -152,9 +152,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
             if (loginPreferences.getString("passwd", null) != null) {
+                mMobileNumber.setText(loginPreferences.getString("username", ""));
+                mPasswordView.setText(loginPreferences.getString("passwd", ""));
+                mSaveLoginCheckBox.setChecked(true);
                 mSignInData.setPhone(loginPreferences.getString("username", ""));
                 mSignInData.setPasswd(loginPreferences.getString("passwd", ""));
                 mLoginType = findLoginType(loginPreferences.getString("logintype", ""));
+
                 processLogin();
             }
 
@@ -230,7 +234,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
         int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
         RadioButton mRadioButtonUType;
         if (uTypeID == -1) {
-            Utility.showAlert(this, "", "Please Select user type.");
+            Utility.showMessage(this, R.string.user_type_required);
+            //Utility.showAlert(this, "", "Please Select user type.");
             return;
         } else {
             mRadioButtonUType = (RadioButton) findViewById(uTypeID);

@@ -77,6 +77,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     private static int REQUEST_CAMERA = 2;
     private String imgDecodableString;
     private Bitmap mImgCopy;
+    boolean isImageFitToScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,11 +206,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showAddressFields(View view) {
         if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            mAddrLayout.setVisibility(View.GONE);
+            //mAddrLayout.setVisibility(View.GONE);
+            Utility.collapse(mAddrLayout);
         } else {
-            mAddrLayout.setVisibility(View.VISIBLE);
+            //mAddrLayout.setVisibility(View.VISIBLE);
+            Utility.expand(mAddrLayout);
             if (mContLay.getVisibility() == View.VISIBLE) {
-                mContLay.setVisibility(View.GONE);
+                //mContLay.setVisibility(View.GONE);
+                Utility.collapse(mContLay);
             }
         }
         /*if(mEditTextLoc.getVisibility() == View.VISIBLE) {
@@ -230,14 +234,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     }
 
     public void enlargeImg(View view) {
-
-        //Bitmap bitmapScaled = Bitmap.createScaledBitmap(mImgView.getDrawingCache(), 500, 500, true);
-
-        mImgView.setImageBitmap(Utility.scaleBitmap(mImgView.getDrawingCache(), 500, 500));
-
-
-        /*Intent intent = new Intent(this, Qrscanner.class);
-        startActivity(intent);*/
+        Utility.enlargeImage(mImgView);
     }
 
     public void showImageUploadOptions(View view) {

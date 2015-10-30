@@ -254,26 +254,7 @@ public abstract class SearchServProv {
     }
 
     private static String getQuery(String whereClause) {
-        String query = select_from_where();
-
-        if (!whereClause.equals("")) {
-            query += whereClause + " and ";
-        }
-
-        query += MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = " +
-                MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " and " +
-                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = " +
-                MappContract.ServicePoint.TABLE_NAME + "." +
-                MappContract.ServicePoint._ID + " and " +
-                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE + " = " +
-                MappContract.Service.TABLE_NAME + "." + MappContract.Service._ID;
-
-        return query;
-    }
-
-    private static String select_from_where() {
-
-        return "select " +
+        String query = "select " +
 
                 MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS + ", " +
                 MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME + ", " +
@@ -305,6 +286,20 @@ public abstract class SearchServProv {
                 MappContract.Service.TABLE_NAME + ", " +
                 MappContract.ServicePoint.TABLE_NAME + ", " +
                 MappContract.ServProvHasServPt.TABLE_NAME + " where ";
+
+        if (!whereClause.equals("")) {
+            query += whereClause + " and ";
+        }
+
+        query += MappContract.ServiceProvider.TABLE_NAME + "." + MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " and " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = " +
+                MappContract.ServicePoint.TABLE_NAME + "." +
+                MappContract.ServicePoint._ID + " and " +
+                MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE + " = " +
+                MappContract.Service.TABLE_NAME + "." + MappContract.Service._ID;
+
+        return query;
     }
 
 }

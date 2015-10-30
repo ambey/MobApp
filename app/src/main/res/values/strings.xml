@@ -317,5 +317,6 @@
     <string name="error_img_not_picked">You haven\'t picked Image</string>
     <string name="some_error">Something went wrong</string>
     <string name="title_activity_welcome_acitivity">WelcomeAcitivity</string>
+    <string name="user_type_required">Please Select User Type</string>
 
 </resources>

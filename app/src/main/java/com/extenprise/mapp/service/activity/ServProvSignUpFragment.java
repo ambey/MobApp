@@ -262,6 +262,10 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
+    public void enlargeImg(View view) {
+        Utility.enlargeImage(mImgView);
+    }
+
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }

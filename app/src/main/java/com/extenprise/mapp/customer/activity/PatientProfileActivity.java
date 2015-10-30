@@ -349,6 +349,10 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         Utility.datePicker(view, mTextViewDOB);
     }
 
+    public void enlargeImg(View view) {
+        Utility.enlargeImage(mImgView);
+    }
+
     public void changeImg(View view) {
 
         final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
