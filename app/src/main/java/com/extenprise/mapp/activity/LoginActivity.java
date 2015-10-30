@@ -83,11 +83,15 @@ public class LoginActivity extends Activity implements ResponseHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
-        final View welcomeView = findViewById(R.id.welcome);
+        //final View welcomeView = findViewById(R.id.welcome);
         mLoginFormView = findViewById(R.id.login_form);
-        mLoginFormView.setEnabled(false);
+        //mLoginFormView.setEnabled(false);
+        Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
+        rLayoutAnim.setDuration(3000);
+        mLoginFormView.startAnimation(rLayoutAnim);
 
-        welcomeView.post(new Runnable() {
+
+       /* welcomeView.post(new Runnable() {
             @Override
             public void run() {
                 Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
@@ -105,7 +109,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 welcomeView.setVisibility(View.GONE);
                 mLoginFormView.setEnabled(true);
             }
-        }, 3500);
+        }, 3500);*/
 
         mProgressView = findViewById(R.id.login_progress);
 
@@ -169,8 +173,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
             }
             mSaveLoginCheckBox.setChecked(true);*/
         }
+
+
     }
 
+    public void onBackPressed()
+    {
+        this.finish();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 

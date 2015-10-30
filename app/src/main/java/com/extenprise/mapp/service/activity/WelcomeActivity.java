@@ -28,6 +28,8 @@ public class WelcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+       getActionBar().hide();
         textLabel = (TextView)findViewById(R.id.textViewlogo);
         imgLogo = (ImageView)findViewById(R.id.imageViewLogo);
 
@@ -44,13 +46,13 @@ public class WelcomeActivity extends Activity {
         imgLogo.startAnimation(imgAnimation);
         textLabel.startAnimation(textAnimation);
 
-     /*   mHandler.postDelayed(new Runnable() {
+      mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(WelcomeActivity.this,LoginActivity.class);
                 startActivity(intent);
             }
-        }, 3800);*/
+        }, 3800);
 
 
 

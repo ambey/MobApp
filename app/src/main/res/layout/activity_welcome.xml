@@ -21,13 +21,13 @@
         android:id="@+id/textViewlogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageViewLogo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+
         android:text="by Extenprise"
         android:textColor="#000"
         android:textSize="12sp"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold|italic"
+        android:layout_alignBottom="@+id/imageViewLogo"
+        android:layout_centerHorizontal="true"/>
 
 
 

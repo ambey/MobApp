@@ -48,13 +48,14 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="Medico"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            >
 
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".service.activity.SearchServProvActivity"
@@ -282,7 +283,12 @@
         </activity>
         <activity
             android:name=".service.activity.WelcomeActivity"
-            android:label="@string/title_activity_welcome_acitivity" >
+            android:label="Medico" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
     </application>
