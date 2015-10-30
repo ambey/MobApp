@@ -96,6 +96,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private String imgDecodableString;
     private Bitmap mImgCopy;
 
+    private TextView mViewdrLbl;
     private EditText mName;
     private EditText mLoc;
     private Spinner mCity;
@@ -136,6 +137,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mEmailID = (EditText) findViewById(R.id.editTextEmail);
         mGender = (RadioGroup) findViewById(R.id.radioGroupGender);
         mRegNo = (EditText) findViewById(R.id.editTextRegNum);
+        mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
         mDocName = (TextView) findViewById(R.id.textviewDocname);
         mFname = (EditText) findViewById(R.id.textViewFName);
         mLname = (EditText) findViewById(R.id.textViewLName);
@@ -192,18 +194,25 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     private void viewProfile() {
-        mDocName.setText(LoginHolder.servLoginRef.getfName() + " " +
-                LoginHolder.servLoginRef.getlName());
-        if(LoginHolder.servLoginRef.getImg() != null) {
+        ServiceProvider sp = LoginHolder.servLoginRef;
+
+        mDocName.setText(sp.getfName() + " " + sp.getlName());
+        String servCategory = sp.getServProvHasServPt(0).getService().getCategory();
+        if (servCategory.equalsIgnoreCase("pharmacist")) {
+            mViewdrLbl.setText("Welcome");
+            mImgView.setImageResource(R.drawable.medstore);
+        }
+
+        if(sp.getImg() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
         }
-        mFname.setText(LoginHolder.servLoginRef.getfName());
-        mLname.setText(LoginHolder.servLoginRef.getlName());
-        mMobNo.setText(LoginHolder.servLoginRef.getPhone());
-        mEmailID.setText(LoginHolder.servLoginRef.getEmailId());
-        mRegNo.setText(LoginHolder.servLoginRef.getRegNo());
+        mFname.setText(sp.getfName());
+        mLname.setText(sp.getlName());
+        mMobNo.setText(sp.getPhone());
+        mEmailID.setText(sp.getEmailId());
+        mRegNo.setText(sp.getRegNo());
 
-        if (LoginHolder.servLoginRef.getGender().equalsIgnoreCase("Male")) {
+        if (sp.getGender().equalsIgnoreCase("Male")) {
             mMale.setChecked(true);
         } else {
             mFemale.setChecked(true);
@@ -1304,6 +1313,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 }
+
             });
             listView.setAdapter(adapter);
             registerForContextMenu(listView);

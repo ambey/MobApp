@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.service.data.ServProvListItem;
+import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by ambey on 4/10/15.
@@ -68,6 +71,19 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
             specialityView.setTextColor(textColor);
             expView.setTextColor(textColor);
         }
+
+
+        //TODO
+        //Have to get the working days from server side.
+
+        /*ImageView mImageViewAvailable = (ImageView) v.findViewById(R.id.imageViewAvailability);
+
+        if(Utility.findDocAvailability(docAvailDays, Calendar.getInstance())) {
+            mImageViewAvailable.setImageResource(R.drawable.gcircle);
+        } else {
+            mImageViewAvailable.setImageResource(R.drawable.rcircle);
+        }*/
+
         return v;
     }
 

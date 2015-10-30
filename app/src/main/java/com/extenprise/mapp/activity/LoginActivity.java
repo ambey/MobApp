@@ -373,6 +373,9 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 intent.putExtra("customer", customer);
                 LoginHolder.custLoginRef = customer;
             } else {
+                //TODO
+                //Have to get service category from server side
+
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
                 assert serviceProvider != null;
                 String serviceCategory = serviceProvider.getServProvHasServPt(0).getService().getCategory();

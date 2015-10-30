@@ -13,12 +13,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.data.ServProvListItem;
@@ -28,6 +31,7 @@ import com.extenprise.mapp.service.ui.ServProvListAdapter;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class SearchServProvResultActivity extends Activity implements ResponseHandler {
 
