@@ -2,7 +2,9 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-    <!--<string name="server_name">http://10.0.2.2:8080/mapp</string>-->
+<!--
+    <string name="server_name">http://10.0.2.2:8080/mapp</string>
+-->
 
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
 
@@ -32,6 +34,7 @@
     <string name="action_save_rx">service/SaveRx.action</string>
     <string name="action_get_medstore_list">service/GetMedStoreList.action</string>
     <string name="action_send_rx">service/SendRx.action</string>
+    <string name="action_get_rx_inbox">service/GetRxInbox.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
@@ -51,15 +54,20 @@
     <string name="weekly_off">Weekly Off *</string>
     <string name="country_code">+91</string>
 
+    <string name="medical_store">Medical Store</string>
+    <string name="clinic">Clinic</string>
+    <string name="path_lab">Path Lab</string>
+    <string name="scan_lab">Scanner Lab</string>
+
     <string-array name="city">
         <item>Pune</item>
     </string-array>
 
     <string-array name="work_place_type">
-        <item>Clinic</item>
-        <item>Medical Store</item>
-        <item>Path Lab</item>
-        <item>Scanner Lab</item>
+        <item>@string/clinic</item>
+        <item>@string/medical_store</item>
+        <item>@string/path_lab</item>
+        <item>@string/scan_lab</item>
     </string-array>
 
     <string-array name="days">
@@ -288,6 +296,9 @@
     <string name="conf">Confirm</string>
     <string name="cancel">Cancel</string>
 
+    <string name="phone">Phone:</string>
+    <string name="doctor">Doctor:</string>
+
     <string name="primary_phone_no">Primary Phone Number *</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
@@ -306,7 +317,24 @@
     <string name="rx_num">Rx Number</string>
     <string name="send">Send</string>
     <string name="send_rx_to_mstore">Send Rx to a\nMedical Store</string>
+    <string name="doctor_name">Doctor Name</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="daily">Daily</string>
+    <string name="days">Days</string>
+    <string name="dose">Dose</string>
 
+    <string name="once">Once</string>
+    <string name="twice">Twice</string>
+    <string name="thrice">Thrice</string>
+
+    <string name="new_state">New</string>
+    <string name="pending_state">Pending</string>
+    <string name="inprocess_state">In Process</string>
+    <string name="packed_state">Packed</string>
+    <string name="dispatched_state">Dispatched</string>
+    <string name="delivered_state">Delivered</string>
+
+    <string name="send_availability_feedback">Send Availability Feedback</string>
     <string name="error_not_online">You are not online!!!!</string>
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>
     <string name="msg_appont_canceled">The appointment has been canceled</string>
@@ -318,5 +346,6 @@
     <string name="some_error">Something went wrong</string>
     <string name="title_activity_welcome_acitivity">WelcomeAcitivity</string>
     <string name="user_type_required">Please Select User Type</string>
+    <string name="title_activity_rx_inbox_item_details">Rx Details</string>
 
 </resources>

@@ -72,18 +72,6 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
             expView.setTextColor(textColor);
         }
 
-
-        //TODO
-        //Have to get the working days from server side.
-
-        /*ImageView mImageViewAvailable = (ImageView) v.findViewById(R.id.imageViewAvailability);
-
-        if(Utility.findDocAvailability(docAvailDays, Calendar.getInstance())) {
-            mImageViewAvailable.setImageResource(R.drawable.gcircle);
-        } else {
-            mImageViewAvailable.setImageResource(R.drawable.rcircle);
-        }*/
-
         return v;
     }
 

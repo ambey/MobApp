@@ -18,6 +18,7 @@ import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,12 +95,17 @@ public class LoginActivity extends Activity implements ResponseHandler {
        /* welcomeView.post(new Runnable() {
             @Override
             public void run() {
-                Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
                 Animation rWelcomeAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.text_fade);
-                rLayoutAnim.setDuration(3500);
                 rWelcomeAnim.setDuration(4500);
                 rWelcomeAnim.setFillEnabled(true);
                 welcomeView.startAnimation(rWelcomeAnim);
+            }
+        });
+        mLoginFormView.post(new Runnable() {
+            @Override
+            public void run() {
+                Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
+                rLayoutAnim.setDuration(3500);
                 mLoginFormView.startAnimation(rLayoutAnim);
             }
         });
@@ -311,7 +317,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
     }
 
     private void processLogin() {
-        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mLoginFormView, mProgressView, true);
         }
     }
@@ -388,17 +394,15 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 intent.putExtra("customer", customer);
                 LoginHolder.custLoginRef = customer;
             } else {
-                //TODO
-                //Have to get service category from server side
-
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
                 assert serviceProvider != null;
-                String serviceCategory = serviceProvider.getServProvHasServPt(0).getService().getCategory();
+                String servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
+                Log.v("LoginActivity", "service category: " + servPointType);
+                LoginHolder.servLoginRef = serviceProvider;
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
-                if (serviceCategory.equalsIgnoreCase("pharmacist")) {
+                if (servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                     intent = new Intent(this, MedicalStoreHomeActivity.class);
                 }
-                intent.putExtra("service", msgData.getParcelable("service"));
             }
             startActivity(intent);
         } else {

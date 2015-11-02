@@ -86,7 +86,6 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         }
         Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
         intent.putExtra("appont", mList.get(position));
-        intent.putExtra("service", mServProv);
         getContext().startActivity(intent);
     }
 }

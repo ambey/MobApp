@@ -5,10 +5,18 @@
     tools:context="com.extenprise.mapp.service.activity.ViewAppointment">
 
     <TextView
+        android:id="@+id/dateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <TextView
         android:id="@+id/patientFNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/dateView"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:text="@string/first_name"
         android:textSize="20sp" />
 
@@ -17,7 +25,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toRightOf="@id/patientFNameTextView"
+        android:layout_toEndOf="@id/patientFNameTextView"
+        android:layout_alignBottom="@id/patientFNameTextView"
         android:text="@string/last_name"
         android:textSize="20sp" />
 

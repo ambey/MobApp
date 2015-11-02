@@ -140,6 +140,11 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="TableHeader">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="CollapseFormHeading">
         <item name="android:background">@drawable/label</item>
         <item name="android:textSize">18sp</item>

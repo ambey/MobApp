@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
@@ -17,6 +18,7 @@ import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.data.MedStoreRxForm;
+import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -64,6 +66,7 @@ public class MappService extends Service {
     public static final int DO_SEND_RX = 20;
     public static final int DO_GET_MEDSTORE_LIST = 21;
     public static final int DO_WORK_PLACE_LIST = 22;
+    public static final int DO_GET_RX_INBOX = 23;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -438,6 +441,21 @@ public class MappService extends Service {
         task.execute((Void) null);
     }
 
+    public void doGetRxInbox(Message msg) {
+        Bundle data = msg.getData();
+        int id = data.getInt("id");
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), "{\"id\": \"" + id + "\"}");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
     private void onError(int action) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("status", false);
@@ -531,6 +549,9 @@ public class MappService extends Service {
             case DO_SEND_RX:
                 urlId = R.string.action_send_rx;
                 break;
+            case DO_GET_RX_INBOX:
+                urlId = R.string.action_get_rx_inbox;
+                break;
             default:
                 return null;
         }
@@ -613,6 +634,9 @@ public class MappService extends Service {
                 case DO_SEND_RX:
                     mService.doSendRx(msg);
                     break;
+                case DO_GET_RX_INBOX:
+                    mService.doGetRxInbox(msg);
+                    break;
                 default:
                     super.handleMessage(msg);
             }
@@ -633,6 +657,7 @@ public class MappService extends Service {
         private ArrayList<ServProvListItem> mServProvList;
         private ArrayList<String> mStringList;
         private ArrayList<AppointmentListItem> mAppontList;
+        private ArrayList<RxInboxItem> mInbox;
         private Appointment mForm;
         private Rx mRx;
 
@@ -727,6 +752,7 @@ public class MappService extends Service {
                             mForm = gson.fromJson(responseBuf.toString(), Appointment.class);
                             break;
                         case DO_APPONT_LIST:
+                        case DO_PAST_APPONT_LIST:
                             mAppontList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<AppointmentListItem>>() {
                             }.getType());
                             break;
@@ -736,7 +762,12 @@ public class MappService extends Service {
                             break;
                         case DO_GET_RX:
                         case DO_SAVE_RX:
+                            Log.v("MappService", "ResponseBuf: " + responseBuf.toString());
                             mRx = gson.fromJson(responseBuf.toString(), Rx.class);
+                            break;
+                        case DO_GET_RX_INBOX:
+                            mInbox = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<RxInboxItem>>() {
+                            }.getType());
                             break;
                     }
                     status = true;
@@ -786,6 +817,10 @@ public class MappService extends Service {
             }
             if (mRx != null) {
                 bundle.putParcelable("rx", mRx);
+                Log.v("MappService", "Rx id: " + mRx.getId());
+            }
+            if (mInbox != null) {
+                bundle.putParcelableArrayList("inbox", mInbox);
             }
             Message msg = Message.obtain(null, mAction);
             msg.setData(bundle);

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
 import com.extenprise.mapp.net.MappService;
@@ -65,7 +66,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
         Intent intent = getIntent();
         mAppont = intent.getParcelableExtra("appont");
-        mServProv = intent.getParcelableExtra("service");
+
+        mServProv = LoginHolder.servLoginRef;
 
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
@@ -124,7 +126,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void gotPastAppointments(Bundle data) {
-        mPastApponts = data.getParcelableArrayList("pastApponts");
+        mPastApponts = data.getParcelableArrayList("appontList");
         View pastAppontLayout = findViewById(R.id.pastAppointmentLayout);
         Button viewMoreButton = (Button) findViewById(R.id.viewMoreButton);
         if (viewMoreButton == null) {

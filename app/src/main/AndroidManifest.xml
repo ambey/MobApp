@@ -153,11 +153,13 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
-                        <!--<intent-filter>
+            <!--
+                        <intent-filter>
                             <action android:name="android.intent.action.MAIN" />
 
                             <category android:name="android.intent.category.LAUNCHER" />
-                        </intent-filter>-->
+                        </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".service.activity.ViewAppointmentListActivity"
@@ -267,7 +269,11 @@
         </activity>
         <activity
             android:name=".service.activity.RxListActivity"
-            android:label="@string/title_activity_rx_list" >
+            android:label="@string/title_activity_rx_list"
+            android:parentActivityName=".service.activity.MedicalStoreHomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".service.activity.MedicalStoreHomeActivity" />
         </activity>
         <activity
             android:name=".service.activity.PendingRxListActivity"
@@ -289,7 +295,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".service.activity.RxInboxItemDetailsActivity"
+            android:label="@string/title_activity_rx_inbox_item_details"
+            android:parentActivityName=".service.activity.RxListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.extenprise.mapp.service.activity.RxListActivity" />
         </activity>
     </application>
 

@@ -299,8 +299,13 @@ public class RxActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mForm, mProgressBar, false);
     }
 
-    private void saveRxDone() {
+    private void saveRxDone(Bundle data) {
         Utility.showProgress(this, mForm, mProgressBar, false);
+        Rx rx = data.getParcelable("rx");
+        if(rx != null) {
+            mRx.setId(rx.getId());
+            Log.v("RxActivity","Saved Rx, id: " + mRx.getId());
+        }
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
         intent.putExtra("rx", mRx);
         intent.putExtra("appont", mAppont);
@@ -319,7 +324,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             gotRx(data);
             return true;
         } else if(action == MappService.DO_SAVE_RX) {
-            saveRxDone();
+            saveRxDone(data);
             return true;
         }
         return false;

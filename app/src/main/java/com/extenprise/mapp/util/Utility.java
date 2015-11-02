@@ -279,8 +279,8 @@ public abstract class Utility {
 
     public static int getSpinnerIndex(Spinner spinner, String str) {
         int index = 0;
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(str)){
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(str)) {
                 index = i;
                 break;
             }
@@ -290,18 +290,20 @@ public abstract class Utility {
 
     public static void expandOrCollapse(final View v, String exp_or_colpse) {
         TranslateAnimation anim;
-        if(exp_or_colpse.equals("expand")) {
+        if (exp_or_colpse.equals("expand")) {
             anim = new TranslateAnimation(0.0f, 0.0f, -v.getHeight(), 0.0f);
             v.setVisibility(View.VISIBLE);
         } else {
             anim = new TranslateAnimation(0.0f, 0.0f, 0.0f, -v.getHeight());
-            Animation.AnimationListener collapselistener= new Animation.AnimationListener() {
+            Animation.AnimationListener collapselistener = new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
                 }
+
                 @Override
                 public void onAnimationRepeat(Animation animation) {
                 }
+
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     v.setVisibility(View.GONE);
@@ -315,7 +317,7 @@ public abstract class Utility {
     }
 
     public static byte[] getBytesFromBitmap(Bitmap bitmap) {
-        if(bitmap == null) {
+        if (bitmap == null) {
             return null;
         }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -330,7 +332,7 @@ public abstract class Utility {
 
     public static void setEnabledButton(Context context, Button button, boolean enabled) {
         button.setEnabled(enabled);
-        if(enabled) {
+        if (enabled) {
             button.setBackgroundResource(R.drawable.button);
             button.setTextColor(context.getResources().getColor(R.color.ThemeColor));
         } else {
@@ -383,9 +385,21 @@ public abstract class Utility {
         return true;
     }
 
+    public static String getTimesAsStr(Context context, int times) {
+        switch (times) {
+            case 1:
+                return context.getString(R.string.once);
+            case 2:
+                return context.getString(R.string.twice);
+            case 3:
+                return context.getString(R.string.thrice);
+        }
+        return "-";
+    }
+
     public static void enlargeImage(ImageView imageView) {
 
-        if(imageView.getLayoutParams().height == LinearLayout.LayoutParams.MATCH_PARENT) {
+        if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.MATCH_PARENT) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(120, 120);
             params.gravity = Gravity.CENTER;
             imageView.setLayoutParams(params);
@@ -419,13 +433,12 @@ public abstract class Utility {
 
         v.getLayoutParams().height = 0;
         v.setVisibility(View.VISIBLE);
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
                         ? LayoutParams.WRAP_CONTENT
-                        : (int)(targtetHeight * interpolatedTime);
+                        : (int) (targtetHeight * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -435,21 +448,20 @@ public abstract class Utility {
             }
         };
 
-        a.setDuration((int)(targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
     public static void collapse(final View v) {
         final int initialHeight = v.getMeasuredHeight();
 
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
+                if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.requestLayout();
                 }
             }
@@ -460,7 +472,7 @@ public abstract class Utility {
             }
         };
 
-        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 }

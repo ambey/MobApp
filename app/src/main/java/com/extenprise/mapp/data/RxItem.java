@@ -1,7 +1,10 @@
 package com.extenprise.mapp.data;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.extenprise.mapp.R;
 
 public class RxItem implements Parcelable {
     private boolean saved;
@@ -191,6 +194,19 @@ public class RxItem implements Parcelable {
 
     public void setAltDrugForm(String altDrugForm) {
         this.altDrugForm = altDrugForm;
+    }
+
+    public int getDailyDose() {
+        int count = 0;
+        if (morning) count++;
+        if (afternoon) count++;
+        if (evening) count++;
+        return count;
+    }
+
+    public String getDailyDoseString() {
+        return String.format("%s---%s---%s",
+                morning ? doseQty : "X", afternoon ? doseQty : "X", evening ? doseQty : "X");
     }
 
     @Override

@@ -77,8 +77,8 @@
             android:layout_alignEnd="@+id/linenView2"
             android:layout_alignParentTop="true"
             android:layout_alignRight="@+id/linenView2"
-            android:enabled="false"
-            android:onClick="viewOpenRx"
+            android:enabled="true"
+            android:onClick="viewRxInbox"
             android:text="@string/open_rx" />
 
         <Button

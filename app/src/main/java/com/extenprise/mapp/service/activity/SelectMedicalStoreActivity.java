@@ -11,22 +11,23 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.ReportServiceStatus;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.MedStoreRxForm;
 import com.extenprise.mapp.service.data.ServProvListItem;
-import com.extenprise.mapp.service.ui.ServProvListAdapter;
+import com.extenprise.mapp.service.ui.MedStoreListAdapter;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SelectMedicalStoreActivity extends Activity implements ResponseHandler {
 
@@ -44,19 +45,6 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mMedStoreList = (ListView) findViewById(R.id.medStoreListView);
-        mMedStoreList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                onNothingSelected(parent);
-                view.setBackgroundColor(getResources().getColor(R.color.ThemeColor));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         Intent intent = getIntent();
         mRx = intent.getParcelableExtra("rx");
 
@@ -71,7 +59,7 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
 
     private void gotMedStoreList(Bundle data) {
         ArrayList<ServProvListItem> list = data.getParcelableArrayList("servProvList");
-        ServProvListAdapter adapter = new ServProvListAdapter(this, 0, list);
+        MedStoreListAdapter adapter = new MedStoreListAdapter(this, 0, list);
         mMedStoreList.setAdapter(adapter);
         if (list != null && list.size() > 0) {
             Button sendButton = (Button) findViewById(R.id.sendRxButton);
@@ -87,6 +75,11 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (action == MappService.DO_GET_MEDSTORE_LIST) {
             gotMedStoreList(data);
             return true;
@@ -109,10 +102,18 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
             Bundle bundle = new Bundle();
 
             if (mAction == MappService.DO_SEND_RX) {
-                ServProvListItem item = (ServProvListItem) mMedStoreList.getAdapter().getItem(mMedStoreList.getSelectedItemPosition());
+                int position = ((MedStoreListAdapter)mMedStoreList.getAdapter()).getSelectedPos();
+                System.out.println("selected medstore pos: " + position);
+                if(position == -1) {
+                    unbindService(this);
+                    return;
+                }
+                ServProvListItem item = (ServProvListItem) mMedStoreList.getAdapter().getItem(position);
                 MedStoreRxForm form = new MedStoreRxForm();
                 form.setIdServProvHasServPt(item.getIdServProvHasServPt());
                 form.setIdRx(mRx.getId());
+                form.setDate(new Date());
+                form.setStatus(ReportServiceStatus.STATUS_NEW.ordinal());
                 bundle.putParcelable("form", form);
             } else if (mAction == MappService.DO_GET_MEDSTORE_LIST) {
                 bundle.putInt("id", mRx.getAppointment().getIdServProvHasServPt());

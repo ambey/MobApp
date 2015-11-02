@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,14 +42,20 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_rx);
 
-        TextView date = (TextView) findViewById(R.id.viewDate);
+        View view = findViewById(R.id.layoutRxHead);
+        view.setVisibility(View.INVISIBLE);
+
         View layout = findViewById(R.id.layoutAppont);
+        TextView date = (TextView) layout.findViewById(R.id.dateView);
         TextView fname = (TextView) layout.findViewById(R.id.patientFNameTextView);
         TextView lname = (TextView) layout.findViewById(R.id.patientLNameTextView);
         TextView time = (TextView) layout.findViewById(R.id.appointmentTimeTextView);
         TextView gender = (TextView) layout.findViewById(R.id.patientGenderTextView);
         TextView age = (TextView) layout.findViewById(R.id.patientAgeTextView);
         TextView weight = (TextView) layout.findViewById(R.id.patientWeightTextView);
+
+        Button feedbackButton = (Button) findViewById(R.id.buttonSendAvailability);
+        feedbackButton.setVisibility(View.GONE);
 
         Intent intent = getIntent();
 
@@ -65,7 +72,7 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         time.setText(mAppont.getTime());
         gender.setText(mAppont.getGender());
         age.setText(String.format("%d", mAppont.getAge()));
-        weight.setText(String.format("%0.1f", mAppont.getWeight()));
+        weight.setText(String.format("%.1f", mAppont.getWeight()));
 
         fillRxItems();
     }

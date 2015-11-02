@@ -28,9 +28,7 @@ public class ServiceProviderHomeActivity extends Activity {
         setContentView(R.layout.activity_service_provider_home);
 
         Intent intent = getIntent();
-        mServiceProv = intent.getParcelableExtra("service");
-
-        LoginHolder.servLoginRef = mServiceProv;
+        mServiceProv = LoginHolder.servLoginRef;
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +

@@ -5,12 +5,18 @@ import android.os.Parcelable;
 
 import com.extenprise.mapp.data.Rx;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by ambey on 21/10/15.
  */
 public class MedStoreRxForm implements Parcelable {
     private int idServProvHasServPt;
     private int idRx;
+    private Date date;
+    private int status;
 
     public MedStoreRxForm() {
     }
@@ -18,6 +24,14 @@ public class MedStoreRxForm implements Parcelable {
     protected MedStoreRxForm(Parcel in) {
         idServProvHasServPt = in.readInt();
         idRx = in.readInt();
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        try {
+            date = sdf.parse(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        status = in.readInt();
     }
 
     public static final Creator<MedStoreRxForm> CREATOR = new Creator<MedStoreRxForm>() {
@@ -31,6 +45,22 @@ public class MedStoreRxForm implements Parcelable {
             return new MedStoreRxForm[size];
         }
     };
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public int getIdServProvHasServPt() {
         return idServProvHasServPt;
@@ -57,5 +87,13 @@ public class MedStoreRxForm implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(idServProvHasServPt);
         dest.writeInt(idRx);
+        String dateStr = "";
+        if(date != null) {
+            SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
+            sdf.applyPattern("dd/MM/yyyy");
+            dateStr = sdf.format(date);
+        }
+        dest.writeString(dateStr);
+        dest.writeInt(status);
     }
 }

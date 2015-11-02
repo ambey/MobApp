@@ -1,19 +1,33 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.service.data.RxInboxItem;
+import com.extenprise.mapp.service.ui.RxInboxAdapter;
+
+import java.util.ArrayList;
 
 
-public class RxListActivity extends ActionBarActivity {
+public class RxListActivity extends Activity {
+
+    private ArrayList<RxInboxItem> mInbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_list);
+
+        mInbox = getIntent().getParcelableArrayListExtra("inbox");
+        RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox);
+        ListView view = (ListView) findViewById(R.id.rxListView);
+        view.setAdapter(adapter);
+        view.setOnItemClickListener(adapter);
     }
 
     @Override
