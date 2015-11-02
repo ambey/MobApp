@@ -288,7 +288,7 @@
                 android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
-            android:name=".service.activity.WelcomeActivity"
+            android:name=".activity.WelcomeActivity"
             android:label="Medico" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -87,6 +87,7 @@
         android:layout_height="30dp"
         android:layout_below="@+id/linLayout2"
         android:layout_marginTop="20dp"
+        android:clickable="true"
         android:onClick="showWorkFields"
         android:text="@string/work_place_details" />
 
@@ -99,6 +100,7 @@
         android:layout_alignRight="@+id/linLayout1"
         android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
         android:onClick="showWorkFields"
+        android:clickable="true"
         android:text="@string/count" />
 
     <ProgressBar

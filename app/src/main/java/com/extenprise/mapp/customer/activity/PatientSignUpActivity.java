@@ -150,13 +150,12 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     }
 
     public void showPersonalFields(View view) {
-
         if (mContLay.getVisibility() == View.VISIBLE) {
-            mContLay.setVisibility(View.GONE);
+            Utility.collapse(mContLay);
         } else {
-            mContLay.setVisibility(View.VISIBLE);
+            Utility.expand(mContLay);
             if (mAddrLayout.getVisibility() == View.VISIBLE) {
-                mAddrLayout.setVisibility(View.GONE);
+                Utility.collapse(mAddrLayout);
             }
         }
         /*
@@ -206,27 +205,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showAddressFields(View view) {
         if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            //mAddrLayout.setVisibility(View.GONE);
             Utility.collapse(mAddrLayout);
         } else {
-            //mAddrLayout.setVisibility(View.VISIBLE);
             Utility.expand(mAddrLayout);
             if (mContLay.getVisibility() == View.VISIBLE) {
-                //mContLay.setVisibility(View.GONE);
                 Utility.collapse(mContLay);
             }
         }
-        /*if(mEditTextLoc.getVisibility() == View.VISIBLE) {
-            mEditTextLoc.setVisibility(View.GONE);
-            mEditTextPinCode.setVisibility(View.GONE);
-            mSpinState.setVisibility(View.GONE);
-            mSpinCity.setVisibility(View.GONE);
-        } else {
-            mEditTextLoc.setVisibility(View.VISIBLE);
-            mEditTextPinCode.setVisibility(View.VISIBLE);
-            mSpinState.setVisibility(View.VISIBLE);
-            mSpinCity.setVisibility(View.VISIBLE);
-        }*/
     }
 
     public void showDatePicker(View view) {

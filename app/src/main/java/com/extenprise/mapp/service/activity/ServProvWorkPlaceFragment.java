@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -75,6 +76,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private View mProgressView;
 
     private RelativeLayout mRelLayout2;
+    private LinearLayout mLayoutWorkHrs;
 
     private Button mMultiSpinnerDays;
     protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -92,6 +94,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);
         mProgressView = mRootview.findViewById(R.id.progressView);
         mRelLayout2 = (RelativeLayout) mRootview.findViewById(R.id.relLayout2);
+        mLayoutWorkHrs = (LinearLayout) mRootview.findViewById(R.id.layoutWorkHrs);
 
         mName = (EditText) mRootview.findViewById(R.id.editTextName);
         mLoc = (EditText) mRootview.findViewById(R.id.editTextLoc);
@@ -159,12 +162,10 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void showtimeFields(View view) {
-        if (mStartTime.getVisibility() == View.VISIBLE) {
-            mStartTime.setVisibility(View.GONE);
-            mEndTime.setVisibility(View.GONE);
+        if (mLayoutWorkHrs.getVisibility() == View.VISIBLE) {
+            Utility.collapse(mLayoutWorkHrs);
         } else {
-            mStartTime.setVisibility(View.VISIBLE);
-            mEndTime.setVisibility(View.VISIBLE);
+            Utility.expand(mLayoutWorkHrs);
         }
     }
 
@@ -190,9 +191,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     public void showWorkFields(View view) {
         if (mRelLayout2.getVisibility() == View.VISIBLE) {
-            mRelLayout2.setVisibility(View.GONE);
+            //mRelLayout2.setVisibility(View.GONE);
+            Utility.collapse(mRelLayout2);
         } else {
-            mRelLayout2.setVisibility(View.VISIBLE);
+            Utility.expand(mRelLayout2);
+            //mRelLayout2.setVisibility(View.VISIBLE);
         }
     }
 

@@ -104,17 +104,14 @@
 
             <TextView
                 android:id="@+id/viewWorkHrsLbl"
+                style="@style/CollapseLabel"
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:layout_below="@+id/servProLay2"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/label"
                 android:clickable="true"
                 android:onClick="showtimeFields"
-                android:text="@string/workHrsLbl"
-                android:textColor="#ffffffff"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:text="@string/workHrsLbl" />
 
             <LinearLayout
                 android:id="@+id/servProLay3"
@@ -154,32 +151,25 @@
 
                 <TextView
                     android:id="@+id/viewWeeklyOffLbl"
+                    style="@style/CollapseLabel"
                     android:layout_width="160dp"
                     android:layout_height="30dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:background="@drawable/label"
                     android:clickable="true"
                     android:onClick="showDaysField"
-                    android:text="@string/avail_days"
-                    android:textColor="#ffffffff"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:text="@string/avail_days" />
 
                 <TextView
                     android:id="@+id/viewGender"
+                    style="@style/CollapseLabel"
                     android:layout_width="160dp"
                     android:layout_height="30dp"
-
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/label"
                     android:clickable="true"
                     android:onClick="showGenderField"
-                    android:text="@string/gender"
-                    android:textColor="#ffffffff"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:text="@string/gender" />
 
             <!--<Spinner
                 android:entries="@array/days"

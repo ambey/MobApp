@@ -23,6 +23,8 @@
 
     <color name="ThemeColor">#c00000</color>
     <color name="PassiveColor">#cdcdcd</color>
+    <color name="CollapseColor">#ffffffff</color>
+
     <!--
         <style name="MyActionBarTabs" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
             &lt;!&ndash; tab indicator &ndash;&gt;
@@ -32,6 +34,20 @@
             <item name="background">@color/actionbar_bg</item>
         </style>
     -->
+
+    <style name="ExpandLabel">
+        <item name="android:background">@drawable/expand</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ThemeColor</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="CollapseLabel">
+        <item name="android:background">@drawable/label</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/CollapseColor</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 
     <style name="MyButton">
         <item name="android:background">@drawable/button</item>

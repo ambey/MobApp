@@ -6,7 +6,8 @@
     <RelativeLayout
         android:id="@+id/relLayout2"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/editTextName"
@@ -122,6 +123,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <Button
@@ -191,7 +193,7 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="30dp">
 
             <Button
                 android:id="@+id/editTextWeeklyOff"

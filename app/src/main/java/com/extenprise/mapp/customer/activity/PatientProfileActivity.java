@@ -165,24 +165,23 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
     }
 
     public void showPersonalFields(View view) {
-
-        if(mContLay.getVisibility() == View.VISIBLE) {
-            mContLay.setVisibility(View.GONE);
+        if (mContLay.getVisibility() == View.VISIBLE) {
+            Utility.collapse(mContLay);
         } else {
-            mContLay.setVisibility(View.VISIBLE);
-            if(mAddrLayout.getVisibility() == View.VISIBLE) {
-                mAddrLayout.setVisibility(View.GONE);
+            Utility.expand(mContLay);
+            if (mAddrLayout.getVisibility() == View.VISIBLE) {
+                Utility.collapse(mAddrLayout);
             }
         }
     }
 
     public void showAddressFields(View view) {
-        if(mAddrLayout.getVisibility() == View.VISIBLE) {
-            mAddrLayout.setVisibility(View.GONE);
+        if (mAddrLayout.getVisibility() == View.VISIBLE) {
+            Utility.collapse(mAddrLayout);
         } else {
-            mAddrLayout.setVisibility(View.VISIBLE);
-            if(mContLay.getVisibility() == View.VISIBLE) {
-                mContLay.setVisibility(View.GONE);
+            Utility.expand(mAddrLayout);
+            if (mContLay.getVisibility() == View.VISIBLE) {
+                Utility.collapse(mContLay);
             }
         }
     }

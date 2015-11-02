@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -124,38 +126,31 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
     public void showtimeFields(View view) {
         if (mServProLay3.getVisibility() == View.VISIBLE) {
-            mServProLay3.setVisibility(View.GONE);
+            Utility.collapse(mServProLay3);
             view.setBackgroundResource(R.drawable.label);
-            //view.setBackgroundColor(Color.parseColor("#b0171f"));
         } else {
-            mServProLay3.setVisibility(View.VISIBLE);
-            view.setBackgroundResource(R.drawable.spinner);
-            //view.setBackgroundColor(Color.TRANSPARENT);
+            Utility.expand(mServProLay3);
+            view.setBackgroundResource(R.drawable.expand);
         }
     }
 
     public void showGenderField(View view) {
         if (mGender.getVisibility() == View.VISIBLE) {
-            //Utility.expandOrCollapse(mGender, "");
-            mGender.setVisibility(View.GONE);
+            Utility.collapse(mGender);
             view.setBackgroundResource(R.drawable.label);
-
         } else {
-            //Utility.expandOrCollapse(mGender, "expand");
-            mGender.setVisibility(View.VISIBLE);
-            view.setBackgroundResource(R.drawable.spinner);
+            Utility.expand(mGender);
+            view.setBackgroundResource(R.drawable.expand);
         }
     }
 
     public void showDaysField(View view) {
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
-            //Utility.expandOrCollapse(mMultiSpinnerDays, "");
-            mMultiSpinnerDays.setVisibility(View.GONE);
+            Utility.collapse(mMultiSpinnerDays);
             view.setBackgroundResource(R.drawable.label);
         } else {
-            //Utility.expandOrCollapse(mMultiSpinnerDays, "expand");
-            mMultiSpinnerDays.setVisibility(View.VISIBLE);
-            view.setBackgroundResource(R.drawable.spinner);
+            Utility.expand(mMultiSpinnerDays);
+            view.setBackgroundResource(R.drawable.expand);
         }
     }
 

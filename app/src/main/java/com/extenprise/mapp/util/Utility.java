@@ -21,6 +21,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
@@ -462,5 +464,17 @@ public abstract class Utility {
 
         a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
+    }
+
+    public static Animation imgAnim() {
+        RotateAnimation anim = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
+//Setup anim with desired properties
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE); //Repeat animation indefinitely
+        anim.setDuration(700); //Put desired duration per anim cycle here, in milliseconds
+
+//Start animation
+        return anim;
     }
 }

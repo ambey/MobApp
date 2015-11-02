@@ -157,7 +157,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         });
 
         mSaveLoginCheckBox = (CheckBox) findViewById(R.id.rememberMe);
-        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        /*SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
@@ -172,13 +172,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 processLogin();
             }
 
-            /*mMobileNumber.setText(loginPreferences.getString("username", ""));
+            *//*mMobileNumber.setText(loginPreferences.getString("username", ""));
             if(loginPreferences.getString("passwd", "") != null) {
                 mPasswordView.setText(loginPreferences.getString("passwd", ""));
                 mLoginType = loginPreferences.getInt("logintype", 0);
             }
-            mSaveLoginCheckBox.setChecked(true);*/
-        }
+            mSaveLoginCheckBox.setChecked(true);*//*
+        }*/
 
 
     }
@@ -320,6 +320,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mLoginFormView, mProgressView, true);
         }
+
+        /*SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
+        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin) {
+
+        }*/
     }
 
     @Override

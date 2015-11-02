@@ -114,7 +114,7 @@
             android:layout_alignLeft="@+id/linenView2"
             android:layout_alignStart="@+id/linenView2"
             android:layout_below="@+id/linenView5"
-            android:enabled="false"
+            android:enabled="true"
             android:onClick="viewProfile"
             android:text="@string/profile_text" />
 
