@@ -2,25 +2,20 @@ package com.extenprise.mapp.activity;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,9 +32,6 @@ import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
 
@@ -50,7 +42,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
     TextView textLabel;
     ImageView imgLogo;
-    Animation imgAnimation,textAnimation;
+    Animation imgAnimation, textAnimation;
     private Handler mHandler = new Handler();
 
     @Override
@@ -58,12 +50,12 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         getActionBar().setDisplayHomeAsUpEnabled(false);
-       getActionBar().hide();
-        textLabel = (TextView)findViewById(R.id.textViewlogo);
-        imgLogo = (ImageView)findViewById(R.id.imageViewLogo);
+        getActionBar().hide();
+        textLabel = (TextView) findViewById(R.id.textViewlogo);
+        imgLogo = (ImageView) findViewById(R.id.imageViewLogo);
 
         imgAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
-        textAnimation = AnimationUtils.loadAnimation(this,R.anim.text_fade);
+        textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
 
         /*
         img1 = (ImageView)findViewById(R.id.img1);
@@ -78,14 +70,15 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
+            mSignInData = new SignInData();
             mSignInData.setPhone(loginPreferences.getString("username", ""));
             mSignInData.setPasswd(loginPreferences.getString("passwd", ""));
             String type = loginPreferences.getString("logintype", "");
             assert type != null;
             if (type.equalsIgnoreCase(getString(R.string.patient))) {
-                mLoginType =  MappService.CUSTOMER_LOGIN;
+                mLoginType = MappService.CUSTOMER_LOGIN;
             } else if (type.equalsIgnoreCase(getString(R.string.servProv))) {
-                mLoginType =  MappService.SERVICE_LOGIN;
+                mLoginType = MappService.SERVICE_LOGIN;
             }
             Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
         } else {
@@ -182,6 +175,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             mService = null;
         }
     };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
