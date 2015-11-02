@@ -5,7 +5,6 @@
 <!--
     <string name="server_name">http://10.0.2.2:8080/mapp</string>
 -->
-
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
 
     <string name="action_signin_cust">customer/SignIn.action</string>

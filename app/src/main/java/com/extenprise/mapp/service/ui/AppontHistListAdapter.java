@@ -58,11 +58,14 @@ public class AppontHistListAdapter extends ArrayAdapter<AppointmentListItem> {
         return v;
     }
 
-    public void showRxDetails(int position) {
-        Intent intent = new Intent(getContext(), ViewRxActivity.class);
-        intent.putExtra("parent-activity", getContext().getClass().getName());
-        intent.putExtra("appont", mAppont);
-        intent.putExtra("pastAppont", mList.get(position));
-        getContext().startActivity(intent);
+    @Override
+    public AppointmentListItem getItem(int position) {
+        try {
+            return mList.get(position);
+        } catch (Exception e) {
+            e.printStackTrace();;
+        }
+        return null;
     }
+
 }

@@ -136,7 +136,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         if (mPastApponts != null && mPastApponts.size() > 0) {
-            AppointmentListItem lastAppont = mPastApponts.get(0);
+            AppointmentListItem lastAppont = mPastApponts.get(mPastApponts.size() - 1);
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
             dateOthView.setText(sdf.format(lastAppont.getDate()));
         } else {
@@ -198,7 +198,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Intent intent = new Intent(this, ViewRxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("appont", mAppont);
-        intent.putExtra("pastAppont", mPastApponts.get(0));
+        intent.putExtra("pastAppont", mPastApponts.get(mPastApponts.size() - 1));
         startActivity(intent);
     }
 

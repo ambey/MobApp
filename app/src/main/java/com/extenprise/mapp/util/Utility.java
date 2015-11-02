@@ -385,18 +385,6 @@ public abstract class Utility {
         return true;
     }
 
-    public static String getTimesAsStr(Context context, int times) {
-        switch (times) {
-            case 1:
-                return context.getString(R.string.once);
-            case 2:
-                return context.getString(R.string.twice);
-            case 3:
-                return context.getString(R.string.thrice);
-        }
-        return "-";
-    }
-
     public static void enlargeImage(ImageView imageView) {
 
         if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.MATCH_PARENT) {

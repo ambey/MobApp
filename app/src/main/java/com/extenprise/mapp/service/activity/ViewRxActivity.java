@@ -103,17 +103,20 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
     }
 
     public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
         if (mParentActivity != null) {
             try {
-                Intent intent = new Intent(this, Class.forName(mParentActivity));
-                intent.putExtra("appont", mOrigAppont);
-                return intent;
+                intent = new Intent(this, Class.forName(mParentActivity));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-                return super.getParentActivityIntent();
             }
         }
-        return super.getParentActivityIntent();
+        if(intent != null) {
+            intent.putExtra("appont", mOrigAppont);
+            intent.putParcelableArrayListExtra("appontList", getIntent().getParcelableArrayListExtra("appontList"));
+            intent.putExtra("parent-activity", getIntent().getParcelableExtra("super_parent_activity"));
+        }
+        return intent;
     }
 
     /**

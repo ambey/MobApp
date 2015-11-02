@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.service.activity.ViewRxActivity;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.ui.AppontHistListAdapter;
 
@@ -41,16 +42,6 @@ public class PatientHistoryActivity extends Activity {
 
         AppontHistListAdapter adapter = new AppontHistListAdapter(this, 0, mAppont, mApponts);
         lvMyAppont.setAdapter(adapter);
-/*
-
-        SimpleCursorAdapter othAdapter = new SimpleCursorAdapter(this,
-                R.layout.layout_appont_row,
-                othCursor,
-                columns,
-                viewIds,
-                0);
-        lvOthAppont.setAdapter(othAdapter);
-*/
     }
 
     @Override
@@ -82,7 +73,13 @@ public class PatientHistoryActivity extends Activity {
 
         ListView lvMyAppont = (ListView) findViewById(R.id.listViewMyAppont);
         AppontHistListAdapter adapter = (AppontHistListAdapter) lvMyAppont.getAdapter();
-        adapter.showRxDetails(position);
+        Intent intent = new Intent(this, ViewRxActivity.class);
+        intent.putExtra("super_parent_actvity", getIntent().getParcelableExtra("parent-actvity"));
+        intent.putExtra("parent-activity", this.getClass().getName());
+        intent.putExtra("appont", mAppont);
+        intent.putParcelableArrayListExtra("appontList", mApponts);
+        intent.putExtra("pastAppont", adapter.getItem(position));
+        startActivity(intent);
     }
 
     public Intent getParentActivityIntent() {
