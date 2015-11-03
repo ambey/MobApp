@@ -54,7 +54,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         textLabel = (TextView) findViewById(R.id.textViewlogo);
         imgLogo = (ImageView) findViewById(R.id.imageViewLogo);
 
-        imgAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
+        //imgAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
         textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
 
         /*
@@ -64,7 +64,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         img1.startAnimation(imgRotation);*/
 /* start Animation */
 
-        imgLogo.startAnimation(imgAnimation);
+        imgLogo.startAnimation(textAnimation);
         textLabel.startAnimation(textAnimation);
 
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
