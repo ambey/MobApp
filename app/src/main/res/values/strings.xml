@@ -341,10 +341,12 @@
     <string name="title_activity_rx_list">RxListActivity</string>
     <string name="title_activity_pending_rx_list">PendingRxListActivity</string>
     <string name="title_activity_select_medical_store">SelectMedicalStoreActivity</string>
+    <string name="title_activity_welcome_acitivity">WelcomeAcitivity</string>
+    <string name="title_activity_rx_inbox_item_details">Rx Details</string>
+
     <string name="error_img_not_picked">You haven\'t picked Image</string>
     <string name="some_error">Something went wrong</string>
-    <string name="title_activity_welcome_acitivity">WelcomeAcitivity</string>
     <string name="user_type_required">Please Select User Type</string>
-    <string name="title_activity_rx_inbox_item_details">Rx Details</string>
+    <string name="press_back_button">Press Back again to Exit</string>
 
 </resources>

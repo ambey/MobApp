@@ -38,7 +38,8 @@
                 android:layout_weight="0.5"
                 android:ems="10"
                 android:hint="@string/fnm"
-                android:inputType="textPersonName" />
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:inputType="text|textNoSuggestions" />
 
             <EditText
                 android:id="@+id/editTextCustomerLName"
@@ -49,7 +50,8 @@
                 android:layout_weight="0.5"
                 android:ems="10"
                 android:hint="@string/lnm"
-                android:inputType="textPersonName" />
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:inputType="text|textNoSuggestions"/>
         </LinearLayout>
 
         <EditText

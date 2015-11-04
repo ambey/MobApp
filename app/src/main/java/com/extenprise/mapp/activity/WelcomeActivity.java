@@ -86,6 +86,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    WelcomeActivity.this.finish();
                     Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }

@@ -3,6 +3,8 @@ package com.extenprise.mapp.service.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import com.extenprise.mapp.util.Utility;
 public class ServiceProviderHomeActivity extends Activity {
 
     private ServiceProvider mServiceProv;
+    private Boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,5 +84,35 @@ public class ServiceProviderHomeActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            Log.v("onBackPressed", "PatientsHomeScreenActivity called.. calling finish.");
+            finish(); // finish activity
+            moveTaskToBack(true); // exist app
+            //finish(); // finish activity
+        } else {
+            Utility.showMessage(this, R.string.press_back_button);
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        /*Intent intent = super.getParentActivityIntent();
+        if(intent == null) {
+            return null;
+        }
+        intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));*/
+        return null;
     }
 }

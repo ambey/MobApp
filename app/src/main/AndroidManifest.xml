@@ -289,7 +289,9 @@
         </activity>
         <activity
             android:name=".activity.WelcomeActivity"
-            android:label="Medico" >
+            android:label="Medico"
+            android:theme="@style/Theme.Transparent"
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

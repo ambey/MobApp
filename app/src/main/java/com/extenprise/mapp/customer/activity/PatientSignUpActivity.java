@@ -590,4 +590,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }
     }
+
+
+
+
 }
