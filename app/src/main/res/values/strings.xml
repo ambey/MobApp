@@ -34,6 +34,7 @@
     <string name="action_get_medstore_list">service/GetMedStoreList.action</string>
     <string name="action_send_rx">service/SendRx.action</string>
     <string name="action_get_rx_inbox">service/GetRxInbox.action</string>
+    <string name="action_send_availability_feedback">service/SendAvailability.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>

@@ -5,12 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
-import com.extenprise.mapp.util.Utility;
 
 /**
  * Created by ambey on 10/10/15.
@@ -46,6 +47,13 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> {
         TextView doseFreqView = (TextView) v.findViewById(R.id.viewDoseFreq);
         TextView courseView = (TextView) v.findViewById(R.id.viewCourseDur);
 
+        CheckBox availableCB = (CheckBox) v.findViewById(R.id.checkboxAvailable);
+        availableCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
         RxItem item = mRx.getItems().get(position);
         nameView.setText(item.getDrugName().toUpperCase());
         strengthView.setText(item.getDrugStrength());

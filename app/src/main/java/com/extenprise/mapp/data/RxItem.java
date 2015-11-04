@@ -24,6 +24,7 @@ public class RxItem implements Parcelable {
     private String altDrugName;
     private String altDrugStrength;
     private String altDrugForm;
+    private boolean available;
 
     public RxItem() {
     }
@@ -194,6 +195,14 @@ public class RxItem implements Parcelable {
 
     public void setAltDrugForm(String altDrugForm) {
         this.altDrugForm = altDrugForm;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public int getDailyDose() {
