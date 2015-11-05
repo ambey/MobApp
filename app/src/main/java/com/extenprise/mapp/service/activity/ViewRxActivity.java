@@ -151,7 +151,7 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
     private void gotRx(Bundle data) {
         Rx rx = data.getParcelable("rx");
         ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
-        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, rx);
+        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, rx, false);
         rxItemsList.setAdapter(adapter);
     }
 

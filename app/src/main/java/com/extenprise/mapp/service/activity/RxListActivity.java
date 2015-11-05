@@ -24,7 +24,8 @@ public class RxListActivity extends Activity {
         setContentView(R.layout.activity_rx_list);
 
         mInbox = getIntent().getParcelableArrayListExtra("inbox");
-        RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox);
+        boolean feedback = getIntent().getBooleanExtra("feedback", false);
+        RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox, feedback);
         ListView view = (ListView) findViewById(R.id.rxListView);
         view.setAdapter(adapter);
         view.setOnItemClickListener(adapter);

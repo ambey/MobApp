@@ -22,10 +22,12 @@ import java.util.ArrayList;
  */
 public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements AdapterView.OnItemClickListener {
     private ArrayList<RxInboxItem> rxList;
+    private boolean feedback;
 
-    public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list) {
+    public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list, boolean feedback) {
         super(context, resource);
         rxList = list;
+        this.feedback = feedback;
     }
 
     @Override
@@ -42,16 +44,28 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.layout_rx_list_detail, null);
+            if(feedback) {
+                v = inflater.inflate(R.layout.layout_rx_feedback_head, null);
+            } else {
+                v = inflater.inflate(R.layout.layout_rx_list_detail, null);
+            }
         }
         TextView statusView = (TextView) v.findViewById(R.id.statusView);
         TextView dateView = (TextView) v.findViewById(R.id.dateTextView);
         TextView custNameView = (TextView) v.findViewById(R.id.custNameView);
         TextView custPhoneView = (TextView) v.findViewById(R.id.custPhoneView);
-        TextView drNameView = (TextView) v.findViewById(R.id.drNameView);
-        TextView drClinicView = (TextView) v.findViewById(R.id.drClinicView);
-        TextView drPhoneView = (TextView) v.findViewById(R.id.drPhoneView);
-
+        TextView servProvNameView;
+        TextView servPointNameView;
+        TextView servProvPhoneView;
+        if(feedback) {
+            servProvNameView = (TextView)v.findViewById(R.id.medStoreProvView);
+            servPointNameView = (TextView)v.findViewById(R.id.medStoreNameView);
+            servProvPhoneView = (TextView)v.findViewById(R.id.medStoreProvPhoneView);
+        } else {
+            servProvNameView = (TextView) v.findViewById(R.id.drNameView);
+            servPointNameView = (TextView) v.findViewById(R.id.drClinicView);
+            servProvPhoneView = (TextView) v.findViewById(R.id.drPhoneView);
+        }
         RxInboxItem item = rxList.get(position);
         int status = item.getReportService().getStatus();
         statusView.setText(ReportServiceStatus.getStatusString(getContext(), status));
@@ -59,14 +73,14 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         dateView.setText(sdf.format(item.getRx().getDate()));
-        drNameView.setText(String.format("%s %s.", item.getServProv().getLastName().toUpperCase(),
+        servProvNameView.setText(String.format("%s %s.", item.getServProv().getLastName().toUpperCase(),
                 item.getServProv().getFirstName().substring(0, 1).toUpperCase()));
         custNameView.setText(String.format("%s %s.", item.getCustomer().getlName().toUpperCase(),
                 item.getCustomer().getfName().substring(0, 1).toUpperCase()));
         custPhoneView.setText(item.getCustomer().getSignInData().getPhone());
-        drClinicView.setText(String.format("%s, %s", item.getServProv().getServPtName(),
+        servPointNameView.setText(String.format("%s, %s", item.getServProv().getServPtName(),
                 item.getServProv().getServPtLocation()));
-        drPhoneView.setText(String.format("(%s)", item.getServProv().getPhone()));
+        servProvPhoneView.setText(String.format("(%s)", item.getServProv().getPhone()));
         return v;
     }
 
@@ -84,6 +98,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putExtra("inboxItem", rxList.get(position));
         intent.putParcelableArrayListExtra("inbox", rxList);
+        intent.putExtra("feedback", feedback);
         getContext().startActivity(intent);
     }
 }

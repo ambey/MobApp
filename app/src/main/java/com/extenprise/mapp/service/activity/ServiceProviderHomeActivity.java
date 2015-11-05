@@ -11,16 +11,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
+import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
 
-public class ServiceProviderHomeActivity extends Activity {
+import java.util.ArrayList;
+
+public class ServiceProviderHomeActivity extends Activity implements ResponseHandler {
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
 
     private ServiceProvider mServiceProv;
     private Boolean exit = false;
@@ -30,7 +35,6 @@ public class ServiceProviderHomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
-        Intent intent = getIntent();
         mServiceProv = LoginHolder.servLoginRef;
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
@@ -41,27 +45,29 @@ public class ServiceProviderHomeActivity extends Activity {
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imageDoctor);
-        if(mServiceProv.getImg() != null) {
+        if (mServiceProv.getImg() != null) {
             img.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getImg()));
         }
     }
 
     public void viewAppointment(View view) {
-        performAction(ViewAppointmentListActivity.class);
-    }
-
-    private void performAction(Class c) {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
-        Intent intent = new Intent(this, c);
+        Intent intent = new Intent(this, ViewAppointmentListActivity.class);
         intent.putExtra("service", mServiceProv);
         startActivity(intent);
     }
 
     public void viewProfile(View view) {
-        performAction(ServProvProfileActivity.class);
+        Intent intent = new Intent(this, ServProvProfileActivity.class);
+        intent.putExtra("service", mServiceProv);
+        startActivity(intent);
+    }
+
+    public void viewRxFeedback(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", mServiceProv.getServProvHasServPt(0).getIdServProvHasServPt());
+        mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
+        mConnection.setData(bundle);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -114,5 +120,27 @@ public class ServiceProviderHomeActivity extends Activity {
         }
         intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));*/
         return null;
+    }
+
+    private void gotRxInbox(Bundle data) {
+        ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
+        Intent intent = new Intent(this, RxListActivity.class);
+        intent.putParcelableArrayListExtra("inbox", list);
+        intent.putExtra("feedback", true);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        try {
+            unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (action == MappService.DO_GET_RX_FEEDBACK) {
+            gotRxInbox(data);
+            return true;
+        }
+        return false;
     }
 }

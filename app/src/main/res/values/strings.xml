@@ -2,10 +2,12 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-<!--
     <string name="server_name">http://10.0.2.2:8080/mapp</string>
--->
+<!--
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
+-->
+
+    <string name="by_exp">By Extenprise</string>
 
     <string name="action_signin_cust">customer/SignIn.action</string>
     <string name="action_signup_cust">customer/SignUp.action</string>
@@ -35,6 +37,7 @@
     <string name="action_send_rx">service/SendRx.action</string>
     <string name="action_get_rx_inbox">service/GetRxInbox.action</string>
     <string name="action_send_availability_feedback">service/SendAvailability.action</string>
+    <string name="action_get_rx_feedback">service/GetRxFeedback.action</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
@@ -330,10 +333,13 @@
     <string name="new_state">New</string>
     <string name="pending_state">Pending</string>
     <string name="inprocess_state">In Process</string>
+    <string name="feedback_state">Feedback Sent</string>
     <string name="packed_state">Packed</string>
     <string name="dispatched_state">Dispatched</string>
     <string name="delivered_state">Delivered</string>
 
+    <string name="resend_rx">Resend Rx</string>
+    <string name="view_rx_feedback">View Rx Feedback</string>
     <string name="send_availability_feedback">Send Availability Feedback</string>
     <string name="error_not_online">You are not online!!!!</string>
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>

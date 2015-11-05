@@ -16,6 +16,7 @@ import java.util.Date;
 public class RxItemAvailability implements Parcelable{
     private int idServProvHasServPt;
     private int idRx;
+    private int status;
     private Date receivedDate;
     ArrayList<RxItem> availableList;
 
@@ -26,6 +27,7 @@ public class RxItemAvailability implements Parcelable{
     protected RxItemAvailability(Parcel in) {
         idServProvHasServPt = in.readInt();
         idRx = in.readInt();
+        status = in.readInt();
         try {
             SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
             sdf.applyPattern("dd/MM/yyyy");
@@ -80,6 +82,14 @@ public class RxItemAvailability implements Parcelable{
         this.availableList = availableList;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -89,6 +99,7 @@ public class RxItemAvailability implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(idServProvHasServPt);
         dest.writeInt(idRx);
+        dest.writeInt(status);
         String dateStr = "";
         if(receivedDate != null) {
             SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();

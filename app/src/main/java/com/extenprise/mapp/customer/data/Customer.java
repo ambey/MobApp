@@ -11,6 +11,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -71,6 +73,13 @@ public class Customer implements Parcelable {
         age = source.readInt();
         weight = source.readFloat();
         height = source.readFloat();
+        try {
+            SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
+            sdf.applyPattern("dd/MM/yyyy");
+            dob = sdf.parse(source.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<Appointment> getAppointments() {
@@ -200,6 +209,13 @@ public class Customer implements Parcelable {
         dest.writeInt(age);
         dest.writeFloat(weight);
         dest.writeFloat(height);
+        String dateStr = "";
+        if(dob != null) {
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+            sdf.applyPattern("dd/MM/yyyy");
+            dateStr = sdf.format(dob);
+        }
+        dest.writeString(dateStr);
     }
 
     public static final Creator<Customer> CREATOR = new Creator<Customer>() {

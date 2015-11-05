@@ -70,6 +70,7 @@ public class MappService extends Service {
     public static final int DO_WORK_PLACE_LIST = 22;
     public static final int DO_GET_RX_INBOX = 23;
     public static final int DO_SEND_AVAILABILITY = 24;
+    public static final int DO_GET_RX_FEEDBACK = 25;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -572,6 +573,9 @@ public class MappService extends Service {
             case DO_SEND_AVAILABILITY:
                 urlId = R.string.action_send_availability_feedback;
                 break;
+            case DO_GET_RX_FEEDBACK:
+                urlId = R.string.action_get_rx_feedback;
+                break;
             default:
                 return null;
         }
@@ -655,6 +659,7 @@ public class MappService extends Service {
                     mService.doSendRx(msg);
                     break;
                 case DO_GET_RX_INBOX:
+                case DO_GET_RX_FEEDBACK:
                     mService.doGetRxInbox(msg);
                     break;
                 case DO_SEND_AVAILABILITY:
@@ -789,6 +794,7 @@ public class MappService extends Service {
                             mRx = gson.fromJson(responseBuf.toString(), Rx.class);
                             break;
                         case DO_GET_RX_INBOX:
+                        case DO_GET_RX_FEEDBACK:
                             mInbox = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<RxInboxItem>>() {
                             }.getType());
                             break;

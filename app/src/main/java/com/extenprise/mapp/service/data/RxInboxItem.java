@@ -9,7 +9,7 @@ import com.extenprise.mapp.data.Rx;
 /**
  * Created by ambey on 30/10/15.
  */
-public class RxInboxItem implements Parcelable{
+public class RxInboxItem implements Parcelable {
     private ServProvListItem servProv;
     private Customer customer;
     private Rx rx;

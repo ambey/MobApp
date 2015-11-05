@@ -1,16 +1,10 @@
 package com.extenprise.mapp.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +19,7 @@ import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.activity.MedicalStoreHomeActivity;
@@ -35,22 +30,25 @@ import com.extenprise.mapp.util.Utility;
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+
     private int mLoginType;
-    private SignInData mSignInData;
 
     TextView textLabel;
     ImageView imgLogo;
-    Animation imgAnimation, textAnimation;
+    Animation textAnimation;
     private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-        getActionBar().hide();
+        try {
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+            getActionBar().hide();
+        }catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         textLabel = (TextView) findViewById(R.id.textViewlogo);
         imgLogo = (ImageView) findViewById(R.id.imageViewLogo);
 
@@ -70,16 +68,21 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
-            mSignInData = new SignInData();
-            mSignInData.setPhone(loginPreferences.getString("username", ""));
-            mSignInData.setPasswd(loginPreferences.getString("passwd", ""));
+            SignInData signInData = new SignInData();
+            signInData.setPhone(loginPreferences.getString("username", ""));
+            signInData.setPasswd(loginPreferences.getString("passwd", ""));
             String type = loginPreferences.getString("logintype", "");
-            assert type != null;
             if (type.equalsIgnoreCase(getString(R.string.patient))) {
                 mLoginType = MappService.CUSTOMER_LOGIN;
             } else if (type.equalsIgnoreCase(getString(R.string.servProv))) {
                 mLoginType = MappService.SERVICE_LOGIN;
             }
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", mLoginType);
+            bundle.putParcelable("signInData", signInData);
+            mConnection.setAction(MappService.DO_LOGIN);
+            mConnection.setData(bundle);
             Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
         } else {
 
@@ -147,35 +150,6 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             mPasswordView.requestFocus();*/
         }
     }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", mLoginType);
-            bundle.putParcelable("signInData", mSignInData);
-            Message msg = Message.obtain(null, MappService.DO_LOGIN);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

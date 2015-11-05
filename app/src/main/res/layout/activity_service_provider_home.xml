@@ -61,8 +61,7 @@
     <View
         android:id="@+id/linenView"
         style="@style/HorizontalLineview"
-        android:layout_marginTop="120dp"
-         />
+        android:layout_marginTop="120dp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -75,11 +74,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/linenView5"
-            android:layout_alignParentTop="true"
             android:layout_alignEnd="@+id/linenView2"
+            android:layout_alignParentTop="true"
             android:layout_alignRight="@+id/linenView2"
             android:onClick="viewAppointment"
-            android:text="@string/view_appoint"/>
+            android:text="@string/view_appoint" />
 
         <Button
             android:id="@+id/buttonViewReport"
@@ -91,20 +90,20 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/linenView2"
             android:enabled="false"
-            android:text="@string/viewpatientreport"/>
+            android:text="@string/viewpatientreport" />
 
 
         <Button
-            android:id="@+id/buttonViewRx"
-            style="@style/InactiveRectButton"
+            android:id="@+id/buttonViewRxFeedback"
+            style="@style/RectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/linenView4"
             android:layout_alignEnd="@+id/linenView2"
             android:layout_alignRight="@+id/linenView2"
             android:layout_below="@+id/linenView5"
-            android:enabled="true"
-            android:text="@string/viewpatientrx"/>
+            android:onClick="viewRxFeedback"
+            android:text="@string/view_rx_feedback" />
 
         <Button
             android:id="@+id/buttonViewProfile"
@@ -115,29 +114,25 @@
             android:layout_alignLeft="@+id/linenView2"
             android:layout_alignStart="@+id/linenView2"
             android:layout_below="@+id/linenView5"
-            android:enabled="true"
             android:onClick="viewProfile"
-            android:text="@string/profile_text"/>
+            android:text="@string/profile_text" />
 
         <View
             android:id="@+id/linenView2"
             style="@style/VerticallLineview"
             android:layout_alignBottom="@+id/linenView4"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-             />
+            android:layout_centerHorizontal="true" />
 
         <View
             android:id="@+id/linenView4"
             style="@style/HorizontalLineview"
-            android:layout_marginTop="240dp"
-           />
+            android:layout_marginTop="240dp" />
 
         <View
             android:id="@+id/linenView5"
-           style="@style/HorizontalLineview"
-            android:layout_marginTop="120dp"
-             />
+            style="@style/HorizontalLineview"
+            android:layout_marginTop="120dp" />
 
 
     </RelativeLayout>

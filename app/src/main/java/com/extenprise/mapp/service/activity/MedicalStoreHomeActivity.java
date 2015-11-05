@@ -1,14 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +12,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.RxInboxItem;
@@ -28,8 +23,7 @@ import java.util.ArrayList;
 
 
 public class MedicalStoreHomeActivity extends Activity implements ResponseHandler{
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
 
     private ServiceProvider mServProv;
 
@@ -76,6 +70,10 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     }
 
     public void viewRxInbox(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", mServProv.getServProvHasServPt(0).getIdServProvHasServPt());
+        mConnection.setAction(MappService.DO_GET_RX_INBOX);
+        mConnection.setData(bundle);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
@@ -83,36 +81,9 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);
+        intent.putExtra("feedback", false);
         startActivity(intent);
     }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-            bundle.putInt("id", mServProv.getServProvHasServPt(0).getIdServProvHasServPt());
-            Message msg = Message.obtain(null, MappService.DO_GET_RX_INBOX);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
 
     @Override
     public boolean gotResponse(int action, Bundle data) {

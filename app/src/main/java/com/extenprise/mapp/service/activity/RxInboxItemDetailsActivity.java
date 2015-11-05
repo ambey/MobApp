@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.RxItemAvailability;
 import com.extenprise.mapp.service.ui.RxItemListAdapter;
+import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 
@@ -33,18 +35,41 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
         Intent intent = getIntent();
         mInboxItem = intent.getParcelableExtra("inboxItem");
+        boolean feedback = intent.getBooleanExtra("feedback", false);
 
         View layoutAppont = findViewById(R.id.layoutAppont);
         layoutAppont.setVisibility(View.INVISIBLE);
 
+        TextView servProvNameView;
+        TextView servPointView;
+        TextView servProvPhoneView;
+        if (feedback) {
+            View layoutRxHead = findViewById(R.id.layoutRxHead);
+            layoutRxHead.setVisibility(View.INVISIBLE);
+
+            servProvNameView = (TextView) findViewById(R.id.medStoreProvView);
+            servPointView = (TextView) findViewById(R.id.medStoreNameView);
+            servProvPhoneView = (TextView) findViewById(R.id.medStoreProvPhoneView);
+        } else {
+            View layoutRxFeedback = findViewById(R.id.layoutRxFeedbackHead);
+            layoutRxFeedback.setVisibility(View.INVISIBLE);
+
+            servProvNameView = (TextView) findViewById(R.id.drNameView);
+            servPointView = (TextView) findViewById(R.id.drClinicView);
+            servProvPhoneView = (TextView) findViewById(R.id.drPhoneView);
+        }
         TextView statusView = (TextView) findViewById(R.id.statusView);
         TextView dateView = (TextView) findViewById(R.id.dateTextView);
         TextView custNameView = (TextView) findViewById(R.id.custNameView);
         TextView custPhoneView = (TextView) findViewById(R.id.custPhoneView);
-        TextView drNameView = (TextView) findViewById(R.id.drNameView);
-        TextView drClinicView = (TextView) findViewById(R.id.drClinicView);
-        TextView drPhoneView = (TextView) findViewById(R.id.drPhoneView);
 
+        Button sendAvailabilityButton = (Button)findViewById(R.id.buttonSendAvailability);
+        Button resendRxButton = (Button)findViewById(R.id.buttonResendRx);
+        if(feedback) {
+            sendAvailabilityButton.setVisibility(View.INVISIBLE);
+        } else {
+            resendRxButton.setVisibility(View.INVISIBLE);
+        }
         int status = mInboxItem.getReportService().getStatus();
         if (ReportServiceStatus.STATUS_PENDING.ordinal() == status) {
             status = ReportServiceStatus.STATUS_INPROCESS.ordinal();
@@ -54,18 +79,19 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         dateView.setText(sdf.format(mInboxItem.getRx().getDate()));
-        drNameView.setText(String.format("%s %s.", mInboxItem.getServProv().getLastName().toUpperCase(),
+        servProvNameView.setText(String.format("%s %s.", mInboxItem.getServProv().getLastName().toUpperCase(),
                 mInboxItem.getServProv().getFirstName().substring(0, 1).toUpperCase()));
         custNameView.setText(String.format("%s %s.", mInboxItem.getCustomer().getlName().toUpperCase(),
                 mInboxItem.getCustomer().getfName().substring(0, 1).toUpperCase()));
         custPhoneView.setText(mInboxItem.getCustomer().getSignInData().getPhone());
-        drClinicView.setText(String.format("%s, %s", mInboxItem.getServProv().getServPtName(),
+        servPointView.setText(String.format("%s, %s", mInboxItem.getServProv().getServPtName(),
                 mInboxItem.getServProv().getServPtLocation()));
-        drPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
+        servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
-        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInboxItem.getRx());
+        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInboxItem.getRx(), feedback);
         listView.setAdapter(adapter);
+
 
     }
 
@@ -75,6 +101,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         RxItemAvailability availability = new RxItemAvailability();
         availability.setIdServProvHasServPt(mInboxItem.getReportService().getIdServProvHasServPt());
         availability.setIdRx(mInboxItem.getReportService().getIdReport());
+        availability.setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         availability.setReceivedDate(mInboxItem.getReportService().getReceivedDate());
         availability.setAvailableList(mInboxItem.getRx().getItems());
 
@@ -105,7 +132,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        if(action == MappService.DO_SEND_AVAILABILITY) {
+        if (action == MappService.DO_SEND_AVAILABILITY) {
             sentAvailabilityFeedback();
             return true;
         }

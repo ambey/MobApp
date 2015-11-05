@@ -18,10 +18,12 @@ import com.extenprise.mapp.data.RxItem;
  */
 public class RxItemListAdapter extends ArrayAdapter<RxItem> {
     private Rx mRx;
+    private boolean mFeedback;
 
-    public RxItemListAdapter(Context context, int resource, Rx rx) {
+    public RxItemListAdapter(Context context, int resource, Rx rx, boolean feedback) {
         super(context, resource);
         mRx = rx;
+        mFeedback = feedback;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,9 +53,13 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> {
         availableCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                mRx.getItems().get(position).setAvailable(isChecked);
             }
         });
+        if (mFeedback) {
+            availableCB.setChecked(mRx.getItems().get(position).isAvailable());
+            availableCB.setEnabled(false);
+        }
         RxItem item = mRx.getItems().get(position);
         nameView.setText(item.getDrugName().toUpperCase());
         strengthView.setText(item.getDrugStrength());
