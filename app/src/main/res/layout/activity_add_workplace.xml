@@ -9,6 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ServProvSignUpActivity">
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
     <LinearLayout
         android:id="@+id/linLayout1"
         android:layout_width="fill_parent"
@@ -111,7 +119,7 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ScrollView
+    <RelativeLayout
         android:id="@+id/addWorkPlaceForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -159,6 +167,8 @@
             </LinearLayout>
 
         </LinearLayout>
+    </RelativeLayout>
+        </RelativeLayout>
     </ScrollView>
 
 </RelativeLayout>
