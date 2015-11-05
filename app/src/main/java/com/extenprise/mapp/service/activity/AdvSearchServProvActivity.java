@@ -71,6 +71,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adv_search_serv_prov);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mDrClinicName = (EditText) findViewById(R.id.editSearchDr);
         mSpeciality = (Spinner) findViewById(R.id.viewSpeciality);

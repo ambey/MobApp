@@ -15,6 +15,7 @@ public class ServProvListItem implements Parcelable {
     private float experience;
     private String servPtName;
     private String servPtLocation;
+    private String availDays;
 
     public ServProvListItem() {
     }
@@ -29,10 +30,19 @@ public class ServProvListItem implements Parcelable {
         lastName = fields[count++];
         speciality = fields[count++];
         servPtName = fields[count++];
-        servPtLocation = fields[count];
+        servPtLocation = fields[count++];
+        availDays = fields[count];
 
         experience = source.readFloat();
         idServProvHasServPt = source.readInt();
+    }
+
+    public String getAvailDays() {
+        return availDays;
+    }
+
+    public void setAvailDays(String availDays) {
+        this.availDays = availDays;
     }
 
     public String getPhone() {

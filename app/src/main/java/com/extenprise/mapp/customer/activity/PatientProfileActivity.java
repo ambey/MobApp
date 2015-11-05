@@ -2,6 +2,7 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -345,6 +346,9 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
     }
 
     public void showDatePicker(View view) {
+        /*DatePickerDialog dpd = Utility.datePicker(view, mTextViewDOB);
+        dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
+        dpd.show();*/
         Utility.datePicker(view, mTextViewDOB);
     }
 
@@ -487,7 +491,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
             focusView = mEditTextCustomerLName;
             valid = false;
         }
-        if (!TextUtils.isEmpty(emailId) && !Validator.isEmailValid(emailId)) {
+        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
             mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEditTextCustomerEmail;
             valid = false;

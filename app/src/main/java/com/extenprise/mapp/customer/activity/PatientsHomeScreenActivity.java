@@ -2,6 +2,7 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,17 +22,33 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.activity.SearchServProvActivity;
 import com.extenprise.mapp.util.Utility;
 
+import org.w3c.dom.Text;
+
 
 public class PatientsHomeScreenActivity extends Activity {
 
     private Customer mCustomer;
     private Boolean exit = false;
+    private TextView mlastDate;
+    private TextView mlastTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
 
+        mlastDate = (TextView) findViewById(R.id.textViewDate);
+        mlastTime = (TextView) findViewById(R.id.textViewTime);
+
+        SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
+        Boolean saveVisit = prefs.getBoolean("saveVisit", false);
+        if(saveVisit) {
+            mlastDate.setText(prefs.getString("Date", ""));
+            mlastTime.setText(prefs.getString("Time", ""));
+        } else {
+            Utility.setCurrentDateOnView(mlastDate);
+            Utility.setCurrentTimeOnView(mlastTime);
+        }
         Intent intent = getIntent();
         mCustomer = intent.getParcelableExtra("customer");
 
@@ -48,6 +65,8 @@ public class PatientsHomeScreenActivity extends Activity {
         if(mCustomer.getImg() != null) {
             img.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getImg()));
         }
+
+        Utility.setLastVisited(this);
     }
 
     public void viewProfile(View view) {

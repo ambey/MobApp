@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -45,6 +46,7 @@ import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -248,6 +250,9 @@ public abstract class Utility {
                         }
                     }
                 }, year, month, day);
+
+        //Set max date as current dat for date of birth
+        dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
         dpd.show();
     }
 
@@ -476,5 +481,34 @@ public abstract class Utility {
 
 //Start animation
         return anim;
+    }
+
+    public static void setLastVisited(Activity activity) {
+        SharedPreferences prefer = activity.getSharedPreferences("lastVisit", 0);
+        SharedPreferences.Editor preferencesEditor = prefer.edit();
+        preferencesEditor.putBoolean("saveVisit", true);
+        preferencesEditor.putString("Date", setCurrentDateOnView(null));
+        preferencesEditor.putString("Time", setCurrentTimeOnView(null));
+        preferencesEditor.apply();
+    }
+
+    public static String setCurrentDateOnView(TextView v) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        String date = sdf.format(c.getTime());
+        if(v != null) {
+            v.setText(date);
+        }
+        return date;
+    }
+
+    public static String setCurrentTimeOnView(TextView v) {
+        Calendar c = Calendar.getInstance();
+        String time = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+        if(v != null) {
+            v.setText(time);
+        }
+        return time;
     }
 }

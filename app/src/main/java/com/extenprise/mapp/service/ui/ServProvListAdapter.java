@@ -53,6 +53,15 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
         TextView locationView = (TextView) v.findViewById(R.id.viewLocation);
         TextView specialityView = (TextView) v.findViewById(R.id.viewDocSpeciality);
         TextView expView = (TextView) v.findViewById(R.id.viewExpValue);
+        ImageView imgAvail = (ImageView) v.findViewById(R.id.imageViewAvailability);
+
+        if(item.getAvailDays() != null) {
+          if(Utility.findDocAvailability(item.getAvailDays(), Calendar.getInstance())) {
+              imgAvail.setImageResource(R.drawable.g_circle);
+          } else {
+              imgAvail.setImageResource(R.drawable.r_circle);
+          }
+        }
 
         fnameView.setText(item.getFirstName());
         lnameView.setText(item.getLastName());

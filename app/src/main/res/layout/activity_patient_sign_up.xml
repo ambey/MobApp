@@ -64,7 +64,7 @@
                     android:ems="10"
                     android:maxLength="10"
                     android:hint="@string/primary_phone_no"
-                    android:inputType="phone" />
+                    android:inputType="number" />
             </LinearLayout>
 
             <EditText

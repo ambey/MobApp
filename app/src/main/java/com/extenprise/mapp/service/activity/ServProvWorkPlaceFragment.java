@@ -448,7 +448,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             valid = false;
         }
         String email = mEmailId.getText().toString().trim();
-        if (!TextUtils.isEmpty(email) && !Validator.isEmailValid(mEmailId.getText().toString())) {
+        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(mEmailId.getText().toString())) {
             mEmailId.setError(getString(R.string.error_invalid_email));
             focusView = mEmailId;
             valid = false;

@@ -56,7 +56,7 @@ public class ViewAppointmentListActivity extends Activity
         mAppointmentDateTextView = (TextView) findViewById(R.id.appointmentDateTextView);
         mAppointmentListView = (ListView) findViewById(R.id.appointmentListView);
 
-        mSelectedDate = setCurrentDateOnView();
+        mSelectedDate = Utility.setCurrentDateOnView(mAppointmentDateTextView);
         setAppointmentList();
     }
 
@@ -82,15 +82,6 @@ public class ViewAppointmentListActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    public String setCurrentDateOnView() {
-        Calendar c = Calendar.getInstance();
-
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        String date = sdf.format(c.getTime());
-        mAppointmentDateTextView.setText(date);
-        return date;
-    }
 
     private void setAppointmentList() {
         if (!AppStatus.getInstance(this).isOnline()) {

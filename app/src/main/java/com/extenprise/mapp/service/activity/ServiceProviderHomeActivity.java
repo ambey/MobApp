@@ -2,6 +2,7 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,9 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -29,12 +32,28 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     private ServiceProvider mServiceProv;
     private Boolean exit = false;
+    private TextView mlastDate;
+    private TextView mlastTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
+        mlastDate = (TextView) findViewById(R.id.textViewDate);
+        mlastTime = (TextView) findViewById(R.id.textViewTime);
+
+        SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
+        Boolean saveVisit = prefs.getBoolean("saveVisit", false);
+        if(saveVisit) {
+            mlastDate.setText(prefs.getString("Date", ""));
+            mlastTime.setText(prefs.getString("Time", ""));
+        } else {
+            Utility.setCurrentDateOnView(mlastDate);
+            Utility.setCurrentTimeOnView(mlastTime);
+        }
+
+        Intent intent = getIntent();
         mServiceProv = LoginHolder.servLoginRef;
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
@@ -48,6 +67,8 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         if (mServiceProv.getImg() != null) {
             img.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getImg()));
         }
+
+        Utility.setLastVisited(this);
     }
 
     public void viewAppointment(View view) {

@@ -943,7 +943,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             valid = false;
         }
         String email = mEmailIdwork.getText().toString().trim();
-        if (!TextUtils.isEmpty(email) && !Validator.isEmailValid(mEmailIdwork.getText().toString())) {
+        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(mEmailIdwork.getText().toString())) {
             mEmailIdwork.setError(getString(R.string.error_invalid_email));
             focusView = mEmailIdwork;
             valid = false;
@@ -1061,7 +1061,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             cancel = true;
         }*/
         if (!TextUtils.isEmpty(mEmailID.getText().toString())) {
-            if (Validator.isEmailValid(mEmailID.getText().toString().trim())) {
+            if (Validator.isValidEmaillId(mEmailID.getText().toString().trim())) {
                 mEmailID.setError(getString(R.string.error_invalid_email));
                 focusView = mEmailID;
                 cancel = true;

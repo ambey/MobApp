@@ -15,7 +15,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/name"
-            android:inputType="textAutoComplete"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+            android:inputType="textAutoComplete|text"
             android:layout_alignBottom="@+id/viewWorkPlaceType"/>
 
         <Spinner
@@ -40,10 +42,10 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-
             android:layout_alignBottom="@+id/editTextCity"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "
             android:hint="@string/loc"
-            android:inputType="textAutoComplete" />
+            android:inputType="textAutoComplete|number|text"/>
 
         <Spinner
             android:id="@+id/editTextCity"
@@ -88,7 +90,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:hint="@string/phone2"
-            android:inputType="phone" />
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/editTextEmail"

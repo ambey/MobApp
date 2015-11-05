@@ -54,6 +54,8 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -296,6 +298,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
             SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
             SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
+
+            loginPrefsEditor.putString("passwd", String.valueOf(Calendar.getInstance().getTime()));
             if (mSaveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.putBoolean("saveLogin", true);
                 loginPrefsEditor.putString("username", mSignInData.getPhone());

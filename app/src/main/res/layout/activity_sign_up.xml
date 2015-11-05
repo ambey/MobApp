@@ -75,7 +75,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/first_name"
-                    android:inputType="textPersonName"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:inputType="text|textNoSuggestions"
                     android:textColor="@color/black" />
 
                 <EditText
@@ -86,7 +87,8 @@
                     android:layout_marginStart="12dp"
                     android:ems="10"
                     android:hint="@string/last_name"
-                    android:inputType="textPersonName" />
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:inputType="text|textNoSuggestions" />
 
             </LinearLayout>
 
@@ -97,7 +99,7 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/cellPhoneNo"
-                android:inputType="phone" />
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/editTextEmail"

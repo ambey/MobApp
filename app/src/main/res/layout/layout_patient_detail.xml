@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.90"
                 android:hint="@string/height"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
             <TextView
                 android:id="@+id/viewHeightUnit"
@@ -138,7 +138,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="0.90"
                 android:hint="@string/weight"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
             <TextView
                 android:id="@+id/viewWeightUnit"
@@ -186,8 +186,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_weight="0.5"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "
                 android:hint="@string/loc"
-                android:inputType="textAutoComplete" />
+                android:inputType="textAutoComplete|number|text" />
 
             <Spinner
                 android:id="@+id/editTextCity"
@@ -216,6 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="0.5"
+                android:maxLength="6"
                 android:hint="@string/pincode"
                 android:inputType="number" />
 

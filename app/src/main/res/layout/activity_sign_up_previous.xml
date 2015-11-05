@@ -70,8 +70,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="60dp"
-                android:clickable="true"
-                android:onClick="signUpServProv"
                 android:text="@string/areYouServProv"
                 android:visibility="visible" />
 
@@ -93,6 +91,8 @@
                         android:id="@+id/medicalStoreImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:clickable="true"
+                        android:onClick="signUpMedicalStore"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/medstore" />
 
@@ -100,6 +100,8 @@
                         android:id="@+id/mStoreTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="signUpMedicalStore"
                         android:text="@string/medicalStore"
                         android:textColor="#000" />
 
@@ -141,12 +143,15 @@
                         android:id="@+id/diagnosticImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:clickable="true"
+                        android:onClick="signUpDiagCenter"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/diagcenter" />
 
                     <TextView
                         android:id="@+id/diagnosticTextView"
-
+                        android:clickable="true"
+                        android:onClick="signUpDiagCenter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/diagnosticCenter"

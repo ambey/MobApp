@@ -134,6 +134,14 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 }
             }
         });
+
+        String category = getActivity().getIntent().getStringExtra("category");
+        if(category.equals(R.string.medicalStore)) {
+            mImgView.setImageResource(R.drawable.medstore);
+        } else if(category.equals(R.string.diagnosticCenter)) {
+            mImgView.setImageResource(R.drawable.diagcenter);
+        }
+
         return mRootView;
     }
 
@@ -214,20 +222,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             return false;
         }
         return true;
-    }
-
-    private void checkPhoneExistence() {
-        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
-        Intent intent = new Intent(getActivity(), MappService.class);
-        getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
-    }
-
-    public void phoneCheckDone(Bundle data) {
-        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
-        if (data.getBoolean("exists")) {
-            mCellphoneview.setError(getString(R.string.error_phone_registered));
-            mCellphoneview.requestFocus();
-        }
     }
 
     private boolean isRegNoExist(String regNo) {
@@ -470,12 +464,10 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             e.printStackTrace();
         }
         if (action == MappService.DO_PHONE_EXIST_CHECK) {
-            //phoneCheckDone(data);
             checkDone(data);
             return true;
         }
         if (action == MappService.DO_REG_NO_CHECK) {
-            //regNoCheckDone(data);
             checkDone(data);
             return true;
         }
@@ -484,13 +476,14 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
     public void checkDone(Bundle data) {
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
-        if (data.getBoolean("exists")) {
+        if (!data.getBoolean("status")) {
+            if(check == MappService.DO_REG_NO_CHECK) {
+                mRegistrationNumber.setError("This Registration Number is already Registered.");
+                mRegistrationNumber.requestFocus();
+            }
             if(check == MappService.DO_PHONE_EXIST_CHECK) {
                 mCellphoneview.setError(getString(R.string.error_phone_registered));
                 mCellphoneview.requestFocus();
-            } else if(check == MappService.DO_REG_NO_CHECK) {
-                mRegistrationNumber.setError("This Registration Number is already Registered.");
-                mRegistrationNumber.requestFocus();
             }
         }
     }
