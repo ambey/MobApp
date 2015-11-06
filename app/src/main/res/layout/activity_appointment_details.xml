@@ -65,12 +65,23 @@
             android:text="@string/cancel" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/viewMoreButton"
+        style="@style/LinkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/buttonLayout1"
+        android:layout_marginTop="20dp"
+        android:onClick="showPatientHistory"
+        android:text="@string/view_more" />
+
     <TextView
         android:id="@+id/pastAppointmentTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonLayout1"
-        android:layout_marginTop="25dp"
+        android:layout_alignBottom="@id/viewMoreButton"
         android:text="@string/last_appt"
         android:textSize="18sp" />
 
@@ -94,25 +105,12 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp" />
 
-    <Button
-        android:id="@+id/viewMoreButton"
-        style="@style/RectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/pastAppointmentLayout"
-        android:layout_alignRight="@id/pastAppointmentLayout"
-        android:layout_below="@id/pastAppointmentLayout"
-        android:layout_marginTop="5dp"
-        android:onClick="showPatientHistory"
-        android:text="@string/view_more" />
-
     <LinearLayout
         android:id="@+id/buttonLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/viewMoreButton"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
         android:orientation="horizontal">
 
         <Button

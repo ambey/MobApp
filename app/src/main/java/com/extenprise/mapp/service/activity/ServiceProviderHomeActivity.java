@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.ReportServiceStatus;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
@@ -86,6 +87,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     public void viewRxFeedback(View view) {
         Bundle bundle = new Bundle();
         bundle.putInt("id", mServiceProv.getServProvHasServPt(0).getIdServProvHasServPt());
+        bundle.putInt("status", ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
         mConnection.setData(bundle);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);

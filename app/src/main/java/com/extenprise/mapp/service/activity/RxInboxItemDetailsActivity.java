@@ -19,7 +19,6 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.RxItemAvailability;
 import com.extenprise.mapp.service.ui.RxItemListAdapter;
-import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 
@@ -38,37 +37,46 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         boolean feedback = intent.getBooleanExtra("feedback", false);
 
         View layoutAppont = findViewById(R.id.layoutAppont);
-        layoutAppont.setVisibility(View.INVISIBLE);
+        layoutAppont.setVisibility(View.GONE);
 
         TextView servProvNameView;
         TextView servPointView;
         TextView servProvPhoneView;
+        TextView statusView;
+        TextView dateView;
+        TextView custNameView;
+        TextView custPhoneView;
+
         if (feedback) {
             View layoutRxHead = findViewById(R.id.layoutRxHead);
-            layoutRxHead.setVisibility(View.INVISIBLE);
+            layoutRxHead.setVisibility(View.GONE);
 
+            statusView = (TextView) findViewById(R.id.feedBackStatusView);
+            dateView = (TextView) findViewById(R.id.feedbackDateView);
+            custNameView = (TextView) findViewById(R.id.feedbackCustNameView);
+            custPhoneView = (TextView) findViewById(R.id.feedbackCustPhoneView);
             servProvNameView = (TextView) findViewById(R.id.medStoreProvView);
             servPointView = (TextView) findViewById(R.id.medStoreNameView);
             servProvPhoneView = (TextView) findViewById(R.id.medStoreProvPhoneView);
         } else {
             View layoutRxFeedback = findViewById(R.id.layoutRxFeedbackHead);
-            layoutRxFeedback.setVisibility(View.INVISIBLE);
+            layoutRxFeedback.setVisibility(View.GONE);
 
+            statusView = (TextView) findViewById(R.id.statusView);
+            dateView = (TextView) findViewById(R.id.dateTextView);
+            custNameView = (TextView) findViewById(R.id.custNameView);
+            custPhoneView = (TextView) findViewById(R.id.custPhoneView);
             servProvNameView = (TextView) findViewById(R.id.drNameView);
             servPointView = (TextView) findViewById(R.id.drClinicView);
             servProvPhoneView = (TextView) findViewById(R.id.drPhoneView);
         }
-        TextView statusView = (TextView) findViewById(R.id.statusView);
-        TextView dateView = (TextView) findViewById(R.id.dateTextView);
-        TextView custNameView = (TextView) findViewById(R.id.custNameView);
-        TextView custPhoneView = (TextView) findViewById(R.id.custPhoneView);
 
         Button sendAvailabilityButton = (Button)findViewById(R.id.buttonSendAvailability);
         Button resendRxButton = (Button)findViewById(R.id.buttonResendRx);
         if(feedback) {
-            sendAvailabilityButton.setVisibility(View.INVISIBLE);
+            sendAvailabilityButton.setVisibility(View.GONE);
         } else {
-            resendRxButton.setVisibility(View.INVISIBLE);
+            resendRxButton.setVisibility(View.GONE);
         }
         int status = mInboxItem.getReportService().getStatus();
         if (ReportServiceStatus.STATUS_PENDING.ordinal() == status) {
@@ -91,8 +99,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         ListView listView = (ListView) findViewById(R.id.listRxItems);
         RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInboxItem.getRx(), feedback);
         listView.setAdapter(adapter);
-
-
     }
 
     public void sendAvailabilityFeedback(View view) {
@@ -127,6 +133,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             return null;
         }
         intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));
+        intent.putExtra("feedback", getIntent().getBooleanExtra("feedback", false));
         return intent;
     }
 

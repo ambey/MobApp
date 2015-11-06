@@ -4,56 +4,65 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/statusView"
+        android:id="@+id/feedBackStatusView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/dateTextView"
+        android:id="@+id/feedbackDateView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
 
     <TextView
-        android:id="@+id/custNameView"
+        android:id="@+id/feedbackCustNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dateTextView"
+        android:layout_below="@id/feedbackDateView"
         android:textSize="18sp"/>
 
     <TextView
-        android:id="@+id/custPhoneView"
+        android:id="@+id/feedbackCustPhoneView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignBottom="@id/custNameView"/>
+        android:layout_alignBottom="@id/feedbackCustNameView"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@id/custPhoneView"
-        android:layout_toStartOf="@id/custPhoneView"
-        android:layout_alignBottom="@id/custNameView"
-        android:text="@string/phone" />
+        android:layout_toLeftOf="@id/feedbackCustPhoneView"
+        android:layout_toStartOf="@id/feedbackCustPhoneView"
+        android:layout_alignBottom="@id/feedbackCustNameView"
+        android:text="@string/phone_lbl" />
 
     <TextView
-        android:id="@+id/medStoreProvLblView"
+        android:id="@+id/medStoreLblView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/custNameView"
-        android:text="@string/doctor"/>
+        android:layout_below="@id/feedbackCustNameView"
+        android:text="@string/medstore_lbl"/>
+
+    <TextView
+        android:id="@+id/medStoreNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/medStoreLblView"
+        android:layout_toRightOf="@id/medStoreLblView"
+        android:layout_alignBottom="@id/medStoreLblView"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/medStoreProvView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/medStoreProvLblView"
-        android:layout_toRightOf="@id/medStoreProvLblView"
-        android:layout_alignBottom="@id/medStoreProvLblView"
-        android:textStyle="bold"/>
+        android:layout_alignLeft="@id/medStoreNameView"
+        android:layout_alignStart="@id/medStoreNameView"
+        android:layout_below="@id/medStoreNameView"
+        android:textColor="#00f"/>
 
     <TextView
         android:id="@+id/medStoreProvPhoneView"
@@ -61,15 +70,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignBottom="@id/medStoreProvLblView"/>
-
-    <TextView
-        android:id="@+id/medStoreNameView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/medStoreProvView"
-        android:layout_alignStart="@id/medStoreProvView"
-        android:layout_below="@id/medStoreProvView"
-        android:textColor="#00f"/>
+        android:layout_alignBottom="@id/medStoreProvView"/>
 
 </RelativeLayout>

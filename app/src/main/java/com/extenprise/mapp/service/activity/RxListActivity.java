@@ -5,7 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.service.data.RxInboxItem;
@@ -25,6 +27,11 @@ public class RxListActivity extends Activity {
 
         mInbox = getIntent().getParcelableArrayListExtra("inbox");
         boolean feedback = getIntent().getBooleanExtra("feedback", false);
+        TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
+        if(mInbox.size() > 0) {
+            msgView.setVisibility(View.GONE);
+        }
+
         RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox, feedback);
         ListView view = (ListView) findViewById(R.id.rxListView);
         view.setAdapter(adapter);

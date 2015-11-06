@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by ambey on 3/11/15.
  */
-public class RxItemAvailability implements Parcelable{
+public class RxItemAvailability implements Parcelable {
     private int idServProvHasServPt;
     private int idRx;
     private int status;
@@ -29,7 +29,7 @@ public class RxItemAvailability implements Parcelable{
         idRx = in.readInt();
         status = in.readInt();
         try {
-            SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
             sdf.applyPattern("dd/MM/yyyy");
             receivedDate = sdf.parse(in.readString());
         } catch (ParseException e) {
@@ -101,8 +101,8 @@ public class RxItemAvailability implements Parcelable{
         dest.writeInt(idRx);
         dest.writeInt(status);
         String dateStr = "";
-        if(receivedDate != null) {
-            SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
+        if (receivedDate != null) {
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
             sdf.applyPattern("dd/MM/yyyy");
             dateStr = sdf.format(receivedDate);
         }

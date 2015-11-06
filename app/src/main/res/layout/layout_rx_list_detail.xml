@@ -37,14 +37,14 @@
         android:layout_toLeftOf="@id/custPhoneView"
         android:layout_toStartOf="@id/custPhoneView"
         android:layout_alignBottom="@id/custNameView"
-        android:text="@string/phone" />
+        android:text="@string/phone_lbl" />
 
     <TextView
         android:id="@+id/drNameLblView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/custNameView"
-        android:text="@string/doctor"/>
+        android:text="@string/dr_lbl"/>
 
     <TextView
         android:id="@+id/drNameView"

@@ -44,24 +44,32 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if(feedback) {
+            if (feedback) {
                 v = inflater.inflate(R.layout.layout_rx_feedback_head, null);
             } else {
                 v = inflater.inflate(R.layout.layout_rx_list_detail, null);
             }
         }
-        TextView statusView = (TextView) v.findViewById(R.id.statusView);
-        TextView dateView = (TextView) v.findViewById(R.id.dateTextView);
-        TextView custNameView = (TextView) v.findViewById(R.id.custNameView);
-        TextView custPhoneView = (TextView) v.findViewById(R.id.custPhoneView);
+        TextView statusView;
+        TextView dateView;
+        TextView custNameView;
+        TextView custPhoneView;
         TextView servProvNameView;
         TextView servPointNameView;
         TextView servProvPhoneView;
-        if(feedback) {
-            servProvNameView = (TextView)v.findViewById(R.id.medStoreProvView);
-            servPointNameView = (TextView)v.findViewById(R.id.medStoreNameView);
-            servProvPhoneView = (TextView)v.findViewById(R.id.medStoreProvPhoneView);
+        if (feedback) {
+            statusView = (TextView) v.findViewById(R.id.feedBackStatusView);
+            dateView = (TextView) v.findViewById(R.id.feedbackDateView);
+            custNameView = (TextView) v.findViewById(R.id.feedbackCustNameView);
+            custPhoneView = (TextView) v.findViewById(R.id.feedbackCustPhoneView);
+            servProvNameView = (TextView) v.findViewById(R.id.medStoreProvView);
+            servPointNameView = (TextView) v.findViewById(R.id.medStoreNameView);
+            servProvPhoneView = (TextView) v.findViewById(R.id.medStoreProvPhoneView);
         } else {
+            statusView = (TextView) v.findViewById(R.id.statusView);
+            dateView = (TextView) v.findViewById(R.id.dateTextView);
+            custNameView = (TextView) v.findViewById(R.id.custNameView);
+            custPhoneView = (TextView) v.findViewById(R.id.custPhoneView);
             servProvNameView = (TextView) v.findViewById(R.id.drNameView);
             servPointNameView = (TextView) v.findViewById(R.id.drClinicView);
             servProvPhoneView = (TextView) v.findViewById(R.id.drPhoneView);

@@ -446,10 +446,11 @@ public class MappService extends Service {
     public void doGetRxInbox(Message msg) {
         Bundle data = msg.getData();
         int id = data.getInt("id");
+        int status = data.getInt("status");
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         try {
-            task = new MappAsyncTask(getURL(msg.what), "{\"id\": \"" + id + "\"}");
+            task = new MappAsyncTask(getURL(msg.what), "{\"id\": \"" + id + "\", \"status\": \"" + status + "\"}");
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(msg.what);

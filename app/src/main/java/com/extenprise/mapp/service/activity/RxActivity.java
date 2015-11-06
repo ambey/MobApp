@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.Appointment;

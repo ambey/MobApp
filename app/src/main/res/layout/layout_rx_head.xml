@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.15"
-            android:text="@string/phone" />
+            android:text="@string/phone_lbl" />
 
         <TextView
             android:id="@+id/phoneView"
@@ -39,7 +39,7 @@
             style="@style/MediumText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/doctor" />
+            android:text="@string/dr_lbl" />
 
         <TextView
             android:id="@+id/drNameView"

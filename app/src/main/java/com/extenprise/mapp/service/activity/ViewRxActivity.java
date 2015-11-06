@@ -43,7 +43,9 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         setContentView(R.layout.activity_view_rx);
 
         View view = findViewById(R.id.layoutRxHead);
-        view.setVisibility(View.INVISIBLE);
+        view.setVisibility(View.GONE);
+        view = findViewById(R.id.layoutRxFeedbackHead);
+        view.setVisibility(View.GONE);
 
         View layout = findViewById(R.id.layoutAppont);
         TextView date = (TextView) layout.findViewById(R.id.dateView);

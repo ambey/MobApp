@@ -74,7 +74,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             String type = loginPreferences.getString("logintype", "");
             if (type.equalsIgnoreCase(getString(R.string.patient))) {
                 mLoginType = MappService.CUSTOMER_LOGIN;
-            } else if (type.equalsIgnoreCase(getString(R.string.servProv))) {
+            } else if (type.equalsIgnoreCase(getString(R.string.serv_prov))) {
                 mLoginType = MappService.SERVICE_LOGIN;
             }
 

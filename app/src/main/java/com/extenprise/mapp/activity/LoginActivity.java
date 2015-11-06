@@ -242,7 +242,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
     private int findLoginType(String loginType) {
         if (loginType.equalsIgnoreCase(getString(R.string.patient))) {
             return MappService.CUSTOMER_LOGIN;
-        } else if (loginType.equalsIgnoreCase(getString(R.string.servProv))) {
+        } else if (loginType.equalsIgnoreCase(getString(R.string.serv_prov))) {
             return MappService.SERVICE_LOGIN;
         }
         return -1;
@@ -252,7 +252,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
         RadioButton mRadioButtonUType;
         if (uTypeID == -1) {
-            Utility.showMessage(this, R.string.user_type_required);
+            Utility.showMessage(this, R.string.error_user_type_required);
             //Utility.showAlert(this, "", "Please Select user type.");
             return;
         } else {

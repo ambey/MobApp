@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="city">
+        <item>Pune</item>
+    </string-array>
+
+    <string-array name="work_place_type">
+        <item>@string/clinic</item>
+        <item>@string/medical_store</item>
+        <item>@string/path_lab</item>
+        <item>@string/scan_lab</item>
+    </string-array>
+
+    <string-array name="days">
+        <item>All Days</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="gender_type">
+        <item>@string/male</item>
+        <item>@string/female</item>
+    </string-array>
+
+    <string-array name="login_option">
+        <item>@string/patient</item>
+        <item>@string/serv_prov</item>
+    </string-array>
+
+    <string name="patient">Patient</string>
+    <string name="serv_prov">Medical Service Provider</string>
+
+    <string-array name="when">
+        <item>@string/before_meal</item>
+        <item>@string/after_meal</item>
+    </string-array>
+
+    <string name="before_meal">Before Meal</string>
+    <string name="after_meal">After Meal</string>
+
+    <string-array name="drug_type">
+        <item>@string/tablet</item>
+        <item>@string/syrup</item>
+        <item>@string/gel</item>
+        <item>@string/cream</item>
+    </string-array>
+
+    <string name="tablet">Tablet</string>
+    <string name="syrup">Syrup</string>
+    <string name="gel">Gel</string>
+    <string name="cream">Cream</string>
+
+    <string-array name="state">
+        <item>Maharashtra</item>
+    </string-array>
+
+    <string name="select_speciality">Select Speciality</string>
+    <string name="other">Other</string>
+
+    <string-array name="speciality">
+        <item>@string/select_speciality</item>
+        <item>@string/cardiologist</item>
+        <item>@string/oncologist</item>
+        <item>@string/gynaecologist</item>
+        <item>@string/dermatologist</item>
+        <item>@string/neurologist</item>
+        <item>@string/psychologist</item>
+        <item>@string/hematologist</item>
+        <item>@string/pathologist</item>
+        <item>@string/radiologist</item>
+        <item>@string/urologist</item>
+    </string-array>
+
+    <string name="select_category">Select Category</string>
+
+    <string-array name="service_category">
+        <item>@string/select_category</item>
+        <item>@string/physician</item>
+        <item>@string/pharmacist</item>
+        <item>@string/diagnostic_center</item>
+    </string-array>
+
+    <string-array name="gender_search">
+        <item>@string/both</item>
+        <item>@string/male</item>
+        <item>@string/female</item>
+    </string-array>
+
+    <string name="both">Both</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
+    <string-array name="speciality_search">
+        <item>@string/select_speciality</item>
+        <item>@string/speciality</item>
+        <item>@string/cardiologist</item>
+        <item>@string/oncologist</item>
+        <item>@string/gynaecologist</item>
+        <item>@string/dermatologist</item>
+        <item>@string/neurologist</item>
+        <item>@string/psychologist</item>
+        <item>@string/hematologist</item>
+        <item>@string/pathologist</item>
+        <item>@string/radiologist</item>
+        <item>@string/urologist</item>
+    </string-array>
+
+    <string name="cardiologist">Cardiologist</string>
+    <string name="oncologist">Oncologist</string>
+    <string name="gynaecologist">Gynaecologist</string>
+    <string name="dermatologist">Dermatologist</string>
+    <string name="neurologist">Neurologist</string>
+    <string name="psychologist">Psychologist</string>
+    <string name="hematologist">Hematologist</string>
+    <string name="pathologist">Pathologist</string>
+    <string name="radiologist">Radiologist</string>
+    <string name="urologist">Urologist</string>
+
+    <string-array name="service_category_search">
+        <item>@string/select_category</item>
+        <item>@string/physician</item>
+        <item>@string/pharmacist</item>
+        <item>@string/diagnostic_center</item>
+    </string-array>
+
+    <string name="physician">Physician</string>
+    <string name="pharmacist">Pharmacist</string>
+    <string name="diagnostic_center">Diagnostic Center</string>
+
+    <string-array name="report_service_status">
+        <item>@string/new_state</item>
+        <item>@string/pending_state</item>
+        <item>@string/inprocess_state</item>
+        <item>@string/feedback_state</item>
+        <item>@string/packed_state</item>
+        <item>@string/dispatched_state</item>
+        <item>@string/delivered_state</item>
+    </string-array>
+
+    <string name="new_state">New</string>
+    <string name="pending_state">Pending</string>
+    <string name="inprocess_state">In Process</string>
+    <string name="feedback_state">Feedback Sent</string>
+    <string name="packed_state">Packed</string>
+    <string name="dispatched_state">Dispatched</string>
+    <string name="delivered_state">Delivered</string>
+
+</resources>

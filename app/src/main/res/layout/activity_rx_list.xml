@@ -8,6 +8,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.service.activity.RxListActivity">
 
+    <TextView
+        android:id="@+id/noItemsMsgView"
+        style="@style/LargeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/error_no_items_found"/>
     <ListView
         android:id="@+id/rxListView"
         android:layout_width="fill_parent"
