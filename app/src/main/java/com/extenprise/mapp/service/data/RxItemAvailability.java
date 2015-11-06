@@ -18,7 +18,7 @@ public class RxItemAvailability implements Parcelable {
     private int idRx;
     private int status;
     private Date receivedDate;
-    ArrayList<RxItem> availableList;
+    private ArrayList<RxItem> availableList;
 
     public RxItemAvailability() {
         availableList = new ArrayList<>();

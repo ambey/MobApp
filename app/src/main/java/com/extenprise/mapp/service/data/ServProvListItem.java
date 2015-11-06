@@ -21,7 +21,7 @@ public class ServProvListItem implements Parcelable {
     }
 
     public ServProvListItem(Parcel source) {
-        String[] fields = new String[6];
+        String[] fields = new String[7];
 
         source.readStringArray(fields);
         int count = 0;
@@ -116,7 +116,7 @@ public class ServProvListItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{phone, firstName, lastName, speciality, servPtName, servPtLocation});
+        dest.writeStringArray(new String[]{phone, firstName, lastName, speciality, servPtName, servPtLocation, availDays});
         dest.writeFloat(experience);
         dest.writeInt(idServProvHasServPt);
     }

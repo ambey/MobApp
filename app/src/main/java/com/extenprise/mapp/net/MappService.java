@@ -418,7 +418,7 @@ public class MappService extends Service {
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         try {
-            task = new MappAsyncTask(getURL(msg.what), "{\"idService\": \"" + idService + "\"}");
+            task = new MappAsyncTask(getURL(msg.what), "{\"idService\": " + idService + "}");
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(msg.what);
@@ -450,7 +450,7 @@ public class MappService extends Service {
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         try {
-            task = new MappAsyncTask(getURL(msg.what), "{\"id\": \"" + id + "\", \"status\": \"" + status + "\"}");
+            task = new MappAsyncTask(getURL(msg.what), "{\"id\": " + id + ", \"status\": " + status + "}");
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(msg.what);
