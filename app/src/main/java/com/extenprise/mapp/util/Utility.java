@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -230,9 +231,10 @@ public abstract class Utility {
         tpd.show();
     }
 
-    public static void datePicker(View view, final TextView button, final DateChangeListener listener) {
-        // Process to get Current Time
-        final Calendar c = Calendar.getInstance();
+    public static void datePicker(View view, final TextView button, final DateChangeListener listener,
+                                  long defaultTime, long maxTime, long minTime) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(defaultTime);
         final int year = c.get(Calendar.YEAR);
         final int month = c.get(Calendar.MONTH);
         final int day = c.get(Calendar.DAY_OF_MONTH);
@@ -250,14 +252,21 @@ public abstract class Utility {
                         }
                     }
                 }, year, month, day);
-
-        //Set max date as current dat for date of birth
-        dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
+        if(maxTime != -1) {
+            dpd.getDatePicker().setMaxDate(maxTime);
+        }
+        if(minTime != -1) {
+            dpd.getDatePicker().setMinDate(minTime);
+        }
         dpd.show();
     }
 
+    public static void datePicker(View view, final TextView button, final DateChangeListener listener) {
+        datePicker(view, button, listener, Calendar.getInstance().getTimeInMillis(), -1, -1);
+    }
+
     public static void datePicker(View view, final TextView button) {
-        datePicker(view, button, null);
+        datePicker(view, button, null, Calendar.getInstance().getTimeInMillis(), -1, -1);
     }
 
     public static String getCommaSepparatedString(String[] arr) {
@@ -515,7 +524,7 @@ public abstract class Utility {
     public static int getDrugTypePosition(Context context, String drugType) {
         String[] drugTypes = context.getResources().getStringArray(R.array.drug_type);
         for (int i = 0; i < drugTypes.length; i++) {
-            if(drugTypes[i].equalsIgnoreCase(drugType)) {
+            if (drugTypes[i].equalsIgnoreCase(drugType)) {
                 return i;
             }
         }
@@ -525,10 +534,10 @@ public abstract class Utility {
     public static int getEmptyOrFullPosition(Context context, boolean empty) {
         String[] emptyOrFull = context.getResources().getStringArray(R.array.when);
         String when = context.getResources().getString(R.string.before_meal);
-        if(! empty) {
+        if (!empty) {
             when = context.getResources().getString(R.string.after_meal);
         }
-        if(emptyOrFull[0].equalsIgnoreCase(when)) {
+        if (emptyOrFull[0].equalsIgnoreCase(when)) {
             return 0;
         }
         return 1;

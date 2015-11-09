@@ -173,7 +173,8 @@ public class BookAppointmentActivity extends Activity
     }
 
     public void showDatePicker(View view) {
-        Utility.datePicker(view, mTextViewDate, this);
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        Utility.datePicker(view, mTextViewDate, this, currentTime, -1, currentTime);
     }
 
     @Override
