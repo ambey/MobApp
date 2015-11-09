@@ -54,7 +54,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
             Utility.setCurrentTimeOnView(mlastTime);
         }
 
-        Intent intent = getIntent();
         mServiceProv = LoginHolder.servLoginRef;
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);

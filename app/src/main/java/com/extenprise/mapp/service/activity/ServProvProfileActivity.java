@@ -48,7 +48,6 @@ import android.widget.Toast;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -59,7 +58,6 @@ import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
-import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
@@ -127,6 +125,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         //workPlace.setSignInData(LoginHolder.servLoginRef.getPhone());
         workPlace = new WorkPlace();
         workPlace.getSignInData().setPhone(LoginHolder.servLoginRef.getPhone());
+
+        mWorkPlaceList = new ArrayList<>();
 
         mFormView = findViewById(R.id.updateServProvform);
         mProgressView = findViewById(R.id.progressView);
@@ -203,7 +203,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mImgView.setImageResource(R.drawable.medstore);
         }
 
-        if(sp.getImg() != null) {
+        if (sp.getImg() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
         }
         mFname.setText(sp.getfName());
@@ -336,7 +336,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.workDetailListView) {
+        if (v.getId() == R.id.workDetailListView) {
             menu.setHeaderTitle("Item Operations");
             menu.add(0, v.getId(), 0, "Edit");
             menu.add(0, v.getId(), 0, "Remove");
@@ -400,7 +400,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     public void editWorkPlaceInfo(View v) {
         boolean set = true;
         EditText nm = (EditText) v.findViewById(R.id.editTextName);
-        if(nm.isEnabled()) {
+        if (nm.isEnabled()) {
             set = false;
         }
         int[] editTxtIds = new int[]{
@@ -592,8 +592,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     ////////////////////////////////////////////////////////////////////////////
 
 
-
-
     /////////////////////////////Image Upload/////////////////////////////
 
     @Override
@@ -728,11 +726,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     ////////////////////////////////////////////////////////////////////////
 
 
-
-
-
     ///////////////////////////////Add New Work Place Details/////////////////////////////////
-
 
 
     public void addNewWorkPlace(View view) {
@@ -989,13 +983,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
     //////////////////////////////////////////Update Profile///////////////////////////////////
 
     public void updateProfile(View view) {
-        if(!isValidInput()) {
+        if (!isValidInput()) {
             return;
         }
         ServiceProvider sp = new ServiceProvider();
@@ -1006,7 +997,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         sp.setGender(mGenderBtn.getText().toString());
         sp.setRegNo(mRegNo.getText().toString());
 
-        for(WorkPlace wp: mWorkPlaceList) {
+        for (WorkPlace wp : mWorkPlaceList) {
             LoginHolder.servLoginRef.setQualification(wp.getQualification());
             //LoginHolder.servLoginRef.setGender(mGender.getSelectedItem().toString());
 
@@ -1061,7 +1052,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             cancel = true;
         }*/
         if (!TextUtils.isEmpty(mEmailID.getText().toString())) {
-            if (Validator.isValidEmaillId(mEmailID.getText().toString().trim())) {
+            if (!Validator.isValidEmaillId(mEmailID.getText().toString().trim())) {
                 mEmailID.setError(getString(R.string.error_invalid_email));
                 focusView = mEmailID;
                 cancel = true;
@@ -1073,7 +1064,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             focusView = mFemale;
             cancel = true;
         } else {
-            mGenderBtn = (RadioButton)findViewById(genderID);
+            mGenderBtn = (RadioButton) findViewById(genderID);
         }
 
         String regNo = mRegNo.getText().toString();
@@ -1185,10 +1176,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-
     //////////////////////////////////////////Connection & handler////////////////////////////////////
     public void performAction() {
         if (!AppStatus.getInstance(this).isOnline()) {
@@ -1217,10 +1204,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             Message msg = null;
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            if(mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
+            if (mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
                 bundle.putString("regno", mRegNo.getText().toString().trim());
                 bundle.putParcelable("service", LoginHolder.servLoginRef);
-            } else if(mServiceAction == MappService.DO_GET_SPECIALITY) {
+            } else if (mServiceAction == MappService.DO_GET_SPECIALITY) {
                 SearchServProvForm mForm = new SearchServProvForm();
                 mForm.setCategory(mServCatagory.getSelectedItem().toString());
                 bundle.putParcelable("form", mForm);
@@ -1247,34 +1234,34 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
     };
 
-        @Override
-        public boolean gotResponse(int action, Bundle data) {
-            switch (action) {
-                case MappService.ADD_WORK_PLACE:
-                    addWorkPlaceDone(data);
-                    break;
-                case MappService.REMOVE_WORK_PLACE:
-                    removeWorkPlaceDone(data);
-                    break;
-                case MappService.DO_UPDATE:
-                    updateDone(data);
-                    break;
-                case MappService.DO_REG_NO_CHECK:
-                    regNoCheckDone(data);
-                    break;
-                case MappService.DO_WORK_PLACE_LIST:
-                    getWorkPlaceListDone(data);
-                    break;
-                case MappService.DO_GET_SPECIALITY:
-                    getSpecialitiesDone(data);
-                default:
-                    return false;
-            }
-            return true;
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        switch (action) {
+            case MappService.ADD_WORK_PLACE:
+                addWorkPlaceDone(data);
+                break;
+            case MappService.REMOVE_WORK_PLACE:
+                removeWorkPlaceDone(data);
+                break;
+            case MappService.DO_UPDATE:
+                updateDone(data);
+                break;
+            case MappService.DO_REG_NO_CHECK:
+                regNoCheckDone(data);
+                break;
+            case MappService.DO_WORK_PLACE_LIST:
+                getWorkPlaceListDone(data);
+                break;
+            case MappService.DO_GET_SPECIALITY:
+                getSpecialitiesDone(data);
+            default:
+                return false;
         }
+        return true;
+    }
 
     public void regNoCheckDone(Bundle data) {
-        if(data.getBoolean("exists")) {
+        if (data.getBoolean("exists")) {
             mRegNo.setError("This Registration Number is already Registered.");
             mRegNo.requestFocus();
         }
@@ -1323,7 +1310,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private void getSpecialitiesDone(Bundle data) {
         ArrayList<String> list = data.getStringArrayList("specialities");
-        if(list == null) {
+        if (list == null) {
             list = new ArrayList<>();
         }
         list.add("Other");

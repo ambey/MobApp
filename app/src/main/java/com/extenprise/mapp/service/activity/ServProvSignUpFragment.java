@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -48,10 +45,6 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -135,10 +128,10 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             }
         });
 
-        String category = getActivity().getIntent().getStringExtra("category");
-        if(category.equals(R.string.medicalStore)) {
+        int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
+        if(category == R.string.medicalStore) {
             mImgView.setImageResource(R.drawable.medstore);
-        } else if(category.equals(R.string.diagnosticCenter)) {
+        } else if(category == R.string.diagnosticCenter) {
             mImgView.setImageResource(R.drawable.diagcenter);
         }
 

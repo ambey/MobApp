@@ -15,6 +15,9 @@ public class RxInboxItem implements Parcelable {
     private Rx rx;
     private ReportService reportService;
 
+    public RxInboxItem() {
+    }
+
     protected RxInboxItem(Parcel in) {
         servProv = in.readParcelable(ServProvListItem.class.getClassLoader());
         customer = in.readParcelable(Customer.class.getClassLoader());

@@ -97,6 +97,13 @@
             android:gravity="end" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/viewAvailable"
+        style="@style/MediumLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end" />
+
     <CheckBox
         android:id="@+id/checkboxAvailable"
         android:layout_width="wrap_content"

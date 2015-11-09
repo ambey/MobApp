@@ -10,11 +10,13 @@ import java.util.ArrayList;
  */
 public class Rx extends Report {
     private ArrayList<RxItem> items;
+    private int nextSrNo;
     private byte[] scannedCopy;
 
     public Rx() {
         setType("Prescription");
         items = new ArrayList<>();
+        nextSrNo = 1;
     }
 
     protected Rx(Parcel in) {
@@ -46,6 +48,23 @@ public class Rx extends Report {
             return new Rx[size];
         }
     };
+
+    public boolean isAllItemsAvailable() {
+        for(RxItem item : items) {
+            if(item.getAvailable() == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public int getNextSrNo() {
+        return nextSrNo;
+    }
+
+    public void setNextSrNo(int nextSrNo) {
+        this.nextSrNo = nextSrNo;
+    }
 
     public byte[] getScannedCopy() {
         return scannedCopy;

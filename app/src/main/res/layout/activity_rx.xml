@@ -9,20 +9,20 @@
     tools:context="com.extenprise.mapp.util.RxActivity">
 
     <TextView
-        android:id="@+id/fNameTextView"
+        android:id="@+id/rxForLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/first_name" />
+        android:text="@string/rx_for" />
 
     <TextView
-        android:id="@+id/lNameTextView"
+        android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/fNameTextView"
-        android:layout_toRightOf="@id/fNameTextView"
-        android:text="@string/last_name" />
+        android:layout_toEndOf="@id/rxForLbl"
+        android:layout_toRightOf="@id/rxForLbl"
+        android:text="@string/name" />
 
     <TextView
         android:id="@+id/dateTextView"
@@ -32,6 +32,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
+        android:visibility="gone"
         android:text="@string/date" />
 
     <ProgressBar
@@ -39,7 +40,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fNameTextView"
+        android:layout_below="@id/nameTextView"
         android:layout_marginTop="20dp"
         android:visibility="gone" />
 
@@ -47,7 +48,7 @@
         android:id="@+id/rxItemForm"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_below="@id/fNameTextView"
+        android:layout_below="@id/nameTextView"
         android:layout_marginTop="20dp">
 
         <RelativeLayout

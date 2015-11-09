@@ -19,6 +19,7 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.RxItemAvailability;
 import com.extenprise.mapp.service.ui.RxItemListAdapter;
+import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 
@@ -71,19 +72,25 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             servProvPhoneView = (TextView) findViewById(R.id.drPhoneView);
         }
 
-        Button sendAvailabilityButton = (Button)findViewById(R.id.buttonSendAvailability);
-        Button resendRxButton = (Button)findViewById(R.id.buttonResendRx);
-        if(feedback) {
+        Button sendAvailabilityButton = (Button) findViewById(R.id.buttonSendAvailability);
+        Button resendRxButton = (Button) findViewById(R.id.buttonResendRx);
+        if (feedback) {
             sendAvailabilityButton.setVisibility(View.GONE);
+            if (!mInboxItem.getRx().isAllItemsAvailable()) {
+                Utility.setEnabledButton(this, resendRxButton, false);
+            }
         } else {
             resendRxButton.setVisibility(View.GONE);
         }
         int status = mInboxItem.getReportService().getStatus();
-        if (ReportServiceStatus.STATUS_PENDING.ordinal() == status) {
+        if (ReportServiceStatus.STATUS_PENDING.ordinal() == status ||
+                ReportServiceStatus.STATUS_NEW.ordinal() == status) {
             status = ReportServiceStatus.STATUS_INPROCESS.ordinal();
         }
         statusView.setText(ReportServiceStatus.getStatusString(this, status));
-
+        if (feedback) {
+            statusView.setVisibility(View.GONE);
+        }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         dateView.setText(sdf.format(mInboxItem.getRx().getDate()));
@@ -97,8 +104,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
-        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInboxItem.getRx(), feedback);
+        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInboxItem, feedback);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(adapter);
     }
 
     public void sendAvailabilityFeedback(View view) {
@@ -120,7 +128,15 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 
+    public void resendRx(View view) {
+        Intent intent = getParentActivityIntent();
+        intent.putExtra("inboxItem", mInboxItem);
+        intent.putExtra("feedback", getIntent().getBooleanExtra("feedback", false));
+        startActivity(intent);
+    }
+
     private void sentAvailabilityFeedback() {
+        mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         Intent intent = getParentActivityIntent();
         startActivity(intent);
     }
@@ -131,6 +147,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         Intent intent = super.getParentActivityIntent();
         if (intent == null) {
             return null;
+        }
+        if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_NEW.ordinal()) {
+            mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_PENDING.ordinal());
         }
         intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));
         intent.putExtra("feedback", getIntent().getBooleanExtra("feedback", false));

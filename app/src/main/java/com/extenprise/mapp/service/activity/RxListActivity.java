@@ -1,6 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -58,5 +60,11 @@ public class RxListActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        return new Intent(this, ServiceProviderHomeActivity.class);
     }
 }

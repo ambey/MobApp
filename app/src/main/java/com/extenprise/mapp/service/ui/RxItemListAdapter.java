@@ -1,34 +1,39 @@
 package com.extenprise.mapp.service.ui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
+import com.extenprise.mapp.service.activity.RxActivity;
+import com.extenprise.mapp.service.activity.RxInboxItemDetailsActivity;
+import com.extenprise.mapp.service.data.RxInboxItem;
 
 /**
  * Created by ambey on 10/10/15.
  */
-public class RxItemListAdapter extends ArrayAdapter<RxItem> {
-    private Rx mRx;
+public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterView.OnItemClickListener {
+    private RxInboxItem mRxInboxItem;
     private boolean mFeedback;
 
-    public RxItemListAdapter(Context context, int resource, Rx rx, boolean feedback) {
+    public RxItemListAdapter(Context context, int resource, RxInboxItem rxInboxItem, boolean feedback) {
         super(context, resource);
-        mRx = rx;
+        mRxInboxItem = rxInboxItem;
         mFeedback = feedback;
     }
 
     @Override
     public int getCount() {
-        return mRx.getRxItemCount();
+        return mRxInboxItem.getRx().getRxItemCount();
     }
 
     @Override
@@ -50,17 +55,29 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> {
         TextView courseView = (TextView) v.findViewById(R.id.viewCourseDur);
 
         CheckBox availableCB = (CheckBox) v.findViewById(R.id.checkboxAvailable);
-        availableCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mRx.getItems().get(position).setAvailable(isChecked);
-            }
-        });
+        TextView availableView = (TextView) v.findViewById(R.id.viewAvailable);
+
+        final RxItem item = mRxInboxItem.getRx().getItems().get(position);
+
         if (mFeedback) {
-            availableCB.setChecked(mRx.getItems().get(position).isAvailable());
-            availableCB.setEnabled(false);
+            availableCB.setVisibility(View.GONE);
+            int resId = R.string.available;
+            int color = Color.GREEN;
+            if (item.getAvailable() == 0) {
+                resId = R.string.not_available;
+                color = Color.RED;
+            }
+            availableView.setText(resId);
+            availableView.setTextColor(color);
+        } else {
+            availableView.setVisibility(View.GONE);
+            availableCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    item.setAvailable(isChecked ? 1 : 0);
+                }
+            });
         }
-        RxItem item = mRx.getItems().get(position);
         nameView.setText(item.getDrugName().toUpperCase());
         strengthView.setText(item.getDrugStrength());
         kindView.setText(item.getDrugForm());
@@ -73,5 +90,19 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> {
         courseView.setText(String.format("%d %s", item.getCourseDur(), getContext().getString(R.string.days)));
 
         return v;
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if(!mFeedback) {
+            return;
+        }
+        Intent intent = new Intent(getContext(), RxActivity.class);
+        intent.putExtra("feedback", true);
+        intent.putExtra("parent-activity", RxInboxItemDetailsActivity.class.getName());
+        intent.putExtra("position", position);
+        intent.putExtra("inboxItem", mRxInboxItem);
+        getContext().startActivity(intent);
     }
 }

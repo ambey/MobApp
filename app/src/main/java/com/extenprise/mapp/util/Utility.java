@@ -369,7 +369,7 @@ public abstract class Utility {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String newSpec = txtSpec.getText().toString();
-                        ArrayList<String> specs = new ArrayList<String>();
+                        ArrayList<String> specs = new ArrayList<>();
                         specs.add(newSpec);
                         setNewSpec(activity, specs, speciality);
                     }
@@ -497,7 +497,7 @@ public abstract class Utility {
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         String date = sdf.format(c.getTime());
-        if(v != null) {
+        if (v != null) {
             v.setText(date);
         }
         return date;
@@ -506,9 +506,31 @@ public abstract class Utility {
     public static String setCurrentTimeOnView(TextView v) {
         Calendar c = Calendar.getInstance();
         String time = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
-        if(v != null) {
+        if (v != null) {
             v.setText(time);
         }
         return time;
+    }
+
+    public static int getDrugTypePosition(Context context, String drugType) {
+        String[] drugTypes = context.getResources().getStringArray(R.array.drug_type);
+        for (int i = 0; i < drugTypes.length; i++) {
+            if(drugTypes[i].equalsIgnoreCase(drugType)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public static int getEmptyOrFullPosition(Context context, boolean empty) {
+        String[] emptyOrFull = context.getResources().getStringArray(R.array.when);
+        String when = context.getResources().getString(R.string.before_meal);
+        if(! empty) {
+            when = context.getResources().getString(R.string.after_meal);
+        }
+        if(emptyOrFull[0].equalsIgnoreCase(when)) {
+            return 0;
+        }
+        return 1;
     }
 }

@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-<!--
     <string name="server_name">http://10.0.2.2:8080/mapp</string>
--->
+<!--
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
+-->
 
     <string name="by_exp">By Extenprise</string>
 
@@ -105,6 +105,7 @@
     <string name="exp_short">Exp.</string>
     <string name="clinic_name">Clinic Name</string>
     <string name="available">Available</string>
+    <string name="not_available">Not Available</string>
     <string name="unavailable">Unavailable</string>
     <string name="pincode">Pin Code *</string>
     <string name="rs_sign">\u20B9</string>
@@ -124,6 +125,8 @@
     <string name="scan_rx_now">Scan Rx Copy Now!</string>
     <string name="already_scanned">It\'s Already Scanned</string>
     <string name="rx_copy">Rx Copy</string>
+    <string name="rx_for">Rx For:</string>
+    <string name="run_by">Run By:</string>
 
     <string name="no_past_appont">No appointments found!</string>
     <string name="consult_fees">Consultation Fees</string>

@@ -3,12 +3,14 @@ package com.extenprise.mapp.service.activity;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 //import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +42,10 @@ public class ServProvSignUpActivity extends FragmentActivity {
         mPagerAdapter = new ServProvsignUpPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPager = (ViewPager) findViewById(R.id.signUpViewPager);
         mViewPager.setAdapter(mPagerAdapter);
+
+        Intent intent = getIntent();
+        String category = intent.getStringExtra("category");
+        Log.v(this.getClass().getName(), "category: " + category);
 
 /*
         TabLayout tabLayout = (TabLayout) findViewById(R.id.slidingTabs);

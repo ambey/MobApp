@@ -17,5 +17,6 @@
     <string name="error_phone_registered">This phone number is already registered.\nPlease Sign In.</string>
     <string name="error_invalid_experience">Invalid value entered for experience</string>
     <string name="error_no_items_found">No items here</string>
+    <string name="error_invalid_weight">Invalid weight entered</string>
 
 </resources>

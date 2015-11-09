@@ -1,41 +1,38 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RxActivity extends Activity implements ResponseHandler {
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
 
     private View mForm;
     private View mProgressBar;
@@ -60,7 +57,7 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     private String mParentActivity;
     private AppointmentListItem mAppont;
-    private int mAction;
+    private boolean mFeedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +67,18 @@ public class RxActivity extends Activity implements ResponseHandler {
         Intent intent = getIntent();
         mParentActivity = intent.getStringExtra("parent-activity");
         mAppont = intent.getParcelableExtra("appont");
+        mFeedback = intent.getBooleanExtra("feedback", false);
+        RxInboxItem rxInboxItem = intent.getParcelableExtra("inboxItem");
 
         mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);
 
-        TextView fName = (TextView) findViewById(R.id.fNameTextView);
-        TextView lName = (TextView) findViewById(R.id.lNameTextView);
-        TextView date = (TextView) findViewById(R.id.dateTextView);
+        Button addButton = (Button) findViewById(R.id.addButton);
+        if (mFeedback) {
+            addButton.setVisibility(View.GONE);
+        }
+        TextView name = (TextView) findViewById(R.id.nameTextView);
+        //TextView date = (TextView) findViewById(R.id.dateTextView);
         mSrNo = (TextView) findViewById(R.id.srNoTextView);
         mDrugName = (TextView) findViewById(R.id.drugEditText);
         mDrugStrength = (TextView) findViewById(R.id.drugStrengthEditText);
@@ -95,29 +97,31 @@ public class RxActivity extends Activity implements ResponseHandler {
         mAltDrugStrength = (TextView) findViewById(R.id.altDrugStrengthEditText);
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
 
-        fName.setText(mAppont.getFirstName());
-        lName.setText(mAppont.getLastName());
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        date.setText(sdf.format(mAppont.getDate()));
-
-        fillRx();
-/*
-        MappDbHelper dbHelper = new MappDbHelper(this);
-        mRx = DBUtil.getRx(dbHelper, mAppontId);
-        if(mRx == null) {
-            mRx = new Rx();
+        if (mFeedback) {
+            Customer c = rxInboxItem.getCustomer();
+            name.setText(String.format("%s %s", c.getfName(), c.getlName()));
+        } else {
+            name.setText(String.format("%s %s", mAppont.getFirstName(), mAppont.getLastName()));
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+            sdf.applyPattern("dd/MM/yyyy");
+            //date.setText(sdf.format(mAppont.getDate()));
         }
-        mSrNo.setText("" + (mRx.getRxItemCount() + 1));
-*/
 
+        fillRx(rxInboxItem);
     }
 
-    private void fillRx() {
+    private void fillRx(RxInboxItem rxInboxItem) {
+        if (mFeedback) {
+            int position = getIntent().getIntExtra("position", 0);
+            setupRxItemUI(rxInboxItem.getRx().getItems().get(position));
+            return;
+        }
         Utility.showProgress(this, mForm, mProgressBar, true);
-        mAction = MappService.DO_GET_RX;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mAppont);
+        mConnection.setAction(MappService.DO_GET_RX);
+        mConnection.setData(bundle);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -157,10 +161,23 @@ public class RxActivity extends Activity implements ResponseHandler {
     public void addRxItem(View view) {
         addRxItem();
         clearFields();
-        mSrNo.setText(String.format("%d",(mRx.getRxItemCount() + 1)));
+        mSrNo.setText(String.format("%d", (mRx.getRxItemCount() + 1)));
     }
 
     public void doneRx(View view) {
+        if (mFeedback) {
+            if (updateRxItem()) {
+                try {
+                    Intent intent = new Intent(this, Class.forName(mParentActivity));
+                    intent.putExtra("feedback", mFeedback);
+                    intent.putExtra("inboxItem", getIntent().getParcelableExtra("inboxItem"));
+                    startActivity(intent);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            return;
+        }
         if (addRxItem()) {
             addRxToDB();
         }
@@ -172,21 +189,40 @@ public class RxActivity extends Activity implements ResponseHandler {
             return;
         }
         Utility.showProgress(this, mForm, mProgressBar, true);
-        mAction = MappService.DO_SAVE_RX;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
-
-/*
-        RxDBTask task = new RxDBTask(this);
-        task.execute();
-*/
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("rx", mRx);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_SAVE_RX);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
-    private boolean addRxItem() {
-        if (!isValidInput()) {
-            return false;
+    private void setupRxItemUI(RxItem rxItem) {
+        mDrugName.setText(rxItem.getDrugName());
+        mDrugStrength.setText(rxItem.getDrugStrength());
+        mDrugForm.setSelection(Utility.getDrugTypePosition(this, rxItem.getDrugForm()));
+        mDoseQty.setText(rxItem.getDoseQty());
+        mCourseDur.setText(String.format("%d", rxItem.getCourseDur()));
+        mEmptyOrFull.setSelection(Utility.getEmptyOrFullPosition(this, rxItem.isBeforeMeal()));
+        mInTakeSteps.setText(rxItem.getInTakeSteps());
+        mAltDrugName.setText(rxItem.getAltDrugName());
+        mAltDrugStrength.setText(rxItem.getAltDrugStrength());
+        mAltDrugForm.setSelection(Utility.getDrugTypePosition(this, rxItem.getDrugForm()));
+
+        mMorning.setChecked(rxItem.isMorning());
+        mAfternnon.setChecked(rxItem.isAfternoon());
+        mEvening.setChecked(rxItem.isEvening());
+        if (rxItem.getmTime() != null) {
+            mMTime.setText(rxItem.getmTime());
         }
-        RxItem rxItem = new RxItem();
+        if (rxItem.getaTime() != null) {
+            mATime.setText(rxItem.getaTime());
+        }
+        if (rxItem.geteTime() != null) {
+            mETime.setText(rxItem.geteTime());
+        }
+    }
+
+    private void fillRxItem(RxItem rxItem) {
         rxItem.setDrugName(mDrugName.getText().toString());
         rxItem.setDrugStrength(mDrugStrength.getText().toString());
         rxItem.setDrugForm(mDrugForm.getSelectedItem().toString());
@@ -216,6 +252,28 @@ public class RxActivity extends Activity implements ResponseHandler {
         if (!mETime.getText().toString().equals(time)) {
             rxItem.seteTime(mETime.getText().toString());
         }
+    }
+
+    private boolean updateRxItem() {
+        if (!isValidInput()) {
+            return false;
+        }
+        RxInboxItem rxInboxItem = getIntent().getParcelableExtra("inboxItem");
+        int position = getIntent().getIntExtra("position", 0);
+        RxItem item = rxInboxItem.getRx().getItems().get(position);
+        fillRxItem(item);
+        return true;
+    }
+
+    private boolean addRxItem() {
+        if (!isValidInput()) {
+            return false;
+        }
+        RxItem rxItem = new RxItem();
+        fillRxItem(rxItem);
+        int srNo = mRx.getNextSrNo();
+        rxItem.setSrNo(srNo);
+        mRx.setNextSrNo(srNo + 1);
 
         mRx.addItem(rxItem);
         return true;
@@ -284,12 +342,11 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     private void gotRx(Bundle data) {
         mRx = data.getParcelable("rx");
-        if(mRx != null) {
-            mSrNo.setText(String.format("%d", mRx.getRxItemCount() + 1));
-        } else {
-            mSrNo.setText("1");
+        if (mRx == null) {
             mRx = new Rx();
         }
+        mSrNo.setText(String.format("%d", mRx.getNextSrNo()));
+
         Appointment a = mRx.getAppointment();
         a.setDate(mAppont.getDate());
         a.setIdServProvHasServPt(mAppont.getIdServProvHasServPt());
@@ -301,9 +358,9 @@ public class RxActivity extends Activity implements ResponseHandler {
     private void saveRxDone(Bundle data) {
         Utility.showProgress(this, mForm, mProgressBar, false);
         Rx rx = data.getParcelable("rx");
-        if(rx != null) {
+        if (rx != null) {
             mRx.setId(rx.getId());
-            Log.v("RxActivity","Saved Rx, id: " + mRx.getId());
+            Log.v("RxActivity", "Saved Rx, id: " + mRx.getId());
         }
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
         intent.putExtra("rx", mRx);
@@ -319,48 +376,15 @@ public class RxActivity extends Activity implements ResponseHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(action == MappService.DO_GET_RX) {
+        if (action == MappService.DO_GET_RX) {
             gotRx(data);
             return true;
-        } else if(action == MappService.DO_SAVE_RX) {
+        } else if (action == MappService.DO_SAVE_RX) {
             saveRxDone(data);
             return true;
         }
         return false;
     }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-
-            if(mAction == MappService.DO_GET_RX) {
-                bundle.putParcelable("form", mAppont);
-            } else if(mAction == MappService.DO_SAVE_RX) {
-                bundle.putParcelable("rx", mRx);
-            }
-            Message msg = Message.obtain(null, mAction);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
 
     @Nullable
     @Override
@@ -368,6 +392,8 @@ public class RxActivity extends Activity implements ResponseHandler {
         try {
             Intent intent = new Intent(this, Class.forName(mParentActivity));
             intent.putExtra("appont", mAppont);
+            intent.putExtra("feedback", mFeedback);
+            intent.putExtra("inboxItem", getIntent().getParcelableExtra("inboxItem"));
             return intent;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

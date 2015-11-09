@@ -123,7 +123,7 @@ public class BookAppointmentActivity extends Activity
         form.setDate(mSelectedDate);
         form.setTodayDate(todayDate);
         form.setTime(minutes);
-        bundle.putParcelable("form", bundle);
+        bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_APPONT_TIME_SLOTS);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);

@@ -77,7 +77,9 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         RxInboxItem item = rxList.get(position);
         int status = item.getReportService().getStatus();
         statusView.setText(ReportServiceStatus.getStatusString(getContext(), status));
-
+        if(feedback) {
+            statusView.setVisibility(View.GONE);
+        }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         dateView.setText(sdf.format(item.getRx().getDate()));

@@ -368,7 +368,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             return;
         }
         mServiceAction = MappService.DO_SIGNUP;
-        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }
     }
@@ -494,7 +494,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         String passwd1 = mEditTextPasswd.getText().toString().trim();
         String passwd2 = mEditTextConPasswd.getText().toString().trim();
         String dob = mTextViewDOB.getText().toString().trim();
-        String height = mEditTextHeight.getText().toString().trim();
         String weight = mEditTextWeight.getText().toString().trim();
         String loc = mEditTextLoc.getText().toString().trim();
         String pinCode = mEditTextPinCode.getText().toString().trim();
@@ -565,6 +564,18 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             mEditTextWeight.setError(getString(R.string.error_field_required));
             focusView = mEditTextWeight;
             valid = false;
+        } else {
+            double value = 0.0;
+            try {
+                value = Double.parseDouble(weight);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            if (value <= 0.0) {
+                mEditTextWeight.setError(getString(R.string.error_invalid_weight));
+                focusView = mEditTextWeight;
+                valid = false;
+            }
         }
         if (TextUtils.isEmpty(loc)) {
             mEditTextLoc.setError(getString(R.string.error_field_required));
@@ -590,12 +601,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     private void checkPhoneExistence() {
         mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
-        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }
     }
-
-
 
 
 }

@@ -1,12 +1,10 @@
 package com.extenprise.mapp.data;
 
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.extenprise.mapp.R;
-
 public class RxItem implements Parcelable {
+    private int srNo;
     private boolean saved;
     private String drugName;
     private String drugStrength;
@@ -24,12 +22,13 @@ public class RxItem implements Parcelable {
     private String altDrugName;
     private String altDrugStrength;
     private String altDrugForm;
-    private boolean available;
+    private int available;
 
     public RxItem() {
     }
 
     protected RxItem(Parcel in) {
+        srNo = in.readInt();
         saved = (in.readInt() > 0);
         drugName = in.readString();
         drugStrength = in.readString();
@@ -47,6 +46,7 @@ public class RxItem implements Parcelable {
         altDrugName = in.readString();
         altDrugStrength = in.readString();
         altDrugForm = in.readString();
+        available = in.readInt();
     }
 
     public static final Creator<RxItem> CREATOR = new Creator<RxItem>() {
@@ -60,6 +60,14 @@ public class RxItem implements Parcelable {
             return new RxItem[size];
         }
     };
+
+    public int getSrNo() {
+        return srNo;
+    }
+
+    public void setSrNo(int srNo) {
+        this.srNo = srNo;
+    }
 
     public boolean isSaved() {
         return saved;
@@ -197,11 +205,11 @@ public class RxItem implements Parcelable {
         this.altDrugForm = altDrugForm;
     }
 
-    public boolean isAvailable() {
+    public int getAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(int available) {
         this.available = available;
     }
 
@@ -225,6 +233,7 @@ public class RxItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(srNo);
         dest.writeInt(saved ? 1 : 0);
         dest.writeString(drugName);
         dest.writeString(drugStrength);
@@ -242,5 +251,6 @@ public class RxItem implements Parcelable {
         dest.writeString(altDrugName);
         dest.writeString(altDrugStrength);
         dest.writeString(altDrugForm);
+        dest.writeInt(available);
     }
 }

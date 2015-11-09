@@ -24,6 +24,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.ui.RxItemListAdapter;
 
 import java.text.SimpleDateFormat;
@@ -153,7 +154,9 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
     private void gotRx(Bundle data) {
         Rx rx = data.getParcelable("rx");
         ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
-        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, rx, false);
+        RxInboxItem inboxItem = new RxInboxItem();
+        inboxItem.setRx(rx);
+        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, inboxItem, false);
         rxItemsList.setAdapter(adapter);
     }
 
