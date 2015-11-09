@@ -92,6 +92,8 @@ public class ServProvDetailsActivity extends Activity {
         if(LoginHolder.custLoginRef == null) {
             intent = new Intent(this, LoginActivity.class);
             intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
+        } else {
+            intent.putExtra("customer", LoginHolder.custLoginRef);
         }
         intent.putExtra("servProv", mServProv);
         startActivity(intent);
