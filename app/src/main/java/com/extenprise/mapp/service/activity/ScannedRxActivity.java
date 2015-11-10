@@ -1,10 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,10 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,27 +21,27 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.util.Utility;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
-public class ScannedRxActivity extends Activity implements ResponseHandler{
+public class ScannedRxActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
-
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
     private AppointmentListItem mAppont;
     private Bitmap mRxCopy;
     private ImageView mRxView;
     private Uri mRxUri;
     private Intent mData;
-    private byte[] mBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +107,11 @@ public class ScannedRxActivity extends Activity implements ResponseHandler{
             if (mData != null) {
                 InputStream stream = getContentResolver().openInputStream(
                         mData.getData());
-                mRxCopy = BitmapFactory.decodeStream(stream);
-                mRxView.setImageBitmap(mRxCopy);
-                stream.close();
+                if(stream != null) {
+                    mRxCopy = BitmapFactory.decodeStream(stream);
+                    mRxView.setImageBitmap(mRxCopy);
+                    stream.close();
+                }
             } else {
                 Uri selectedImage = mRxUri;
                 getContentResolver().notifyChange(selectedImage, null);
@@ -179,46 +175,26 @@ public class ScannedRxActivity extends Activity implements ResponseHandler{
             if (requestCode == 1 || requestCode == 2) {
                 SaveBlobTask saveBlobTask = new SaveBlobTask(this, data);
                 saveBlobTask.execute();
+                displayScanCopy();
             }
         }
+    }
+
+    private void sendRxToMedStore(Bundle data) {
+        Rx rx = data.getParcelable("rx");
+        Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
+        intent.putExtra("rx", rx);
+        startActivity(intent);
     }
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        if(action == MappService.DO_SAVE_SCANNED_RX_COPY) {
-            displayScanCopy();
+        if (action == MappService.DO_SAVE_SCANNED_RX_COPY) {
+            //displayScanCopy();
+            sendRxToMedStore(data);
         }
         return false;
     }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-
-            bundle.putParcelable("form", mAppont);
-            Message msg = Message.obtain(null, MappService.DO_SAVE_SCANNED_RX_COPY);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
 
     private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
 
@@ -240,7 +216,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler{
             try {
                 if (path != null) {
                     RandomAccessFile raf = new RandomAccessFile(path, "r");
-                    mBytes = new byte[(int) raf.length()];
+                    byte[] mBytes = new byte[(int) raf.length()];
                     raf.readFully(mBytes);
                     raf.close();
                     mAppont.setRxCopy(mBytes);
@@ -263,9 +239,11 @@ public class ScannedRxActivity extends Activity implements ResponseHandler{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            //displayScanCopy(mData);
-            Intent intent = new Intent(mActivity, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("form", mAppont);
+            mConnection.setData(bundle);
+            mConnection.setAction(MappService.DO_SAVE_SCANNED_RX_COPY);
+            Utility.doServiceAction(ScannedRxActivity.this, mConnection, BIND_AUTO_CREATE);
         }
 
         @Override

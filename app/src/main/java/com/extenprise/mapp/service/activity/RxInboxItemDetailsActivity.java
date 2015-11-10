@@ -1,12 +1,16 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,8 +38,10 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_inbox_item_details);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         Intent intent = getIntent();
         mInbox = intent.getParcelableArrayListExtra("inbox");
         int position = intent.getIntExtra("position", 0);
@@ -109,6 +115,16 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
+        if(mInbox.get(position).getRx().getItems().size() == 0) {
+            listView.setVisibility(View.GONE);
+            ImageView imageView = (ImageView) findViewById(R.id.rxCopyImageView);
+            byte[] pix = mInbox.get(position).getRx().getScannedCopy();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
+            imageView.setImageBitmap(bitmap);
+            sendAvailabilityButton.setVisibility(View.GONE);
+            resendRxButton.setVisibility(View.GONE);
+            return;
+        }
         RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, position,
                 feedback ? RxFeedback.VIEW_FEEDBACK : RxFeedback.GIVE_FEEDBACK);
         listView.setAdapter(adapter);

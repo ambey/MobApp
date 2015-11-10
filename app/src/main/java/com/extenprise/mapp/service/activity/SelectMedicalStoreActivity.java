@@ -1,14 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +13,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.ReportServiceStatus;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.MedStoreRxForm;
@@ -31,12 +26,9 @@ import java.util.Date;
 
 public class SelectMedicalStoreActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
-
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
     private ListView mMedStoreList;
     private Rx mRx;
-    private int mAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +40,30 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         Intent intent = getIntent();
         mRx = intent.getParcelableExtra("rx");
 
-        mAction = MappService.DO_GET_MEDSTORE_LIST;
+        mConnection.setAction(MappService.DO_GET_MEDSTORE_LIST);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", mRx.getAppointment().getIdServProvHasServPt());
+        mConnection.setData(bundle);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     public void sendRxToMedStore(View view) {
-        mAction = MappService.DO_SEND_RX;
+        int position = ((MedStoreListAdapter)mMedStoreList.getAdapter()).getSelectedPos();
+        System.out.println("selected medstore pos: " + position);
+        if(position == -1) {
+            unbindService(mConnection);
+            return;
+        }
+        Bundle bundle = new Bundle();
+        ServProvListItem item = (ServProvListItem) mMedStoreList.getAdapter().getItem(position);
+        MedStoreRxForm form = new MedStoreRxForm();
+        form.setIdServProvHasServPt(item.getIdServProvHasServPt());
+        form.setIdRx(mRx.getId());
+        form.setDate(new Date());
+        form.setStatus(ReportServiceStatus.STATUS_NEW.ordinal());
+        bundle.putParcelable("form", form);
+        mConnection.setAction(MappService.DO_SEND_RX);
+        mConnection.setData(bundle);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
@@ -93,6 +103,7 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
+/*
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
@@ -134,6 +145,7 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
             mService = null;
         }
     };
+*/
 
     @Nullable
     @Override

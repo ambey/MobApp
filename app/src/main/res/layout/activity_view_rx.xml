@@ -33,12 +33,28 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/listRxItems"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="0.5" />
+        android:layout_weight="0.5">
+
+        <ListView
+            android:id="@+id/listRxItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/rxCopyImageView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/rx_copy" />
+        </ScrollView>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/buttonResendRx"

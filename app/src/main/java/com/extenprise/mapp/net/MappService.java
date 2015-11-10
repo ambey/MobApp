@@ -737,7 +737,9 @@ public class MappService extends Service {
                     }
                     rd.close();
 
-                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+                    GsonBuilder gsonBuilder = new GsonBuilder().registerTypeHierarchyAdapter(byte[].class, new ByteArrayToJSONAdapter());
+                    gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    Gson gson = gsonBuilder.create();
                     switch (mAction) {
                         case DO_LOGIN:
                         case DO_SIGNUP:
@@ -798,6 +800,9 @@ public class MappService extends Service {
                         case DO_GET_RX_FEEDBACK:
                             mInbox = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<RxInboxItem>>() {
                             }.getType());
+                            break;
+                        case DO_SAVE_SCANNED_RX_COPY:
+                            mRx = gson.fromJson(responseBuf.toString(), Rx.class);
                             break;
                     }
                     status = true;
