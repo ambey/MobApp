@@ -132,20 +132,21 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         if (viewMoreButton == null) {
             viewMoreButton = (Button) pastAppontLayout.findViewById(R.id.viewMoreButton);
         }
-        viewMoreButton.setVisibility(View.VISIBLE);
+        Button viewRxButton = (Button) pastAppontLayout.findViewById(R.id.viewRxButton);
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         if (mPastApponts != null && mPastApponts.size() > 0) {
             AppointmentListItem lastAppont = mPastApponts.get(mPastApponts.size() - 1);
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
             dateOthView.setText(sdf.format(lastAppont.getDate()));
+            Utility.setEnabledButton(this, viewRxButton, true, R.drawable.rect_button, R.color.LinkColor);
+            if(mPastApponts.size() > 1) {
+                Utility.setEnabledButton(this, viewMoreButton, true, R.drawable.rect_button, R.color.LinkColor);
+            }
         } else {
             pastAppontLayout.setVisibility(View.INVISIBLE);
             TextView msgView = (TextView) findViewById(R.id.viewMsg);
             msgView.setVisibility(View.VISIBLE);
-        }
-        if (mPastApponts == null || mPastApponts.size() <= 1) {
-            Utility.setEnabledButton(this, viewMoreButton, false);
         }
     }
 

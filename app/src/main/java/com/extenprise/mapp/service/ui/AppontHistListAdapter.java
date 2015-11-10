@@ -1,18 +1,16 @@
 package com.extenprise.mapp.service.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.data.Appointment;
-import com.extenprise.mapp.service.activity.ViewRxActivity;
 import com.extenprise.mapp.service.data.AppointmentListItem;
+import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +51,9 @@ public class AppontHistListAdapter extends ArrayAdapter<AppointmentListItem> {
         SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         dateView.setText(sdf.format(mList.get(position).getDate()));
-        idView.setText("" + position);
+        idView.setText(String.format("%d", position));
+        Button viewRxButton = (Button) v.findViewById(R.id.viewRxButton);
+        Utility.setEnabledButton(getContext(), viewRxButton, true, R.drawable.rect_button, R.color.LinkColor);
 
         return v;
     }
@@ -63,7 +63,7 @@ public class AppontHistListAdapter extends ArrayAdapter<AppointmentListItem> {
         try {
             return mList.get(position);
         } catch (Exception e) {
-            e.printStackTrace();;
+            e.printStackTrace();
         }
         return null;
     }

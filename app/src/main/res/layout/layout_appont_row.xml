@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -12,17 +11,18 @@
 
     <Button
         android:id="@+id/viewRxButton"
-        style="@style/LinkButton"
+        style="@style/InactiveLinkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:enabled="false"
         android:onClick="showRxDetails"
         android:text="@string/view_rx" />
 
     <Button
         android:id="@+id/viewReportButton"
-        style="@style/LinkButton"
+        style="@style/InactiveLinkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"

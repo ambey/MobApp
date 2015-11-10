@@ -13,13 +13,10 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -30,7 +27,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.GridLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,7 +46,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -355,6 +350,12 @@ public abstract class Utility {
             button.setBackgroundResource(R.drawable.inactive_button);
             button.setTextColor(context.getResources().getColor(R.color.PassiveColor));
         }
+    }
+
+    public static void setEnabledButton(Context context, Button button, boolean enabled, int background, int color) {
+        button.setEnabled(enabled);
+        button.setBackgroundResource(background);
+        button.setTextColor(context.getResources().getColor(color));
     }
 
     public static void showMessage(Context context, int msgId) {

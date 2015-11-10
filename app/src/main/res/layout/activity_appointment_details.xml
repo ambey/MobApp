@@ -67,13 +67,14 @@
 
     <Button
         android:id="@+id/viewMoreButton"
-        style="@style/LinkButton"
+        style="@style/InactiveLinkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/buttonLayout1"
         android:layout_marginTop="20dp"
+        android:enabled="false"
         android:onClick="showPatientHistory"
         android:text="@string/view_more" />
 

@@ -3,8 +3,6 @@ package com.extenprise.mapp.service.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.extenprise.mapp.util.ByteArrayToJSONAdapter;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,20 +29,23 @@ public class AppointmentListItem implements Parcelable {
     public AppointmentListItem() {
     }
 
-    public AppointmentListItem(Parcel source) {
-        String[] fields = new String[5];
-        source.readStringArray(fields);
-
-        int i = 0;
-        servProvPhone = fields[i++];
-        firstName = fields[i++];
-        lastName = fields[i++];
-        gender = fields[i++];
-        time = fields[i++];
-
+    protected AppointmentListItem(Parcel in) {
+        servProvPhone = in.readString();
+        idServProvHasServPt = in.readInt();
+        idCustomer = in.readInt();
+        firstName = in.readString();
+        lastName = in.readString();
+        gender = in.readString();
+        age = in.readInt();
+        weight = in.readFloat();
+        time = in.readString();
+        reportCount = in.readInt();
+        confirmed = in.readByte() != 0;
+        canceled = in.readByte() != 0;
+        rxCopy = in.createByteArray();
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        String dateStr = source.readString();
+        String dateStr = in.readString();
         if (!dateStr.equals("")) {
             try {
                 date = sdf.parse(dateStr);
@@ -52,19 +53,19 @@ public class AppointmentListItem implements Parcelable {
                 e.printStackTrace();
             }
         }
-        idServProvHasServPt = source.readInt();
-        idCustomer = source.readInt();
-        age = source.readInt();
-        weight = source.readFloat();
-        reportCount = source.readInt();
-        confirmed = source.readInt() > 0;
-        canceled = source.readInt() > 0;
-        int size = source.readInt();
-        if(size > 0) {
-            rxCopy = new byte[size];
-            source.readByteArray(rxCopy);
-        }
     }
+
+    public static final Creator<AppointmentListItem> CREATOR = new Creator<AppointmentListItem>() {
+        @Override
+        public AppointmentListItem createFromParcel(Parcel in) {
+            return new AppointmentListItem(in);
+        }
+
+        @Override
+        public AppointmentListItem[] newArray(int size) {
+            return new AppointmentListItem[size];
+        }
+    };
 
     public boolean isCanceled() {
         return canceled;
@@ -185,7 +186,19 @@ public class AppointmentListItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{servProvPhone, firstName, lastName, gender, time});
+        dest.writeString(servProvPhone);
+        dest.writeInt(idServProvHasServPt);
+        dest.writeInt(idCustomer);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(gender);
+        dest.writeInt(age);
+        dest.writeFloat(weight);
+        dest.writeString(time);
+        dest.writeInt(reportCount);
+        dest.writeByte((byte) (confirmed ? 1 : 0));
+        dest.writeByte((byte) (canceled ? 1 : 0));
+        dest.writeByteArray(rxCopy);
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         String dateStr = "";
@@ -193,33 +206,6 @@ public class AppointmentListItem implements Parcelable {
             dateStr = sdf.format(date);
         }
         dest.writeString(dateStr);
-        dest.writeInt(idServProvHasServPt);
-        dest.writeInt(idCustomer);
-        dest.writeInt(age);
-        dest.writeFloat(weight);
-        dest.writeInt(reportCount);
-        dest.writeInt(confirmed ? 1 : 0);
-        dest.writeInt(canceled ? 1 : 0);
-        int size = 0;
-        if(rxCopy != null) {
-            size = rxCopy.length;
-        }
-        dest.writeInt(size);
-        if(size > 0) {
-            dest.writeByteArray(rxCopy);
-        }
     }
 
-    public static final Creator<AppointmentListItem> CREATOR = new Creator<AppointmentListItem>() {
-
-        @Override
-        public AppointmentListItem createFromParcel(Parcel source) {
-            return new AppointmentListItem(source);
-        }
-
-        @Override
-        public AppointmentListItem[] newArray(int size) {
-            return new AppointmentListItem[size];
-        }
-    };
 }
