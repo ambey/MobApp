@@ -1,14 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,21 +13,23 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.Rx;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.ui.RxItemListAdapter;
+import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class ViewRxActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
-
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
     private String mParentActivity;
     private AppointmentListItem mOrigAppont;
     private AppointmentListItem mAppont;
@@ -59,6 +55,8 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
 
         Button feedbackButton = (Button) findViewById(R.id.buttonSendAvailability);
         feedbackButton.setVisibility(View.GONE);
+        Button resendRxButton = (Button) findViewById(R.id.buttonResendRx);
+        resendRxButton.setVisibility(View.GONE);
 
         Intent intent = getIntent();
 
@@ -81,6 +79,11 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
     }
 
     private void fillRxItems() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mAppont);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_GET_RX);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -114,7 +117,7 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
                 e.printStackTrace();
             }
         }
-        if(intent != null) {
+        if (intent != null) {
             intent.putExtra("appont", mOrigAppont);
             intent.putParcelableArrayListExtra("appontList", getIntent().getParcelableArrayListExtra("appontList"));
             intent.putExtra("parent-activity", getIntent().getParcelableExtra("super_parent_activity"));
@@ -122,41 +125,14 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         return intent;
     }
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-
-            bundle.putParcelable("form", mAppont);
-            Message msg = Message.obtain(null, MappService.DO_GET_RX);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
-
     private void gotRx(Bundle data) {
         Rx rx = data.getParcelable("rx");
         ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
+        ArrayList<RxInboxItem> rxList = new ArrayList<>();
         RxInboxItem inboxItem = new RxInboxItem();
         inboxItem.setRx(rx);
-        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, inboxItem, false);
+        rxList.add(inboxItem);
+        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, rxList, 0, RxFeedback.NONE);
         rxItemsList.setAdapter(adapter);
     }
 

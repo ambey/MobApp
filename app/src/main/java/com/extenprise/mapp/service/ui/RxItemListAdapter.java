@@ -13,27 +13,39 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.service.activity.RxActivity;
 import com.extenprise.mapp.service.activity.RxInboxItemDetailsActivity;
 import com.extenprise.mapp.service.data.RxInboxItem;
 
+import java.util.ArrayList;
+
 /**
  * Created by ambey on 10/10/15.
  */
 public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterView.OnItemClickListener {
+    private ArrayList<RxInboxItem> mInbox;
+    private int position;
     private RxInboxItem mRxInboxItem;
-    private boolean mFeedback;
+    private RxFeedback mFeedback;
 
-    public RxItemListAdapter(Context context, int resource, RxInboxItem rxInboxItem, boolean feedback) {
+    public RxItemListAdapter(Context context, int resource, ArrayList<RxInboxItem> rxInbox, int position, RxFeedback feedback) {
         super(context, resource);
-        mRxInboxItem = rxInboxItem;
+        mInbox = rxInbox;
+        this.position = position;
+        mRxInboxItem = rxInbox.get(position);
         mFeedback = feedback;
     }
 
     @Override
     public int getCount() {
-        return mRxInboxItem.getRx().getRxItemCount();
+        try {
+            return mRxInboxItem.getRx().getRxItemCount();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -59,7 +71,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
 
         final RxItem item = mRxInboxItem.getRx().getItems().get(position);
 
-        if (mFeedback) {
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
             availableCB.setVisibility(View.GONE);
             int resId = R.string.available;
             int color = Color.GREEN;
@@ -69,7 +81,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
             }
             availableView.setText(resId);
             availableView.setTextColor(color);
-        } else {
+        } else if(mFeedback == RxFeedback.GIVE_FEEDBACK){
             availableView.setVisibility(View.GONE);
             availableCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -77,6 +89,9 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
                     item.setAvailable(isChecked ? 1 : 0);
                 }
             });
+        } else {
+            availableCB.setVisibility(View.GONE);
+            availableView.setVisibility(View.GONE);
         }
         nameView.setText(item.getDrugName().toUpperCase());
         strengthView.setText(item.getDrugStrength());
@@ -95,14 +110,15 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(!mFeedback) {
+        if(mFeedback != RxFeedback.VIEW_FEEDBACK) {
             return;
         }
         Intent intent = new Intent(getContext(), RxActivity.class);
         intent.putExtra("feedback", true);
         intent.putExtra("parent-activity", RxInboxItemDetailsActivity.class.getName());
-        intent.putExtra("position", position);
-        intent.putExtra("inboxItem", mRxInboxItem);
+        intent.putExtra("position", this.position);
+        intent.putExtra("rxItemPos", position);
+        intent.putParcelableArrayListExtra("inbox", mInbox);
         getContext().startActivity(intent);
     }
 }

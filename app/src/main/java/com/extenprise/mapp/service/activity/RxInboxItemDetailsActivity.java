@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.ReportServiceStatus;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -22,9 +23,11 @@ import com.extenprise.mapp.service.ui.RxItemListAdapter;
 import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class RxInboxItemDetailsActivity extends Activity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private ArrayList<RxInboxItem> mInbox;
     private RxInboxItem mInboxItem;
 
     @Override
@@ -34,7 +37,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        mInboxItem = intent.getParcelableExtra("inboxItem");
+        mInbox = intent.getParcelableArrayListExtra("inbox");
+        int position = intent.getIntExtra("position", 0);
+        mInboxItem = mInbox.get(position);
         boolean feedback = intent.getBooleanExtra("feedback", false);
 
         View layoutAppont = findViewById(R.id.layoutAppont);
@@ -104,7 +109,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
-        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInboxItem, feedback);
+        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, position,
+                feedback ? RxFeedback.VIEW_FEEDBACK : RxFeedback.GIVE_FEEDBACK);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(adapter);
     }
@@ -130,8 +136,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     public void resendRx(View view) {
         Intent intent = getParentActivityIntent();
-        intent.putExtra("inboxItem", mInboxItem);
-        intent.putExtra("feedback", getIntent().getBooleanExtra("feedback", false));
+        if(intent == null) {
+            return;
+        }
         startActivity(intent);
     }
 
@@ -151,7 +158,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_NEW.ordinal()) {
             mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_PENDING.ordinal());
         }
-        intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));
+        intent.putParcelableArrayListExtra("inbox", mInbox);
         intent.putExtra("feedback", getIntent().getBooleanExtra("feedback", false));
         return intent;
     }

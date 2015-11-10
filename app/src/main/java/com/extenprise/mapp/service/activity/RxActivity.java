@@ -29,6 +29,7 @@ import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class RxActivity extends Activity implements ResponseHandler {
@@ -54,6 +55,7 @@ public class RxActivity extends Activity implements ResponseHandler {
     private TextView mAltDrugStrength;
     private Spinner mAltDrugForm;
     private Rx mRx;
+    private ArrayList<RxInboxItem> mInbox;
 
     private String mParentActivity;
     private AppointmentListItem mAppont;
@@ -68,15 +70,11 @@ public class RxActivity extends Activity implements ResponseHandler {
         mParentActivity = intent.getStringExtra("parent-activity");
         mAppont = intent.getParcelableExtra("appont");
         mFeedback = intent.getBooleanExtra("feedback", false);
-        RxInboxItem rxInboxItem = intent.getParcelableExtra("inboxItem");
 
         mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);
 
         Button addButton = (Button) findViewById(R.id.addButton);
-        if (mFeedback) {
-            addButton.setVisibility(View.GONE);
-        }
         TextView name = (TextView) findViewById(R.id.nameTextView);
         //TextView date = (TextView) findViewById(R.id.dateTextView);
         mSrNo = (TextView) findViewById(R.id.srNoTextView);
@@ -97,9 +95,14 @@ public class RxActivity extends Activity implements ResponseHandler {
         mAltDrugStrength = (TextView) findViewById(R.id.altDrugStrengthEditText);
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
 
+        RxInboxItem rxInboxItem = null;
         if (mFeedback) {
+            mInbox = intent.getParcelableArrayListExtra("inbox");
+            int position = intent.getIntExtra("position", 0);
+            rxInboxItem = mInbox.get(position);
             Customer c = rxInboxItem.getCustomer();
             name.setText(String.format("%s %s", c.getfName(), c.getlName()));
+            addButton.setVisibility(View.GONE);
         } else {
             name.setText(String.format("%s %s", mAppont.getFirstName(), mAppont.getLastName()));
             SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -112,7 +115,7 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     private void fillRx(RxInboxItem rxInboxItem) {
         if (mFeedback) {
-            int position = getIntent().getIntExtra("position", 0);
+            int position = getIntent().getIntExtra("rxItemPos", 0);
             setupRxItemUI(rxInboxItem.getRx().getItems().get(position));
             return;
         }
@@ -170,7 +173,8 @@ public class RxActivity extends Activity implements ResponseHandler {
                 try {
                     Intent intent = new Intent(this, Class.forName(mParentActivity));
                     intent.putExtra("feedback", mFeedback);
-                    intent.putExtra("inboxItem", getIntent().getParcelableExtra("inboxItem"));
+                    intent.putParcelableArrayListExtra("inbox", mInbox);
+                    intent.putExtra("position", getIntent().getIntExtra("position", 0));
                     startActivity(intent);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -258,9 +262,10 @@ public class RxActivity extends Activity implements ResponseHandler {
         if (!isValidInput()) {
             return false;
         }
-        RxInboxItem rxInboxItem = getIntent().getParcelableExtra("inboxItem");
         int position = getIntent().getIntExtra("position", 0);
-        RxItem item = rxInboxItem.getRx().getItems().get(position);
+        int rxItemPos = getIntent().getIntExtra("rxItemPos", 0);
+        RxInboxItem rxInboxItem = mInbox.get(position);
+        RxItem item = rxInboxItem.getRx().getItems().get(rxItemPos);
         fillRxItem(item);
         return true;
     }
@@ -393,7 +398,8 @@ public class RxActivity extends Activity implements ResponseHandler {
             Intent intent = new Intent(this, Class.forName(mParentActivity));
             intent.putExtra("appont", mAppont);
             intent.putExtra("feedback", mFeedback);
-            intent.putExtra("inboxItem", getIntent().getParcelableExtra("inboxItem"));
+            intent.putParcelableArrayListExtra("inbox", mInbox);
+            intent.putExtra("position", getIntent().getIntExtra("position", 0));
             return intent;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

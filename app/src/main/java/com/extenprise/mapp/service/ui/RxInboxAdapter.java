@@ -106,8 +106,8 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
-        intent.putExtra("inboxItem", rxList.get(position));
         intent.putParcelableArrayListExtra("inbox", rxList);
+        intent.putExtra("position", position);
         intent.putExtra("feedback", feedback);
         getContext().startActivity(intent);
     }
