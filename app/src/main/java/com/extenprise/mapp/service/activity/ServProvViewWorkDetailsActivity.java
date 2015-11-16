@@ -24,7 +24,7 @@ import com.extenprise.mapp.util.Utility;
 import java.util.Calendar;
 
 
-public class ServProvViewWorkDetails extends Activity {
+public class ServProvViewWorkDetailsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

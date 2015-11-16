@@ -35,7 +35,7 @@ import java.util.Date;
 public class BookAppointmentActivity extends Activity
         implements DateChangeListener, ResponseHandler {
 
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private Spinner mSpinnerTimeSlots;
     private TextView mTextViewDate;
@@ -191,11 +191,6 @@ public class BookAppointmentActivity extends Activity
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_APPONT_TIME_SLOTS) {
             gotTimeSlots(data);
             return true;

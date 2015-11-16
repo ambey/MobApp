@@ -1,41 +1,26 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.service.data.ServProvHasServPt;
-import com.extenprise.mapp.util.Utility;
 
-import java.util.Calendar;
 
-public class SearchResult extends Activity {
-
-    private ImageView mImageViewAvailable;
+public class ServProvWorkDetailListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result);
-
-        ServProvHasServPt spsspt = LoginHolder.spsspt;
-        mImageViewAvailable = (ImageView)findViewById(R.id.imageViewAvailability);
-
-        if(Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
-            mImageViewAvailable.setImageResource(R.drawable.g_circle);
-        } else {
-            mImageViewAvailable.setImageResource(R.drawable.r_circle);
-        }
+        setContentView(R.layout.activity_servprov_wrkdetail_list);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_search_result, menu);
+        getMenuInflater().inflate(R.menu.menu_serv_prov_work_detail_list, menu);
         return true;
     }
 

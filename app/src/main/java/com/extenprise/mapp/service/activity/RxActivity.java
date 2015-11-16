@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class RxActivity extends Activity implements ResponseHandler {
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private View mForm;
     private View mProgressBar;
@@ -364,8 +364,8 @@ public class RxActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mForm, mProgressBar, false);
         Rx rx = data.getParcelable("rx");
         if (rx != null) {
-            mRx.setId(rx.getId());
-            Log.v("RxActivity", "Saved Rx, id: " + mRx.getId());
+            mRx.setIdReport(rx.getIdReport());
+            Log.v("RxActivity", "Saved Rx, id: " + mRx.getIdReport());
         }
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
         intent.putExtra("rx", mRx);
@@ -376,11 +376,6 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_GET_RX) {
             gotRx(data);
             return true;

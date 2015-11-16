@@ -18,7 +18,8 @@ public class MappServiceConnection implements ServiceConnection {
     private Bundle data;
 
     public MappServiceConnection(ServiceResponseHandler responseHandler) {
-        this.respHandler = responseHandler;
+        respHandler = responseHandler;
+        respHandler.setConnection(this);
     }
 
     public void setAction(int action) {

@@ -1,5 +1,6 @@
 package com.extenprise.mapp.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,7 +31,7 @@ import com.extenprise.mapp.util.Utility;
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
 
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private int mLoginType;
 
@@ -43,11 +44,10 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        try {
-            getActionBar().setDisplayHomeAsUpEnabled(false);
-            getActionBar().hide();
-        }catch (NullPointerException e) {
-            e.printStackTrace();
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.hide();
         }
         textLabel = (TextView) findViewById(R.id.textViewlogo);
         imgLogo = (ImageView) findViewById(R.id.imageViewLogo);

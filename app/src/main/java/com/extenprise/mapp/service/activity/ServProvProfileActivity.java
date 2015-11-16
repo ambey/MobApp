@@ -1,13 +1,12 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,10 +14,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -48,8 +43,8 @@ import android.widget.Toast;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.SearchServProvForm;
@@ -63,9 +58,7 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,8 +66,8 @@ import java.util.Calendar;
 
 public class ServProvProfileActivity extends Activity implements ResponseHandler {
 
-    private int mServiceAction;
-    private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
+
     private ArrayList<WorkPlace> mWorkPlaceList;
     private WorkPlace workPlace;
 
@@ -120,7 +113,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serv_prov_profile_main);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         //workPlace.setSignInData(LoginHolder.servLoginRef.getPhone());
         workPlace = new WorkPlace();
@@ -164,8 +160,13 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mServiceAction = MappService.DO_REG_NO_CHECK;
-                    performAction();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putString("regno", mRegNo.getText().toString().trim());
+                    bundle.putParcelable("service", LoginHolder.servLoginRef);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.DO_REG_NO_CHECK);
+                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
                 }
             }
         });
@@ -219,8 +220,12 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
 
         //Get work place list from server
-        mServiceAction = MappService.DO_WORK_PLACE_LIST;
-        performAction();
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        bundle.putParcelable("workPlace", workPlace);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_WORK_PLACE_LIST);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
 
         /*Intent intent = getIntent();
         //mWorkPlaceList = intent.getParcelableArrayListExtra("workPlaceList");
@@ -355,9 +360,13 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             //adapter.removeItem(adapter.getItem(position));
             //adapter.remove(item);
             //item.getActionView().setVisibility(View.GONE);
-            mServiceAction = MappService.REMOVE_WORK_PLACE;
             workPlace = mWorkPlaceList.get(item.getItemId());
-            performAction();
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            bundle.putParcelable("workPlace", workPlace);
+            mConnection.setData(bundle);
+            mConnection.setAction(MappService.REMOVE_WORK_PLACE);
+            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
             //adapter.notifyDataSetChanged();
             return true;
         }
@@ -659,6 +668,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     // Get the cursor
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
+                    if (cursor == null) {
+                        return;
+                    }
                     // Move to first row
                     cursor.moveToFirst();
 
@@ -692,8 +704,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                                 .getExternalStorageDirectory()
                                 + File.separator
                                 + "Phoenix" + File.separator + "default";
-                        f.delete();
-                        OutputStream fOut = null;
+                        if (f.delete()) {
+                            Log.v(this.getClass().getName(), "File delete successful");
+                        }
+                        OutputStream fOut;
                         File file = new File(path, String.valueOf(System
                                 .currentTimeMillis()) + ".jpg");
                         try {
@@ -701,10 +715,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                             bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
                             fOut.flush();
                             fOut.close();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -782,8 +792,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 /*String servCategory = mServCatagory.getSelectedItem().toString();
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);*/
-                mServiceAction = MappService.DO_GET_SPECIALITY;
-                performAction();
+                Bundle bundle = new Bundle();
+                bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                SearchServProvForm mForm = new SearchServProvForm();
+                mForm.setCategory(mServCatagory.getSelectedItem().toString());
+                bundle.putParcelable("form", mForm);
+                mConnection.setData(bundle);
+                mConnection.setAction(MappService.DO_GET_SPECIALITY);
+                Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
             }
 
             @Override
@@ -850,8 +866,12 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     wpt.setQualification(mQualification.getText().toString().trim());
 
                     workPlace = wpt;
-                    mServiceAction = MappService.ADD_WORK_PLACE;
-                    performAction();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putParcelable("workPlace", workPlace);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.ADD_WORK_PLACE);
+                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
                     dialog.dismiss();
                 }
             }
@@ -1025,8 +1045,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
 
         LoginHolder.servLoginRef = sp;
-        mServiceAction = MappService.DO_UPDATE;
-        performAction();
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        bundle.putString("regno", mRegNo.getText().toString().trim());
+        bundle.putParcelable("service", LoginHolder.servLoginRef);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_UPDATE);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+
         /*SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);*/
     }
@@ -1177,19 +1203,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
 
     //////////////////////////////////////////Connection & handler////////////////////////////////////
-    public void performAction() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
-    }
 
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
+/*
     private ServiceConnection mConnection = new ServiceConnection() {
 
         private Messenger mService;
@@ -1233,7 +1251,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mBound = false;
         }
     };
-
+*/
     @Override
     public boolean gotResponse(int action, Bundle data) {
         switch (action) {

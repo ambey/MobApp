@@ -1,20 +1,14 @@
 package com.extenprise.mapp.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
@@ -43,6 +37,7 @@ import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.activity.MedicalStoreHomeActivity;
@@ -55,7 +50,6 @@ import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -64,8 +58,7 @@ import java.util.List;
  */
 public class LoginActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
     private SignInData mSignInData;
 
@@ -321,6 +314,11 @@ public class LoginActivity extends Activity implements ResponseHandler {
     }
 
     private void processLogin() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", mLoginType);
+        bundle.putParcelable("signInData", mSignInData);
+        mConnection.setAction(MappService.DO_LOGIN);
+        mConnection.setData(bundle);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mLoginFormView, mProgressView, true);
         }
@@ -335,11 +333,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_LOGIN) {
             loginDone(data);
             return true;
@@ -421,35 +414,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
             mPasswordView.requestFocus();
         }
     }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", mLoginType);
-            bundle.putParcelable("signInData", mSignInData);
-            Message msg = Message.obtain(null, MappService.DO_LOGIN);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
 
 }
 

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class ViewRxActivity extends Activity implements ResponseHandler {
 
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private String mParentActivity;
     private AppointmentListItem mOrigAppont;
     private AppointmentListItem mAppont;
@@ -138,11 +138,6 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_GET_RX) {
             gotRx(data);
             return true;

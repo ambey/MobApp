@@ -12,12 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.ReportServiceStatus;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -29,20 +27,18 @@ import com.extenprise.mapp.util.Utility;
 import java.util.ArrayList;
 
 public class ServiceProviderHomeActivity extends Activity implements ResponseHandler {
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ServiceProvider mServiceProv;
     private Boolean exit = false;
-    private TextView mlastDate;
-    private TextView mlastTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
-        mlastDate = (TextView) findViewById(R.id.textViewDate);
-        mlastTime = (TextView) findViewById(R.id.textViewTime);
+        TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
+        TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
         SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
         Boolean saveVisit = prefs.getBoolean("saveVisit", false);
@@ -154,11 +150,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_GET_RX_FEEDBACK) {
             gotRxInbox(data);
             return true;

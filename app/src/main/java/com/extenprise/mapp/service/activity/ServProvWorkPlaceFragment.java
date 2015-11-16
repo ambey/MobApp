@@ -2,39 +2,30 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
@@ -45,13 +36,11 @@ import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
-import java.util.ArrayList;
-
 /**
  * Created by ambey on 10/9/15.
  */
 public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler {
-    private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
 
     private View mRootview;
     private EditText mName;
@@ -517,9 +506,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public void saveData() {
 
         Utility.showProgress(getActivity(), mFormView, mProgressView, true);
-        Intent intent = new Intent(getActivity(), MappService.class);
-        getActivity().bindService(intent, mConnection, getActivity().BIND_AUTO_CREATE);
-
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        bundle.putParcelable("service", LoginHolder.servLoginRef);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_SIGNUP);
+        Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE);
 /*
         SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);
@@ -533,9 +525,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
     }
 
-    /**
+/*
+    */
+/**
      * Defines callbacks for service binding, passed to bindService()
-     */
+     *//*
+
     private ServiceConnection mConnection = new ServiceConnection() {
 
         private Messenger mService;
@@ -566,4 +561,5 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             mBound = false;
         }
     };
+*/
 }

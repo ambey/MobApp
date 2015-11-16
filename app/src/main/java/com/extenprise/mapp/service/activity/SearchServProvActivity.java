@@ -1,14 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +21,7 @@ import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.SearchServProvForm;
@@ -39,9 +34,7 @@ import java.util.ArrayList;
 
 public class SearchServProvActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
-    private int mAction;
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private EditText mDrClinicName;
     private Spinner mSpeciality;
@@ -65,7 +58,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
         mDrClinicName = (EditText) findViewById(R.id.editTextSearchDr);
         mSpeciality = (Spinner) findViewById(R.id.editTextSearchSp);
-        mServProvCategory = (Spinner)findViewById(R.id.spinServiceProvCategory);
+        mServProvCategory = (Spinner) findViewById(R.id.spinServiceProvCategory);
         mLocation = (EditText) findViewById(R.id.editTextSearchLoc);
         mSearchFormView = findViewById(R.id.search_form);
         mProgressView = findViewById(R.id.search_progress);
@@ -75,6 +68,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 getSpeciality();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
@@ -91,14 +85,18 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
             Utility.showMessage(this, R.string.error_not_online);
             return;
         }
-        mAction = MappService.DO_GET_SPECIALITY;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Bundle bundle = new Bundle();
+        mForm = new SearchServProvForm();
+        mForm.setCategory(mServProvCategory.getSelectedItem().toString());
+        bundle.putParcelable("form", mForm);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_GET_SPECIALITY);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotSpecialities(Bundle data) {
         specList = data.getStringArrayList("specialities");
-        if(specList == null) {
+        if (specList == null) {
             specList = new ArrayList<>();
         }
         SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
@@ -178,28 +176,28 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
         String sp = "";
-        if(mSpeciality.getSelectedItem() != null) {
+        if (mSpeciality.getSelectedItem() != null) {
             sp = mSpeciality.getSelectedItem().toString();
         }
-        if(sp.equals(getResources().getString(R.string.select_speciality)) ||
+        if (sp.equals(getResources().getString(R.string.select_speciality)) ||
                 sp.equals(getResources().getString(R.string.other))) {
             sp = "";
         }
         String sc = "";
-        if(mServProvCategory.getSelectedItem() != null) {
+        if (mServProvCategory.getSelectedItem() != null) {
             sc = mServProvCategory.getSelectedItem().toString();
         }
-        if(sc.equals(getResources().getString(R.string.select_category))) {
+        if (sc.equals(getResources().getString(R.string.select_category))) {
             sc = "";
         }
 
         String dr = name, clinic = name;
 
-        if(!name.equals("")) {
-            if(name.contains(",")) {
+        if (!name.equals("")) {
+            if (name.contains(",")) {
                 String[] str = name.split(",");
                 dr = str[0];
-                if(str.length > 1) {
+                if (str.length > 1) {
                     clinic = str[1].trim();
                 }
             }
@@ -218,11 +216,13 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         if (AppStatus.getInstance(this).isOnline()) {
             //Toast.makeText(this, "You are online!!!!", Toast.LENGTH_LONG).show();
             Utility.showProgress(this, mSearchFormView, mProgressView, true);
-            mAction = MappService.DO_SEARCH_SERV_PROV;
-            Intent intent = new Intent(this, MappService.class);
-            bindService(intent, mConnection, BIND_AUTO_CREATE);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("form", mForm);
+            mConnection.setData(bundle);
+            mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
+            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
         } else {
-            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
             Log.v("Home", "############################You are not online!!!!");
         }
 
@@ -288,49 +288,12 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         }
     }
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-            if(mAction == MappService.DO_GET_SPECIALITY) {
-                mForm = new SearchServProvForm();
-                mForm.setCategory(mServProvCategory.getSelectedItem().toString());
-            }
-            bundle.putParcelable("form", mForm);
-            Message msg = Message.obtain(null, mAction);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
-
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(action == MappService.DO_SEARCH_SERV_PROV) {
+        if (action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
             return true;
-        } else if(action == MappService.DO_GET_SPECIALITY) {
+        } else if (action == MappService.DO_GET_SPECIALITY) {
             gotSpecialities(data);
             return true;
         }

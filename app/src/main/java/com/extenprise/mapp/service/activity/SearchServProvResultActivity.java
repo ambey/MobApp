@@ -1,45 +1,32 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
-import com.extenprise.mapp.service.data.ServProvListItem;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.ui.ServProvListAdapter;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class SearchServProvResultActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ArrayList<ServProvListItem> mServProvList;
-    private ServProvListItem mSelectedItem;
     private View mProgressView;
     private View mSearchResultView;
 
@@ -98,10 +85,12 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
             Utility.showMessage(this, R.string.error_not_online);
             return;
         }
-        mSelectedItem = mServProvList.get(position);
+        ServProvListItem mSelectedItem = mServProvList.get(position);
         Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
-        Intent intent = new Intent(view.getContext(), MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mSelectedItem);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_SERV_PROV_DETAILS);
     }
 
     public void gotDetails(Bundle data) {
@@ -112,41 +101,8 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         startActivity(intent);
     }
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("form", mSelectedItem);
-            Message msg = Message.obtain(null, MappService.DO_SERV_PROV_DETAILS);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
-
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if(action == MappService.DO_SERV_PROV_DETAILS) {
             gotDetails(data);
             return true;

@@ -36,7 +36,7 @@ import java.io.RandomAccessFile;
 
 public class ScannedRxActivity extends Activity implements ResponseHandler {
 
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private AppointmentListItem mAppont;
     private Bitmap mRxCopy;
     private ImageView mRxView;
@@ -173,7 +173,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1 || requestCode == 2) {
-                SaveBlobTask saveBlobTask = new SaveBlobTask(this, data);
+                SaveBlobTask saveBlobTask = new SaveBlobTask(data);
                 saveBlobTask.execute();
                 displayScanCopy();
             }
@@ -198,11 +198,8 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
 
     private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
 
-        private Activity mActivity;
-
-        public SaveBlobTask(Activity activity, Intent data) {
+        public SaveBlobTask(Intent data) {
             mData = data;
-            mActivity = activity;
         }
 
         @Override

@@ -12,9 +12,10 @@ import java.util.Date;
  */
 public class Report implements Parcelable {
     private Date date;
-    private String type;
-    private int id;
+    private String reportType;
+    private int idReport;
     private Appointment appointment;
+    private byte[] scannedCopy;
 
     public Report() {
         appointment = new Appointment();
@@ -28,9 +29,10 @@ public class Report implements Parcelable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        type = in.readString();
-        id = in.readInt();
+        reportType = in.readString();
+        idReport = in.readInt();
         appointment = in.readParcelable(Appointment.class.getClassLoader());
+        scannedCopy = in.createByteArray();
     }
 
     public static final Creator<Report> CREATOR = new Creator<Report>() {
@@ -53,20 +55,20 @@ public class Report implements Parcelable {
         this.date = date;
     }
 
-    public String getType() {
-        return type;
+    public String getReportType() {
+        return reportType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
     }
 
-    public int getId() {
-        return id;
+    public int getIdReport() {
+        return idReport;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdReport(int idReport) {
+        this.idReport = idReport;
     }
 
     public Appointment getAppointment() {
@@ -75,6 +77,14 @@ public class Report implements Parcelable {
 
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
+    }
+
+    public byte[] getScannedCopy() {
+        return scannedCopy;
+    }
+
+    public void setScannedCopy(byte[] scannedCopy) {
+        this.scannedCopy = scannedCopy;
     }
 
     @Override
@@ -89,12 +99,13 @@ public class Report implements Parcelable {
             SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
             sdf.applyPattern("dd/MM/yyyy");
             dateStr = sdf.format(date);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         dest.writeString(dateStr);
-        dest.writeString(type);
-        dest.writeInt(id);
+        dest.writeString(reportType);
+        dest.writeInt(idReport);
         dest.writeParcelable(appointment, flags);
+        dest.writeByteArray(scannedCopy);
     }
 }

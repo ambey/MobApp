@@ -1,12 +1,10 @@
 package com.extenprise.mapp.customer.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,13 +12,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,10 +28,10 @@ import android.widget.TextView;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.util.EncryptUtil;
-import com.extenprise.mapp.util.UploadImage;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
@@ -50,8 +45,7 @@ import java.util.Date;
 
 public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
-    private int mServiceAction;
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private LinearLayout mContLay;
     private LinearLayout mAddrLayout;
@@ -84,7 +78,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_sign_up);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
@@ -289,6 +286,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
                     // Get the cursor
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
+                    if (cursor == null) {
+                        return;
+                    }
                     // Move to first row
                     cursor.moveToFirst();
 
@@ -322,8 +322,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
                                 .getExternalStorageDirectory()
                                 + File.separator
                                 + "Phoenix" + File.separator + "default";
-                        f.delete();
-                        OutputStream fOut = null;
+                        if (f.delete()) {
+                            Log.v(this.getClass().getName(), "File delete successful");
+                        }
+                        OutputStream fOut;
                         File file = new File(path, String.valueOf(System
                                 .currentTimeMillis()) + ".jpg");
                         try {
@@ -367,7 +369,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         if (!isValidInput()) {
             return;
         }
-        mServiceAction = MappService.DO_SIGNUP;
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+        bundle.putParcelable("customer", getSignUpData(MappService.DO_SIGNUP));
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_SIGNUP);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }
@@ -376,6 +382,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
+/*
     private ServiceConnection mConnection = new ServiceConnection() {
         private Messenger mService;
 
@@ -406,14 +413,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
             mService = null;
         }
     };
-
+*/
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_SIGNUP) {
             signUpDone(data);
             return true;
@@ -440,10 +442,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
-    private Customer getSignUpData() {
+    private Customer getSignUpData(int action) {
         Customer c = new Customer();
         c.getSignInData().setPhone(mEditTextCellphone.getText().toString().trim());
-        if (mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
+        if (action == MappService.DO_PHONE_EXIST_CHECK) {
             return c;
         }
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
@@ -600,7 +602,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     }
 
     private void checkPhoneExistence() {
-        mServiceAction = MappService.DO_PHONE_EXIST_CHECK;
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+        bundle.putParcelable("signInData", getSignUpData(MappService.DO_PHONE_EXIST_CHECK).getSignInData());
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_PHONE_EXIST_CHECK);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }

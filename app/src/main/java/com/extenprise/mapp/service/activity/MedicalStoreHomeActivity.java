@@ -22,8 +22,8 @@ import com.extenprise.mapp.util.Utility;
 import java.util.ArrayList;
 
 
-public class MedicalStoreHomeActivity extends Activity implements ResponseHandler{
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+public class MedicalStoreHomeActivity extends Activity implements ResponseHandler {
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ServiceProvider mServProv;
 
@@ -42,7 +42,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imageMedstore);
-        if(mServProv.getImg() != null) {
+        if (mServProv.getImg() != null) {
             img.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getImg()));
         }
     }
@@ -87,11 +87,6 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_GET_RX_INBOX) {
             gotRxInbox(data);
             return true;
@@ -100,7 +95,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     }
 
     public void viewProfile(View view) {
-        Intent intent = new Intent(this, ServProvViewProfile.class);
+        Intent intent = new Intent(this, ServProvViewProfileActivity.class);
         intent.putExtra("service", mServProv);
         startActivity(intent);
     }

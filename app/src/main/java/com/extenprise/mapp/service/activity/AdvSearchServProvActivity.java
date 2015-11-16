@@ -1,19 +1,13 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,13 +19,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.SearchServProvForm;
@@ -42,9 +35,8 @@ import java.util.Calendar;
 
 public class AdvSearchServProvActivity extends Activity implements ResponseHandler {
 
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private SearchServProvForm mForm;
-    private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
-    private int mAction;
     ArrayList<String> specList;
 
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
@@ -71,7 +63,10 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adv_search_serv_prov);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mDrClinicName = (EditText) findViewById(R.id.editSearchDr);
         mSpeciality = (Spinner) findViewById(R.id.viewSpeciality);
@@ -92,7 +87,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mForm = getIntent().getParcelableExtra("form");
 
         specList = getIntent().getStringArrayListExtra("specList");
-        if(specList == null) {
+        if (specList == null) {
             specList = new ArrayList<>();
         }
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
@@ -318,12 +313,12 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
     public void searchDr(View view) {
 
-        View focusView = null;
+        View focusView;
 
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
         String sp = "";
-        if(mSpeciality.getSelectedItem() != null) {
+        if (mSpeciality.getSelectedItem() != null) {
             sp = mSpeciality.getSelectedItem().toString();
         }
         if (sp.equals("Select Speciality") || sp.equals("Other")) {
@@ -334,7 +329,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             sc = "";
         }
 
-        String dr = name, clinic = name;
+        String clinic = name;
 
         String qualification = mQualification.getText().toString().trim();
         String gender = mGender.getSelectedItem().toString();
@@ -371,7 +366,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         if (!name.equals("")) {
             if (name.contains(",")) {
                 String[] str = name.trim().split(",");
-                dr = str[0];
                 if (str.length > 1) {
                     clinic = str[1];
                 }
@@ -396,10 +390,11 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             return;
         }
         Utility.showProgress(this, mSearchFormView, mProgressView, true);
-        mAction = MappService.DO_SEARCH_SERV_PROV;
-        Intent intent = new Intent(this, MappService.class);
-        intent.putExtra("form", mForm);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mForm);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
@@ -412,14 +407,19 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             Utility.showMessage(this, R.string.error_not_online);
             return;
         }
-        mAction = MappService.DO_GET_SPECIALITY;
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        mForm = new SearchServProvForm();
+        mForm.setCategory(mServProvCategory.getSelectedItem().toString());
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mForm);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_GET_SPECIALITY);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
+/*
     private ServiceConnection mConnection = new ServiceConnection() {
 
         private Messenger mService;
@@ -450,18 +450,13 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             mService = null;
         }
     };
-
+*/
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(action == MappService.DO_SEARCH_SERV_PROV) {
+        if (action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
             return true;
-        } else if(action == MappService.DO_GET_SPECIALITY) {
+        } else if (action == MappService.DO_GET_SPECIALITY) {
             gotSpecialities(data);
             return true;
         }
@@ -470,7 +465,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
     private void gotSpecialities(Bundle data) {
         ArrayList<String> list = data.getStringArrayList("specialities");
-        if(list == null) {
+        if (list == null) {
             list = new ArrayList<>();
         }
         SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);

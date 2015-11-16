@@ -15,7 +15,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.Report;
 import com.extenprise.mapp.data.ReportServiceStatus;
+import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
@@ -30,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class RxInboxItemDetailsActivity extends Activity implements ResponseHandler {
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ArrayList<RxInboxItem> mInbox;
     private RxInboxItem mInboxItem;
 
@@ -115,14 +117,16 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
-        if(mInbox.get(position).getRx().getItems().size() == 0) {
-            listView.setVisibility(View.GONE);
-            ImageView imageView = (ImageView) findViewById(R.id.rxCopyImageView);
-            byte[] pix = mInbox.get(position).getRx().getScannedCopy();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
-            imageView.setImageBitmap(bitmap);
+        Rx rx = mInbox.get(position).getRx();
+        if(rx.getItems().size() == 0) {
             sendAvailabilityButton.setVisibility(View.GONE);
             resendRxButton.setVisibility(View.GONE);
+            listView.setVisibility(View.GONE);
+            mConnection.setAction(MappService.DO_GET_RX_SCANNED_COPY);
+            Bundle bundle = new Bundle();
+            bundle.putInt("idRx", rx.getIdReport());
+            mConnection.setData(bundle);
+            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
             return;
         }
         RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, position,
@@ -164,6 +168,17 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         startActivity(intent);
     }
 
+    private void gotRxScannedCopy(Bundle data) {
+        ImageView imageView = (ImageView) findViewById(R.id.rxCopyImageView);
+        Report report = data.getParcelable("report");
+        if(report == null) {
+            return;
+        }
+        byte[] pix = report.getScannedCopy();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
+        imageView.setImageBitmap(bitmap);
+    }
+
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
@@ -183,6 +198,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_SEND_AVAILABILITY) {
             sentAvailabilityFeedback();
+            return true;
+        } else if(action == MappService.DO_GET_RX_SCANNED_COPY) {
+            gotRxScannedCopy(data);
             return true;
         }
         return false;

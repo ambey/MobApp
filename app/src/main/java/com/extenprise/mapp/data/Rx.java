@@ -11,10 +11,9 @@ import java.util.ArrayList;
 public class Rx extends Report {
     private ArrayList<RxItem> items;
     private int nextSrNo;
-    private byte[] scannedCopy;
 
     public Rx() {
-        setType("Prescription");
+        setReportType("Prescription");
         items = new ArrayList<>();
         nextSrNo = 1;
     }
@@ -22,14 +21,12 @@ public class Rx extends Report {
     protected Rx(Parcel in) {
         super(in);
         items = in.createTypedArrayList(RxItem.CREATOR);
-        scannedCopy = in.createByteArray();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeTypedList(items);
-        dest.writeByteArray(scannedCopy);
     }
 
     @Override
@@ -64,14 +61,6 @@ public class Rx extends Report {
 
     public void setNextSrNo(int nextSrNo) {
         this.nextSrNo = nextSrNo;
-    }
-
-    public byte[] getScannedCopy() {
-        return scannedCopy;
-    }
-
-    public void setScannedCopy(byte[] scannedCopy) {
-        this.scannedCopy = scannedCopy;
     }
 
     public ArrayList<RxItem> getItems() {

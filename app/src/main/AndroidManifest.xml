@@ -100,9 +100,6 @@
                 android:value=".service.activity.SearchServProvActivity" />
         </activity>
         <activity
-            android:name=".service.activity.SearchResult"
-            android:label="@string/title_activity_search_result" />
-        <activity
             android:name=".service.activity.ServProvDetailsActivity"
             android:label="@string/title_activity_doctor_details"
             android:parentActivityName=".service.activity.SearchServProvResultActivity" >
@@ -170,14 +167,6 @@
                 android:value=".service.activity.ServiceProviderHomeActivity" />
         </activity>
         <activity
-            android:name=".service.activity.ViewAppointment"
-            android:label="@string/title_activity_view_appointment"
-            android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.ServiceProviderHomeActivity" />
-        </activity>
-        <activity
             android:name=".customer.activity.PatientSignUpActivity"
             android:label="@string/title_activity_customer_sign_up"
             android:parentActivityName=".activity.SignUpPreviousActivity" >
@@ -225,19 +214,19 @@
             android:label="@string/title_activity_first_flipper" >
         </activity>
         <activity
-            android:name=".service.activity.ServProvViewProfile"
+            android:name=".service.activity.ServProvViewProfileActivity"
             android:label="@string/title_activity_view_profile_main" >
         </activity>
         <activity
-            android:name=".service.activity.ServProvBasicInfo"
+            android:name=".service.activity.ServProvBasicInfoActivity"
             android:label="@string/title_activity_view_profile_basic_info" >
         </activity>
         <activity
-            android:name=".service.activity.ServProvViewWorkDetails"
+            android:name=".service.activity.ServProvViewWorkDetailsActivity"
             android:label="@string/title_activity_view_profile_work_detail" >
         </activity>
         <activity
-            android:name=".service.activity.ServProvWorkDetailList"
+            android:name=".service.activity.ServProvWorkDetailListActivity"
             android:label="@string/title_activity_serv_prov_work_detail_list" >
         </activity>
         <activity

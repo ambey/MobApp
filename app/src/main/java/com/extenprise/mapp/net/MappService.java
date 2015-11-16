@@ -14,6 +14,7 @@ import android.util.Log;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
+import com.extenprise.mapp.data.Report;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.data.AppointmentListItem;
@@ -71,6 +72,7 @@ public class MappService extends Service {
     public static final int DO_GET_RX_INBOX = 23;
     public static final int DO_SEND_AVAILABILITY = 24;
     public static final int DO_GET_RX_FEEDBACK = 25;
+    public static final int DO_GET_RX_SCANNED_COPY = 26;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -475,6 +477,23 @@ public class MappService extends Service {
         task.execute((Void) null);
     }
 
+    public void doGetRxCopy(Message msg) {
+        Bundle data = msg.getData();
+        Report report = new Report();
+        report.setIdReport(data.getInt("idRx"));
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(report));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
     private void onError(int action) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("status", false);
@@ -577,6 +596,9 @@ public class MappService extends Service {
             case DO_GET_RX_FEEDBACK:
                 urlId = R.string.action_get_rx_feedback;
                 break;
+            case DO_GET_RX_SCANNED_COPY:
+                urlId = R.string.action_get_rx_copy;
+                break;
             default:
                 return null;
         }
@@ -666,6 +688,9 @@ public class MappService extends Service {
                 case DO_SEND_AVAILABILITY:
                     mService.doSendAvailability(msg);
                     break;
+                case DO_GET_RX_SCANNED_COPY:
+                    mService.doGetRxCopy(msg);
+                    break;
                 default:
                     super.handleMessage(msg);
             }
@@ -689,6 +714,7 @@ public class MappService extends Service {
         private ArrayList<RxInboxItem> mInbox;
         private Appointment mForm;
         private Rx mRx;
+        private Report mReport;
 
         public MappAsyncTask(URL url, String data) {
             mUrl = url;
@@ -804,6 +830,9 @@ public class MappService extends Service {
                         case DO_SAVE_SCANNED_RX_COPY:
                             mRx = gson.fromJson(responseBuf.toString(), Rx.class);
                             break;
+                        case DO_GET_RX_SCANNED_COPY:
+                            mReport = gson.fromJson(responseBuf.toString(), Report.class);
+                            break;
                     }
                     status = true;
                 }
@@ -852,7 +881,10 @@ public class MappService extends Service {
             }
             if (mRx != null) {
                 bundle.putParcelable("rx", mRx);
-                Log.v("MappService", "Rx id: " + mRx.getId());
+                Log.v("MappService", "Rx id: " + mRx.getIdReport());
+            }
+            if(mReport != null) {
+                bundle.putParcelable("report", mReport);
             }
             if (mInbox != null) {
                 bundle.putParcelableArrayList("inbox", mInbox);

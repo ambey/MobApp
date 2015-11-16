@@ -16,12 +16,11 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.Utility;
 
 
-public class ServProvViewProfile extends Activity {
+public class ServProvViewProfileActivity extends Activity {
 
     TextView mDocName;
     EditText mFname, mLname, mQualification, mExp;
@@ -50,12 +49,12 @@ public class ServProvViewProfile extends Activity {
     }
 
     public void viewBasicInfo(View view) {
-        Intent intent = new Intent(this, ServProvBasicInfo.class);
+        Intent intent = new Intent(this, ServProvBasicInfoActivity.class);
         startActivity(intent);
     }
 
     public void viewWorkDetails(View view) {
-        Intent intent = new Intent(this, ServProvViewWorkDetails.class);
+        Intent intent = new Intent(this, ServProvViewWorkDetailsActivity.class);
         startActivity(intent);
     }
 

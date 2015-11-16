@@ -1,5 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import java.util.Date;
 
 public class SelectMedicalStoreActivity extends Activity implements ResponseHandler {
 
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this));
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ListView mMedStoreList;
     private Rx mRx;
 
@@ -34,7 +35,10 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_medical_store);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mMedStoreList = (ListView) findViewById(R.id.medStoreListView);
         Intent intent = getIntent();
@@ -58,7 +62,7 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         ServProvListItem item = (ServProvListItem) mMedStoreList.getAdapter().getItem(position);
         MedStoreRxForm form = new MedStoreRxForm();
         form.setIdServProvHasServPt(item.getIdServProvHasServPt());
-        form.setIdRx(mRx.getId());
+        form.setIdRx(mRx.getIdReport());
         form.setDate(new Date());
         form.setStatus(ReportServiceStatus.STATUS_NEW.ordinal());
         bundle.putParcelable("form", form);
@@ -85,11 +89,6 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_GET_MEDSTORE_LIST) {
             gotMedStoreList(data);
             return true;
@@ -99,53 +98,6 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         }
         return false;
     }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-/*
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-
-            if (mAction == MappService.DO_SEND_RX) {
-                int position = ((MedStoreListAdapter)mMedStoreList.getAdapter()).getSelectedPos();
-                System.out.println("selected medstore pos: " + position);
-                if(position == -1) {
-                    unbindService(this);
-                    return;
-                }
-                ServProvListItem item = (ServProvListItem) mMedStoreList.getAdapter().getItem(position);
-                MedStoreRxForm form = new MedStoreRxForm();
-                form.setIdServProvHasServPt(item.getIdServProvHasServPt());
-                form.setIdRx(mRx.getId());
-                form.setDate(new Date());
-                form.setStatus(ReportServiceStatus.STATUS_NEW.ordinal());
-                bundle.putParcelable("form", form);
-            } else if (mAction == MappService.DO_GET_MEDSTORE_LIST) {
-                bundle.putInt("id", mRx.getAppointment().getIdServProvHasServPt());
-            }
-            Message msg = Message.obtain(null, mAction);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
-*/
 
     @Nullable
     @Override

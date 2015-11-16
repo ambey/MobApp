@@ -29,4 +29,5 @@
     <string name="action_get_rx_inbox">service/GetRxInbox.action</string>
     <string name="action_send_availability_feedback">service/SendAvailability.action</string>
     <string name="action_get_rx_feedback">service/GetRxFeedback.action</string>
+    <string name="action_get_rx_copy">service/GetRxCopy.action</string>
 </resources>

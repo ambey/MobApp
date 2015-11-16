@@ -18,7 +18,7 @@ import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.util.Utility;
 
 
-public class ServProvBasicInfo extends Activity {
+public class ServProvBasicInfoActivity extends Activity {
 
     EditText mMobNo, mEmailID, mRegNo;
     Spinner mGender;

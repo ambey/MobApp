@@ -1,21 +1,15 @@
 package com.extenprise.mapp.service.activity;
 
-import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,6 +30,7 @@ import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -53,9 +48,8 @@ import java.util.Locale;
  * Created by ambey on 10/9/15.
  */
 public class ServProvSignUpFragment extends Fragment implements TitleFragment, ResponseHandler {
-    private ServiceResponseHandler mResponseHandler = new ServiceResponseHandler(this);
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
 
-    private int check;
     private View mRootView;
     private EditText mFirstName;
     private EditText mLastName;
@@ -102,9 +96,8 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(!TextUtils.isEmpty(mCellphoneview.getText().toString().trim())) {
-                        check = MappService.DO_PHONE_EXIST_CHECK;
-                        checkExistence();
+                    if (!TextUtils.isEmpty(mCellphoneview.getText().toString().trim())) {
+                        checkExistence(MappService.DO_PHONE_EXIST_CHECK);
                     }
                 }
             }
@@ -121,17 +114,16 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     if (!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
-                        check = MappService.DO_REG_NO_CHECK;
-                        checkExistence();
+                        checkExistence(MappService.DO_REG_NO_CHECK);
                     }
                 }
             }
         });
 
         int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
-        if(category == R.string.medicalStore) {
+        if (category == R.string.medicalStore) {
             mImgView.setImageResource(R.drawable.medstore);
-        } else if(category == R.string.diagnosticCenter) {
+        } else if (category == R.string.diagnosticCenter) {
             mImgView.setImageResource(R.drawable.diagcenter);
         }
 
@@ -397,16 +389,27 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
-    private void checkExistence() {
+    private void checkExistence(int check) {
         if (!AppStatus.getInstance(getActivity()).isOnline()) {
             Utility.showMessage(getActivity(), R.string.error_not_online);
             return;
         }
         Utility.showProgress(getActivity(), mFormView, mProgressView, true);
-        Intent intent = new Intent(getActivity(), MappService.class);
-        getActivity().bindService(intent, mConnection, FragmentActivity.BIND_AUTO_CREATE);
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        if (check == MappService.DO_REG_NO_CHECK) {
+            bundle.putString("regno", mRegistrationNumber.getText().toString().trim());
+        } else if (check == MappService.DO_PHONE_EXIST_CHECK) {
+            SignInData data = new SignInData();
+            data.setPhone(mCellphoneview.getText().toString().trim());
+            bundle.putParcelable("signInData", data);
+        }
+        mConnection.setData(bundle);
+        mConnection.setAction(check);
+        Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE);
     }
 
+/*
     private ServiceConnection mConnection = new ServiceConnection() {
 
         private Messenger mService;
@@ -427,12 +430,14 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 bundle.putParcelable("signInData", data);
                 msg = Message.obtain(null, MappService.DO_PHONE_EXIST_CHECK);
             }
+*/
 /*
             bundle.putString("phone", mCellphoneview.getText().toString().trim());
             bundle.putString("regno", mRegistrationNumber.getText().toString().trim());
             bundle.putParcelable("service", LoginHolder.servLoginRef);
             Message msg = Message.obtain(null, MappService.DO_SIGNUP);
-*/
+*//*
+
             msg.replyTo = new Messenger(mResponseHandler);
             msg.setData(bundle);
 
@@ -448,33 +453,26 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             mService = null;
         }
     };
+*/
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            getActivity().unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (action == MappService.DO_PHONE_EXIST_CHECK) {
-            checkDone(data);
-            return true;
-        }
-        if (action == MappService.DO_REG_NO_CHECK) {
-            checkDone(data);
+        if (action == MappService.DO_PHONE_EXIST_CHECK ||
+                action == MappService.DO_REG_NO_CHECK) {
+            checkDone(action, data);
             return true;
         }
         return false;
     }
 
-    public void checkDone(Bundle data) {
+    public void checkDone(int check, Bundle data) {
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
         if (!data.getBoolean("status")) {
-            if(check == MappService.DO_REG_NO_CHECK) {
+            if (check == MappService.DO_REG_NO_CHECK) {
                 mRegistrationNumber.setError("This Registration Number is already Registered.");
                 mRegistrationNumber.requestFocus();
             }
-            if(check == MappService.DO_PHONE_EXIST_CHECK) {
+            if (check == MappService.DO_PHONE_EXIST_CHECK) {
                 mCellphoneview.setError(getString(R.string.error_phone_registered));
                 mCellphoneview.requestFocus();
             }

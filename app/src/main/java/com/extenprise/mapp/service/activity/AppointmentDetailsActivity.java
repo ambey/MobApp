@@ -1,14 +1,8 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +14,7 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientHistoryActivity;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.AppointmentListItem;
@@ -34,9 +29,7 @@ import java.util.Date;
 
 public class AppointmentDetailsActivity extends Activity implements ResponseHandler {
 
-    private Messenger mService;
-    private ServiceResponseHandler mRespHandler = new ServiceResponseHandler(this);
-    private int mAction;
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private AppointmentListItem mAppont;
     private ServiceProvider mServProv;
@@ -140,7 +133,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
             dateOthView.setText(sdf.format(lastAppont.getDate()));
             Utility.setEnabledButton(this, viewRxButton, true, R.drawable.rect_button, R.color.LinkColor);
-            if(mPastApponts.size() > 1) {
+            if (mPastApponts.size() > 1) {
                 Utility.setEnabledButton(this, viewMoreButton, true, R.drawable.rect_button, R.color.LinkColor);
             }
         } else {
@@ -151,8 +144,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void fillPastAppointements() {
-        mAction = MappService.DO_PAST_APPONT_LIST;
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        doAppontAction(MappService.DO_PAST_APPONT_LIST);
     }
 
     @Override
@@ -177,14 +169,20 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         return super.onOptionsItemSelected(item);
     }
 
-    public void confirmAppointment(View view) {
-        mAction = MappService.DO_CONFIRM_APPONT;
+    private void doAppontAction(int action) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mAppont);
+        mConnection.setData(bundle);
+        mConnection.setAction(action);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
+    public void confirmAppointment(View view) {
+        doAppontAction(MappService.DO_CONFIRM_APPONT);
+    }
+
     public void cancelAppointment(View view) {
-        mAction = MappService.DO_CANCEL_APPONT;
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        doAppontAction(MappService.DO_CANCEL_APPONT);
     }
 
     public void showRxActivity(View view) {
@@ -217,42 +215,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         startActivity(intent);
     }
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-
-            bundle.putParcelable("form", mAppont);
-            Message msg = Message.obtain(null, mAction);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
-
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_PAST_APPONT_LIST) {
             gotPastAppointments(data);
             return true;
