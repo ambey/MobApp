@@ -36,9 +36,6 @@ import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
-/**
- * Created by ambey on 10/9/15.
- */
 public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
 
@@ -59,7 +56,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     //private Spinner mWeeklyOff;
     private Spinner mServPtType;
     private Spinner mServCatagory;
-    private int hour, minute;
 
     private View mFormView;
     private View mProgressView;
@@ -77,7 +73,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.activity_add_workplace, container, false);
-        Bundle args = getArguments();
         LoginHolder.spsspt = new ServProvHasServPt();
 
         mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);
@@ -124,7 +119,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String spec = mSpeciality.getSelectedItem().toString();
                 if (spec.equals("Other")) {
-                        openSpecDialog();
+                    openSpecDialog();
                 }
             }
 
@@ -151,6 +146,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void showtimeFields(View view) {
+        Log.v(this.getClass().getName(), "view: " + view.toString() + "workhrsLayout: " + mLayoutWorkHrs);
         if (mLayoutWorkHrs.getVisibility() == View.VISIBLE) {
             Utility.collapse(mLayoutWorkHrs);
         } else {
@@ -159,6 +155,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void showFeeFields(View view) {
+        Log.v(this.getClass().getName(), "view: " + view.toString() + "consult Fee: " + mConsultFee);
         TextView rupeeSign = (TextView) mRootview.findViewById(R.id.viewRsSign);
         if (mConsultFee.getVisibility() == View.VISIBLE) {
             mConsultFee.setVisibility(View.GONE);
@@ -170,6 +167,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void showDaysFields(View view) {
+        Log.v(this.getClass().getName(), "view: " + view.toString() + "Days: " + mMultiSpinnerDays);
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
             mMultiSpinnerDays.setVisibility(View.GONE);
         } else {
@@ -354,7 +352,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         clearWorkPlace();
         int count = LoginHolder.servLoginRef.getServiceCount() + 1;
         TextView countView = (TextView) mRootview.findViewById(R.id.viewWorkPlaceCount);
-        countView.setText("#" + count);
+        countView.setText(String.format("#%d", count));
         return true;
     }
 
@@ -492,8 +490,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         //mWeeklyOff.setSelected(false);
         mServPtType.setSelected(false);
         mConsultFee.setText("");
-        mMultiSpinnerDays.setText("Select Days");
-
+        mMultiSpinnerDays.setText(getString(R.string.select_days));
     }
 
     public void registerDone(View view) {
@@ -528,8 +525,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 /*
     */
 /**
-     * Defines callbacks for service binding, passed to bindService()
-     *//*
+ * Defines callbacks for service binding, passed to bindService()
+ *//*
 
     private ServiceConnection mConnection = new ServiceConnection() {
 

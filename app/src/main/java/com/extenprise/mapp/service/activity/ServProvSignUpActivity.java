@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-//import android.support.design.widget.TabLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -14,20 +12,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//import android.support.design.widget.TabLayout;
+
 public class ServProvSignUpActivity extends FragmentActivity {
 
-    private ServProvsignUpPagerAdapter mPagerAdapter;
+    private ServProvSignUpPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
-
-    private RelativeLayout mRelLayout2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +35,13 @@ public class ServProvSignUpActivity extends FragmentActivity {
         fragments.add(Fragment.instantiate(this, ServProvSignUpFragment.class.getName(), fragmentBundle));
         fragments.add(Fragment.instantiate(this, ServProvWorkPlaceFragment.class.getName(), fragmentBundle));
 
-        mPagerAdapter = new ServProvsignUpPagerAdapter(getSupportFragmentManager(), fragments);
+        mPagerAdapter = new ServProvSignUpPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPager = (ViewPager) findViewById(R.id.signUpViewPager);
         mViewPager.setAdapter(mPagerAdapter);
 
         Intent intent = getIntent();
-        String category = intent.getStringExtra("category");
-        Log.v(this.getClass().getName(), "category: " + category);
+        int category = intent.getIntExtra("category", R.string.practitionar);
+        Log.v(this.getClass().getName(), "category: " + getString(category));
 
 /*
         TabLayout tabLayout = (TabLayout) findViewById(R.id.slidingTabs);
@@ -55,10 +51,9 @@ public class ServProvSignUpActivity extends FragmentActivity {
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                try {
-                    getActionBar().setSelectedNavigationItem(position);
-                } catch (NullPointerException x) {
-                    x.printStackTrace();
+                ActionBar actionBar = getActionBar();
+                if (actionBar != null) {
+                    actionBar.setSelectedNavigationItem(position);
                 }
             }
         });
@@ -66,38 +61,33 @@ public class ServProvSignUpActivity extends FragmentActivity {
         final ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        }
 
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            @Override
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
+            ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+                @Override
+                public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                    mViewPager.setCurrentItem(tab.getPosition());
+                }
 
-            @Override
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                @Override
+                public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
-            }
+                }
 
-            @Override
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                @Override
+                public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
-            }
-        };
+                }
+            };
 
-        try {
             actionBar.addTab(actionBar.newTab().setTabListener(tabListener));
             actionBar.addTab(actionBar.newTab().setTabListener(tabListener));
-
-        } catch (NullPointerException x) {
-            x.printStackTrace();
         }
     }
 
     public boolean isValidInput() {
         List<Fragment> fragments = mPagerAdapter.getFragments();
-        ServProvSignUpFragment f1 = (ServProvSignUpFragment)fragments.get(0);
-        ServProvWorkPlaceFragment f2 = (ServProvWorkPlaceFragment)fragments.get(1);
+        ServProvSignUpFragment f1 = (ServProvSignUpFragment) fragments.get(0);
+        ServProvWorkPlaceFragment f2 = (ServProvWorkPlaceFragment) fragments.get(1);
         return (f1.isValidInput(mViewPager) && f2.isValidInput());
     }
 
@@ -354,53 +344,53 @@ public class ServProvSignUpActivity extends FragmentActivity {
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.onPrepareDialog(id, dialog);
     }
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         return fragment.onCreateDialog(id);
     }
 
     public void showtimeFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showtimeFields(view);
     }
 
     public void showFeeFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showFeeFields(view);
     }
 
     public void showDaysFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showDaysFields(view);
     }
 
     public void showWorkFields(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showWorkFields(view);
     }
 
     public void showStartTimePicker(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showStartTimePicker(view);
     }
 
     public void showEndTimePicker(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showEndTimePicker(view);
     }
 
     public void addNewWorkPlace(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.addNewWorkPlace(view);
     }
 
     public void registerDone(View view) {
-        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment)mPagerAdapter.getItem(1);
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.registerDone(view);
     }
 }

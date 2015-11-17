@@ -29,8 +29,10 @@ public class ServProvDetailsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serv_prov_details);
 
+/*
         View formView = findViewById(R.id.bookAppointmentForm);
         View progressView = findViewById(R.id.progressView);
+*/
 
         Intent intent = getIntent();
         mServProv = intent.getParcelableExtra("service");
@@ -43,23 +45,25 @@ public class ServProvDetailsActivity extends Activity {
         ImageView imageViewAvailable = (ImageView) findViewById(R.id.imageViewAvailable);
 
         TextView textViewFees = (TextView) findViewById(R.id.textviewFees);
+/*
         TextView textViewReviews = (TextView) findViewById(R.id.textviewReviews);
+*/
         TextView textViewDocQualification = (TextView) findViewById(R.id.textviewDocQualification);
 
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         textViewClinic.setText(spsspt.getServicePoint().getName());
-        textViewDocExperience.setText("" + spsspt.getExperience());
-        textViewClinicTime.setText(Utility.getTimeString(spsspt.getStartTime()) + " to "
-                + Utility.getTimeString(spsspt.getEndTime()));
-        textViewDocname.setText(mServProv.getfName() + " " + mServProv.getlName());
-        textViewDocSpeciality.setText("(" + spsspt.getService().getSpeciality() + ")");
+        textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));
+        textViewClinicTime.setText(String.format("%s to %s",
+                Utility.getTimeString(spsspt.getStartTime()), Utility.getTimeString(spsspt.getEndTime())));
+        textViewDocname.setText(String.format("%s %s", mServProv.getfName(), mServProv.getlName()));
+        textViewDocSpeciality.setText(String.format("(%s)", spsspt.getService().getSpeciality()));
 
         //mTextViewReviews.setText("11");
         textViewDocQualification.setText(mServProv.getQualification());
-        textViewFees.setText("" + spsspt.getConsultFee());
+        textViewFees.setText(String.format("%.2f", spsspt.getConsultFee()));
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
-        if(Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
+        if (Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
             imageViewAvailable.setImageResource(R.drawable.g_circle);
             availability.setText(getString(R.string.available));
         } else {
@@ -75,7 +79,7 @@ public class ServProvDetailsActivity extends Activity {
             return;
         }
         Intent intent = new Intent(this, BookAppointmentActivity.class);
-        if(LoginHolder.custLoginRef == null) {
+        if (LoginHolder.custLoginRef == null) {
             intent = new Intent(this, LoginActivity.class);
             intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
         } else {
@@ -110,7 +114,7 @@ public class ServProvDetailsActivity extends Activity {
 
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        if(intent != null) {
+        if (intent != null) {
             intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
         }
         return intent;

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/relLayout2"
@@ -13,24 +14,22 @@
             android:id="@+id/editTextName"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/viewWorkPlaceType"
             android:layout_marginTop="10dp"
             android:hint="@string/name"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-            android:inputType="textAutoComplete|text"
-            android:layout_alignBottom="@+id/viewWorkPlaceType"/>
+            android:inputType="textAutoComplete|text" />
 
         <Spinner
             android:id="@+id/viewWorkPlaceType"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/editTextName"
             android:layout_toRightOf="@+id/editTextName"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:background="@drawable/spinner"
             android:entries="@array/work_place_type"
             android:padding="5dp"
@@ -41,24 +40,23 @@
             android:id="@+id/editTextLoc"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_alignBottom="@+id/editTextCity"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "
+            android:layout_marginTop="10dp"
             android:hint="@string/loc"
-            android:inputType="textAutoComplete|number|text"/>
+            android:inputType="textAutoComplete|number|text" />
 
         <Spinner
             android:id="@+id/editTextCity"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/viewWorkPlaceType"
-            android:layout_marginTop="10dp"
-             android:layout_alignParentEnd="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_toEndOf="@+id/editTextLoc"
-            android:layout_toRightOf="@+id/editTextLoc"
+            android:layout_below="@+id/viewWorkPlaceType"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/editTextLoc"
+            android:layout_toRightOf="@+id/editTextLoc"
             android:background="@drawable/spinner"
             android:entries="@array/city"
             android:padding="5dp"
@@ -69,26 +67,26 @@
             android:id="@+id/editTextPhone1"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/editTextPhone2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/editTextLoc"
             android:layout_marginTop="10dp"
             android:hint="@string/phone1"
-            android:inputType="phone"
-            android:layout_alignBottom="@+id/editTextPhone2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:inputType="phone" />
 
         <EditText
             android:id="@+id/editTextPhone2"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_below="@+id/editTextCity"
-            android:layout_toEndOf="@+id/editTextPhone1"
-            android:layout_toRightOf="@+id/editTextPhone1"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/editTextPhone1"
+            android:layout_toRightOf="@+id/editTextPhone1"
             android:hint="@string/phone2"
             android:inputType="number" />
 
@@ -97,8 +95,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editTextPhone1"
-            android:hint="@string/email"
             android:layout_marginTop="10dp"
+            android:hint="@string/email"
             android:inputType="textEmailAddress" />
     </RelativeLayout>
 
@@ -125,12 +123,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/buttonStartTime"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:focusable="true"
@@ -141,7 +139,7 @@
 
             <Button
                 android:id="@+id/buttonEndTime"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:focusable="true"
@@ -201,12 +199,12 @@
                 android:id="@+id/editTextWeeklyOff"
                 android:layout_width="170dp"
                 android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:background="@drawable/spinner"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:text="@string/practice_days"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"/>
+                android:text="@string/practice_days" />
 
 
             <TextView
@@ -226,10 +224,10 @@
                 android:id="@+id/editTextConsultationFees"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_toEndOf="@+id/viewRsSign"
                 android:layout_toRightOf="@+id/viewRsSign"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:hint="@string/consult_fees"
                 android:inputType="number" />
 

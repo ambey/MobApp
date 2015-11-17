@@ -9,14 +9,11 @@ import com.extenprise.mapp.ui.TitleFragment;
 
 import java.util.List;
 
-/**
- * Created by ambey on 10/9/15.
- */
-public class ServProvsignUpPagerAdapter extends FragmentPagerAdapter {
+public class ServProvSignUpPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> mFragments;
 
-    public ServProvsignUpPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+    public ServProvSignUpPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
         mFragments = fragments;
     }

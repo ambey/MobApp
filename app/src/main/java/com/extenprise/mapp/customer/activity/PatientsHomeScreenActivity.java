@@ -12,33 +12,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.net.AppStatus;
-import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.activity.SearchServProvActivity;
 import com.extenprise.mapp.util.Utility;
-
-import org.w3c.dom.Text;
 
 
 public class PatientsHomeScreenActivity extends Activity {
 
     private Customer mCustomer;
     private Boolean exit = false;
-    private TextView mlastDate;
-    private TextView mlastTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
 
-        mlastDate = (TextView) findViewById(R.id.textViewDate);
-        mlastTime = (TextView) findViewById(R.id.textViewTime);
+        TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
+        TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
         SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
         Boolean saveVisit = prefs.getBoolean("saveVisit", false);

@@ -124,18 +124,6 @@
                 android:value=".service.activity.ViewAppointmentListActivity" />
         </activity>
         <activity
-            android:name=".activity.HomeScreenActivity"
-            android:label="@string/title_activity_home_screen" >
-
-            <!--
-                        <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
-
-                            <category android:name="android.intent.category.LAUNCHER" />
-                        </intent-filter>
-            -->
-        </activity>
-        <activity
             android:name=".service.activity.BookAppointmentActivity"
             android:label="@string/title_activity_book_appointment"
             android:parentActivityName=".service.activity.ServProvDetailsActivity" >

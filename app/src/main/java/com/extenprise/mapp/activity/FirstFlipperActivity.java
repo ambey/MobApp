@@ -1,28 +1,23 @@
 package com.extenprise.mapp.activity;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.extenprise.mapp.R;
 
 public class FirstFlipperActivity extends Activity {
 
-    RadioButton RB0;
-    RadioButton RB1;
-    ViewFlipper viewFlipper;
+    private ViewFlipper viewFlipper;
+/*
     private float lastX;
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +39,15 @@ public class FirstFlipperActivity extends Activity {
         viewFlipper.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return !gestureDetector.onTouchEvent(event);
             }
         });
 
         /*
          * Find the views declared in main.xml.
          */
-       RB0 = (RadioButton) findViewById(R.id.radio0);
-        RB1 = (RadioButton) findViewById(R.id.radio1);
+        RadioButton RB0 = (RadioButton) findViewById(R.id.radio0);
+        RadioButton RB1 = (RadioButton) findViewById(R.id.radio1);
 
 
         /*
@@ -102,6 +93,7 @@ public class FirstFlipperActivity extends Activity {
         }
 
 
+/*
         public boolean onTouchEvent(MotionEvent touchevent)
         {
             switch (touchevent.getAction())
@@ -148,6 +140,7 @@ public class FirstFlipperActivity extends Activity {
             }
             return false;
         }
+*/
     }
 
     private void touch(View v) {

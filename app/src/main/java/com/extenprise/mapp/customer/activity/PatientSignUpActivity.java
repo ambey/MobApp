@@ -70,9 +70,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     private static int RESULT_LOAD_IMG = 1;
     private static int REQUEST_CAMERA = 2;
-    private String imgDecodableString;
     private Bitmap mImgCopy;
-    boolean isImageFitToScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,7 +291,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imgDecodableString = cursor.getString(columnIndex);
+                    String imgDecodableString = cursor.getString(columnIndex);
                     cursor.close();
                     // Set the Image in ImageView after decoding the String
                     mImgView.setImageBitmap(BitmapFactory

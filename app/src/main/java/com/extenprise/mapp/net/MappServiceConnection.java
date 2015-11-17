@@ -8,9 +8,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-/**
- * Created by ambey on 4/11/15.
- */
 public class MappServiceConnection implements ServiceConnection {
     private Messenger service;
     private int action;
