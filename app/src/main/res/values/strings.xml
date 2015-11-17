@@ -210,4 +210,9 @@
 
     <string name="press_back_button">Press Back again to Exit</string>
 
+    <string name="sms_sent">SMS Sent</string>
+    <string name="sms_failed">SMS faild, please try again.</string>
+    <string name="email_sent">Email Sent</string>
+    <string name="email_failed">Email faild, please try again.</string>
+
 </resources>

@@ -134,8 +134,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         boolean cancel = false;
         View focusView = null;
 
+        String fnm = mFirstName.getText().toString();
+        String lnm = mLastName.getText().toString();
         String cnfPasswd = mCnfPasswdView.getText().toString();
         String passwd = mPasswdView.getText().toString();
+
         if (TextUtils.isEmpty(cnfPasswd)) {
             mCnfPasswdView.setError(getString(R.string.error_field_required));
             focusView = mCnfPasswdView;
@@ -165,13 +168,23 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             focusView = mCellphoneview;
             cancel = true;
         }
-        if (TextUtils.isEmpty(mLastName.getText().toString())) {
+
+        if (TextUtils.isEmpty(lnm)) {
             mLastName.setError(getString(R.string.error_field_required));
             focusView = mLastName;
             cancel = true;
+        } else if (!Validator.isOnlyAlpha(lnm)) {
+            mLastName.setError(getString(R.string.error_only_alpha));
+            focusView = mLastName;
+            cancel = true;
         }
-        if (TextUtils.isEmpty(mFirstName.getText().toString())) {
+
+        if (TextUtils.isEmpty(fnm)) {
             mFirstName.setError(getString(R.string.error_field_required));
+            focusView = mFirstName;
+            cancel = true;
+        } else if (!Validator.isOnlyAlpha(fnm)) {
+            mFirstName.setError(getString(R.string.error_only_alpha));
             focusView = mFirstName;
             cancel = true;
         }

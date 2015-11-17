@@ -75,7 +75,6 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/first_name"
-                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:inputType="text|textNoSuggestions"
                     android:textColor="@color/black" />
 
@@ -87,7 +86,6 @@
                     android:layout_marginStart="12dp"
                     android:ems="10"
                     android:hint="@string/last_name"
-                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:inputType="text|textNoSuggestions" />
 
             </LinearLayout>
@@ -117,8 +115,7 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWd"
-                android:inputType="textPassword"
-                android:text="" />
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/editTextCnfPasswd"
@@ -127,8 +124,7 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWdCon"
-                android:inputType="textPassword"
-                android:text="" />
+                android:inputType="textPassword" />
 
             <RadioGroup
                 android:id="@+id/radioGroupGender"
