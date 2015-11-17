@@ -149,9 +149,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         data.putParcelable("form", availability);
         mConnection.setData(data);
         mConnection.setAction(MappService.DO_SEND_AVAILABILITY);
-
-        Intent intent = new Intent(this, MappService.class);
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     public void resendRx(View view) {

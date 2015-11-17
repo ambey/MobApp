@@ -3,19 +3,16 @@ package com.extenprise.mapp.service.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.net.AppStatus;
-import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
@@ -25,17 +22,6 @@ import java.util.Calendar;
 
 public class ServProvDetailsActivity extends Activity {
 
-    private TextView mTextViewDocname;
-    private TextView mTextViewDocSpeciality;
-    private TextView mTextViewDocQualification;
-    private TextView mTextViewDocExperience;
-    private TextView mTextViewReviews;
-    private TextView mTextViewClinic;
-    private TextView mTextViewClinicTime;
-    private TextView mTextViewFees;
-    private ImageView mImageViewAvailable;
-    private View mFormView;
-    private View mProgressView;
     private ServiceProvider mServProv;
 
     @Override
@@ -43,41 +29,41 @@ public class ServProvDetailsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serv_prov_details);
 
-        mFormView = findViewById(R.id.bookAppointmentForm);
-        mProgressView = findViewById(R.id.progressView);
+        View formView = findViewById(R.id.bookAppointmentForm);
+        View progressView = findViewById(R.id.progressView);
 
         Intent intent = getIntent();
         mServProv = intent.getParcelableExtra("service");
 
-        mTextViewClinic = (TextView)findViewById(R.id.textviewFirstClinic);
-        mTextViewDocExperience = (TextView)findViewById(R.id.textviewDocExperience);
-        mTextViewDocname = (TextView)findViewById(R.id.textviewDocname);
-        mTextViewClinicTime = (TextView)findViewById(R.id.textviewFirstclinictime);
-        mTextViewDocSpeciality = (TextView)findViewById(R.id.textviewDocspeciality);
-        mImageViewAvailable = (ImageView)findViewById(R.id.imageViewAvailable);
+        TextView textViewClinic = (TextView) findViewById(R.id.textviewFirstClinic);
+        TextView textViewDocExperience = (TextView) findViewById(R.id.textviewDocExperience);
+        TextView textViewDocname = (TextView) findViewById(R.id.textviewDocname);
+        TextView textViewClinicTime = (TextView) findViewById(R.id.textviewFirstclinictime);
+        TextView textViewDocSpeciality = (TextView) findViewById(R.id.textviewDocspeciality);
+        ImageView imageViewAvailable = (ImageView) findViewById(R.id.imageViewAvailable);
 
-        mTextViewFees = (TextView)findViewById(R.id.textviewFees);
-        mTextViewReviews = (TextView)findViewById(R.id.textviewReviews);
-        mTextViewDocQualification = (TextView)findViewById(R.id.textviewDocQualification);
+        TextView textViewFees = (TextView) findViewById(R.id.textviewFees);
+        TextView textViewReviews = (TextView) findViewById(R.id.textviewReviews);
+        TextView textViewDocQualification = (TextView) findViewById(R.id.textviewDocQualification);
 
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
-        mTextViewClinic.setText(spsspt.getServicePoint().getName());
-        mTextViewDocExperience.setText("" + spsspt.getExperience());
-        mTextViewClinicTime.setText(Utility.getTimeString(spsspt.getStartTime()) + " to "
+        textViewClinic.setText(spsspt.getServicePoint().getName());
+        textViewDocExperience.setText("" + spsspt.getExperience());
+        textViewClinicTime.setText(Utility.getTimeString(spsspt.getStartTime()) + " to "
                 + Utility.getTimeString(spsspt.getEndTime()));
-        mTextViewDocname.setText(mServProv.getfName() + " " + mServProv.getlName());
-        mTextViewDocSpeciality.setText("(" + spsspt.getService().getSpeciality() + ")");
+        textViewDocname.setText(mServProv.getfName() + " " + mServProv.getlName());
+        textViewDocSpeciality.setText("(" + spsspt.getService().getSpeciality() + ")");
 
         //mTextViewReviews.setText("11");
-        mTextViewDocQualification.setText(mServProv.getQualification());
-        mTextViewFees.setText("" + spsspt.getConsultFee());
+        textViewDocQualification.setText(mServProv.getQualification());
+        textViewFees.setText("" + spsspt.getConsultFee());
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
         if(Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
-            mImageViewAvailable.setImageResource(R.drawable.g_circle);
+            imageViewAvailable.setImageResource(R.drawable.g_circle);
             availability.setText(getString(R.string.available));
         } else {
-            mImageViewAvailable.setImageResource(R.drawable.r_circle);
+            imageViewAvailable.setImageResource(R.drawable.r_circle);
             availability.setText(getString(R.string.unavailable));
         }
 
@@ -95,6 +81,7 @@ public class ServProvDetailsActivity extends Activity {
         } else {
             intent.putExtra("customer", LoginHolder.custLoginRef);
         }
+        intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
         intent.putExtra("servProv", mServProv);
         startActivity(intent);
     }
@@ -123,7 +110,9 @@ public class ServProvDetailsActivity extends Activity {
 
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+        if(intent != null) {
+            intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+        }
         return intent;
     }
 }

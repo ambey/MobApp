@@ -206,6 +206,7 @@ public class BookAppointmentActivity extends Activity
         Intent intent = super.getParentActivityIntent();
         if(intent != null) {
             intent.putExtra("service", getIntent().getParcelableExtra("servProv"));
+            intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
         }
         return intent;
     }

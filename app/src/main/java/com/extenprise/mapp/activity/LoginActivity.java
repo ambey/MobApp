@@ -388,6 +388,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                     try {
                         intent = new Intent(this, Class.forName(targetActivity));
                         intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
+                        intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                         return;

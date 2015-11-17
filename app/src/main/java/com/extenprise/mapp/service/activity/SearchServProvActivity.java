@@ -85,9 +85,13 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
             Utility.showMessage(this, R.string.error_not_online);
             return;
         }
+        String selectedCategory = mServProvCategory.getSelectedItem().toString();
+        if(selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
+            return;
+        }
         Bundle bundle = new Bundle();
         mForm = new SearchServProvForm();
-        mForm.setCategory(mServProvCategory.getSelectedItem().toString());
+        mForm.setCategory(selectedCategory);
         bundle.putParcelable("form", mForm);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_SPECIALITY);

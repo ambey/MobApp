@@ -91,6 +91,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         bundle.putParcelable("form", mSelectedItem);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SERV_PROV_DETAILS);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     public void gotDetails(Bundle data) {
