@@ -107,14 +107,13 @@
 
         <Button
             android:id="@+id/buttonViewProfile"
-            style="@style/InactiveRectButton"
+            style="@style/RectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/linenView4"
             android:layout_alignLeft="@+id/linenView2"
             android:layout_alignStart="@+id/linenView2"
             android:layout_below="@+id/linenView5"
-            android:enabled="false"
             android:onClick="viewProfile"
             android:text="@string/profile_text" />
 

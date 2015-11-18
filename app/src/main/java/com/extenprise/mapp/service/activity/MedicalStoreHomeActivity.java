@@ -2,7 +2,11 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +30,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ServiceProvider mServProv;
+    private Boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,19 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         setContentView(R.layout.activity_medical_store_home);
 
         mServProv = LoginHolder.servLoginRef;
+
+        TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
+        TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
+
+        SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
+        Boolean saveVisit = prefs.getBoolean("saveVisit", false);
+        if(saveVisit) {
+            mlastDate.setText(prefs.getString("Date", ""));
+            mlastTime.setText(prefs.getString("Time", ""));
+        } else {
+            Utility.setCurrentDateOnView(mlastDate);
+            Utility.setCurrentTimeOnView(mlastTime);
+        }
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +
@@ -95,8 +113,34 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     }
 
     public void viewProfile(View view) {
-        Intent intent = new Intent(this, ServProvViewProfileActivity.class);
+        Intent intent = new Intent(this, ServProvProfileActivity.class);
         intent.putExtra("service", mServProv);
+        intent.putExtra("category", "Pharmacist");
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            Log.v("onBackPressed", "MedicalStoreHomeActivity called.. calling finish.");
+            finish(); // finish activity
+            moveTaskToBack(true); // exist app
+            //finish(); // finish activity
+        } else {
+            Utility.showMessage(this, R.string.press_back_button);
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        return null;
     }
 }

@@ -89,6 +89,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         if(selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
             return;
         }
+        Utility.showProgress(this, mSearchFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         mForm = new SearchServProvForm();
         mForm.setCategory(selectedCategory);
@@ -99,6 +100,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     }
 
     private void gotSpecialities(Bundle data) {
+        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
+
         specList = data.getStringArrayList("specialities");
         if (specList == null) {
             specList = new ArrayList<>();
@@ -289,6 +292,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
             intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
             startActivity(intent);
+        } else {
+            Utility.showMessage(this, R.string.no_result);
         }
     }
 

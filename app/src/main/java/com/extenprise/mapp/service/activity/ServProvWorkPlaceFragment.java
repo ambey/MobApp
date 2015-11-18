@@ -130,6 +130,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         });
 
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+
+        int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
+        if (category == R.string.medicalStore) {
+            mConsultFee.setEnabled(false);
+        }
+
         return mRootview;
     }
 
@@ -344,7 +350,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         spsspt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
         spsspt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
         spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
-        spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+        if(mConsultFee.isEnabled()) {
+            spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+        }
         spsspt.setServicePoint(spt);
 
         LoginHolder.servLoginRef.addServProvHasServPt(spsspt);
@@ -464,13 +472,15 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             focusView = mMultiSpinnerDays;
             valid = false;
         }
-        String cosultFee = mConsultFee.getText().toString().trim();
-        if (TextUtils.isEmpty(cosultFee)) {
-            mConsultFee.setError(getString(R.string.error_field_required));
-            focusView = mConsultFee;
-            valid = false;
-        }
 
+        if(mConsultFee.isEnabled()) {
+            String cosultFee = mConsultFee.getText().toString().trim();
+            if (TextUtils.isEmpty(cosultFee)) {
+                mConsultFee.setError(getString(R.string.error_field_required));
+                focusView = mConsultFee;
+                valid = false;
+            }
+        }
 
         if (focusView != null) {
             focusView.requestFocus();

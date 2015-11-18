@@ -1,19 +1,30 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.util.DateChangeListener;
+import com.extenprise.mapp.util.Utility;
 
 
-public class PendingRxListActivity extends ActionBarActivity {
+public class PendingRxListActivity extends Activity implements DateChangeListener {
+
+    private TextView mRxDate;
+    private String mSelectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_rx_list);
+
+        mRxDate = (TextView) findViewById(R.id.textViewRxDate);
+        mSelectedDate = Utility.setCurrentDateOnView(mRxDate);
     }
 
     @Override
@@ -36,5 +47,14 @@ public class PendingRxListActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDatePicker(View view) {
+        Utility.datePicker(view, mRxDate, this);
+    }
+
+    @Override
+    public void datePicked(String date) {
+        mSelectedDate = date;
     }
 }

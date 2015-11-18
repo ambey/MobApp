@@ -144,6 +144,13 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         //workhourLBL = (TextView) findViewById(R.id.viewWorkHrsLbl);
         //workhourLBL.setClickable(false);
 
+        Intent intent = getIntent();
+        String category = intent.getStringExtra("category");
+        if(category.equals("Pharmacist")) {
+            mViewdrLbl.setText("Welcome");
+            mImgView.setImageResource(R.drawable.medstore);
+        }
+
         viewProfile();
 
         if (savedInstanceState != null) {
@@ -722,13 +729,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(this, "You haven't picked Image",
-                            Toast.LENGTH_LONG).show();
+                    Utility.showMessage(this, R.string.error_img_not_picked);
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
-                    .show();
+            Utility.showMessage(this, R.string.some_error);
         }
 
     }

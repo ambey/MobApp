@@ -577,6 +577,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
                 valid = false;
             }
         }
+
         if (TextUtils.isEmpty(loc)) {
             mEditTextLoc.setError(getString(R.string.error_field_required));
             focusView = mEditTextLoc;

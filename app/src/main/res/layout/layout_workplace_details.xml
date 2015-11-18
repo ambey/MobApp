@@ -43,7 +43,7 @@
             android:layout_alignBottom="@+id/editTextCity"
             android:layout_marginTop="10dp"
             android:hint="@string/loc"
-            android:inputType="textAutoComplete|number|text" />
+            android:inputType="text" />
 
         <Spinner
             android:id="@+id/editTextCity"

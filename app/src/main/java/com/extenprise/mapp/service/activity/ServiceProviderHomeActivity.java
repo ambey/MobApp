@@ -113,7 +113,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     @Override
     public void onBackPressed() {
         if (exit) {
-            Log.v("onBackPressed", "PatientsHomeScreenActivity called.. calling finish.");
+            Log.v("onBackPressed", "ServiceProviderHomeActivity called.. calling finish.");
             finish(); // finish activity
             moveTaskToBack(true); // exist app
             //finish(); // finish activity

@@ -93,12 +93,12 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
         mSpeciality.setAdapter(spinnerAdapter);
 
-        mLocation.setText(mForm.getLocation());
-        mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
-        mServProvCategory.setSelection(Utility.getSpinnerIndex(mServProvCategory, mForm.getCategory()));
-        mDrClinicName.setText(mForm.getName());
-
-        mForm.getSpeciality();
+        if(mForm != null) {
+            mLocation.setText(mForm.getLocation());
+            mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
+            mServProvCategory.setSelection(Utility.getSpinnerIndex(mServProvCategory, mForm.getCategory()));
+            mDrClinicName.setText(mForm.getName());
+        }
 
         mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
@@ -407,8 +407,13 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             Utility.showMessage(this, R.string.error_not_online);
             return;
         }
+        String selectedCategory = mServProvCategory.getSelectedItem().toString();
+        if(selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
+            return;
+        }
+        Utility.showProgress(this, mSearchFormView, mProgressView, true);
         mForm = new SearchServProvForm();
-        mForm.setCategory(mServProvCategory.getSelectedItem().toString());
+        mForm.setCategory(selectedCategory);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mForm);
         mConnection.setData(bundle);
@@ -464,6 +469,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     }
 
     private void gotSpecialities(Bundle data) {
+        Utility.showProgress(this, mSearchFormView, mProgressView, false);
         ArrayList<String> list = data.getStringArrayList("specialities");
         if (list == null) {
             list = new ArrayList<>();
@@ -480,6 +486,8 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             intent.putParcelableArrayListExtra("servProvList", data.getParcelableArrayList("servProvList"));
             intent.putExtra("parent-activity", this.getClass().getName());
             startActivity(intent);
+        } else {
+            Utility.showMessage(this, R.string.no_result);
         }
     }
 }
