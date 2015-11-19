@@ -79,6 +79,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     public void viewProfile(View view) {
         Intent intent = new Intent(this, ServProvProfileActivity.class);
         intent.putExtra("service", mServiceProv);
+        intent.putExtra("category", "Practitioner");
         startActivity(intent);
     }
 

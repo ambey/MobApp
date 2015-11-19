@@ -100,7 +100,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     }
 
     private void gotSpecialities(Bundle data) {
-        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        Utility.showProgress(this, mSearchFormView, mProgressView, false);
 
         specList = data.getStringArrayList("specialities");
         if (specList == null) {

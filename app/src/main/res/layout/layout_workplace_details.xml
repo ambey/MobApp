@@ -7,8 +7,7 @@
     <RelativeLayout
         android:id="@+id/relLayout2"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/editTextName"
@@ -123,8 +122,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/buttonStartTime"

@@ -205,11 +205,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         ServiceProvider sp = LoginHolder.servLoginRef;
 
         mDocName.setText(sp.getfName() + " " + sp.getlName());
-        String servCategory = sp.getServProvHasServPt(0).getService().getCategory();
+        /*String servCategory = sp.getServProvHasServPt(0).getService().getCategory();
         if (servCategory.equalsIgnoreCase("pharmacist")) {
             mViewdrLbl.setText("Welcome");
             mImgView.setImageResource(R.drawable.medstore);
-        }
+        }*/
 
         if (sp.getImg() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
@@ -1319,12 +1319,12 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
                     R.layout.activity_servprov_wrkdetail_list, mWorkPlaceList);
             listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 }
 
-            });
+            });*/
             listView.setAdapter(adapter);
             registerForContextMenu(listView);
         }
