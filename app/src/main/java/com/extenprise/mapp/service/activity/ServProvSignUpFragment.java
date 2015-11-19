@@ -44,9 +44,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by ambey on 10/9/15.
- */
 public class ServProvSignUpFragment extends Fragment implements TitleFragment, ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
 

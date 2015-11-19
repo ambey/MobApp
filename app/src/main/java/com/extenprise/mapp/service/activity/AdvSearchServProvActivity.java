@@ -55,7 +55,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     private View mSearchFormView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    protected CharSequence[] options = getResources().getStringArray(R.array.days);
     protected boolean[] selections = new boolean[options.length];
     String selectedDays;
 

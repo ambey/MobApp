@@ -216,4 +216,8 @@
     <string name="email_failed">Email faild, please try again.</string>
     <string name="no_result">No Result Found.</string>
 
+    <string name="show_history">Show History</string>
+    <string name="no_appont_yet">No Appointments yet…</string>
+    <string name="loading_page">Loading… Please wait</string>
+
 </resources>

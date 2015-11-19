@@ -30,12 +30,15 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ServiceProvider mServiceProv;
-    private Boolean exit = false;
+    private boolean exit = false;
+    private TextView mMsgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
+
+        mMsgView = (TextView)findViewById(R.id.msgView);
 
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
@@ -85,6 +88,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         bundle.putInt("status", ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
         mConnection.setData(bundle);
+        mMsgView.setVisibility(View.VISIBLE);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
@@ -141,6 +145,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     }
 
     private void gotRxInbox(Bundle data) {
+        mMsgView.setVisibility(View.GONE);
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);

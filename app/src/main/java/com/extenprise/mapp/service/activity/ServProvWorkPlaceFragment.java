@@ -64,7 +64,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private LinearLayout mLayoutWorkHrs;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    protected CharSequence[] options = getResources().getStringArray(R.array.days);
     protected boolean[] selections = new boolean[options.length];
     //String []selectedDays = new String[_options.length];
     String selectedDays;

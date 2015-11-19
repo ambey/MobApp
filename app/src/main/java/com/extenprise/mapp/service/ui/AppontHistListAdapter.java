@@ -15,9 +15,6 @@ import com.extenprise.mapp.util.Utility;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-/**
- * Created by ambey on 11/10/15.
- */
 public class AppontHistListAdapter extends ArrayAdapter<AppointmentListItem> {
     private AppointmentListItem mAppont;
     private ArrayList<AppointmentListItem> mList;
@@ -53,7 +50,7 @@ public class AppontHistListAdapter extends ArrayAdapter<AppointmentListItem> {
         dateView.setText(sdf.format(mList.get(position).getDate()));
         idView.setText(String.format("%d", position));
         Button viewRxButton = (Button) v.findViewById(R.id.viewRxButton);
-        Utility.setEnabledButton(getContext(), viewRxButton, true, R.drawable.rect_button, R.color.LinkColor);
+        Utility.setEnabledButton(getContext(), viewRxButton, true, R.color.LinkColor);
 
         return v;
     }

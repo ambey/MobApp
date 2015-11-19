@@ -119,6 +119,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     }
 
     private void gotPastAppointments(Bundle data) {
+        TextView msgView = (TextView) findViewById(R.id.viewMsg);
+        msgView.setVisibility(View.GONE);
         mPastApponts = data.getParcelableArrayList("appontList");
         View pastAppontLayout = findViewById(R.id.pastAppointmentLayout);
         Button viewMoreButton = (Button) findViewById(R.id.viewMoreButton);
@@ -132,18 +134,24 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             AppointmentListItem lastAppont = mPastApponts.get(mPastApponts.size() - 1);
             TextView dateOthView = (TextView) pastAppontLayout.findViewById(R.id.dateTextView);
             dateOthView.setText(sdf.format(lastAppont.getDate()));
-            Utility.setEnabledButton(this, viewRxButton, true, R.drawable.rect_button, R.color.LinkColor);
+            Utility.setEnabledButton(this, viewRxButton, true, R.color.LinkColor);
             if (mPastApponts.size() > 1) {
-                Utility.setEnabledButton(this, viewMoreButton, true, R.drawable.rect_button, R.color.LinkColor);
+                Utility.setEnabledButton(this, viewMoreButton, true, R.color.LinkColor);
             }
+            pastAppontLayout.setVisibility(View.VISIBLE);
         } else {
             pastAppontLayout.setVisibility(View.INVISIBLE);
-            TextView msgView = (TextView) findViewById(R.id.viewMsg);
+            msgView.setText(R.string.no_past_appont);
             msgView.setVisibility(View.VISIBLE);
         }
     }
 
     private void fillPastAppointements() {
+        View pastAppontLayout = findViewById(R.id.pastAppointmentLayout);
+        pastAppontLayout.setVisibility(View.GONE);
+        TextView msgView = (TextView) findViewById(R.id.viewMsg);
+        msgView.setText(R.string.loading_page);
+        msgView.setVisibility(View.VISIBLE);
         doAppontAction(MappService.DO_PAST_APPONT_LIST);
     }
 

@@ -4,6 +4,7 @@
 
     <string name="appointLbl">Appointment Details</string>
     <string name="appointment">Appointment</string>
+    <string name="appointment_list">Appointment List</string>
     <string name="drName">Doctor Name</string>
     <string name="changDate">Change Date</string>
 </resources>

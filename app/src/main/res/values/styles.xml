@@ -116,13 +116,13 @@
     </style>
 
     <style name="LinkButton">
-        <item name="android:background">@drawable/rect_button</item>
+        <item name="android:background">#0000</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#00f</item>
     </style>
 
     <style name="InactiveLinkButton">
-        <item name="android:background">@drawable/rect_button</item>
+        <item name="android:background">#0000</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/PassiveColor</item>
     </style>

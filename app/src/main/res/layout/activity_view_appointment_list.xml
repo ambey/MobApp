@@ -14,25 +14,42 @@
         style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/appointment"/>
+        android:text="@string/appointment_list" />
 
     <TextView
         android:id="@+id/appointmentDateTextView"
-        style="@style/MediumLabel"
+        style="@style/MediumText"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:background="@drawable/spinner"
         android:text="@string/date"
         android:clickable="true"
         android:onClick="showDatePicker"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appointmentDateTextView"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/appointmentListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appointmentDateTextView"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/appontMsgView"
+        style="@style/MediumLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appointmentDateTextView"
         android:layout_marginTop="20dp"
-        />
+        android:visibility="gone"
+        android:text="@string/no_appont_yet" />
 </RelativeLayout>

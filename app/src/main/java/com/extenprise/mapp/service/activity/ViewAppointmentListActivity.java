@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
@@ -37,7 +38,8 @@ public class ViewAppointmentListActivity extends Activity
     private TextView mAppointmentDateTextView;
     private ListView mAppointmentListView;
     private String mSelectedDate;
-
+    private ProgressBar mProgressBar;
+    private TextView mMsgView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,9 @@ public class ViewAppointmentListActivity extends Activity
         mAppointmentListView = (ListView) findViewById(R.id.appointmentListView);
 
         mSelectedDate = Utility.setCurrentDateOnView(mAppointmentDateTextView);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mMsgView = (TextView) findViewById(R.id.appontMsgView);
+
         setAppointmentList();
     }
 
@@ -96,14 +101,23 @@ public class ViewAppointmentListActivity extends Activity
         bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_APPONT_LIST);
+        mMsgView.setVisibility(View.GONE);
+        Utility.showProgress(this, mAppointmentListView, mProgressBar, true);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotAppontList(Bundle data) {
         ArrayList<AppointmentListItem> list = data.getParcelableArrayList("appontList");
+        assert list != null;
         AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, list, mServiceProv);
         mAppointmentListView.setAdapter(adapter);
         mAppointmentListView.setOnItemClickListener(adapter);
+        if (list.size() > 0) {
+            mMsgView.setVisibility(View.GONE);
+        } else {
+            mAppointmentListView.setVisibility(View.GONE);
+            mMsgView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void showDatePicker(View view) {
@@ -118,6 +132,7 @@ public class ViewAppointmentListActivity extends Activity
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgress(this, mAppointmentListView, mProgressBar, false);
         if (action == MappService.DO_APPONT_LIST) {
             gotAppontList(data);
             return true;

@@ -48,9 +48,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by ambey on 23/7/15.
- */
 public abstract class Utility {
     /**
      * Shows the progress UI and hides the login form.
@@ -265,20 +262,20 @@ public abstract class Utility {
     }
 
     public static String getCommaSepparatedString(String[] arr) {
-        StringBuffer sb = new StringBuffer("");
-        for (int i = 0; arr != null && i < arr.length; i++) {
-            if (arr[i] != null && !arr[i].equals("")) {
-                sb.append(arr[i]);
+        try {
+            String value = arr[0];
+            for (int i = 1; i < arr.length; i++) {
+                value += "," + arr[i];
             }
-            if (i < arr.length - 1) {
-                sb.append(',');
-            }
+            return value;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return sb.toString();
+        return "";
     }
 
-    public static String getDays() {
-        return "All Days,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+    public static String getDays(Context context) {
+        return getCommaSepparatedString(context.getResources().getStringArray(R.array.days));
     }
 
     public static String getDaAsString(String sep) {
@@ -352,9 +349,8 @@ public abstract class Utility {
         }
     }
 
-    public static void setEnabledButton(Context context, Button button, boolean enabled, int background, int color) {
+    public static void setEnabledButton(Context context, Button button, boolean enabled, int color) {
         button.setEnabled(enabled);
-        button.setBackgroundResource(background);
         button.setTextColor(context.getResources().getColor(color));
     }
 
