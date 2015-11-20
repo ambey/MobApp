@@ -75,7 +75,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mRootview = inflater.inflate(R.layout.activity_add_workplace, container, false);
         LoginHolder.spsspt = new ServProvHasServPt();
 
-        options = getResources().getStringArray(R.array.days);
+        options = Utility.getDaysOptions(getActivity());
         selections = new boolean[options.length];
 
         mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);

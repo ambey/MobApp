@@ -201,6 +201,8 @@
     <string name="send_availability_feedback">Send Availability Feedback</string>
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>
     <string name="msg_appont_canceled">The appointment has been canceled</string>
+    <string name="msg_booking_appont">Booking Appointment… Please wait.</string>
+
     <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>
     <string name="title_activity_rx_list">RxListActivity</string>
     <string name="title_activity_pending_rx_list">PendingRxListActivity</string>
@@ -219,6 +221,5 @@
     <string name="show_history">Show History</string>
     <string name="no_appont_yet">No Appointments yet…</string>
     <string name="loading_page">Loading… Please wait</string>
-    <string name="error_reg_no_registered">This Registration Number is already Registered.</string>
 
 </resources>

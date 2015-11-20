@@ -576,4 +576,8 @@ public abstract class Utility {
         }
         return 1;
     }
+
+    public static String[] getDaysOptions(Context context) {
+        return context.getResources().getStringArray(R.array.days);
+    }
 }

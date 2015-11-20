@@ -19,18 +19,18 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-<!--
-    <TextView
-        android:id="@+id/tvBookApptLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/label1"
-        android:padding="5dp"
-        android:text="@string/title_activity_book_appointment"
-        android:textSize="20sp"
-        android:textStyle="bold" />
--->
+    <!--
+        <TextView
+            android:id="@+id/tvBookApptLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/label1"
+            android:padding="5dp"
+            android:text="@string/title_activity_book_appointment"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    -->
 
     <TextView
         android:id="@+id/tvDrLbl"
@@ -69,78 +69,88 @@
         style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvDrLbl"
         android:layout_alignLeft="@id/tvDocFName"
         android:layout_alignStart="@id/tvDocFName"
-        android:text="@string/speciality"/>
+        android:layout_below="@id/tvDrLbl"
+        android:text="@string/speciality" />
 
     <TextView
         android:id="@+id/tvQualification"
         style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tvDocSpec"
-        android:layout_toEndOf="@id/tvDocSpec"
         android:layout_alignBaseline="@id/tvDocSpec"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:text="@string/qualification"/>
+        android:layout_toEndOf="@id/tvDocSpec"
+        android:layout_toRightOf="@id/tvDocSpec"
+        android:text="@string/qualification" />
 
     <TextView
         android:id="@+id/tvDateLbl"
         style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/spinnerTimeSlots"
         android:layout_alignLeft="@id/tvDrLbl"
         android:layout_alignStart="@id/tvDrLbl"
-        android:layout_alignBottom="@+id/spinnerTimeSlots"
-        android:hint="@string/date"/>
+        android:hint="@string/date" />
 
     <TextView
         android:id="@+id/tvDate"
         style="@style/MediumText"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tvDateLbl"
-        android:layout_toEndOf="@id/tvDateLbl"
+        android:layout_alignBottom="@id/spinnerTimeSlots"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_alignBottom="@id/spinnerTimeSlots"
+        android:layout_toEndOf="@id/tvDateLbl"
+        android:layout_toRightOf="@id/tvDateLbl"
         android:clickable="true"
         android:hint="@string/date_format"
-        android:onClick="showDatePicker"/>
+        android:onClick="showDatePicker" />
 
     <TextView
         android:id="@+id/tvTimeLbl"
         style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tvDate"
-        android:layout_toEndOf="@id/tvDate"
         android:layout_alignBottom="@+id/spinnerTimeSlots"
-        android:text="@string/time"/>
+        android:layout_toEndOf="@id/tvDate"
+        android:layout_toRightOf="@id/tvDate"
+        android:text="@string/time" />
 
     <Spinner
         android:id="@+id/spinnerTimeSlots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/tvTimeLbl"
-        android:layout_toRightOf="@id/tvTimeLbl"
         android:layout_below="@id/tvDocSpec"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/tvTimeLbl"
+        android:layout_toRightOf="@id/tvTimeLbl"
         android:choiceMode="singleChoice" />
 
     <Button
         android:id="@+id/buttonBook"
         style="@style/MyButton"
-        android:background="@drawable/inactive_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/inactive_button"
         android:onClick="bookAppointment"
         android:text="@string/title_activity_book_appointment" />
 
+    <TextView
+        android:id="@+id/viewMsg"
+        style="@style/MediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonBook"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/msg_booking_appont"
+        android:visibility="gone" />
 </RelativeLayout>

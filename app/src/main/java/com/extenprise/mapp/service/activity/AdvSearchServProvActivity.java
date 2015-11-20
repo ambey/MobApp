@@ -68,7 +68,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        options = getResources().getStringArray(R.array.days);
+        options = Utility.getDaysOptions(this);
         selections = new boolean[options.length];
 
         mDrClinicName = (EditText) findViewById(R.id.editSearchDr);

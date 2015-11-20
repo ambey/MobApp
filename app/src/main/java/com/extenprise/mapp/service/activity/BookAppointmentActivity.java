@@ -43,6 +43,7 @@ public class BookAppointmentActivity extends Activity
     private ServiceProvider mServProv;
     private Customer mCust;
     private Date mSelectedDate;
+    private TextView mMsgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class BookAppointmentActivity extends Activity
         mSpinnerTimeSlots = (Spinner) findViewById(R.id.spinnerTimeSlots);
         mTextViewDate = (TextView) findViewById(R.id.tvDate);
         mBookButton = (Button) findViewById(R.id.buttonBook);
+        mMsgView = (TextView) findViewById(R.id.viewMsg);
 
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
 
@@ -88,6 +90,8 @@ public class BookAppointmentActivity extends Activity
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_BOOK_APPONT);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        Utility.setEnabledButton(this, mBookButton, false);
+        mMsgView.setVisibility(View.VISIBLE);
     }
 
     public void setTimeSlots() {
@@ -142,12 +146,11 @@ public class BookAppointmentActivity extends Activity
     }
 
     private void gotAppont(Bundle data) {
+        mMsgView.setVisibility(View.GONE);
         Utility.showAlert(this, "", "Your Appointment has been booked.");
         Appointment appointment = data.getParcelable("form");
         mCust.getAppointments().add(appointment);
         mServProv.getServProvHasServPt(0).getAppointments().add(appointment);
-
-        Utility.setEnabledButton(this, mBookButton, false);
     }
 
     @Override

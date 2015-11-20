@@ -38,7 +38,6 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -105,8 +104,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private EditText mQualification;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options = {"All Days", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-    protected boolean[] selections = new boolean[options.length];
+    protected CharSequence[] options;
+    protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
     private String selectedDays;
 
@@ -118,6 +117,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        options = Utility.getDaysOptions(this);
+        selections = new boolean[options.length];
 
         //workPlace.setSignInData(LoginHolder.servLoginRef.getPhone());
         workPlace = new WorkPlace();
