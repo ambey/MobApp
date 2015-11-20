@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -39,20 +42,20 @@ public class RxActivity extends Activity implements ResponseHandler {
     private View mProgressBar;
     private TextView mSrNo;
     private TextView mDrugName;
-    private TextView mDrugStrength;
     private Spinner mDrugForm;
-    private TextView mDoseQty;
     private TextView mCourseDur;
     private Spinner mEmptyOrFull;
+    private Spinner mDoseMUnit;
+    private Spinner mDoseAUnit;
+    private Spinner mDoseEUnit;
     private CheckBox mMorning;
     private CheckBox mAfternnon;
     private CheckBox mEvening;
-    private TextView mMTime;
-    private TextView mATime;
-    private TextView mETime;
+    private EditText mMDose;
+    private EditText mADose;
+    private EditText mEDose;
     private TextView mInTakeSteps;
     private TextView mAltDrugName;
-    private TextView mAltDrugStrength;
     private Spinner mAltDrugForm;
     private Rx mRx;
     private ArrayList<RxInboxItem> mInbox;
@@ -79,20 +82,51 @@ public class RxActivity extends Activity implements ResponseHandler {
         //TextView date = (TextView) findViewById(R.id.dateTextView);
         mSrNo = (TextView) findViewById(R.id.srNoTextView);
         mDrugName = (TextView) findViewById(R.id.drugEditText);
-        mDrugStrength = (TextView) findViewById(R.id.drugStrengthEditText);
+        mDoseMUnit = (Spinner) findViewById(R.id.drugUnitMSpinner);
+        mDoseAUnit = (Spinner) findViewById(R.id.drugUnitASpinner);
+        mDoseEUnit = (Spinner) findViewById(R.id.drugUnitESpinner);
         mDrugForm = (Spinner) findViewById(R.id.drugFormSpinner);
-        mDoseQty = (TextView) findViewById(R.id.doseQtyEditText);
+        mDrugForm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String drugForm = mDrugForm.getSelectedItem().toString();
+                int arrayId = -1;
+                if (drugForm.equalsIgnoreCase(getString(R.string.syrup))) {
+                    arrayId = R.array.syrup_unit;
+                } else if (drugForm.equalsIgnoreCase(getString(R.string.powder))) {
+                    arrayId = R.array.powder_unit;
+                }
+                if (arrayId != -1) {
+                    mDoseMUnit.setAdapter(new ArrayAdapter<>(RxActivity.this,
+                            R.layout.layout_spinner, getResources().getStringArray(arrayId)));
+                    mDoseAUnit.setAdapter(new ArrayAdapter<>(RxActivity.this,
+                            R.layout.layout_spinner, getResources().getStringArray(arrayId)));
+                    mDoseEUnit.setAdapter(new ArrayAdapter<>(RxActivity.this,
+                            R.layout.layout_spinner, getResources().getStringArray(arrayId)));
+                } else {
+                    mDoseMUnit.setAdapter(null);
+                    mDoseAUnit.setAdapter(null);
+                    mDoseEUnit.setAdapter(null);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mDoseMUnit.setAdapter(null);
+                mDoseAUnit.setAdapter(null);
+                mDoseEUnit.setAdapter(null);
+            }
+        });
         mCourseDur = (TextView) findViewById(R.id.courseDurEditText);
         mEmptyOrFull = (Spinner) findViewById(R.id.emptyOrFullSpinner);
         mMorning = (CheckBox) findViewById(R.id.morningCheckBox);
         mAfternnon = (CheckBox) findViewById(R.id.afternoonCheckBox);
         mEvening = (CheckBox) findViewById(R.id.eveningCheckBox);
-        mMTime = (TextView) findViewById(R.id.timeMTextView);
-        mATime = (TextView) findViewById(R.id.timeATextView);
-        mETime = (TextView) findViewById(R.id.timeETextView);
+        mMDose = (EditText) findViewById(R.id.doseMText);
+        mADose = (EditText) findViewById(R.id.doseAText);
+        mEDose = (EditText) findViewById(R.id.doseEText);
         mInTakeSteps = (TextView) findViewById(R.id.intakeStepsEditText);
         mAltDrugName = (TextView) findViewById(R.id.altDrugEditText);
-        mAltDrugStrength = (TextView) findViewById(R.id.altDrugStrengthEditText);
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
 
         RxInboxItem rxInboxItem = null;
@@ -149,18 +183,6 @@ public class RxActivity extends Activity implements ResponseHandler {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showMTimePicker(View view) {
-        Utility.timePicker(view, mMTime);
-    }
-
-    public void showATimePicker(View view) {
-        Utility.timePicker(view, mATime);
-    }
-
-    public void showETimePicker(View view) {
-        Utility.timePicker(view, mETime);
-    }
-
     public void addRxItem(View view) {
         addRxItem();
         clearFields();
@@ -202,35 +224,42 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     private void setupRxItemUI(RxItem rxItem) {
         mDrugName.setText(rxItem.getDrugName());
-        mDrugStrength.setText(rxItem.getDrugStrength());
         mDrugForm.setSelection(Utility.getDrugTypePosition(this, rxItem.getDrugForm()));
-        mDoseQty.setText(rxItem.getDoseQty());
         mCourseDur.setText(String.format("%d", rxItem.getCourseDur()));
         mEmptyOrFull.setSelection(Utility.getEmptyOrFullPosition(this, rxItem.isBeforeMeal()));
         mInTakeSteps.setText(rxItem.getInTakeSteps());
         mAltDrugName.setText(rxItem.getAltDrugName());
-        mAltDrugStrength.setText(rxItem.getAltDrugStrength());
         mAltDrugForm.setSelection(Utility.getDrugTypePosition(this, rxItem.getDrugForm()));
 
         mMorning.setChecked(rxItem.isMorning());
         mAfternnon.setChecked(rxItem.isAfternoon());
         mEvening.setChecked(rxItem.isEvening());
-        if (rxItem.getmTime() != null) {
-            mMTime.setText(rxItem.getmTime());
+        if (rxItem.getmDose() != null) {
+            String[] dose = rxItem.getmDose().split(" ");
+            mMDose.setText(dose[0]);
+            if (dose.length == 2) {
+                mDoseMUnit.setSelection(Utility.getDoseUnitPosition(this, rxItem.getDrugForm(), dose[1].trim()));
+            }
         }
-        if (rxItem.getaTime() != null) {
-            mATime.setText(rxItem.getaTime());
+        if (rxItem.getaDose() != null) {
+            String[] dose = rxItem.getaDose().split(" ");
+            mADose.setText(dose[0]);
+            if (dose.length == 2) {
+                mDoseAUnit.setSelection(Utility.getDoseUnitPosition(this, rxItem.getDrugForm(), dose[1].trim()));
+            }
         }
-        if (rxItem.geteTime() != null) {
-            mETime.setText(rxItem.geteTime());
+        if (rxItem.geteDose() != null) {
+            String[] dose = rxItem.geteDose().split(" ");
+            mEDose.setText(dose[0]);
+            if (dose.length == 2) {
+                mDoseEUnit.setSelection(Utility.getDoseUnitPosition(this, rxItem.getDrugForm(), dose[1].trim()));
+            }
         }
     }
 
     private void fillRxItem(RxItem rxItem) {
         rxItem.setDrugName(mDrugName.getText().toString());
-        rxItem.setDrugStrength(mDrugStrength.getText().toString());
         rxItem.setDrugForm(mDrugForm.getSelectedItem().toString());
-        rxItem.setDoseQty(mDoseQty.getText().toString());
         rxItem.setCourseDur(Integer.parseInt(mCourseDur.getText().toString()));
         boolean beforeMeal = false;
         if (mEmptyOrFull.getSelectedItem().toString().equals(getString(R.string.before_meal))) {
@@ -239,22 +268,31 @@ public class RxActivity extends Activity implements ResponseHandler {
         rxItem.setBeforeMeal(beforeMeal);
         rxItem.setInTakeSteps(mInTakeSteps.getText().toString());
         rxItem.setAltDrugName(mAltDrugName.getText().toString());
-        rxItem.setAltDrugStrength(mAltDrugStrength.getText().toString());
         rxItem.setAltDrugForm(mAltDrugForm.getSelectedItem().toString());
 
         rxItem.setMorning(mMorning.isChecked());
+        if (mMorning.isChecked()) {
+            String unit = "";
+            if (mDoseMUnit.getSelectedItem() != null) {
+                unit = mDoseMUnit.getSelectedItem().toString();
+            }
+            rxItem.setmDose(String.format("%s %s", mMDose.getText().toString(), unit));
+        }
         rxItem.setAfternoon(mAfternnon.isChecked());
+        if (mAfternnon.isChecked()) {
+            String unit = "";
+            if (mDoseAUnit.getSelectedItem() != null) {
+                unit = mDoseAUnit.getSelectedItem().toString();
+            }
+            rxItem.setmDose(String.format("%s %s", mADose.getText().toString(), unit));
+        }
         rxItem.setEvening(mEvening.isChecked());
-
-        String time = getString(R.string.time);
-        if (!mMTime.getText().toString().equals(time)) {
-            rxItem.setmTime(mMTime.getText().toString());
-        }
-        if (!mATime.getText().toString().equals(time)) {
-            rxItem.setaTime(mATime.getText().toString());
-        }
-        if (!mETime.getText().toString().equals(time)) {
-            rxItem.seteTime(mETime.getText().toString());
+        if (mEvening.isChecked()) {
+            String unit = "";
+            if (mDoseEUnit.getSelectedItem() != null) {
+                unit = mDoseEUnit.getSelectedItem().toString();
+            }
+            rxItem.setmDose(String.format("%s %s", mEDose.getText().toString(), unit));
         }
     }
 
@@ -286,22 +324,21 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     private void clearFields() {
         mDrugName.setText("");
-        mDrugStrength.setText("");
 
-        mDoseQty.setText("");
         mCourseDur.setText("");
         mMorning.setChecked(false);
         mAfternnon.setChecked(false);
         mEvening.setChecked(false);
 
-        String time = getString(R.string.time);
-        mMTime.setText(time);
-        mATime.setText(time);
-        mETime.setText(time);
+        mMDose.setText("");
+        mADose.setText("");
+        mEDose.setText("");
+        mDoseMUnit.setAdapter(null);
+        mDoseAUnit.setAdapter(null);
+        mDoseEUnit.setAdapter(null);
 
         mInTakeSteps.setText("");
         mAltDrugName.setText("");
-        mAltDrugStrength.setText("");
     }
 
     private boolean isValidInput() {
@@ -309,11 +346,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         View focusView = null;
 
         String value = mCourseDur.getText().toString();
-        if (TextUtils.isEmpty(value)) {
-            mCourseDur.setError(getString(R.string.error_field_required));
-            focusView = mCourseDur;
-            valid = false;
-        } else {
+        if (!TextUtils.isEmpty(value)) {
             try {
                 int dur = Integer.parseInt(value);
                 if (dur < 0) {
@@ -326,18 +359,35 @@ public class RxActivity extends Activity implements ResponseHandler {
             }
         }
 
-        value = mDoseQty.getText().toString();
-        if (TextUtils.isEmpty(value)) {
-            mDoseQty.setError(getString(R.string.error_field_required));
-            focusView = mDoseQty;
-            valid = false;
-        }
-
         value = mDrugName.getText().toString();
         if (TextUtils.isEmpty(value)) {
             mDrugName.setError(getString(R.string.error_field_required));
             focusView = mDrugName;
             valid = false;
+        }
+        if (mMorning.isChecked()) {
+            value = mMDose.getText().toString();
+            if (TextUtils.isEmpty(value)) {
+                mMDose.setError(getString(R.string.error_field_required));
+                focusView = mMDose;
+                valid = false;
+            }
+        }
+        if (mAfternnon.isChecked()) {
+            value = mADose.getText().toString();
+            if (TextUtils.isEmpty(value)) {
+                mADose.setError(getString(R.string.error_field_required));
+                focusView = mADose;
+                valid = false;
+            }
+        }
+        if (mEvening.isChecked()) {
+            value = mEDose.getText().toString();
+            if (TextUtils.isEmpty(value)) {
+                mEDose.setError(getString(R.string.error_field_required));
+                focusView = mEDose;
+                valid = false;
+            }
         }
         if (!valid) {
             focusView.requestFocus();

@@ -64,8 +64,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private LinearLayout mLayoutWorkHrs;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options = getResources().getStringArray(R.array.days);
-    protected boolean[] selections = new boolean[options.length];
+    protected CharSequence[] options;
+    protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
     String selectedDays;
 
@@ -74,6 +74,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.activity_add_workplace, container, false);
         LoginHolder.spsspt = new ServProvHasServPt();
+
+        options = getResources().getStringArray(R.array.days);
+        selections = new boolean[options.length];
 
         mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);
         mProgressView = mRootview.findViewById(R.id.progressView);

@@ -9,15 +9,14 @@ public class RxItem implements Parcelable {
     private String drugName;
     private String drugStrength;
     private String drugForm;
-    private String doseQty;
     private int courseDur;
     private boolean beforeMeal;
     private boolean morning;
     private boolean afternoon;
     private boolean evening;
-    private String mTime;
-    private String aTime;
-    private String eTime;
+    private String mDose;
+    private String aDose;
+    private String eDose;
     private String inTakeSteps;
     private String altDrugName;
     private String altDrugStrength;
@@ -33,15 +32,14 @@ public class RxItem implements Parcelable {
         drugName = in.readString();
         drugStrength = in.readString();
         drugForm = in.readString();
-        doseQty = in.readString();
         courseDur = in.readInt();
         beforeMeal = in.readByte() != 0;
         morning = in.readByte() != 0;
         afternoon = in.readByte() != 0;
         evening = in.readByte() != 0;
-        mTime = in.readString();
-        aTime = in.readString();
-        eTime = in.readString();
+        mDose = in.readString();
+        aDose = in.readString();
+        eDose = in.readString();
         inTakeSteps = in.readString();
         altDrugName = in.readString();
         altDrugStrength = in.readString();
@@ -101,14 +99,6 @@ public class RxItem implements Parcelable {
         this.drugForm = drugForm;
     }
 
-    public String getDoseQty() {
-        return doseQty;
-    }
-
-    public void setDoseQty(String doseQty) {
-        this.doseQty = doseQty;
-    }
-
     public int getCourseDur() {
         return courseDur;
     }
@@ -147,30 +137,6 @@ public class RxItem implements Parcelable {
 
     public void setEvening(boolean evening) {
         this.evening = evening;
-    }
-
-    public String getmTime() {
-        return mTime;
-    }
-
-    public void setmTime(String mTime) {
-        this.mTime = mTime;
-    }
-
-    public String getaTime() {
-        return aTime;
-    }
-
-    public void setaTime(String aTime) {
-        this.aTime = aTime;
-    }
-
-    public String geteTime() {
-        return eTime;
-    }
-
-    public void seteTime(String eTime) {
-        this.eTime = eTime;
     }
 
     public String getInTakeSteps() {
@@ -223,7 +189,7 @@ public class RxItem implements Parcelable {
 
     public String getDailyDoseString() {
         return String.format("%s---%s---%s",
-                morning ? doseQty : "X", afternoon ? doseQty : "X", evening ? doseQty : "X");
+                morning ? mDose : "0", afternoon ? aDose : "0", evening ? eDose : "0");
     }
 
     @Override
@@ -238,19 +204,42 @@ public class RxItem implements Parcelable {
         dest.writeString(drugName);
         dest.writeString(drugStrength);
         dest.writeString(drugForm);
-        dest.writeString(doseQty);
         dest.writeInt(courseDur);
         dest.writeByte((byte) (beforeMeal ? 1 : 0));
         dest.writeByte((byte) (morning ? 1 : 0));
         dest.writeByte((byte) (afternoon ? 1 : 0));
         dest.writeByte((byte) (evening ? 1 : 0));
-        dest.writeString(mTime);
-        dest.writeString(aTime);
-        dest.writeString(eTime);
+        dest.writeString(mDose);
+        dest.writeString(aDose);
+        dest.writeString(eDose);
         dest.writeString(inTakeSteps);
         dest.writeString(altDrugName);
         dest.writeString(altDrugStrength);
         dest.writeString(altDrugForm);
         dest.writeInt(available);
+    }
+
+    public String getmDose() {
+        return mDose;
+    }
+
+    public void setmDose(String mDose) {
+        this.mDose = mDose;
+    }
+
+    public String geteDose() {
+        return eDose;
+    }
+
+    public void seteDose(String eDose) {
+        this.eDose = eDose;
+    }
+
+    public String getaDose() {
+        return aDose;
+    }
+
+    public void setaDose(String aDose) {
+        this.aDose = aDose;
     }
 }

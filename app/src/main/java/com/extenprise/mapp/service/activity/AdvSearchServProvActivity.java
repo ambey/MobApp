@@ -55,8 +55,8 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     private View mSearchFormView;
 
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options = getResources().getStringArray(R.array.days);
-    protected boolean[] selections = new boolean[options.length];
+    protected CharSequence[] options;
+    protected boolean[] selections;
     String selectedDays;
 
     @Override
@@ -67,6 +67,9 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        options = getResources().getStringArray(R.array.days);
+        selections = new boolean[options.length];
 
         mDrClinicName = (EditText) findViewById(R.id.editSearchDr);
         mSpeciality = (Spinner) findViewById(R.id.viewSpeciality);

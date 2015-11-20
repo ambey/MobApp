@@ -31,11 +31,14 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
     private ServiceProvider mServProv;
     private Boolean exit = false;
+    private TextView mMsgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medical_store_home);
+
+        mMsgView = (TextView)findViewById(R.id.msgView);
 
         mServProv = LoginHolder.servLoginRef;
 
@@ -92,10 +95,12 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         bundle.putInt("id", mServProv.getServProvHasServPt(0).getIdServProvHasServPt());
         mConnection.setAction(MappService.DO_GET_RX_INBOX);
         mConnection.setData(bundle);
+        mMsgView.setVisibility(View.VISIBLE);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotRxInbox(Bundle data) {
+        mMsgView.setVisibility(View.GONE);
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);

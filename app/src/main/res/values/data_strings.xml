@@ -48,12 +48,34 @@
         <item>@string/syrup</item>
         <item>@string/gel</item>
         <item>@string/cream</item>
+        <item>@string/powder</item>
+    </string-array>
+
+    <string-array name="syrup_unit">
+        <item>@string/drops</item>
+        <item>@string/spoon</item>
+        <item>@string/ml</item>
+    </string-array>
+
+    <string-array name="gel_unit">
+        <item>@string/spoon</item>
+        <item>@string/ml</item>
+    </string-array>
+
+    <string-array name="powder_unit">
+        <item>@string/scoop</item>
     </string-array>
 
     <string name="tablet">Tablet</string>
     <string name="syrup">Syrup</string>
     <string name="gel">Gel</string>
     <string name="cream">Cream</string>
+    <string name="powder">Powder</string>
+
+    <string name="ml">ml</string>
+    <string name="spoon">Spoon</string>
+    <string name="drops">Drops</string>
+    <string name="scoop">Scoop</string>
 
     <string-array name="state">
         <item>Maharashtra</item>

@@ -518,14 +518,35 @@ public abstract class Utility {
         return time;
     }
 
+    public static int getStringPosInArray(String[] array, String value) {
+        try {
+            for (int i = 0; i < array.length; i++) {
+                if (array[i].equalsIgnoreCase(value)) {
+                    return i;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public static int getDrugTypePosition(Context context, String drugType) {
         String[] drugTypes = context.getResources().getStringArray(R.array.drug_type);
-        for (int i = 0; i < drugTypes.length; i++) {
-            if (drugTypes[i].equalsIgnoreCase(drugType)) {
-                return i;
-            }
+        return getStringPosInArray(drugTypes, drugType);
+    }
+
+    public static int getDoseUnitPosition(Context context, String drugType, String doseUnit) {
+        int arrayResId = -1;
+        if (drugType.equalsIgnoreCase(context.getString(R.string.syrup))) {
+            arrayResId = R.array.syrup_unit;
+        } else if (drugType.equalsIgnoreCase(context.getString(R.string.powder))) {
+            arrayResId = R.array.powder_unit;
         }
-        return 0;
+        if (arrayResId == -1) {
+            return -1;
+        }
+        return getStringPosInArray(context.getResources().getStringArray(arrayResId), doseUnit);
     }
 
     public static int getEmptyOrFullPosition(Context context, boolean empty) {

@@ -51,7 +51,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="Medico"
-            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             >
 
            <!-- <intent-filter>

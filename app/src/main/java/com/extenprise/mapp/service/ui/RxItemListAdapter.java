@@ -56,14 +56,12 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
             v = inflater.inflate(R.layout.layout_rx_item, null);
         }
         TextView nameView = (TextView) v.findViewById(R.id.viewDrugName);
-        TextView strengthView = (TextView) v.findViewById(R.id.viewDrugStrength);
         TextView kindView = (TextView) v.findViewById(R.id.viewDrugKind);
 
         TextView mView = (TextView) v.findViewById(R.id.mView);
         TextView aView = (TextView) v.findViewById(R.id.aView);
         TextView eView = (TextView) v.findViewById(R.id.eView);
 
-        TextView doseFreqView = (TextView) v.findViewById(R.id.viewDoseFreq);
         TextView courseView = (TextView) v.findViewById(R.id.viewCourseDur);
 
         CheckBox availableCB = (CheckBox) v.findViewById(R.id.checkboxAvailable);
@@ -94,14 +92,12 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
             availableView.setVisibility(View.GONE);
         }
         nameView.setText(item.getDrugName().toUpperCase());
-        strengthView.setText(item.getDrugStrength());
         kindView.setText(item.getDrugForm());
 
-        mView.setText(item.isMorning() ? "1" : "0");
-        aView.setText(item.isAfternoon() ? "1" : "0");
-        eView.setText(item.isEvening() ? "1" : "0");
+        mView.setText(item.isMorning() ? item.getmDose() : "0");
+        aView.setText(item.isAfternoon() ? item.getaDose() : "0");
+        eView.setText(item.isEvening() ? item.geteDose() : "0");
 
-        doseFreqView.setText(String.format("%s: %s", getContext().getString(R.string.dose), item.getDoseQty()));
         courseView.setText(String.format("%d %s", item.getCourseDur(), getContext().getString(R.string.days)));
 
         return v;
