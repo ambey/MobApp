@@ -147,11 +147,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showPersonalFields(View view) {
         if (mContLay.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mContLay);
+            Utility.collapse(mContLay, view);
         } else {
-            Utility.expand(mContLay);
+            Utility.expand(mContLay, view);
             if (mAddrLayout.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mAddrLayout);
+                Utility.collapse(mAddrLayout, null);
             }
         }
         /*
@@ -201,11 +201,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showAddressFields(View view) {
         if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mAddrLayout);
+            Utility.collapse(mAddrLayout, view);
         } else {
-            Utility.expand(mAddrLayout);
+            Utility.expand(mAddrLayout, view);
             if (mContLay.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mContLay);
+                Utility.collapse(mContLay, view);
             }
         }
     }
@@ -222,14 +222,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     }
 
     public void showImageUploadOptions(View view) {
-
         //UploadImage.uploadImage(this, mImgView);
-
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Upload Image ");
         dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -238,21 +235,17 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
                                 .getExternalStorageDirectory(), "temp.jpg");
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                         startActivityForResult(intent, REQUEST_CAMERA);
-                        //startImageCapture();
                         break;
-
                     case 1:
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
                         break;
-
                     case 2:
                         dialog.dismiss();
                         break;
                 }
             }
-
         });
         dialogBuilder.create().show();
     }
@@ -344,7 +337,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         } catch (Exception e) {
             Utility.showMessage(this, R.string.some_error);
         }
-
     }
 
 /*

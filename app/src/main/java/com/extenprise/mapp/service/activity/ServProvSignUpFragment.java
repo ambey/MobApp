@@ -479,7 +479,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
         if (!data.getBoolean("status")) {
             if (check == MappService.DO_REG_NO_CHECK) {
-                mRegistrationNumber.setError("This Registration Number is already Registered.");
+                mRegistrationNumber.setError(getString(R.string.error_reg_no_registered));
                 mRegistrationNumber.requestFocus();
             }
             if (check == MappService.DO_PHONE_EXIST_CHECK) {

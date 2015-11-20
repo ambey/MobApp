@@ -30,10 +30,14 @@ public class PatientsHomeScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
 
+        Intent intent = getIntent();
+        mCustomer = intent.getParcelableExtra("customer");
+        LoginHolder.custLoginRef = mCustomer;
+
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
-        SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" + mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
         Boolean saveVisit = prefs.getBoolean("saveVisit", false);
         if(saveVisit) {
             mlastDate.setText(prefs.getString("Date", ""));
@@ -42,16 +46,11 @@ public class PatientsHomeScreenActivity extends Activity {
             Utility.setCurrentDateOnView(mlastDate);
             Utility.setCurrentTimeOnView(mlastTime);
         }
-        Intent intent = getIntent();
-        mCustomer = intent.getParcelableExtra("customer");
-
-        LoginHolder.custLoginRef = mCustomer;
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +
                 mCustomer.getfName() + " " +
                 mCustomer.getlName();
-
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imagePatient);
@@ -59,7 +58,7 @@ public class PatientsHomeScreenActivity extends Activity {
             img.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getImg()));
         }
 
-        Utility.setLastVisited(this);
+        //Utility.setLastVisit(this, mCustomer.getSignInData().getPhone(), "customer");
     }
 
     public void viewProfile(View view) {

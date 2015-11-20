@@ -219,5 +219,6 @@
     <string name="show_history">Show History</string>
     <string name="no_appont_yet">No Appointments yet…</string>
     <string name="loading_page">Loading… Please wait</string>
+    <string name="error_reg_no_registered">This Registration Number is already Registered.</string>
 
 </resources>

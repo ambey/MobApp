@@ -125,31 +125,27 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
     public void showtimeFields(View view) {
         if (mServProLay3.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mServProLay3);
-            view.setBackgroundResource(R.drawable.label);
+            Utility.collapse(mServProLay3, view);
         } else {
-            Utility.expand(mServProLay3);
-            view.setBackgroundResource(R.drawable.expand);
+            Utility.expand(mServProLay3, view);
         }
     }
 
     public void showGenderField(View view) {
         if (mGender.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mGender);
+            Utility.collapse(mGender, view);
             view.setBackgroundResource(R.drawable.label);
         } else {
-            Utility.expand(mGender);
+            Utility.expand(mGender, view);
             view.setBackgroundResource(R.drawable.expand);
         }
     }
 
     public void showDaysField(View view) {
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mMultiSpinnerDays);
-            view.setBackgroundResource(R.drawable.label);
+            Utility.collapse(mMultiSpinnerDays, view);
         } else {
-            Utility.expand(mMultiSpinnerDays);
-            view.setBackgroundResource(R.drawable.expand);
+            Utility.expand(mMultiSpinnerDays, view);
         }
     }
 

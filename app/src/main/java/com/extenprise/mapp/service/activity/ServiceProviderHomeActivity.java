@@ -38,12 +38,14 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
+        mServiceProv = LoginHolder.servLoginRef;
+
         mMsgView = (TextView)findViewById(R.id.msgView);
 
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
-        SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
         Boolean saveVisit = prefs.getBoolean("saveVisit", false);
         if(saveVisit) {
             mlastDate.setText(prefs.getString("Date", ""));
@@ -52,8 +54,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
             Utility.setCurrentDateOnView(mlastDate);
             Utility.setCurrentTimeOnView(mlastTime);
         }
-
-        mServiceProv = LoginHolder.servLoginRef;
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +
@@ -66,8 +66,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         if (mServiceProv.getImg() != null) {
             img.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getImg()));
         }
-
-        Utility.setLastVisited(this);
+        //Utility.setLastVisited(this);
     }
 
     public void viewAppointment(View view) {
@@ -86,6 +85,8 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     public void viewRxFeedback(View view) {
         Bundle bundle = new Bundle();
         bundle.putInt("id", mServiceProv.getServProvHasServPt(0).getIdServProvHasServPt());
+        //SPSSPT ID is not fetching from server.. so its giving null Exception.
+        //TODO
         bundle.putInt("status", ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
         mConnection.setData(bundle);

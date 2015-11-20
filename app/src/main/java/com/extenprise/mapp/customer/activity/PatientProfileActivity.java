@@ -160,22 +160,22 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
 
     public void showPersonalFields(View view) {
         if (mContLay.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mContLay);
+            Utility.collapse(mContLay, null);
         } else {
-            Utility.expand(mContLay);
+            Utility.expand(mContLay, null);
             if (mAddrLayout.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mAddrLayout);
+                Utility.collapse(mAddrLayout, null);
             }
         }
     }
 
     public void showAddressFields(View view) {
         if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mAddrLayout);
+            Utility.collapse(mAddrLayout, null);
         } else {
-            Utility.expand(mAddrLayout);
+            Utility.expand(mAddrLayout, null);
             if (mContLay.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mContLay);
+                Utility.collapse(mContLay, null);
             }
         }
     }

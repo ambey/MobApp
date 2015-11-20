@@ -428,7 +428,10 @@ public abstract class Utility {
         return Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(), bitmapToScale.getHeight(), matrix, true);*/
     }
 
-    public static void expand(final View v) {
+    public static void expand(final View v, View view) {
+        if(view != null) {
+            view.setBackgroundResource(R.drawable.expand);
+        }
         v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final int targtetHeight = v.getMeasuredHeight();
 
@@ -453,7 +456,11 @@ public abstract class Utility {
         v.startAnimation(a);
     }
 
-    public static void collapse(final View v) {
+    public static void collapse(final View v, View view) {
+        if(view != null) {
+            view.setBackgroundResource(R.drawable.label);
+        }
+
         final int initialHeight = v.getMeasuredHeight();
 
         Animation a = new Animation() {
@@ -489,8 +496,17 @@ public abstract class Utility {
         return anim;
     }
 
-    public static void setLastVisited(Activity activity) {
+    /*public static void setLastVisited(Activity activity) {
         SharedPreferences prefer = activity.getSharedPreferences("lastVisit", 0);
+        SharedPreferences.Editor preferencesEditor = prefer.edit();
+        preferencesEditor.putBoolean("saveVisit", true);
+        preferencesEditor.putString("Date", setCurrentDateOnView(null));
+        preferencesEditor.putString("Time", setCurrentTimeOnView(null));
+        preferencesEditor.apply();
+    }*/
+
+    public static void setLastVisit(Activity activity, String phone, String type) {
+        SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);
         SharedPreferences.Editor preferencesEditor = prefer.edit();
         preferencesEditor.putBoolean("saveVisit", true);
         preferencesEditor.putString("Date", setCurrentDateOnView(null));

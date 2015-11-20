@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
@@ -120,8 +121,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
         //workPlace.setSignInData(LoginHolder.servLoginRef.getPhone());
         workPlace = new WorkPlace();
-        workPlace.getSignInData().setPhone(LoginHolder.servLoginRef.getPhone());
-
+        SignInData sid = new SignInData();
+        sid.setPhone(LoginHolder.servLoginRef.getPhone());
+        workPlace.setSignInData(sid);
+        //workPlace.getSignInData().setPhone(LoginHolder.servLoginRef.getPhone());
         mWorkPlaceList = new ArrayList<>();
 
         mFormView = findViewById(R.id.updateServProvform);
@@ -227,6 +230,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
 
         //Get work place list from server
+
+        Utility.showProgress(this, mFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
         bundle.putParcelable("workPlace", workPlace);
@@ -367,6 +372,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             //adapter.removeItem(adapter.getItem(position));
             //adapter.remove(item);
             //item.getActionView().setVisibility(View.GONE);
+            Utility.showProgress(this, mFormView, mProgressView, true);
             workPlace = mWorkPlaceList.get(item.getItemId());
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
@@ -380,7 +386,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         return super.onContextItemSelected(item);
     }
 
-
     public void showtimeFields(View view) {
         int[] buttonIds = new int[]{
                 R.id.buttonStartTime,
@@ -389,9 +394,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         for (int buttonId : buttonIds) {
             Button btn = (Button) findViewById(buttonId);
             if (btn.getVisibility() == View.GONE) {
-                btn.setVisibility(View.VISIBLE);
+                Utility.expand(btn, view);
             } else {
-                btn.setVisibility(View.GONE);
+                Utility.collapse(btn, view);
             }
         }
     }
@@ -458,22 +463,22 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     public void openPersonalInfo(View view) {
         if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-            mPersonalInfo.setVisibility(View.GONE);
+            Utility.collapse(mPersonalInfo, null);
         } else {
-            mPersonalInfo.setVisibility(View.VISIBLE);
+            Utility.expand(mPersonalInfo, null);
             if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-                mWorkPlaceInfo.setVisibility(View.GONE);
+                Utility.collapse(mWorkPlaceInfo, null);
             }
         }
     }
 
     public void openWorkPlaceInfo(View view) {
         if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-            mWorkPlaceInfo.setVisibility(View.GONE);
+            Utility.collapse(mWorkPlaceInfo, null);
         } else {
-            mWorkPlaceInfo.setVisibility(View.VISIBLE);
+            Utility.expand(mWorkPlaceInfo, null);
             if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-                mPersonalInfo.setVisibility(View.GONE);
+                Utility.collapse(mPersonalInfo, null);
             }
         }
     }
@@ -626,12 +631,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     public void changeImage(View view) {
-
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Upload Image ");
         dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -640,21 +643,17 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                                 .getExternalStorageDirectory(), "temp.jpg");
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                         startActivityForResult(intent, REQUEST_CAMERA);
-                        //startImageCapture();
                         break;
-
                     case 1:
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
                         break;
-
                     case 2:
                         dialog.dismiss();
                         break;
                 }
             }
-
         });
         dialogBuilder.create().show();
     }
@@ -682,7 +681,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imgDecodableString = cursor.getString(columnIndex);
+                    String imgDecodableString = cursor.getString(columnIndex);
                     cursor.close();
                     // Set the Image in ImageView after decoding the String
                     mImgView.setImageBitmap(BitmapFactory
@@ -735,7 +734,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         } catch (Exception e) {
             Utility.showMessage(this, R.string.some_error);
         }
-
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -797,6 +795,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 /*String servCategory = mServCatagory.getSelectedItem().toString();
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);*/
+                Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
                 Bundle bundle = new Bundle();
                 bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                 SearchServProvForm mForm = new SearchServProvForm();
@@ -871,6 +870,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     wpt.setQualification(mQualification.getText().toString().trim());
 
                     workPlace = wpt;
+                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     bundle.putParcelable("workPlace", workPlace);
@@ -1049,6 +1049,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             int count = LoginHolder.servLoginRef.getServiceCount() + 1;
         }
 
+        Utility.showProgress(this, mFormView, mProgressView, true);
         LoginHolder.servLoginRef = sp;
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
@@ -1323,15 +1324,17 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 }
-
             });*/
             listView.setAdapter(adapter);
             registerForContextMenu(listView);
+            Utility.showMessage(this, R.string.work_place_details);
         }
+
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
     private void getSpecialitiesDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
         ArrayList<String> list = data.getStringArrayList("specialities");
         if (list == null) {
             list = new ArrayList<>();

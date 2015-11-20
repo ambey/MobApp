@@ -322,13 +322,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mLoginFormView, mProgressView, true);
         }
-
-        /*SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-
-        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (saveLogin) {
-
-        }*/
     }
 
     @Override
@@ -372,7 +365,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
         mMobileNumber.setAdapter(adapter);
     }
 
@@ -380,6 +372,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mLoginFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
+            String phone = "", type = "";
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
@@ -398,6 +391,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 }
                 intent.putExtra("customer", customer);
                 LoginHolder.custLoginRef = customer;
+                phone = customer.getSignInData().getPhone();
+                type = "customer";
             } else {
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
                 assert serviceProvider != null;
@@ -408,13 +403,15 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 if (servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                     intent = new Intent(this, MedicalStoreHomeActivity.class);
                 }
+                phone = serviceProvider.getSignInData().getPhone();
+                type = "servprov";
             }
+            Utility.setLastVisit(this, phone, type);
             startActivity(intent);
         } else {
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();
         }
     }
-
 }
 
