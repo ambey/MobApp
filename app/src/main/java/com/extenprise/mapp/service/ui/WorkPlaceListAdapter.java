@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.service.data.WorkPlace;
@@ -73,8 +74,20 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> {
         mQualification.setText(item.getQualification());
         mMultiSpinnerDays.setText(item.getWorkingDays());
         mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
-        mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
+        //mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
         mExperience.setText(String.format("%.01f", item.getExperience()));
+
+        ArrayList<String> specs = new ArrayList<>();
+        specs.add(item.getSpeciality());
+        Utility.setNewSpec(getContext(), specs, mSpeciality);
+
+        mServPtType.setClickable(false);
+        mCity.setClickable(false);
+        mStartTime.setClickable(false);
+        mEndTime.setClickable(false);
+        mMultiSpinnerDays.setClickable(false);
+        mServCatagory.setClickable(false);
+        mSpeciality.setClickable(false);
 
         return v;
     }

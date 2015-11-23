@@ -366,7 +366,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         if (item.getTitle() == "Edit") {
-            editWorkPlaceInfo(item.getActionView());
+            workPlace = mWorkPlaceList.get(item.getItemId());
+
+
+            //editWorkPlaceInfo(item.getActionView());
             return true;
         } else if (item.getTitle() == "Remove") {
             //ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
@@ -374,16 +377,18 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             //adapter.removeItem(adapter.getItem(position));
             //adapter.remove(item);
             //item.getActionView().setVisibility(View.GONE);
-            Utility.showProgress(this, mFormView, mProgressView, true);
-            workPlace = mWorkPlaceList.get(item.getItemId());
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            bundle.putParcelable("workPlace", workPlace);
-            mConnection.setData(bundle);
-            mConnection.setAction(MappService.REMOVE_WORK_PLACE);
-            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-            //adapter.notifyDataSetChanged();
-            return true;
+            if(Utility.confirm(this, R.string.confirm_remove_workplace)) {
+                Utility.showProgress(this, mFormView, mProgressView, true);
+                workPlace = mWorkPlaceList.get(item.getItemId());
+                Bundle bundle = new Bundle();
+                bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                bundle.putParcelable("workPlace", workPlace);
+                mConnection.setData(bundle);
+                mConnection.setAction(MappService.REMOVE_WORK_PLACE);
+                Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+                //adapter.notifyDataSetChanged();
+                return true;
+            }
         }
         return super.onContextItemSelected(item);
     }
@@ -449,6 +454,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         for (int buttonId : buttonIds) {
             Button btn = (Button) v.findViewById(buttonId);
             btn.setEnabled(set);
+            btn.setClickable(true);
         }
 
         int[] spinnerIds = new int[]{
@@ -458,29 +464,36 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 R.id.editTextCity
         };
         for (int spinnerId : spinnerIds) {
-            Button btn = (Button) v.findViewById(spinnerId);
-            btn.setEnabled(set);
+            Spinner spn = (Spinner) v.findViewById(spinnerId);
+            spn.setEnabled(set);
+            spn.setClickable(true);
         }
     }
 
     public void openPersonalInfo(View view) {
         if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mPersonalInfo, null);
+            //Utility.collapse(mPersonalInfo, null);
+            mPersonalInfo.setVisibility(View.GONE);
         } else {
-            Utility.expand(mPersonalInfo, null);
+            //Utility.expand(mPersonalInfo, null);
+            mPersonalInfo.setVisibility(View.VISIBLE);
             if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mWorkPlaceInfo, null);
+                //Utility.collapse(mWorkPlaceInfo, null);
+                mWorkPlaceInfo.setVisibility(View.GONE);
             }
         }
     }
 
     public void openWorkPlaceInfo(View view) {
         if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mWorkPlaceInfo, null);
+            //Utility.collapse(mWorkPlaceInfo, null);
+            mWorkPlaceInfo.setVisibility(View.GONE);
         } else {
-            Utility.expand(mWorkPlaceInfo, null);
+            mWorkPlaceInfo.setVisibility(View.VISIBLE);
+            //Utility.expand(mWorkPlaceInfo, null);
             if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mPersonalInfo, null);
+                //Utility.collapse(mPersonalInfo, null);
+                mPersonalInfo.setVisibility(View.GONE);
             }
         }
     }
@@ -757,6 +770,46 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 */
         //addWorkPlaceScreen();
 
+        final AlertDialog dialog = Utility.openWorkPlaceDialog(this, getWorkPlaceView(null)).create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isValidWorkPlace()) {
+                    WorkPlace wpt = new WorkPlace();
+                    wpt.setName(mName.getText().toString().trim());
+                    wpt.setLocation(mLoc.getText().toString().trim());
+                    wpt.setCity(mCity.getSelectedItem().toString().trim());
+                    wpt.setPhone(mPhone1.getText().toString().trim());
+                    wpt.setAltPhone(mPhone2.getText().toString().trim());
+                    wpt.setEmailId(mEmailIdwork.getText().toString().trim());
+                    wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+                    wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
+                    wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setServCategory(mServCatagory.getSelectedItem().toString());
+                    wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
+                    wpt.setServPointType(mServPtType.getSelectedItem().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
+                    wpt.setQualification(mQualification.getText().toString().trim());
+
+                    workPlace = wpt;
+                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putParcelable("workPlace", workPlace);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.ADD_WORK_PLACE);
+                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+    private View getWorkPlaceView(WorkPlace item) {
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_servprov_wrkdetail_list, null);
 
@@ -776,6 +829,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
         workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
+
+
+        if(item != null) {
+            //TODO
+        }
 
         workhourLBL.setClickable(false);
         mStartTime.setOnClickListener(new View.OnClickListener() {
@@ -828,61 +886,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add New Work Place");
-        builder.setView(dialogView);
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                // TODO Auto-generated method stub
-            }
-        });
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidWorkPlace()) {
-                    WorkPlace wpt = new WorkPlace();
-                    wpt.setName(mName.getText().toString().trim());
-                    wpt.setLocation(mLoc.getText().toString().trim());
-                    wpt.setCity(mCity.getSelectedItem().toString().trim());
-                    wpt.setPhone(mPhone1.getText().toString().trim());
-                    wpt.setAltPhone(mPhone2.getText().toString().trim());
-                    wpt.setEmailId(mEmailIdwork.getText().toString().trim());
-                    wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
-                    wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
-                    wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
-                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                    wpt.setServCategory(mServCatagory.getSelectedItem().toString());
-                    wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
-                    wpt.setServPointType(mServPtType.getSelectedItem().toString());
-                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                    wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
-                    wpt.setQualification(mQualification.getText().toString().trim());
-
-                    workPlace = wpt;
-                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                    bundle.putParcelable("workPlace", workPlace);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.ADD_WORK_PLACE);
-                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
-                    dialog.dismiss();
-                }
-            }
-        });
+        return dialogView;
     }
 
     private boolean isValidWorkPlace() {

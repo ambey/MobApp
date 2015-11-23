@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -579,5 +580,53 @@ public abstract class Utility {
 
     public static String[] getDaysOptions(Context context) {
         return context.getResources().getStringArray(R.array.days);
+    }
+
+    public static boolean confirm(Activity activity, int msg) throws Resources.NotFoundException {
+        //final boolean confirm = false;
+        final boolean[] confirm = new boolean[1];
+        new AlertDialog.Builder(activity)
+                .setIcon(R.drawable.med_logo_final)
+                .setMessage(msg)
+                .setPositiveButton(R.string.yes,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                //confirm = true;
+                                confirm[0] = true;
+                            }
+                        })
+                .setNegativeButton(R.string.no,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                confirm[0] = false;
+
+                            }
+                        }).show();
+
+        return confirm[0];
+    }
+
+    public static AlertDialog.Builder openWorkPlaceDialog(Activity activity, View dialogView) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Add New Work Place");
+        builder.setView(dialogView);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        return builder;
     }
 }

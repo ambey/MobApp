@@ -152,13 +152,14 @@ public class MappService extends Service {
 
     public void addWorkPlace(Message msg) {
         Bundle data = msg.getData();
-        Object object = data.getParcelable("service");
+        //Object object = data.getParcelable("service");
+        WorkPlace workPlace = data.getParcelable("workPlace");
 
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         try {
-            task = new MappAsyncTask(getURL(ADD_WORK_PLACE), gson.toJson(object));
+            task = new MappAsyncTask(getURL(ADD_WORK_PLACE), gson.toJson(workPlace));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(ADD_WORK_PLACE);
@@ -186,13 +187,14 @@ public class MappService extends Service {
 
     public void removeWorkPlace(Message msg) {
         Bundle data = msg.getData();
-        Object object = data.getParcelable("service");
+        //Object object = data.getParcelable("service");
+        WorkPlace workPlace = data.getParcelable("workPlace");
 
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         try {
-            task = new MappAsyncTask(getURL(REMOVE_WORK_PLACE), gson.toJson(object));
+            task = new MappAsyncTask(getURL(REMOVE_WORK_PLACE), gson.toJson(workPlace));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(REMOVE_WORK_PLACE);

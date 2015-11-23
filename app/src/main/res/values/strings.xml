@@ -221,5 +221,10 @@
     <string name="show_history">Show History</string>
     <string name="no_appont_yet">No Appointments yet…</string>
     <string name="loading_page">Loading… Please wait</string>
+    <string name="confirm_remember">Do you Want Medico to save your login details?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirm_remove_workplace">Do you really want to remove work place.</string>
+
 
 </resources>

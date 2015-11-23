@@ -60,6 +60,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:padding="5dp"
+        android:clickable="false"
         android:prompt="@string/speciality_doc"
         android:spinnerMode="dropdown" />
 
@@ -78,6 +79,7 @@
         android:background="@drawable/spinner"
         android:choiceMode="singleChoice"
         android:focusable="true"
+        android:clickable="false"
         android:focusableInTouchMode="true"
         android:padding="5dp"
         android:spinnerMode="dropdown" />

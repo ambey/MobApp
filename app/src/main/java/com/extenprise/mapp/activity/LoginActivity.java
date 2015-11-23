@@ -294,11 +294,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
             loginPrefsEditor.putString("passwd", String.valueOf(Calendar.getInstance().getTime()));
             if (mSaveLoginCheckBox.isChecked()) {
-                loginPrefsEditor.putBoolean("saveLogin", true);
-                loginPrefsEditor.putString("username", mSignInData.getPhone());
-                loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
-                loginPrefsEditor.putString("logintype", uType);
-                loginPrefsEditor.apply();
+                if(Utility.confirm(this, R.string.confirm_remember)) {
+                    loginPrefsEditor.putBoolean("saveLogin", true);
+                    loginPrefsEditor.putString("username", mSignInData.getPhone());
+                    loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
+                    loginPrefsEditor.putString("logintype", uType);
+                    loginPrefsEditor.apply();
+                }
             } else {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
