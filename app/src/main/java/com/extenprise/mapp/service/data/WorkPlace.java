@@ -19,7 +19,7 @@ public class WorkPlace implements Parcelable {
     private String emailId;
     private String city;
     private String servPointType;
-    private String servCatagory;
+    private String servCategory;
     private String speciality;
     private float experience;
     private String qualification;
@@ -33,32 +33,37 @@ public class WorkPlace implements Parcelable {
     }
 
     public WorkPlace(Parcel source) {
-        String[] fields = new String[12];
-        signInData = new SignInData();
-
-        source.readStringArray(fields);
-        int count = 0;
-        name = fields[count++];
-        location = fields[count++];
-        speciality = fields[count++];
-        pincode = fields[count++];
-        phone = fields[count++];
-        altPhone = fields[count++];
-        emailId = fields[count++];
-        city = fields[count++];
-        servPointType = fields[count++];
-        servCatagory = fields[count++];
-        qualification = fields[count++];
-        signInData.setPhone(fields[count++]);
-        signInData.setPasswd(fields[count++]);
-        workingDays = fields[count];
-
+        signInData = source.readParcelable(SignInData.class.getClassLoader());
+        name = source.readString();
+        location = source.readString();
+        pincode = source.readString();
+        phone = source.readString();
+        altPhone = source.readString();
+        emailId = source.readString();
+        city = source.readString();
+        servPointType = source.readString();
+        servCategory = source.readString();
+        speciality = source.readString();
         experience = source.readFloat();
+        qualification = source.readString();
+        workingDays = source.readString();
+        consultFee = source.readFloat();
         startTime = source.readInt();
         endTime = source.readInt();
-        consultFee = source.readFloat();
     }
 
+
+    public static final Creator<WorkPlace> CREATOR = new Creator<WorkPlace>() {
+        @Override
+        public WorkPlace createFromParcel(Parcel in) {
+            return new WorkPlace(in);
+        }
+
+        @Override
+        public WorkPlace[] newArray(int size) {
+            return new WorkPlace[size];
+        }
+    };
 
     @Override
     public int describeContents() {
@@ -67,26 +72,24 @@ public class WorkPlace implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{name, location, pincode, phone, altPhone,
-                emailId, city, servPointType, servCatagory, speciality, qualification, workingDays});
+        dest.writeParcelable(signInData, flags);
+        dest.writeString(name);
+        dest.writeString(location);
+        dest.writeString(pincode);
+        dest.writeString(phone);
+        dest.writeString(altPhone);
+        dest.writeString(emailId);
+        dest.writeString(city);
+        dest.writeString(servPointType);
+        dest.writeString(servCategory);
+        dest.writeString(speciality);
         dest.writeFloat(experience);
+        dest.writeString(qualification);
+        dest.writeString(workingDays);
         dest.writeFloat(consultFee);
         dest.writeInt(startTime);
         dest.writeInt(endTime);
     }
-
-    public static final Creator<WorkPlace> CREATOR = new Creator<WorkPlace>() {
-
-        @Override
-        public WorkPlace createFromParcel(Parcel source) {
-            return new WorkPlace(source);
-        }
-
-        @Override
-        public WorkPlace[] newArray(int size) {
-            return new WorkPlace[size];
-        }
-    };
 
     public String getName() {
         return name;
@@ -142,14 +145,6 @@ public class WorkPlace implements Parcelable {
 
     public void setServPointType(String servPointType) {
         this.servPointType = servPointType;
-    }
-
-    public String getServCatagory() {
-        return servCatagory;
-    }
-
-    public void setServCatagory(String servCatagory) {
-        this.servCatagory = servCatagory;
     }
 
     public String getSpeciality() {
@@ -222,5 +217,13 @@ public class WorkPlace implements Parcelable {
 
     public void setSignInData(SignInData signInData) {
         this.signInData = signInData;
+    }
+
+    public String getServCategory() {
+        return servCategory;
+    }
+
+    public void setServCategory(String servCategory) {
+        this.servCategory = servCategory;
     }
 }

@@ -65,14 +65,14 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> {
         mPhone1.setText(item.getPhone());
         mPhone2.setText(item.getAltPhone());
         mEmailIdwork.setText(item.getEmailId());
-        mConsultFee.setText("" + item.getConsultFee());
+        mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
         mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
         mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity()));
-        mStartTime.setText(item.getStartTime());
-        mEndTime.setText(item.getEndTime());
+        mStartTime.setText(Utility.getTimeString(item.getStartTime()));
+        mEndTime.setText(Utility.getTimeString(item.getEndTime()));
         mQualification.setText(item.getQualification());
         mMultiSpinnerDays.setText(item.getWorkingDays());
-        mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCatagory()));
+        mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
         mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
         mExperience.setText(String.format("%.01f", item.getExperience()));
 

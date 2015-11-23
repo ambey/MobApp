@@ -169,13 +169,13 @@ public class MappService extends Service {
 
     public void getWorkPlace(Message msg) {
         Bundle data = msg.getData();
-        Object object = data.getParcelable("service");
+        WorkPlace workPlace = data.getParcelable("workPlace");
 
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         try {
-            task = new MappAsyncTask(getURL(DO_WORK_PLACE_LIST), gson.toJson(object));
+            task = new MappAsyncTask(getURL(DO_WORK_PLACE_LIST), gson.toJson(workPlace));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             onError(DO_WORK_PLACE_LIST);

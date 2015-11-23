@@ -152,7 +152,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         Intent intent = getIntent();
         String category = intent.getStringExtra("category");
         if(category.equals("Pharmacist")) {
-            mViewdrLbl.setText("Welcome");
+            mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
         }
 
@@ -209,7 +209,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private void viewProfile() {
         ServiceProvider sp = LoginHolder.servLoginRef;
 
-        mDocName.setText(sp.getfName() + " " + sp.getlName());
+        mDocName.setText(String.format("%s %s", sp.getfName(), sp.getlName()));
         /*String servCategory = sp.getServProvHasServPt(0).getService().getCategory();
         if (servCategory.equalsIgnoreCase("pharmacist")) {
             mViewdrLbl.setText("Welcome");
@@ -864,7 +864,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
                     wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
                     wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                    wpt.setServCatagory(mServCatagory.getSelectedItem().toString());
+                    wpt.setServCategory(mServCatagory.getSelectedItem().toString());
                     wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
                     wpt.setServPointType(mServPtType.getSelectedItem().toString());
                     wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
