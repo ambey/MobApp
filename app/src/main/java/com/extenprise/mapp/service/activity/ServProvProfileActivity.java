@@ -356,7 +356,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId() == R.id.workDetailListView) {
-            menu.setHeaderTitle("Item Operations");
+            //menu.setHeaderTitle(R.string.work_place_details);
             menu.add(0, v.getId(), 0, "Edit");
             menu.add(0, v.getId(), 0, "Remove");
         }
@@ -365,10 +365,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        workPlace = (WorkPlace) listView.getItemAtPosition(info.position);
         if (item.getTitle() == "Edit") {
-            workPlace = mWorkPlaceList.get(item.getItemId());
-
-
+            getWorkPlaceView(workPlace).show();
             //editWorkPlaceInfo(item.getActionView());
             return true;
         } else if (item.getTitle() == "Remove") {
@@ -379,7 +378,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             //item.getActionView().setVisibility(View.GONE);
             if(Utility.confirm(this, R.string.confirm_remove_workplace)) {
                 Utility.showProgress(this, mFormView, mProgressView, true);
-                workPlace = mWorkPlaceList.get(item.getItemId());
+                //workPlace = mWorkPlaceList.get(item.getItemId());
                 Bundle bundle = new Bundle();
                 bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                 bundle.putParcelable("workPlace", workPlace);
@@ -392,6 +391,40 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
         return super.onContextItemSelected(item);
     }
+
+    /*@Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+        if (!AdapterView.AdapterContextMenuInfo.class.isInstance (item.getMenuInfo ())) {
+            return false;
+        }
+        AdapterView.AdapterContextMenuInfo cmi =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        workPlace = (WorkPlace) listView.getItemAtPosition(cmi.position);
+
+        try {
+            if (item.getItemId() == R.string.edit1) {
+                getWorkPlaceView(workPlace).show();
+                return true;
+            } else if (item.getItemId() == R.string.remove) {
+                if(Utility.confirm(this, R.string.confirm_remove_workplace)) {
+                    Utility.showProgress(this, mFormView, mProgressView, true);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putParcelable("mWorkPlace", workPlace);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.REMOVE_WORK_PLACE);
+                    Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+                    return true;
+                }
+            }
+        }
+        catch (Exception error) {
+            Utility.showMessage(this, R.string.some_error);
+            return false;
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }*/
 
     public void showtimeFields(View view) {
         int[] buttonIds = new int[]{
@@ -768,48 +801,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         Cursor extendedCursor = new MergeCursor(cursors);
         adapter.notifyDataSetChanged();
 */
-        //addWorkPlaceScreen();
-
-        final AlertDialog dialog = Utility.openWorkPlaceDialog(this, getWorkPlaceView(null)).create();
-        dialog.show();
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidWorkPlace()) {
-                    WorkPlace wpt = new WorkPlace();
-                    wpt.setName(mName.getText().toString().trim());
-                    wpt.setLocation(mLoc.getText().toString().trim());
-                    wpt.setCity(mCity.getSelectedItem().toString().trim());
-                    wpt.setPhone(mPhone1.getText().toString().trim());
-                    wpt.setAltPhone(mPhone2.getText().toString().trim());
-                    wpt.setEmailId(mEmailIdwork.getText().toString().trim());
-                    wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
-                    wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
-                    wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
-                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                    wpt.setServCategory(mServCatagory.getSelectedItem().toString());
-                    wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
-                    wpt.setServPointType(mServPtType.getSelectedItem().toString());
-                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                    wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
-                    wpt.setQualification(mQualification.getText().toString().trim());
-
-                    workPlace = wpt;
-                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                    bundle.putParcelable("workPlace", workPlace);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.ADD_WORK_PLACE);
-                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
-                    dialog.dismiss();
-                }
-            }
-        });
+        getWorkPlaceView(null);
     }
 
-    private View getWorkPlaceView(WorkPlace item) {
+    private AlertDialog getWorkPlaceView(WorkPlace item) {
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_servprov_wrkdetail_list, null);
 
@@ -831,8 +826,30 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
 
+
         if(item != null) {
-            //TODO
+            mName.setText(item.getName());
+            mLoc.setText(item.getLocation());
+            mPhone1.setText(item.getPhone());
+            mPhone2.setText(item.getAltPhone());
+            mEmailIdwork.setText(item.getEmailId());
+            mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
+            mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
+            mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity()));
+            mStartTime.setText(Utility.getTimeString(item.getStartTime()));
+            mEndTime.setText(Utility.getTimeString(item.getEndTime()));
+            mQualification.setText(item.getQualification());
+            mMultiSpinnerDays.setText(item.getWorkingDays());
+            mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
+            //mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
+            mExperience.setText(String.format("%.01f", item.getExperience()));
+
+            ArrayList<String> specs = new ArrayList<>();
+            specs.add(item.getSpeciality());
+            Utility.setNewSpec(this, specs, mSpeciality);
+            /*specs.clear();
+            specs.add(item.getServCategory());
+            Utility.setNewSpec(this, specs, mServCatagory);*/
         }
 
         workhourLBL.setClickable(false);
@@ -879,14 +896,51 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     openSpecDialog();
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
+                Utility.showMessage(getApplicationContext(), R.string.no_spec_added);
             }
         });
 
-        return dialogView;
+        final AlertDialog dialog = Utility.openWorkPlaceDialog(this, dialogView).create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isValidWorkPlace()) {
+                    WorkPlace wpt = new WorkPlace();
+                    wpt.setName(mName.getText().toString().trim());
+                    wpt.setLocation(mLoc.getText().toString().trim());
+                    wpt.setCity(mCity.getSelectedItem().toString().trim());
+                    wpt.setPhone(mPhone1.getText().toString().trim());
+                    wpt.setAltPhone(mPhone2.getText().toString().trim());
+                    wpt.setEmailId(mEmailIdwork.getText().toString().trim());
+                    wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+                    wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
+                    wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setServCategory(mServCatagory.getSelectedItem().toString());
+                    wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
+                    wpt.setServPointType(mServPtType.getSelectedItem().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
+                    wpt.setQualification(mQualification.getText().toString().trim());
+
+                    workPlace = wpt;
+                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putParcelable("workPlace", workPlace);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.ADD_WORK_PLACE);
+                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        return dialog;
     }
 
     private boolean isValidWorkPlace() {
@@ -906,19 +960,20 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             valid = false;
         }
 
-        String spec = mSpeciality.getSelectedItem().toString();
-        if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
-            //Utility.showAlert(this, "", "Please select speciality.");
-            View selectedView = mSpeciality.getSelectedView();
-            if (selectedView != null && selectedView instanceof TextView) {
-                TextView selectedTextView = (TextView) selectedView;
-                String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
-                selectedTextView.setError(errorString);
+        if(mSpeciality.getSelectedItem() != null) {
+            String spec = mSpeciality.getSelectedItem().toString();
+            if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
+                //Utility.showAlert(this, "", "Please select speciality.");
+                View selectedView = mSpeciality.getSelectedView();
+                if (selectedView != null && selectedView instanceof TextView) {
+                    TextView selectedTextView = (TextView) selectedView;
+                    String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
+                    selectedTextView.setError(errorString);
+                }
+                focusView = mSpeciality;
+                valid = false;
             }
-            focusView = mSpeciality;
-            valid = false;
         }
-
         String exp = mExperience.getText().toString().trim();
         if (TextUtils.isEmpty(exp)) {
             mExperience.setError(getString(R.string.error_field_required));
@@ -1333,6 +1388,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             });*/
             listView.setAdapter(adapter);
             registerForContextMenu(listView);
+            //listView.setOnCreateContextMenuListener(this);
             Utility.showMessage(this, R.string.work_place_details);
         }
 
