@@ -30,9 +30,7 @@ public class PatientsHomeScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
 
-        Intent intent = getIntent();
-        mCustomer = intent.getParcelableExtra("customer");
-        LoginHolder.custLoginRef = mCustomer;
+        mCustomer = LoginHolder.custLoginRef;
 
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
@@ -61,6 +59,11 @@ public class PatientsHomeScreenActivity extends Activity {
         //Utility.setLastVisit(this, mCustomer.getSignInData().getPhone(), "customer");
     }
 
+    public void viewAppointments(View view) {
+        Intent intent = new Intent(this, ViewAppointmentListActivity.class);
+        intent.putExtra("customer", mCustomer);
+        startActivity(intent);
+    }
     public void viewProfile(View view) {
         Intent intent = new Intent(this, PatientProfileActivity.class);
         intent.putExtra("customer", mCustomer);

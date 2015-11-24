@@ -51,14 +51,15 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="Medico"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            >
+            android:windowSoftInputMode="adjustPan|stateHidden" >
 
-           <!-- <intent-filter>
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".service.activity.SearchServProvActivity"
@@ -250,7 +251,7 @@
         <activity
             android:name=".service.activity.RxListActivity"
             android:label="@string/title_activity_rx_list"
-            android:parentActivityName=".service.activity.MedicalStoreHomeActivity">
+            android:parentActivityName=".service.activity.MedicalStoreHomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.MedicalStoreHomeActivity" />
@@ -269,8 +270,7 @@
         </activity>
         <activity
             android:name=".activity.WelcomeActivity"
-            android:label="Medico"
-       >
+            android:label="Medico" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -284,6 +284,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.extenprise.mapp.service.activity.RxListActivity" />
+        </activity>
+        <activity android:name=".customer.activity.ViewAppointmentListActivity"
+            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".customer.activity.PatientsHomeScreenActivity" />
         </activity>
     </application>
 

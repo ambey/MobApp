@@ -228,5 +228,9 @@
     <string name="confirm_remove_workplace">Do you really want to remove work place.</string>
     <string name="no_spec_added">No Speciality added.</string>
 
+    <string name="upcoming_apponts">Upcoming Appointments</string>
+    <string name="time_lbl">Time:</string>
+    <string name="view_other_reports">View Other Reports</string>
+    <string name="address_lbl">Address:</string>
 
 </resources>

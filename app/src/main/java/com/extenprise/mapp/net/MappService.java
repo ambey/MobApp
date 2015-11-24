@@ -73,6 +73,8 @@ public class MappService extends Service {
     public static final int DO_SEND_AVAILABILITY = 24;
     public static final int DO_GET_RX_FEEDBACK = 25;
     public static final int DO_GET_RX_SCANNED_COPY = 26;
+    public static final int DO_GET_CUST_UPCOMING_APPONTS = 27;
+    public static final int DO_GET_CUST_PAST_APPONTS = 28;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -496,6 +498,22 @@ public class MappService extends Service {
         task.execute((Void) null);
     }
 
+    public void doGetCustApponts(Message msg) {
+        Bundle data = msg.getData();
+        com.extenprise.mapp.customer.data.AppointmentListItem item = data.getParcelable("appont");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        mReplyTo = msg.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(item));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(msg.what);
+            return;
+        }
+        task.execute((Void) null);
+    }
+
     private void onError(int action) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("status", false);
@@ -601,6 +619,12 @@ public class MappService extends Service {
             case DO_GET_RX_SCANNED_COPY:
                 urlId = R.string.action_get_rx_copy;
                 break;
+            case DO_GET_CUST_UPCOMING_APPONTS:
+                urlId= R.string.action_get_cust_upcoming_apponts;
+                break;
+            case DO_GET_CUST_PAST_APPONTS:
+                urlId=R.string.action_get_cust_past_apponts;
+                break;
             default:
                 return null;
         }
@@ -693,6 +717,10 @@ public class MappService extends Service {
                 case DO_GET_RX_SCANNED_COPY:
                     mService.doGetRxCopy(msg);
                     break;
+                case DO_GET_CUST_UPCOMING_APPONTS:
+                case DO_GET_CUST_PAST_APPONTS:
+                    mService.doGetCustApponts(msg);
+                    break;
                 default:
                     super.handleMessage(msg);
             }
@@ -713,6 +741,7 @@ public class MappService extends Service {
         private ArrayList<ServProvListItem> mServProvList;
         private ArrayList<String> mStringList;
         private ArrayList<AppointmentListItem> mAppontList;
+        private ArrayList<com.extenprise.mapp.customer.data.AppointmentListItem> mCustAppontList;
         private ArrayList<RxInboxItem> mInbox;
         private Appointment mForm;
         private Rx mRx;
@@ -835,6 +864,12 @@ public class MappService extends Service {
                         case DO_GET_RX_SCANNED_COPY:
                             mReport = gson.fromJson(responseBuf.toString(), Report.class);
                             break;
+                        case DO_GET_CUST_UPCOMING_APPONTS:
+                        case DO_GET_CUST_PAST_APPONTS:
+                            mCustAppontList = gson.fromJson(responseBuf.toString(),
+                                    new TypeToken<ArrayList<com.extenprise.mapp.customer.data.AppointmentListItem>>() {
+                            }.getType());
+                            break;
                     }
                     status = true;
                 }
@@ -877,7 +912,9 @@ public class MappService extends Service {
             if (mAppontList != null) {
                 bundle.putParcelableArrayList("appontList", mAppontList);
             }
-
+            if (mCustAppontList != null) {
+                bundle.putParcelableArrayList("appontList", mCustAppontList);
+            }
             if (mWorkPlaceList != null) {
                 bundle.putParcelableArrayList("workPlaceList", mWorkPlaceList);
             }

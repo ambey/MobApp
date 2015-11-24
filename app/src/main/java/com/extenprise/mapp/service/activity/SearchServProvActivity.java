@@ -86,7 +86,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
             return;
         }
         String selectedCategory = mServProvCategory.getSelectedItem().toString();
-        if(selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
+        if (selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
+            mSpeciality.setAdapter(null);
             return;
         }
         Utility.showProgress(this, mSearchFormView, mProgressView, true);
@@ -106,6 +107,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         if (specList == null) {
             specList = new ArrayList<>();
         }
+        specList.add(0, getString(R.string.select_speciality));
         SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
         mSpeciality.setAdapter(adapter);
     }
@@ -220,18 +222,17 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     public void searchDr(View view) {
         fillSearchForm();
-        if (AppStatus.getInstance(this).isOnline()) {
-            //Toast.makeText(this, "You are online!!!!", Toast.LENGTH_LONG).show();
-            Utility.showProgress(this, mSearchFormView, mProgressView, true);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("form", mForm);
-            mConnection.setData(bundle);
-            mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
-            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-        } else {
+        if (!AppStatus.getInstance(this).isOnline()) {
             Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
             Log.v("Home", "############################You are not online!!!!");
-        }
+            return;
+        }            //Toast.makeText(this, "You are online!!!!", Toast.LENGTH_LONG).show();
+        Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mForm);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
 
         /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
 

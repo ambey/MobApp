@@ -74,7 +74,7 @@
 
         <Button
             android:id="@+id/buttonDoctorsAppointment"
-            style="@style/InactiveRectButton"
+            style="@style/RectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/linenView5"
@@ -82,8 +82,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:enabled="false"
             android:layout_alignRight="@+id/linenView2"
+            android:onClick="viewAppointments"
             android:text="@string/doc_appoint" />
 
 
@@ -99,7 +99,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/linenView2"
             android:enabled="false"
-            android:text="@string/my_report" />
+            android:text="@string/view_other_reports" />
 
 
         <Button
@@ -111,7 +111,7 @@
             android:layout_alignEnd="@+id/linenView2"
             android:layout_alignRight="@+id/linenView2"
             android:layout_below="@+id/linenView5"
-            android:text="@string/my_rx"
+            android:text="@string/view_rx"
             android:enabled="false"/>
 
         <Button
