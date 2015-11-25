@@ -22,6 +22,7 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -271,9 +272,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     private void showWorkPlaceList() {
-
         final Cursor cursor = SearchServProv.getCursor();
-
         String[] values = new String[]{
                 MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY,
                 MappContract.Service.COLUMN_NAME_SERVICE_NAME,
@@ -291,7 +290,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS,
                 MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE
         };
-
         int[] viewIds = new int[]{
                 R.id.spinServiceProvCategory,
                 R.id.editTextSpeciality,
@@ -309,9 +307,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 R.id.editTextWeeklyOff,
                 R.id.editTextConsultationFees
         };
-
-        //ArrayAdapter arrayAdapter = new ArrayAdapter();
-
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.activity_servprov_wrkdetail_list,
                 cursor,
@@ -337,19 +332,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 return view;
             }
         };
-
-
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-            }
-
-        });*/
         listView.setAdapter(adapter);
-        registerForContextMenu(listView);
     }
 
     @Override
@@ -383,7 +367,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                 bundle.putParcelable("workPlace", workPlace);
                 mConnection.setData(bundle);
-                mConnection.setAction(MappService.REMOVE_WORK_PLACE);
+                mConnection.setAction(MappService.DO_REMOVE_WORK_PLACE);
                 Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
                 //adapter.notifyDataSetChanged();
                 return true;
@@ -825,8 +809,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
         workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
-
-
         if(item != null) {
             mName.setText(item.getName());
             mLoc.setText(item.getLocation());
@@ -853,6 +835,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
 
         workhourLBL.setClickable(false);
+        mSpeciality.setClickable(true);
+        mServCatagory.setClickable(true);
         mStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -896,13 +880,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     openSpecDialog();
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 Utility.showMessage(getApplicationContext(), R.string.no_spec_added);
             }
         });
 
-        final AlertDialog dialog = Utility.openWorkPlaceDialog(this, dialogView).create();
+        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.add_new_work_place).create();
         dialog.show();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -933,7 +918,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     bundle.putParcelable("workPlace", workPlace);
                     mConnection.setData(bundle);
-                    mConnection.setAction(MappService.ADD_WORK_PLACE);
+                    mConnection.setAction(MappService.DO_ADD_WORK_PLACE);
                     Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
                     dialog.dismiss();
                 }
@@ -1322,10 +1307,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     @Override
     public boolean gotResponse(int action, Bundle data) {
         switch (action) {
-            case MappService.ADD_WORK_PLACE:
+            case MappService.DO_ADD_WORK_PLACE:
                 addWorkPlaceDone(data);
                 break;
-            case MappService.REMOVE_WORK_PLACE:
+            case MappService.DO_REMOVE_WORK_PLACE:
                 removeWorkPlaceDone(data);
                 break;
             case MappService.DO_UPDATE:
@@ -1355,21 +1340,21 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private void updateDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showRegistrationAlert(this, "", "Profile Updated Successfully.");
+            Utility.showMessage(this, R.string.profile_updated);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
     private void addWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showRegistrationAlert(this, "", "Work Place Added Successfully.");
+            Utility.showMessage(this, R.string.add_work_place);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
     private void removeWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showRegistrationAlert(this, "", "Work Place Removed Successfully.");
+            Utility.showMessage(this, R.string.remove_work_place);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
@@ -1379,19 +1364,53 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
             mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
             WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
-                    R.layout.activity_servprov_wrkdetail_list, mWorkPlaceList);
+                    R.layout.layout_workplace, mWorkPlaceList);
             listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
             /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int opt = Utility.option(getApplicationContext(), R.string.edit1, R.string.remove);
+                    workPlace = mWorkPlaceList.get(position);
+                    if (opt == R.string.edit1) {
+                        getWorkPlaceView(workPlace);
+                    } else if (opt == R.string.remove) {
+                        if (Utility.confirm(getApplicationContext(), R.string.confirm_remove_workplace)) {
+                            Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                            bundle.putParcelable("workPlace", workPlace);
+                            mConnection.setData(bundle);
+                            mConnection.setAction(MappService.DO_REMOVE_WORK_PLACE);
+                            Utility.doServiceAction(getApplicationContext(), mConnection, BIND_AUTO_CREATE);
+                        }
+                    }
                 }
             });*/
+            listView.setOnTouchListener(new ListView.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+                    // Handle ListView touch events.
+                    v.onTouchEvent(event);
+                    return true;
+                }
+            });
             listView.setAdapter(adapter);
             registerForContextMenu(listView);
             //listView.setOnCreateContextMenuListener(this);
             Utility.showMessage(this, R.string.work_place_details);
         }
-
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 

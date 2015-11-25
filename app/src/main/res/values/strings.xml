@@ -232,5 +232,6 @@
     <string name="time_lbl">Time:</string>
     <string name="view_other_reports">View Other Reports</string>
     <string name="address_lbl">Address:</string>
+    <string name="profile_updated">Profile Updated</string>
 
 </resources>

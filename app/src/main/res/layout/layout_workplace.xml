@@ -1,0 +1,147 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".ServProvSignUpActivity">
+
+    <TextView
+        android:id="@+id/spinServiceProvCategory"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:hint="@string/cate" />
+    <TextView
+        android:id="@+id/editTextSpeciality"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:hint="@string/speciality"
+        android:layout_toEndOf="@+id/spinServiceProvCategory"
+        android:layout_toRightOf="@+id/spinServiceProvCategory" />
+
+    <TextView
+        android:id="@+id/editTextQualification"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/spinServiceProvCategory"
+        android:hint="@string/qualification" />
+    <TextView
+        android:id="@+id/editTextExperience"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextSpeciality"
+        android:layout_toEndOf="@+id/editTextQualification"
+        android:layout_toRightOf="@+id/editTextQualification"
+        android:hint="@string/experience" />
+    <TextView
+        android:id="@+id/editTextName"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextExperience"
+        android:hint="@string/name" />
+
+    <TextView
+        android:id="@+id/viewWorkPlaceType"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextExperience"
+        android:hint="@string/work_place_type"
+        android:layout_toEndOf="@+id/editTextName"
+        android:layout_toRightOf="@+id/editTextName" />
+
+    <TextView
+        android:id="@+id/editTextLoc"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextName"
+        android:hint="@string/loc" />
+
+    <TextView
+        android:id="@+id/editTextCity"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/viewWorkPlaceType"
+        android:hint="@string/city"
+        android:layout_toEndOf="@+id/editTextLoc"
+        android:layout_toRightOf="@+id/editTextLoc" />
+
+    <TextView
+        android:id="@+id/editTextPhone1"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextLoc"
+        android:hint="@string/phone1" />
+
+    <TextView
+        android:id="@+id/editTextPhone2"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextCity"
+        android:layout_toEndOf="@+id/editTextPhone1"
+        android:layout_toRightOf="@+id/editTextPhone1"
+        android:hint="@string/phone2" />
+
+    <TextView
+        android:id="@+id/editTextEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextPhone1"
+        android:hint="@string/email" />
+
+    <TextView
+        android:id="@+id/buttonStartTime"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextEmail"
+        android:hint="@string/start_time" />
+
+    <TextView
+        android:id="@+id/buttonEndTime"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextEmail"
+        android:layout_toEndOf="@+id/buttonStartTime"
+        android:layout_toRightOf="@+id/buttonStartTime"
+        android:visibility="gone"
+        android:hint="@string/end_time" />
+
+    <TextView
+        android:id="@+id/editTextWeeklyOff"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonStartTime"
+        android:text="@string/practice_days" />
+
+
+    <TextView
+        android:id="@+id/textViewConsultationFees"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextWeeklyOff"
+        android:hint="@string/consult_fees" />
+
+    <TextView
+        android:id="@+id/viewRsSign"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_below="@+id/editTextWeeklyOff"
+        android:layout_marginLeft="10dp"
+        android:text="@string/rs_sign"
+        android:layout_toEndOf="@+id/textViewConsultationFees"
+        android:layout_toRightOf="@+id/textViewConsultationFees"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/editTextConsultationFees"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/editTextWeeklyOff"
+        android:layout_toEndOf="@+id/viewRsSign"
+        android:layout_toRightOf="@+id/viewRsSign"
+        android:hint="@string/consult_fees" />
+
+</RelativeLayout>

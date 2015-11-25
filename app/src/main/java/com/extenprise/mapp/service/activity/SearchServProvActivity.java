@@ -223,10 +223,11 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     public void searchDr(View view) {
         fillSearchForm();
         if (!AppStatus.getInstance(this).isOnline()) {
-            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Log.v("Home", "############################You are not online!!!!");
+            //Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
+            Utility.showMessage(this, R.string.error_not_online);
+            //Log.v("Home", "############################You are not online!!!!");
             return;
-        }            //Toast.makeText(this, "You are online!!!!", Toast.LENGTH_LONG).show();
+        }
         Utility.showProgress(this, mSearchFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mForm);
@@ -235,7 +236,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
 
         /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
-
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc);
         mSearchTask.execute((Void) null);

@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageViewAvailable"
             android:layout_centerHorizontal="true"
+            android:divider="@drawable/divider"
             android:layout_marginTop="10dp" />
     </RelativeLayout>
 </RelativeLayout>

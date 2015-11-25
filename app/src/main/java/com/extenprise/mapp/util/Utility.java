@@ -582,11 +582,12 @@ public abstract class Utility {
         return context.getResources().getStringArray(R.array.days);
     }
 
-    public static boolean confirm(Activity activity, int msg) throws Resources.NotFoundException {
+    public static boolean confirm(Context activity, int msg) throws Resources.NotFoundException {
         //final boolean confirm = false;
         final boolean[] confirm = new boolean[1];
         new AlertDialog.Builder(activity)
-                .setIcon(R.drawable.med_logo_final)
+                .setTitle(R.drawable.med_logo_final)
+                /*.setIcon(R.drawable.med_logo_final)*/
                 .setMessage(msg)
                 .setPositiveButton(R.string.yes,
                         new DialogInterface.OnClickListener() {
@@ -611,11 +612,10 @@ public abstract class Utility {
         return confirm[0];
     }
 
-    public static AlertDialog.Builder openWorkPlaceDialog(Activity activity, View dialogView) {
+    public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Add New Work Place");
+        builder.setTitle(title);
         builder.setView(dialogView);
-
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -628,5 +628,36 @@ public abstract class Utility {
             }
         });
         return builder;
+    }
+
+    public static int option(Context activity, final int opt1, final int opt2) throws Resources.NotFoundException {
+        //final boolean confirm = false;
+        final int[] clicked = new int[1];
+        new AlertDialog.Builder(activity)
+                .setTitle(R.drawable.med_logo_final)
+                .setPositiveButton(opt1,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                clicked[0] = opt1;
+                            }
+                        })
+                .setNegativeButton(opt2,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                clicked[0] = opt2;
+                            }
+                        })
+                .setNeutralButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                clicked[0] = R.string.cancel;
+                                dialog.dismiss();
+                            }
+                        })
+                .show();
+        return clicked[0];
     }
 }

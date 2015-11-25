@@ -53,9 +53,9 @@ public class MappService extends Service {
     public static final int DO_SEARCH_SERV_PROV = 4;
     public static final int DO_SERV_PROV_DETAILS = 5;
     public static final int DO_UPDATE = 6;
-    public static final int ADD_WORK_PLACE = 7;
+    public static final int DO_ADD_WORK_PLACE = 7;
     public static final int DO_REG_NO_CHECK = 8;
-    public static final int REMOVE_WORK_PLACE = 9;
+    public static final int DO_REMOVE_WORK_PLACE = 9;
     public static final int DO_APPONT_TIME_SLOTS = 10;
     public static final int DO_BOOK_APPONT = 11;
     public static final int DO_APPONT_LIST = 12;
@@ -161,10 +161,10 @@ public class MappService extends Service {
         MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         try {
-            task = new MappAsyncTask(getURL(ADD_WORK_PLACE), gson.toJson(workPlace));
+            task = new MappAsyncTask(getURL(DO_ADD_WORK_PLACE), gson.toJson(workPlace));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            onError(ADD_WORK_PLACE);
+            onError(DO_ADD_WORK_PLACE);
             return;
         }
         task.execute((Void) null);
@@ -196,10 +196,10 @@ public class MappService extends Service {
         MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         try {
-            task = new MappAsyncTask(getURL(REMOVE_WORK_PLACE), gson.toJson(workPlace));
+            task = new MappAsyncTask(getURL(DO_REMOVE_WORK_PLACE), gson.toJson(workPlace));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            onError(REMOVE_WORK_PLACE);
+            onError(DO_REMOVE_WORK_PLACE);
             return;
         }
         task.execute((Void) null);
@@ -547,13 +547,13 @@ public class MappService extends Service {
                     urlId = R.string.action_update_cust;
                 }
                 break;
-            case ADD_WORK_PLACE:
+            case DO_ADD_WORK_PLACE:
                 urlId = R.string.action_addwork_place;
                 break;
             case DO_WORK_PLACE_LIST:
                 urlId = R.string.action_getwork_place;
                 break;
-            case REMOVE_WORK_PLACE:
+            case DO_REMOVE_WORK_PLACE:
                 urlId = R.string.remove_work_place;
                 break;
             case DO_PHONE_EXIST_CHECK:
@@ -652,13 +652,13 @@ public class MappService extends Service {
                 case DO_UPDATE:
                     mService.doUpdate(msg);
                     break;
-                case ADD_WORK_PLACE:
+                case DO_ADD_WORK_PLACE:
                     mService.addWorkPlace(msg);
                     break;
                 case DO_WORK_PLACE_LIST:
                     mService.getWorkPlace(msg);
                     break;
-                case REMOVE_WORK_PLACE:
+                case DO_REMOVE_WORK_PLACE:
                     mService.removeWorkPlace(msg);
                     break;
                 case DO_PHONE_EXIST_CHECK:
@@ -807,10 +807,10 @@ public class MappService extends Service {
                                 mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             }
                             break;
-                        case ADD_WORK_PLACE:
+                        case DO_ADD_WORK_PLACE:
                             mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlace.class);
                             break;
-                        case REMOVE_WORK_PLACE:
+                        case DO_REMOVE_WORK_PLACE:
                             mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlace.class);
                             break;
                         case DO_PHONE_EXIST_CHECK:
