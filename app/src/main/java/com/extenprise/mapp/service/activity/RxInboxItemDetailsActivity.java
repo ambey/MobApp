@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Report;
 import com.extenprise.mapp.data.ReportServiceStatus;
 import com.extenprise.mapp.data.Rx;
@@ -23,6 +24,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.ReportService;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.RxItemAvailability;
 import com.extenprise.mapp.service.ui.RxItemListAdapter;
@@ -41,14 +43,18 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_inbox_item_details);
         ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         Intent intent = getIntent();
         mInbox = intent.getParcelableArrayListExtra("inbox");
         int position = intent.getIntExtra("position", 0);
         mInboxItem = mInbox.get(position);
-        boolean feedback = intent.getBooleanExtra("feedback", false);
+        Customer customer = intent.getParcelableExtra("customer");
+        if(customer != null) {
+            mInboxItem.setCustomer(customer);
+        }
+        int feedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
 
         View layoutAppont = findViewById(R.id.layoutAppont);
         layoutAppont.setVisibility(View.GONE);
@@ -61,7 +67,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         TextView custNameView;
         TextView custPhoneView;
 
-        if (feedback) {
+        if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             View layoutRxHead = findViewById(R.id.layoutRxHead);
             layoutRxHead.setVisibility(View.GONE);
 
@@ -87,22 +93,28 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
         Button sendAvailabilityButton = (Button) findViewById(R.id.buttonSendAvailability);
         Button resendRxButton = (Button) findViewById(R.id.buttonResendRx);
-        if (feedback) {
+        if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             sendAvailabilityButton.setVisibility(View.GONE);
-            if (!mInboxItem.getRx().isAllItemsAvailable()) {
+            if (mInboxItem.getRx().isAllItemsAvailable()) {
                 Utility.setEnabledButton(this, resendRxButton, false);
             }
+        } else if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
+            resendRxButton.setVisibility(View.GONE);
         } else {
+            sendAvailabilityButton.setVisibility(View.GONE);
             resendRxButton.setVisibility(View.GONE);
         }
-        int status = mInboxItem.getReportService().getStatus();
-        if (ReportServiceStatus.STATUS_PENDING.ordinal() == status ||
-                ReportServiceStatus.STATUS_NEW.ordinal() == status) {
-            status = ReportServiceStatus.STATUS_INPROCESS.ordinal();
-        }
-        statusView.setText(ReportServiceStatus.getStatusString(this, status));
-        if (feedback) {
-            statusView.setVisibility(View.GONE);
+
+        if (feedback != RxFeedback.NONE.ordinal()) {
+            int status = mInboxItem.getReportService().getStatus();
+            if (ReportServiceStatus.STATUS_PENDING.ordinal() == status ||
+                    ReportServiceStatus.STATUS_NEW.ordinal() == status) {
+                status = ReportServiceStatus.STATUS_INPROCESS.ordinal();
+            }
+            statusView.setText(ReportServiceStatus.getStatusString(this, status));
+            if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+                statusView.setVisibility(View.GONE);
+            }
         }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
@@ -118,7 +130,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
         Rx rx = mInbox.get(position).getRx();
-        if(rx.getItems().size() == 0) {
+        if (rx.getItems().size() == 0) {
             sendAvailabilityButton.setVisibility(View.GONE);
             resendRxButton.setVisibility(View.GONE);
             listView.setVisibility(View.GONE);
@@ -129,8 +141,13 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
             return;
         }
-        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, position,
-                feedback ? RxFeedback.VIEW_FEEDBACK : RxFeedback.GIVE_FEEDBACK);
+        RxFeedback fb = RxFeedback.NONE;
+        if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+            fb = RxFeedback.VIEW_FEEDBACK;
+        } else if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
+            fb = RxFeedback.GIVE_FEEDBACK;
+        }
+        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, position, fb);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(adapter);
     }
@@ -154,7 +171,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     public void resendRx(View view) {
         Intent intent = getParentActivityIntent();
-        if(intent == null) {
+        if (intent == null) {
             return;
         }
         startActivity(intent);
@@ -169,7 +186,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     private void gotRxScannedCopy(Bundle data) {
         ImageView imageView = (ImageView) findViewById(R.id.rxCopyImageView);
         Report report = data.getParcelable("report");
-        if(report == null) {
+        if (report == null) {
             return;
         }
         byte[] pix = report.getScannedCopy();
@@ -182,13 +199,27 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
         if (intent == null) {
-            return null;
+            String parentActivityClass = getIntent().getStringExtra("parent-activity");
+            if(parentActivityClass != null) {
+                try {
+                    intent = new Intent(this, Class.forName(parentActivityClass));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(intent == null) {
+                return null;
+            }
         }
-        if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_NEW.ordinal()) {
-            mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_PENDING.ordinal());
+        ReportService service = mInboxItem.getReportService();
+        if(service != null) {
+            if (service.getStatus() == ReportServiceStatus.STATUS_NEW.ordinal()) {
+                service.setStatus(ReportServiceStatus.STATUS_PENDING.ordinal());
+            }
         }
         intent.putParcelableArrayListExtra("inbox", mInbox);
-        intent.putExtra("feedback", getIntent().getBooleanExtra("feedback", false));
+        intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal()));
+        intent.putExtra("customer", getIntent().getParcelableExtra("customer"));
         return intent;
     }
 
@@ -197,7 +228,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         if (action == MappService.DO_SEND_AVAILABILITY) {
             sentAvailabilityFeedback();
             return true;
-        } else if(action == MappService.DO_GET_RX_SCANNED_COPY) {
+        } else if (action == MappService.DO_GET_RX_SCANNED_COPY) {
             gotRxScannedCopy(data);
             return true;
         }

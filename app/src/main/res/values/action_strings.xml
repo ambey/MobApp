@@ -32,4 +32,5 @@
     <string name="action_get_rx_copy">service/GetRxCopy.action</string>
     <string name="action_get_cust_upcoming_apponts">customer/GetUpcomingAppontList.action</string>
     <string name="action_get_cust_past_apponts">customer/GetPastAppontList.action</string>
+    <string name="action_get_cust_rx_list">customer/GetRxList.action</string>
 </resources>

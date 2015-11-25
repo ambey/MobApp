@@ -2,9 +2,8 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.ui.RxInboxAdapter;
 
@@ -20,21 +20,24 @@ import java.util.ArrayList;
 
 public class RxListActivity extends Activity {
 
-    private ArrayList<RxInboxItem> mInbox;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_list);
 
-        mInbox = getIntent().getParcelableArrayListExtra("inbox");
-        boolean feedback = getIntent().getBooleanExtra("feedback", false);
+        ArrayList<RxInboxItem> mInbox = getIntent().getParcelableArrayListExtra("inbox");
+        int feedback = getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal());
         TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
         if(mInbox.size() > 0) {
             msgView.setVisibility(View.GONE);
         }
-
-        RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox, feedback);
+        RxFeedback fb = RxFeedback.NONE;
+        if(feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
+            fb = RxFeedback.GIVE_FEEDBACK;
+        } else if(feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+            fb = RxFeedback.VIEW_FEEDBACK;
+        }
+        RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox, fb);
         ListView view = (ListView) findViewById(R.id.rxListView);
         view.setAdapter(adapter);
         view.setOnItemClickListener(adapter);

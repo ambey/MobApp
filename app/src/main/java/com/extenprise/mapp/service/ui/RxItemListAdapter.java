@@ -110,7 +110,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
             return;
         }
         Intent intent = new Intent(getContext(), RxActivity.class);
-        intent.putExtra("feedback", true);
+        intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK.ordinal());
         intent.putExtra("parent-activity", RxInboxItemDetailsActivity.class.getName());
         intent.putExtra("position", this.position);
         intent.putExtra("rxItemPos", position);

@@ -104,15 +104,15 @@
 
         <Button
             android:id="@+id/buttonViewRx"
-            style="@style/InactiveRectButton"
+            style="@style/RectButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/linenView2"
             android:layout_alignEnd="@+id/linenView2"
             android:layout_alignRight="@+id/linenView2"
             android:layout_below="@+id/linenView5"
-            android:text="@string/view_rx"
-            android:enabled="false"/>
+            android:onClick="viewRxList"
+            android:text="@string/view_rx"/>
 
         <Button
             android:id="@+id/buttonViewProfile"

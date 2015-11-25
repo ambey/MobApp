@@ -291,6 +291,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
         </activity>
+        <activity android:name=".customer.activity.ViewRxListActivity"
+            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".customer.activity.PatientsHomeScreenActivity" />
+        </activity>
     </application>
 
 </manifest>

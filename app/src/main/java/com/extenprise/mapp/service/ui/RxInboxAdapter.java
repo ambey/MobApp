@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.ReportServiceStatus;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.service.activity.RxInboxItemDetailsActivity;
 import com.extenprise.mapp.service.data.RxInboxItem;
 
@@ -22,9 +23,9 @@ import java.util.ArrayList;
  */
 public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements AdapterView.OnItemClickListener {
     private ArrayList<RxInboxItem> rxList;
-    private boolean feedback;
+    private RxFeedback feedback;
 
-    public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list, boolean feedback) {
+    public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list, RxFeedback feedback) {
         super(context, resource);
         rxList = list;
         this.feedback = feedback;
@@ -44,7 +45,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (feedback) {
+            if (feedback == RxFeedback.VIEW_FEEDBACK) {
                 v = inflater.inflate(R.layout.layout_rx_feedback_head, null);
             } else {
                 v = inflater.inflate(R.layout.layout_rx_list_detail, null);
@@ -57,7 +58,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         TextView servProvNameView;
         TextView servPointNameView;
         TextView servProvPhoneView;
-        if (feedback) {
+        if (feedback == RxFeedback.VIEW_FEEDBACK) {
             statusView = (TextView) v.findViewById(R.id.feedBackStatusView);
             dateView = (TextView) v.findViewById(R.id.feedbackDateView);
             custNameView = (TextView) v.findViewById(R.id.feedbackCustNameView);
@@ -77,7 +78,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         RxInboxItem item = rxList.get(position);
         int status = item.getReportService().getStatus();
         statusView.setText(ReportServiceStatus.getStatusString(getContext(), status));
-        if(feedback) {
+        if(feedback == RxFeedback.VIEW_FEEDBACK) {
             statusView.setVisibility(View.GONE);
         }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -108,7 +109,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putParcelableArrayListExtra("inbox", rxList);
         intent.putExtra("position", position);
-        intent.putExtra("feedback", feedback);
+        intent.putExtra("feedback", feedback.ordinal());
         getContext().startActivity(intent);
     }
 }

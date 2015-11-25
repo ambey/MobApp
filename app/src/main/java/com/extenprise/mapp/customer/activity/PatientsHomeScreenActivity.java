@@ -59,6 +59,12 @@ public class PatientsHomeScreenActivity extends Activity {
         //Utility.setLastVisit(this, mCustomer.getSignInData().getPhone(), "customer");
     }
 
+    public void viewRxList(View view) {
+        Intent intent = new Intent(this, ViewRxListActivity.class);
+        intent.putExtra("customer", mCustomer);
+        startActivity(intent);
+    }
+
     public void viewAppointments(View view) {
         Intent intent = new Intent(this, ViewAppointmentListActivity.class);
         intent.putExtra("customer", mCustomer);
