@@ -43,10 +43,12 @@ import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public abstract class Utility {
@@ -284,6 +286,18 @@ public abstract class Utility {
         return String.format("%02d/%02d/%04d", c.get(Calendar.DAY_OF_MONTH)
                 , c.get(Calendar.MONTH) + 1
                 , c.get(Calendar.YEAR));
+    }
+
+    public static Date getStrAsDate(String date) {
+        Date d = new Date();
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        try {
+            d = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
     }
 
     public static int getSpinnerIndex(Spinner spinner, String str) {
@@ -586,8 +600,6 @@ public abstract class Utility {
         //final boolean confirm = false;
         final boolean[] confirm = new boolean[1];
         new AlertDialog.Builder(activity)
-                .setTitle(R.drawable.med_logo_final)
-                /*.setIcon(R.drawable.med_logo_final)*/
                 .setMessage(msg)
                 .setPositiveButton(R.string.yes,
                         new DialogInterface.OnClickListener() {
@@ -660,4 +672,16 @@ public abstract class Utility {
                 .show();
         return clicked[0];
     }
+
+    public static boolean isDateAfterToday(Date date) {
+        Date today=new Date();
+        if(today.compareTo(date)<0) {
+            return true;
+        } else if(today.compareTo(date)>0) {
+            return false;
+        } else {
+            return false; //Both Dates are equal
+        }
+    }
+
 }

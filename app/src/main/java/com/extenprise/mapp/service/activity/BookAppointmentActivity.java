@@ -182,13 +182,7 @@ public class BookAppointmentActivity extends Activity
 
     @Override
     public void datePicked(String date) {
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        try {
-            mSelectedDate = sdf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        mSelectedDate = Utility.getStrAsDate(date);
         setTimeSlots();
     }
 

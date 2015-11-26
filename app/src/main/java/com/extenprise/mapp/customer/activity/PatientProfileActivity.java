@@ -33,6 +33,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
@@ -43,10 +44,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
-public class PatientProfileActivity extends Activity implements ResponseHandler {
+public class PatientProfileActivity extends Activity implements ResponseHandler, DateChangeListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
@@ -131,7 +133,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
             dob = String.format("%02d/%02d/%4d", d, m + 1, y);
         }*/
 
-        mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName());
+        mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName()
+        + " (" + LoginHolder.custLoginRef.getAge() + " years)");
         mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
         if(LoginHolder.custLoginRef.getImg() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
@@ -200,7 +203,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         } else {
             setFieldsEnability(true);
         }
-
+        //showPersonalFields(v);
         mContLay.setVisibility(View.VISIBLE);
     }
 
@@ -314,7 +317,9 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
         /*DatePickerDialog dpd = Utility.datePicker(view, mTextViewDOB);
         dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
         dpd.show();*/
-        Utility.datePicker(view, mTextViewDOB);
+        //Utility.datePicker(view, mTextViewDOB);
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        Utility.datePicker(view, mTextViewDOB, this, currentTime, currentTime, -1);
     }
 
     public void enlargeImg(View view) {
@@ -510,5 +515,13 @@ public class PatientProfileActivity extends Activity implements ResponseHandler 
             intent.putExtra("customer", getIntent().getParcelableExtra("customer"));
         }
         return intent;
+    }
+
+    @Override
+    public void datePicked(String date) {
+        if(!Utility.isDateAfterToday(Utility.getStrAsDate(date))) {
+            mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName()
+                    + " (" + Utility.getAge(date) + " years)");
+        }
     }
 }

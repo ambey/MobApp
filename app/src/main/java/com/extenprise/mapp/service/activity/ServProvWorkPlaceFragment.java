@@ -157,9 +157,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public void showtimeFields(View view) {
         Log.v(this.getClass().getName(), "view: " + view.toString() + "workhrsLayout: " + mLayoutWorkHrs);
         if (mLayoutWorkHrs.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mLayoutWorkHrs, view);
+            Utility.collapse(mLayoutWorkHrs, null);
         } else {
-            Utility.expand(mLayoutWorkHrs, view);
+            Utility.expand(mLayoutWorkHrs, null);
         }
     }
 
@@ -169,11 +169,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         if (mConsultFee.getVisibility() == View.VISIBLE) {
             //mConsultFee.setVisibility(View.GONE);
             rupeeSign.setVisibility(View.GONE);
-            Utility.collapse(mConsultFee, view);
+            Utility.collapse(mConsultFee, null);
         } else {
             //mConsultFee.setVisibility(View.VISIBLE);
             rupeeSign.setVisibility(View.VISIBLE);
-            Utility.expand(mConsultFee, view);
+            Utility.expand(mConsultFee, null);
         }
     }
 
@@ -181,20 +181,20 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         Log.v(this.getClass().getName(), "view: " + view.toString() + "Days: " + mMultiSpinnerDays);
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
             //mMultiSpinnerDays.setVisibility(View.GONE);
-            Utility.collapse(mMultiSpinnerDays, view);
+            Utility.collapse(mMultiSpinnerDays, null);
         } else {
             //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
             //mMultiSpinnerDays.setVisibility(View.VISIBLE);
-            Utility.expand(mMultiSpinnerDays, view);
+            Utility.expand(mMultiSpinnerDays, null);
         }
     }
 
     public void showWorkFields(View view) {
         if (mRelLayout2.getVisibility() == View.VISIBLE) {
             //mRelLayout2.setVisibility(View.GONE);
-            Utility.collapse(mRelLayout2, view);
+            Utility.collapse(mRelLayout2, null);
         } else {
-            Utility.expand(mRelLayout2, view);
+            Utility.expand(mRelLayout2, null);
             //mRelLayout2.setVisibility(View.VISIBLE);
         }
     }

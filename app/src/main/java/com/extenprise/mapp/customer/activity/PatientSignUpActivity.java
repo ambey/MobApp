@@ -31,6 +31,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
@@ -40,10 +41,11 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
-public class PatientSignUpActivity extends Activity implements ResponseHandler {
+public class PatientSignUpActivity extends Activity implements ResponseHandler, DateChangeListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
@@ -147,9 +149,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showPersonalFields(View view) {
         if (mContLay.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mContLay, view);
+            Utility.collapse(mContLay, null);
         } else {
-            Utility.expand(mContLay, view);
+            Utility.expand(mContLay, null);
             if (mAddrLayout.getVisibility() == View.VISIBLE) {
                 Utility.collapse(mAddrLayout, null);
             }
@@ -201,11 +203,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
 
     public void showAddressFields(View view) {
         if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mAddrLayout, view);
+            Utility.collapse(mAddrLayout, null);
         } else {
-            Utility.expand(mAddrLayout, view);
+            Utility.expand(mAddrLayout, null);
             if (mContLay.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mContLay, view);
+                Utility.collapse(mContLay, null);
             }
         }
     }
@@ -214,7 +216,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
         /*DatePickerDialog dpd = Utility.datePicker(view, mTextViewDOB);
         dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
         dpd.show();*/
-        Utility.datePicker(view, mTextViewDOB);
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        Utility.datePicker(view, mTextViewDOB, this, currentTime, currentTime, -1);
+        //Utility.datePicker(view, mTextViewDOB);
     }
 
     public void enlargeImg(View view) {
@@ -608,4 +612,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler {
     }
 
 
+    @Override
+    public void datePicked(String date) {
+        int age = Utility.getAge(date);
+
+    }
 }

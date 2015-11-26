@@ -82,7 +82,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         mRootView = inflater.inflate(R.layout.activity_sign_up, container, false);
         LoginHolder.servLoginRef = new ServiceProvider();
 
-        mRootView.findViewById(R.id.next).setVisibility(View.GONE);
+        //mRootView.findViewById(R.id.next).setVisibility(View.GONE);
         mFormView = mRootView.findViewById(R.id.signUpForm);
         mProgressView = mRootView.findViewById(R.id.progressView);
 

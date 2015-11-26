@@ -45,29 +45,7 @@
 
 
 
-            <ImageView
-                android:id="@+id/viewEditEducation"
-                android:layout_below="@+id/linenView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:onClick="editPersonalInfo"
-                android:src="@drawable/editpen" />
 
-            <TextView
-                android:id="@+id/textViewEditEducation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/viewEditEducation"
-                android:layout_alignStart="@+id/viewEditEducation"
-                android:layout_below="@+id/viewEditEducation"
-                android:layout_centerHorizontal="true"
-                android:clickable="true"
-                android:onClick="editPersonalInfo"
-                android:text="@string/edit_info"
-                android:textSize="12sp" />
 
 
             <TextView
@@ -76,28 +54,51 @@
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/textViewEditEducation"
+                android:layout_below="@+id/linenView"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:onClick="openPersonalInfo"
                 android:text="@string/personalDetails"/>
 
-
             <RelativeLayout
                 android:id="@+id/personalInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewDoc"
-                android:visibility="gone">
+                >
+
+                <ImageView
+                    android:id="@+id/viewEditEducation"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:onClick="editPersonalInfo"
+                    android:src="@drawable/editpen" />
+
+                <TextView
+                    android:id="@+id/textViewEditEducation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/viewEditEducation"
+                    android:layout_alignStart="@+id/viewEditEducation"
+                    android:layout_below="@+id/viewEditEducation"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="true"
+                    android:layout_marginBottom="20dp"
+                    android:onClick="editPersonalInfo"
+                    android:text="@string/edit_info"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/viewFname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewEditEducation"
                     android:layout_marginTop="10dp"
                     android:text="@string/first_name"
-
                     android:textSize="14sp" />
 
                 <EditText
@@ -107,9 +108,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="0dp"
+                    android:layout_below="@+id/textViewEditEducation"
                     android:enabled="false"
                     android:hint="@string/first_name"
-
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
