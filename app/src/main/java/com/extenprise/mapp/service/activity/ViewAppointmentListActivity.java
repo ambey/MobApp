@@ -27,6 +27,7 @@ import com.extenprise.mapp.util.Utility;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ViewAppointmentListActivity extends Activity
@@ -35,10 +36,12 @@ public class ViewAppointmentListActivity extends Activity
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ServiceProvider mServiceProv;
 
-    private TextView mAppointmentDateTextView;
-    private ListView mAppointmentListView;
+    private TextView mAppontsDateView;
+    private ListView mUpcomingAppontsListView;
+    private ListView mAppontsListView;
     private String mSelectedDate;
-    private ProgressBar mProgressBar;
+    private ProgressBar mUpcomingAppontsProgressBar;
+    private ProgressBar mAppontsProgressBar;
     private TextView mMsgView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +50,18 @@ public class ViewAppointmentListActivity extends Activity
 
         mServiceProv = LoginHolder.servLoginRef;
 
-        mAppointmentDateTextView = (TextView) findViewById(R.id.appointmentDateTextView);
-        mAppointmentListView = (ListView) findViewById(R.id.appointmentListView);
+        mUpcomingAppontsProgressBar = (ProgressBar) findViewById(R.id.appontsProgressBar);
+        mAppontsProgressBar = (ProgressBar) findViewById(R.id.pastAppontsProgressBar);
 
-        mSelectedDate = Utility.setCurrentDateOnView(mAppointmentDateTextView);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mAppontsDateView = (TextView) findViewById(R.id.appointmentDateTextView);
+
+        mUpcomingAppontsListView = (ListView) findViewById(R.id.upcomingAppontsListView);
+        mAppontsListView = (ListView) findViewById(R.id.appontsListView);
+
+        //mSelectedDate = Utility.setCurrentDateOnView(mPastAppontsDateView);
         mMsgView = (TextView) findViewById(R.id.appontMsgView);
 
-        setAppointmentList();
+        setUpcomingAppontList();
     }
 
     @Override
@@ -79,8 +86,25 @@ public class ViewAppointmentListActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
+    private void setUpcomingAppontList() {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
+        }
+        AppointmentListItem form = new AppointmentListItem();
+        form.setServProvPhone(mServiceProv.getPhone());
+        form.setDate(new Date());
 
-    private void setAppointmentList() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", form);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_UPCOMING_APPONT_LIST);
+        mMsgView.setVisibility(View.GONE);
+        Utility.showProgress(this, mUpcomingAppontsListView, mUpcomingAppontsProgressBar, true);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+    }
+
+    private void setAppontList() {
         if (!AppStatus.getInstance(this).isOnline()) {
             Utility.showMessage(this, R.string.error_not_online);
             return;
@@ -102,38 +126,62 @@ public class ViewAppointmentListActivity extends Activity
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_APPONT_LIST);
         mMsgView.setVisibility(View.GONE);
-        Utility.showProgress(this, mAppointmentListView, mProgressBar, true);
+        Utility.showProgress(this, mAppontsListView, mAppontsProgressBar, true);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
-    private void gotAppontList(Bundle data) {
+    private void gotUpcomingAppontList(Bundle data) {
+        Utility.showProgress(this, mUpcomingAppontsListView, mUpcomingAppontsProgressBar, false);
         ArrayList<AppointmentListItem> list = data.getParcelableArrayList("appontList");
         assert list != null;
         AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, list, mServiceProv);
-        mAppointmentListView.setAdapter(adapter);
-        mAppointmentListView.setOnItemClickListener(adapter);
+        adapter.setShowDate(true);
+        mUpcomingAppontsListView.setAdapter(adapter);
+        mUpcomingAppontsListView.setOnItemClickListener(adapter);
         if (list.size() > 0) {
             mMsgView.setVisibility(View.GONE);
         } else {
-            mAppointmentListView.setVisibility(View.GONE);
+            mUpcomingAppontsListView.setVisibility(View.GONE);
+            mMsgView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void gotAppontList(Bundle data) {
+        Utility.showProgress(this, mAppontsListView, mAppontsProgressBar, false);
+        ArrayList<AppointmentListItem> list = data.getParcelableArrayList("appontList");
+        assert list != null;
+        AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, list, mServiceProv);
+        mAppontsListView.setAdapter(adapter);
+        mAppontsListView.setOnItemClickListener(adapter);
+        if (list.size() > 0) {
+            mAppontsListView.setVisibility(View.VISIBLE);
+            mMsgView.setVisibility(View.GONE);
+        } else {
+            mAppontsListView.setVisibility(View.GONE);
             mMsgView.setVisibility(View.VISIBLE);
         }
     }
 
     public void showDatePicker(View view) {
-        Utility.datePicker(view, mAppointmentDateTextView, this);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
+        long yesterday = cal.getTimeInMillis();
+        Utility.datePicker(view, mAppontsDateView, this, yesterday, yesterday, -1);
     }
 
     @Override
     public void datePicked(String date) {
         mSelectedDate = date;
-        setAppointmentList();
+        setAppontList();
     }
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        Utility.showProgress(this, mAppointmentListView, mProgressBar, false);
-        if (action == MappService.DO_APPONT_LIST) {
+        Utility.showProgress(this, mAppontsListView, mUpcomingAppontsProgressBar, false);
+        if (action == MappService.DO_UPCOMING_APPONT_LIST) {
+            gotUpcomingAppontList(data);
+            return true;
+        } else if (action == MappService.DO_APPONT_LIST) {
             gotAppontList(data);
             return true;
         }

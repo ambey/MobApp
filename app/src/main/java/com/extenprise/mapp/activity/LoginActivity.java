@@ -133,13 +133,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button emailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        emailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
+        mLoginFormView = emailSignInButton;
 
         TextView mRegisterButton = (TextView) findViewById(R.id.notRegistered);
         mRegisterButton.setOnClickListener(new OnClickListener() {

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -104,7 +105,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);
-        intent.putExtra("feedback", false);
+        intent.putExtra("feedback", RxFeedback.GIVE_FEEDBACK.ordinal());
         startActivity(intent);
     }
 

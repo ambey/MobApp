@@ -1,13 +1,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="4dp"
+    android:background="@color/background2">
 
     <TextView
         android:id="@+id/dateView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/appointmentTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/patientLNameTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/time"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/timeLblTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/patientLNameTextView"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@id/appointmentTimeTextView"
+        android:layout_toStartOf="@id/appointmentTimeTextView"
+        android:text="@string/time"
+        android:textSize="15sp" />
+
     <TextView
         android:id="@+id/patientFNameTextView"
         android:layout_width="wrap_content"
@@ -22,11 +52,11 @@
         android:id="@+id/patientLNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/patientFNameTextView"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toRightOf="@id/patientFNameTextView"
         android:layout_toEndOf="@id/patientFNameTextView"
-        android:layout_alignBottom="@id/patientFNameTextView"
+        android:layout_toRightOf="@id/patientFNameTextView"
         android:text="@string/last_name"
         android:textSize="20sp" />
 
@@ -95,35 +125,10 @@
         style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/appointmentTimeTextView"
-        android:layout_alignEnd="@+id/appointmentTimeTextView"
         android:layout_alignBaseline="@id/patientAgeTextView"
+        android:layout_alignEnd="@+id/appointmentTimeTextView"
+        android:layout_alignRight="@+id/appointmentTimeTextView"
         android:layout_below="@+id/appointmentTimeTextView" />
-
-
-    <TextView
-        android:id="@+id/appointmentTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/patientLNameTextView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:text="@string/time"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/timeLblTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/patientLNameTextView"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@id/appointmentTimeTextView"
-        android:layout_toStartOf="@id/appointmentTimeTextView"
-        android:text="@string/time"
-        android:textSize="15sp" />
 
 </RelativeLayout>
 

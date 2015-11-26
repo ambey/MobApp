@@ -76,6 +76,7 @@ public class MappService extends Service {
     public static final int DO_GET_CUST_UPCOMING_APPONTS = 27;
     public static final int DO_GET_CUST_PAST_APPONTS = 28;
     public static final int DO_GET_CUST_RX_LIST = 29;
+    public static final int DO_UPCOMING_APPONT_LIST = 30;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -312,26 +313,10 @@ public class MappService extends Service {
         mReplyTo = msg.replyTo;
         MappAsyncTask task;
         try {
-            task = new MappAsyncTask(getURL(DO_APPONT_LIST), gson.toJson(form));
+            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            onError(DO_APPONT_LIST);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doPastAppontList(Message msg) {
-        Bundle data = msg.getData();
-        AppointmentListItem form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(DO_PAST_APPONT_LIST), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_PAST_APPONT_LIST);
+            onError(msg.what);
             return;
         }
         task.execute((Void) null);
@@ -600,6 +585,9 @@ public class MappService extends Service {
             case DO_PAST_APPONT_LIST:
                 urlId = R.string.action_past_appont_list;
                 break;
+            case DO_UPCOMING_APPONT_LIST:
+                urlId = R.string.action_upcoming_appont_list;
+                break;
             case DO_CONFIRM_APPONT:
                 urlId = R.string.action_confirm_appont;
                 break;
@@ -700,10 +688,9 @@ public class MappService extends Service {
                     mService.doBookAppont(msg);
                     break;
                 case DO_APPONT_LIST:
-                    mService.doAppontList(msg);
-                    break;
                 case DO_PAST_APPONT_LIST:
-                    mService.doPastAppontList(msg);
+                case DO_UPCOMING_APPONT_LIST:
+                    mService.doAppontList(msg);
                     break;
                 case DO_CONFIRM_APPONT:
                 case DO_CANCEL_APPONT:
@@ -864,6 +851,7 @@ public class MappService extends Service {
                             break;
                         case DO_APPONT_LIST:
                         case DO_PAST_APPONT_LIST:
+                        case DO_UPCOMING_APPONT_LIST:
                             mAppontList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<AppointmentListItem>>() {
                             }.getType());
                             break;

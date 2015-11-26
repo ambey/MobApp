@@ -79,6 +79,7 @@ public class PatientsHomeScreenActivity extends Activity {
     public void searchDoc(View view) {
         Intent intent = new Intent(this, SearchServProvActivity.class);
         intent.putExtra("customer", mCustomer);
+        intent.putExtra("parent-activity", this.getClass().getName());
         startActivity(intent);
     }
 

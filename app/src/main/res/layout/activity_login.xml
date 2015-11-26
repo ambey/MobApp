@@ -12,13 +12,6 @@
     tools:context="com.extenprise.mapp.activity.LoginActivity">
 
     <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
     <!-- <include
          android:id="@+id/welcome"
          layout="@layout/activity_welcome"
@@ -115,14 +108,26 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/rememberMe" />
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="@style/ExtraWideButton"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="@string/login" />
+                android:layout_gravity="center_horizontal">
+
+                <ProgressBar
+                    android:id="@+id/login_progress"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/email_sign_in_button"
+                    style="@style/ExtraWideButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/notRegistered"

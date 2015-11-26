@@ -247,10 +247,10 @@ public abstract class Utility {
                         }
                     }
                 }, year, month, day);
-        if(maxTime != -1) {
+        if (maxTime != -1) {
             dpd.getDatePicker().setMaxDate(maxTime);
         }
-        if(minTime != -1) {
+        if (minTime != -1) {
             dpd.getDatePicker().setMinDate(minTime);
         }
         dpd.show();
@@ -444,7 +444,7 @@ public abstract class Utility {
     }
 
     public static void expand(final View v, View view) {
-        if(view != null) {
+        if (view != null) {
             view.setBackgroundResource(R.drawable.expand);
         }
         v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -472,7 +472,7 @@ public abstract class Utility {
     }
 
     public static void collapse(final View v, View view) {
-        if(view != null) {
+        if (view != null) {
             view.setBackgroundResource(R.drawable.label);
         }
 
@@ -642,6 +642,7 @@ public abstract class Utility {
         return builder;
     }
 
+/*
     public static int option(Context activity, final int opt1, final int opt2) throws Resources.NotFoundException {
         //final boolean confirm = false;
         final int[] clicked = new int[1];
@@ -672,6 +673,7 @@ public abstract class Utility {
                 .show();
         return clicked[0];
     }
+*/
 
     public static boolean isDateAfterToday(Date date) {
         Date today=new Date();
@@ -682,6 +684,45 @@ public abstract class Utility {
         } else {
             return false; //Both Dates are equal
         }
+    }
+
+    public static String getDateAsStr(Context context, Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        Calendar todayCal = Calendar.getInstance();
+        int currentYear = todayCal.get(Calendar.YEAR);
+        int currentMonth = todayCal.get(Calendar.MONTH);
+        int today = todayCal.get(Calendar.DAY_OF_MONTH);
+        if (year == currentYear && month == currentMonth) {
+            if (day == today) {
+                return context.getString(R.string.today);
+            }
+        }
+        todayCal.set(Calendar.DAY_OF_MONTH, today + 1);
+        currentYear = todayCal.get(Calendar.YEAR);
+        currentMonth = todayCal.get(Calendar.MONTH);
+        if (year == currentYear && month == currentMonth) {
+            if (day == todayCal.get(Calendar.DAY_OF_MONTH)) {
+                return context.getString(R.string.tomorrow);
+            }
+        }
+        Calendar yesterCal = Calendar.getInstance();
+        yesterCal.set(Calendar.DAY_OF_MONTH, today - 1);
+        currentYear = yesterCal.get(Calendar.YEAR);
+        currentMonth = yesterCal.get(Calendar.MONTH);
+        if (year == currentYear && month == currentMonth) {
+            if (day == yesterCal.get(Calendar.DAY_OF_MONTH)) {
+                return context.getString(R.string.yesterday);
+            }
+        }
+
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        return sdf.format(date);
     }
 
 }

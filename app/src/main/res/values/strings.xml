@@ -96,6 +96,7 @@
     <string name="srno">Sr No</string>
     <string name="avail_days">Available Days</string>
     <string name="select_days">Select Days</string>
+    <string name="select_date">Select Date</string>
     <string name="date_of_birth">Date Of Birth *</string>
     <string name="gender1">Gender *</string>
     <string name="height">Height</string>
@@ -222,6 +223,7 @@
 
     <string name="show_history">Show History</string>
     <string name="no_appont_yet">No Appointments yet…</string>
+    <string name="no_appont_found">No Appointments found…</string>
     <string name="loading_page">Loading… Please wait</string>
     <string name="confirm_remember">Do you Want Medico to save your login details?</string>
     <string name="yes">Yes</string>
@@ -236,4 +238,7 @@
     <string name="my_rx_list">My Rx List</string>
     <string name="profile_updated">Profile Updated</string>
 
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
 </resources>

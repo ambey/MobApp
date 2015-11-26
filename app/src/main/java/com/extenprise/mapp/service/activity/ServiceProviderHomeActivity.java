@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.ReportServiceStatus;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -151,7 +152,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);
-        intent.putExtra("feedback", true);
+        intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK.ordinal());
         startActivity(intent);
     }
 
