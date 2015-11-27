@@ -48,7 +48,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     private EditText mExperience;
     private LinearLayout mServProLay3;
 
-    //private Spinner mAvaildays;
     private Spinner mGender;
     private Spinner mConsultFee;
     private View mProgressView;
@@ -78,7 +77,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mQualification = (EditText) findViewById(R.id.editTextQualification);
         mButtonStartTime = (Button) findViewById(R.id.buttonStartTime);
         mButttonEndTime = (Button) findViewById(R.id.buttonEndTime);
-        //mAvaildays = (Spinner) findViewById(R.id.spinAvailDays);
         mGender = (Spinner) findViewById(R.id.spinGender);
         mExperience = (EditText) findViewById(R.id.editTextExp);
         mConsultFee = (Spinner) findViewById(R.id.spinConsultationFees);
@@ -96,15 +94,20 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
         mSpeciality.setAdapter(spinnerAdapter);
 
+        mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
+        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+
         if(mForm != null) {
             mLocation.setText(mForm.getLocation());
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
             mServProvCategory.setSelection(Utility.getSpinnerIndex(mServProvCategory, mForm.getCategory()));
             mDrClinicName.setText(mForm.getName());
+            mQualification.setText(mForm.getQualification());
+            mExperience.setText(mForm.getExperience());
+            mButtonStartTime.setText(mForm.getStartTime());
+            mButttonEndTime.setText(mForm.getEndTime());
+            mMultiSpinnerDays.setText(mForm.getWorkDays());
         }
-
-        mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
-        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
 
         mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -473,6 +476,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         if (list == null) {
             list = new ArrayList<>();
         }
+        list.add(0, getString(R.string.select_speciality));
         SpinnerAdapter adapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpeciality.setAdapter(adapter);
     }
@@ -484,6 +488,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
             intent.putParcelableArrayListExtra("servProvList", data.getParcelableArrayList("servProvList"));
             intent.putExtra("parent-activity", this.getClass().getName());
+            intent.putExtra("form", mForm);
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.no_result);

@@ -21,6 +21,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
+import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
@@ -62,7 +63,7 @@ public class RxActivity extends Activity implements ResponseHandler {
 
     private String mParentActivity;
     private AppointmentListItem mAppont;
-    private boolean mFeedback;
+    private int mFeedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         Intent intent = getIntent();
         mParentActivity = intent.getStringExtra("parent-activity");
         mAppont = intent.getParcelableExtra("appont");
-        mFeedback = intent.getBooleanExtra("feedback", false);
+        mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
 
         mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);
@@ -130,7 +131,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
 
         RxInboxItem rxInboxItem = null;
-        if (mFeedback) {
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             mInbox = intent.getParcelableArrayListExtra("inbox");
             int position = intent.getIntExtra("position", 0);
             rxInboxItem = mInbox.get(position);
@@ -148,7 +149,7 @@ public class RxActivity extends Activity implements ResponseHandler {
     }
 
     private void fillRx(RxInboxItem rxInboxItem) {
-        if (mFeedback) {
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             int position = getIntent().getIntExtra("rxItemPos", 0);
             setupRxItemUI(rxInboxItem.getRx().getItems().get(position));
             return;
@@ -190,7 +191,7 @@ public class RxActivity extends Activity implements ResponseHandler {
     }
 
     public void doneRx(View view) {
-        if (mFeedback) {
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             if (updateRxItem()) {
                 try {
                     Intent intent = new Intent(this, Class.forName(mParentActivity));

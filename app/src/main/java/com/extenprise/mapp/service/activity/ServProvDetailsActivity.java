@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
+import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
 
@@ -49,8 +51,13 @@ public class ServProvDetailsActivity extends Activity {
         TextView textViewReviews = (TextView) findViewById(R.id.textviewReviews);
 */
         TextView textViewDocQualification = (TextView) findViewById(R.id.textviewDocQualification);
+        Button bookAppontButton = (Button) findViewById(R.id.buttonBookAppointment);
 
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
+        Service service = spsspt.getService();
+        if(service.getCategory().equalsIgnoreCase(getString(R.string.pharmacist))) {
+            bookAppontButton.setEnabled(false);
+        }
         textViewClinic.setText(spsspt.getServicePoint().getName());
         textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));
         textViewClinicTime.setText(String.format("%s to %s",
@@ -116,6 +123,7 @@ public class ServProvDetailsActivity extends Activity {
         Intent intent = super.getParentActivityIntent();
         if (intent != null) {
             intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+            intent.putExtra("parent-activity", getIntent().getStringExtra("myparent-activity"));
         }
         return intent;
     }

@@ -98,6 +98,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         Utility.showProgress(this, mSearchResultView, mProgressView, false);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
         intent.putParcelableArrayListExtra("servProvList", mServProvList);
+        intent.putExtra("myparent-activity", getIntent().getStringExtra("parent-activity"));
         intent.putExtra("service", data.getParcelable("service"));
         startActivity(intent);
     }
@@ -113,15 +114,17 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
     
     @Override
     public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
         String parentClass = getIntent().getStringExtra("parent-activity");
         if(parentClass != null) {
             try {
-                return new Intent(this, Class.forName(parentClass));
+                intent = new Intent(this, Class.forName(parentClass));
+                intent.putExtra("form", getIntent().getParcelableExtra("form"));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        return super.getParentActivityIntent();
+        return intent;
     }
 }
 
