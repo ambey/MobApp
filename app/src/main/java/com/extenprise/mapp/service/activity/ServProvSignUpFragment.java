@@ -53,6 +53,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private EditText mCellphoneview;
     private EditText mPasswdView;
     private EditText mCnfPasswdView;
+    private EditText mEmailID;
     private RadioGroup mRadioGroupGender;
     private RadioButton mRadioButtonGender;
     private EditText mRegistrationNumber;
@@ -99,7 +100,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 }
             }
         });
-
+        mEmailID = (EditText) mRootView.findViewById(R.id.editTextEmail);
         mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
         mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
         mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
@@ -164,6 +165,15 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             mCellphoneview.setError(getString(R.string.error_invalid_phone));
             focusView = mCellphoneview;
             cancel = true;
+        }
+
+        String email = mEmailID.getText().toString().trim();
+        if(!TextUtils.isEmpty(email)) {
+            if (!Validator.isValidEmaillId(email)) {
+                mEmailID.setError(getString(R.string.error_invalid_email));
+                focusView = mEmailID;
+                cancel = true;
+            }
         }
 
         if (TextUtils.isEmpty(lnm)) {

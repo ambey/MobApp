@@ -16,20 +16,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
-    <ScrollView
-        android:id="@+id/updateServProvform"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="00dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
 
     <include
         android:id="@+id/layoutNameAvatar"
-        layout="@layout/layout_name_avatar"/>
+        layout="@layout/layout_name_avatar" />
 
     <View
         android:id="@+id/linenView"
@@ -39,11 +29,15 @@
         android:layout_marginTop="20dp"
         android:background="#9d9d9d" />
 
-
-
-
-
-
+    <ScrollView
+        android:id="@+id/updateServProvform"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linenView"
+        android:layout_marginTop="10dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
 
@@ -53,9 +47,6 @@
                 style="@style/CollapseFormHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/linenView"
-                android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:onClick="openPersonalInfo"
@@ -109,8 +100,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="0dp"
                     android:layout_below="@+id/textViewEditEducation"
-                    android:enabled="false"
                     android:hint="@string/first_name"
+                    android:focusable="true"
+                    android:inputType="text|textNoSuggestions"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -132,9 +124,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/textViewFName"
                     android:layout_marginTop="0dp"
-                    android:enabled="false"
                     android:hint="@string/last_name"
-
+                    android:inputType="text|textNoSuggestions"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -144,7 +135,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textViewLName"
                     android:layout_marginTop="10dp"
-
                     android:text="@string/mob_num"
                     android:textSize="14sp" />
 
@@ -155,7 +145,6 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/textViewLName"
-                    android:enabled="false"
                     android:hint="@string/mob_num"
                     android:inputType="number"
                     android:textSize="14sp"
@@ -179,7 +168,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/editTextMobNum"
                     android:layout_marginTop="0dp"
-                    android:enabled="false"
                     android:hint="@string/mail_id"
                     android:inputType="textEmailAddress"
                     android:textSize="14sp"
@@ -203,9 +191,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/viewEmailLabel"
                     android:layout_marginTop="0dp"
-                    android:enabled="false"
                     android:hint="@string/reg_num"
-
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -224,7 +210,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/editTextRegNum"
                     android:focusable="true"
@@ -235,7 +220,6 @@
                         android:id="@+id/radioButtonMale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:text="@string/male" />
 
                     <RadioButton
@@ -244,9 +228,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
                         android:layout_marginStart="30dp"
-                        android:enabled="false"
                         android:text="@string/female" />
                 </RadioGroup>
+
+                <Button
+                    android:id="@+id/buttonViewUpdate"
+
+                    style="@style/MyButton"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/viewGenderLabel"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:onClick="updateProfile"
+
+                    android:text="@string/update" />
+
             </RelativeLayout>
 
             <TextView
@@ -280,16 +277,19 @@
                     android:dividerHeight="10dp"
                     tools:ignore="NestedScrolling" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/textViewAddNewWork"
+                    android:src="@drawable/addnew_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/workDetailListView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
                     android:clickable="true"
                     android:onClick="addNewWorkPlace"
-                    android:text="@string/add_new_work_place" />
+                    android:contentDescription="@string/add_new_work_place"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/workDetailListView"
+                    android:layout_marginTop="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
 
                 <TextView
                     android:id="@+id/textViewRemoveWork"
@@ -313,18 +313,7 @@
             android:textStyle="bold"
             android:background="@drawable/button"
             android:textColor="#fff"-->
-            <Button
-                android:id="@+id/buttonViewUpdate"
 
-                style="@style/MyButton"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/workPlaceInfo"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
-                android:onClick="updateProfile"
-
-                android:text="@string/update" />
 
 
         </RelativeLayout>

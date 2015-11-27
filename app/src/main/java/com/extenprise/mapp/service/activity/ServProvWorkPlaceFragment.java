@@ -139,6 +139,10 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             mConsultFee.setEnabled(false);
         }
 
+        //collapse fields on create.
+        Utility.collapse(mLayoutWorkHrs, null);
+        Utility.collapse(mRelLayout2, null);
+
         return mRootview;
     }
 

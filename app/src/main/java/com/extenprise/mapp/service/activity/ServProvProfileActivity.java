@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -44,6 +45,7 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappContract;
+import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -234,9 +236,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         } else {
             mFemale.setChecked(true);
         }
+        enability(false);
 
         //Get work place list from server
-
         Utility.showProgress(this, mFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
@@ -244,34 +246,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_WORK_PLACE_LIST);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-
-        /*Intent intent = getIntent();
-        //mWorkPlaceList = intent.getParcelableArrayListExtra("workPlaceList");
-        ArrayList<ServProvHasServPt> services = LoginHolder.servLoginRef.getServices();
-        for(ServProvHasServPt s : services) {
-            WorkPlace wp = new WorkPlace();
-
-            wp.setPincode(s.getServicePoint().getPincode());
-            wp.setSpeciality(s.getService().getSpeciality());
-            wp.setLocation(s.getServicePoint().getLocation());
-            wp.setQualification(LoginHolder.servLoginRef.getQualification());
-            wp.setExperience(s.getExperience());
-            wp.setServCatagory(s.getService().getCategory());
-            wp.setAltPhone(s.getServicePoint().getAltPhone());
-            wp.setCity(s.getServicePoint().getCity().getCity());
-            wp.setConsultFee(s.getConsultFee());
-            wp.setEmailId(s.getServicePoint().getEmailId());
-            wp.setEndTime(s.getEndTime());
-            wp.setStartTime(s.getStartTime());
-            wp.setServPointType(s.getServPointType());
-            wp.setName(s.getServicePoint().getName());
-            wp.setPhone(s.getServicePoint().getPhone());
-            wp.setWorkingDays(s.getWorkingDays());
-            wp.setSignInData(LoginHolder.servLoginRef.getSignInData());
-
-            mWorkPlaceList.add(wp);
-        }*/
-        //mWorkPlaceList = LoginHolder.servLoginRef.getServices();
     }
 
     private void showWorkPlaceList() {
@@ -428,25 +402,115 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
     }
 
-    public void editPersonalInfo(View view) {
-        boolean set = false;
-        if (!mFname.isEnabled()) {
-            set = true;
-        }
+    private void enability(boolean set) {
         mFname.setEnabled(set);
         mLname.setEnabled(set);
-        //mMobNo.setEnabled(true);
         mEmailID.setEnabled(set);
         mRegNo.setEnabled(set);
         mMale.setEnabled(set);
         mFemale.setEnabled(set);
+    }
 
-        //openPersonalInfo(view);
-        mPersonalInfo.setVisibility(View.VISIBLE);
+    public void editPersonalInfo(View view) {
+        boolean set = true;
+        if(mFname.isEnabled()) {
+            set = false;
+        }
+        enability(set);
+
+         /*EditText mFirstName;
+         EditText mLastName;
+         EditText mCellphoneview;
+         EditText mPasswdView;
+         EditText mCnfPasswdView;
+         final RadioGroup mRadioGroupGender;
+         RadioButton mRadioButtonGender;
+         final EditText mRegistrationNumber;
 
 
-        /*LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.layout_personal_info, null);*/
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.layout_personal_info, null);
+
+        dialogView.findViewById(R.id.editTextCellphone).setVisibility(View.GONE);
+        dialogView.findViewById(R.id.editTextPasswd).setVisibility(View.GONE);
+        dialogView.findViewById(R.id.editTextCnfPasswd).setVisibility(View.GONE);
+
+        mFirstName = (EditText) dialogView.findViewById(R.id.editTextFName);
+        mLastName = (EditText) dialogView.findViewById(R.id.editTextLName);
+        mRadioGroupGender = (RadioGroup) dialogView.findViewById(R.id.radioGroupGender);
+        mRegistrationNumber = (EditText) dialogView.findViewById(R.id.editTextRegistrationNumber);
+        mRegistrationNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
+                        checkExistence(MappService.DO_REG_NO_CHECK);
+
+                    }
+                }
+            }
+        });
+
+
+        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.add_new_work_place).create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isValidWorkPlace()) {
+                    WorkPlace wpt = new WorkPlace();
+                    wpt.setName(mName.getText().toString().trim());
+                    wpt.setLocation(mLoc.getText().toString().trim());
+                    wpt.setCity(mCity.getSelectedItem().toString().trim());
+                    wpt.setPhone(mPhone1.getText().toString().trim());
+                    wpt.setAltPhone(mPhone2.getText().toString().trim());
+                    wpt.setEmailId(mEmailIdwork.getText().toString().trim());
+                    wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+                    wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
+                    wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setServCategory(mServCatagory.getSelectedItem().toString());
+                    wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
+                    wpt.setServPointType(mServPtType.getSelectedItem().toString());
+                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
+                    wpt.setQualification(mQualification.getText().toString().trim());
+
+                    workPlace = wpt;
+                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putParcelable("workPlace", workPlace);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.DO_ADD_WORK_PLACE);
+                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        //return dialog;*/
+    }
+
+    private void checkExistence(int check) {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Utility.showMessage(this, R.string.error_not_online);
+            return;
+        }
+        Utility.showProgress(this, mFormView, mProgressView, true);
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        if (check == MappService.DO_REG_NO_CHECK) {
+            bundle.putString("regno", mRegNo.getText().toString().trim());
+        } else if (check == MappService.DO_PHONE_EXIST_CHECK) {
+            SignInData data = new SignInData();
+            data.setPhone(mRegNo.getText().toString().trim());
+            bundle.putParcelable("signInData", data);
+        }
+        mConnection.setData(bundle);
+        mConnection.setAction(check);
+        Utility.doServiceAction(this, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     public void editWorkPlaceInfo(View v) {
@@ -925,7 +989,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     bundle.putParcelable("workPlace", workPlace);
                     mConnection.setData(bundle);
-                    mConnection.setAction(MappService.DO_ADD_WORK_PLACE);
+                    mConnection.setAction(MappService.DO_EDIT_WORK_PLACE);
                     Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
                     dialog.dismiss();
                 }

@@ -106,6 +106,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/label"
+        android:clickable="true"
         android:onClick="showtimeFields"
         android:text="@string/work_hrs"
         android:textColor="#fff"
