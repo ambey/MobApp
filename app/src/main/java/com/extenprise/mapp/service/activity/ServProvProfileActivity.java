@@ -349,6 +349,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_REMOVE_WORK_PLACE);
                     Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                    dialog.dismiss();
                 }
             });
             return true;

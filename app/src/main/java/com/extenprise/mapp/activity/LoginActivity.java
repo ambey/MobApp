@@ -307,6 +307,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
                         loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
                         loginPrefsEditor.putString("logintype", uType);
                         loginPrefsEditor.apply();
+                        dialog.dismiss();
+                        processLogin();
                     }
                 });
                 /*if(Utility.confirm(this, R.string.confirm_remember)) {*/
@@ -319,10 +321,11 @@ public class LoginActivity extends Activity implements ResponseHandler {
             } else {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
+                processLogin();
             }
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            processLogin();
+            //processLogin();
 /*
             mAuthTask = new UserLoginTask(this, mobile, password);
             mAuthTask.execute((Void) null);
