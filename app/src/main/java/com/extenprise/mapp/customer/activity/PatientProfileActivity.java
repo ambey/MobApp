@@ -233,7 +233,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     private void updateDone(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
         if(data.getBoolean("status")) {
-            Utility.showRegistrationAlert(this, "", "Profile Updated.");
+            //Utility.showRegistrationAlert(this, "", "Profile Updated.");
+            Utility.showMessage(this, R.string.update_profile_done);
         }
     }
 

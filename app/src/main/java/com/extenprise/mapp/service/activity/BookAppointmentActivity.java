@@ -13,6 +13,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.net.MappService;
@@ -151,6 +152,10 @@ public class BookAppointmentActivity extends Activity
         Appointment appointment = data.getParcelable("form");
         mCust.getAppointments().add(appointment);
         mServProv.getServProvHasServPt(0).getAppointments().add(appointment);
+
+        /*Intent intent = new Intent(this, PatientsHomeScreenActivity.class);
+        intent.putExtra("customer", mCust);
+        startActivity(intent);*/
     }
 
     @Override

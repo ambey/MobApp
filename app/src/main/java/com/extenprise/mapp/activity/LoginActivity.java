@@ -1,8 +1,10 @@
 package com.extenprise.mapp.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -258,7 +260,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String uType = mRadioButtonUType.getText().toString().trim();
+        final String uType = mRadioButtonUType.getText().toString().trim();
         mLoginType = findLoginType(uType);
         String phone = mMobileNumber.getText().toString().trim();
         String passwd = mPasswordView.getText().toString();
@@ -291,17 +293,29 @@ public class LoginActivity extends Activity implements ResponseHandler {
             mSignInData.setPasswd(EncryptUtil.encrypt(passwd));
 
             SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
+            final SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
 
             loginPrefsEditor.putString("passwd", String.valueOf(Calendar.getInstance().getTime()));
             if (mSaveLoginCheckBox.isChecked()) {
-                if(Utility.confirm(this, R.string.confirm_remember)) {
-                    loginPrefsEditor.putBoolean("saveLogin", true);
+                final AlertDialog dialog = Utility.customDialogBuilder(this, null, R.string.confirm_remember).create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loginPrefsEditor.putBoolean("saveLogin", true);
+                        loginPrefsEditor.putString("username", mSignInData.getPhone());
+                        loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
+                        loginPrefsEditor.putString("logintype", uType);
+                        loginPrefsEditor.apply();
+                    }
+                });
+                /*if(Utility.confirm(this, R.string.confirm_remember)) {*/
+                    /*loginPrefsEditor.putBoolean("saveLogin", true);
                     loginPrefsEditor.putString("username", mSignInData.getPhone());
                     loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
                     loginPrefsEditor.putString("logintype", uType);
-                    loginPrefsEditor.apply();
-                }
+                    loginPrefsEditor.apply();*/
+                //}
             } else {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
@@ -406,12 +420,15 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 if (servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                     intent = new Intent(this, MedicalStoreHomeActivity.class);
                 }
+                intent.putExtra("servprov", serviceProvider);
                 phone = serviceProvider.getSignInData().getPhone();
                 type = "servprov";
             }
             Utility.setLastVisit(this, phone, type);
+            Utility.showMessage(this, R.string.login_done);
             startActivity(intent);
         } else {
+            Utility.showMessage(this, R.string.login_failed);
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();
         }

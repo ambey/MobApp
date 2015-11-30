@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_wp_done">Work Place Added Successfully</string>
+    <string name="edit_wp_done">Work Place Updated Successfully</string>
+    <string name="remove_wp_done">Work Place Removed Successfully</string>
+    <string name="update_profile_done">Profile Updated Successfully</string>
+    <string name="login_done">Login Successful</string>
+    <string name="login_failed">Login Failed</string>
+
+</resources>

@@ -136,4 +136,10 @@ public class PatientsHomeScreenActivity extends Activity {
         Log.v("getParentActivityIntent", "PatientsHomeScreenActivity called");
         return null;
     }
+
+    private void refresh() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 }

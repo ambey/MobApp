@@ -626,8 +626,12 @@ public abstract class Utility {
 
     public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(title);
-        builder.setView(dialogView);
+        if(dialogView != null) {
+            builder.setTitle(title);
+            builder.setView(dialogView);
+        } else {
+            builder.setMessage(title);
+        }
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
