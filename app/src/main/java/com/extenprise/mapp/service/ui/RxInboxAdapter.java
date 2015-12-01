@@ -1,5 +1,6 @@
 package com.extenprise.mapp.service.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -110,6 +111,9 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         intent.putParcelableArrayListExtra("inbox", rxList);
         intent.putExtra("position", position);
         intent.putExtra("feedback", feedback.ordinal());
-        getContext().startActivity(intent);
+
+        Activity myActivity = (Activity)getContext();
+        intent.putExtra("origin_activity", myActivity.getIntent().getStringExtra("parent-activity"));
+        myActivity.startActivity(intent);
     }
 }

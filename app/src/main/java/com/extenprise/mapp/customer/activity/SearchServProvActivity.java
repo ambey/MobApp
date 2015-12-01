@@ -1,4 +1,4 @@
-package com.extenprise.mapp.service.activity;
+package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -19,7 +19,6 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;

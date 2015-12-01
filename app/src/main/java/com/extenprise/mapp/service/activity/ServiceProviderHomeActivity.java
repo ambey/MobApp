@@ -153,6 +153,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);
         intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK.ordinal());
+        intent.putExtra("parent-activity", getClass().getName());
         startActivity(intent);
     }
 

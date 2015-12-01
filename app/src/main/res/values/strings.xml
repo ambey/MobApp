@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-<!--
     <string name="server_name">http://10.0.2.2:8080/mapp</string>
--->
+<!--
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
+-->
 
     <string name="by_exp">By Extenprise</string>
 
@@ -202,9 +202,12 @@
     <string name="resend_rx">Resend Rx</string>
     <string name="view_rx_feedback">View Rx Feedback</string>
     <string name="send_availability_feedback">Send Availability Feedback</string>
+    <string name="msg_appont_booked">The appointment has been booked.\nYou will receive confirmation from the doctor</string>
     <string name="msg_appont_confirmed">The appointment has been confirmed</string>
     <string name="msg_appont_canceled">The appointment has been canceled</string>
     <string name="msg_booking_appont">Booking Appointment… Please wait.</string>
+    <string name="msg_rx_sent_to_medstore">The Rx sent to selected Medical store.</string>
+    <string name="msg_profile_updated">Profile Successfully Updated.</string>
 
     <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>
     <string name="title_activity_rx_list">RxListActivity</string>

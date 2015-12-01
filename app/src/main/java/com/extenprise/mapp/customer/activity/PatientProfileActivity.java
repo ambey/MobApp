@@ -38,9 +38,7 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,7 +70,6 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
 
     private static int RESULT_LOAD_IMG = 1;
     private static int REQUEST_CAMERA = 2;
-    private String imgDecodableString;
     private Bitmap mImgCopy;
 
     @Override
@@ -133,8 +130,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             dob = String.format("%02d/%02d/%4d", d, m + 1, y);
         }*/
 
-        mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName()
-        + " (" + LoginHolder.custLoginRef.getAge() + " years)");
+        mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
+        LoginHolder.custLoginRef.getAge()));
         mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
         if(LoginHolder.custLoginRef.getImg() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
@@ -151,8 +148,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             mTextViewDOB.setText(dob);
         }
         mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
-        mEditTextHeight.setText("" + LoginHolder.custLoginRef.getHeight());
-        mEditTextWeight.setText("" + LoginHolder.custLoginRef.getWeight());
+        mEditTextHeight.setText(String.format("%.1f", LoginHolder.custLoginRef.getHeight()));
+        mEditTextWeight.setText(String.format("%.1f", LoginHolder.custLoginRef.getWeight()));
         mEditTextLoc.setText(LoginHolder.custLoginRef.getLocation());
         mEditTextPinCode.setText(LoginHolder.custLoginRef.getPincode());
         mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, LoginHolder.custLoginRef.getCity().getCity()));
@@ -233,8 +230,14 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     private void updateDone(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
         if(data.getBoolean("status")) {
-            //Utility.showRegistrationAlert(this, "", "Profile Updated.");
-            Utility.showMessage(this, R.string.update_profile_done);
+            Utility.showAlert(this, "", getString(R.string.msg_profile_updated), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(PatientProfileActivity.this, PatientsHomeScreenActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -248,10 +251,10 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         try {
             Date dob = sdf.parse(mTextViewDOB.getText().toString());
             c.setDob(dob);
+            c.setAge(Utility.getAge(dob));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        c.setAge(Utility.getAge(mTextViewDOB.getText().toString()));
         c.setEmailId(mEditTextCustomerEmail.getText().toString().trim());
         c.setGender(mSpinGender.getSelectedItem().toString());
         float height = 0;
@@ -384,7 +387,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imgDecodableString = cursor.getString(columnIndex);
+                    String imgDecodableString = cursor.getString(columnIndex);
                     cursor.close();
                     // Set the Image in ImageView after decoding the String
                     mImgView.setImageBitmap(BitmapFactory
@@ -448,7 +451,6 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         String lName = mEditTextCustomerLName.getText().toString().trim();
         String emailId = mEditTextCustomerEmail.getText().toString().trim();
         String dob = mTextViewDOB.getText().toString();
-        String height = mEditTextHeight.getText().toString().trim();
         String weight = mEditTextWeight.getText().toString().trim();
         String loc = mEditTextLoc.getText().toString().trim();
         String pinCode = mEditTextPinCode.getText().toString().trim();
@@ -472,7 +474,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
             valid = false;
-        } else if(Utility.getAge(dob) <= 0) {
+        } else if(Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
@@ -520,9 +522,10 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
 
     @Override
     public void datePicked(String date) {
-        if(!Utility.isDateAfterToday(Utility.getStrAsDate(date))) {
-            mPname.setText(LoginHolder.custLoginRef.getfName() + " " + LoginHolder.custLoginRef.getlName()
-                    + " (" + Utility.getAge(date) + " years)");
+        Date datePicked = Utility.getStrAsDate(date, "dd/MM/yyyy");
+        if(!Utility.isDateAfterToday(datePicked)) {
+            mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
+                    LoginHolder.custLoginRef.getAge()));
         }
     }
 }

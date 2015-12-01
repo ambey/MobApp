@@ -62,7 +62,7 @@
             -->
         </activity>
         <activity
-            android:name=".service.activity.SearchServProvActivity"
+            android:name=".customer.activity.SearchServProvActivity"
             android:label="Medico" >
 
             <!--
@@ -96,28 +96,28 @@
             android:name=".service.activity.ServiceProviderHomeActivity"
             android:label="@string/title_activity_service_provider_home" />
         <activity
-            android:name=".service.activity.AdvSearchServProvActivity"
+            android:name=".customer.activity.AdvSearchServProvActivity"
             android:label="@string/title_activity_search_doctor"
-            android:parentActivityName=".service.activity.SearchServProvActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.SearchServProvActivity" />
+                android:value=".customer.activity.SearchServProvActivity" />
         </activity>
         <activity
             android:name=".service.activity.ServProvDetailsActivity"
             android:label="@string/title_activity_doctor_details"
-            android:parentActivityName=".service.activity.SearchServProvResultActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvResultActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.SearchServProvResultActivity" />
+                android:value=".customer.activity.SearchServProvResultActivity" />
         </activity>
         <activity
-            android:name=".service.activity.SearchServProvResultActivity"
+            android:name=".customer.activity.SearchServProvResultActivity"
             android:label="@string/title_activity_search_doc_result_list"
-            android:parentActivityName=".service.activity.SearchServProvActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.SearchServProvActivity" />
+                android:value=".customer.activity.SearchServProvActivity" />
         </activity>
         <activity
             android:name=".service.activity.AppointmentDetailsActivity"
@@ -128,12 +128,12 @@
                 android:value=".service.activity.ViewAppointmentListActivity" />
         </activity>
         <activity
-            android:name=".service.activity.BookAppointmentActivity"
+            android:name=".customer.activity.BookAppointmentActivity"
             android:label="@string/title_activity_book_appointment"
-            android:parentActivityName=".service.activity.ServProvDetailsActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvResultActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.ServProvDetailsActivity" />
+                android:value=".customer.activity.SearchServProvResultActivity" />
         </activity>
         <activity
             android:name=".activity.SignUpPreviousActivity"

@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientSignUpActivity;
-import com.extenprise.mapp.service.activity.SearchServProvActivity;
+import com.extenprise.mapp.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.service.activity.ServProvSignUpActivity;
 
 

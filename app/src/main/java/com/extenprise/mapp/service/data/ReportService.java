@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Created by ambey on 1/11/15.
  */
-public class ReportService implements Parcelable{
+public class ReportService implements Parcelable {
     private int idServProvHasServPt;
     private int idReport;
     private int status;
@@ -100,12 +100,12 @@ public class ReportService implements Parcelable{
         String dateStr = "";
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        if(receivedDate != null) {
+        if (receivedDate != null) {
             dateStr = sdf.format(receivedDate);
         }
         dest.writeString(dateStr);
         dateStr = "";
-        if(lastUpdateDate != null) {
+        if (lastUpdateDate != null) {
             dateStr = sdf.format(lastUpdateDate);
         }
         dest.writeString(dateStr);

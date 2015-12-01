@@ -87,6 +87,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
                     item.setAvailable(isChecked ? 1 : 0);
                 }
             });
+            availableCB.setChecked(item.getAvailable() == 1);
         } else {
             availableCB.setVisibility(View.GONE);
             availableView.setVisibility(View.GONE);

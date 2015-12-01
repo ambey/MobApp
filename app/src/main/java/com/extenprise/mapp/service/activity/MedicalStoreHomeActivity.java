@@ -106,6 +106,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);
         intent.putExtra("feedback", RxFeedback.GIVE_FEEDBACK.ordinal());
+        intent.putExtra("parent-activity", getClass().getName());
         startActivity(intent);
     }
 

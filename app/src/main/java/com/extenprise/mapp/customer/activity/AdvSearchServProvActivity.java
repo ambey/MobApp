@@ -1,4 +1,4 @@
-package com.extenprise.mapp.service.activity;
+package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,6 +22,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.activity.SearchServProvResultActivity;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;

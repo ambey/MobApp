@@ -87,47 +87,22 @@ public abstract class Utility {
         }
     }
 
-    public static void showRegistrationAlert(final Activity mActivity, String title, String msg) {
-        //final boolean flag;
-        //final String str = "";
-        AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(msg);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        //Intent intent = new Intent(mActivity, cls);
-                        mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
-                        //return true;
-                    }
-                });
-        //alertDialog.isShowing()
-
-        alertDialog.show();
-        //return true;
+    public static void showAlert(Activity activity, String title, String msg) {
+        showAlert(activity, title, msg, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
     }
 
-    public static void showAlert(Activity mActivity, String title, String msg) {
-        //final boolean flag;
-        //final String str = "";
+    public static void showAlert(Activity mActivity, String title, String msg, DialogInterface.OnClickListener listener) {
         AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(msg);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        //Intent intent = new Intent(mActivity, cls);
-                        //mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
-                        //return true;
-                    }
-                });
-        //alertDialog.isShowing()
-
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", listener);
         alertDialog.setIcon(R.drawable.med_logo_final);
         alertDialog.show();
-        //return true;
     }
 
     public static int getMinutes(String time) {
@@ -175,13 +150,30 @@ public abstract class Utility {
 
     }*/
 
-    public static int getAge(String dob) {
+    public static int getAge(Date dob) {
+        Calendar birthCal = Calendar.getInstance();
+        birthCal.setTime(dob);
+
+        Calendar nowCal = Calendar.getInstance();
+
+        int age = nowCal.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR);
+        if(nowCal.get(Calendar.MONTH) < birthCal.get(Calendar.MONTH)) {
+            age--;
+        } else if(nowCal.get(Calendar.MONTH) == birthCal.get(Calendar.MONTH)) {
+            if(nowCal.get(Calendar.DAY_OF_MONTH) < birthCal.get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+        }
+        return age;
+    }
+
+    public static int getAge(String dob, String sep) {
 
         int year = 0, month = 0, day = 0;
         if (!dob.equals("")) {
-            if (dob.contains("/")) {
-                String[] dobStr = dob.split("/", 3);
-                if (dobStr.length > 1) {
+            if (dob.contains(sep)) {
+                String[] dobStr = dob.split(sep, 3);
+                if (dobStr.length == 3) {
                     day = Integer.parseInt(dobStr[0]);
                     month = Integer.parseInt(dobStr[1]);
                     year = Integer.parseInt(dobStr[2]);
@@ -281,17 +273,17 @@ public abstract class Utility {
         return getCommaSepparatedString(context.getResources().getStringArray(R.array.days));
     }
 
-    public static String getDaAsString(String sep) {
+    public static String getDateAsString(String sep) {
         Calendar c = Calendar.getInstance();
         return String.format("%02d/%02d/%04d", c.get(Calendar.DAY_OF_MONTH)
                 , c.get(Calendar.MONTH) + 1
                 , c.get(Calendar.YEAR));
     }
 
-    public static Date getStrAsDate(String date) {
+    public static Date getStrAsDate(String date, String pattern) {
         Date d = new Date();
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
+        sdf.applyPattern(pattern);
         try {
             d = sdf.parse(date);
         } catch (ParseException e) {

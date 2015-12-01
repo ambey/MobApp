@@ -18,11 +18,7 @@ import com.extenprise.mapp.data.Report;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.service.data.AppointmentListItem;
-import com.extenprise.mapp.service.data.AppointmentTimeslotsForm;
-import com.extenprise.mapp.service.data.MedStoreRxForm;
 import com.extenprise.mapp.service.data.RxInboxItem;
-import com.extenprise.mapp.service.data.RxItemAvailability;
-import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.service.data.WorkPlace;
@@ -78,6 +74,7 @@ public class MappService extends Service {
     public static final int DO_GET_CUST_RX_LIST = 29;
     public static final int DO_UPCOMING_APPONT_LIST = 30;
     public static final int DO_EDIT_WORK_PLACE = 31;
+    public static final int DO_UPDATE_REPORT_STATUS = 32;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -100,20 +97,11 @@ public class MappService extends Service {
         Bundle data = msg.getData();
         mLoginType = data.getInt("loginType");
         SignInData signInData = data.getParcelable("signInData");
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        try {
-            task = new MappAsyncTask(getURL(DO_LOGIN), gson.toJson(signInData));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_LOGIN);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(signInData));
     }
 
-    public void doSignup(Message msg) {
+    public void doSignupOrUpdate(Message msg) {
         Bundle data = msg.getData();
         mLoginType = data.getInt("loginType");
 
@@ -121,369 +109,55 @@ public class MappService extends Service {
         if (mLoginType == CUSTOMER_LOGIN) {
             object = data.getParcelable("customer");
         }
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        try {
-            task = new MappAsyncTask(getURL(DO_SIGNUP), gson.toJson(object));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_SIGNUP);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(object));
     }
 
-    public void doUpdate(Message msg) {
+    public void doWorkPlaceStuff(Message msg) {
         Bundle data = msg.getData();
-        mLoginType = data.getInt("loginType");
-
-        Object object = data.getParcelable("service");
-        if (mLoginType == CUSTOMER_LOGIN) {
-            object = data.getParcelable("customer");
-        }
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        try {
-            task = new MappAsyncTask(getURL(DO_UPDATE), gson.toJson(object));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_UPDATE);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void addWorkPlace(Message msg) {
-        Bundle data = msg.getData();
-        //Object object = data.getParcelable("service");
-        WorkPlace workPlace = data.getParcelable("workPlace");
-
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        try {
-            task = new MappAsyncTask(getURL(DO_ADD_WORK_PLACE), gson.toJson(workPlace));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_ADD_WORK_PLACE);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void editWorkPlace(Message msg) {
-        Bundle data = msg.getData();
-        //Object object = data.getParcelable("service");
-        WorkPlace workPlace = data.getParcelable("workPlace");
-
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        try {
-            task = new MappAsyncTask(getURL(DO_EDIT_WORK_PLACE), gson.toJson(workPlace));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_EDIT_WORK_PLACE);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void getWorkPlace(Message msg) {
-        Bundle data = msg.getData();
-        WorkPlace workPlace = data.getParcelable("workPlace");
-
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        try {
-            task = new MappAsyncTask(getURL(DO_WORK_PLACE_LIST), gson.toJson(workPlace));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_WORK_PLACE_LIST);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void removeWorkPlace(Message msg) {
-        Bundle data = msg.getData();
-        //Object object = data.getParcelable("service");
-        WorkPlace workPlace = data.getParcelable("workPlace");
-
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        try {
-            task = new MappAsyncTask(getURL(DO_REMOVE_WORK_PLACE), gson.toJson(workPlace));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_REMOVE_WORK_PLACE);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(data.getParcelable("workPlace")));
     }
 
     public void doPhoneExistsCheck(Message msg) {
         Bundle data = msg.getData();
         mLoginType = data.getInt("loginType");
-
-        SignInData signInData = data.getParcelable("signInData");
-        mReplyTo = msg.replyTo;
         Gson gson = new Gson();
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(DO_PHONE_EXIST_CHECK), gson.toJson(signInData));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_PHONE_EXIST_CHECK);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(data.getParcelable("signInData")));
     }
 
     public void doRegNoExistsCheck(Message msg) {
         Bundle data = msg.getData();
-        Object object = data.getParcelable("service");
-
-        mReplyTo = msg.replyTo;
         Gson gson = new Gson();
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(DO_REG_NO_CHECK), gson.toJson(object));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_REG_NO_CHECK);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(data.getParcelable("service")));
     }
 
-    public void doSearchServProv(Message msg) {
+    public void doSubmitForm(Message msg) {
         Bundle data = msg.getData();
-        SearchServProvForm form = data.getParcelable("form");
-        mReplyTo = msg.replyTo;
-        Gson gson = new Gson();
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(DO_SEARCH_SERV_PROV), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_SEARCH_SERV_PROV);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doGetServProvDetails(Message msg) {
-        Bundle data = msg.getData();
-        ServProvListItem form = data.getParcelable("form");
-        mReplyTo = msg.replyTo;
-        Gson gson = new Gson();
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(DO_SERV_PROV_DETAILS), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_SERV_PROV_DETAILS);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doGetTimeSlots(Message msg) {
-        Bundle data = msg.getData();
-        AppointmentTimeslotsForm form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(DO_APPONT_TIME_SLOTS), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_APPONT_TIME_SLOTS);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doBookAppont(Message msg) {
-        Bundle data = msg.getData();
-        Appointment form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(DO_BOOK_APPONT), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(DO_BOOK_APPONT);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doAppontList(Message msg) {
-        Bundle data = msg.getData();
-        AppointmentListItem form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doSaveScannedRxCopy(Message msg) {
-        Bundle data = msg.getData();
-        AppointmentListItem form = data.getParcelable("form");
         GsonBuilder gsonBuilder = new GsonBuilder().registerTypeHierarchyAdapter(byte[].class, new ByteArrayToJSONAdapter());
         gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Gson gson = gsonBuilder.create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    private void doChangeAppontStatus(Message msg) {
-        Bundle data = msg.getData();
-        AppointmentListItem form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    private void doGetSpeciality(Message msg) {
-        Bundle data = msg.getData();
-        SearchServProvForm form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    private void doGetRx(Message msg) {
-        Bundle data = msg.getData();
-        AppointmentListItem form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(data.getParcelable("form")));
     }
 
     private void doSaveRx(Message msg) {
         Bundle data = msg.getData();
         Rx rx = data.getParcelable("rx");
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(rx));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(rx));
     }
 
     public void doGetMedStoreList(Message msg) {
         Bundle data = msg.getData();
         int idService = data.getInt("id");
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), "{\"idService\": " + idService + "}");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doSendRx(Message msg) {
-        Bundle data = msg.getData();
-        MedStoreRxForm form = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(form));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, "{\"idService\": " + idService + "}");
     }
 
     public void doGetRxInbox(Message msg) {
         Bundle data = msg.getData();
         int id = data.getInt("id");
         int status = data.getInt("status");
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), "{\"id\": " + id + ", \"status\": " + status + "}");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
-    }
-
-    public void doSendAvailability(Message msg) {
-        Bundle data = msg.getData();
-        RxItemAvailability availability = data.getParcelable("form");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(availability));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, "{\"id\": " + id + ", \"status\": " + status + "}");
     }
 
     public void doGetRxCopy(Message msg) {
@@ -491,48 +165,21 @@ public class MappService extends Service {
         Report report = new Report();
         report.setIdReport(data.getInt("idRx"));
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(report));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(report));
     }
 
     public void doGetCustApponts(Message msg) {
         Bundle data = msg.getData();
         com.extenprise.mapp.customer.data.AppointmentListItem item = data.getParcelable("appont");
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(item));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(item));
     }
 
     public void doGetCustRxList(Message msg) {
         Bundle data = msg.getData();
         RxInboxItem inboxItem = data.getParcelable("rxItem");
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        mReplyTo = msg.replyTo;
-        MappAsyncTask task;
-        try {
-            task = new MappAsyncTask(getURL(msg.what), gson.toJson(inboxItem));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            onError(msg.what);
-            return;
-        }
-        task.execute((Void) null);
+        sendAsyncMsg(msg, gson.toJson(inboxItem));
     }
 
     private void onError(int action) {
@@ -545,6 +192,19 @@ public class MappService extends Service {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendAsyncMsg(Message message, String data) {
+        mReplyTo = message.replyTo;
+        MappAsyncTask task;
+        try {
+            task = new MappAsyncTask(getURL(message.what), data);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            onError(message.what);
+            return;
+        }
+        task.execute((Void) null);
     }
 
     private URL getURL(int action) throws MalformedURLException {
@@ -677,22 +337,14 @@ public class MappService extends Service {
                     mService.doLogin(msg);
                     break;
                 case DO_SIGNUP:
-                    mService.doSignup(msg);
-                    break;
                 case DO_UPDATE:
-                    mService.doUpdate(msg);
+                    mService.doSignupOrUpdate(msg);
                     break;
                 case DO_ADD_WORK_PLACE:
-                    mService.addWorkPlace(msg);
-                    break;
                 case DO_EDIT_WORK_PLACE:
-                    mService.editWorkPlace(msg);
-                    break;
                 case DO_WORK_PLACE_LIST:
-                    mService.getWorkPlace(msg);
-                    break;
                 case DO_REMOVE_WORK_PLACE:
-                    mService.removeWorkPlace(msg);
+                    mService.doWorkPlaceStuff(msg);
                     break;
                 case DO_PHONE_EXIST_CHECK:
                     mService.doPhoneExistsCheck(msg);
@@ -701,34 +353,20 @@ public class MappService extends Service {
                     mService.doRegNoExistsCheck(msg);
                     break;
                 case DO_SEARCH_SERV_PROV:
-                    mService.doSearchServProv(msg);
-                    break;
                 case DO_SERV_PROV_DETAILS:
-                    mService.doGetServProvDetails(msg);
-                    break;
                 case DO_APPONT_TIME_SLOTS:
-                    mService.doGetTimeSlots(msg);
-                    break;
                 case DO_BOOK_APPONT:
-                    mService.doBookAppont(msg);
-                    break;
                 case DO_APPONT_LIST:
                 case DO_PAST_APPONT_LIST:
                 case DO_UPCOMING_APPONT_LIST:
-                    mService.doAppontList(msg);
-                    break;
                 case DO_CONFIRM_APPONT:
                 case DO_CANCEL_APPONT:
-                    mService.doChangeAppontStatus(msg);
-                    break;
                 case DO_SAVE_SCANNED_RX_COPY:
-                    mService.doSaveScannedRxCopy(msg);
-                    break;
                 case DO_GET_SPECIALITY:
-                    mService.doGetSpeciality(msg);
-                    break;
                 case DO_GET_RX:
-                    mService.doGetRx(msg);
+                case DO_SEND_RX:
+                case DO_SEND_AVAILABILITY:
+                    mService.doSubmitForm(msg);
                     break;
                 case DO_SAVE_RX:
                     mService.doSaveRx(msg);
@@ -736,15 +374,9 @@ public class MappService extends Service {
                 case DO_GET_MEDSTORE_LIST:
                     mService.doGetMedStoreList(msg);
                     break;
-                case DO_SEND_RX:
-                    mService.doSendRx(msg);
-                    break;
                 case DO_GET_RX_INBOX:
                 case DO_GET_RX_FEEDBACK:
                     mService.doGetRxInbox(msg);
-                    break;
-                case DO_SEND_AVAILABILITY:
-                    mService.doSendAvailability(msg);
                     break;
                 case DO_GET_RX_SCANNED_COPY:
                     mService.doGetRxCopy(msg);
@@ -781,6 +413,7 @@ public class MappService extends Service {
         private Appointment mForm;
         private Rx mRx;
         private Report mReport;
+        private int mResponsecode;
 
         public MappAsyncTask(URL url, String data) {
             mUrl = url;
@@ -818,8 +451,8 @@ public class MappService extends Service {
                 }
 
                 //Get Response
-                int responseCode = connection.getResponseCode();
-                if ((responseCode / 100) == 2) {
+                mResponsecode = connection.getResponseCode();
+                if ((mResponsecode / 100) == 2) {
                     InputStream is = connection.getInputStream();
                     BufferedReader rd = new BufferedReader(new InputStreamReader(is));
                     String line;
@@ -927,6 +560,7 @@ public class MappService extends Service {
         protected void onPostExecute(final Boolean success) {
             Bundle bundle = new Bundle();
             bundle.putBoolean("status", success);
+            bundle.putInt("responseCode", mResponsecode);
             if (mCustomer != null) {
                 bundle.putParcelable("customer", mCustomer);
             }

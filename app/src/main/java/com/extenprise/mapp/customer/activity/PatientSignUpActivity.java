@@ -431,7 +431,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showRegistrationAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
@@ -449,10 +449,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         try {
             Date dob = sdf.parse(mTextViewDOB.getText().toString().trim());
             c.setDob(dob);
+            c.setAge(Utility.getAge(dob));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        c.setAge(Utility.getAge(mTextViewDOB.getText().toString().trim()));
         c.setEmailId(mEditTextCustomerEmail.getText().toString().trim());
         c.setGender(mSpinGender.getSelectedItem().toString().trim());
         float height = 0;
@@ -548,7 +548,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
             valid = false;
-        } else if(Utility.getAge(dob) <= 0) {
+        } else if(Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
@@ -614,7 +614,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     @Override
     public void datePicked(String date) {
-        int age = Utility.getAge(date);
+        int age = Utility.getAge(Utility.getStrAsDate(date, "dd/MM/yyyy"));
 
     }
 }

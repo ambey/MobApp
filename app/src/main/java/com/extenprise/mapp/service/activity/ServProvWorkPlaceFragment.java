@@ -471,8 +471,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         }
         if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
                 !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
-            if (Utility.getMinutes(mStartTime.getText().toString()) >= Utility.getMinutes(mEndTime.getText().toString())) {
-                mEndTime.setError(getString(R.string.error_endtime));
+            if (Utility.getMinutes(mStartTime.getText().toString()) + 60 >= Utility.getMinutes(mEndTime.getText().toString())) {
+                mEndTime.setError(getString(R.string.error_invalid_endtime));
                 focusView = mEndTime;
                 valid = false;
             }
@@ -538,7 +538,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showRegistrationAlert(getActivity(), "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showAlert(getActivity(), "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
     }

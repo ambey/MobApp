@@ -1,4 +1,4 @@
-package com.extenprise.mapp.service.activity;
+package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.activity.ServProvDetailsActivity;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.ui.ServProvListAdapter;
 import com.extenprise.mapp.util.Utility;

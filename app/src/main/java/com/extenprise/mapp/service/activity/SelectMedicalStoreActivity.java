@@ -2,6 +2,7 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -82,9 +83,15 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
     }
 
     private void rxSentToMedStore() {
-        Intent intent = new Intent(this, ServiceProviderHomeActivity.class);
-        intent.putExtra("service", LoginHolder.servLoginRef);
-        startActivity(intent);
+        Utility.showAlert(this, "", getString(R.string.msg_rx_sent_to_medstore), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent(SelectMedicalStoreActivity.this, ServiceProviderHomeActivity.class);
+                intent.putExtra("service", LoginHolder.servLoginRef);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

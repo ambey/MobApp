@@ -43,7 +43,7 @@ import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.activity.MedicalStoreHomeActivity;
-import com.extenprise.mapp.service.activity.SearchServProvActivity;
+import com.extenprise.mapp.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.EncryptUtil;
@@ -392,7 +392,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mLoginFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
-            String phone = "", type = "";
+            String phone, type;
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
@@ -411,6 +411,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 }
                 intent.putExtra("customer", customer);
                 LoginHolder.custLoginRef = customer;
+                assert customer != null;
                 phone = customer.getSignInData().getPhone();
                 type = "customer";
             } else {

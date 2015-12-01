@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.City;
 import com.extenprise.mapp.data.SignInData;
+import com.extenprise.mapp.util.Utility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -99,7 +100,10 @@ public class Customer implements Parcelable {
     }
 
     public int getAge() {
-        return age;
+        if(age > 0) {
+            return age;
+        }
+        return Utility.getAge(dob);
     }
 
     public void setAge(int age) {

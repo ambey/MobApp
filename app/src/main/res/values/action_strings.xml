@@ -35,4 +35,5 @@
     <string name="action_get_cust_upcoming_apponts">customer/GetUpcomingAppontList.action</string>
     <string name="action_get_cust_past_apponts">customer/GetPastAppontList.action</string>
     <string name="action_get_cust_rx_list">customer/GetRxList.action</string>
+    <string name="action_update_report_status">service/UpdateReportServiceStatus.action</string>
 </resources>

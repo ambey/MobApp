@@ -1,6 +1,7 @@
-package com.extenprise.mapp.service.activity;
+package com.extenprise.mapp.customer.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +14,6 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.net.MappService;
@@ -26,7 +26,6 @@ import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.Utility;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -136,7 +135,7 @@ public class BookAppointmentActivity extends Activity
 
     private void gotTimeSlots(Bundle data) {
         ArrayList<String> list = data.getStringArrayList("timeSlots");
-        if(list == null) {
+        if (list == null) {
             return;
         }
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
@@ -148,14 +147,21 @@ public class BookAppointmentActivity extends Activity
 
     private void gotAppont(Bundle data) {
         mMsgView.setVisibility(View.GONE);
-        Utility.showAlert(this, "", "Your Appointment has been booked.");
-        Appointment appointment = data.getParcelable("form");
-        mCust.getAppointments().add(appointment);
-        mServProv.getServProvHasServPt(0).getAppointments().add(appointment);
-
-        /*Intent intent = new Intent(this, PatientsHomeScreenActivity.class);
-        intent.putExtra("customer", mCust);
-        startActivity(intent);*/
+        if (data.getBoolean("status")) {
+            Utility.showAlert(this, "", getString(R.string.msg_appont_booked), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(BookAppointmentActivity.this, PatientsHomeScreenActivity.class);
+                    startActivity(intent);
+                }
+            });
+            Appointment appointment = data.getParcelable("form");
+            mCust.getAppointments().add(appointment);
+            mServProv.getServProvHasServPt(0).getAppointments().add(appointment);
+        } else {
+            Utility.showAlert(this, "", getString(R.string.error_appont));
+        }
     }
 
     @Override
@@ -187,7 +193,7 @@ public class BookAppointmentActivity extends Activity
 
     @Override
     public void datePicked(String date) {
-        mSelectedDate = Utility.getStrAsDate(date);
+        mSelectedDate = Utility.getStrAsDate(date, "dd/MM/yyyy");
         setTimeSlots();
     }
 
@@ -206,7 +212,7 @@ public class BookAppointmentActivity extends Activity
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        if(intent != null) {
+        if (intent != null) {
             intent.putExtra("service", getIntent().getParcelableExtra("servProv"));
             intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
         }

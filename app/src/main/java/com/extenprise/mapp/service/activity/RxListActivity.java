@@ -68,6 +68,15 @@ public class RxListActivity extends Activity {
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        return new Intent(this, ServiceProviderHomeActivity.class);
+        Intent intent = super.getParentActivityIntent();
+        String parentClass = getIntent().getStringExtra("parent-activity");
+        if(parentClass != null) {
+            try {
+                intent = new Intent(this, Class.forName(parentClass));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return intent;
     }
 }
