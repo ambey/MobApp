@@ -22,5 +22,6 @@
     <string name="error_duplicate_reg_no">This Registration Number is already used by someone else.</string>
     <string name="error_appont">Sorry! The appointment can\'t be booked.</string>
     <string name="error_invalid_endtime">End time should be ateast 60 minutes ahead of the Start time</string>
+    <string name="error_select_gender">Please select Gender.</string>
 
 </resources>

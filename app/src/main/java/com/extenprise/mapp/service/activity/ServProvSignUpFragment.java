@@ -200,7 +200,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         if (genderID == -1) {
             //Utility.showAlert(this, "", "Please Select Gender.");
             RadioButton mFemale = (RadioButton) mRootView.findViewById(R.id.radioButtonFemale);
-            mFemale.setError("Please select Gender.");
+            mFemale.setError(getString(R.string.error_select_gender));
             focusView = mFemale;
             cancel = true;
             //return;

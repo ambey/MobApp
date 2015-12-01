@@ -308,7 +308,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                         loginPrefsEditor.putString("logintype", uType);
                         loginPrefsEditor.apply();
                         dialog.dismiss();
-                        processLogin();
+                        //processLogin();
                     }
                 });
                 /*if(Utility.confirm(this, R.string.confirm_remember)) {*/
@@ -321,7 +321,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             } else {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
-                processLogin();
+                //processLogin();
             }
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
@@ -330,17 +330,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
             mAuthTask = new UserLoginTask(this, mobile, password);
             mAuthTask.execute((Void) null);
 */
-        }
-    }
-
-    private void processLogin() {
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", mLoginType);
-        bundle.putParcelable("signInData", mSignInData);
-        mConnection.setAction(MappService.DO_LOGIN);
-        mConnection.setData(bundle);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mLoginFormView, mProgressView, true);
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", mLoginType);
+            bundle.putParcelable("signInData", mSignInData);
+            mConnection.setAction(MappService.DO_LOGIN);
+            mConnection.setData(bundle);
+            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                Utility.showProgress(this, mLoginFormView, mProgressView, true);
+            }
         }
     }
 

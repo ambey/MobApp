@@ -170,7 +170,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mFname.setText(mFname.getText().toString() + " : " + mServiceProv.getfName());
         mLname.setText(mLname.getText().toString() + " : " + mServiceProv.getlName());
         mMobNo.setText(mMobNo.getText().toString() + " : " + mSignInData.getPhone());
-        mEmailID.setText(mEmailID.getText().toString() + " : " + mServiceProv.getEmailId());
+        String email = getString(R.string.not_specified);
+        if(mServiceProv.getEmailId() != null) {
+            email = mServiceProv.getEmailId();
+        }
+        mEmailID.setText(mEmailID.getText().toString() + " : " + email);
         mRegNo.setText(mRegNo.getText().toString() + " : " + mServiceProv.getRegNo());
         mGenderTextView.setText(mGenderTextView.getText().toString() + " : " + mServiceProv.getGender());
 
@@ -394,6 +398,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mLname = (EditText) dialogView.findViewById(R.id.editTextLName);
         mEmailID = (EditText) dialogView.findViewById(R.id.editTextEmail);
         mGender = (RadioGroup) dialogView.findViewById(R.id.radioGroupGender);
+        mMale = (RadioButton) dialogView.findViewById(R.id.radioButtonMale);
+        mFemale = (RadioButton) dialogView.findViewById(R.id.radioButtonFemale);
         mRegNo = (EditText) dialogView.findViewById(R.id.editTextRegistrationNumber);
         mRegNo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -415,7 +421,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
         mFname.setText(mServiceProv.getfName());
         mLname.setText(mServiceProv.getlName());
-        mEmailID.setText(mServiceProv.getEmailId());
+        String email = getString(R.string.not_specified);
+        if(mServiceProv.getEmailId() != null) {
+            email = mServiceProv.getEmailId();
+        }
+        mEmailID.setText(email);
         mRegNo.setText(mServiceProv.getRegNo());
         if (mServiceProv.getGender().equalsIgnoreCase("Male")) {
             mMale.setChecked(true);
@@ -423,7 +433,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mFemale.setChecked(true);
         }
 
-        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.add_new_work_place).create();
+        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.personalDetails).create();
         dialog.show();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -456,11 +466,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 }
                 int genderID = mGender.getCheckedRadioButtonId();
                 if (genderID == -1) {
-                    mFemale.setError("Please select Gender.");
+                    mFemale.setError(getString(R.string.error_select_gender));
                     focusView = mFemale;
                     cancel = true;
                 } else {
-                    mGenderBtn = (RadioButton) findViewById(genderID);
+                    mGenderBtn = (RadioButton) dialogView.findViewById(genderID);
                 }
                 if (TextUtils.isEmpty(regNo)) {
                     mRegNo.setError(getString(R.string.error_field_required));
@@ -921,7 +931,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             }
         });
 
-        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.add_new_work_place).create();
+        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.work_place_details).create();
         dialog.show();
 
         final int finalAction = action;

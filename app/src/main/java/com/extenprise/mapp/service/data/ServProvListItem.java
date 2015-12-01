@@ -15,7 +15,8 @@ public class ServProvListItem implements Parcelable {
     private float experience;
     private String servPtName;
     private String servPtLocation;
-    private String availDays;
+    private String workingDays;
+
 
     public ServProvListItem() {
     }
@@ -31,18 +32,18 @@ public class ServProvListItem implements Parcelable {
         speciality = fields[count++];
         servPtName = fields[count++];
         servPtLocation = fields[count++];
-        availDays = fields[count];
+        workingDays = fields[count];
 
         experience = source.readFloat();
         idServProvHasServPt = source.readInt();
     }
 
     public String getAvailDays() {
-        return availDays;
+        return workingDays;
     }
 
-    public void setAvailDays(String availDays) {
-        this.availDays = availDays;
+    public void setAvailDays(String workingDays) {
+        this.workingDays = workingDays;
     }
 
     public String getPhone() {
@@ -116,7 +117,7 @@ public class ServProvListItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{phone, firstName, lastName, speciality, servPtName, servPtLocation, availDays});
+        dest.writeStringArray(new String[]{phone, firstName, lastName, speciality, servPtName, servPtLocation, workingDays});
         dest.writeFloat(experience);
         dest.writeInt(idServProvHasServPt);
     }
