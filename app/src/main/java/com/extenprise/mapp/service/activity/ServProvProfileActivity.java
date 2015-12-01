@@ -74,9 +74,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private ServiceProvider mServiceProv;
     private SignInData mSignInData;
 
-    private EditText mMobNo, mEmailID, mRegNo;
-    private TextView mDocName, workhourLBL;
-    private EditText mFname, mLname;
+    private TextView mMobNo, mEmailID, mRegNo, mFname, mLname, mGenderTextView;
+    private TextView mDocName, workhourLBL, mViewdrLbl;
     private RadioGroup mGender;
     private RadioButton mMale, mFemale, mGenderBtn;
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
@@ -87,10 +86,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private static int RESULT_LOAD_IMG = 1;
     private static int REQUEST_CAMERA = 2;
-    private String imgDecodableString;
     private Bitmap mImgCopy;
 
-    private TextView mViewdrLbl;
     private EditText mName;
     private EditText mLoc;
     private Spinner mCity;
@@ -120,7 +117,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         options = Utility.getDaysOptions(this);
         selections = new boolean[options.length];
 
@@ -137,17 +133,16 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
 
-        /*findViewById(R.id.editTextPasswd).setVisibility(View.GONE);
-        findViewById(R.id.editTextCnfPasswd).setVisibility(View.GONE);*/
+        mFname = (TextView) findViewById(R.id.textViewFName);
+        mLname = (TextView) findViewById(R.id.textViewLName);
+        mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
+        mMobNo = (TextView) findViewById(R.id.editTextMobNum);
+        mEmailID = (TextView) findViewById(R.id.editTextEmail);
+        mRegNo = (TextView) findViewById(R.id.editTextRegNum);
 
-        mMobNo = (EditText) findViewById(R.id.editTextMobNum);
-        mEmailID = (EditText) findViewById(R.id.editTextEmail);
         mGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-        mRegNo = (EditText) findViewById(R.id.editTextRegNum);
         mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
         mDocName = (TextView) findViewById(R.id.textviewDocname);
-        mFname = (EditText) findViewById(R.id.textViewFName);
-        mLname = (EditText) findViewById(R.id.textViewLName);
         mMale = (RadioButton) findViewById(R.id.radioButtonMale);
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
@@ -159,7 +154,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
         }
-
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
             mImgView.setImageBitmap(bitmap);
@@ -169,26 +163,25 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
+        mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
+        if (mServiceProv.getImg() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
+        }
+        mFname.setText(mFname.getText().toString() + " : " + mServiceProv.getfName());
+        mLname.setText(mLname.getText().toString() + " : " + mServiceProv.getlName());
+        mMobNo.setText(mMobNo.getText().toString() + " : " + mSignInData.getPhone());
+        mEmailID.setText(mEmailID.getText().toString() + " : " + mServiceProv.getEmailId());
+        mRegNo.setText(mRegNo.getText().toString() + " : " + mServiceProv.getRegNo());
+        mGenderTextView.setText(mGenderTextView.getText().toString() + " : " + mServiceProv.getGender());
 
-        mRegNo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String regNo = mRegNo.getText().toString().trim();
-                    if(!TextUtils.isEmpty(regNo)) {
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                        bundle.putString("regno", mRegNo.getText().toString().trim());
-                        bundle.putParcelable("service", mServiceProv);
-                        mConnection.setData(bundle);
-                        mConnection.setAction(MappService.DO_REG_NO_CHECK);
-                        Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
-                    }
-                }
-            }
-        });
-
-        viewProfile();
+        //Get work place list from server
+        Utility.showProgress(this, mFormView, mProgressView, true);
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        bundle.putParcelable("workPlace", mWorkPlace);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_WORK_PLACE_LIST);
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -211,38 +204,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void viewProfile() {
-        mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
-        /*String servCategory = sp.getServProvHasServPt(0).getService().getCategory();
-        if (servCategory.equalsIgnoreCase("pharmacist")) {
-            mViewdrLbl.setText("Welcome");
-            mImgView.setImageResource(R.drawable.medstore);
-        }*/
-        if (mServiceProv.getImg() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
-        }
-        mFname.setText(mServiceProv.getfName());
-        mLname.setText(mServiceProv.getlName());
-        mMobNo.setText(mSignInData.getPhone());
-        mEmailID.setText(mServiceProv.getEmailId());
-        mRegNo.setText(mServiceProv.getRegNo());
-        if (mServiceProv.getGender().equalsIgnoreCase("Male")) {
-            mMale.setChecked(true);
-        } else {
-            mFemale.setChecked(true);
-        }
-        enability(false);
-
-        //Get work place list from server
-        Utility.showProgress(this, mFormView, mProgressView, true);
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        bundle.putParcelable("workPlace", mWorkPlace);
-        mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_WORK_PLACE_LIST);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     private void showWorkPlaceList() {
@@ -417,22 +378,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     public void editPersonalInfo(View view) {
-        boolean set = true;
+        /*boolean set = true;
         if(mFname.isEnabled()) {
             set = false;
         }
-        enability(set);
-
-         /*EditText mFirstName;
-         EditText mLastName;
-         EditText mCellphoneview;
-         EditText mPasswdView;
-         EditText mCnfPasswdView;
-         final RadioGroup mRadioGroupGender;
-         RadioButton mRadioButtonGender;
-         final EditText mRegistrationNumber;
-
-
+        enability(set);*/
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.layout_personal_info, null);
 
@@ -440,22 +390,38 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         dialogView.findViewById(R.id.editTextPasswd).setVisibility(View.GONE);
         dialogView.findViewById(R.id.editTextCnfPasswd).setVisibility(View.GONE);
 
-        mFirstName = (EditText) dialogView.findViewById(R.id.editTextFName);
-        mLastName = (EditText) dialogView.findViewById(R.id.editTextLName);
-        mRadioGroupGender = (RadioGroup) dialogView.findViewById(R.id.radioGroupGender);
-        mRegistrationNumber = (EditText) dialogView.findViewById(R.id.editTextRegistrationNumber);
-        mRegistrationNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mFname = (EditText) dialogView.findViewById(R.id.editTextFName);
+        mLname = (EditText) dialogView.findViewById(R.id.editTextLName);
+        mEmailID = (EditText) dialogView.findViewById(R.id.editTextEmail);
+        mGender = (RadioGroup) dialogView.findViewById(R.id.radioGroupGender);
+        mRegNo = (EditText) dialogView.findViewById(R.id.editTextRegistrationNumber);
+        mRegNo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
-                        checkExistence(MappService.DO_REG_NO_CHECK);
-
+                    String regNo = mRegNo.getText().toString().trim();
+                    if (!TextUtils.isEmpty(regNo)) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                        bundle.putString("regno", mRegNo.getText().toString().trim());
+                        bundle.putParcelable("service", mServiceProv);
+                        mConnection.setData(bundle);
+                        mConnection.setAction(MappService.DO_REG_NO_CHECK);
+                        Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
                     }
                 }
             }
         });
 
+        mFname.setText(mServiceProv.getfName());
+        mLname.setText(mServiceProv.getlName());
+        mEmailID.setText(mServiceProv.getEmailId());
+        mRegNo.setText(mServiceProv.getRegNo());
+        if (mServiceProv.getGender().equalsIgnoreCase("Male")) {
+            mMale.setChecked(true);
+        } else {
+            mFemale.setChecked(true);
+        }
 
         final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.add_new_work_place).create();
         dialog.show();
@@ -463,39 +429,67 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isValidWorkPlace()) {
-                    WorkPlace wpt = new WorkPlace();
-                    wpt.setName(mName.getText().toString().trim());
-                    wpt.setLocation(mLoc.getText().toString().trim());
-                    wpt.setCity(mCity.getSelectedItem().toString().trim());
-                    wpt.setPhone(mPhone1.getText().toString().trim());
-                    wpt.setAltPhone(mPhone2.getText().toString().trim());
-                    wpt.setEmailId(mEmailIdwork.getText().toString().trim());
-                    wpt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
-                    wpt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
-                    wpt.setWorkingDays(mMultiSpinnerDays.getText().toString());
-                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                    wpt.setServCategory(mServCatagory.getSelectedItem().toString());
-                    wpt.setSpeciality(mSpeciality.getSelectedItem().toString());
-                    wpt.setServPointType(mServPtType.getSelectedItem().toString());
-                    wpt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                    wpt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
-                    wpt.setQualification(mQualification.getText().toString().trim());
+                boolean cancel = false;
+                View focusView = null;
 
-                    mWorkPlace = wpt;
-                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                    bundle.putParcelable("mWorkPlace", mWorkPlace);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.DO_ADD_WORK_PLACE);
-                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
-                    dialog.dismiss();
+                String fnm = mFname.getText().toString().trim();
+                String lnm = mLname.getText().toString().trim();
+                String email = mEmailID.getText().toString().trim();
+                String regNo = mRegNo.getText().toString();
+
+                if (TextUtils.isEmpty(mLname.getText().toString())) {
+                    mLname.setError(getString(R.string.error_field_required));
+                    focusView = mLname;
+                    cancel = true;
                 }
+                if (TextUtils.isEmpty(mFname.getText().toString())) {
+                    mFname.setError(getString(R.string.error_field_required));
+                    focusView = mFname;
+                    cancel = true;
+                }
+                if (!TextUtils.isEmpty(mEmailID.getText().toString())) {
+                    if (!Validator.isValidEmaillId(mEmailID.getText().toString().trim())) {
+                        mEmailID.setError(getString(R.string.error_invalid_email));
+                        focusView = mEmailID;
+                        cancel = true;
+                    }
+                }
+                int genderID = mGender.getCheckedRadioButtonId();
+                if (genderID == -1) {
+                    mFemale.setError("Please select Gender.");
+                    focusView = mFemale;
+                    cancel = true;
+                } else {
+                    mGenderBtn = (RadioButton) findViewById(genderID);
+                }
+                if (TextUtils.isEmpty(regNo)) {
+                    mRegNo.setError(getString(R.string.error_field_required));
+                    focusView = mRegNo;
+                    cancel = true;
+                }
+
+                if (cancel) {
+                    focusView.requestFocus();
+                    return;
+                }
+                mServiceProv.setfName(fnm);
+                mServiceProv.setlName(lnm);
+                mServiceProv.setEmailId(email);
+                mServiceProv.setGender(mGenderBtn.getText().toString());
+                mServiceProv.setRegNo(regNo);
+                mServiceProv.setSignInData(mSignInData);
+
+                Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                Bundle bundle = new Bundle();
+                bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                bundle.putString("regno", regNo);
+                bundle.putParcelable("service", mServiceProv);
+                mConnection.setData(bundle);
+                mConnection.setAction(MappService.DO_UPDATE);
+                Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                dialog.dismiss();
             }
         });
-
-        //return dialog;*/
     }
 
     public void editWorkPlaceInfo(View v) {
@@ -571,16 +565,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
     }
 
-    /*@Override
-    public void cancel() {
-
-    }
-
-    @Override
-    public void dismiss() {
-
-    }
-*/
 
     ///////////////////////////Multi spinner..../////////////////////////////
 
@@ -978,8 +962,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
         return dialog;
     }
-
-
 
     private boolean isValidWorkPlace() {
         boolean valid = true;

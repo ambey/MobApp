@@ -54,7 +54,7 @@
 
             <RelativeLayout
                 android:id="@+id/personalInfo"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewDoc"
                 >
@@ -84,165 +84,46 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/viewFname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewEditEducation"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/first_name"
-                    android:textSize="14sp" />
-
-                <EditText
                     android:id="@+id/textViewFName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="0dp"
                     android:layout_below="@+id/textViewEditEducation"
-                    android:hint="@string/first_name"
-                    android:focusable="true"
-                    android:inputType="text|textNoSuggestions"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:text="@string/first_name" />
 
                 <TextView
-                    android:id="@+id/viewLname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/viewFname"
-
-                    android:layout_marginTop="10dp"
-                    android:text="@string/last_name"
-                    android:textSize="14sp" />
-
-                <EditText
                     android:id="@+id/textViewLName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@+id/textViewFName"
-                    android:layout_marginTop="0dp"
-                    android:hint="@string/last_name"
-                    android:inputType="text|textNoSuggestions"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:text="@string/last_name" />
 
                 <TextView
-                    android:id="@+id/viewMobNumLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewLName"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/mob_num"
-                    android:textSize="14sp" />
-
-                <EditText
                     android:id="@+id/editTextMobNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/textViewLName"
-                    android:hint="@string/mob_num"
-                    android:inputType="number"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:text="@string/mob_num"
+                    android:layout_below="@+id/textViewLName" />
 
                 <TextView
-                    android:id="@+id/viewEmailLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/viewMobNumLabel"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/mail_id"
-
-                    android:textSize="14sp" />
-
-                <EditText
                     android:id="@+id/editTextEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@+id/editTextMobNum"
-                    android:layout_marginTop="0dp"
-                    android:hint="@string/mail_id"
-                    android:inputType="textEmailAddress"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:text="@string/mail_id" />
 
                 <TextView
-                    android:id="@+id/viewRegNumLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/viewEmailLabel"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/reg_num"
-
-                    android:textSize="14sp" />
-
-                <EditText
                     android:id="@+id/editTextRegNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/viewEmailLabel"
-                    android:layout_marginTop="0dp"
-                    android:hint="@string/reg_num"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_below="@+id/editTextEmail"
+                    android:text="@string/reg_num" />
 
                 <TextView
                     android:id="@+id/viewGenderLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/viewRegNumLabel"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/gender"
-
-                    android:textSize="14sp" />
-
-                <RadioGroup
-                    android:id="@+id/radioGroupGender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@+id/editTextRegNum"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radioButtonMale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/male" />
-
-                    <RadioButton
-                        android:id="@+id/radioButtonFemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginStart="30dp"
-                        android:text="@string/female" />
-                </RadioGroup>
-
-                <Button
-                    android:id="@+id/buttonViewUpdate"
-
-                    style="@style/MyButton"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/viewGenderLabel"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="50dp"
-                    android:onClick="updateProfile"
-
-                    android:text="@string/update" />
+                    android:text="@string/gender" />
 
             </RelativeLayout>
 

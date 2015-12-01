@@ -131,7 +131,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         }*/
 
         mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
-        LoginHolder.custLoginRef.getAge()));
+        Utility.getAge(LoginHolder.custLoginRef.getDob())));
         mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
         if(LoginHolder.custLoginRef.getImg() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
@@ -525,7 +525,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         Date datePicked = Utility.getStrAsDate(date, "dd/MM/yyyy");
         if(!Utility.isDateAfterToday(datePicked)) {
             mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
-                    LoginHolder.custLoginRef.getAge()));
+                    Utility.getAge(LoginHolder.custLoginRef.getDob())));
         }
     }
 }
