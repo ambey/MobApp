@@ -15,6 +15,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -39,6 +40,7 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
+import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 
@@ -721,4 +723,15 @@ public abstract class Utility {
         return sdf.format(date);
     }
 
+    public static void logout(SharedPreferences loginPreferences, Activity activity) {
+        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin) {
+            SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
+            loginPrefsEditor.clear();
+            loginPrefsEditor.apply();
+        }
+        activity.finish();
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
+    }
 }

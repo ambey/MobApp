@@ -69,6 +69,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Date date = mAppont.getDate();
         int fromTime = Utility.getMinutes(mAppont.getTime());
         date.setTime(date.getTime() + fromTime * 60 * 1000);
+
         if (date.after(today)) {
             //Utility.setEnabledButton(this, rxButton, false);
             Utility.setEnabledButton(this, uploadRxButton, false);
@@ -96,10 +97,18 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             mStatusView.setText(getString(R.string.not_confirmed));
         }
 
-        if (mAppont.isConfirmed() || mAppont.isCanceled()) {
+        //If time has past than button should get disabled.
+        if (mAppont.isConfirmed() || mAppont.isCanceled() || date.getTime() < today.getTime()) {
             Utility.setEnabledButton(this, mConfirmAppontButton, false);
             Utility.setEnabledButton(this, mCancelAppontButton, false);
         }
+
+        /*if (date.getTime() < today.getTime()) {
+            Utility.setEnabledButton(this, mConfirmAppontButton, false);
+            Utility.setEnabledButton(this, mCancelAppontButton, false);
+            Utility.setEnabledButton(this, rxButton, false);
+            Utility.setEnabledButton(this, uploadRxButton, false);
+        }*/
 
         dateView.setText(sdf.format(date));
         fNameView.setText(mAppont.getFirstName());

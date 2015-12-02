@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
@@ -431,7 +432,17 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showAlert(this, "", getString(R.string.msg_registration_done), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(PatientSignUpActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
+            //Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+        } else {
+            Utility.showMessage(this, R.string.some_error);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }

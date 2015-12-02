@@ -3,12 +3,14 @@ package com.extenprise.mapp.customer.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.net.AppStatus;
@@ -57,6 +59,14 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
             }
         });
         listView.setAdapter(adapter);
+
+        ServProvListItem spl = mServProvList.get(1);
+        String msg = "lol";
+        if(spl.getWorkingDays() != null) {
+            msg = spl.getWorkingDays();
+        }
+        Toast.makeText(this, "working days : " + msg, Toast.LENGTH_LONG).show();
+        Log.v("Home", "############################" + "working days : " + msg);
     }
 
     @Override

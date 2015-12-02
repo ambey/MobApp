@@ -1352,6 +1352,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private void updateDone(Bundle data) {
         if (data.getBoolean("status")) {
+            LoginHolder.servLoginRef = mServiceProv;
             refresh();
             Utility.showMessage(this, R.string.update_profile_done);
         }

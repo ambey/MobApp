@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
@@ -538,7 +540,17 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showAlert(getActivity(), "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+            Utility.showAlert(getActivity(), "", getString(R.string.msg_registration_done), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
+            //Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
+        } else {
+            Utility.showMessage(getActivity(), R.string.some_error);
         }
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
     }

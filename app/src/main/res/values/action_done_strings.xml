@@ -6,5 +6,6 @@
     <string name="update_profile_done">Profile Updated Successfully</string>
     <string name="login_done">Login Successful</string>
     <string name="login_failed">Login Failed</string>
+    <string name="msg_registration_done">You have successfully registered.\nLogin to your account.</string>
 
 </resources>

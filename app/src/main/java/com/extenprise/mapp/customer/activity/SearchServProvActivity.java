@@ -184,7 +184,12 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     }
 
     public void showSignInScreen(View v) {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent;
+        if (LoginHolder.custLoginRef != null) {
+            intent = new Intent(this, PatientsHomeScreenActivity.class);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+        }
         startActivity(intent);
     }
 

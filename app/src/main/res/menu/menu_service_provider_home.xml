@@ -9,4 +9,6 @@
         android:layout_alignParentLeft="true"
         android:orderInCategory="100" android:title="Back"
         app:showAsAction="ifRoom" />
+    <item android:id="@+id/logout" android:title="@string/logout" app:showAsAction="never"
+        android:orderInCategory="100"/>
 </menu>

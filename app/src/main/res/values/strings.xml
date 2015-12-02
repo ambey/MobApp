@@ -245,4 +245,5 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="yesterday">Yesterday</string>
     <string name="not_specified">Not Specified</string>
+    <string name="logout">Logout</string>
 </resources>

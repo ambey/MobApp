@@ -38,11 +38,11 @@ public class ServProvListItem implements Parcelable {
         idServProvHasServPt = source.readInt();
     }
 
-    public String getAvailDays() {
+    public String getWorkingDays() {
         return workingDays;
     }
 
-    public void setAvailDays(String workingDays) {
+    public void setWorkingDays(String workingDays) {
         this.workingDays = workingDays;
     }
 
