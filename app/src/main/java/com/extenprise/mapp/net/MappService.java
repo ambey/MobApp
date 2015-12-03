@@ -238,7 +238,7 @@ public class MappService extends Service {
                 urlId = R.string.action_getwork_place;
                 break;
             case DO_REMOVE_WORK_PLACE:
-                urlId = R.string.remove_work_place;
+                urlId = R.string.action_remove_work_place;
                 break;
             case DO_PHONE_EXIST_CHECK:
                 urlId = R.string.action_check_phone_serv;

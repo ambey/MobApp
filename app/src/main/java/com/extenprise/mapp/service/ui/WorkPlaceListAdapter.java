@@ -20,6 +20,8 @@ import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.util.Utility;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -84,6 +86,7 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         TextView mQualification = (TextView) v.findViewById(R.id.editTextQualification);
         TextView  mMultiSpinnerDays = (TextView) v.findViewById(R.id.editTextWeeklyOff);
         TextView  mServCatagory = (TextView) v.findViewById(R.id.spinServiceProvCategory);
+        TextView mPinCode = (TextView) v.findViewById(R.id.editTextPinCode);
 
         mName.setText("Name : " + item.getName());
         mLoc.setText("Location : " + item.getLocation());
@@ -109,6 +112,9 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         Utility.setNewSpec(getContext(), specs, mSpeciality);*/
         mSpeciality.setText("Speciality : " + item.getSpeciality());
         mServCatagory.setText("Category : " + item.getServCategory());
+        if(item.getPincode() != null) {
+            mPinCode.setText("Pin Code : " + item.getPincode());
+        }
 
         /*mServPtType.setClickable(false);
         mCity.setClickable(false);

@@ -26,7 +26,7 @@ public class ServicePoint implements Parcelable {
 
     public ServicePoint(Parcel source) {
         idServicePoint = source.readInt();
-        String[] fields = new String[5];
+        String[] fields = new String[6];
         source.readStringArray(fields);
 
         int i = 0;
@@ -35,6 +35,7 @@ public class ServicePoint implements Parcelable {
         phone = fields[i++];
         altPhone = fields[i++];
         emailId = fields[i++];
+        pincode = fields[i];
         city = new City(source);
     }
 
@@ -144,7 +145,7 @@ public class ServicePoint implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(idServicePoint);
         dest.writeStringArray(new String[] {
-                name, location, phone, altPhone, emailId
+                name, location, phone, altPhone, emailId, pincode
         });
         city.writeToParcel(dest, flags);
     }

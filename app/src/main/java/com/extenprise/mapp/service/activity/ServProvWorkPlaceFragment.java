@@ -53,6 +53,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private EditText mQualification;
     private Button mStartTime;
     private Button mEndTime;
+    private EditText mPinCode;
     //private Spinner mGender;
     private EditText mConsultFee;
     //private Spinner mWeeklyOff;
@@ -98,6 +99,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mServPtType = (Spinner) mRootview.findViewById(R.id.viewWorkPlaceType);
         mSpeciality = (Spinner) mRootview.findViewById(R.id.editTextSpeciality);
         mExperience = (EditText) mRootview.findViewById(R.id.editTextExperience);
+        mPinCode = (EditText) mRootview.findViewById(R.id.editTextPinCode);
         mQualification = (EditText) mRootview.findViewById(R.id.editTextQualification);
         mMultiSpinnerDays = (Button) mRootview.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) mRootview.findViewById(R.id.spinServiceProvCategory);
@@ -354,6 +356,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         spt.setPhone(mPhone1.getText().toString().trim());
         spt.setAltPhone(mPhone2.getText().toString().trim());
         spt.setEmailId(mEmailId.getText().toString().trim());
+        spt.setPincode(mPinCode.getText().toString().trim());
 
         spsspt.getService().setSpeciality(mSpeciality.getSelectedItem().toString());
         spsspt.getService().setCategory(mServCatagory.getSelectedItem().toString());
@@ -420,6 +423,14 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                 valid = false;
             }
         }
+
+        String pincode = mPinCode.getText().toString().trim();
+        if (TextUtils.isEmpty(pincode)) {
+            mPinCode.setError(getString(R.string.error_field_required));
+            focusView = mPinCode;
+            valid = false;
+        }
+
         String qualification = mQualification.getText().toString().trim();
         if (TextUtils.isEmpty(qualification)) {
             mQualification.setError(getString(R.string.error_field_required));
@@ -507,6 +518,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mCity.setSelected(false);
         mPhone1.setText("");
         mPhone2.setText("");
+        mPinCode.setText("");
         mEmailId.setText("");
         mStartTime.setText(R.string.start_time);
         mEndTime.setText(R.string.end_time);

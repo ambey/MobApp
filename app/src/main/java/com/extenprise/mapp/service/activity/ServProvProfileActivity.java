@@ -102,6 +102,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private Spinner mSpeciality;
     private EditText mExperience;
     private EditText mQualification;
+    private EditText mPinCode;
 
     private Button mMultiSpinnerDays;
     protected CharSequence[] options;
@@ -840,6 +841,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
         mSpeciality = (Spinner) dialogView.findViewById(R.id.editTextSpeciality);
         mExperience = (EditText) dialogView.findViewById(R.id.editTextExperience);
+        mPinCode = (EditText) dialogView.findViewById(R.id.editTextPinCode);
         mQualification = (EditText) dialogView.findViewById(R.id.editTextQualification);
         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
@@ -863,7 +865,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
             //mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
             mExperience.setText(String.format("%.01f", item.getExperience()));
-
+            if(item.getPincode() != null) {
+                mPinCode.setText(item.getPincode());
+            }
             ArrayList<String> specs = new ArrayList<>();
             specs.add(item.getSpeciality());
             Utility.setNewSpec(this, specs, mSpeciality);
@@ -957,6 +961,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     wp.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
                     wp.setQualification(mQualification.getText().toString().trim());
                     wp.setSignInData(mSignInData);
+                    wp.setPincode(mPinCode.getText().toString().trim());
 
                     Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
                     Bundle bundle = new Bundle();
@@ -1017,6 +1022,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 valid = false;
             }
         }
+
+        String pincode = mPinCode.getText().toString().trim();
+        if (TextUtils.isEmpty(pincode)) {
+            mPinCode.setError(getString(R.string.error_field_required));
+            focusView = mPinCode;
+            valid = false;
+        }
+
         String qualification = mQualification.getText().toString().trim();
         if (TextUtils.isEmpty(qualification)) {
             mQualification.setError(getString(R.string.error_field_required));
@@ -1353,8 +1366,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private void updateDone(Bundle data) {
         if (data.getBoolean("status")) {
             LoginHolder.servLoginRef = mServiceProv;
+            Utility.showMessage(this, R.string.msg_update_profile);
             refresh();
-            Utility.showMessage(this, R.string.update_profile_done);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
