@@ -230,7 +230,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     private void updateDone(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
         if(data.getBoolean("status")) {
-                Utility.showAlert(this, "", getString(R.string.msg_profile_updated), new DialogInterface.OnClickListener() {
+                Utility.showAlert(this, "", getString(R.string.msg_update_profile), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

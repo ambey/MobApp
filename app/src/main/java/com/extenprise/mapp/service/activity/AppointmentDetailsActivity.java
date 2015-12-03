@@ -97,7 +97,13 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             mStatusView.setText(getString(R.string.not_confirmed));
         }
 
-        //If time has past than button should get disabled.
+        //Appointment of patient is not confirmed than service provider can not create Rx of patient
+        if(!mAppont.isConfirmed()) {
+            Utility.setEnabledButton(this, rxButton, false);
+            Utility.setEnabledButton(this, uploadRxButton, false);
+        }
+
+        //If time has past than also button should get disabled.
         if (mAppont.isConfirmed() || mAppont.isCanceled() || date.getTime() < today.getTime()) {
             Utility.setEnabledButton(this, mConfirmAppontButton, false);
             Utility.setEnabledButton(this, mCancelAppontButton, false);

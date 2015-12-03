@@ -202,12 +202,9 @@
     <string name="resend_rx">Resend Rx</string>
     <string name="view_rx_feedback">View Rx Feedback</string>
     <string name="send_availability_feedback">Send Availability Feedback</string>
-    <string name="msg_appont_booked">The appointment has been booked.\nYou will receive confirmation from the doctor</string>
-    <string name="msg_appont_confirmed">The appointment has been confirmed</string>
-    <string name="msg_appont_canceled">The appointment has been canceled</string>
     <string name="msg_booking_appont">Booking Appointment… Please wait.</string>
     <string name="msg_rx_sent_to_medstore">The Rx sent to selected Medical store.</string>
-    <string name="msg_profile_updated">Profile Successfully Updated.</string>
+
 
     <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>
     <string name="title_activity_rx_list">RxListActivity</string>
@@ -239,7 +236,6 @@
     <string name="view_other_reports">View Other Reports</string>
     <string name="address_lbl">Address:</string>
     <string name="my_rx_list">My Rx List</string>
-    <string name="profile_updated">Profile Updated</string>
 
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>

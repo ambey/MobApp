@@ -1361,7 +1361,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private void addWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.add_wp_done);
+            Utility.showMessage(this, R.string.msg_add_wp);
             refresh();
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
@@ -1369,7 +1369,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private void editWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.edit_wp_done);
+            Utility.showMessage(this, R.string.msg_edit_wp);
             refresh();
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
@@ -1377,7 +1377,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     private void removeWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.remove_wp_done);
+            Utility.showMessage(this, R.string.msg_remove_wp);
             refresh();
         }
         Utility.showProgress(this, mFormView, mProgressView, false);

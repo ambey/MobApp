@@ -181,6 +181,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void sentAvailabilityFeedback() {
+        Utility.showMessage(this, R.string.msg_availablity_sent);
         mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         Intent intent = getParentActivityIntent();
         startActivity(intent);

@@ -100,4 +100,15 @@ public abstract class Validator {
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
+    public static boolean isValuePositive(String val) {
+        try {
+            int dose = Integer.parseInt(val);
+            if (dose <= 0) {
+                return false;
+            }
+        } catch (NumberFormatException x) {
+            return false;
+        }
+        return true;
+    }
 }

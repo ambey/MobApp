@@ -426,7 +426,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 type = "servprov";
             }
             Utility.setLastVisit(this, phone, type);
-            Utility.showMessage(this, R.string.login_done);
+            Utility.showMessage(this, R.string.msg_login);
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.login_failed);

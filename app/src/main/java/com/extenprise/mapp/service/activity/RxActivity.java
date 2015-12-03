@@ -31,6 +31,7 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.util.Utility;
+import com.extenprise.mapp.util.Validator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -347,16 +348,16 @@ public class RxActivity extends Activity implements ResponseHandler {
         View focusView = null;
 
         String value = mCourseDur.getText().toString();
-        if (!TextUtils.isEmpty(value)) {
-            try {
-                int dur = Integer.parseInt(value);
-                if (dur < 0) {
-                    mCourseDur.setError(getString(R.string.error_num_should_be_positive));
-                    focusView = mCourseDur;
-                    valid = false;
-                }
-            } catch (NumberFormatException x) {
+
+        if (TextUtils.isEmpty(value)) {
+            mCourseDur.setError(getString(R.string.error_field_required));
+            focusView = mCourseDur;
+            valid = false;
+        } else {
+            if(!Validator.isValuePositive(value)) {
                 mCourseDur.setError(getString(R.string.error_invalid_number));
+                focusView = mCourseDur;
+                valid = false;
             }
         }
 
@@ -366,12 +367,19 @@ public class RxActivity extends Activity implements ResponseHandler {
             focusView = mDrugName;
             valid = false;
         }
+
         if (mMorning.isChecked()) {
             value = mMDose.getText().toString();
             if (TextUtils.isEmpty(value)) {
                 mMDose.setError(getString(R.string.error_field_required));
                 focusView = mMDose;
                 valid = false;
+            } else {
+                if(!Validator.isValuePositive(value)) {
+                    mMDose.setError(getString(R.string.error_invalid_number));
+                    focusView = mMDose;
+                    valid = false;
+                }
             }
         }
         if (mAfternnon.isChecked()) {
@@ -380,6 +388,12 @@ public class RxActivity extends Activity implements ResponseHandler {
                 mADose.setError(getString(R.string.error_field_required));
                 focusView = mADose;
                 valid = false;
+            } else {
+                if(!Validator.isValuePositive(value)) {
+                    mADose.setError(getString(R.string.error_invalid_number));
+                    focusView = mADose;
+                    valid = false;
+                }
             }
         }
         if (mEvening.isChecked()) {
@@ -388,6 +402,12 @@ public class RxActivity extends Activity implements ResponseHandler {
                 mEDose.setError(getString(R.string.error_field_required));
                 focusView = mEDose;
                 valid = false;
+            } else {
+                if(!Validator.isValuePositive(value)) {
+                    mEDose.setError(getString(R.string.error_invalid_number));
+                    focusView = mEDose;
+                    valid = false;
+                }
             }
         }
         if (!valid) {
