@@ -60,33 +60,33 @@
         android:hint="@string/loc" />
 
     <TextView
-        android:id="@+id/editTextCity"
+        android:id="@+id/editTextPinCode"
         android:layout_width="170dp"
         android:layout_height="20dp"
         android:layout_below="@+id/viewWorkPlaceType"
-        android:hint="@string/city"
+        android:hint="@string/pincode"
         android:layout_toEndOf="@+id/editTextLoc"
         android:layout_toRightOf="@+id/editTextLoc" />
 
     <TextView
-        android:id="@+id/editTextPinCode"
+        android:id="@+id/editTextCity"
         android:layout_width="170dp"
         android:layout_height="20dp"
-        android:layout_below="@+id/editTextCity"
-        android:hint="@string/pincode" />
+        android:layout_below="@+id/editTextPinCode"
+        android:hint="@string/city" />
 
     <TextView
         android:id="@+id/editTextPhone1"
         android:layout_width="170dp"
         android:layout_height="20dp"
-        android:layout_below="@+id/editTextPinCode"
+        android:layout_below="@+id/editTextCity"
         android:hint="@string/phone1" />
 
     <TextView
         android:id="@+id/editTextPhone2"
         android:layout_width="170dp"
         android:layout_height="20dp"
-        android:layout_below="@+id/editTextPinCode"
+        android:layout_below="@+id/editTextCity"
         android:layout_toEndOf="@+id/editTextPhone1"
         android:layout_toRightOf="@+id/editTextPhone1"
         android:hint="@string/phone2" />

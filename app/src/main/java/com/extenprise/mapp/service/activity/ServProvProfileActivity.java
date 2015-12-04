@@ -43,6 +43,7 @@ import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.net.AppStatus;
@@ -103,6 +104,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private EditText mExperience;
     private EditText mQualification;
     private EditText mPinCode;
+    private Spinner mState;
 
     private Button mMultiSpinnerDays;
     protected CharSequence[] options;
@@ -837,6 +839,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mConsultFee = (EditText) dialogView.findViewById(R.id.editTextConsultationFees);
         mServPtType = (Spinner) dialogView.findViewById(R.id.viewWorkPlaceType);
         mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
+        mState = (Spinner) dialogView.findViewById(R.id.editTextState);
         mStartTime = (Button) dialogView.findViewById(R.id.buttonStartTime);
         mEndTime = (Button) dialogView.findViewById(R.id.buttonEndTime);
         mSpeciality = (Spinner) dialogView.findViewById(R.id.editTextSpeciality);
@@ -857,7 +860,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mEmailIdwork.setText(item.getEmailId());
             mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
             mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
-            mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity()));
+            mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity().getCity()));
+            mState.setSelection(Utility.getSpinnerIndex(mState, item.getCity().getState()));
             mStartTime.setText(Utility.getTimeString(item.getStartTime()));
             mEndTime.setText(Utility.getTimeString(item.getEndTime()));
             mQualification.setText(item.getQualification());
@@ -946,7 +950,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     WorkPlace wp = new WorkPlace();
                     wp.setName(mName.getText().toString().trim());
                     wp.setLocation(mLoc.getText().toString().trim());
-                    wp.setCity(mCity.getSelectedItem().toString().trim());
+                    wp.getCity().setCity(mCity.getSelectedItem().toString());
+                    wp.getCity().setState(mState.getSelectedItem().toString());
                     wp.setPhone(mPhone1.getText().toString().trim());
                     wp.setAltPhone(mPhone2.getText().toString().trim());
                     wp.setEmailId(mEmailIdwork.getText().toString().trim());
@@ -1366,32 +1371,56 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private void updateDone(Bundle data) {
         if (data.getBoolean("status")) {
             LoginHolder.servLoginRef = mServiceProv;
-            Utility.showMessage(this, R.string.msg_update_profile);
-            refresh();
+            Utility.showAlert(this, "", getString(R.string.msg_update_profile), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    refresh();
+                }
+            });
+            /*Utility.showMessage(this, R.string.msg_update_profile);
+            refresh();*/
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
     private void addWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.msg_add_wp);
-            refresh();
+            Utility.showAlert(this, "", getString(R.string.msg_add_wp), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    refresh();
+                }
+            });
+            /*Utility.showMessage(this, R.string.msg_add_wp);
+            refresh();*/
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
     private void editWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.msg_edit_wp);
-            refresh();
+            Utility.showAlert(this, "", getString(R.string.msg_edit_wp), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    refresh();
+                }
+            });
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
     private void removeWorkPlaceDone(Bundle data) {
         if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.msg_remove_wp);
-            refresh();
+            Utility.showAlert(this, "", getString(R.string.msg_remove_wp), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    refresh();
+                }
+            });
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }

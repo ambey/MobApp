@@ -43,15 +43,7 @@
             android:layout_marginTop="10dp"
             android:hint="@string/loc"
             android:inputType="text" />
-        <EditText
-            android:id="@+id/editTextPinCode"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextLoc"
-            android:layout_marginTop="10dp"
-            android:maxLength="6"
-            android:hint="@string/pincode"
-            android:inputType="number"  />
+
 
         <Spinner
             android:id="@+id/editTextCity"
@@ -70,6 +62,37 @@
             android:padding="5dp"
             android:prompt="@string/city"
             android:spinnerMode="dropdown" />
+
+        <EditText
+            android:id="@+id/editTextPinCode"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextLoc"
+            android:layout_alignBottom="@+id/editTextState"
+            android:layout_marginTop="10dp"
+            android:maxLength="6"
+            android:hint="@string/pincode"
+            android:inputType="number"  />
+
+        <Spinner
+            android:id="@+id/editTextState"
+            android:layout_width="160dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/spinner"
+            android:layout_below="@+id/editTextCity"
+            android:layout_toEndOf="@+id/editTextPinCode"
+            android:layout_toRightOf="@+id/editTextPinCode"
+            android:entries="@array/state"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="5dp"
+            android:spinnerMode="dropdown"
+            android:prompt="@string/state" />
 
         <EditText
             android:id="@+id/editTextPhone1"

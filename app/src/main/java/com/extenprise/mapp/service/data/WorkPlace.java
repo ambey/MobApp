@@ -3,6 +3,7 @@ package com.extenprise.mapp.service.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.extenprise.mapp.data.City;
 import com.extenprise.mapp.data.SignInData;
 
 /**
@@ -17,7 +18,7 @@ public class WorkPlace implements Parcelable {
     private String phone;
     private String altPhone;
     private String emailId;
-    private String city;
+    private City city;
     private String servPointType;
     private String servCategory;
     private String speciality;
@@ -30,6 +31,7 @@ public class WorkPlace implements Parcelable {
 
     public WorkPlace() {
         signInData = new SignInData();
+        city = new City();
     }
 
     public WorkPlace(Parcel source) {
@@ -40,7 +42,7 @@ public class WorkPlace implements Parcelable {
         phone = source.readString();
         altPhone = source.readString();
         emailId = source.readString();
-        city = source.readString();
+        //city = source.readString();
         servPointType = source.readString();
         servCategory = source.readString();
         speciality = source.readString();
@@ -50,6 +52,8 @@ public class WorkPlace implements Parcelable {
         consultFee = source.readFloat();
         startTime = source.readInt();
         endTime = source.readInt();
+
+        city = new City(source);
     }
 
 
@@ -73,22 +77,19 @@ public class WorkPlace implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(signInData, flags);
-        dest.writeString(name);
-        dest.writeString(location);
-        dest.writeString(pincode);
-        dest.writeString(phone);
-        dest.writeString(altPhone);
-        dest.writeString(emailId);
-        dest.writeString(city);
-        dest.writeString(servPointType);
-        dest.writeString(servCategory);
-        dest.writeString(speciality);
+
         dest.writeFloat(experience);
-        dest.writeString(qualification);
-        dest.writeString(workingDays);
         dest.writeFloat(consultFee);
+
         dest.writeInt(startTime);
         dest.writeInt(endTime);
+
+        dest.writeStringArray(new String[]{
+                name, location, phone, altPhone, emailId, pincode,
+                servPointType, servCategory, speciality, qualification, workingDays
+        });
+
+        city.writeToParcel(dest, flags);
     }
 
     public String getName() {
@@ -203,11 +204,11 @@ public class WorkPlace implements Parcelable {
         this.endTime = endTime;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 

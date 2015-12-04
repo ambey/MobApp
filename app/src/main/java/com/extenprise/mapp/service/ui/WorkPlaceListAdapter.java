@@ -97,7 +97,7 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         //mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
         mServPtType.setText("Service Point : " + item.getServPointType());
         //mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity()));
-        mCity.setText("City : " + item.getCity());
+        mCity.setText(item.getCity().toString());
         mStartTime.setText("Working Hours : From " + Utility.getTimeString(item.getStartTime()) +
                 " To " + Utility.getTimeString(item.getEndTime()));
         //mEndTime.setText("" + Utility.getTimeString(item.getEndTime()));

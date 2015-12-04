@@ -45,6 +45,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private EditText mName;
     private EditText mLoc;
     private Spinner mCity;
+    private Spinner mState;
     private EditText mPhone1;
     private EditText mPhone2;
     private EditText mEmailId;
@@ -89,6 +90,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mName = (EditText) mRootview.findViewById(R.id.editTextName);
         mLoc = (EditText) mRootview.findViewById(R.id.editTextLoc);
         mCity = (Spinner) mRootview.findViewById(R.id.editTextCity);
+        mState = (Spinner) mRootview.findViewById(R.id.editTextState);
         mPhone1 = (EditText) mRootview.findViewById(R.id.editTextPhone1);
         mPhone2 = (EditText) mRootview.findViewById(R.id.editTextPhone2);
         mEmailId = (EditText) mRootview.findViewById(R.id.editTextEmail);
@@ -352,7 +354,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
         spt.setName(mName.getText().toString().trim());
         spt.setLocation(mLoc.getText().toString().trim());
-        spt.getCity().setCity(mCity.getSelectedItem().toString().trim());
+        spt.getCity().setCity(mCity.getSelectedItem().toString());
+        spt.getCity().setState(mState.getSelectedItem().toString());
         spt.setPhone(mPhone1.getText().toString().trim());
         spt.setAltPhone(mPhone2.getText().toString().trim());
         spt.setEmailId(mEmailId.getText().toString().trim());
@@ -516,6 +519,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mName.setText("");
         mLoc.setText("");
         mCity.setSelected(false);
+        mState.setSelected(false);
         mPhone1.setText("");
         mPhone2.setText("");
         mPinCode.setText("");

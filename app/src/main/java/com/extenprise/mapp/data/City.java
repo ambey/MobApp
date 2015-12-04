@@ -14,7 +14,13 @@ public class City implements Parcelable {
 
     public City() {
         country = "India";
-        state = "Maharashtra";
+    }
+
+    @Override
+    public String toString() {
+        return "City='" + city +
+                ", State='" + state +
+                ", Country='" + country;
     }
 
     public City(Parcel source) {

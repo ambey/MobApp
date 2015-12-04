@@ -2,6 +2,7 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -181,10 +182,17 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void sentAvailabilityFeedback() {
-        Utility.showMessage(this, R.string.msg_availablity_sent);
+        //Utility.showMessage(this, R.string.msg_availablity_sent);
         mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
-        Intent intent = getParentActivityIntent();
-        startActivity(intent);
+        Utility.showAlert(this, "", getString(R.string.msg_availablity_sent), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent(RxInboxItemDetailsActivity.this, MedicalStoreHomeActivity.class);
+                startActivity(intent);
+            }
+        });
+        //Intent intent = getParentActivityIntent();
     }
 
     private void gotRxScannedCopy(Bundle data) {

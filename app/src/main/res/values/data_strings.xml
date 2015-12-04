@@ -79,6 +79,8 @@
 
     <string-array name="state">
         <item>Maharashtra</item>
+        <item>Madhya Pradesh</item>
+        <item>Goa</item>
     </string-array>
 
     <string name="select_speciality">Select Speciality</string>
