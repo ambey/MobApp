@@ -341,7 +341,11 @@ public class MappService extends Service {
                     mService.doSignupOrUpdate(msg);
                     break;
                 case DO_ADD_WORK_PLACE:
+                    mService.doWorkPlaceStuff(msg);
+                    break;
                 case DO_EDIT_WORK_PLACE:
+                    mService.doWorkPlaceStuff(msg);
+                    break;
                 case DO_WORK_PLACE_LIST:
                 case DO_REMOVE_WORK_PLACE:
                     mService.doWorkPlaceStuff(msg);

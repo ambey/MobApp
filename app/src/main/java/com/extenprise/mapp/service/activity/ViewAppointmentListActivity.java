@@ -42,7 +42,7 @@ public class ViewAppointmentListActivity extends Activity
     private String mSelectedDate;
     private ProgressBar mUpcomingAppontsProgressBar;
     private ProgressBar mAppontsProgressBar;
-    private TextView mMsgView;
+    private TextView mMsgView, mAppontListMsgView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +60,7 @@ public class ViewAppointmentListActivity extends Activity
 
         //mSelectedDate = Utility.setCurrentDateOnView(mPastAppontsDateView);
         mMsgView = (TextView) findViewById(R.id.appontMsgView);
+        mAppontListMsgView = (TextView) findViewById(R.id.appontListMsgView);
 
         setUpcomingAppontList();
     }
@@ -139,10 +140,11 @@ public class ViewAppointmentListActivity extends Activity
         mUpcomingAppontsListView.setAdapter(adapter);
         mUpcomingAppontsListView.setOnItemClickListener(adapter);
         if (list.size() > 0) {
-            mMsgView.setVisibility(View.GONE);
+            mAppontListMsgView.setVisibility(View.GONE);
+            mUpcomingAppontsListView.setVisibility(View.VISIBLE);
         } else {
             mUpcomingAppontsListView.setVisibility(View.GONE);
-            mMsgView.setVisibility(View.VISIBLE);
+            mAppontListMsgView.setVisibility(View.VISIBLE);
         }
     }
 

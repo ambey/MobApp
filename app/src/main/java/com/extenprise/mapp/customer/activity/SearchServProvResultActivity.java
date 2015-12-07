@@ -53,15 +53,13 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 getDetails(view, position);
-
             }
         });
         listView.setAdapter(adapter);
 
         ServProvListItem spl = mServProvList.get(1);
-        String msg = "lol";
+        String msg = "not present";
         if(spl.getWorkingDays() != null) {
             msg = spl.getWorkingDays();
         }

@@ -111,6 +111,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
     private String selectedDays;
+    private int msg, action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1334,12 +1335,15 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     public boolean gotResponse(int action, Bundle data) {
         switch (action) {
             case MappService.DO_ADD_WORK_PLACE:
-                addWorkPlaceDone(data);
+                msg = R.string.msg_add_wp;
+                updateDone(data);
                 break;
             case MappService.DO_REMOVE_WORK_PLACE:
-                removeWorkPlaceDone(data);
+                msg = R.string.msg_remove_wp;
+                updateDone(data);
                 break;
             case MappService.DO_UPDATE:
+                msg = R.string.msg_update_profile;
                 updateDone(data);
                 break;
             case MappService.DO_REG_NO_CHECK:
@@ -1352,7 +1356,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 getSpecialitiesDone(data);
                 break;
             case MappService.DO_EDIT_WORK_PLACE:
-                editWorkPlaceDone(data);
+                msg = R.string.msg_edit_wp;
+                updateDone(data);
                 break;
             default:
                 return false;
@@ -1371,56 +1376,17 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private void updateDone(Bundle data) {
         if (data.getBoolean("status")) {
             LoginHolder.servLoginRef = mServiceProv;
-            Utility.showAlert(this, "", getString(R.string.msg_update_profile), new DialogInterface.OnClickListener() {
+            Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    refresh();
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
                 }
             });
-            /*Utility.showMessage(this, R.string.msg_update_profile);
-            refresh();*/
-        }
-        Utility.showProgress(this, mFormView, mProgressView, false);
-    }
-
-    private void addWorkPlaceDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            Utility.showAlert(this, "", getString(R.string.msg_add_wp), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    refresh();
-                }
-            });
-            /*Utility.showMessage(this, R.string.msg_add_wp);
-            refresh();*/
-        }
-        Utility.showProgress(this, mFormView, mProgressView, false);
-    }
-
-    private void editWorkPlaceDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            Utility.showAlert(this, "", getString(R.string.msg_edit_wp), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    refresh();
-                }
-            });
-        }
-        Utility.showProgress(this, mFormView, mProgressView, false);
-    }
-
-    private void removeWorkPlaceDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            Utility.showAlert(this, "", getString(R.string.msg_remove_wp), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    refresh();
-                }
-            });
+        } else {
+            Utility.showMessage(this, R.string.some_error);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
@@ -1441,7 +1407,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                             // Disallow ScrollView to intercept touch events.
                             v.getParent().requestDisallowInterceptTouchEvent(true);
                             break;
-
                         case MotionEvent.ACTION_UP:
                             // Allow ScrollView to intercept touch events.
                             v.getParent().requestDisallowInterceptTouchEvent(false);
@@ -1468,13 +1433,4 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
         Utility.setNewSpec(this, list, mSpeciality);
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    private void refresh() {
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-    }
-
 }

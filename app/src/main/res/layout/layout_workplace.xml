@@ -70,7 +70,7 @@
 
     <TextView
         android:id="@+id/editTextCity"
-        android:layout_width="170dp"
+        android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_below="@+id/editTextPinCode"
         android:hint="@string/city" />

@@ -30,6 +30,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -37,6 +38,8 @@ import com.extenprise.mapp.ui.TitleFragment;
 import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
+
+import java.util.ArrayList;
 
 public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
@@ -110,18 +113,23 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String servCategory = mServCatagory.getSelectedItem().toString();
-                MappDbHelper dbHelper = new MappDbHelper(getActivity());
-                //ArrayList<String> specs = DBUtil.getSpecOfCategory(dbHelper, servCategory);
-                Utility.setNewSpec(getActivity(), DBUtil.getSpecOfCategory(dbHelper, servCategory), mSpeciality);
-                //setSpecs(specs);
+                if(!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
+                    Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    SearchServProvForm mForm = new SearchServProvForm();
+                    mForm.setCategory(mServCatagory.getSelectedItem().toString());
+                    bundle.putParcelable("form", mForm);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.DO_GET_SPECIALITY);
+                    Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE);
+                }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
         });
-
 
         mSpeciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -244,19 +252,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         return 0;
     }
 
-    @Override
-    public boolean gotResponse(int action, Bundle data) {
-        try {
-            getActivity().unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (action == MappService.DO_SIGNUP) {
-            signUpDone(data);
-            return true;
-        }
-        return false;
-    }
+
 
     public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
@@ -540,7 +536,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void saveData() {
-
         Utility.showProgress(getActivity(), mFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
@@ -552,6 +547,24 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);
 */
+    }
+
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        try {
+            getActivity().unbindService(mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (action == MappService.DO_SIGNUP) {
+            signUpDone(data);
+            return true;
+        } else if(action == MappService.DO_GET_SPECIALITY) {
+            getSpecialitiesDone(data);
+            return true;
+        }
+        return false;
     }
 
     private void signUpDone(Bundle data) {
@@ -569,6 +582,15 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             Utility.showMessage(getActivity(), R.string.some_error);
         }
         Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+    }
+
+    private void getSpecialitiesDone(Bundle data) {
+        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        ArrayList<String> list = data.getStringArrayList("specialities");
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        Utility.setNewSpec(getActivity(), list, mSpeciality);
     }
 
 /*

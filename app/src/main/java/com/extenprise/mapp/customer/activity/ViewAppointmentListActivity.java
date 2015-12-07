@@ -3,8 +3,10 @@ package com.extenprise.mapp.customer.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
@@ -28,6 +30,7 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
     private ListView mPastListView;
     private ArrayList<AppointmentListItem> mUpcomingList;
     private ArrayList<AppointmentListItem> mPastList;
+    private TextView mMsgView, mUpcomMsgView;
 
     private ProgressBar mUpcomingProgress;
     private ProgressBar mPastProgress;
@@ -46,6 +49,8 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
         mUpcomingProgress = (ProgressBar) findViewById(R.id.upcomingProgress);
         mPastProgress = (ProgressBar) findViewById(R.id.pastProgress);
+        mMsgView = (TextView) findViewById(R.id.pastAppontMsgView);
+        mUpcomMsgView = (TextView) findViewById(R.id.appontMsgView);
 
         getUpcomingList();
     }
@@ -81,6 +86,13 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
 
     private void gotUpcomingApponts(Bundle data) {
         mUpcomingList = data.getParcelableArrayList("appontList");
+        if (mUpcomingList.size() > 0) {
+            mUpcomMsgView.setVisibility(View.GONE);
+            mUpcomingListView.setVisibility(View.VISIBLE);
+        } else {
+            mUpcomingListView.setVisibility(View.GONE);
+            mUpcomMsgView.setVisibility(View.VISIBLE);
+        }
         getPastList();
     }
 
@@ -92,6 +104,14 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         mPastList = data.getParcelableArrayList("appontList");
         adapter = new AppointmentListAdapter(this, 0, mPastList);
         mPastListView.setAdapter(adapter);
+
+        if (mPastList.size() > 0) {
+            mMsgView.setVisibility(View.GONE);
+            mPastListView.setVisibility(View.VISIBLE);
+        } else {
+            mPastListView.setVisibility(View.GONE);
+            mMsgView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

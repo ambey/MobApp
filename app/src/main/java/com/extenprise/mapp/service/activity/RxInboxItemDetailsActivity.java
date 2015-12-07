@@ -203,6 +203,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         }
         byte[] pix = report.getScannedCopy();
         Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
+        //TODO
+        //NullPointerException at line 205.
         imageView.setImageBitmap(bitmap);
     }
 

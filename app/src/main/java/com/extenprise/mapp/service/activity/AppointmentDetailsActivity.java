@@ -1,6 +1,7 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -127,10 +128,22 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         fillPastAppointements();
     }
 
-    private void statusChangeDone(String msg) {
-        Utility.setEnabledButton(this, mConfirmAppontButton, false);
-        Utility.setEnabledButton(this, mCancelAppontButton, false);
-        Utility.showAlert(this, "", msg);
+    private void statusChangeDone(int msg) {
+        /*Utility.setEnabledButton(this, mConfirmAppontButton, false);
+        Utility.setEnabledButton(this, mCancelAppontButton, false);*/
+        //Utility.showAlert(this, "", msg);
+
+        //refreshing page
+        Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = getIntent();
+                intent.putExtra("appont", mAppont);
+                finish();
+                startActivity(intent);
+            }
+        });
     }
 
     private void gotPastAppointments(Bundle data) {
@@ -246,12 +259,12 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         } else if (action == MappService.DO_CONFIRM_APPONT) {
             mAppont.setConfirmed(true);
             mStatusView.setText(getString(R.string.confirmed));
-            statusChangeDone(getString(R.string.msg_appont_confirmed));
+            statusChangeDone(R.string.msg_appont_confirmed);
             return true;
         } else if (action == MappService.DO_CANCEL_APPONT) {
             mAppont.setCanceled(true);
             mStatusView.setText(getString(R.string.canceled));
-            statusChangeDone(getString(R.string.msg_appont_canceled));
+            statusChangeDone(R.string.msg_appont_canceled);
             return true;
         }
         return false;

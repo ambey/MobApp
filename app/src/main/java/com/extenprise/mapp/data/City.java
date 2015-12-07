@@ -18,9 +18,9 @@ public class City implements Parcelable {
 
     @Override
     public String toString() {
-        return "City='" + city +
-                ", State='" + state +
-                ", Country='" + country;
+        return "City : " + city +
+                ", State : " + state +
+                ", Country : " + country;
     }
 
     public City(Parcel source) {
