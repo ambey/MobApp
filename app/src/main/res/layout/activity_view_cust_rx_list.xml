@@ -34,6 +34,14 @@
             android:id="@+id/rxListView"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent" />
+        <TextView
+            android:id="@+id/rxMsgView"
+            style="@style/MediumLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/no_rx_found"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

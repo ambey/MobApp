@@ -117,7 +117,10 @@ public class ServProvListItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{phone, firstName, lastName, speciality, servPtName, servPtLocation, workingDays});
+        dest.writeStringArray(new String[] {
+                phone, firstName, lastName, speciality,
+                servPtName, servPtLocation, workingDays
+        } );
         dest.writeFloat(experience);
         dest.writeInt(idServProvHasServPt);
     }

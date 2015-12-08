@@ -63,7 +63,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         if(spl.getWorkingDays() != null) {
             msg = spl.getWorkingDays();
         }
-        Toast.makeText(this, "working days : " + msg, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "working days : " + msg, Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + "working days : " + msg);
     }
 

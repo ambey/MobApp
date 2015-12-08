@@ -204,6 +204,7 @@
     <string name="send_availability_feedback">Send Availability Feedback</string>
     <string name="msg_booking_appont">Booking Appointment… Please wait.</string>
     <string name="msg_rx_sent_to_medstore">The Rx sent to selected Medical store.</string>
+    <string name="no_rx_found">No Rx Found.</string>
 
 
     <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>

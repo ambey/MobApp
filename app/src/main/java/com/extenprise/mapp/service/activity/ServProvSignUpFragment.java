@@ -410,11 +410,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
      * Defines callbacks for service binding, passed to bindService()
      */
     private void checkExistence(int check) {
-        if (!AppStatus.getInstance(getActivity()).isOnline()) {
-            Utility.showMessage(getActivity(), R.string.error_not_online);
-            return;
-        }
-        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
         if (check == MappService.DO_REG_NO_CHECK) {
@@ -426,7 +421,9 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         }
         mConnection.setData(bundle);
         mConnection.setAction(check);
-        Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE);
+        if(Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
+            Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+        }
     }
 
 /*

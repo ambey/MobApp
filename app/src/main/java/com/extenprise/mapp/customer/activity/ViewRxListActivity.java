@@ -3,8 +3,10 @@ package com.extenprise.mapp.customer.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
@@ -24,6 +26,7 @@ public class ViewRxListActivity extends Activity implements ResponseHandler {
 
     private ListView mRxListView;
     private ProgressBar mRxListProgress;
+    private TextView mRxMsgView;
 
     private Customer mCust;
 
@@ -38,6 +41,7 @@ public class ViewRxListActivity extends Activity implements ResponseHandler {
 
         mRxListView = (ListView) findViewById(R.id.rxListView);
         mRxListProgress = (ProgressBar) findViewById(R.id.rxListProgress);
+        mRxMsgView = (TextView) findViewById(R.id.rxMsgView);
 
         if(rxInboxItems == null) {
             getRxList();
@@ -67,6 +71,14 @@ public class ViewRxListActivity extends Activity implements ResponseHandler {
         RxListAdapter adapter = new RxListAdapter(this, 0, list, mCust);
         mRxListView.setAdapter(adapter);
         mRxListView.setOnItemClickListener(adapter);
+
+        if(list.size() > 0) {
+            mRxListView.setVisibility(View.VISIBLE);
+            mRxMsgView.setVisibility(View.GONE);
+        } else {
+            mRxListView.setVisibility(View.GONE);
+            mRxMsgView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
