@@ -9,18 +9,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.data.AppointmentListItem;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.customer.ui.AppointmentListAdapter;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
-import com.extenprise.mapp.customer.data.AppointmentListItem;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ViewAppointmentListActivity extends Activity implements ResponseHandler {
 
@@ -29,7 +28,6 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
     private ListView mUpcomingListView;
     private ListView mPastListView;
     private ArrayList<AppointmentListItem> mUpcomingList;
-    private ArrayList<AppointmentListItem> mPastList;
     private TextView mMsgView, mUpcomMsgView;
 
     private ProgressBar mUpcomingProgress;
@@ -40,7 +38,7 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_cust_appointment_list);
+        setContentView(R.layout.activity_view_appointment_list);
 
         Intent intent = getIntent();
         mCust = intent.getParcelableExtra("customer");
@@ -64,10 +62,10 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
 
     private void getUpcomingList() {
         Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
-        AppointmentListItem item = new AppointmentListItem();
-        setupForm(item);
+        AppointmentListItem form = new AppointmentListItem();
+        setupForm(form);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("appont", item);
+        bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_CUST_UPCOMING_APPONTS);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
@@ -75,10 +73,10 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
 
     private void getPastList() {
         Utility.showProgress(this, mPastListView, mPastProgress, true);
-        AppointmentListItem item = new AppointmentListItem();
-        setupForm(item);
+        AppointmentListItem form = new AppointmentListItem();
+        setupForm(form);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("appont", item);
+        bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_CUST_PAST_APPONTS);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
@@ -86,13 +84,6 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
 
     private void gotUpcomingApponts(Bundle data) {
         mUpcomingList = data.getParcelableArrayList("appontList");
-        if (mUpcomingList.size() > 0) {
-            mUpcomMsgView.setVisibility(View.GONE);
-            mUpcomingListView.setVisibility(View.VISIBLE);
-        } else {
-            mUpcomingListView.setVisibility(View.GONE);
-            mUpcomMsgView.setVisibility(View.VISIBLE);
-        }
         getPastList();
     }
 
@@ -100,12 +91,20 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, false);
         AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, mUpcomingList);
         mUpcomingListView.setAdapter(adapter);
+        if (mUpcomingList != null && mUpcomingList.size() > 0) {
+            mUpcomMsgView.setVisibility(View.GONE);
+            mUpcomingListView.setVisibility(View.VISIBLE);
+        } else {
+            mUpcomingListView.setVisibility(View.GONE);
+            mUpcomMsgView.setVisibility(View.VISIBLE);
+        }
+
         Utility.showProgress(this, mPastListView, mPastProgress, false);
-        mPastList = data.getParcelableArrayList("appontList");
-        adapter = new AppointmentListAdapter(this, 0, mPastList);
+        ArrayList<AppointmentListItem> pastList = data.getParcelableArrayList("appontList");
+        adapter = new AppointmentListAdapter(this, 0, pastList);
         mPastListView.setAdapter(adapter);
 
-        if (mPastList.size() > 0) {
+        if (pastList != null && pastList.size() > 0) {
             mMsgView.setVisibility(View.GONE);
             mPastListView.setVisibility(View.VISIBLE);
         } else {

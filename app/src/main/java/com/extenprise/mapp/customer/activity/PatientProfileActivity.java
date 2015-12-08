@@ -77,7 +77,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_profile);
         ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -92,15 +92,15 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         mImgView = (ImageView) findViewById(R.id.imageViewPatient);
 
         mTextViewDOB = (TextView) findViewById(R.id.textViewDOB);
-        mEditTextCustomerFName = (EditText)findViewById(R.id.editTextCustomerFName);
+        mEditTextCustomerFName = (EditText) findViewById(R.id.editTextCustomerFName);
         mEditTextCustomerLName = (EditText) findViewById(R.id.editTextCustomerLName);
-        mEditTextCustomerEmail = (EditText)findViewById(R.id.editTextCustomerEmail);
-        mEditTextHeight = (EditText)findViewById(R.id.editTextHeight);
-        mEditTextWeight = (EditText)findViewById(R.id.editTextWeight);
-        mEditTextLoc = (EditText)findViewById(R.id.editTextLoc);
-        mEditTextPinCode = (EditText)findViewById(R.id.editTextZipCode);
-        mSpinCity = (Spinner)findViewById(R.id.editTextCity);
-        mSpinState = (Spinner)findViewById(R.id.editTextState);
+        mEditTextCustomerEmail = (EditText) findViewById(R.id.editTextCustomerEmail);
+        mEditTextHeight = (EditText) findViewById(R.id.editTextHeight);
+        mEditTextWeight = (EditText) findViewById(R.id.editTextWeight);
+        mEditTextLoc = (EditText) findViewById(R.id.editTextLoc);
+        mEditTextPinCode = (EditText) findViewById(R.id.editTextZipCode);
+        mSpinCity = (Spinner) findViewById(R.id.editTextCity);
+        mSpinState = (Spinner) findViewById(R.id.editTextState);
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
 
         viewProfile();
@@ -131,9 +131,9 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         }*/
 
         mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
-        Utility.getAge(LoginHolder.custLoginRef.getDob())));
+                Utility.getAge(LoginHolder.custLoginRef.getDob())));
         mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
-        if(LoginHolder.custLoginRef.getImg() != null) {
+        if (LoginHolder.custLoginRef.getImg() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
         }
         mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
@@ -143,7 +143,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         Date dt = LoginHolder.custLoginRef.getDob();
-        if(dt != null) {
+        if (dt != null) {
             String dob = sdf.format(LoginHolder.custLoginRef.getDob());
             mTextViewDOB.setText(dob);
         }
@@ -195,7 +195,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     }
 
     public void editPatientProf(View v) {
-        if(mEditTextCustomerFName.isEnabled()) {
+        if (mEditTextCustomerFName.isEnabled()) {
             setFieldsEnability(false);
         } else {
             setFieldsEnability(true);
@@ -205,7 +205,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     }
 
     public void updateProfile(View v) {
-        if(!isValidInput()) {
+        if (!isValidInput()) {
             return;
         }
         Bundle bundle = new Bundle();
@@ -213,14 +213,14 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         bundle.putParcelable("customer", getUpdateData());
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_UPDATE);
-        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }
     }
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        if(action == MappService.DO_UPDATE) {
+        if (action == MappService.DO_UPDATE) {
             updateDone(data);
             return true;
         }
@@ -229,10 +229,10 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
 
     private void updateDone(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
-        if(data.getBoolean("status")) {
-                Utility.showAlert(this, "", getString(R.string.msg_update_profile), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        if (data.getBoolean("status")) {
+            Utility.showAlert(this, "", getString(R.string.msg_profile_updated), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     LoginHolder.custLoginRef = getUpdateData();
                     Intent intent = new Intent(PatientProfileActivity.this, PatientsHomeScreenActivity.class);
@@ -333,7 +333,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
 
     public void changeImg(View view) {
 
-        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Upload Image ");
         dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
@@ -381,7 +381,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                     // Get the cursor
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
-                    if(cursor == null) {
+                    if (cursor == null) {
                         return;
                     }
                     // Move to first row
@@ -417,7 +417,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                                 .getExternalStorageDirectory()
                                 + File.separator
                                 + "Phoenix" + File.separator + "default";
-                        if(f.delete()) {
+                        if (f.delete()) {
                             Log.v(this.getClass().getName(), "File delete successful");
                         }
                         OutputStream fOut;
@@ -475,7 +475,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
             valid = false;
-        } else if(Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
+        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
@@ -499,7 +499,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             mEditTextPinCode.setError(getString(R.string.error_field_required));
             focusView = mEditTextPinCode;
             valid = false;
-        } else if(Validator.isPinCodeValid(pinCode)) {
+        } else if (Validator.isPinCodeValid(pinCode)) {
             mEditTextPinCode.setError("Invalid Pin Code.");
             focusView = mEditTextPinCode;
             valid = false;
@@ -515,7 +515,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        if(intent != null) {
+        if (intent != null) {
             intent.putExtra("customer", getIntent().getParcelableExtra("customer"));
         }
         return intent;
@@ -524,7 +524,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     @Override
     public void datePicked(String date) {
         Date datePicked = Utility.getStrAsDate(date, "dd/MM/yyyy");
-        if(!Utility.isDateAfterToday(datePicked)) {
+        if (!Utility.isDateAfterToday(datePicked)) {
             mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
                     Utility.getAge(LoginHolder.custLoginRef.getDob())));
         }

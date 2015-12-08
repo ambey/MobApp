@@ -20,8 +20,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.9"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.9">
 
         <ProgressBar
             android:id="@+id/rxListProgress"
@@ -34,13 +34,14 @@
             android:id="@+id/rxListView"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent" />
+
         <TextView
             android:id="@+id/rxMsgView"
             style="@style/MediumLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/no_rx_found"
+            android:text="@string/msg_no_rx_found"
             android:visibility="gone" />
     </RelativeLayout>
 

@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Rx;
 
+import java.util.List;
+
 /**
  * Created by ambey on 30/10/15.
  */
@@ -14,6 +16,7 @@ public class RxInboxItem implements Parcelable {
     private Customer customer;
     private Rx rx;
     private ReportService reportService;
+    private List<ServProvListItem> medStoreList;
 
     public RxInboxItem() {
     }
@@ -23,6 +26,21 @@ public class RxInboxItem implements Parcelable {
         customer = in.readParcelable(Customer.class.getClassLoader());
         rx = in.readParcelable(Rx.class.getClassLoader());
         reportService = in.readParcelable(ReportService.class.getClassLoader());
+        medStoreList = in.createTypedArrayList(ServProvListItem.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(servProv, flags);
+        dest.writeParcelable(customer, flags);
+        dest.writeParcelable(rx, flags);
+        dest.writeParcelable(reportService, flags);
+        dest.writeTypedList(medStoreList);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<RxInboxItem> CREATOR = new Creator<RxInboxItem>() {
@@ -69,16 +87,11 @@ public class RxInboxItem implements Parcelable {
         this.reportService = reportService;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public List<ServProvListItem> getMedStoreList() {
+        return medStoreList;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(servProv, flags);
-        dest.writeParcelable(customer, flags);
-        dest.writeParcelable(rx, flags);
-        dest.writeParcelable(reportService, flags);
+    public void setMedStoreList(List<ServProvListItem> medStoreList) {
+        this.medStoreList = medStoreList;
     }
 }

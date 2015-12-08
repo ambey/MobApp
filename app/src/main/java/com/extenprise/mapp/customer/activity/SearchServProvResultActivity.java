@@ -114,18 +114,18 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        if(action == MappService.DO_SERV_PROV_DETAILS) {
+        if (action == MappService.DO_SERV_PROV_DETAILS) {
             gotDetails(data);
             return true;
         }
         return false;
     }
-    
+
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
         String parentClass = getIntent().getStringExtra("parent-activity");
-        if(parentClass != null) {
+        if (parentClass != null) {
             try {
                 intent = new Intent(this, Class.forName(parentClass));
                 intent.putExtra("form", getIntent().getParcelableExtra("form"));

@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:background="@color/background2"
+    android:orientation="horizontal"
+    android:padding="4dp">
 
     <CheckBox
         android:id="@+id/medStoreCheckBox"
@@ -16,47 +18,54 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/medStoreNameView"
+            style="@style/MediumLabel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:hint="@string/medicalStore" />
 
-            <TextView
-                android:id="@+id/medStoreNameView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:hint="@string/medicalStore" />
-
-            <TextView
-                android:id="@+id/medStoreLocView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.3"
-                android:hint="@string/location" />
-        </LinearLayout>
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/firstNameView"
+                android:id="@+id/runByLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginStart="30dp"
-                android:hint="@string/first_name"/>
+                android:text="@string/run_by" />
 
             <TextView
-                android:id="@+id/lastNameView"
+                android:id="@+id/firstNameView"
+                style="@style/MediumText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:hint="@string/last_name"/>
-        </LinearLayout>
+                android:layout_toEndOf="@id/runByLbl"
+                android:layout_toRightOf="@id/runByLbl"
+                android:hint="@string/first_name" />
+
+            <TextView
+                android:id="@+id/lastNameView"
+                style="@style/MediumText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/firstNameView"
+                android:layout_toRightOf="@id/firstNameView"
+                android:hint="@string/last_name" />
+
+            <TextView
+                android:id="@+id/medStoreLocView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/firstNameView"
+                android:layout_alignLeft="@id/firstNameView"
+                android:layout_alignStart="@id/firstNameView"
+                android:hint="@string/location" />
+        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>

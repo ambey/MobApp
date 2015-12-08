@@ -37,7 +37,7 @@ public class PatientsHomeScreenActivity extends Activity {
 
         SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" + mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
         Boolean saveVisit = prefs.getBoolean("saveVisit", false);
-        if(saveVisit) {
+        if (saveVisit) {
             mlastDate.setText(prefs.getString("Date", ""));
             mlastTime.setText(prefs.getString("Time", ""));
         } else {
@@ -52,7 +52,7 @@ public class PatientsHomeScreenActivity extends Activity {
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imagePatient);
-        if(mCustomer.getImg() != null) {
+        if (mCustomer.getImg() != null) {
             img.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getImg()));
         }
 
@@ -70,6 +70,7 @@ public class PatientsHomeScreenActivity extends Activity {
         intent.putExtra("customer", mCustomer);
         startActivity(intent);
     }
+
     public void viewProfile(View view) {
         Intent intent = new Intent(this, PatientProfileActivity.class);
         intent.putExtra("customer", mCustomer);

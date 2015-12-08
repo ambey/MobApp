@@ -75,6 +75,7 @@ public class MappService extends Service {
     public static final int DO_UPCOMING_APPONT_LIST = 30;
     public static final int DO_EDIT_WORK_PLACE = 31;
     public static final int DO_UPDATE_REPORT_STATUS = 32;
+    public static final int DO_CUST_PAST_APPONT_LIST = 33;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -168,13 +169,6 @@ public class MappService extends Service {
         sendAsyncMsg(msg, gson.toJson(report));
     }
 
-    public void doGetCustApponts(Message msg) {
-        Bundle data = msg.getData();
-        com.extenprise.mapp.customer.data.AppointmentListItem item = data.getParcelable("appont");
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        sendAsyncMsg(msg, gson.toJson(item));
-    }
-
     public void doGetCustRxList(Message msg) {
         Bundle data = msg.getData();
         RxInboxItem inboxItem = data.getParcelable("rxItem");
@@ -266,6 +260,9 @@ public class MappService extends Service {
                 break;
             case DO_PAST_APPONT_LIST:
                 urlId = R.string.action_past_appont_list;
+                break;
+            case DO_CUST_PAST_APPONT_LIST:
+                urlId = R.string.action_cust_past_appont_list;
                 break;
             case DO_UPCOMING_APPONT_LIST:
                 urlId = R.string.action_upcoming_appont_list;
@@ -370,6 +367,9 @@ public class MappService extends Service {
                 case DO_GET_RX:
                 case DO_SEND_RX:
                 case DO_SEND_AVAILABILITY:
+                case DO_GET_CUST_UPCOMING_APPONTS:
+                case DO_GET_CUST_PAST_APPONTS:
+                case DO_CUST_PAST_APPONT_LIST:
                     mService.doSubmitForm(msg);
                     break;
                 case DO_SAVE_RX:
@@ -384,10 +384,6 @@ public class MappService extends Service {
                     break;
                 case DO_GET_RX_SCANNED_COPY:
                     mService.doGetRxCopy(msg);
-                    break;
-                case DO_GET_CUST_UPCOMING_APPONTS:
-                case DO_GET_CUST_PAST_APPONTS:
-                    mService.doGetCustApponts(msg);
                     break;
                 case DO_GET_CUST_RX_LIST:
                     mService.doGetCustRxList(msg);

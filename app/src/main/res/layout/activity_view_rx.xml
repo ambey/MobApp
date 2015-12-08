@@ -39,6 +39,13 @@
         android:layout_marginTop="10dp"
         android:layout_weight="0.5">
 
+        <TextView
+            android:id="@+id/viewMsgNoItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error_no_items_found"
+            android:visibility="gone" />
+
         <ListView
             android:id="@+id/listRxItems"
             android:layout_width="fill_parent"

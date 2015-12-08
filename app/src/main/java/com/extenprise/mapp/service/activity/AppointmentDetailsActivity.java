@@ -180,7 +180,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         TextView msgView = (TextView) findViewById(R.id.viewMsg);
         msgView.setText(R.string.loading_page);
         msgView.setVisibility(View.VISIBLE);
-        doAppontAction(MappService.DO_PAST_APPONT_LIST);
+        doAppontAction(MappService.DO_CUST_PAST_APPONT_LIST);
     }
 
     @Override

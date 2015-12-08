@@ -199,13 +199,15 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         ImageView imageView = (ImageView) findViewById(R.id.rxCopyImageView);
         Report report = data.getParcelable("report");
         if (report == null) {
+            TextView msgView = (TextView) findViewById(R.id.viewMsgNoItems);
+            msgView.setVisibility(View.VISIBLE);
             return;
         }
         byte[] pix = report.getScannedCopy();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
-        //TODO
-        //NullPointerException at line 205.
-        imageView.setImageBitmap(bitmap);
+        if(pix != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     @Nullable

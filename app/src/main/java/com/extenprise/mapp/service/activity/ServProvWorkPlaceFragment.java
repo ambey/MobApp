@@ -365,7 +365,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         spsspt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
         spsspt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
         spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
-        if(mConsultFee.isEnabled()) {
+        if (mConsultFee.isEnabled()) {
             spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         }
         spsspt.setServicePoint(spt);
@@ -496,7 +496,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             valid = false;
         }
 
-        if(mConsultFee.isEnabled()) {
+        if (mConsultFee.isEnabled()) {
             String cosultFee = mConsultFee.getText().toString().trim();
             if (TextUtils.isEmpty(cosultFee)) {
                 mConsultFee.setError(getString(R.string.error_field_required));

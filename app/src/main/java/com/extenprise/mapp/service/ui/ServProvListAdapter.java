@@ -55,12 +55,12 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
         TextView expView = (TextView) v.findViewById(R.id.viewExpValue);
         ImageView imgAvail = (ImageView) v.findViewById(R.id.imageViewAvailability);
 
-        if(item.getWorkingDays() != null) {
-          if(Utility.findDocAvailability(item.getWorkingDays(), Calendar.getInstance())) {
-              imgAvail.setImageResource(R.drawable.g_circle);
-          } else {
-              imgAvail.setImageResource(R.drawable.r_circle);
-          }
+        if (item.getWorkingDays() != null) {
+            if (Utility.findDocAvailability(item.getWorkingDays(), Calendar.getInstance())) {
+                imgAvail.setImageResource(R.drawable.g_circle);
+            } else {
+                imgAvail.setImageResource(R.drawable.r_circle);
+            }
         }
 
         fnameView.setText(item.getFirstName());
@@ -70,7 +70,7 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
         specialityView.setText(item.getSpeciality());
         expView.setText(String.format("%.01f", item.getExperience()));
 
-        if(position == selectedPosition) {
+        if (position == selectedPosition) {
             int textColor = Color.WHITE;
             v.setBackgroundColor(getContext().getResources().getColor(R.color.ThemeColor));
             fnameView.setTextColor(textColor);

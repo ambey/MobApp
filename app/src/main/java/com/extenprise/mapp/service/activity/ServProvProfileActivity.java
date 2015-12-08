@@ -4,8 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,7 +25,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,16 +34,12 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappContract;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -63,7 +56,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 
 public class ServProvProfileActivity extends Activity implements ResponseHandler {
@@ -111,7 +103,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
     private String selectedDays;
-    private int msg, action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1335,16 +1326,13 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     public boolean gotResponse(int action, Bundle data) {
         switch (action) {
             case MappService.DO_ADD_WORK_PLACE:
-                msg = R.string.msg_add_wp;
-                updateDone(data);
+                updateDone(R.string.msg_add_wp_done, data);
                 break;
             case MappService.DO_REMOVE_WORK_PLACE:
-                msg = R.string.msg_remove_wp;
-                updateDone(data);
+                updateDone(R.string.msg_remove_wp_done, data);
                 break;
             case MappService.DO_UPDATE:
-                msg = R.string.msg_update_profile;
-                updateDone(data);
+                updateDone(R.string.msg_update_profile_done, data);
                 break;
             case MappService.DO_REG_NO_CHECK:
                 regNoCheckDone(data);
@@ -1356,8 +1344,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 getSpecialitiesDone(data);
                 break;
             case MappService.DO_EDIT_WORK_PLACE:
-                msg = R.string.msg_edit_wp;
-                updateDone(data);
+                updateDone(R.string.msg_edit_wp_done, data);
                 break;
             default:
                 return false;
@@ -1373,7 +1360,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
-    private void updateDone(Bundle data) {
+    private void updateDone(int msg, Bundle data) {
         if (data.getBoolean("status")) {
             LoginHolder.servLoginRef = mServiceProv;
             Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {

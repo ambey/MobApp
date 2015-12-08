@@ -177,6 +177,12 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="MediumLabelGreen">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#080</item>
+    </style>
+
     <style name="TableHeader">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14sp</item>

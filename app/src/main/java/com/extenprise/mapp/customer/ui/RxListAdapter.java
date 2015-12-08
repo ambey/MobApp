@@ -13,7 +13,6 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.service.activity.RxInboxItemDetailsActivity;
-import com.extenprise.mapp.service.activity.ViewRxActivity;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.ServProvListItem;
 
@@ -51,8 +50,8 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
             v = inflater.inflate(R.layout.layout_cust_view_rx, null);
         }
         TextView dateView = (TextView) v.findViewById(R.id.dateView);
-        TextView fnameView = (TextView) v.findViewById(R.id.drFNameView);
-        TextView lnameView = (TextView) v.findViewById(R.id.drLNameView);
+        TextView drFnameView = (TextView) v.findViewById(R.id.drFNameView);
+        TextView drLnameView = (TextView) v.findViewById(R.id.drLNameView);
         TextView clinicNameAddrView = (TextView) v.findViewById(R.id.clinicNameAddressView);
         TextView phoneView = (TextView) v.findViewById(R.id.phoneView);
 
@@ -61,11 +60,28 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         sdf.applyPattern("dd/MM/yyyy");
         dateView.setText(sdf.format(item.getRx().getDate()));
         ServProvListItem servProvItem = item.getServProv();
-        fnameView.setText(servProvItem.getFirstName());
-        lnameView.setText(servProvItem.getLastName());
+        drFnameView.setText(servProvItem.getFirstName());
+        drLnameView.setText(servProvItem.getLastName());
         clinicNameAddrView.setText(String.format("%s, %s", servProvItem.getServPtName(), servProvItem.getServPtLocation()));
         phoneView.setText(servProvItem.getPhone());
 
+        if(item.getMedStoreList() != null && item.getMedStoreList().size() > 0) {
+            TextView medStoreNameView = (TextView) v.findViewById(R.id.medStoreNameView);
+            TextView fNameView = (TextView) v.findViewById(R.id.firstNameView);
+            TextView lNameView = (TextView) v.findViewById(R.id.lastNameView);
+            TextView medStoreAddrView = (TextView) v.findViewById(R.id.medStoreAddressView);
+            TextView medStorePhView = (TextView) v.findViewById(R.id.medStorePhoneView);
+
+            ServProvListItem medStore = item.getMedStoreList().get(0);
+            medStoreNameView.setText(medStore.getServPtName());
+            fNameView.setText(medStore.getFirstName());
+            lNameView.setText(medStore.getLastName());
+            medStoreAddrView.setText(String.format("%s,", medStore.getServPtLocation()));
+            medStorePhView.setText(medStore.getPhone());
+        } else {
+            View medStoreLayout = v.findViewById(R.id.medStoreLayout);
+            medStoreLayout.setVisibility(View.GONE);
+        }
         return v;
     }
 

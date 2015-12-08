@@ -258,33 +258,31 @@
                     android:layout_weight="0.2" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/buttonLayout"
+            <Button
+                android:id="@+id/addButton"
+                style="@style/ExtraWideButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/altDrugLayout"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                android:onClick="addRxItem"
+                android:text="@string/add_new_rx_item" />
 
-                <Button
-                    android:id="@+id/addButton"
-                    style="@style/ExtraWideButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="addRxItem"
-                    android:text="@string/add" />
-
-                <Button
-                    android:id="@+id/doneButton"
-                    style="@style/ExtraWideButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:onClick="doneRx"
-                    android:text="@string/done" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/doneButton"
+                style="@style/ExtraWideButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/addButton"
+                android:layout_alignLeft="@id/addButton"
+                android:layout_alignRight="@id/addButton"
+                android:layout_alignStart="@id/addButton"
+                android:layout_below="@id/addButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:onClick="doneRx"
+                android:text="@string/done" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

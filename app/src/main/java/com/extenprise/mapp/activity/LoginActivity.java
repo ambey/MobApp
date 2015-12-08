@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -36,6 +35,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
+import com.extenprise.mapp.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.MappService;
@@ -43,7 +43,6 @@ import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.activity.MedicalStoreHomeActivity;
-import com.extenprise.mapp.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.EncryptUtil;
@@ -88,32 +87,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         rLayoutAnim.setDuration(3000);
         mLoginFormView.startAnimation(rLayoutAnim);
 
-
-       /* welcomeView.post(new Runnable() {
-            @Override
-            public void run() {
-                Animation rWelcomeAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.text_fade);
-                rWelcomeAnim.setDuration(4500);
-                rWelcomeAnim.setFillEnabled(true);
-                welcomeView.startAnimation(rWelcomeAnim);
-            }
-        });
-        mLoginFormView.post(new Runnable() {
-            @Override
-            public void run() {
-                Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
-                rLayoutAnim.setDuration(3500);
-                mLoginFormView.startAnimation(rLayoutAnim);
-            }
-        });
-        welcomeView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                welcomeView.setVisibility(View.GONE);
-                mLoginFormView.setEnabled(true);
-            }
-        }, 3500);*/
-
         mProgressView = findViewById(R.id.login_progress);
 
         mSignInData = new SignInData();
@@ -155,36 +128,12 @@ public class LoginActivity extends Activity implements ResponseHandler {
         });
 
         mSaveLoginCheckBox = (CheckBox) findViewById(R.id.rememberMe);
-        /*SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-
-        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (saveLogin) {
-            if (loginPreferences.getString("passwd", null) != null) {
-                mMobileNumber.setText(loginPreferences.getString("username", ""));
-                mPasswordView.setText(loginPreferences.getString("passwd", ""));
-                mSaveLoginCheckBox.setChecked(true);
-                mSignInData.setPhone(loginPreferences.getString("username", ""));
-                mSignInData.setPasswd(loginPreferences.getString("passwd", ""));
-                mLoginType = findLoginType(loginPreferences.getString("logintype", ""));
-
-                processLogin();
-            }
-
-            *//*mMobileNumber.setText(loginPreferences.getString("username", ""));
-            if(loginPreferences.getString("passwd", "") != null) {
-                mPasswordView.setText(loginPreferences.getString("passwd", ""));
-                mLoginType = loginPreferences.getInt("logintype", 0);
-            }
-            mSaveLoginCheckBox.setChecked(true);*//*
-        }*/
-
-
     }
 
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         this.finish();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -218,16 +167,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
             new SetupEmailAutoCompleteTask().execute(null, null);
         }
     }
-
-/*
-    public void registerServProv() {
-        mMobileNumber.setError(null);
-        mPasswordView.setError(null);
-        Intent intent = new Intent(this, ServProvSignUpActivity.class);
-        startActivity(intent);
-    }
-*/
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -311,13 +250,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
                         //processLogin();
                     }
                 });
-                /*if(Utility.confirm(this, R.string.confirm_remember)) {*/
-                    /*loginPrefsEditor.putBoolean("saveLogin", true);
-                    loginPrefsEditor.putString("username", mSignInData.getPhone());
-                    loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
-                    loginPrefsEditor.putString("logintype", uType);
-                    loginPrefsEditor.apply();*/
-                //}
             } else {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
@@ -426,13 +358,12 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 type = "servprov";
             }
             Utility.setLastVisit(this, phone, type);
-            Utility.showMessage(this, R.string.msg_login);
+            Utility.showMessage(this, R.string.msg_login_done);
             startActivity(intent);
         } else {
-            Utility.showMessage(this, R.string.login_failed);
+            Utility.showMessage(this, R.string.msg_login_failed);
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();
         }
     }
 }
-

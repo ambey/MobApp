@@ -15,7 +15,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,7 +39,6 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 
@@ -159,10 +157,10 @@ public abstract class Utility {
         Calendar nowCal = Calendar.getInstance();
 
         int age = nowCal.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR);
-        if(nowCal.get(Calendar.MONTH) < birthCal.get(Calendar.MONTH)) {
+        if (nowCal.get(Calendar.MONTH) < birthCal.get(Calendar.MONTH)) {
             age--;
-        } else if(nowCal.get(Calendar.MONTH) == birthCal.get(Calendar.MONTH)) {
-            if(nowCal.get(Calendar.DAY_OF_MONTH) < birthCal.get(Calendar.DAY_OF_MONTH)) {
+        } else if (nowCal.get(Calendar.MONTH) == birthCal.get(Calendar.MONTH)) {
+            if (nowCal.get(Calendar.DAY_OF_MONTH) < birthCal.get(Calendar.DAY_OF_MONTH)) {
                 age--;
             }
         }
@@ -283,7 +281,7 @@ public abstract class Utility {
     }
 
     public static Date getStrAsDate(String date, String pattern) {
-        Date d = new Date();
+        Date d = null;
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern(pattern);
         try {
@@ -620,7 +618,7 @@ public abstract class Utility {
 
     public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        if(dialogView != null) {
+        if (dialogView != null) {
             builder.setTitle(title);
             builder.setView(dialogView);
         } else {
@@ -674,17 +672,26 @@ public abstract class Utility {
 */
 
     public static boolean isDateAfterToday(Date date) {
-        Date today=new Date();
-        if(today.compareTo(date)<0) {
+        Date today = new Date();
+        if (today.compareTo(date) < 0) {
             return true;
-        } else if(today.compareTo(date)>0) {
+        } else if (today.compareTo(date) > 0) {
             return false;
         } else {
             return false; //Both Dates are equal
         }
     }
 
-    public static String getDateAsStr(Context context, Date date) {
+    public static String getDateAsStr(Date date, String pattern) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern(pattern);
+        return sdf.format(date);
+    }
+
+    public static String getDateForDisplay(Context context, Date date, String pattern) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         int year = cal.get(Calendar.YEAR);
@@ -719,7 +726,7 @@ public abstract class Utility {
         }
 
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
+        sdf.applyPattern(pattern);
         return sdf.format(date);
     }
 

@@ -72,7 +72,7 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         timeView.setText(item.getTime());
 
         if (mShowDate) {
-            dateView.setText(Utility.getDateAsStr(getContext(), item.getDate()));
+            dateView.setText(Utility.getDateForDisplay(getContext(), item.getDate(), "dd/MM/yyyy"));
         } else {
             dateView.setVisibility(View.GONE);
         }

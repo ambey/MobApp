@@ -42,14 +42,14 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
         mServiceProv = LoginHolder.servLoginRef;
 
-        mMsgView = (TextView)findViewById(R.id.msgView);
+        mMsgView = (TextView) findViewById(R.id.msgView);
 
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
         SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
         Boolean saveVisit = prefs.getBoolean("saveVisit", false);
-        if(saveVisit) {
+        if (saveVisit) {
             mlastDate.setText(prefs.getString("Date", ""));
             mlastTime.setText(prefs.getString("Time", ""));
         } else {
