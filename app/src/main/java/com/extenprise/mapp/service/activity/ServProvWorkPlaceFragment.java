@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -290,12 +289,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     private boolean addNewWorkPlace() {
-
-        //Check For Internet Connectivity
-        if (!AppStatus.getInstance(getActivity()).isOnline()) {
-            Utility.showMessage(getActivity(), R.string.error_not_online);
-            return false;
-        }
 
         ServProvSignUpActivity activity = (ServProvSignUpActivity) getActivity();
         if (!activity.isValidInput()) {

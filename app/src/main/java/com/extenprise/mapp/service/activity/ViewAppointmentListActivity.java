@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -81,10 +80,6 @@ public class ViewAppointmentListActivity extends Activity
     }
 
     private void getUpcomingList() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         AppointmentListItem form = new AppointmentListItem();
         setupForm(form);
 

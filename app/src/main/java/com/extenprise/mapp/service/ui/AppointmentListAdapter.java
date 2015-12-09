@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.service.activity.AppointmentDetailsActivity;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -89,10 +88,6 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (!AppStatus.getInstance(getContext()).isOnline()) {
-            Utility.showMessage(getContext(), R.string.error_not_online);
-            return;
-        }
         Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
         intent.putExtra("appont", mList.get(position));
         getContext().startActivity(intent);

@@ -14,7 +14,6 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.customer.activity.BookAppointmentActivity;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -82,10 +81,6 @@ public class ServProvDetailsActivity extends Activity {
     }
 
     public void bookAppointment(View view) {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         Intent intent = new Intent(this, BookAppointmentActivity.class);
         if (LoginHolder.custLoginRef == null) {
             intent = new Intent(this, LoginActivity.class);
