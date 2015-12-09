@@ -85,7 +85,6 @@ public class ViewAppointmentListActivity extends Activity
             Utility.showMessage(this, R.string.error_not_online);
             return;
         }
-        Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
         AppointmentListItem form = new AppointmentListItem();
         setupForm(form);
 
@@ -94,18 +93,21 @@ public class ViewAppointmentListActivity extends Activity
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_UPCOMING_APPONT_LIST);
         //mMsgView.setVisibility(View.GONE);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
+        }
     }
 
     private void getPastList() {
-        Utility.showProgress(this, mPastListView, mPastProgress, true);
         AppointmentListItem form = new AppointmentListItem();
         setupForm(form);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_PAST_APPONT_LIST);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mPastListView, mPastProgress, true);
+        }
     }
 
     private void setupForm(AppointmentListItem form) {

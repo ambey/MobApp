@@ -22,8 +22,6 @@ import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.customer.activity.SearchServProvResultActivity;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -36,10 +34,12 @@ import java.util.Calendar;
 
 public class AdvSearchServProvActivity extends Activity implements ResponseHandler {
 
+    protected CharSequence[] options;
+    protected boolean[] selections;
+    ArrayList<String> specList;
+    String selectedDays;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private SearchServProvForm mForm;
-    ArrayList<String> specList;
-
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
     private EditText mDrClinicName;
     private Spinner mSpeciality;
@@ -48,16 +48,11 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     private EditText mQualification;
     private EditText mExperience;
     private LinearLayout mServProLay3;
-
     private Spinner mGender;
     private Spinner mConsultFee;
     private View mProgressView;
     private View mSearchFormView;
-
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options;
-    protected boolean[] selections;
-    String selectedDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +93,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
         mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
 
-        if(mForm != null) {
+        if (mForm != null) {
             mLocation.setText(mForm.getLocation());
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
             mServProvCategory.setSelection(Utility.getSpinnerIndex(mServProvCategory, mForm.getCategory()));
@@ -161,15 +156,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mSpeciality.setAdapter(spinnerAdapter);
     }*/
 
-    public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick(View view) {
-            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-                setupSelection();
-            }
-            showDialog(0);
-        }
-    }
-
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
@@ -185,29 +171,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
                 .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
                 .setPositiveButton("OK", new DialogButtonClickHandler())
                 .create();
-    }
-
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
-        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
-                for (CharSequence option : options) {
-                    Log.i("ME", option + " selected: " + selected);
-                }
-            } else {
-                Log.i("ME", options[clicked] + " selected: " + selected);
-            }
-        }
-    }
-
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
-        public void onClick(DialogInterface dialog, int clicked) {
-            switch (clicked) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedDays();
-                    mMultiSpinnerDays.setText(selectedDays);
-                    break;
-            }
-        }
     }
 
     protected void printSelectedDays() {
@@ -258,7 +221,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             selectedDays += "," + options[i];
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -388,16 +350,13 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mForm.setSpeciality(sp);
         mForm.setLocation(loc);
 
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
-        Utility.showProgress(this, mSearchFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mForm);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        }
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
@@ -406,22 +365,19 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     }
 
     private void getSpecialityList() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         String selectedCategory = mServProvCategory.getSelectedItem().toString();
-        if(selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
+        if (selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
             return;
         }
-        Utility.showProgress(this, mSearchFormView, mProgressView, true);
         mForm = new SearchServProvForm();
         mForm.setCategory(selectedCategory);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mForm);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_SPECIALITY);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        }
     }
 
     /**
@@ -493,6 +449,38 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.no_result);
+        }
+    }
+
+    public class ButtonClickHandler implements View.OnClickListener {
+        public void onClick(View view) {
+            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+                setupSelection();
+            }
+            showDialog(0);
+        }
+    }
+
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
+        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
+            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
+                for (CharSequence option : options) {
+                    Log.i("ME", option + " selected: " + selected);
+                }
+            } else {
+                Log.i("ME", options[clicked] + " selected: " + selected);
+            }
+        }
+    }
+
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int clicked) {
+            switch (clicked) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    printSelectedDays();
+                    mMultiSpinnerDays.setText(selectedDays);
+                    break;
+            }
         }
     }
 }

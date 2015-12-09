@@ -23,7 +23,6 @@ import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.data.RxItem;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -155,12 +154,13 @@ public class RxActivity extends Activity implements ResponseHandler {
             setupRxItemUI(rxInboxItem.getRx().getItems().get(position));
             return;
         }
-        Utility.showProgress(this, mForm, mProgressBar, true);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mAppont);
         mConnection.setAction(MappService.DO_GET_RX);
         mConnection.setData(bundle);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mForm, mProgressBar, true);
+        }
     }
 
     @Override
@@ -212,16 +212,13 @@ public class RxActivity extends Activity implements ResponseHandler {
     }
 
     private void addRxToDB() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
-        Utility.showProgress(this, mForm, mProgressBar, true);
         Bundle bundle = new Bundle();
         bundle.putParcelable("rx", mRx);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SAVE_RX);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mForm, mProgressBar, true);
+        }
     }
 
     private void setupRxItemUI(RxItem rxItem) {

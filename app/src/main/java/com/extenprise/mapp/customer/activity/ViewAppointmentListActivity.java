@@ -61,25 +61,27 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
     }
 
     private void getUpcomingList() {
-        Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
         AppointmentListItem form = new AppointmentListItem();
         setupForm(form);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_CUST_UPCOMING_APPONTS);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
+        }
     }
 
     private void getPastList() {
-        Utility.showProgress(this, mPastListView, mPastProgress, true);
         AppointmentListItem form = new AppointmentListItem();
         setupForm(form);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_CUST_PAST_APPONTS);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mPastListView, mPastProgress, true);
+        }
     }
 
     private void gotUpcomingApponts(Bundle data) {

@@ -28,7 +28,6 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -45,8 +44,14 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ServProvSignUpFragment extends Fragment implements TitleFragment, ResponseHandler {
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+    // LogCat tag
+    private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
+    // Camera activity request codes
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
-
     private View mRootView;
     private EditText mFirstName;
     private EditText mLastName;
@@ -59,23 +64,45 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private EditText mRegistrationNumber;
     private ImageView mImgView;
     private TextView mImgTxtView;
-
     private View mFormView;
     private View mProgressView;
-
-    // LogCat tag
-    private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
-
-    // Camera activity request codes
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
-
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-
     private Uri fileUri; // file url to store image/video
 
     private Button btnCapturePicture, btnRecordVideo;
+
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "Android File Upload");
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "Oops! Failed create "
+                        + "Android File Upload" + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }
 
     @Nullable
     @Override
@@ -265,10 +292,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         Utility.enlargeImage(mImgView);
     }
 
-    public Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
     /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -347,38 +370,8 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
     }*/
 
-    private static File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "Android File Upload");
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d(TAG, "Oops! Failed create "
-                        + "Android File Upload" + " directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
     }
 
     public void saveData() {

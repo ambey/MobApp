@@ -60,13 +60,15 @@ import java.util.ArrayList;
 
 public class ServProvProfileActivity extends Activity implements ResponseHandler {
 
+    private static int RESULT_LOAD_IMG = 1;
+    private static int REQUEST_CAMERA = 2;
+    protected CharSequence[] options;
+    protected boolean[] selections;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
-
     private ArrayList<WorkPlace> mWorkPlaceList;
     private WorkPlace mWorkPlace;
     private ServiceProvider mServiceProv;
     private SignInData mSignInData;
-
     private TextView mMobNo, mEmailID, mRegNo, mFname, mLname, mGenderTextView;
     private TextView mDocName, workhourLBL, mViewdrLbl;
     private RadioGroup mGender;
@@ -76,11 +78,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private View mFormView;
     private View mProgressView;
     private ImageView mImgView;
-
-    private static int RESULT_LOAD_IMG = 1;
-    private static int REQUEST_CAMERA = 2;
     private Bitmap mImgCopy;
-
     private EditText mName;
     private EditText mLoc;
     private Spinner mCity;
@@ -97,10 +95,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private EditText mQualification;
     private EditText mPinCode;
     private Spinner mState;
-
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options;
-    protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
     private String selectedDays;
 
@@ -174,13 +169,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mGenderTextView.setText(mGenderTextView.getText().toString() + " : " + mServiceProv.getGender());
 
         //Get work place list from server
-        Utility.showProgress(this, mFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
         bundle.putParcelable("workPlace", mWorkPlace);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_WORK_PLACE_LIST);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+        }
     }
 
     @Override
@@ -301,14 +297,15 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
                     //mWorkPlace = mWorkPlaceList.get(item.getItemId());
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     bundle.putParcelable("workPlace", wp);
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_REMOVE_WORK_PLACE);
-                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                    if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                        Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                    }
                     dialog.dismiss();
                 }
             });
@@ -484,14 +481,15 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 mServiceProv.setRegNo(regNo);
                 mServiceProv.setSignInData(mSignInData);
 
-                Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
                 Bundle bundle = new Bundle();
                 bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                 bundle.putString("regno", regNo);
                 bundle.putParcelable("service", mServiceProv);
                 mConnection.setData(bundle);
                 mConnection.setAction(MappService.DO_UPDATE);
-                Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                    Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                }
                 dialog.dismiss();
             }
         });
@@ -573,15 +571,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     ///////////////////////////Multi spinner..../////////////////////////////
 
-    public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick(View view) {
-            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-                setupSelection();
-            }
-            showDialog(0);
-        }
-    }
-
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
@@ -597,29 +586,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
                 .setPositiveButton("OK", new DialogButtonClickHandler())
                 .create();
-    }
-
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
-        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
-                for (CharSequence option : options) {
-                    Log.i("ME", option + " selected: " + selected);
-                }
-            } else {
-                Log.i("ME", options[clicked] + " selected: " + selected);
-            }
-        }
-    }
-
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
-        public void onClick(DialogInterface dialog, int clicked) {
-            switch (clicked) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedDays();
-                    mMultiSpinnerDays.setText(selectedDays);
-                    break;
-            }
-        }
     }
 
     protected void printSelectedDays() {
@@ -671,11 +637,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-
-
-    /////////////////////////////Image Upload/////////////////////////////
-
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         BitmapDrawable drawable = (BitmapDrawable) mImgView.getDrawable();
@@ -718,6 +679,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         });
         dialogBuilder.create().show();
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+
+
+    /////////////////////////////Image Upload/////////////////////////////
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -797,12 +763,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////
-
-
-    ///////////////////////////////Add New Work Place Details/////////////////////////////////
-
-
     public void addNewWorkPlace(View view) {
         /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
         adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
@@ -842,7 +802,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
         workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
-        if(item != null) {
+        if (item != null) {
             action = MappService.DO_EDIT_WORK_PLACE;
 
             mName.setText(item.getName());
@@ -861,7 +821,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
             //mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
             mExperience.setText(String.format("%.01f", item.getExperience()));
-            if(item.getPincode() != null) {
+            if (item.getPincode() != null) {
                 mPinCode.setText(item.getPincode());
             }
             ArrayList<String> specs = new ArrayList<>();
@@ -895,8 +855,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 String servCategory = mServCatagory.getSelectedItem().toString();
                 /*MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);*/
-                if(!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
-                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                if (!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     SearchServProvForm mForm = new SearchServProvForm();
@@ -904,7 +863,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     bundle.putParcelable("form", mForm);
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_GET_SPECIALITY);
-                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                    if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                    }
                 }
             }
 
@@ -918,7 +879,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String spec = mSpeciality.getSelectedItem().toString();
                 String servCategory = mServCatagory.getSelectedItem().toString();
-                if(!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
+                if (!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
                     if (spec.equals("Other")) {
                         Utility.openSpecDialog(ServProvProfileActivity.this, mSpeciality);
                     }
@@ -960,13 +921,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     wp.setSignInData(mSignInData);
                     wp.setPincode(mPinCode.getText().toString().trim());
 
-                    Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     bundle.putParcelable("workPlace", wp);
                     mConnection.setData(bundle);
                     mConnection.setAction(finalAction);
-                    Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                    if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                    }
                     dialog.dismiss();
                 }
             }
@@ -980,7 +942,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         View focusView = null;
 
         String category = mServCatagory.getSelectedItem().toString();
-        if(TextUtils.isEmpty(category) || category.equals(getString(R.string.select_category))) {
+        if (TextUtils.isEmpty(category) || category.equals(getString(R.string.select_category))) {
             //Utility.showAlert(this, "", "Please select service category.");
             View selectedView = mServCatagory.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
@@ -992,7 +954,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             valid = false;
         }
 
-        if(mSpeciality.getSelectedItem() != null) {
+        if (mSpeciality.getSelectedItem() != null) {
             String spec = mSpeciality.getSelectedItem().toString();
             if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
                 //Utility.showAlert(this, "", "Please select speciality.");
@@ -1106,10 +1068,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         return valid;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
 
 
-    //////////////////////////////////////////Update Profile///////////////////////////////////
+    ///////////////////////////////Add New Work Place Details/////////////////////////////////
 
     public void updateProfile(View view) {
         boolean cancel = false;
@@ -1164,17 +1126,127 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mServiceProv.setRegNo(regNo);
         mServiceProv.setSignInData(mSignInData);
 
-        Utility.showProgress(this, mFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
         bundle.putString("regno", regNo);
         bundle.putParcelable("service", mServiceProv);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_UPDATE);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mFormView, mProgressView, true);
+        }
 
         /*SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);*/
+    }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+/*
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        private Messenger mService;
+        private boolean mBound;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mWorkPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
+            mService = new Messenger(service);
+            mBound = true;
+            Message msg = null;
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            if (mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
+                bundle.putString("regno", mRegNo.getText().toString().trim());
+                bundle.putParcelable("service", LoginHolder.servLoginRef);
+            } else if (mServiceAction == MappService.DO_GET_SPECIALITY) {
+                SearchServProvForm mForm = new SearchServProvForm();
+                mForm.setCategory(mServCatagory.getSelectedItem().toString());
+                bundle.putParcelable("form", mForm);
+            } else {
+                bundle.putParcelable("mWorkPlace", mWorkPlace);
+                //for add, remove and get Workplace.
+            }
+            msg = Message.obtain(null, mServiceAction);
+            msg.replyTo = new Messenger(mResponseHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+
+            mBound = false;
+        }
+    };
+*/
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        switch (action) {
+            case MappService.DO_ADD_WORK_PLACE:
+                updateDone(R.string.msg_add_wp_done, data);
+                break;
+            case MappService.DO_REMOVE_WORK_PLACE:
+                updateDone(R.string.msg_remove_wp_done, data);
+                break;
+            case MappService.DO_UPDATE:
+                updateDone(R.string.msg_update_profile_done, data);
+                break;
+            case MappService.DO_REG_NO_CHECK:
+                regNoCheckDone(data);
+                break;
+            case MappService.DO_WORK_PLACE_LIST:
+                getWorkPlaceListDone(data);
+                break;
+            case MappService.DO_GET_SPECIALITY:
+                getSpecialitiesDone(data);
+                break;
+            case MappService.DO_EDIT_WORK_PLACE:
+                updateDone(R.string.msg_edit_wp_done, data);
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    public void regNoCheckDone(Bundle data) {
+        if (data.getBoolean("exists")) {
+            mRegNo.setError("This Registration Number is already Registered.");
+            mRegNo.requestFocus();
+        }
+        Utility.showProgress(this, mFormView, mProgressView, false);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////Update Profile///////////////////////////////////
+
+    private void updateDone(int msg, Bundle data) {
+        if (data.getBoolean("status")) {
+            LoginHolder.servLoginRef = mServiceProv;
+            Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            });
+        } else {
+            Utility.showMessage(this, R.string.some_error);
+        }
+        Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
 /*
@@ -1274,110 +1346,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     //////////////////////////////////////////Connection & handler////////////////////////////////////
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-/*
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        private Messenger mService;
-        private boolean mBound;
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mWorkPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
-            mService = new Messenger(service);
-            mBound = true;
-            Message msg = null;
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            if (mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
-                bundle.putString("regno", mRegNo.getText().toString().trim());
-                bundle.putParcelable("service", LoginHolder.servLoginRef);
-            } else if (mServiceAction == MappService.DO_GET_SPECIALITY) {
-                SearchServProvForm mForm = new SearchServProvForm();
-                mForm.setCategory(mServCatagory.getSelectedItem().toString());
-                bundle.putParcelable("form", mForm);
-            } else {
-                bundle.putParcelable("mWorkPlace", mWorkPlace);
-                //for add, remove and get Workplace.
-            }
-            msg = Message.obtain(null, mServiceAction);
-            msg.replyTo = new Messenger(mResponseHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-
-            mBound = false;
-        }
-    };
-*/
-    @Override
-    public boolean gotResponse(int action, Bundle data) {
-        switch (action) {
-            case MappService.DO_ADD_WORK_PLACE:
-                updateDone(R.string.msg_add_wp_done, data);
-                break;
-            case MappService.DO_REMOVE_WORK_PLACE:
-                updateDone(R.string.msg_remove_wp_done, data);
-                break;
-            case MappService.DO_UPDATE:
-                updateDone(R.string.msg_update_profile_done, data);
-                break;
-            case MappService.DO_REG_NO_CHECK:
-                regNoCheckDone(data);
-                break;
-            case MappService.DO_WORK_PLACE_LIST:
-                getWorkPlaceListDone(data);
-                break;
-            case MappService.DO_GET_SPECIALITY:
-                getSpecialitiesDone(data);
-                break;
-            case MappService.DO_EDIT_WORK_PLACE:
-                updateDone(R.string.msg_edit_wp_done, data);
-                break;
-            default:
-                return false;
-        }
-        return true;
-    }
-
-    public void regNoCheckDone(Bundle data) {
-        if (data.getBoolean("exists")) {
-            mRegNo.setError("This Registration Number is already Registered.");
-            mRegNo.requestFocus();
-        }
-        Utility.showProgress(this, mFormView, mProgressView, false);
-    }
-
-    private void updateDone(int msg, Bundle data) {
-        if (data.getBoolean("status")) {
-            LoginHolder.servLoginRef = mServiceProv;
-            Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                }
-            });
-        } else {
-            Utility.showMessage(this, R.string.some_error);
-        }
-        Utility.showProgress(this, mFormView, mProgressView, false);
-    }
-
     private void getWorkPlaceListDone(Bundle data) {
         if (data.getBoolean("status")) {
             //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
@@ -1419,5 +1387,37 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             list = new ArrayList<>();
         }
         Utility.setNewSpec(this, list, mSpeciality);
+    }
+
+    public class ButtonClickHandler implements View.OnClickListener {
+        public void onClick(View view) {
+            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+                setupSelection();
+            }
+            showDialog(0);
+        }
+    }
+
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
+        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
+            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
+                for (CharSequence option : options) {
+                    Log.i("ME", option + " selected: " + selected);
+                }
+            } else {
+                Log.i("ME", options[clicked] + " selected: " + selected);
+            }
+        }
+    }
+
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int clicked) {
+            switch (clicked) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    printSelectedDays();
+                    mMultiSpinnerDays.setText(selectedDays);
+                    break;
+            }
+        }
     }
 }

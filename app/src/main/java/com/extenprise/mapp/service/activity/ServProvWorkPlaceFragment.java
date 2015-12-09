@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.db.MappDbHelper;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
@@ -35,15 +34,17 @@ import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.ui.TitleFragment;
-import com.extenprise.mapp.util.DBUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
 
 public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler {
+    protected CharSequence[] options;
+    protected boolean[] selections;
+    //String []selectedDays = new String[_options.length];
+    String selectedDays;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
-
     private View mRootview;
     private EditText mName;
     private EditText mLoc;
@@ -63,18 +64,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     //private Spinner mWeeklyOff;
     private Spinner mServPtType;
     private Spinner mServCatagory;
-
     private View mFormView;
     private View mProgressView;
-
     private RelativeLayout mRelLayout2;
     private LinearLayout mLayoutWorkHrs;
-
     private Button mMultiSpinnerDays;
-    protected CharSequence[] options;
-    protected boolean[] selections;
-    //String []selectedDays = new String[_options.length];
-    String selectedDays;
 
     @Nullable
     @Override
@@ -114,7 +108,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String servCategory = mServCatagory.getSelectedItem().toString();
                 if(!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
-                    Utility.showProgress(getActivity(), mFormView, mProgressView, true);
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     SearchServProvForm mForm = new SearchServProvForm();
@@ -122,7 +115,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                     bundle.putParcelable("form", mForm);
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_GET_SPECIALITY);
-                    Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE);
+                    if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
+                        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+                    }
                 }
             }
             @Override
@@ -252,17 +247,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         return 0;
     }
 
-
-
-    public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick(View view) {
-            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-                setupSelection();
-            }
-            getActivity().showDialog(0);
-        }
-    }
-
     public void onPrepareDialog(int id, Dialog dialog) {
         if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
             setupSelection();
@@ -275,29 +259,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                 .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
                 .setPositiveButton("OK", new DialogButtonClickHandler())
                 .create();
-    }
-
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
-        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
-                for (CharSequence option : options) {
-                    Log.i("ME", option + " selected: " + selected);
-                }
-            } else {
-                Log.i("ME", options[clicked] + " selected: " + selected);
-            }
-        }
-    }
-
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
-        public void onClick(DialogInterface dialog, int clicked) {
-            switch (clicked) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedDays();
-                    mMultiSpinnerDays.setText(selectedDays);
-                    break;
-            }
-        }
     }
 
     protected void printSelectedDays() {
@@ -536,19 +497,19 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public void saveData() {
-        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
         bundle.putParcelable("service", LoginHolder.servLoginRef);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SIGNUP);
-        Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
+            Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+        }
 /*
         SaveServiceData task = new SaveServiceData(this);
         task.execute((Void) null);
 */
     }
-
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
@@ -560,7 +521,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         if (action == MappService.DO_SIGNUP) {
             signUpDone(data);
             return true;
-        } else if(action == MappService.DO_GET_SPECIALITY) {
+        } else if (action == MappService.DO_GET_SPECIALITY) {
             getSpecialitiesDone(data);
             return true;
         }
@@ -591,6 +552,38 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             list = new ArrayList<>();
         }
         Utility.setNewSpec(getActivity(), list, mSpeciality);
+    }
+
+    public class ButtonClickHandler implements View.OnClickListener {
+        public void onClick(View view) {
+            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+                setupSelection();
+            }
+            getActivity().showDialog(0);
+        }
+    }
+
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
+        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
+            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
+                for (CharSequence option : options) {
+                    Log.i("ME", option + " selected: " + selected);
+                }
+            } else {
+                Log.i("ME", options[clicked] + " selected: " + selected);
+            }
+        }
+    }
+
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int clicked) {
+            switch (clicked) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    printSelectedDays();
+                    mMultiSpinnerDays.setText(selectedDays);
+                    break;
+            }
+        }
     }
 
 /*

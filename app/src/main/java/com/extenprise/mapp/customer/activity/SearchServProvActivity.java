@@ -19,7 +19,6 @@ import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.FirstFlipperActivity;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -34,17 +33,15 @@ import java.util.ArrayList;
 
 public class SearchServProvActivity extends Activity implements ResponseHandler {
 
+    SearchServProvForm mForm;
+    ArrayList<String> specList;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
-
     private EditText mDrClinicName;
     private Spinner mSpeciality;
     private Spinner mServProvCategory;
     private EditText mLocation;
     private View mProgressView;
     private View mSearchFormView;
-    SearchServProvForm mForm;
-
-    ArrayList<String> specList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,23 +85,20 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     }
 
     private void getSpeciality() {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         String selectedCategory = mServProvCategory.getSelectedItem().toString();
         if (selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
             mSpeciality.setAdapter(null);
             return;
         }
-        Utility.showProgress(this, mSearchFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         mForm = new SearchServProvForm();
         mForm.setCategory(selectedCategory);
         bundle.putParcelable("form", mForm);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_SPECIALITY);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        }
     }
 
     private void gotSpecialities(Bundle data) {
@@ -234,18 +228,13 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     public void searchDr(View view) {
         fillSearchForm();
-        if (!AppStatus.getInstance(this).isOnline()) {
-            //Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
-            Utility.showMessage(this, R.string.error_not_online);
-            //Log.v("Home", "############################You are not online!!!!");
-            return;
-        }
-        Utility.showProgress(this, mSearchFormView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mForm);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+        }
 
         /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
 /*

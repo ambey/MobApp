@@ -72,7 +72,7 @@ public class ViewRxListActivity extends Activity implements ResponseHandler {
         mRxListView.setAdapter(adapter);
         mRxListView.setOnItemClickListener(adapter);
 
-        if(list.size() > 0) {
+        if (list != null && list.size() > 0) {
             mRxListView.setVisibility(View.VISIBLE);
             mRxMsgView.setVisibility(View.GONE);
         } else {

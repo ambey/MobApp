@@ -10,10 +10,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -90,17 +88,14 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
     }
 
     private void getDetails(View view, int position) {
-        if (!AppStatus.getInstance(this).isOnline()) {
-            Utility.showMessage(this, R.string.error_not_online);
-            return;
-        }
         ServProvListItem mSelectedItem = mServProvList.get(position);
-        Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mSelectedItem);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SERV_PROV_DETAILS);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
+        }
     }
 
     public void gotDetails(Bundle data) {
