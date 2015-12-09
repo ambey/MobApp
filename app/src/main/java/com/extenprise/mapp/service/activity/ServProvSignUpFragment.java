@@ -32,6 +32,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.Service;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.ui.TitleFragment;
 import com.extenprise.mapp.util.EncryptUtil;
@@ -406,7 +407,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
         if (check == MappService.DO_REG_NO_CHECK) {
-            bundle.putString("regno", mRegistrationNumber.getText().toString().trim());
+            String regNo = mRegistrationNumber.getText().toString().trim();
+            ServiceProvider sp = new ServiceProvider();
+            sp.setRegNo(regNo);
+            bundle.putString("regno", regNo);
+            bundle.putParcelable("service", sp);
         } else if (check == MappService.DO_PHONE_EXIST_CHECK) {
             SignInData data = new SignInData();
             data.setPhone(mCellphoneview.getText().toString().trim());

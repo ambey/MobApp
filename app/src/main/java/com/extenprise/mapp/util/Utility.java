@@ -512,8 +512,8 @@ public abstract class Utility {
         preferencesEditor.apply();
     }*/
 
-    public static void setLastVisit(Activity activity, String phone, String type) {
-        SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);
+    public static void setLastVisit(SharedPreferences prefer) {
+        //SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);
         SharedPreferences.Editor preferencesEditor = prefer.edit();
         preferencesEditor.putBoolean("saveVisit", true);
         preferencesEditor.putString("Date", setCurrentDateOnView(null));

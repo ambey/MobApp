@@ -56,7 +56,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         });
         listView.setAdapter(adapter);
 
-        ServProvListItem spl = mServProvList.get(1);
+        ServProvListItem spl = mServProvList.get(0);
         String msg = "not present";
         if(spl.getWorkingDays() != null) {
             msg = spl.getWorkingDays();

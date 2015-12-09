@@ -8,6 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -112,7 +113,21 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
                 MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
                 DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);
                 //setSpecs(specs);*/
-                getSpecialityList();
+
+                String selectedCategory = mServProvCategory.getSelectedItem().toString();
+                if (selectedCategory.equals(getString(R.string.select_category))) {
+                    return;
+                }
+                mForm = new SearchServProvForm();
+                mForm.setCategory(selectedCategory);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("form", mForm);
+                mConnection.setData(bundle);
+                mConnection.setAction(MappService.DO_GET_SPECIALITY);
+                if (Utility.doServiceAction(AdvSearchServProvActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                    Utility.showProgress(AdvSearchServProvActivity.this, mSearchFormView, mProgressView, true);
+                }
+                //getSpecialityList();
             }
 
             @Override
@@ -124,37 +139,27 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 
     public void showtimeFields(View view) {
         if (mServProLay3.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mServProLay3, view);
+            Utility.collapse(mServProLay3, null);
         } else {
-            Utility.expand(mServProLay3, view);
+            Utility.expand(mServProLay3, null);
         }
     }
 
     public void showGenderField(View view) {
         if (mGender.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mGender, view);
-            view.setBackgroundResource(R.drawable.label);
+            Utility.collapse(mGender, null);
         } else {
-            Utility.expand(mGender, view);
-            view.setBackgroundResource(R.drawable.expand);
+            Utility.expand(mGender, null);
         }
     }
 
     public void showDaysField(View view) {
         if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mMultiSpinnerDays, view);
+            Utility.collapse(mMultiSpinnerDays, null);
         } else {
-            Utility.expand(mMultiSpinnerDays, view);
+            Utility.expand(mMultiSpinnerDays, null);
         }
     }
-
-
-
-
-    /*private void setSpecs(ArrayList<String> specs) {
-        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specs);
-        mSpeciality.setAdapter(spinnerAdapter);
-    }*/
 
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
@@ -245,40 +250,18 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
     }
 
     public void showStartTimePicker(View view) {
-        /*DialogFragment timeDialog = new TimePickerFragment();
-        ((TimePickerFragment) timeDialog).setParentView(view);
-        timeDialog.show(getSupportFragmentManager(), "" + R.id.buttonStartTime);*/
-
-        timePicker(mButtonStartTime);
+        Utility.timePicker(view, mButtonStartTime);
+        //timePicker(mButtonStartTime);
     }
 
     public void showEndTimePicker(View view) {
-        timePicker(mButttonEndTime);
-    }
-
-    public void timePicker(final Button button) {
-        // Process to get Current Time
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-
-        // Launch Time Picker Dialog
-        TimePickerDialog tpd = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
-
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
-                        // Display Selected time in textbox
-                        button.setText(String.format("%02d:%02d", hourOfDay, minute));
-                    }
-                }, hour, minute, false);
-        tpd.show();
+        //timePicker(mButttonEndTime);
+        Utility.timePicker(view, mButtonStartTime);
     }
 
     public void searchDr(View view) {
-
-        View focusView;
+        boolean valid = true;
+        View focusView = null;
 
         String name = mDrClinicName.getText().toString().trim();
         String loc = mLocation.getText().toString().trim();
@@ -286,11 +269,12 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         if (mSpeciality.getSelectedItem() != null) {
             sp = mSpeciality.getSelectedItem().toString();
         }
-        if (sp.equals("Select Speciality") || sp.equals("Other")) {
+        if (sp.equals(getResources().getString(R.string.select_speciality)) ||
+                sp.equals(getResources().getString(R.string.other))) {
             sp = "";
         }
         String sc = mServProvCategory.getSelectedItem().toString();
-        if (sc.equals("Select Category")) {
+        if (sc.equals(getResources().getString(R.string.select_category))) {
             sc = "";
         }
 
@@ -302,6 +286,15 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             gender = "";
         }
         String exp = mExperience.getText().toString().trim();
+        if (!TextUtils.isEmpty(exp)) {
+            double exp2 = Double.parseDouble(mExperience.getText().toString());
+            if (exp2 < 0 || exp2 > 99) {
+                mExperience.setError(getString(R.string.error_invalid_experience));
+                focusView = mExperience;
+                valid = false;
+            }
+        }
+
         String startTime = mButtonStartTime.getText().toString();
         String endTime = mButttonEndTime.getText().toString();
         //String availDay = Utility.getCommaSepparatedString(selectedDays);
@@ -323,9 +316,13 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             if (Utility.getMinutes(startTime) >= Utility.getMinutes(endTime)) {
                 mButttonEndTime.setError("End Time Can't be similar or less than to Start Time.");
                 focusView = mButttonEndTime;
-                focusView.requestFocus();
-                return;
+                valid = false;
             }
+        }
+
+        if(!valid) {
+            focusView.requestFocus();
+            return;
         }
 
         if (!name.equals("")) {
@@ -362,22 +359,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
                 qualification, exp, startTime, endTime, availDay, gender, consultFee);
         mSearchTask.execute((Void) null);
 */
-    }
-
-    private void getSpecialityList() {
-        String selectedCategory = mServProvCategory.getSelectedItem().toString();
-        if (selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
-            return;
-        }
-        mForm = new SearchServProvForm();
-        mForm.setCategory(selectedCategory);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("form", mForm);
-        mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_GET_SPECIALITY);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mSearchFormView, mProgressView, true);
-        }
     }
 
     /**

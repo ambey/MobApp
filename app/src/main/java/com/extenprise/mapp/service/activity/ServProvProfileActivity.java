@@ -399,13 +399,16 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 if (!hasFocus) {
                     String regNo = mRegNo.getText().toString().trim();
                     if (!TextUtils.isEmpty(regNo)) {
+                        mServiceProv.setRegNo(regNo);
                         Bundle bundle = new Bundle();
                         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                        bundle.putString("regno", mRegNo.getText().toString().trim());
+                        bundle.putString("regno", regNo);
                         bundle.putParcelable("service", mServiceProv);
                         mConnection.setData(bundle);
                         mConnection.setAction(MappService.DO_REG_NO_CHECK);
-                        Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+                        if(Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                            Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                        }
                     }
                 }
             }
@@ -1244,6 +1247,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 }
             });
         } else {
+            mServiceProv = LoginHolder.servLoginRef;
             Utility.showMessage(this, R.string.some_error);
         }
         Utility.showProgress(this, mFormView, mProgressView, false);
@@ -1419,5 +1423,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     break;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //finish();
+        return;
     }
 }

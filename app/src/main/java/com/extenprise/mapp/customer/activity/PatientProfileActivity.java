@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -528,5 +529,10 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
                     Utility.getAge(LoginHolder.custLoginRef.getDob())));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }

@@ -290,12 +290,12 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
             // Get all emails from the user's contacts and copy them to a list.
             ContentResolver cr = getContentResolver();
-            Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+            Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                     null, null, null);
             if (emailCur != null) {
                 while (emailCur.moveToNext()) {
                     String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
-                            .CommonDataKinds.Email.DATA));
+                            .CommonDataKinds.Phone.DATA));
                     emailAddressCollection.add(email);
                 }
                 emailCur.close();
@@ -321,7 +321,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mLoginFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
-            String phone, type;
+            String phone="", type="";
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
@@ -357,7 +357,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 phone = serviceProvider.getSignInData().getPhone();
                 type = "servprov";
             }
-            Utility.setLastVisit(this, phone, type);
+            Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
             Utility.showMessage(this, R.string.msg_login_done);
             startActivity(intent);
         } else {
