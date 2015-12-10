@@ -23,10 +23,10 @@ public class Send {
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNo, null, message, null, null);
-            Utility.showMessage(activity, R.string.sms_sent);
+            Utility.showMessage(activity, R.string.msg_sms_sent);
         }
         catch (Exception e) {
-            Utility.showMessage(activity, R.string.sms_failed);
+            Utility.showMessage(activity, R.string.msg_sms_failed);
             e.printStackTrace();
         }
     }

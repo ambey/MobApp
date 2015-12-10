@@ -15,5 +15,11 @@
     <string name="msg_rx_sent_to_medstore">The Rx sent to selected Medical store.</string>
     <string name="msg_profile_updated">Profile Successfully Updated.</string>
     <string name="msg_no_rx_found">No Rx Found.</string>
+    <string name="msg_press_back_button">Press Back again to Exit</string>
+    <string name="msg_sms_sent">SMS Sent</string>
+    <string name="msg_sms_failed">SMS faild, please try again.</string>
+    <string name="msg_email_sent">Email Sent</string>
+    <string name="msg_email_failed">Email faild, please try again.</string>
+    <string name="msg_no_result">No Result Found.</string>
 
 </resources>

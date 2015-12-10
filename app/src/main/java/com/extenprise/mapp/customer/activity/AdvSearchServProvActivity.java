@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TimePicker;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.net.MappService;
@@ -31,7 +29,6 @@ import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AdvSearchServProvActivity extends Activity implements ResponseHandler {
 
@@ -429,7 +426,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             intent.putExtra("form", mForm);
             startActivity(intent);
         } else {
-            Utility.showMessage(this, R.string.no_result);
+            Utility.showMessage(this, R.string.msg_no_result);
         }
     }
 

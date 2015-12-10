@@ -147,7 +147,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
             moveTaskToBack(true); // exist app
             //finish(); // finish activity
         } else {
-            Utility.showMessage(this, R.string.press_back_button);
+            Utility.showMessage(this, R.string.msg_press_back_button);
             exit = true;
             new Handler().postDelayed(new Runnable() {
                 @Override

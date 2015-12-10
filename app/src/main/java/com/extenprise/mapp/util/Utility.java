@@ -14,7 +14,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -43,6 +45,7 @@ import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -588,7 +591,7 @@ public abstract class Utility {
         return context.getResources().getStringArray(R.array.days);
     }
 
-    public static boolean confirm(Context activity, int msg) throws Resources.NotFoundException {
+    /*public static boolean confirm(Context activity, int msg) throws Resources.NotFoundException {
         //final boolean confirm = false;
         final boolean[] confirm = new boolean[1];
         new AlertDialog.Builder(activity)
@@ -615,7 +618,7 @@ public abstract class Utility {
 
         return confirm[0];
     }
-
+*/
     public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         if (dialogView != null) {
@@ -740,5 +743,37 @@ public abstract class Utility {
         activity.finish();
         Intent intent = new Intent(activity, LoginActivity.class);
         activity.startActivity(intent);
+    }
+
+    public static AlertDialog.Builder captureImage(final Activity activity) {
+        //final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
+        final CharSequence[] items = {
+                activity.getString(R.string.take_photo),
+                activity.getString(R.string.from_gallery),
+                activity.getString(R.string.cancel) };
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+        dialogBuilder.setTitle("Upload Image ");
+        dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File f = new File(android.os.Environment
+                                .getExternalStorageDirectory(), "temp.jpg");
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                        activity.startActivityForResult(intent, R.integer.request_camera);
+                        break;
+                    case 1:
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        activity.startActivityForResult(galleryIntent, R.integer.request_gallery);
+                        break;
+                    case 2:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        return dialogBuilder;
     }
 }

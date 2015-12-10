@@ -2,15 +2,11 @@
 <resources>
     <string name="app_name">Professional Details</string>
 
-    <string name="server_name">http://10.0.2.2:8080/mapp</string>
+    <!--<string name="server_name">http://10.0.2.2:8080/mapp</string>-->
 
-<!--
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
--->
-
 
     <string name="by_exp">By Extenprise</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
     <string name="action_settings">Settings</string>
@@ -24,28 +20,15 @@
     <string name="dob_label">Date of Birth:</string>
     <string name="dob_with_format">Date of Birth: (dd/mm/YYYY)</string>
     <string name="dob_format">dd/mm/YYYY *</string>
-
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
     <string name="country_code">+91</string>
-
     <string name="medical_store">Medical Store</string>
     <string name="clinic">Clinic</string>
     <string name="path_lab">Path Lab</string>
     <string name="scan_lab">Scanner Lab</string>
-
     <string name="reg_no">Registration Number *</string>
 
-    <string-array name="consultation_fees">
-        <item>&#45;</item>
-        <item>&lt;200</item>
-        <item>200&#45;500</item>
-        <item>500&gt;</item>
-
-    </string-array>
-
-    <string name="state">State</string>
-    <string name="gender">Gender</string>
     <string name="title_activity_advance__search_doc">Advance Search Doctor</string>
     <string name="title_activity_search_result">List of Doctor</string>
     <string name="title_activity_doctor_details">Doctor Details</string>
@@ -66,7 +49,25 @@
     <string name="title_activity_view_rx">View Rx</string>
     <string name="title_activity_patients_home_screen">Home</string>
     <string name="title_activity_scanned_rx">Scanned Rx Copy</string>
+    <string name="title_activity_serv_prove_profile">ServProveProfile</string>
+    <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>
+    <string name="title_activity_rx_list">RxListActivity</string>
+    <string name="title_activity_pending_rx_list">PendingRxListActivity</string>
+    <string name="title_activity_select_medical_store">SelectMedicalStoreActivity</string>
+    <string name="title_activity_welcome_acitivity">WelcomeAcitivity</string>
+    <string name="title_activity_rx_inbox_item_details">Rx Details</string>
 
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="evening">Evening</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="time">Time</string>
+    <string name="time_desc">AM/PM</string>
+
+    <string name="state">State</string>
+    <string name="gender">Gender</string>
     <string name="view_more">View More</string>
     <string name="rx_now">Rx Now</string>
     <string name="upload_rx">Upload Scanned Rx</string>
@@ -76,8 +77,6 @@
     <string name="patient_name">Patient Name</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="time">Time</string>
-    <string name="time_desc">AM/PM</string>
     <string name="age">Age</string>
     <string name="year">Years</string>
     <string name="weight">Weight *</string>
@@ -89,13 +88,11 @@
     <string name="alt_drug">Alternate Drug</string>
     <string name="strength">Strength</string>
     <string name="intake_steps">Intake Steps</string>
-    <string name="morning">Morning</string>
-    <string name="afternoon">Afternoon</string>
-    <string name="evening">Evening</string>
     <string name="dose_qty">Dose Qty</string>
     <string name="course_dur">Course Dur</string>
     <string name="drug_name">Drug Name</string>
     <string name="srno">Sr No</string>
+
     <string name="avail_days">Available Days</string>
     <string name="select_days">Select Days</string>
     <string name="select_date">Select Date</string>
@@ -134,12 +131,10 @@
     <string name="run_by">Run By:</string>
 
     <string name="no_past_appont">No appointments found!</string>
-    <string name="consult_fees">Consultation Fees</string>
+    <string name="consult_fees">Consultation Fees \u20B9</string>
     <string name="title_activity_first_flipper">FirstFlipperActivity</string>
-
     <string name="uploadImg">Upload Image</string>
     <string name="profile_text">View/Edit Profile</string>
-    <string name="title_activity_view_profile_main">ViewProfileMain</string>
 
     <string name="edit_info">Edit Info</string>
     <string name="edit_wrk">Edit Work\nDetails</string>
@@ -147,9 +142,7 @@
     <string name="education">Education</string>
     <string name="wrkxp">Work Experience</string>
     <string name="update">Update</string>
-    <string name="title_activity_view_profile_basic_info">ViewProfileBasicInfo</string>
     <string name="con_info">Contact Info</string>
-    <string name="title_activity_view_profile_work_detail">ViewProfileWorkDetail</string>
     <string name="mob_num">Mobile Number</string>
     <string name="mail_id">Email Id</string>
     <string name="bas_info">Basic Info</string>
@@ -158,7 +151,6 @@
     <string name="wrk_det">Work Details</string>
     <string name="spec_cat">Speciality and Category</string>
     <string name="cate">Category</string>
-    <string name="title_activity_serv_prov_work_detail_list">ServProvWorkDetailList</string>
     <string name="wrkplace_name">Work Place Name</string>
     <string name="wrkplace_loc">Work Place Location</string>
     <string name="phn_num1">Phone Number 1</string>
@@ -167,23 +159,23 @@
     <string name="strt_tm">Start Time</string>
     <string name="end_tm">End Time</string>
     <string name="pract_day">Practise Days</string>
-    <string name="title_activity_serv_prove_profile">ServProveProfile</string>
-    <string name="conf">Confirm</string>
-    <string name="cancel">Cancel</string>
 
-    <string name="phone_lbl">Phone:</string>
+    <string name="alt_phone">Alternate Phone : </string>
+    <string name="phone_lbl">Phone : </string>
     <string name="dr_lbl">Doctor:</string>
     <string name="medstore_lbl">Medical Store:</string>
-
     <string name="primary_phone_no">Primary Phone Number *</string>
     <string name="title_activity_patient_profile">PatientProfile</string>
     <string name="pinfo">Personal Info</string>
     <string name="addinfo">Address Info</string>
     <string name="wght">Weight</string>
 
+    <string name="conf">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="confirmed">Confirmed</string>
     <string name="canceled">Canceled</string>
     <string name="not_confirmed">Not Confirmed</string>
+
     <string name="open_rx">View Rx Inbox</string>
     <string name="pend_rx">To Undelivered Rx</string>
     <string name="rx_inbox">Rx Inbox</string>
@@ -191,35 +183,24 @@
     <string name="rx_num">Rx Number</string>
     <string name="send">Send</string>
     <string name="send_rx_to_mstore">Send Rx to a\nMedical Store</string>
+    <string name="add_new_rx_item">Add New Rx Item</string>
+    <string name="rx_sent_to">Rx Sent To:</string>
+    <string name="my_rx_list">My Rx List</string>
+    <string name="resend_rx">Resend Rx</string>
+    <string name="view_rx_feedback">View Rx Feedback</string>
+
     <string name="doctor_name">Doctor Name</string>
     <string name="customer_name">Customer Name</string>
     <string name="daily">Daily</string>
     <string name="days">Days</string>
     <string name="dose">Dose</string>
-
     <string name="once">Once</string>
     <string name="twice">Twice</string>
     <string name="thrice">Thrice</string>
-
-    <string name="resend_rx">Resend Rx</string>
-    <string name="view_rx_feedback">View Rx Feedback</string>
-    <string name="send_availability_feedback">Send Availability Feedback</string>
-
-
-    <string name="title_activity_medical_store_home">MedicalStoreHomeActivity</string>
-    <string name="title_activity_rx_list">RxListActivity</string>
-    <string name="title_activity_pending_rx_list">PendingRxListActivity</string>
-    <string name="title_activity_select_medical_store">SelectMedicalStoreActivity</string>
-    <string name="title_activity_welcome_acitivity">WelcomeAcitivity</string>
-    <string name="title_activity_rx_inbox_item_details">Rx Details</string>
-
-    <string name="press_back_button">Press Back again to Exit</string>
-
-    <string name="sms_sent">SMS Sent</string>
-    <string name="sms_failed">SMS faild, please try again.</string>
-    <string name="email_sent">Email Sent</string>
-    <string name="email_failed">Email faild, please try again.</string>
-    <string name="no_result">No Result Found.</string>
+    <string name="logout">Logout</string>
+    <string name="back">Back</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="from_gallery">Choose from Gallery</string>
 
     <string name="show_history">Show History</string>
     <string name="no_appont_yet">No Appointments yet…</string>
@@ -230,19 +211,10 @@
     <string name="no">No</string>
     <string name="confirm_remove_workplace">Do you really want to remove work place.</string>
     <string name="no_spec_added">No Speciality added.</string>
-
+    <string name="send_availability_feedback">Send Availability Feedback</string>
     <string name="upcoming_apponts">Upcoming Appointments</string>
     <string name="time_lbl">Time:</string>
     <string name="view_other_reports">View Other Reports</string>
     <string name="address_lbl">Address:</string>
-    <string name="my_rx_list">My Rx List</string>
-
-    <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
-    <string name="yesterday">Yesterday</string>
     <string name="not_specified">Not Specified</string>
-    <string name="logout">Logout</string>
-    <string name="back">Back</string>
-    <string name="add_new_rx_item">Add New Rx Item</string>
-    <string name="rx_sent_to">Rx Sent To:</string>
 </resources>

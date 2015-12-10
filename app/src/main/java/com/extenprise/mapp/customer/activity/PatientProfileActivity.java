@@ -69,8 +69,6 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     private Spinner mSpinGender;
     private ImageView mImgView;
 
-    private static int RESULT_LOAD_IMG = 1;
-    private static int REQUEST_CAMERA = 2;
     private Bitmap mImgCopy;
 
     @Override
@@ -333,37 +331,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     }
 
     public void changeImg(View view) {
-
-        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Upload Image ");
-        dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File f = new File(android.os.Environment
-                                .getExternalStorageDirectory(), "temp.jpg");
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                        startActivityForResult(intent, REQUEST_CAMERA);
-                        //startImageCapture();
-                        break;
-
-                    case 1:
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-                        break;
-
-                    case 2:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-
-        });
-        dialogBuilder.create().show();
+        Utility.captureImage(this).create().show();
     }
 
     @Override
@@ -372,7 +340,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         try {
             // When an Image is picked
             if (resultCode == RESULT_OK) {
-                if (requestCode == RESULT_LOAD_IMG
+                if (requestCode == R.integer.request_gallery
                         && null != data) {
                     // Get the Image from data
 
@@ -395,7 +363,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                     mImgView.setImageBitmap(BitmapFactory
                             .decodeFile(imgDecodableString));
 
-                } else if (requestCode == REQUEST_CAMERA) {
+                } else if (requestCode == R.integer.request_camera) {
                     File f = new File(Environment.getExternalStorageDirectory()
                             .toString());
                     for (File temp : f.listFiles()) {

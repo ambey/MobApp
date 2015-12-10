@@ -55,22 +55,6 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         }
         WorkPlace item = list.get(position);
 
-        /*EditText mName = (EditText) v.findViewById(R.id.editTextName);
-        EditText mLoc = (EditText) v.findViewById(R.id.editTextLoc);
-        EditText  mPhone1 = (EditText) v.findViewById(R.id.editTextPhone1);
-        EditText mPhone2 = (EditText) v.findViewById(R.id.editTextPhone2);
-        EditText  mEmailIdwork = (EditText) v.findViewById(R.id.editTextEmail);
-        EditText mConsultFee = (EditText) v.findViewById(R.id.editTextConsultationFees);
-        Spinner mServPtType = (Spinner) v.findViewById(R.id.viewWorkPlaceType);
-        Spinner  mCity = (Spinner) v.findViewById(R.id.editTextCity);
-        Button  mStartTime = (Button) v.findViewById(R.id.buttonStartTime);
-        Button mEndTime = (Button) v.findViewById(R.id.buttonEndTime);
-        Spinner  mSpeciality = (Spinner) v.findViewById(R.id.editTextSpeciality);
-        EditText mExperience = (EditText) v.findViewById(R.id.editTextExperience);
-        EditText mQualification = (EditText) v.findViewById(R.id.editTextQualification);
-        Button  mMultiSpinnerDays = (Button) v.findViewById(R.id.editTextWeeklyOff);
-        Spinner  mServCatagory = (Spinner) v.findViewById(R.id.spinServiceProvCategory);*/
-
         TextView mName = (TextView) v.findViewById(R.id.editTextName);
         TextView mLoc = (TextView) v.findViewById(R.id.editTextLoc);
         TextView  mPhone1 = (TextView) v.findViewById(R.id.editTextPhone1);
@@ -80,7 +64,6 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         TextView mServPtType = (TextView) v.findViewById(R.id.viewWorkPlaceType);
         TextView  mCity = (TextView) v.findViewById(R.id.editTextCity);
         TextView  mStartTime = (TextView) v.findViewById(R.id.buttonStartTime);
-        //TextView mEndTime = (TextView) v.findViewById(R.id.buttonEndTime);
         TextView  mSpeciality = (TextView) v.findViewById(R.id.editTextSpeciality);
         TextView mExperience = (TextView) v.findViewById(R.id.editTextExperience);
         TextView mQualification = (TextView) v.findViewById(R.id.editTextQualification);
@@ -88,41 +71,24 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         TextView  mServCatagory = (TextView) v.findViewById(R.id.spinServiceProvCategory);
         TextView mPinCode = (TextView) v.findViewById(R.id.editTextPinCode);
 
-        mName.setText("Name : " + item.getName());
-        mLoc.setText("Location : " + item.getLocation());
-        mPhone1.setText("Phone1 : " + item.getPhone());
-        mPhone2.setText("Phone2 : " + item.getAltPhone());
-        mEmailIdwork.setText("EmailID : " + item.getEmailId());
-        mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
-        //mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
-        mServPtType.setText("Service Point : " + item.getServPointType());
-        //mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity()));
+        mName.setText(replaceMark(mName) + item.getName());
+        mLoc.setText(replaceMark(mLoc) + item.getLocation());
+        mPhone1.setText(replaceMark(mPhone1) + item.getPhone());
+        mPhone2.setText(mPhone2.getText().toString() + item.getAltPhone());
+        mEmailIdwork.setText(mEmailIdwork.getText().toString() + " : " + item.getEmailId());
+        mConsultFee.setText(mConsultFee.getText() + String.format("%.2f", item.getConsultFee()));
+        mServPtType.setText(replaceMark(mServPtType) + item.getServPointType());
         mCity.setText(item.getCity().toString());
-        mStartTime.setText("Working Hours : From " + Utility.getTimeString(item.getStartTime()) +
+        mStartTime.setText(replaceMark(mStartTime) + Utility.getTimeString(item.getStartTime()) +
                 " To " + Utility.getTimeString(item.getEndTime()));
-        //mEndTime.setText("" + Utility.getTimeString(item.getEndTime()));
-        mQualification.setText("Qualification :" + item.getQualification());
-        mMultiSpinnerDays.setText("Working Days : " + item.getWorkingDays());
-        //mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
-        //mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
-        mExperience.setText("Experience : " + String.format("%.01f", item.getExperience()));
-
-        /*ArrayList<String> specs = new ArrayList<>();
-        specs.add(item.getSpeciality());
-        Utility.setNewSpec(getContext(), specs, mSpeciality);*/
-        mSpeciality.setText("Speciality : " + item.getSpeciality());
-        mServCatagory.setText("Category : " + item.getServCategory());
+        mQualification.setText(replaceMark(mQualification) + item.getQualification());
+        mMultiSpinnerDays.setText(replaceMark(mMultiSpinnerDays) + item.getWorkingDays());
+        mExperience.setText(replaceMark(mExperience) + String.format("%.01f", item.getExperience()));
+        mSpeciality.setText(mSpeciality.getText().toString() + " : " + item.getSpeciality());
+        mServCatagory.setText(mServCatagory.getText().toString() + " : " + item.getServCategory());
         if(item.getPincode() != null) {
-            mPinCode.setText("Pin Code : " + item.getPincode());
+            mPinCode.setText(replaceMark(mPinCode) + item.getPincode());
         }
-
-        /*mServPtType.setClickable(false);
-        mCity.setClickable(false);
-        mStartTime.setClickable(false);
-        mEndTime.setClickable(false);
-        mMultiSpinnerDays.setClickable(false);
-        mServCatagory.setClickable(false);
-        mSpeciality.setClickable(false);*/
 
         /*v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,5 +139,9 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
     public void onNothingSelected(AdapterView<?> parent) {
         selectedPosition = -1;
         notifyDataSetChanged();
+    }
+
+    private String replaceMark(TextView tv) {
+        return tv.getText().toString().replace("*", ":");
     }
 }

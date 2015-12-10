@@ -4,7 +4,13 @@ import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -12,9 +18,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.util.Utility;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +35,8 @@ public class ServProvSignUpActivity extends FragmentActivity {
 
     private ServProvSignUpPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
+
+    //private ImageView mImgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +56,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
         int category = intent.getIntExtra("category", R.string.practitionar);
         Log.v(this.getClass().getName(), "category: " + getString(category));
 
+        //mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
 /*
         TabLayout tabLayout = (TabLayout) findViewById(R.id.slidingTabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -112,6 +126,84 @@ public class ServProvSignUpActivity extends FragmentActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            // When an Image is picked
+            if (resultCode == RESULT_OK) {
+                if (requestCode == R.integer.request_gallery
+                        && null != data) {
+                    // Get the Image from data
+
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    if (cursor == null) {
+                        return;
+                    }
+                    // Move to first row
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+                    // Set the Image in ImageView after decoding the String
+                    mImgView.setImageBitmap(BitmapFactory
+                            .decodeFile(imgDecodableString));
+
+                } else if (requestCode == R.integer.request_camera) {
+                    File f = new File(Environment.getExternalStorageDirectory()
+                            .toString());
+                    for (File temp : f.listFiles()) {
+                        if (temp.getName().equals("temp.jpg")) {
+                            f = temp;
+                            break;
+                        }
+                    }
+                    try {
+                        Bitmap bm;
+                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
+
+                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                                btmapOptions);
+
+                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
+                        mImgView.setImageBitmap(bm);
+
+                        String path = android.os.Environment
+                                .getExternalStorageDirectory()
+                                + File.separator
+                                + "Phoenix" + File.separator + "default";
+                        if (f.delete()) {
+                            Log.v(this.getClass().getName(), "File delete successful");
+                        }
+                        OutputStream fOut;
+                        File file = new File(path, String.valueOf(System
+                                .currentTimeMillis()) + ".jpg");
+                        try {
+                            fOut = new FileOutputStream(file);
+                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+                            fOut.flush();
+                            fOut.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Utility.showMessage(this, R.string.error_img_not_picked);
+                }
+            }
+        } catch (Exception e) {
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }*/
 
     /*
         public void showAddWorkPlaceScreen(View v) {

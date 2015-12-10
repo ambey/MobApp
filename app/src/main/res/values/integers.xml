@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="integer" name="login" format="integer">100</item>
+    <item type="integer" name="request_gallery" format="integer">1</item>
+    <item type="integer" name="request_camera" format="integer">2</item>
+
+
 </resources>

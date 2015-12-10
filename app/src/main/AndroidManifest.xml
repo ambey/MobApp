@@ -206,22 +206,6 @@
             android:label="@string/title_activity_first_flipper" >
         </activity>
         <activity
-            android:name=".service.activity.ServProvViewProfileActivity"
-            android:label="@string/title_activity_view_profile_main" >
-        </activity>
-        <activity
-            android:name=".service.activity.ServProvBasicInfoActivity"
-            android:label="@string/title_activity_view_profile_basic_info" >
-        </activity>
-        <activity
-            android:name=".service.activity.ServProvViewWorkDetailsActivity"
-            android:label="@string/title_activity_view_profile_work_detail" >
-        </activity>
-        <activity
-            android:name=".service.activity.ServProvWorkDetailListActivity"
-            android:label="@string/title_activity_serv_prov_work_detail_list" >
-        </activity>
-        <activity
             android:name=".service.activity.ServProvProfileActivity"
             android:label="@string/title_activity_serv_prove_profile"
             android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >

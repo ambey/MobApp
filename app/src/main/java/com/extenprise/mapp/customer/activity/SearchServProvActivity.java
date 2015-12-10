@@ -295,7 +295,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
             intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
             startActivity(intent);
         } else {
-            Utility.showMessage(this, R.string.no_result);
+            Utility.showMessage(this, R.string.msg_no_result);
         }
     }
 
