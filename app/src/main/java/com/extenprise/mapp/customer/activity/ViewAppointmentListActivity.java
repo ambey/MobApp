@@ -28,7 +28,7 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
     private ListView mUpcomingListView;
     private ListView mPastListView;
     private ArrayList<AppointmentListItem> mUpcomingList;
-    private TextView mMsgView, mUpcomMsgView;
+    private TextView mPastMsgView, mUpcomMsgView;
 
     private ProgressBar mUpcomingProgress;
     private ProgressBar mPastProgress;
@@ -47,8 +47,8 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
         mUpcomingProgress = (ProgressBar) findViewById(R.id.upcomingProgress);
         mPastProgress = (ProgressBar) findViewById(R.id.pastProgress);
-        mMsgView = (TextView) findViewById(R.id.pastAppontMsgView);
-        mUpcomMsgView = (TextView) findViewById(R.id.appontMsgView);
+        mPastMsgView = (TextView) findViewById(R.id.pastAppontsMsgView);
+        mUpcomMsgView = (TextView) findViewById(R.id.upcomingAppontsMsgView);
 
         getUpcomingList();
     }
@@ -107,11 +107,11 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         mPastListView.setAdapter(adapter);
 
         if (pastList != null && pastList.size() > 0) {
-            mMsgView.setVisibility(View.GONE);
+            mPastMsgView.setVisibility(View.GONE);
             mPastListView.setVisibility(View.VISIBLE);
         } else {
             mPastListView.setVisibility(View.GONE);
-            mMsgView.setVisibility(View.VISIBLE);
+            mPastMsgView.setVisibility(View.VISIBLE);
         }
     }
 
