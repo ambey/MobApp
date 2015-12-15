@@ -71,23 +71,23 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         TextView  mServCatagory = (TextView) v.findViewById(R.id.spinServiceProvCategory);
         TextView mPinCode = (TextView) v.findViewById(R.id.editTextPinCode);
 
-        mName.setText(replaceMark(mName) + item.getName());
-        mLoc.setText(replaceMark(mLoc) + item.getLocation());
-        mPhone1.setText(replaceMark(mPhone1) + item.getPhone());
-        mPhone2.setText(mPhone2.getText().toString() + item.getAltPhone());
-        mEmailIdwork.setText(mEmailIdwork.getText().toString() + " : " + item.getEmailId());
-        mConsultFee.setText(mConsultFee.getText() + String.format("%.2f", item.getConsultFee()));
-        mServPtType.setText(replaceMark(mServPtType) + item.getServPointType());
+        mName.setText("Name : " + item.getName());
+        mLoc.setText("Location : " + item.getLocation());
+        mPhone1.setText("Phone : " + item.getPhone());
+        mPhone2.setText("Alt Phone : " + item.getAltPhone());
+        mEmailIdwork.setText("EmailID : " + item.getEmailId());
+        mConsultFee.setText("Fee : " + String.format("%.2f", item.getConsultFee()));
+        mServPtType.setText("Service Point Type : " + item.getServPointType());
         mCity.setText(item.getCity().toString());
-        mStartTime.setText(replaceMark(mStartTime) + Utility.getTimeString(item.getStartTime()) +
+        mStartTime.setText("Practice Hours : " + Utility.getTimeString(item.getStartTime()) +
                 " To " + Utility.getTimeString(item.getEndTime()));
-        mQualification.setText(replaceMark(mQualification) + item.getQualification());
-        mMultiSpinnerDays.setText(replaceMark(mMultiSpinnerDays) + item.getWorkingDays());
-        mExperience.setText(replaceMark(mExperience) + String.format("%.01f", item.getExperience()));
-        mSpeciality.setText(mSpeciality.getText().toString() + " : " + item.getSpeciality());
-        mServCatagory.setText(mServCatagory.getText().toString() + " : " + item.getServCategory());
+        mQualification.setText("Qualification : " + item.getQualification());
+        mMultiSpinnerDays.setText("Working Days : " + item.getWorkingDays());
+        mExperience.setText("Experience : " + String.format("%.01f", item.getExperience()) + " years");
+        mSpeciality.setText("Speciality : " + item.getSpeciality());
+        mServCatagory.setText("Service Category : " + item.getServCategory());
         if(item.getPincode() != null) {
-            mPinCode.setText(replaceMark(mPinCode) + item.getPincode());
+            mPinCode.setText("PinCode : " + item.getPincode());
         }
 
         /*v.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         notifyDataSetChanged();
     }
 
-    private String replaceMark(TextView tv) {
+    /*private String replaceMark(TextView tv) {
         return tv.getText().toString().replace("*", ":");
-    }
+    }*/
 }

@@ -1,9 +1,13 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +29,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
@@ -40,6 +45,10 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -51,7 +60,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
     // Camera activity request codes
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
+    private static final int GALLERY_IMAGE_REQUEST_CODE = 200;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
     private View mRootView;
     private EditText mFirstName;
@@ -68,10 +77,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private View mFormView;
     private View mProgressView;
     private Uri fileUri; // file url to store image/video
+    private Bitmap defaultImgBits;
 
     private Button btnCapturePicture, btnRecordVideo;
 
-    private static File getOutputMediaFile(int type) {
+    /*private static File getOutputMediaFile(int type) {
 
         // External sdcard location
         File mediaStorageDir = new File(
@@ -103,7 +113,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         }
 
         return mediaFile;
-    }
+    }*/
 
     @Nullable
     @Override
@@ -145,6 +155,8 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 }
             }
         });
+
+        defaultImgBits = mImgView.getDrawingCache();
 
         int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
         if (category == R.string.medicalStore) {
@@ -279,27 +291,57 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public void captureImage(View v) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
         // start the image capture Intent
-        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);*/
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        dialogBuilder.setTitle("Upload Image ");
+        dialogBuilder.setItems(Utility.optionItems(getActivity()), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File f = new File(android.os.Environment
+                                .getExternalStorageDirectory(), "temp.jpg");
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                        getActivity().startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                        break;
+                    case 1:
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        getActivity().startActivityForResult(galleryIntent, GALLERY_IMAGE_REQUEST_CODE);
+                        break;
+                    case 2:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+
+        dialogBuilder.create().show();
+
+
+
+        //Utility.captureImage(getActivity()).create().show();
     }
 
     public void enlargeImg(View view) {
         Utility.enlargeImage(mImgView);
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
         try {
             // When an Image is picked
-            if (resultCode == RESULT_OK) {
-                if (requestCode == RESULT_LOAD_IMG
+            if (resultCode == getActivity().RESULT_OK) {
+                if (requestCode == GALLERY_IMAGE_REQUEST_CODE
                         && null != data) {
                     // Get the Image from data
 
@@ -307,19 +349,19 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     // Get the cursor
-                    Cursor cursor = getContentResolver().query(selectedImage,
+                    Cursor cursor = getActivity().getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
                     // Move to first row
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imgDecodableString = cursor.getString(columnIndex);
+                    String imgDecodableString = cursor.getString(columnIndex);
                     cursor.close();
                     // Set the Image in ImageView after decoding the String
                     mImgView.setImageBitmap(BitmapFactory
                             .decodeFile(imgDecodableString));
 
-                } else if (requestCode == REQUEST_CAMERA) {
+                } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
                     File f = new File(Environment.getExternalStorageDirectory()
                             .toString());
                     for (File temp : f.listFiles()) {
@@ -369,13 +411,26 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             Utility.showMessage(getActivity(), R.string.some_error);
         }
 
-    }*/
-
-    public Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
     }
 
+    /*public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }*/
+
     public void saveData() {
+        if(defaultImgBits == mImgView.getDrawingCache()) {
+            Utility.confirm(getActivity(), R.string.msg_without_img, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == DialogInterface.BUTTON_NEGATIVE) {
+                        Utility.showMessage(getActivity(), R.string.msg_set_img);
+                        return;
+                    }
+                    dialog.dismiss();
+                }
+            });
+        }
+
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
             sp.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));

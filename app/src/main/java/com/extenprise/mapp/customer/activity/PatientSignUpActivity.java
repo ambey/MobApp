@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.customer.data.Customer;
@@ -32,6 +33,7 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.Utility;
@@ -72,6 +74,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private ImageView mImgView;
 
     private Bitmap mImgCopy;
+    private Bitmap defaultImgBits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +115,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mSpinCity = (Spinner) findViewById(R.id.editTextCity);
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
+
+        defaultImgBits = mImgView.getDrawingCache();
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -337,13 +342,33 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         if (!isValidInput()) {
             return;
         }
+
+        if(defaultImgBits == mImgView.getDrawingCache()) {
+            Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == DialogInterface.BUTTON_NEGATIVE) {
+                        Utility.showMessage(PatientSignUpActivity.this, R.string.msg_set_img);
+                        return;
+                    }
+                    dialog.dismiss();
+                }
+            });
+        }
+
+        ServiceProvider sp = LoginHolder.servLoginRef;
+        try {
+            sp.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
         bundle.putParcelable("customer", getSignUpData(MappService.DO_SIGNUP));
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SIGNUP);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
+        if (Utility.doServiceAction(PatientSignUpActivity.this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
         }
     }
 
@@ -459,6 +484,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getCity().setCity(mSpinCity.getSelectedItem().toString());
         c.getCity().setState(mSpinState.getSelectedItem().toString());
         c.getCity().setCountry("India");
+        c.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
 
         return c;
     }

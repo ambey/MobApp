@@ -9,6 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.service.activity.ServProvProfileActivity">
 
+    <ProgressBar
+        android:id="@+id/progressView"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <ScrollView
         android:id="@+id/updateServProvform"
         android:layout_width="match_parent"
@@ -19,13 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <ProgressBar
-        android:id="@+id/progressView"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+
 
     <include
         android:id="@+id/layoutNameAvatar"

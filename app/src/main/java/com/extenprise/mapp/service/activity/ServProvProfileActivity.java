@@ -1183,6 +1183,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             case MappService.DO_UPDATE:
                 updateDone(R.string.msg_update_profile_done, data);
                 break;
+            case MappService.DO_EDIT_WORK_PLACE:
+                updateDone(R.string.msg_edit_wp_done, data);
+                break;
             case MappService.DO_REG_NO_CHECK:
                 regNoCheckDone(data);
                 break;
@@ -1192,9 +1195,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             case MappService.DO_GET_SPECIALITY:
                 getSpecialitiesDone(data);
                 break;
-            case MappService.DO_EDIT_WORK_PLACE:
-                updateDone(R.string.msg_edit_wp_done, data);
-                break;
+
             default:
                 return false;
         }
@@ -1223,7 +1224,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     dialog.dismiss();
                     Intent intent = getIntent();
                     finish();
-                    startActivity(intent);
+                    startActivity(intent); //page refresh
                 }
             });
         } else {

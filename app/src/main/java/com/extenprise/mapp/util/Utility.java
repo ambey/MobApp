@@ -369,6 +369,11 @@ public abstract class Utility {
         Log.v("Home", "############################" + context.getString(msgId));
     }
 
+    public static void showMessage(Context context, String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+        Log.v("Home", "############################" + msg);
+    }
+
     public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
         specs.add("Other");
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, specs);
@@ -591,34 +596,14 @@ public abstract class Utility {
         return context.getResources().getStringArray(R.array.days);
     }
 
-    /*public static boolean confirm(Context activity, int msg) throws Resources.NotFoundException {
-        //final boolean confirm = false;
-        final boolean[] confirm = new boolean[1];
+    public static void confirm(Context activity, int msg, DialogInterface.OnClickListener listener) throws Resources.NotFoundException {
+        //final boolean[] confirm = new boolean[1];
         new AlertDialog.Builder(activity)
                 .setMessage(msg)
-                .setPositiveButton(R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                //confirm = true;
-                                confirm[0] = true;
-                            }
-                        })
-                .setNegativeButton(R.string.no,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                confirm[0] = false;
-
-                            }
-                        }).show();
-
-        return confirm[0];
+                .setPositiveButton(R.string.yes, listener)
+                .setNegativeButton(R.string.no, listener);
     }
-*/
+
     public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         if (dialogView != null) {
@@ -747,13 +732,10 @@ public abstract class Utility {
 
     public static AlertDialog.Builder captureImage(final Activity activity) {
         //final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
-        final CharSequence[] items = {
-                activity.getString(R.string.take_photo),
-                activity.getString(R.string.from_gallery),
-                activity.getString(R.string.cancel) };
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
         dialogBuilder.setTitle("Upload Image ");
-        dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+        dialogBuilder.setItems(optionItems(activity), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -775,5 +757,14 @@ public abstract class Utility {
             }
         });
         return dialogBuilder;
+    }
+
+    public static CharSequence[] optionItems(final Activity activity) {
+        CharSequence[] items = {
+                activity.getString(R.string.take_photo),
+                activity.getString(R.string.from_gallery),
+                activity.getString(R.string.cancel) };
+
+        return items;
     }
 }

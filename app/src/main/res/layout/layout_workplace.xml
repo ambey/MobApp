@@ -125,10 +125,12 @@
 
     <TextView
         android:id="@+id/editTextConsultationFees"
-        android:layout_width="fill_parent"
+        android:layout_width="170dp"
         android:layout_height="20dp"
-        android:layout_below="@+id/editTextWeeklyOff"
-        android:text="@string/consult_fees" />
+        android:text="@string/consult_fees"
+        android:layout_below="@+id/editTextEmail"
+        android:layout_toRightOf="@+id/editTextPhone1"
+        android:layout_toEndOf="@+id/editTextPhone1" />
 
     <!--<TextView
         android:id="@+id/viewRsSign"
