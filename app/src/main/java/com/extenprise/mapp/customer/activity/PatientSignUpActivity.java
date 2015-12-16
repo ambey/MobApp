@@ -98,8 +98,15 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!TextUtils.isEmpty(mEditTextCellphone.getText().toString().trim())) {
-                        checkPhoneExistence();
+                    if (Validator.isPhoneValid(mEditTextCellphone.getText().toString().trim())) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                        bundle.putParcelable("signInData", getSignUpData(MappService.DO_PHONE_EXIST_CHECK).getSignInData());
+                        mConnection.setData(bundle);
+                        mConnection.setAction(MappService.DO_PHONE_EXIST_CHECK);
+                        if (Utility.doServiceAction(PatientSignUpActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                            Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
+                        }
                     }
                 }
             }
@@ -490,46 +497,35 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     private boolean isValidInput() {
+        EditText[] fields = { mEditTextCellphone, mEditTextPasswd, mEditTextConPasswd, mEditTextCustomerFName,
+                mEditTextCustomerLName, mEditTextWeight, mEditTextLoc, mEditTextPinCode };
+        if(Utility.areEditFieldsEmpty(this, fields)) {
+           return false;
+        }
+
         boolean valid = true;
         View focusView = null;
 
         String fName = mEditTextCustomerFName.getText().toString().trim();
         String lName = mEditTextCustomerLName.getText().toString().trim();
-        String cellPhone = mEditTextCellphone.getText().toString().trim();
+        //String cellPhone = mEditTextCellphone.getText().toString().trim();
         String emailId = mEditTextCustomerEmail.getText().toString().trim();
         String passwd1 = mEditTextPasswd.getText().toString().trim();
         String passwd2 = mEditTextConPasswd.getText().toString().trim();
         String dob = mTextViewDOB.getText().toString().trim();
         String weight = mEditTextWeight.getText().toString().trim();
-        String loc = mEditTextLoc.getText().toString().trim();
+        //String loc = mEditTextLoc.getText().toString().trim();
         String pinCode = mEditTextPinCode.getText().toString().trim();
 
-        if (TextUtils.isEmpty(fName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_field_required));
-            focusView = mEditTextCustomerFName;
-            valid = false;
-        } else if (!Validator.isOnlyAlpha(fName)) {
+        if (!Validator.isOnlyAlpha(fName)) {
             mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerFName;
-            valid = false;
-        }
-        if (TextUtils.isEmpty(lName)) {
-            mEditTextCustomerLName.setError(getString(R.string.error_field_required));
-            focusView = mEditTextCustomerLName;
-            valid = false;
-        } else if (!Validator.isOnlyAlpha(lName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
-            focusView = mEditTextCustomerLName;
             valid = false;
         }
 
-        if (TextUtils.isEmpty(cellPhone)) {
-            mEditTextCellphone.setError(getString(R.string.error_field_required));
-            focusView = mEditTextCellphone;
-            valid = false;
-        } else if (!Validator.isPhoneValid(cellPhone)) {
-            mEditTextCellphone.setError(getString(R.string.error_invalid_phone));
-            focusView = mEditTextCellphone;
+        if (!Validator.isOnlyAlpha(lName)) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            focusView = mEditTextCustomerLName;
             valid = false;
         }
 
@@ -539,16 +535,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             valid = false;
         }
 
-        if (TextUtils.isEmpty(passwd1)) {
-            mEditTextPasswd.setError(getString(R.string.error_field_required));
-            focusView = mEditTextPasswd;
-            valid = false;
-        }
-        if (TextUtils.isEmpty(passwd2)) {
-            mEditTextConPasswd.setError(getString(R.string.error_field_required));
-            focusView = mEditTextConPasswd;
-            valid = false;
-        } else if (!passwd1.equals(passwd2)) {
+        if (!passwd1.equals(passwd2)) {
             mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
             focusView = mEditTextConPasswd;
             valid = false;
@@ -558,69 +545,35 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
             valid = false;
-        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
+        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) < 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
         }
-/*
-        if (TextUtils.isEmpty(height)) {
-            mEditTextHeight.setError(getString(R.string.error_field_required));
-            focusView = mEditTextHeight;
-            valid = false;
+
+        double value = 0.0;
+        try {
+            value = Double.parseDouble(weight);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-*/
-        if (TextUtils.isEmpty(weight)) {
-            mEditTextWeight.setError(getString(R.string.error_field_required));
+        if (value <= 0.0) {
+            mEditTextWeight.setError(getString(R.string.error_invalid_weight));
             focusView = mEditTextWeight;
             valid = false;
-        } else {
-            double value = 0.0;
-            try {
-                value = Double.parseDouble(weight);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-            if (value <= 0.0) {
-                mEditTextWeight.setError(getString(R.string.error_invalid_weight));
-                focusView = mEditTextWeight;
-                valid = false;
-            }
         }
 
-        if (TextUtils.isEmpty(loc)) {
-            mEditTextLoc.setError(getString(R.string.error_field_required));
-            focusView = mEditTextLoc;
-            valid = false;
-        }
-        if (TextUtils.isEmpty(pinCode)) {
-            mEditTextPinCode.setError(getString(R.string.error_field_required));
-            focusView = mEditTextPinCode;
-            valid = false;
-        } else if (Validator.isPinCodeValid(pinCode)) {
-            mEditTextPinCode.setError("Invalid Pin Code.");
+        if (Validator.isPinCodeValid(pinCode)) {
+            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
             focusView = mEditTextPinCode;
             valid = false;
         }
-
 
         if (focusView != null) {
             focusView.requestFocus();
         }
         return valid;
     }
-
-    private void checkPhoneExistence() {
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-        bundle.putParcelable("signInData", getSignUpData(MappService.DO_PHONE_EXIST_CHECK).getSignInData());
-        mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_PHONE_EXIST_CHECK);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
-        }
-    }
-
 
     @Override
     public void datePicked(String date) {

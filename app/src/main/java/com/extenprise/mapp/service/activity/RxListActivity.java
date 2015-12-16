@@ -28,6 +28,9 @@ public class RxListActivity extends Activity {
         ArrayList<RxInboxItem> mInbox = getIntent().getParcelableArrayListExtra("inbox");
         int feedback = getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal());
         TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
+        if(mInbox == null) {
+            mInbox = new ArrayList<>();
+        }
         if(mInbox.size() > 0) {
             msgView.setVisibility(View.GONE);
         }

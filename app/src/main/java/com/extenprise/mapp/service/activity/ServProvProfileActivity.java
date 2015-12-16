@@ -147,6 +147,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         if(category.equals("Pharmacist")) {
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
+            mConsultFee.setEnabled(false);
         }
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -378,11 +379,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     public void editPersonalInfo(View view) {
-        /*boolean set = true;
-        if(mFname.isEnabled()) {
-            set = false;
-        }
-        enability(set);*/
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.layout_personal_info, null);
 
@@ -438,30 +434,18 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText[] fields = { (EditText) mFname, (EditText) mLname, (EditText) mRegNo};
+                if(Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
+                    return;
+                }
+
                 boolean cancel = false;
                 View focusView = null;
-
-                String fnm = mFname.getText().toString().trim();
-                String lnm = mLname.getText().toString().trim();
                 String email = mEmailID.getText().toString().trim();
-                String regNo = mRegNo.getText().toString();
-
-                if (TextUtils.isEmpty(mLname.getText().toString())) {
-                    mLname.setError(getString(R.string.error_field_required));
-                    focusView = mLname;
+                if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
+                    mEmailID.setError(getString(R.string.error_invalid_email));
+                    focusView = mEmailID;
                     cancel = true;
-                }
-                if (TextUtils.isEmpty(mFname.getText().toString())) {
-                    mFname.setError(getString(R.string.error_field_required));
-                    focusView = mFname;
-                    cancel = true;
-                }
-                if (!TextUtils.isEmpty(mEmailID.getText().toString())) {
-                    if (!Validator.isValidEmaillId(mEmailID.getText().toString().trim())) {
-                        mEmailID.setError(getString(R.string.error_invalid_email));
-                        focusView = mEmailID;
-                        cancel = true;
-                    }
                 }
                 int genderID = mGender.getCheckedRadioButtonId();
                 if (genderID == -1) {
@@ -471,26 +455,20 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 } else {
                     mGenderBtn = (RadioButton) dialogView.findViewById(genderID);
                 }
-                if (TextUtils.isEmpty(regNo)) {
-                    mRegNo.setError(getString(R.string.error_field_required));
-                    focusView = mRegNo;
-                    cancel = true;
-                }
-
                 if (cancel) {
                     focusView.requestFocus();
                     return;
                 }
-                mServiceProv.setfName(fnm);
-                mServiceProv.setlName(lnm);
+
+                mServiceProv.setfName(mFname.getText().toString().trim());
+                mServiceProv.setlName(mLname.getText().toString().trim());
                 mServiceProv.setEmailId(email);
                 mServiceProv.setGender(mGenderBtn.getText().toString());
-                mServiceProv.setRegNo(regNo);
+                mServiceProv.setRegNo(mRegNo.getText().toString());
                 mServiceProv.setSignInData(mSignInData);
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                bundle.putString("regno", regNo);
                 bundle.putParcelable("service", mServiceProv);
                 mConnection.setData(bundle);
                 mConnection.setAction(MappService.DO_UPDATE);
@@ -921,6 +899,12 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     private boolean isValidWorkPlace() {
+        EditText[] fields = { mExperience, mQualification,
+                mName, mLoc, mPinCode, mPhone1, mConsultFee };
+        if(Utility.areEditFieldsEmpty(this, fields)) {
+            return false;
+        }
+
         boolean valid = true;
         View focusView = null;
 
@@ -939,7 +923,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
         if (mSpeciality.getSelectedItem() != null) {
             String spec = mSpeciality.getSelectedItem().toString();
-            if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
+            if (spec.equalsIgnoreCase(getString(R.string.select_speciality)) ||
+                    spec.equals(getString(R.string.other))) {
                 //Utility.showAlert(this, "", "Please select speciality.");
                 View selectedView = mSpeciality.getSelectedView();
                 if (selectedView != null && selectedView instanceof TextView) {
@@ -951,52 +936,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 valid = false;
             }
         }
-        String exp = mExperience.getText().toString().trim();
-        if (TextUtils.isEmpty(exp)) {
-            mExperience.setError(getString(R.string.error_field_required));
-            focusView = mExperience;
-            valid = false;
-        } else {
-            double exp2 = Double.parseDouble(mExperience.getText().toString());
-            if (exp2 < 0 || exp2 > 99) {
-                mExperience.setError(getString(R.string.error_invalid_experience));
-                focusView = mExperience;
-                valid = false;
-            }
-        }
 
-        String pincode = mPinCode.getText().toString().trim();
-        if (TextUtils.isEmpty(pincode)) {
-            mPinCode.setError(getString(R.string.error_field_required));
-            focusView = mPinCode;
-            valid = false;
-        }
-
-        String qualification = mQualification.getText().toString().trim();
-        if (TextUtils.isEmpty(qualification)) {
-            mQualification.setError(getString(R.string.error_field_required));
-            focusView = mQualification;
-            valid = false;
-        }
-
-        String name = mName.getText().toString().trim();
-        if (TextUtils.isEmpty(name)) {
-            mName.setError(getString(R.string.error_field_required));
-            focusView = mName;
-            valid = false;
-        }
-        String location = mLoc.getText().toString().trim();
-        if (TextUtils.isEmpty(location)) {
-            mLoc.setError(getString(R.string.error_field_required));
-            focusView = mLoc;
-            valid = false;
-        }
-        String phone1 = mPhone1.getText().toString().trim();
-        if (TextUtils.isEmpty(phone1)) {
-            mPhone1.setError(getString(R.string.error_field_required));
-            focusView = mPhone1;
-            valid = false;
-        } else if (!Validator.isPhoneValid(phone1)) {
+        if (!Validator.isPhoneValid(mPhone1.getText().toString().trim())) {
             mPhone1.setError(getString(R.string.error_invalid_phone));
             focusView = mPhone1;
             valid = false;
@@ -1007,8 +948,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             focusView = mPhone2;
             valid = false;
         }
+
         String email = mEmailIdwork.getText().toString().trim();
-        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(mEmailIdwork.getText().toString())) {
+        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
             mEmailIdwork.setError(getString(R.string.error_invalid_email));
             focusView = mEmailIdwork;
             valid = false;
@@ -1032,18 +974,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             }
         }
         String days = mMultiSpinnerDays.getText().toString();
-        if (days.equalsIgnoreCase("Select Days")) {
+        if (days.equalsIgnoreCase(getString(R.string.practice_days))) {
             mMultiSpinnerDays.setError(getString(R.string.error_field_required));
             focusView = mMultiSpinnerDays;
             valid = false;
         }
-        String cosultFee = mConsultFee.getText().toString().trim();
-        if (TextUtils.isEmpty(cosultFee)) {
-            mConsultFee.setError(getString(R.string.error_field_required));
-            focusView = mConsultFee;
-            valid = false;
-        }
-
 
         if (focusView != null) {
             focusView.requestFocus();
@@ -1055,73 +990,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
 
     ///////////////////////////////Add New Work Place Details/////////////////////////////////
-
-    public void updateProfile(View view) {
-        boolean cancel = false;
-        View focusView = null;
-
-        String fnm = mFname.getText().toString().trim();
-        String lnm = mLname.getText().toString().trim();
-        String email = mEmailID.getText().toString().trim();
-        String regNo = mRegNo.getText().toString();
-
-        if (TextUtils.isEmpty(mLname.getText().toString())) {
-            mLname.setError(getString(R.string.error_field_required));
-            focusView = mLname;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(mFname.getText().toString())) {
-            mFname.setError(getString(R.string.error_field_required));
-            focusView = mFname;
-            cancel = true;
-        }
-        if (!TextUtils.isEmpty(mEmailID.getText().toString())) {
-            if (!Validator.isValidEmaillId(mEmailID.getText().toString().trim())) {
-                mEmailID.setError(getString(R.string.error_invalid_email));
-                focusView = mEmailID;
-                cancel = true;
-            }
-        }
-        int genderID = mGender.getCheckedRadioButtonId();
-        if (genderID == -1) {
-            mFemale.setError("Please select Gender.");
-            focusView = mFemale;
-            cancel = true;
-        } else {
-            mGenderBtn = (RadioButton) findViewById(genderID);
-        }
-        if (TextUtils.isEmpty(regNo)) {
-            mRegNo.setError(getString(R.string.error_field_required));
-            focusView = mRegNo;
-            cancel = true;
-        }
-
-        if (cancel) {
-            focusView.requestFocus();
-            return;
-        }
-
-        mServiceProv.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
-        mServiceProv.setfName(fnm);
-        mServiceProv.setlName(lnm);
-        mServiceProv.setPhone(email);
-        mServiceProv.setGender(mGenderBtn.getText().toString());
-        mServiceProv.setRegNo(regNo);
-        mServiceProv.setSignInData(mSignInData);
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        bundle.putString("regno", regNo);
-        bundle.putParcelable("service", mServiceProv);
-        mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_UPDATE);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
-        }
-
-        /*SaveServiceData task = new SaveServiceData(this);
-        task.execute((Void) null);*/
-    }
 
     /**
      * Defines callbacks for service binding, passed to bindService()
@@ -1406,9 +1274,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         //finish();
         return;
-    }
+    }*/
 }

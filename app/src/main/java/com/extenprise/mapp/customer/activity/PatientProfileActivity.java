@@ -414,6 +414,12 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     }
 
     private boolean isValidInput() {
+        EditText[] fields = { mEditTextCustomerFName, mEditTextCustomerLName, mEditTextWeight,
+                mEditTextLoc, mEditTextPinCode };
+        if(Utility.areEditFieldsEmpty(this, fields)) {
+            return false;
+        }
+
         boolean valid = true;
         View focusView = null;
 
@@ -421,25 +427,28 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         String lName = mEditTextCustomerLName.getText().toString().trim();
         String emailId = mEditTextCustomerEmail.getText().toString().trim();
         String dob = mTextViewDOB.getText().toString();
-        String weight = mEditTextWeight.getText().toString().trim();
+        //String weight = mEditTextWeight.getText().toString().trim();
         String loc = mEditTextLoc.getText().toString().trim();
         String pinCode = mEditTextPinCode.getText().toString().trim();
 
-        if (TextUtils.isEmpty(fName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_field_required));
+        if (!Validator.isOnlyAlpha(fName)) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerFName;
             valid = false;
         }
-        if (TextUtils.isEmpty(lName)) {
-            mEditTextCustomerLName.setError(getString(R.string.error_field_required));
+
+        if (!Validator.isOnlyAlpha(lName)) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerLName;
             valid = false;
         }
+
         if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
             mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEditTextCustomerEmail;
             valid = false;
         }
+
         if (TextUtils.isEmpty(dob)) {
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
@@ -449,27 +458,15 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             focusView = mTextViewDOB;
             valid = false;
         }
-        /*if (TextUtils.isEmpty(height)) {
-            mEditTextHeight.setError(getString(R.string.error_field_required));
-            focusView = mEditTextHeight;
-            valid = false;
-        }*/
-        if (TextUtils.isEmpty(weight)) {
-            mEditTextWeight.setError(getString(R.string.error_field_required));
-            focusView = mEditTextWeight;
-            valid = false;
-        }
+
         if (TextUtils.isEmpty(loc)) {
             mEditTextLoc.setError(getString(R.string.error_field_required));
             focusView = mEditTextLoc;
             valid = false;
         }
-        if (TextUtils.isEmpty(pinCode)) {
-            mEditTextPinCode.setError(getString(R.string.error_field_required));
-            focusView = mEditTextPinCode;
-            valid = false;
-        } else if (Validator.isPinCodeValid(pinCode)) {
-            mEditTextPinCode.setError("Invalid Pin Code.");
+
+        if (Validator.isPinCodeValid(pinCode)) {
+            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
             focusView = mEditTextPinCode;
             valid = false;
         }
@@ -499,8 +496,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         }
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
-        return;
-    }
+    }*/
 }

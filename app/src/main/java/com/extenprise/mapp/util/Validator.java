@@ -1,5 +1,11 @@
 package com.extenprise.mapp.util;
 
+import android.app.Activity;
+import android.text.TextUtils;
+import android.widget.EditText;
+
+import com.extenprise.mapp.R;
+
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,7 +26,7 @@ public abstract class Validator {
     }
 
     public static boolean isPhoneValid(String phoneNo) {
-        if (phoneNo.length() != 10) {
+        /*if (phoneNo.length() != 10) {
             return false;
         }
         if (phoneNo.charAt(0) == '0') {
@@ -29,7 +35,9 @@ public abstract class Validator {
         if (!isOnlyDigits(phoneNo)) {
             return false;
         }
-        return true;
+        return true;*/
+
+        return phoneNo.length() == 10 && phoneNo.charAt(0) != '0' && !isOnlyDigits(phoneNo);
     }
 
     public static boolean isOnlyDigits(String digits) {
@@ -56,7 +64,7 @@ public abstract class Validator {
         return !(pinCode == null || pinCode.length() == 6);
     }
 
-    private static boolean validatePhoneNumber(String phoneNo) {
+    /*private static boolean validatePhoneNumber(String phoneNo) {
         //validate phone numbers of format "1234567890"
         if (phoneNo.matches("\\d{10}")) return true;
             //validating phone number with -, . or spaces
@@ -68,7 +76,7 @@ public abstract class Validator {
             //return false if nothing matches the input
         else return false;
 
-    }
+    }*/
 
     public static boolean isEmailValid2(String email) {
         boolean isValid = false;

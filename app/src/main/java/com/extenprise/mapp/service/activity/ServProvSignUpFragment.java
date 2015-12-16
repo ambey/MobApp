@@ -1,5 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -132,7 +133,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!TextUtils.isEmpty(mCellphoneview.getText().toString().trim())) {
+                    if (Validator.isPhoneValid(mCellphoneview.getText().toString().trim())) {
                         checkExistence(MappService.DO_PHONE_EXIST_CHECK);
                     }
                 }
@@ -169,6 +170,13 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public boolean isValidInput(ViewPager pager) {
+        EditText[] fields = { mFirstName, mLastName, mCellphoneview,
+                mPasswdView, mCnfPasswdView, mRegistrationNumber };
+        if(Utility.areEditFieldsEmpty(getActivity(), fields)) {
+            pager.setCurrentItem(0);
+            return false;
+        }
+
         boolean cancel = false;
         View focusView = null;
 
@@ -176,61 +184,38 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         String lnm = mLastName.getText().toString();
         String cnfPasswd = mCnfPasswdView.getText().toString();
         String passwd = mPasswdView.getText().toString();
+        String email = mEmailID.getText().toString().trim();
 
-        if (TextUtils.isEmpty(cnfPasswd)) {
-            mCnfPasswdView.setError(getString(R.string.error_field_required));
-            focusView = mCnfPasswdView;
-            cancel = true;
-        } else if (!passwd.equals(cnfPasswd)) {
+        if (!passwd.equals(cnfPasswd)) {
             mCnfPasswdView.setError(getString(R.string.error_password_not_matching));
             focusView = mCnfPasswdView;
             cancel = true;
         }
-        if (TextUtils.isEmpty(passwd)) {
-            mPasswdView.setError(getString(R.string.error_field_required));
-            focusView = mPasswdView;
-            cancel = true;
-        } else if (!Validator.isPasswordValid(passwd)) {
+        if (!Validator.isPasswordValid(passwd)) {
             mPasswdView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswdView;
             cancel = true;
         }
 
-        String phone = mCellphoneview.getText().toString();
-        if (TextUtils.isEmpty(phone)) {
-            mCellphoneview.setError(getString(R.string.error_field_required));
-            focusView = mCellphoneview;
-            cancel = true;
-        } else if (!Validator.isPhoneValid(phone)) {
+        if (!Validator.isPhoneValid(mCellphoneview.getText().toString())) {
             mCellphoneview.setError(getString(R.string.error_invalid_phone));
             focusView = mCellphoneview;
             cancel = true;
         }
 
-        String email = mEmailID.getText().toString().trim();
-        if(!TextUtils.isEmpty(email)) {
-            if (!Validator.isValidEmaillId(email)) {
-                mEmailID.setError(getString(R.string.error_invalid_email));
-                focusView = mEmailID;
-                cancel = true;
-            }
+        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
+            mEmailID.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailID;
+            cancel = true;
         }
 
-        if (TextUtils.isEmpty(lnm)) {
-            mLastName.setError(getString(R.string.error_field_required));
-            focusView = mLastName;
-            cancel = true;
-        } else if (!Validator.isOnlyAlpha(lnm)) {
+        if (!Validator.isOnlyAlpha(lnm)) {
             mLastName.setError(getString(R.string.error_only_alpha));
             focusView = mLastName;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(fnm)) {
-            mFirstName.setError(getString(R.string.error_field_required));
-            focusView = mFirstName;
-            cancel = true;
-        } else if (!Validator.isOnlyAlpha(fnm)) {
+        if (!Validator.isOnlyAlpha(fnm)) {
             mFirstName.setError(getString(R.string.error_only_alpha));
             focusView = mFirstName;
             cancel = true;
@@ -247,19 +232,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         } else {
             mRadioButtonGender = (RadioButton) mRootView.findViewById(genderID);
         }
-
-        String regNo = mRegistrationNumber.getText().toString();
-        if (TextUtils.isEmpty(regNo)) {
-            mRegistrationNumber.setError(getString(R.string.error_field_required));
-            focusView = mRegistrationNumber;
-            cancel = true;
-        }
-
-        /*if (isRegNoExist(regNo)) {
-            mRegistrationNumber.setError("This Registration Number is already Registered.");
-            focusView = mRegistrationNumber;
-            cancel = true;
-        }*/
 
         if (cancel) {
             focusView.requestFocus();
@@ -325,9 +297,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         });
 
         dialogBuilder.create().show();
-
-
-
         //Utility.captureImage(getActivity()).create().show();
     }
 
@@ -340,7 +309,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         //super.onActivityResult(requestCode, resultCode, data);
         try {
             // When an Image is picked
-            if (resultCode == getActivity().RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 if (requestCode == GALLERY_IMAGE_REQUEST_CODE
                         && null != data) {
                     // Get the Image from data
@@ -385,7 +354,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                                 + File.separator
                                 + "Phoenix" + File.separator + "default";
                         f.delete();
-                        OutputStream fOut = null;
+                        OutputStream fOut;
                         File file = new File(path, String.valueOf(System
                                 .currentTimeMillis()) + ".jpg");
                         try {
@@ -393,10 +362,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                             bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
                             fOut.flush();
                             fOut.close();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

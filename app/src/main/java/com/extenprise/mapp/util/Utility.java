@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -760,11 +761,22 @@ public abstract class Utility {
     }
 
     public static CharSequence[] optionItems(final Activity activity) {
-        CharSequence[] items = {
+        return new CharSequence[]{
                 activity.getString(R.string.take_photo),
                 activity.getString(R.string.from_gallery),
                 activity.getString(R.string.cancel) };
+    }
 
-        return items;
+    public static boolean areEditFieldsEmpty(Activity activity, EditText[] fields) {
+        for(EditText field : fields) {
+            if (field.isEnabled()) {
+                if (TextUtils.isEmpty(field.getText().toString().trim())) {
+                    field.setError(activity.getString(R.string.error_field_required));
+                    field.requestFocus();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

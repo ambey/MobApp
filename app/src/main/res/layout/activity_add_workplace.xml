@@ -74,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="@string/experience"
+                    android:maxLength="2"
                     android:inputType="number" />
 
 

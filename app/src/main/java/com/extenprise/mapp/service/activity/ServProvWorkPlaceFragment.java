@@ -334,11 +334,17 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public boolean isValidInput() {
+        EditText[] fields = { mExperience, mQualification,
+                mName, mLoc, mPinCode, mPhone1, mConsultFee };
+        if(Utility.areEditFieldsEmpty(getActivity(), fields)) {
+            return false;
+        }
+
         boolean valid = true;
         View focusView = null;
 
         String category = mServCatagory.getSelectedItem().toString();
-        if (category.equalsIgnoreCase("Select Category")) {
+        if (category.equalsIgnoreCase(getString(R.string.select_category))) {
             //UIUtility.showAlert(this, "", "Please select service category.");
             View selectedView = mServCatagory.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
@@ -351,7 +357,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         }
 
         String spec = mSpeciality.getSelectedItem().toString();
-        if (spec.equalsIgnoreCase("Select Speciality") || spec.equals("Other")) {
+        if (spec.equalsIgnoreCase(getString(R.string.select_speciality)) ||
+                spec.equals(getString(R.string.other))) {
             //UIUtility.showAlert(this, "", "Please select speciality.");
             View selectedView = mSpeciality.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
@@ -363,52 +370,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             valid = false;
         }
 
-        String exp = mExperience.getText().toString().trim();
-        if (TextUtils.isEmpty(exp)) {
-            mExperience.setError(getString(R.string.error_field_required));
-            focusView = mExperience;
-            valid = false;
-        } else {
-            double exp2 = Double.parseDouble(mExperience.getText().toString());
-            if (exp2 < 0 || exp2 > 99) {
-                mExperience.setError(getString(R.string.error_invalid_experience));
-                focusView = mExperience;
-                valid = false;
-            }
-        }
-
-        String pincode = mPinCode.getText().toString().trim();
-        if (TextUtils.isEmpty(pincode)) {
-            mPinCode.setError(getString(R.string.error_field_required));
-            focusView = mPinCode;
-            valid = false;
-        }
-
-        String qualification = mQualification.getText().toString().trim();
-        if (TextUtils.isEmpty(qualification)) {
-            mQualification.setError(getString(R.string.error_field_required));
-            focusView = mQualification;
-            valid = false;
-        }
-
-        String name = mName.getText().toString().trim();
-        if (TextUtils.isEmpty(name)) {
-            mName.setError(getString(R.string.error_field_required));
-            focusView = mName;
-            valid = false;
-        }
-        String location = mLoc.getText().toString().trim();
-        if (TextUtils.isEmpty(location)) {
-            mLoc.setError(getString(R.string.error_field_required));
-            focusView = mLoc;
-            valid = false;
-        }
         String phone1 = mPhone1.getText().toString().trim();
-        if (TextUtils.isEmpty(phone1)) {
-            mPhone1.setError(getString(R.string.error_field_required));
-            focusView = mPhone1;
-            valid = false;
-        } else if (!Validator.isPhoneValid(phone1)) {
+        if (!Validator.isPhoneValid(phone1)) {
             mPhone1.setError(getString(R.string.error_invalid_phone));
             focusView = mPhone1;
             valid = false;
@@ -419,12 +382,14 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             focusView = mPhone2;
             valid = false;
         }
+
         String email = mEmailId.getText().toString().trim();
         if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(mEmailId.getText().toString())) {
             mEmailId.setError(getString(R.string.error_invalid_email));
             focusView = mEmailId;
             valid = false;
         }
+
         if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {
             mEndTime.setError(getString(R.string.error_field_required));
             focusView = mEndTime;
@@ -443,20 +408,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                 valid = false;
             }
         }
+
         String days = mMultiSpinnerDays.getText().toString();
-        if (days.equalsIgnoreCase("Select Days")) {
+        if (days.equalsIgnoreCase(getString(R.string.practice_days))) {
             mMultiSpinnerDays.setError(getString(R.string.error_field_required));
             focusView = mMultiSpinnerDays;
             valid = false;
-        }
-
-        if (mConsultFee.isEnabled()) {
-            String cosultFee = mConsultFee.getText().toString().trim();
-            if (TextUtils.isEmpty(cosultFee)) {
-                mConsultFee.setError(getString(R.string.error_field_required));
-                focusView = mConsultFee;
-                valid = false;
-            }
         }
 
         if (focusView != null) {
