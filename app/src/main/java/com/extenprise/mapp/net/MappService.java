@@ -38,11 +38,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MappService extends Service {
-    private final Messenger mMessenger = new Messenger(new LoginHandler(this));
-    private Messenger mReplyTo;
-    private int mLoginType;
-    private int mAction;
-
     public static final int DO_LOGIN = 1;
     public static final int DO_SIGNUP = 2;
     public static final int DO_PHONE_EXIST_CHECK = 3;
@@ -76,9 +71,12 @@ public class MappService extends Service {
     public static final int DO_EDIT_WORK_PLACE = 31;
     public static final int DO_UPDATE_REPORT_STATUS = 32;
     public static final int DO_CUST_PAST_APPONT_LIST = 33;
-
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
+    private final Messenger mMessenger = new Messenger(new LoginHandler(this));
+    private Messenger mReplyTo;
+    private int mLoginType;
+    private int mAction;
 
     public int getAction() {
         return mAction;
@@ -513,6 +511,7 @@ public class MappService extends Service {
                         case DO_APPONT_LIST:
                         case DO_PAST_APPONT_LIST:
                         case DO_UPCOMING_APPONT_LIST:
+                        case DO_CUST_PAST_APPONT_LIST:
                             mAppontList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<AppointmentListItem>>() {
                             }.getType());
                             break;

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.WorkingDataStore;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -32,6 +33,7 @@ public class ViewAppointmentListActivity extends Activity
     private ServiceProvider mServiceProv;
 
     private ArrayList<AppointmentListItem> mUpcomingList;
+    private ArrayList<AppointmentListItem> mPastList;
 
     private ListView mUpcomingListView;
     private ListView mPastListView;
@@ -80,6 +82,12 @@ public class ViewAppointmentListActivity extends Activity
     }
 
     private void getUpcomingList() {
+        Bundle data = WorkingDataStore.getBundle();
+        mUpcomingList = data.getParcelableArrayList("upcomingList");
+        if (mUpcomingList != null) {
+            gotUpcomingAppontList(data);
+            return;
+        }
         AppointmentListItem form = new AppointmentListItem();
         setupForm(form);
 
@@ -94,6 +102,12 @@ public class ViewAppointmentListActivity extends Activity
     }
 
     private void getPastList() {
+        Bundle data = WorkingDataStore.getBundle();
+        mPastList = data.getParcelableArrayList("pastList");
+        if (mPastList != null) {
+            gotPastAppontList(data);
+            return;
+        }
         AppointmentListItem form = new AppointmentListItem();
         setupForm(form);
         Bundle bundle = new Bundle();
@@ -113,7 +127,11 @@ public class ViewAppointmentListActivity extends Activity
     }
 
     private void gotUpcomingAppontList(Bundle data) {
-        mUpcomingList = data.getParcelableArrayList("appontList");
+        if (mUpcomingList == null) {
+            mUpcomingList = data.getParcelableArrayList("appontList");
+            Bundle bundle = WorkingDataStore.getBundle();
+            bundle.putParcelableArrayList("upcomingList", mUpcomingList);
+        }
         getPastList();
     }
 
@@ -131,13 +149,17 @@ public class ViewAppointmentListActivity extends Activity
         }
 
         Utility.showProgress(this, mPastListView, mPastProgress, false);
-        ArrayList<AppointmentListItem> list = data.getParcelableArrayList("appontList");
-        assert list != null;
-        adapter = new AppointmentListAdapter(this, 0, list, mServiceProv);
+        if (mPastList == null) {
+            mPastList = data.getParcelableArrayList("appontList");
+            Bundle bundle = WorkingDataStore.getBundle();
+            bundle.putParcelableArrayList("pastList", mPastList);
+        }
+        assert mPastList != null;
+        adapter = new AppointmentListAdapter(this, 0, mPastList, mServiceProv);
         adapter.setShowDate(true);
         mPastListView.setAdapter(adapter);
         mPastListView.setOnItemClickListener(adapter);
-        if (list.size() > 0) {
+        if (mPastList.size() > 0) {
             mPastListView.setVisibility(View.VISIBLE);
             mPastMsgView.setVisibility(View.GONE);
         } else {
@@ -161,6 +183,10 @@ public class ViewAppointmentListActivity extends Activity
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
+        /* Remove the data from WorkingDataStore */
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.remove("upcomingList");
+        bundle.remove("pastList");
         Intent intent = super.getParentActivityIntent();
         if (intent != null) {
             intent.putExtra("service", mServiceProv);

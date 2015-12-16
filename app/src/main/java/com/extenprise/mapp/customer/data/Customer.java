@@ -7,18 +7,27 @@ import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.City;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.util.Utility;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
-import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class Customer implements Parcelable {
 
+    public static final Creator<Customer> CREATOR = new Creator<Customer>() {
+
+        @Override
+        public Customer createFromParcel(Parcel source) {
+            return new Customer(source);
+        }
+
+        @Override
+        public Customer[] newArray(int size) {
+            return new Customer[size];
+        }
+    };
     private int idCustomer;
     private SignInData signInData;
     private String fName;
@@ -34,14 +43,6 @@ public class Customer implements Parcelable {
     private String pincode;
     private byte[] img;
     private ArrayList<Appointment> appointments;
-
-    public byte[] getImg() {
-        return img;
-    }
-
-    public void setImg(byte[] img) {
-        this.img = img;
-    }
 
     public Customer() {
         signInData = new SignInData();
@@ -81,6 +82,14 @@ public class Customer implements Parcelable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public byte[] getImg() {
+        return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
     }
 
     public ArrayList<Appointment> getAppointments() {
@@ -166,12 +175,12 @@ public class Customer implements Parcelable {
         this.signInData = signInData;
     }
 
-    public void setCity(City city) {
-        this.city = city;
-    }
-
     public City getCity() {
         return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public String getGender() {
@@ -221,17 +230,4 @@ public class Customer implements Parcelable {
         }
         dest.writeString(dateStr);
     }
-
-    public static final Creator<Customer> CREATOR = new Creator<Customer>() {
-
-        @Override
-        public Customer createFromParcel(Parcel source) {
-            return new Customer(source);
-        }
-
-        @Override
-        public Customer[] newArray(int size) {
-            return new Customer[size];
-        }
-    };
 }

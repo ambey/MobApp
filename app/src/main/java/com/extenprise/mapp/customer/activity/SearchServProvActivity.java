@@ -24,8 +24,6 @@ import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.SearchServProvForm;
-import com.extenprise.mapp.service.data.ServProvHasServPt;
-import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
@@ -54,11 +52,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
         }
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setDisplayShowTitleEnabled(false);
-
-        LoginHolder.spsspt = new ServProvHasServPt();
-        LoginHolder.servLoginRef = new ServiceProvider();//spinServiceProvCategory
 
         mDrClinicName = (EditText) findViewById(R.id.editTextSearchDr);
         mSpeciality = (Spinner) findViewById(R.id.editTextSearchSp);

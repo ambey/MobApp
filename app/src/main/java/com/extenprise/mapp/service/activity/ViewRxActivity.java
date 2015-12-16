@@ -127,6 +127,11 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
 
     private void gotRx(Bundle data) {
         Rx rx = data.getParcelable("rx");
+        if (rx == null || rx.getRxItemCount() == 0) {
+            TextView msgView = (TextView) findViewById(R.id.viewMsgNoItems);
+            msgView.setVisibility(View.VISIBLE);
+            return;
+        }
         ListView rxItemsList = (ListView) findViewById(R.id.listRxItems);
         ArrayList<RxInboxItem> rxList = new ArrayList<>();
         RxInboxItem inboxItem = new RxInboxItem();

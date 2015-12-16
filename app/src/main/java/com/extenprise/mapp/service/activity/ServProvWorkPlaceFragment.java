@@ -73,7 +73,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.activity_add_workplace, container, false);
-        LoginHolder.spsspt = new ServProvHasServPt();
+        //LoginHolder.spsspt = new ServProvHasServPt();
 
         options = Utility.getDaysOptions(getActivity());
         selections = new boolean[options.length];

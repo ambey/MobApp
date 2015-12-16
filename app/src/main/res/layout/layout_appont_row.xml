@@ -17,7 +17,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:enabled="false"
-        android:onClick="showRxDetails"
+        android:onClick="viewRxDetails"
         android:text="@string/view_rx" />
 
     <Button

@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:text="@string/view_rx"
-        android:onClick="showRxDetails"/>
+        android:onClick="viewRxDetails"
+        android:text="@string/view_rx" />
 
     <Button
         android:id="@+id/viewReportButton"
@@ -34,9 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
+        android:onClick="showPatientHistory"
         android:text="@string/view_more"
-        android:visibility="gone"
-        android:onClick="showPatientHistory"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/appontIdTextView"

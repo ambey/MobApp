@@ -66,7 +66,7 @@ public class PatientHistoryActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showRxDetails(View view) {
+    public void viewRxDetails(View view) {
         View parent = (View) view.getParent();
         TextView b = (TextView) parent.findViewById(R.id.appontIdTextView);
         int position = Integer.parseInt(b.getText().toString());

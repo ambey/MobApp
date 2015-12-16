@@ -18,6 +18,7 @@
     <string name="error_phone_registered">This phone number is already registered.\nPlease Sign In.</string>
     <string name="error_invalid_experience">Invalid value entered for experience</string>
     <string name="error_no_items_found">No items here</string>
+    <string name="error_no_rx_found">No Rx found.</string>
     <string name="error_invalid_weight">Invalid weight entered</string>
     <string name="error_duplicate_reg_no">This Registration Number is already used by someone else.</string>
     <string name="error_appont">Sorry! The appointment can\'t be booked.</string>
