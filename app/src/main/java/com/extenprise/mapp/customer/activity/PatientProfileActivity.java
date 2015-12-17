@@ -2,7 +2,6 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -349,7 +347,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
         try {
             boolean isImageChanged = false;
             // When an Image is picked
@@ -426,7 +424,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             if(isImageChanged) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                LoginHolder.custLoginRef.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                LoginHolder.custLoginRef.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
                 bundle.putParcelable("customer", LoginHolder.custLoginRef);
                 mConnection.setData(bundle);
                 mConnection.setAction(MappService.DO_UPLOAD_PHOTO);

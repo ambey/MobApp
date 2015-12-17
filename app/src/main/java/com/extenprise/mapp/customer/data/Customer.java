@@ -44,14 +44,6 @@ public class Customer implements Parcelable {
     private byte[] photo;
     private ArrayList<Appointment> appointments;
 
-    public byte[] getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
-    }
-
     public Customer() {
         signInData = new SignInData();
         city = new City();
@@ -80,17 +72,25 @@ public class Customer implements Parcelable {
         city.setState(fields[i++]);
         city.setCountry(fields[i]);
 
-        photo = source.createByteArray();
         age = source.readInt();
         weight = source.readFloat();
         height = source.readFloat();
         try {
-            SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
             sdf.applyPattern("dd/MM/yyyy");
             dob = sdf.parse(source.readString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        photo = source.createByteArray();
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
     public ArrayList<Appointment> getAppointments() {
@@ -223,7 +223,6 @@ public class Customer implements Parcelable {
         dest.writeInt(age);
         dest.writeFloat(weight);
         dest.writeFloat(height);
-        dest.writeByteArray(photo);
 
         String dateStr = "";
         if(dob != null) {
@@ -232,5 +231,6 @@ public class Customer implements Parcelable {
             dateStr = sdf.format(dob);
         }
         dest.writeString(dateStr);
+        dest.writeByteArray(photo);
     }
 }

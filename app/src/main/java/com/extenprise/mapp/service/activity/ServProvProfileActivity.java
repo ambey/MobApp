@@ -61,26 +61,24 @@ import java.util.ArrayList;
 public class ServProvProfileActivity extends Activity implements ResponseHandler {
 
 
-
+    //String []selectedDays = new String[_options.length];
+    protected CharSequence[] options;
+    protected boolean[] selections;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ArrayList<WorkPlace> mWorkPlaceList;
     private WorkPlace mWorkPlace;
     private ServiceProvider mServiceProv;
     private SignInData mSignInData;
-
     private TextView mMobNo, mEmailID, mRegNo, mFname, mLname, mGenderTextView;
     private TextView mDocName, workhourLBL, mViewdrLbl;
     private RadioGroup mGender;
     private RadioButton mMale, mFemale, mGenderBtn;
-
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
     private ListView listView;
     private View mFormView;
     private View mProgressView;
-
     private ImageView mImgView;
     private Bitmap mImgCopy;
-
     private EditText mName;
     private EditText mLoc;
     private Spinner mCity;
@@ -98,9 +96,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private EditText mPinCode;
     private Spinner mState;
     private Button mMultiSpinnerDays;
-    //String []selectedDays = new String[_options.length];
-    protected CharSequence[] options;
-    protected boolean[] selections;
     private String selectedDays;
 
     @Override
@@ -147,7 +142,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         if(category.equals("Pharmacist")) {
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
-            mConsultFee.setEnabled(false);
+            //mConsultFee.setEnabled(false);
         }
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");

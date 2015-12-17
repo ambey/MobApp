@@ -38,6 +38,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ArrayList<RxInboxItem> mInbox;
     private RxInboxItem mInboxItem;
+    private Button mSendAvailButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,20 +93,20 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             servProvPhoneView = (TextView) findViewById(R.id.drPhoneView);
         }
 
-        Button sendAvailabilityButton = (Button) findViewById(R.id.buttonSendAvailability);
+        mSendAvailButton = (Button) findViewById(R.id.buttonSendAvailability);
         Button resendRxButton = (Button) findViewById(R.id.buttonResendRx);
         if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
-            sendAvailabilityButton.setVisibility(View.GONE);
+            mSendAvailButton.setVisibility(View.GONE);
             if (mInboxItem.getRx().isAllItemsAvailable()) {
                 Utility.setEnabledButton(this, resendRxButton, false);
             }
         } else if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
             resendRxButton.setVisibility(View.GONE);
             if(mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal()) {
-                sendAvailabilityButton.setEnabled(false);
+                Utility.setEnabledButton(this, mSendAvailButton, false);
             }
         } else {
-            sendAvailabilityButton.setVisibility(View.GONE);
+            mSendAvailButton.setVisibility(View.GONE);
             resendRxButton.setVisibility(View.GONE);
         }
 
@@ -135,7 +136,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         ListView listView = (ListView) findViewById(R.id.listRxItems);
         Rx rx = mInbox.get(position).getRx();
         if (rx.getItems().size() == 0) {
-            sendAvailabilityButton.setVisibility(View.GONE);
+            mSendAvailButton.setVisibility(View.GONE);
             resendRxButton.setVisibility(View.GONE);
             listView.setVisibility(View.GONE);
             mConnection.setAction(MappService.DO_GET_RX_SCANNED_COPY);
@@ -158,6 +159,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     public void sendAvailabilityFeedback(View view) {
         Log.v("RxInboxDetails", "Send Availability called");
+        /* disable the button */
+        mSendAvailButton = (Button) findViewById(R.id.buttonSendAvailability);
+        Utility.setEnabledButton(this, mSendAvailButton, false);
 
         RxItemAvailability availability = new RxItemAvailability();
         availability.setIdServProvHasServPt(mInboxItem.getReportService().getIdServProvHasServPt());
@@ -182,7 +186,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void sentAvailabilityFeedback() {
-        //Utility.showMessage(this, R.string.msg_availablity_sent);
         mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         Utility.showAlert(this, "", getString(R.string.msg_availablity_sent), new DialogInterface.OnClickListener() {
             @Override
@@ -192,7 +195,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
                 startActivity(intent);
             }
         });
-        //Intent intent = getParentActivityIntent();
     }
 
     private void gotRxScannedCopy(Bundle data) {
