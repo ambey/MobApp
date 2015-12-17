@@ -46,7 +46,6 @@ import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -741,9 +740,11 @@ public abstract class Utility {
                 switch (which) {
                     case 0:
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+/*
                         File f = new File(android.os.Environment
                                 .getExternalStorageDirectory(), "temp.jpg");
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+*/
                         activity.startActivityForResult(intent, R.integer.request_camera);
                         break;
                     case 1:
@@ -778,5 +779,12 @@ public abstract class Utility {
             }
         }
         return false;
+    }
+
+    public static Uri getImageUri(Context context, Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 95, bos);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Photo", null);
+        return Uri.parse(path);
     }
 }
