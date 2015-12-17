@@ -97,6 +97,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private Spinner mState;
     private Button mMultiSpinnerDays;
     private String selectedDays;
+    private String mCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +139,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         listView = (ListView) findViewById(R.id.workDetailListView);
 
         Intent intent = getIntent();
-        String category = intent.getStringExtra("category");
-        if(category.equals("Pharmacist")) {
+        mCategory = intent.getStringExtra("category");
+        if(mCategory.equals("Pharmacist")) {
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
             //mConsultFee.setEnabled(false);
@@ -169,14 +170,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mGenderTextView.setText(mGenderTextView.getText().toString() + " : " + mServiceProv.getGender());
 
         //Get work place list from server
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        bundle.putParcelable("workPlace", mWorkPlace);
-        mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_WORK_PLACE_LIST);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
-        }
+        sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
     }
 
     @Override
@@ -297,15 +291,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //mWorkPlace = mWorkPlaceList.get(item.getItemId());
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                    bundle.putParcelable("workPlace", wp);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.DO_REMOVE_WORK_PLACE);
-                    if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                        Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
-                    }
+                    sendRequest(MappService.DO_REMOVE_WORK_PLACE, wp);
                     dialog.dismiss();
                 }
             });
@@ -395,15 +381,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     String regNo = mRegNo.getText().toString().trim();
                     if (!TextUtils.isEmpty(regNo)) {
                         mServiceProv.setRegNo(regNo);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                        bundle.putString("regno", regNo);
-                        bundle.putParcelable("service", mServiceProv);
-                        mConnection.setData(bundle);
-                        mConnection.setAction(MappService.DO_REG_NO_CHECK);
-                        if(Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                            Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
-                        }
+                        //bundle.putString("regno", regNo);
+                        sendRequest(MappService.DO_REG_NO_CHECK, null);
                     }
                 }
             }
@@ -462,14 +441,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 mServiceProv.setRegNo(mRegNo.getText().toString());
                 mServiceProv.setSignInData(mSignInData);
 
-                Bundle bundle = new Bundle();
-                bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                bundle.putParcelable("service", mServiceProv);
-                mConnection.setData(bundle);
-                mConnection.setAction(MappService.DO_UPDATE);
-                if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                    Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
-                }
+                sendRequest(MappService.DO_UPDATE, null);
                 dialog.dismiss();
             }
         });
@@ -718,15 +690,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 }
             }
             if(isImageChanged) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                 mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
-                bundle.putParcelable("customer", mServiceProv);
-                mConnection.setData(bundle);
-                mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
-                if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-                    Utility.showProgress(this, mFormView, mProgressView, true);
-                }
+                sendRequest(MappService.DO_UPLOAD_PHOTO, null);
             }
         } catch (Exception e) {
             Utility.showMessage(this, R.string.some_error);
@@ -790,7 +755,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mPhone1.setText(item.getPhone());
             mPhone2.setText(item.getAltPhone());
             mEmailIdwork.setText(item.getEmailId());
-            mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
+            if(mCategory.equals(getString(R.string.pharmacist))) {
+                mConsultFee.setEnabled(false);
+            } else {
+                mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
+            }
             mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
             mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity().getCity()));
             mState.setSelection(Utility.getSpinnerIndex(mState, item.getCity().getState()));
@@ -901,14 +870,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     wp.setSignInData(mSignInData);
                     wp.setPincode(mPinCode.getText().toString().trim());
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                    bundle.putParcelable("workPlace", wp);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(finalAction);
-                    if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
-                    }
+                    sendRequest(finalAction, wp);
                     dialog.dismiss();
                 }
             }
@@ -1112,15 +1074,13 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent); //page refresh
                 }
             });
         } else {
             mServiceProv = LoginHolder.servLoginRef;
             Utility.showMessage(this, R.string.some_error);
         }
+        refresh();
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
@@ -1298,7 +1258,28 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     /*@Override
     public void onBackPressed() {
-        //finish();
-        return;
+        unbindService(mConnection);
+        startActivity(super.getParentActivityIntent());
     }*/
+
+    private void sendRequest(int action, WorkPlace wp) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        if(wp != null) {
+            bundle.putParcelable("workPlace", wp);
+        } else {
+            bundle.putParcelable("service", mServiceProv);
+        }
+        mConnection.setData(bundle);
+        mConnection.setAction(action);
+        if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+        }
+    }
+
+    private void refresh() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 }

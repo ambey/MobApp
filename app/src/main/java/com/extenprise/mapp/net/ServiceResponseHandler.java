@@ -1,6 +1,7 @@
 package com.extenprise.mapp.net;
 
 import android.content.Context;
+import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.Message;
 
@@ -34,4 +35,9 @@ public class ServiceResponseHandler extends Handler {
         }
     }
 
+    /*public void unbindService(ServiceConnection conn) {
+        if(unbind) {
+            this.unbindService(conn);
+        }
+    }*/
 }

@@ -313,4 +313,9 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         }
         return intent;
     }
+/*
+    public void onBackPressed() {
+        unbindService(mConnection);
+        startActivity(getParentActivityIntent());
+    }*/
 }

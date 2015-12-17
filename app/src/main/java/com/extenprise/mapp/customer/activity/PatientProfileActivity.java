@@ -2,6 +2,7 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,6 +50,7 @@ import java.util.Date;
 public class PatientProfileActivity extends Activity implements ResponseHandler, DateChangeListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
+    private Customer mCustomer;
 
     private LinearLayout mContLay;
     private LinearLayout mAddrLayout;
@@ -78,6 +81,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mCustomer = LoginHolder.custLoginRef;
+
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
 
@@ -100,7 +105,32 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
 
-        viewProfile();
+        mPname.setText(String.format("%s %s\n(%d years)", mCustomer.getfName(), mCustomer.getlName(),
+                Utility.getAge(mCustomer.getDob())));
+        mMobNo.setText(mCustomer.getSignInData().getPhone());
+        if (mCustomer.getPhoto() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
+        }
+        mEditTextCustomerFName.setText(mCustomer.getfName());
+        mEditTextCustomerLName.setText(mCustomer.getlName());
+        mEditTextCustomerEmail.setText(mCustomer.getEmailId());
+
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
+        Date dt = mCustomer.getDob();
+        if (dt != null) {
+            String dob = sdf.format(mCustomer.getDob());
+            mTextViewDOB.setText(dob);
+        }
+        mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, mCustomer.getGender()));
+        mEditTextHeight.setText(String.format("%.1f", mCustomer.getHeight()));
+        mEditTextWeight.setText(String.format("%.1f", mCustomer.getWeight()));
+        mEditTextLoc.setText(mCustomer.getLocation());
+        mEditTextPinCode.setText(mCustomer.getPincode());
+        mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, mCustomer.getCity().getCity()));
+        mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, mCustomer.getCity().getState()));
+
+        setFieldsEnability(false);
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -111,47 +141,6 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
-    }
-
-    private void viewProfile() {
-        /*//DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String dob = "";
-        int d=0, m=0, y=0;
-        if(LoginHolder.custLoginRef.getDob() != null) {
-            //dob = df.format(LoginHolder.custLoginRef.getDob());
-            Date dd = LoginHolder.custLoginRef.getDob();
-            d = dd.getDay();
-            m = dd.getMonth();
-            y = dd.getYear();
-            dob = String.format("%02d/%02d/%4d", d, m + 1, y);
-        }*/
-
-        mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
-                Utility.getAge(LoginHolder.custLoginRef.getDob())));
-        mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
-        if (LoginHolder.custLoginRef.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getPhoto()));
-        }
-        mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
-        mEditTextCustomerLName.setText(LoginHolder.custLoginRef.getlName());
-        mEditTextCustomerEmail.setText(LoginHolder.custLoginRef.getEmailId());
-
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        Date dt = LoginHolder.custLoginRef.getDob();
-        if (dt != null) {
-            String dob = sdf.format(LoginHolder.custLoginRef.getDob());
-            mTextViewDOB.setText(dob);
-        }
-        mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, LoginHolder.custLoginRef.getGender()));
-        mEditTextHeight.setText(String.format("%.1f", LoginHolder.custLoginRef.getHeight()));
-        mEditTextWeight.setText(String.format("%.1f", LoginHolder.custLoginRef.getWeight()));
-        mEditTextLoc.setText(LoginHolder.custLoginRef.getLocation());
-        mEditTextPinCode.setText(LoginHolder.custLoginRef.getPincode());
-        mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, LoginHolder.custLoginRef.getCity().getCity()));
-        mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, LoginHolder.custLoginRef.getCity().getState()));
-
-        setFieldsEnability(false);
     }
 
     public void showPersonalFields(View view) {
@@ -204,11 +193,15 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         if (!isValidInput()) {
             return;
         }
+        sendRequest(getUpdateData(), MappService.DO_UPDATE);
+    }
+
+    private void sendRequest(Customer customer, int action) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-        bundle.putParcelable("customer", getUpdateData());
+        bundle.putParcelable("customer", customer);
         mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_UPDATE);
+        mConnection.setAction(action);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }
@@ -235,6 +228,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             mImgView.setImageBitmap(mImgCopy);
             Utility.showMessage(this, R.string.some_error);
         }
+        refresh();
     }
 
     private void updateDone(Bundle data) {
@@ -245,8 +239,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     LoginHolder.custLoginRef = getUpdateData();
-                    Intent intent = new Intent(PatientProfileActivity.this, PatientsHomeScreenActivity.class);
-                    startActivity(intent);
+                    refresh();
                 }
             });
         }
@@ -422,15 +415,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                 }
             }
             if(isImageChanged) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                LoginHolder.custLoginRef.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-                bundle.putParcelable("customer", LoginHolder.custLoginRef);
-                mConnection.setData(bundle);
-                mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
-                if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-                    Utility.showProgress(this, mFormView, mProgressView, true);
-                }
+                mCustomer.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                sendRequest(mCustomer, MappService.DO_UPLOAD_PHOTO);
             }
         } catch (Exception e) {
             Utility.showMessage(this, R.string.some_error);
@@ -515,12 +501,18 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     public void datePicked(String date) {
         Date datePicked = Utility.getStrAsDate(date, "dd/MM/yyyy");
         if (!Utility.isDateAfterToday(datePicked)) {
-            mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
-                    Utility.getAge(LoginHolder.custLoginRef.getDob())));
+            mPname.setText(String.format("%s %s\n(%d years)", mCustomer.getfName(), mCustomer.getlName(),
+                    Utility.getAge(mCustomer.getDob())));
         }
     }
 
     /*@Override
     public void onBackPressed() {
     }*/
+
+    private void refresh() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 }

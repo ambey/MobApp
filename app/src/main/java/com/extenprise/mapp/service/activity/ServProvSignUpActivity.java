@@ -103,8 +103,8 @@ public class ServProvSignUpActivity extends FragmentActivity {
                 }
             };
 
-            actionBar.addTab(actionBar.newTab().setTabListener(tabListener));
-            actionBar.addTab(actionBar.newTab().setTabListener(tabListener));
+            actionBar.addTab(actionBar.newTab().setText(R.string.personalDetails).setTabListener(tabListener));
+            actionBar.addTab(actionBar.newTab().setText(R.string.work_place_details).setTabListener(tabListener));
         }
     }
 

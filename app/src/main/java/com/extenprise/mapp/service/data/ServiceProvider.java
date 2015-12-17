@@ -46,7 +46,6 @@ public class ServiceProvider implements Parcelable {
 
         idServiceProvider = source.readInt();
         subscribed = source.readInt();
-        photo = source.createByteArray();
 
         String[] fields = new String[7];
         int i = 0;
@@ -74,6 +73,7 @@ public class ServiceProvider implements Parcelable {
             ServProvHasServPt s = new ServProvHasServPt(source);
             services.add(s);
         }
+        photo = source.createByteArray();
     }
 
     public String getRegNo() {
@@ -222,7 +222,6 @@ public class ServiceProvider implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(idServiceProvider);
         dest.writeInt(subscribed);
-        dest.writeByteArray(photo);
 
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
@@ -238,6 +237,7 @@ public class ServiceProvider implements Parcelable {
         for(ServProvHasServPt s : services) {
             s.writeToParcel(dest, flags);
         }
+        dest.writeByteArray(photo);
     }
 
     public static final Creator<ServiceProvider> CREATOR = new Creator<ServiceProvider>() {

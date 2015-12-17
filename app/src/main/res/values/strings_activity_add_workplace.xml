@@ -2,7 +2,7 @@
 <resources>
     <string name="title_activity_add_workplace">Work Place Details</string>
 
-    <string name="work_place_details">Work Place Details:</string>
+    <string name="work_place_details">Work Place Details</string>
     <string name="work_place_type">Work Place Type *</string>
     <string name="add_new_work_place">Add New Work Place</string>
     <string name="remove_work_place">Remove\nWork Place</string>
