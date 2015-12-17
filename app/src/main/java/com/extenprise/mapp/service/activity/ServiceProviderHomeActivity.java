@@ -65,8 +65,8 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imageDoctor);
-        if (mServiceProv.getImg() != null) {
-            img.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getImg()));
+        if (mServiceProv.getPhoto() != null) {
+            img.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
         }
         //Utility.setLastVisited(this);
     }

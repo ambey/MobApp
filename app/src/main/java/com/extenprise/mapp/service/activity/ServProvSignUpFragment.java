@@ -398,7 +398,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
-            sp.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+            sp.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -159,8 +159,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             }
         }
         mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
-        if (mServiceProv.getImg() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getImg()));
+        if (mServiceProv.getPhoto() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getPhoto()));
         }
         mFname.setText(mFname.getText().toString() + " : " + mServiceProv.getfName());
         mLname.setText(mLname.getText().toString() + " : " + mServiceProv.getlName());
@@ -650,6 +650,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
+            boolean isImageChanged = false;
             // When an Image is picked
             if (resultCode == RESULT_OK) {
                 if (requestCode == R.integer.request_gallery
@@ -674,6 +675,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     // Set the Image in ImageView after decoding the String
                     mImgView.setImageBitmap(BitmapFactory
                             .decodeFile(imgDecodableString));
+                    isImageChanged = true;
 
                 } else if (requestCode == R.integer.request_camera) {
                     File f = new File(Environment.getExternalStorageDirectory()
@@ -693,6 +695,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
                         // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
                         mImgView.setImageBitmap(bm);
+                        isImageChanged = true;
 
                         String path = android.os.Environment
                                 .getExternalStorageDirectory()
@@ -719,7 +722,28 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
             }
+            if(isImageChanged) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                bundle.putParcelable("customer", mServiceProv);
+                mConnection.setData(bundle);
+                mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
+                if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                    Utility.showProgress(this, mFormView, mProgressView, true);
+                }
+            }
         } catch (Exception e) {
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+    private void uploadPhotoDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_upload_photo);
+        } else {
+            mImgView.setImageBitmap(mImgCopy);
             Utility.showMessage(this, R.string.some_error);
         }
     }
@@ -1062,6 +1086,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 break;
             case MappService.DO_GET_SPECIALITY:
                 getSpecialitiesDone(data);
+                break;
+            case MappService.DO_UPLOAD_PHOTO:
+                uploadPhotoDone(data);
                 break;
 
             default:

@@ -37,7 +37,7 @@ public abstract class Validator {
         }
         return true;*/
 
-        return phoneNo.length() == 10 && phoneNo.charAt(0) != '0' && !isOnlyDigits(phoneNo);
+        return phoneNo.length() == 10 && phoneNo.charAt(0) != '0' && isOnlyDigits(phoneNo);
     }
 
     public static boolean isOnlyDigits(String digits) {

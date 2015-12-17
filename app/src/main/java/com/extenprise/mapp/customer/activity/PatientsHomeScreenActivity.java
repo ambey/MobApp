@@ -52,8 +52,8 @@ public class PatientsHomeScreenActivity extends Activity {
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imagePatient);
-        if (mCustomer.getImg() != null) {
-            img.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getImg()));
+        if (mCustomer.getPhoto() != null) {
+            img.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
         }
 
         //Utility.setLastVisit(this, mCustomer.getSignInData().getPhone(), "customer");

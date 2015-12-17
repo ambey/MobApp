@@ -71,6 +71,8 @@ public class MappService extends Service {
     public static final int DO_EDIT_WORK_PLACE = 31;
     public static final int DO_UPDATE_REPORT_STATUS = 32;
     public static final int DO_CUST_PAST_APPONT_LIST = 33;
+    public static final int DO_UPLOAD_PHOTO = 34;
+
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
     private final Messenger mMessenger = new Messenger(new LoginHandler(this));
@@ -108,7 +110,11 @@ public class MappService extends Service {
         if (mLoginType == CUSTOMER_LOGIN) {
             object = data.getParcelable("customer");
         }
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+        GsonBuilder gsonBuilder = new GsonBuilder().registerTypeHierarchyAdapter(byte[].class, new ByteArrayToJSONAdapter());
+        gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = gsonBuilder.create();
+        //Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
         sendAsyncMsg(msg, gson.toJson(object));
     }
 
@@ -310,6 +316,12 @@ public class MappService extends Service {
             case DO_GET_CUST_RX_LIST:
                 urlId = R.string.action_get_cust_rx_list;
                 break;
+            case DO_UPLOAD_PHOTO:
+                urlId = R.string.action_upload_photo_serv;
+                if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                    urlId = R.string.action_upload_photo_cust;
+                }
+                break;
             default:
                 return null;
         }
@@ -385,6 +397,9 @@ public class MappService extends Service {
                     break;
                 case DO_GET_CUST_RX_LIST:
                     mService.doGetCustRxList(msg);
+                    break;
+                case DO_UPLOAD_PHOTO:
+                    mService.doSignupOrUpdate(msg);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -466,6 +481,7 @@ public class MappService extends Service {
                     switch (mAction) {
                         case DO_LOGIN:
                         case DO_SIGNUP:
+                        case DO_UPLOAD_PHOTO:
                         case DO_UPDATE:
                             if (mLoginType == CUSTOMER_LOGIN) {
                                 mCustomer = gson.fromJson(responseBuf.toString(), Customer.class);

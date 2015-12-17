@@ -65,8 +65,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imageMedstore);
-        if (mServProv.getImg() != null) {
-            img.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getImg()));
+        if (mServProv.getPhoto() != null) {
+            img.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto()));
         }
     }
 

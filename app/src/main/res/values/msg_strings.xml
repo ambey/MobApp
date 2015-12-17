@@ -23,5 +23,6 @@
     <string name="msg_no_result">No Result Found.</string>
     <string name="msg_without_img">Do you want to Register without image?</string>
     <string name="msg_set_img">Please set Image</string>
+    <string name="msg_upload_photo">Photo Uploaded Successfully</string>
 
 </resources>

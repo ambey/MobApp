@@ -365,7 +365,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
-            sp.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+            sp.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -491,7 +491,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getCity().setCity(mSpinCity.getSelectedItem().toString());
         c.getCity().setState(mSpinState.getSelectedItem().toString());
         c.getCity().setCountry("India");
-        c.setImg(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+        c.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
 
         return c;
     }

@@ -37,4 +37,6 @@
     <string name="action_get_cust_past_apponts">customer/GetPastAppontList.action</string>
     <string name="action_get_cust_rx_list">customer/GetRxList.action</string>
     <string name="action_update_report_status">service/UpdateReportServiceStatus.action</string>
+    <string name="action_upload_photo_serv">service/UploadPhoto.action</string>
+    <string name="action_upload_photo_cust">customer/UploadPhoto.action</string>
 </resources>

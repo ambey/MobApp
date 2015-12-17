@@ -113,7 +113,6 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
-
     }
 
     private void viewProfile() {
@@ -132,8 +131,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         mPname.setText(String.format("%s %s\n(%d years)", LoginHolder.custLoginRef.getfName(), LoginHolder.custLoginRef.getlName(),
                 Utility.getAge(LoginHolder.custLoginRef.getDob())));
         mMobNo.setText(LoginHolder.custLoginRef.getSignInData().getPhone());
-        if (LoginHolder.custLoginRef.getImg() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getImg()));
+        if (LoginHolder.custLoginRef.getPhoto() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.custLoginRef.getPhoto()));
         }
         mEditTextCustomerFName.setText(LoginHolder.custLoginRef.getfName());
         mEditTextCustomerLName.setText(LoginHolder.custLoginRef.getlName());
@@ -223,7 +222,21 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             updateDone(data);
             return true;
         }
+        if(action == MappService.DO_UPLOAD_PHOTO) {
+            uploadPhotoDone(data);
+            return true;
+        }
         return false;
+    }
+
+    private void uploadPhotoDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_upload_photo);
+        } else {
+            mImgView.setImageBitmap(mImgCopy);
+            Utility.showMessage(this, R.string.some_error);
+        }
     }
 
     private void updateDone(Bundle data) {
@@ -338,6 +351,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
+            boolean isImageChanged = false;
             // When an Image is picked
             if (resultCode == RESULT_OK) {
                 if (requestCode == R.integer.request_gallery
@@ -362,6 +376,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                     // Set the Image in ImageView after decoding the String
                     mImgView.setImageBitmap(BitmapFactory
                             .decodeFile(imgDecodableString));
+                    isImageChanged = true;
 
                 } else if (requestCode == R.integer.request_camera) {
                     File f = new File(Environment.getExternalStorageDirectory()
@@ -381,6 +396,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
 
                         // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
                         mImgView.setImageBitmap(bm);
+                        isImageChanged = true;
 
                         String path = android.os.Environment
                                 .getExternalStorageDirectory()
@@ -407,10 +423,20 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
             }
+            if(isImageChanged) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                LoginHolder.custLoginRef.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                bundle.putParcelable("customer", LoginHolder.custLoginRef);
+                mConnection.setData(bundle);
+                mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
+                if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                    Utility.showProgress(this, mFormView, mProgressView, true);
+                }
+            }
         } catch (Exception e) {
             Utility.showMessage(this, R.string.some_error);
         }
-
     }
 
     private boolean isValidInput() {
