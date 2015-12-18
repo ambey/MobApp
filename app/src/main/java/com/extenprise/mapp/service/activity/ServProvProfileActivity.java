@@ -734,6 +734,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         Utility.showProgress(this, mFormView, mProgressView, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
+            LoginHolder.servLoginRef.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
             mImgView.setImageBitmap(mImgCopy);
             Utility.showMessage(this, R.string.some_error);
