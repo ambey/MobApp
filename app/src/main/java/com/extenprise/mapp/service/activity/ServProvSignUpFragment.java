@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -157,14 +158,13 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             }
         });
 
-        defaultImgBits = mImgView.getDrawingCache();
-
         int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
         if (category == R.string.medicalStore) {
             mImgView.setImageResource(R.drawable.medstore);
         } else if (category == R.string.diagnosticCenter) {
             mImgView.setImageResource(R.drawable.diagcenter);
         }
+        defaultImgBits = ((BitmapDrawable) mImgView.getDrawable()).getBitmap();
 
         return mRootView;
     }
@@ -308,74 +308,47 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
+            boolean isImageChanged = false;
+            Uri selectedImage = null;
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
-                if (requestCode == GALLERY_IMAGE_REQUEST_CODE
+                if ((requestCode == R.integer.request_gallery ||
+                        requestCode == R.integer.request_edit)
                         && null != data) {
                     // Get the Image from data
+                    selectedImage = data.getData();
+                    mImgView.setImageURI(selectedImage);
+                    isImageChanged = true;
 
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    // Get the cursor
-                    Cursor cursor = getActivity().getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);
-                    // Move to first row
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-                    // Set the Image in ImageView after decoding the String
-                    mImgView.setImageBitmap(BitmapFactory
-                            .decodeFile(imgDecodableString));
-
-                } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-                    File f = new File(Environment.getExternalStorageDirectory()
-                            .toString());
-                    for (File temp : f.listFiles()) {
-                        if (temp.getName().equals("temp.jpg")) {
-                            f = temp;
-                            break;
-                        }
-                    }
-                    try {
-                        Bitmap bm;
-                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-
-                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                                btmapOptions);
-
-                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
-                        mImgView.setImageBitmap(bm);
-
-                        String path = android.os.Environment
-                                .getExternalStorageDirectory()
-                                + File.separator
-                                + "Phoenix" + File.separator + "default";
-                        f.delete();
-                        OutputStream fOut;
-                        File file = new File(path, String.valueOf(System
-                                .currentTimeMillis()) + ".jpg");
-                        try {
-                            fOut = new FileOutputStream(file);
-                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
-                            fOut.flush();
-                            fOut.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                } else if (requestCode == R.integer.request_camera) {
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    mImgView.setImageBitmap(bitmap);
+                    selectedImage = Utility.getImageUri(getActivity(), bitmap);
+                    isImageChanged = true;
                 } else {
                     Utility.showMessage(getActivity(), R.string.error_img_not_picked);
                 }
+            } else if (requestCode == R.integer.request_edit) {
+                isImageChanged = true;
+            }
+            if (isImageChanged) {
+                if (requestCode != R.integer.request_edit) {
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(editIntent, R.integer.request_edit);
+                } /*else {
+                    mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);
+
+                    mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);
+                }*/
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Utility.showMessage(getActivity(), R.string.some_error);
         }
-
     }
 
     /*public Uri getOutputMediaFileUri(int type) {
@@ -383,7 +356,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }*/
 
     public void saveData() {
-        if(defaultImgBits == mImgView.getDrawingCache()) {
+        if(defaultImgBits == ((BitmapDrawable) mImgView.getDrawable()).getBitmap()) {
             Utility.confirm(getActivity(), R.string.msg_without_img, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -398,7 +371,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
-            sp.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+            sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } catch (Exception e) {
             e.printStackTrace();
         }

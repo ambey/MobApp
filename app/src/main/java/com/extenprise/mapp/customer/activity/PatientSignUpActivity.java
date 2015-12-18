@@ -107,6 +107,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                         if (Utility.doServiceAction(PatientSignUpActivity.this, mConnection, BIND_AUTO_CREATE)) {
                             Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
                         }
+                    } else {
+                        mEditTextCellphone.setError(getString(R.string.error_field_required));
+                        //mEditTextCellphone.requestFocus();
                     }
                 }
             }
@@ -123,7 +126,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
 
-        defaultImgBits = mImgView.getDrawingCache();
+        defaultImgBits = ((BitmapDrawable) mImgView.getDrawable()).getBitmap();
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -253,78 +256,44 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
         try {
+            boolean isImageChanged = false;
+            Uri selectedImage = null;
             // When an Image is picked
             if (resultCode == RESULT_OK) {
-                if (requestCode == R.integer.request_gallery
+                if ((requestCode == R.integer.request_gallery ||
+                        requestCode == R.integer.request_edit)
                         && null != data) {
                     // Get the Image from data
-
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);
-                    if (cursor == null) {
-                        return;
-                    }
-                    // Move to first row
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-                    // Set the Image in ImageView after decoding the String
-                    mImgView.setImageBitmap(BitmapFactory
-                            .decodeFile(imgDecodableString));
+                    selectedImage = data.getData();
+                    mImgView.setImageURI(selectedImage);
+                    isImageChanged = true;
 
                 } else if (requestCode == R.integer.request_camera) {
-                    File f = new File(Environment.getExternalStorageDirectory()
-                            .toString());
-                    for (File temp : f.listFiles()) {
-                        if (temp.getName().equals("temp.jpg")) {
-                            f = temp;
-                            break;
-                        }
-                    }
-                    try {
-                        Bitmap bm;
-                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-
-                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                                btmapOptions);
-
-                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
-                        mImgView.setImageBitmap(bm);
-
-                        String path = android.os.Environment
-                                .getExternalStorageDirectory()
-                                + File.separator
-                                + "Phoenix" + File.separator + "default";
-                        if (f.delete()) {
-                            Log.v(this.getClass().getName(), "File delete successful");
-                        }
-                        OutputStream fOut;
-                        File file = new File(path, String.valueOf(System
-                                .currentTimeMillis()) + ".jpg");
-                        try {
-                            fOut = new FileOutputStream(file);
-                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
-                            fOut.flush();
-                            fOut.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    mImgView.setImageBitmap(bitmap);
+                    selectedImage = Utility.getImageUri(this, bitmap);
+                    isImageChanged = true;
                 } else {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
+            } else if (requestCode == R.integer.request_edit) {
+                isImageChanged = true;
+            }
+            if (isImageChanged) {
+                if (requestCode != R.integer.request_edit) {
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(editIntent, R.integer.request_edit);
+                } /*else {
+                    mCustomer.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+                    sendRequest(mCustomer, MappService.DO_UPLOAD_PHOTO);
+                }*/
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Utility.showMessage(this, R.string.some_error);
         }
     }
@@ -350,7 +319,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             return;
         }
 
-        if(defaultImgBits == mImgView.getDrawingCache()) {
+        if(defaultImgBits == ((BitmapDrawable) mImgView.getDrawable()).getBitmap()) {
             Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -365,7 +334,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
-            sp.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+            sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -491,7 +460,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getCity().setCity(mSpinCity.getSelectedItem().toString());
         c.getCity().setState(mSpinState.getSelectedItem().toString());
         c.getCity().setCountry("India");
-        c.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+        c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
 
         return c;
     }
@@ -577,7 +546,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     @Override
     public void datePicked(String date) {
-        int age = Utility.getAge(Utility.getStrAsDate(date, "dd/MM/yyyy"));
-
+        //int age = Utility.getAge(Utility.getStrAsDate(date, "dd/MM/yyyy"));
     }
 }

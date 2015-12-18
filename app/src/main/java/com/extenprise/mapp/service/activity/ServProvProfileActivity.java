@@ -66,11 +66,12 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     protected boolean[] selections;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ArrayList<WorkPlace> mWorkPlaceList;
-    private WorkPlace mWorkPlace;
     private ServiceProvider mServiceProv;
     private SignInData mSignInData;
-    private TextView mMobNo, mEmailID, mRegNo, mFname, mLname, mGenderTextView;
-    private TextView mDocName, workhourLBL, mViewdrLbl;
+    private TextView mEmailID;
+    private TextView mRegNo;
+    private TextView mFname;
+    private TextView mLname;
     private RadioGroup mGender;
     private RadioButton mMale, mFemale, mGenderBtn;
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
@@ -110,7 +111,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         options = Utility.getDaysOptions(this);
         selections = new boolean[options.length];
 
-        mWorkPlace = new WorkPlace();
+        WorkPlace mWorkPlace = new WorkPlace();
         mWorkPlaceList = new ArrayList<>();
         mServiceProv = new ServiceProvider();
         mSignInData = new SignInData();
@@ -125,18 +126,18 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
         mFname = (TextView) findViewById(R.id.textViewFName);
         mLname = (TextView) findViewById(R.id.textViewLName);
-        mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
-        mMobNo = (TextView) findViewById(R.id.editTextMobNum);
         mEmailID = (TextView) findViewById(R.id.editTextEmail);
         mRegNo = (TextView) findViewById(R.id.editTextRegNum);
-
         mGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-        mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
-        mDocName = (TextView) findViewById(R.id.textviewDocname);
         mMale = (RadioButton) findViewById(R.id.radioButtonMale);
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
         listView = (ListView) findViewById(R.id.workDetailListView);
+
+        TextView mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
+        TextView mMobNo = (TextView) findViewById(R.id.editTextMobNum);
+        TextView mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
+        TextView mDocName = (TextView) findViewById(R.id.textviewDocname);
 
         Intent intent = getIntent();
         mCategory = intent.getStringExtra("category");
@@ -186,78 +187,11 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showWorkPlaceList() {
-        final Cursor cursor = SearchServProv.getCursor();
-        String[] values = new String[]{
-                MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY,
-                MappContract.Service.COLUMN_NAME_SERVICE_NAME,
-                MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION,
-                MappContract.ServProvHasServPt.COLUMN_NAME_EXP,
-                MappContract.ServicePoint.COLUMN_NAME_NAME,
-                MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE,
-                MappContract.ServicePoint.COLUMN_NAME_LOCATION,
-                MappContract.ServicePoint.COLUMN_NAME_ID_CITY,
-                MappContract.ServicePoint.COLUMN_NAME_PHONE,
-                MappContract.ServicePoint.COLUMN_NAME_ALT_PHONE,
-                MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID,
-                MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME,
-                MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME,
-                MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS,
-                MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE
-        };
-        int[] viewIds = new int[]{
-                R.id.spinServiceProvCategory,
-                R.id.editTextSpeciality,
-                R.id.editTextQualification,
-                R.id.editTextExperience,
-                R.id.editTextName,
-                R.id.viewWorkPlaceType,
-                R.id.editTextLoc,
-                R.id.editTextCity,
-                R.id.editTextPhone1,
-                R.id.editTextPhone2,
-                R.id.editTextEmail,
-                R.id.buttonStartTime,
-                R.id.buttonEndTime,
-                R.id.editTextWeeklyOff,
-                R.id.editTextConsultationFees
-        };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                R.layout.activity_servprov_wrkdetail_list,
-                cursor,
-                values,
-                viewIds, 0) {
-            @Override
-            public View getView(int position, View convertView,
-                                ViewGroup parent) {
-
-                View view = super.getView(position, convertView, parent);
-                cursor.moveToPosition(position);
-
-                TextView mTextViewEdit = (TextView) findViewById(R.id.textViewEditWrkDetail);
-                TextView mViewEdit = (TextView) findViewById(R.id.viewEditWrkDetail);
-
-                mTextViewEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        editWorkPlaceInfo(v);
-                    }
-                });
-
-                return view;
-            }
-        };
-        listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-        listView.setAdapter(adapter);
     }
 
     @Override
@@ -300,414 +234,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         return super.onContextItemSelected(item);
     }
 
-    /*@Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-
-        if (!AdapterView.AdapterContextMenuInfo.class.isInstance (item.getMenuInfo ())) {
-            return false;
-        }
-        AdapterView.AdapterContextMenuInfo cmi =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        mWorkPlace = (WorkPlace) listView.getItemAtPosition(cmi.position);
-
-        try {
-            if (item.getItemId() == R.string.edit1) {
-                getWorkPlaceView(mWorkPlace).show();
-                return true;
-            } else if (item.getItemId() == R.string.remove) {
-                if(Utility.confirm(this, R.string.confirm_remove_workplace)) {
-                    Utility.showProgress(this, mFormView, mProgressView, true);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                    bundle.putParcelable("mWorkPlace", mWorkPlace);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.REMOVE_WORK_PLACE);
-                    Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-                    return true;
-                }
-            }
-        }
-        catch (Exception error) {
-            Utility.showMessage(this, R.string.some_error);
-            return false;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }*/
-
-    public void showtimeFields(View view) {
-        int[] buttonIds = new int[]{
-                R.id.buttonStartTime,
-                R.id.buttonEndTime,
-        };
-        for (int buttonId : buttonIds) {
-            Button btn = (Button) findViewById(buttonId);
-            if (btn.getVisibility() == View.GONE) {
-                Utility.expand(btn, view);
-            } else {
-                Utility.collapse(btn, view);
-            }
-        }
-    }
-
-    private void enability(boolean set) {
-        mFname.setEnabled(set);
-        mLname.setEnabled(set);
-        mEmailID.setEnabled(set);
-        mRegNo.setEnabled(set);
-        mMale.setEnabled(set);
-        mFemale.setEnabled(set);
-        mMobNo.setEnabled(false);
-    }
-
-    public void editPersonalInfo(View view) {
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.layout_personal_info, null);
-
-        dialogView.findViewById(R.id.editTextCellphone).setVisibility(View.GONE);
-        dialogView.findViewById(R.id.editTextPasswd).setVisibility(View.GONE);
-        dialogView.findViewById(R.id.editTextCnfPasswd).setVisibility(View.GONE);
-
-        mFname = (EditText) dialogView.findViewById(R.id.editTextFName);
-        mLname = (EditText) dialogView.findViewById(R.id.editTextLName);
-        mEmailID = (EditText) dialogView.findViewById(R.id.editTextEmail);
-        mGender = (RadioGroup) dialogView.findViewById(R.id.radioGroupGender);
-        mMale = (RadioButton) dialogView.findViewById(R.id.radioButtonMale);
-        mFemale = (RadioButton) dialogView.findViewById(R.id.radioButtonFemale);
-        mRegNo = (EditText) dialogView.findViewById(R.id.editTextRegistrationNumber);
-        mRegNo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    String regNo = mRegNo.getText().toString().trim();
-                    if (!TextUtils.isEmpty(regNo)) {
-                        mServiceProv.setRegNo(regNo);
-                        //bundle.putString("regno", regNo);
-                        sendRequest(MappService.DO_REG_NO_CHECK, null);
-                    }
-                }
-            }
-        });
-
-        mFname.setText(mServiceProv.getfName());
-        mLname.setText(mServiceProv.getlName());
-        String email = getString(R.string.not_specified);
-        if(mServiceProv.getEmailId() != null) {
-            email = mServiceProv.getEmailId();
-        }
-        mEmailID.setText(email);
-        mRegNo.setText(mServiceProv.getRegNo());
-        if (mServiceProv.getGender().equalsIgnoreCase("Male")) {
-            mMale.setChecked(true);
-        } else {
-            mFemale.setChecked(true);
-        }
-
-        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.personalDetails).create();
-        dialog.show();
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText[] fields = { (EditText) mFname, (EditText) mLname, (EditText) mRegNo};
-                if(Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
-                    return;
-                }
-
-                boolean cancel = false;
-                View focusView = null;
-                String email = mEmailID.getText().toString().trim();
-                if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
-                    mEmailID.setError(getString(R.string.error_invalid_email));
-                    focusView = mEmailID;
-                    cancel = true;
-                }
-                int genderID = mGender.getCheckedRadioButtonId();
-                if (genderID == -1) {
-                    mFemale.setError(getString(R.string.error_select_gender));
-                    focusView = mFemale;
-                    cancel = true;
-                } else {
-                    mGenderBtn = (RadioButton) dialogView.findViewById(genderID);
-                }
-                if (cancel) {
-                    focusView.requestFocus();
-                    return;
-                }
-
-                mServiceProv.setfName(mFname.getText().toString().trim());
-                mServiceProv.setlName(mLname.getText().toString().trim());
-                mServiceProv.setEmailId(email);
-                mServiceProv.setGender(mGenderBtn.getText().toString());
-                mServiceProv.setRegNo(mRegNo.getText().toString());
-                mServiceProv.setSignInData(mSignInData);
-
-                sendRequest(MappService.DO_UPDATE, null);
-                dialog.dismiss();
-            }
-        });
-    }
-
-    public void editWorkPlaceInfo(View v) {
-        boolean set = true;
-        EditText nm = (EditText) v.findViewById(R.id.editTextName);
-        if (nm.isEnabled()) {
-            set = false;
-        }
-        int[] editTxtIds = new int[]{
-                R.id.editTextQualification,
-                R.id.editTextExperience,
-                R.id.editTextName,
-                R.id.editTextLoc,
-                R.id.editTextPhone1,
-                R.id.editTextPhone2,
-                R.id.editTextEmail,
-                R.id.editTextConsultationFees
-        };
-        for (int editTxtId : editTxtIds) {
-            EditText txt = (EditText) v.findViewById(editTxtId);
-            txt.setEnabled(set);
-        }
-
-        int[] buttonIds = new int[]{
-                R.id.buttonStartTime,
-                R.id.buttonEndTime,
-                R.id.editTextWeeklyOff
-        };
-        for (int buttonId : buttonIds) {
-            Button btn = (Button) v.findViewById(buttonId);
-            btn.setEnabled(set);
-            btn.setClickable(true);
-        }
-
-        int[] spinnerIds = new int[]{
-                R.id.spinServiceProvCategory,
-                R.id.editTextSpeciality,
-                R.id.viewWorkPlaceType,
-                R.id.editTextCity
-        };
-        for (int spinnerId : spinnerIds) {
-            Spinner spn = (Spinner) v.findViewById(spinnerId);
-            spn.setEnabled(set);
-            spn.setClickable(true);
-        }
-    }
-
-    public void openPersonalInfo(View view) {
-        if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-            //Utility.collapse(mPersonalInfo, null);
-            mPersonalInfo.setVisibility(View.GONE);
-        } else {
-            //Utility.expand(mPersonalInfo, null);
-            mPersonalInfo.setVisibility(View.VISIBLE);
-            if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-                //Utility.collapse(mWorkPlaceInfo, null);
-                mWorkPlaceInfo.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    public void openWorkPlaceInfo(View view) {
-        if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-            //Utility.collapse(mWorkPlaceInfo, null);
-            mWorkPlaceInfo.setVisibility(View.GONE);
-        } else {
-            mWorkPlaceInfo.setVisibility(View.VISIBLE);
-            //Utility.expand(mWorkPlaceInfo, null);
-            if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-                //Utility.collapse(mPersonalInfo, null);
-                mPersonalInfo.setVisibility(View.GONE);
-            }
-        }
-    }
-
-
-    ///////////////////////////Multi spinner..../////////////////////////////
-
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog) {
-        super.onPrepareDialog(id, dialog);
-        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-            setupSelection();
-        }
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        return new AlertDialog.Builder(this)
-                .setTitle("Available Days")
-                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
-                .setPositiveButton("OK", new DialogButtonClickHandler())
-                .create();
-    }
-
-    protected void printSelectedDays() {
-        if (selections[0]) {
-            setupAllDaysSelected();
-            return;
-        }
-        int i = 1;
-        selectedDays = getString(R.string.select_days);
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays = options[i++].toString();
-                break;
-            }
-        }
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays += "," + options[i].toString();
-            }
-        }
-    }
-
-    private void setupSelection() {
-        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
-        selections[0] = false;
-        for (String d : selectedDays) {
-            selections[getDayIndex(d)] = true;
-        }
-    }
-
-    private int getDayIndex(String day) {
-        for (int i = 0; i < options.length; i++) {
-            if (day.equals(options[i])) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private void setupAllDaysSelected() {
-        selections[0] = false;
-        selectedDays = options[1].toString();
-        for (int i = 2; i < options.length; i++) {
-            selectedDays += "," + options[i];
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        BitmapDrawable drawable = (BitmapDrawable) mImgView.getDrawable();
-        if (drawable != null) {
-            Bitmap bitmap = drawable.getBitmap();
-            outState.putParcelable("image", bitmap);
-        }
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return mImgCopy;
-    }
-
-    public void changeImage(View view) {
-        Utility.captureImage(this).create().show();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-
-
-    /////////////////////////////Image Upload/////////////////////////////
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            boolean isImageChanged = false;
-            // When an Image is picked
-            if (resultCode == RESULT_OK) {
-                if (requestCode == R.integer.request_gallery
-                        && null != data) {
-                    // Get the Image from data
-
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);
-                    if (cursor == null) {
-                        return;
-                    }
-                    // Move to first row
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-                    // Set the Image in ImageView after decoding the String
-                    mImgView.setImageBitmap(BitmapFactory
-                            .decodeFile(imgDecodableString));
-                    isImageChanged = true;
-
-                } else if (requestCode == R.integer.request_camera) {
-                    File f = new File(Environment.getExternalStorageDirectory()
-                            .toString());
-                    for (File temp : f.listFiles()) {
-                        if (temp.getName().equals("temp.jpg")) {
-                            f = temp;
-                            break;
-                        }
-                    }
-                    try {
-                        Bitmap bm;
-                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-
-                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                                btmapOptions);
-
-                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
-                        mImgView.setImageBitmap(bm);
-                        isImageChanged = true;
-
-                        String path = android.os.Environment
-                                .getExternalStorageDirectory()
-                                + File.separator
-                                + "Phoenix" + File.separator + "default";
-                        if (f.delete()) {
-                            Log.v(this.getClass().getName(), "File delete successful");
-                        }
-                        OutputStream fOut;
-                        File file = new File(path, String.valueOf(System
-                                .currentTimeMillis()) + ".jpg");
-                        try {
-                            fOut = new FileOutputStream(file);
-                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
-                            fOut.flush();
-                            fOut.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Utility.showMessage(this, R.string.error_img_not_picked);
-                }
-            }
-            if(isImageChanged) {
-                mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
-                sendRequest(MappService.DO_UPLOAD_PHOTO, null);
-            }
-        } catch (Exception e) {
-            Utility.showMessage(this, R.string.some_error);
-        }
-    }
-
-    private void uploadPhotoDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
-        if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.msg_upload_photo);
-        } else {
-            mImgView.setImageBitmap(mImgCopy);
-            Utility.showMessage(this, R.string.some_error);
-        }
-    }
-
     public void addNewWorkPlace(View view) {
         /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
         adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
@@ -745,7 +271,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mQualification = (EditText) dialogView.findViewById(R.id.editTextQualification);
         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
-        workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
+        TextView workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
         if (item != null) {
             action = MappService.DO_EDIT_WORK_PLACE;
@@ -967,59 +493,209 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         return valid;
     }
 
-    ////////////////////////////////////////////////////////////////////////
+    public void editPersonalInfo(View view) {
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.layout_personal_info, null);
 
+        dialogView.findViewById(R.id.editTextCellphone).setVisibility(View.GONE);
+        dialogView.findViewById(R.id.editTextPasswd).setVisibility(View.GONE);
+        dialogView.findViewById(R.id.editTextCnfPasswd).setVisibility(View.GONE);
 
-    ///////////////////////////////Add New Work Place Details/////////////////////////////////
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-/*
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        private Messenger mService;
-        private boolean mBound;
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mWorkPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
-            mService = new Messenger(service);
-            mBound = true;
-            Message msg = null;
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            if (mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
-                bundle.putString("regno", mRegNo.getText().toString().trim());
-                bundle.putParcelable("service", LoginHolder.servLoginRef);
-            } else if (mServiceAction == MappService.DO_GET_SPECIALITY) {
-                SearchServProvForm mForm = new SearchServProvForm();
-                mForm.setCategory(mServCatagory.getSelectedItem().toString());
-                bundle.putParcelable("form", mForm);
-            } else {
-                bundle.putParcelable("mWorkPlace", mWorkPlace);
-                //for add, remove and get Workplace.
+        mFname = (EditText) dialogView.findViewById(R.id.editTextFName);
+        mLname = (EditText) dialogView.findViewById(R.id.editTextLName);
+        mEmailID = (EditText) dialogView.findViewById(R.id.editTextEmail);
+        mGender = (RadioGroup) dialogView.findViewById(R.id.radioGroupGender);
+        mMale = (RadioButton) dialogView.findViewById(R.id.radioButtonMale);
+        mFemale = (RadioButton) dialogView.findViewById(R.id.radioButtonFemale);
+        mRegNo = (EditText) dialogView.findViewById(R.id.editTextRegistrationNumber);
+        mRegNo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String regNo = mRegNo.getText().toString().trim();
+                    if (!TextUtils.isEmpty(regNo)) {
+                        mServiceProv.setRegNo(regNo);
+                        //bundle.putString("regno", regNo);
+                        sendRequest(MappService.DO_REG_NO_CHECK, null);
+                    }
+                }
             }
-            msg = Message.obtain(null, mServiceAction);
-            msg.replyTo = new Messenger(mResponseHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+        });
+        mFname.setText(mServiceProv.getfName());
+        mLname.setText(mServiceProv.getlName());
+        String email = getString(R.string.not_specified);
+        if(mServiceProv.getEmailId() != null) {
+            email = mServiceProv.getEmailId();
+        }
+        mEmailID.setText(email);
+        mRegNo.setText(mServiceProv.getRegNo());
+        if (mServiceProv.getGender().equalsIgnoreCase("Male")) {
+            mMale.setChecked(true);
+        } else {
+            mFemale.setChecked(true);
         }
 
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
+        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.personalDetails).create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText[] fields = { (EditText) mFname, (EditText) mLname, (EditText) mRegNo};
+                if(Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
+                    return;
+                }
+                boolean cancel = false;
+                View focusView = null;
+                String email = mEmailID.getText().toString().trim();
+                if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
+                    mEmailID.setError(getString(R.string.error_invalid_email));
+                    focusView = mEmailID;
+                    cancel = true;
+                }
+                int genderID = mGender.getCheckedRadioButtonId();
+                if (genderID == -1) {
+                    mFemale.setError(getString(R.string.error_select_gender));
+                    focusView = mFemale;
+                    cancel = true;
+                } else {
+                    mGenderBtn = (RadioButton) dialogView.findViewById(genderID);
+                }
 
-            mBound = false;
+                if (cancel && focusView != null) {
+                    focusView.requestFocus();
+                    return;
+                }
+                mServiceProv.setfName(mFname.getText().toString().trim());
+                mServiceProv.setlName(mLname.getText().toString().trim());
+                mServiceProv.setEmailId(email);
+                mServiceProv.setGender(mGenderBtn.getText().toString());
+                mServiceProv.setRegNo(mRegNo.getText().toString());
+                mServiceProv.setSignInData(mSignInData);
+
+                sendRequest(MappService.DO_UPDATE, null);
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public void openPersonalInfo(View view) {
+        if (mPersonalInfo.getVisibility() == View.VISIBLE) {
+            Utility.collapse(mPersonalInfo, null);
+            //mPersonalInfo.setVisibility(View.GONE);
+        } else {
+            Utility.expand(mPersonalInfo, null);
+            //mPersonalInfo.setVisibility(View.VISIBLE);
+            if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
+                Utility.collapse(mWorkPlaceInfo, null);
+                //mWorkPlaceInfo.setVisibility(View.GONE);
+            }
         }
-    };
-*/
+    }
+
+    public void openWorkPlaceInfo(View view) {
+        if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
+            Utility.collapse(mWorkPlaceInfo, null);
+            //mWorkPlaceInfo.setVisibility(View.GONE);
+        } else {
+            //mWorkPlaceInfo.setVisibility(View.VISIBLE);
+            Utility.expand(mWorkPlaceInfo, null);
+            if (mPersonalInfo.getVisibility() == View.VISIBLE) {
+                Utility.collapse(mPersonalInfo, null);
+                //mPersonalInfo.setVisibility(View.GONE);
+            }
+        }
+    }
+
+
+    /////////////////////////////Image Upload/////////////////////////////
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        BitmapDrawable drawable = (BitmapDrawable) mImgView.getDrawable();
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            outState.putParcelable("image", bitmap);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return mImgCopy;
+    }
+
+    public void changeImage(View view) {
+        Utility.captureImage(this).create().show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        try {
+            boolean isImageChanged = false;
+            Uri selectedImage = null;
+            // When an Image is picked
+            if (resultCode == RESULT_OK) {
+                if ((requestCode == R.integer.request_gallery ||
+                        requestCode == R.integer.request_edit)
+                        && null != data) {
+                    // Get the Image from data
+                    selectedImage = data.getData();
+                    mImgView.setImageURI(selectedImage);
+                    isImageChanged = true;
+
+                } else if (requestCode == R.integer.request_camera) {
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    mImgView.setImageBitmap(bitmap);
+                    selectedImage = Utility.getImageUri(this, bitmap);
+                    isImageChanged = true;
+                } else {
+                    Utility.showMessage(this, R.string.error_img_not_picked);
+                }
+            } else if (requestCode == R.integer.request_edit) {
+                isImageChanged = true;
+            }
+
+            if (isImageChanged) {
+                if (requestCode != R.integer.request_edit) {
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(editIntent, R.integer.request_edit);
+                } else {
+                    mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);
+
+                    /*mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);*/
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////Connection & handler////////////////////////////////////
+
+    private void sendRequest(int action, WorkPlace wp) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        if(wp != null) {
+            bundle.putParcelable("workPlace", wp);
+        } else {
+            bundle.putParcelable("service", mServiceProv);
+        }
+        mConnection.setData(bundle);
+        mConnection.setAction(action);
+        if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+        }
+    }
+
     @Override
     public boolean gotResponse(int action, Bundle data) {
         switch (action) {
@@ -1054,6 +730,50 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         return true;
     }
 
+    private void uploadPhotoDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_upload_photo);
+        } else {
+            mImgView.setImageBitmap(mImgCopy);
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+    private void getWorkPlaceListDone(Bundle data) {
+        if (data.getBoolean("status")) {
+            //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
+            mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
+            WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
+                    R.layout.layout_workplace, mWorkPlaceList);
+            listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+            listView.setOnTouchListener(new ListView.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+                    // Handle ListView touch events.
+                    v.onTouchEvent(event);
+                    return true;
+                }
+            });
+            listView.setAdapter(adapter);
+            registerForContextMenu(listView);
+            //listView.setOnCreateContextMenuListener(this);
+            Utility.showMessage(this, R.string.work_place_details);
+        }
+        Utility.showProgress(this, mFormView, mProgressView, false);
+    }
+
     public void regNoCheckDone(Bundle data) {
         if (data.getBoolean("exists")) {
             mRegNo.setError("This Registration Number is already Registered.");
@@ -1062,10 +782,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////Update Profile///////////////////////////////////
+    private void getSpecialitiesDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        ArrayList<String> list = data.getStringArrayList("specialities");
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        Utility.setNewSpec(this, list, mSpeciality);
+    }
 
     private void updateDone(int msg, Bundle data) {
         if (data.getBoolean("status")) {
@@ -1084,7 +808,189 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
-/*
+    private void refresh() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    /*@Override
+    public void onBackPressed() {
+        unbindService(mConnection);
+        startActivity(super.getParentActivityIntent());
+    }*/
+
+///////////////////////////Multi spinner..../////////////////////////////
+
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        super.onPrepareDialog(id, dialog);
+        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            setupSelection();
+        }
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        return new AlertDialog.Builder(this)
+                .setTitle("Available Days")
+                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
+                .setPositiveButton("OK", new DialogButtonClickHandler())
+                .create();
+    }
+
+    protected void printSelectedDays() {
+        if (selections[0]) {
+            setupAllDaysSelected();
+            return;
+        }
+        int i = 1;
+        selectedDays = getString(R.string.select_days);
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
+
+            if (selections[i]) {
+                selectedDays = options[i++].toString();
+                break;
+            }
+        }
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
+
+            if (selections[i]) {
+                selectedDays += "," + options[i].toString();
+            }
+        }
+    }
+
+    private void setupSelection() {
+        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
+        selections[0] = false;
+        for (String d : selectedDays) {
+            selections[getDayIndex(d)] = true;
+        }
+    }
+
+    private int getDayIndex(String day) {
+        for (int i = 0; i < options.length; i++) {
+            if (day.equals(options[i])) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void setupAllDaysSelected() {
+        selections[0] = false;
+        selectedDays = options[1].toString();
+        for (int i = 2; i < options.length; i++) {
+            selectedDays += "," + options[i];
+        }
+    }
+
+    public class ButtonClickHandler implements View.OnClickListener {
+        public void onClick(View view) {
+            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+                setupSelection();
+            }
+            showDialog(0);
+        }
+    }
+
+    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
+        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
+            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
+                for (CharSequence option : options) {
+                    Log.i("ME", option + " selected: " + selected);
+                }
+            } else {
+                Log.i("ME", options[clicked] + " selected: " + selected);
+            }
+        }
+    }
+
+    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int clicked) {
+            switch (clicked) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    printSelectedDays();
+                    mMultiSpinnerDays.setText(selectedDays);
+                    break;
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+
+
+    /*private void showWorkPlaceList() {
+        final Cursor cursor = SearchServProv.getCursor();
+        String[] values = new String[]{
+                MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY,
+                MappContract.Service.COLUMN_NAME_SERVICE_NAME,
+                MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION,
+                MappContract.ServProvHasServPt.COLUMN_NAME_EXP,
+                MappContract.ServicePoint.COLUMN_NAME_NAME,
+                MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE,
+                MappContract.ServicePoint.COLUMN_NAME_LOCATION,
+                MappContract.ServicePoint.COLUMN_NAME_ID_CITY,
+                MappContract.ServicePoint.COLUMN_NAME_PHONE,
+                MappContract.ServicePoint.COLUMN_NAME_ALT_PHONE,
+                MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID,
+                MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME,
+                MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME,
+                MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS,
+                MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE
+        };
+        int[] viewIds = new int[]{
+                R.id.spinServiceProvCategory,
+                R.id.editTextSpeciality,
+                R.id.editTextQualification,
+                R.id.editTextExperience,
+                R.id.editTextName,
+                R.id.viewWorkPlaceType,
+                R.id.editTextLoc,
+                R.id.editTextCity,
+                R.id.editTextPhone1,
+                R.id.editTextPhone2,
+                R.id.editTextEmail,
+                R.id.buttonStartTime,
+                R.id.buttonEndTime,
+                R.id.editTextWeeklyOff,
+                R.id.editTextConsultationFees
+        };
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+                R.layout.activity_servprov_wrkdetail_list,
+                cursor,
+                values,
+                viewIds, 0) {
+            @Override
+            public View getView(int position, View convertView,
+                                ViewGroup parent) {
+
+                View view = super.getView(position, convertView, parent);
+                cursor.moveToPosition(position);
+
+                TextView mTextViewEdit = (TextView) findViewById(R.id.textViewEditWrkDetail);
+                TextView mViewEdit = (TextView) findViewById(R.id.viewEditWrkDetail);
+
+                mTextViewEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editWorkPlaceInfo(v);
+                    }
+                });
+
+                return view;
+            }
+        };
+        listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+        listView.setAdapter(adapter);
+    }*/
+
+
+    /*
     class SaveServiceData extends AsyncTask<Void, Void, Void> {
 
         private Activity myActivity;
@@ -1176,110 +1082,232 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 */
 
-    /////////////////////////////////////////////////////////////////////////////////////////////
+     /*@Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
+        if (!AdapterView.AdapterContextMenuInfo.class.isInstance (item.getMenuInfo ())) {
+            return false;
+        }
+        AdapterView.AdapterContextMenuInfo cmi =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        mWorkPlace = (WorkPlace) listView.getItemAtPosition(cmi.position);
 
-    //////////////////////////////////////////Connection & handler////////////////////////////////////
-
-    private void getWorkPlaceListDone(Bundle data) {
-        if (data.getBoolean("status")) {
-            //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
-            mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
-            WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
-                    R.layout.layout_workplace, mWorkPlaceList);
-            listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-            listView.setOnTouchListener(new ListView.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            // Disallow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            // Allow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-                    // Handle ListView touch events.
-                    v.onTouchEvent(event);
+        try {
+            if (item.getItemId() == R.string.edit1) {
+                getWorkPlaceView(mWorkPlace).show();
+                return true;
+            } else if (item.getItemId() == R.string.remove) {
+                if(Utility.confirm(this, R.string.confirm_remove_workplace)) {
+                    Utility.showProgress(this, mFormView, mProgressView, true);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putParcelable("mWorkPlace", mWorkPlace);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.REMOVE_WORK_PLACE);
+                    Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
                     return true;
                 }
-            });
-            listView.setAdapter(adapter);
-            registerForContextMenu(listView);
-            //listView.setOnCreateContextMenuListener(this);
-            Utility.showMessage(this, R.string.work_place_details);
-        }
-        Utility.showProgress(this, mFormView, mProgressView, false);
-    }
-
-    private void getSpecialitiesDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
-        ArrayList<String> list = data.getStringArrayList("specialities");
-        if (list == null) {
-            list = new ArrayList<>();
-        }
-        Utility.setNewSpec(this, list, mSpeciality);
-    }
-
-    public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick(View view) {
-            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-                setupSelection();
-            }
-            showDialog(0);
-        }
-    }
-
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
-        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
-                for (CharSequence option : options) {
-                    Log.i("ME", option + " selected: " + selected);
-                }
-            } else {
-                Log.i("ME", options[clicked] + " selected: " + selected);
             }
         }
-    }
-
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
-        public void onClick(DialogInterface dialog, int clicked) {
-            switch (clicked) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedDays();
-                    mMultiSpinnerDays.setText(selectedDays);
-                    break;
-            }
+        catch (Exception error) {
+            Utility.showMessage(this, R.string.some_error);
+            return false;
         }
-    }
-
-    /*@Override
-    public void onBackPressed() {
-        unbindService(mConnection);
-        startActivity(super.getParentActivityIntent());
+        return super.onMenuItemSelected(featureId, item);
     }*/
 
-    private void sendRequest(int action, WorkPlace wp) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        if(wp != null) {
-            bundle.putParcelable("workPlace", wp);
-        } else {
-            bundle.putParcelable("service", mServiceProv);
-        }
-        mConnection.setData(bundle);
-        mConnection.setAction(action);
-        if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
-        }
-    }
 
-    private void refresh() {
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-    }
+    /*public void showtimeFields(View view) {
+        int[] buttonIds = new int[]{
+                R.id.buttonStartTime,
+                R.id.buttonEndTime,
+        };
+        for (int buttonId : buttonIds) {
+            Button btn = (Button) findViewById(buttonId);
+            if (btn.getVisibility() == View.GONE) {
+                Utility.expand(btn, view);
+            } else {
+                Utility.collapse(btn, view);
+            }
+        }
+    }*/
+
+
+    /*public void editWorkPlaceInfo(View v) {
+        boolean set = true;
+        EditText nm = (EditText) v.findViewById(R.id.editTextName);
+        if (nm.isEnabled()) {
+            set = false;
+        }
+        int[] editTxtIds = new int[]{
+                R.id.editTextQualification,
+                R.id.editTextExperience,
+                R.id.editTextName,
+                R.id.editTextLoc,
+                R.id.editTextPhone1,
+                R.id.editTextPhone2,
+                R.id.editTextEmail,
+                R.id.editTextConsultationFees
+        };
+        for (int editTxtId : editTxtIds) {
+            EditText txt = (EditText) v.findViewById(editTxtId);
+            txt.setEnabled(set);
+        }
+
+        int[] buttonIds = new int[]{
+                R.id.buttonStartTime,
+                R.id.buttonEndTime,
+                R.id.editTextWeeklyOff
+        };
+        for (int buttonId : buttonIds) {
+            Button btn = (Button) v.findViewById(buttonId);
+            btn.setEnabled(set);
+            btn.setClickable(true);
+        }
+
+        int[] spinnerIds = new int[]{
+                R.id.spinServiceProvCategory,
+                R.id.editTextSpeciality,
+                R.id.viewWorkPlaceType,
+                R.id.editTextCity
+        };
+        for (int spinnerId : spinnerIds) {
+            Spinner spn = (Spinner) v.findViewById(spinnerId);
+            spn.setEnabled(set);
+            spn.setClickable(true);
+        }
+    }*/
+
+
+    /*
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        private Messenger mService;
+        private boolean mBound;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mWorkPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
+            mService = new Messenger(service);
+            mBound = true;
+            Message msg = null;
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            if (mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
+                bundle.putString("regno", mRegNo.getText().toString().trim());
+                bundle.putParcelable("service", LoginHolder.servLoginRef);
+            } else if (mServiceAction == MappService.DO_GET_SPECIALITY) {
+                SearchServProvForm mForm = new SearchServProvForm();
+                mForm.setCategory(mServCatagory.getSelectedItem().toString());
+                bundle.putParcelable("form", mForm);
+            } else {
+                bundle.putParcelable("mWorkPlace", mWorkPlace);
+                //for add, remove and get Workplace.
+            }
+            msg = Message.obtain(null, mServiceAction);
+            msg.replyTo = new Messenger(mResponseHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+
+            mBound = false;
+        }
+    };
+*/
+
+      /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            boolean isImageChanged = false;
+            // When an Image is picked
+            if (resultCode == RESULT_OK) {
+                if (requestCode == R.integer.request_gallery
+                        && null != data) {
+                    // Get the Image from data
+
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    if (cursor == null) {
+                        return;
+                    }
+                    // Move to first row
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+                    // Set the Image in ImageView after decoding the String
+                    mImgView.setImageBitmap(BitmapFactory
+                            .decodeFile(imgDecodableString));
+                    isImageChanged = true;
+
+                } else if (requestCode == R.integer.request_camera) {
+                    File f = new File(Environment.getExternalStorageDirectory()
+                            .toString());
+                    for (File temp : f.listFiles()) {
+                        if (temp.getName().equals("temp.jpg")) {
+                            f = temp;
+                            break;
+                        }
+                    }
+                    try {
+                        Bitmap bm;
+                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
+
+                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                                btmapOptions);
+
+                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
+                        mImgView.setImageBitmap(bm);
+                        isImageChanged = true;
+
+                        String path = android.os.Environment
+                                .getExternalStorageDirectory()
+                                + File.separator
+                                + "Phoenix" + File.separator + "default";
+                        if (f.delete()) {
+                            Log.v(this.getClass().getName(), "File delete successful");
+                        }
+                        OutputStream fOut;
+                        File file = new File(path, String.valueOf(System
+                                .currentTimeMillis()) + ".jpg");
+                        try {
+                            fOut = new FileOutputStream(file);
+                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+                            fOut.flush();
+                            fOut.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Utility.showMessage(this, R.string.error_img_not_picked);
+                }
+            }
+            if(isImageChanged) {
+                mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                sendRequest(MappService.DO_UPLOAD_PHOTO, null);
+            }
+        } catch (Exception e) {
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }*/
+
 }

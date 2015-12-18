@@ -180,21 +180,67 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     }
 
     public void updateProfile(View v) {
-        if (!isValidInput()) {
+        EditText[] fields = {mEditTextCustomerFName, mEditTextCustomerLName, mEditTextWeight,
+                mEditTextLoc, mEditTextPinCode};
+        if (Utility.areEditFieldsEmpty(this, fields)) {
             return;
         }
-        sendRequest(getUpdateData(), MappService.DO_UPDATE);
-    }
 
-    private void sendRequest(Customer customer, int action) {
+        boolean valid = true;
+        View focusView = null;
+
+        String fName = mEditTextCustomerFName.getText().toString().trim();
+        String lName = mEditTextCustomerLName.getText().toString().trim();
+        String emailId = mEditTextCustomerEmail.getText().toString().trim();
+        String dob = mTextViewDOB.getText().toString();
+        //String weight = mEditTextWeight.getText().toString().trim();
+        //String loc = mEditTextLoc.getText().toString().trim();
+        String pinCode = mEditTextPinCode.getText().toString().trim();
+
+        if (!Validator.isOnlyAlpha(fName)) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            focusView = mEditTextCustomerFName;
+            valid = false;
+        }
+        if (!Validator.isOnlyAlpha(lName)) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            focusView = mEditTextCustomerLName;
+            valid = false;
+        }
+        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
+            mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
+            focusView = mEditTextCustomerEmail;
+            valid = false;
+        }
+        if (TextUtils.isEmpty(dob)) {
+            mTextViewDOB.setError(getString(R.string.error_field_required));
+            focusView = mTextViewDOB;
+            valid = false;
+        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
+            mTextViewDOB.setError(getString(R.string.error_future_date));
+            focusView = mTextViewDOB;
+            valid = false;
+        }
+        if (Validator.isPinCodeValid(pinCode)) {
+            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mEditTextPinCode;
+            valid = false;
+        }
+
+        if (!valid && focusView != null) {
+            focusView.requestFocus();
+            return;
+        }
+
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-        bundle.putParcelable("customer", customer);
+        bundle.putParcelable("customer", getUpdateData());
         mConnection.setData(bundle);
-        mConnection.setAction(action);
+        mConnection.setAction(MappService.DO_UPDATE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(this, mFormView, mProgressView, true);
         }
+        //sendRequest(getUpdateData(), MappService.DO_UPDATE);
     }
 
     @Override
@@ -203,23 +249,24 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             updateDone(data);
             return true;
         }
-        if (action == MappService.DO_UPLOAD_PHOTO) {
+        /*if (action == MappService.DO_UPLOAD_PHOTO) {
             uploadPhotoDone(data);
             return true;
-        }
+        }*/
         return false;
     }
 
-    private void uploadPhotoDone(Bundle data) {
+    /*private void uploadPhotoDone(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
         if (data.getBoolean("status")) {
+            LoginHolder.custLoginRef.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
             Utility.showMessage(this, R.string.msg_upload_photo);
         } else {
             mImgView.setImageBitmap(mImgCopy);
             Utility.showMessage(this, R.string.some_error);
         }
         refresh();
-    }
+    }*/
 
     private void updateDone(Bundle data) {
         Utility.showProgress(this, mFormView, mProgressView, false);
@@ -229,9 +276,13 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     LoginHolder.custLoginRef = getUpdateData();
-                    refresh();
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
                 }
             });
+        } else {
+            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -240,6 +291,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         c.getSignInData().setPhone(mMobNo.getText().toString());
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
         c.setlName(mEditTextCustomerLName.getText().toString().trim());
+        c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         try {
@@ -361,79 +414,15 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivityForResult(editIntent, R.integer.request_edit);
-                } else {
+                } /*else {
                     mCustomer.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
                     sendRequest(mCustomer, MappService.DO_UPLOAD_PHOTO);
-                }
+                }*/
             }
         } catch (Exception e) {
             e.printStackTrace();
             Utility.showMessage(this, R.string.some_error);
         }
-    }
-
-    private boolean isValidInput() {
-        EditText[] fields = {mEditTextCustomerFName, mEditTextCustomerLName, mEditTextWeight,
-                mEditTextLoc, mEditTextPinCode};
-        if (Utility.areEditFieldsEmpty(this, fields)) {
-            return false;
-        }
-
-        boolean valid = true;
-        View focusView = null;
-
-        String fName = mEditTextCustomerFName.getText().toString().trim();
-        String lName = mEditTextCustomerLName.getText().toString().trim();
-        String emailId = mEditTextCustomerEmail.getText().toString().trim();
-        String dob = mTextViewDOB.getText().toString();
-        //String weight = mEditTextWeight.getText().toString().trim();
-        String loc = mEditTextLoc.getText().toString().trim();
-        String pinCode = mEditTextPinCode.getText().toString().trim();
-
-        if (!Validator.isOnlyAlpha(fName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
-            focusView = mEditTextCustomerFName;
-            valid = false;
-        }
-
-        if (!Validator.isOnlyAlpha(lName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
-            focusView = mEditTextCustomerLName;
-            valid = false;
-        }
-
-        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
-            mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
-            focusView = mEditTextCustomerEmail;
-            valid = false;
-        }
-
-        if (TextUtils.isEmpty(dob)) {
-            mTextViewDOB.setError(getString(R.string.error_field_required));
-            focusView = mTextViewDOB;
-            valid = false;
-        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
-            mTextViewDOB.setError(getString(R.string.error_future_date));
-            focusView = mTextViewDOB;
-            valid = false;
-        }
-
-        if (TextUtils.isEmpty(loc)) {
-            mEditTextLoc.setError(getString(R.string.error_field_required));
-            focusView = mEditTextLoc;
-            valid = false;
-        }
-
-        if (Validator.isPinCodeValid(pinCode)) {
-            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
-            focusView = mEditTextPinCode;
-            valid = false;
-        }
-
-        if (focusView != null) {
-            focusView.requestFocus();
-        }
-        return valid;
     }
 
     @Nullable
@@ -453,15 +442,5 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             mPname.setText(String.format("%s %s\n(%d years)", mCustomer.getfName(), mCustomer.getlName(),
                     Utility.getAge(mCustomer.getDob())));
         }
-    }
-
-    /*@Override
-    public void onBackPressed() {
-    }*/
-
-    private void refresh() {
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
     }
 }
