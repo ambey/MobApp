@@ -332,28 +332,30 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
-            boolean isImageChanged = false;
+            boolean imageChanged = false;
             Uri selectedImage = null;
             // When an Image is picked
             if (resultCode == RESULT_OK) {
                 if ((requestCode == R.integer.request_gallery ||
                         requestCode == R.integer.request_edit)
-                        && null != data) {
+                        && data != null) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
-                    isImageChanged = true;
+                    imageChanged = true;
 
                 } else if (requestCode == R.integer.request_camera) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(this, bitmap);
-                    isImageChanged = true;
+                    imageChanged = true;
                 } else {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
+            } else if (requestCode == R.integer.request_edit) {
+                imageChanged = true;
             }
-            if (isImageChanged) {
+            if (imageChanged) {
                 if (requestCode != R.integer.request_edit) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(selectedImage, "image/*");
