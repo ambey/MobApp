@@ -625,9 +625,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     public void changeImage(View view) {
-        Utility.captureImage(this).create().show();
+        Utility.captureImage(this);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

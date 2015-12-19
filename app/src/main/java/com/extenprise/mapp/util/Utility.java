@@ -730,12 +730,11 @@ public abstract class Utility {
         activity.startActivity(intent);
     }
 
-    public static AlertDialog.Builder captureImage(final Activity activity) {
+    public static void captureImage(final Activity activity) {
         //final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
-
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-        dialogBuilder.setTitle("Upload Image ");
-        dialogBuilder.setItems(optionItems(activity), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(activity)
+        .setTitle("Upload Image ")
+        .setItems(optionItems(activity), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -757,8 +756,7 @@ public abstract class Utility {
                         break;
                 }
             }
-        });
-        return dialogBuilder;
+        }).create().show();
     }
 
     public static CharSequence[] optionItems(final Activity activity) {

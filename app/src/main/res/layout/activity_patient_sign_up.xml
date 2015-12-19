@@ -67,12 +67,9 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/primary_phone_no"
-                    android:inputType="phone"
+                    android:inputType="number"
                     android:maxLength="10"
-                    android:paddingLeft="40dp"
-
-
-                    />
+                    android:paddingLeft="40dp" />
             </RelativeLayout>
 
             <EditText

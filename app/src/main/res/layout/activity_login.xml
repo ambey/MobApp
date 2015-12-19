@@ -63,7 +63,7 @@
                     android:text="@string/serv_prov" />
             </RadioGroup>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -85,7 +85,36 @@
                     android:inputType="phone"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </LinearLayout>
+            </LinearLayout>-->
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/country_code"
+                    android:textSize="17sp"
+                    android:paddingLeft="5dp"/>
+
+                <AutoCompleteTextView
+                    android:id="@+id/mobileNumber"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="@string/regMobNo"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:maxLength="10"
+                    android:paddingLeft="40dp"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </RelativeLayout>
 
             <EditText
                 android:id="@+id/password"

@@ -37,14 +37,30 @@
 
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/editTextCellphone"
+                <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:ems="10"
-                    android:hint="@string/cellPhoneNo"
-                    android:inputType="number" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/country_code"
+                        android:textSize="17sp"
+                        android:paddingLeft="5dp"/>
+
+                    <EditText
+                        android:id="@+id/editTextCellphone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/cellPhoneNo"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:paddingLeft="40dp" />
+                </RelativeLayout>
 
                 <EditText
                     android:id="@+id/editTextEmail"

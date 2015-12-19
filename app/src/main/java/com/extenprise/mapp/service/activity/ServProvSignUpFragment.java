@@ -56,14 +56,10 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ServProvSignUpFragment extends Fragment implements TitleFragment, ResponseHandler {
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
     // LogCat tag
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
-    // Camera activity request codes
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int GALLERY_IMAGE_REQUEST_CODE = 200;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
+
     private View mRootView;
     private EditText mFirstName;
     private EditText mLastName;
@@ -80,42 +76,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private View mProgressView;
     private Uri fileUri; // file url to store image/video
     private Bitmap defaultImgBits;
-
-    private Button btnCapturePicture, btnRecordVideo;
-
-    /*private static File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "Android File Upload");
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d(TAG, "Oops! Failed create "
-                        + "Android File Upload" + " directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }*/
 
     @Nullable
     @Override
@@ -157,7 +117,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 }
             }
         });
-
         int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
         if (category == R.string.medicalStore) {
             mImgView.setImageResource(R.drawable.medstore);
@@ -170,15 +129,15 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public boolean isValidInput(ViewPager pager) {
+        boolean cancel = false;
+        View focusView = null;
+
         EditText[] fields = { mFirstName, mLastName, mCellphoneview,
                 mPasswdView, mCnfPasswdView, mRegistrationNumber };
         if(Utility.areEditFieldsEmpty(getActivity(), fields)) {
             pager.setCurrentItem(0);
-            return false;
+            cancel = true;
         }
-
-        boolean cancel = false;
-        View focusView = null;
 
         String fnm = mFirstName.getText().toString();
         String lnm = mLastName.getText().toString();
@@ -196,31 +155,26 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             focusView = mPasswdView;
             cancel = true;
         }
-
         if (!Validator.isPhoneValid(mCellphoneview.getText().toString())) {
             mCellphoneview.setError(getString(R.string.error_invalid_phone));
             focusView = mCellphoneview;
             cancel = true;
         }
-
         if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
             mEmailID.setError(getString(R.string.error_invalid_email));
             focusView = mEmailID;
             cancel = true;
         }
-
         if (!Validator.isOnlyAlpha(lnm)) {
             mLastName.setError(getString(R.string.error_only_alpha));
             focusView = mLastName;
             cancel = true;
         }
-
         if (!Validator.isOnlyAlpha(fnm)) {
             mFirstName.setError(getString(R.string.error_only_alpha));
             focusView = mFirstName;
             cancel = true;
         }
-
         int genderID = mRadioGroupGender.getCheckedRadioButtonId();
         if (genderID == -1) {
             //Utility.showAlert(this, "", "Please Select Gender.");
@@ -234,70 +188,39 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         }
 
         if (cancel) {
-            focusView.requestFocus();
+            if(focusView != null) {
+                focusView.requestFocus();
+            }
             pager.setCurrentItem(0);
             return false;
         }
         return true;
     }
 
-    private boolean isRegNoExist(String regNo) {
-        MappDbHelper dbHelper = new MappDbHelper(getActivity());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER
-        };
-
-        String selection = MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER + "=?";
-
-        String[] selectionArgs = {
-                regNo
-        };
-        Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
-                projection, selection, selectionArgs, null, null, null);
-        int count = c.getCount();
-        c.close();
-
-        return (count > 0);
-    }
-
     public void captureImage(View v) {
-        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-        // start the image capture Intent
-        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);*/
-
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        dialogBuilder.setTitle("Upload Image ");
-        dialogBuilder.setItems(Utility.optionItems(getActivity()), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity())
+        .setTitle("Upload Image ")
+        .setItems(Utility.optionItems(getActivity()), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File f = new File(android.os.Environment
+                        /*File f = new File(android.os.Environment
                                 .getExternalStorageDirectory(), "temp.jpg");
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                        getActivity().startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));*/
+                        getActivity().startActivityForResult(intent, R.integer.request_camera);
                         break;
                     case 1:
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        getActivity().startActivityForResult(galleryIntent, GALLERY_IMAGE_REQUEST_CODE);
+                        getActivity().startActivityForResult(galleryIntent, R.integer.request_gallery);
                         break;
                     case 2:
                         dialog.dismiss();
                         break;
                 }
             }
-        });
-
-        dialogBuilder.create().show();
-        //Utility.captureImage(getActivity()).create().show();
+        }).create().show();
     }
 
     public void enlargeImg(View view) {
@@ -337,23 +260,13 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivityForResult(editIntent, R.integer.request_edit);
-                } /*else {
-                    mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);
-
-                    mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
-                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);
-                }*/
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
             Utility.showMessage(getActivity(), R.string.some_error);
         }
     }
-
-    /*public Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }*/
 
     public void saveData() {
         if(defaultImgBits == ((BitmapDrawable) mImgView.getDrawable()).getBitmap()) {
@@ -368,7 +281,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 }
             });
         }
-
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
             sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
@@ -417,7 +329,67 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         }
     }
 
-/*
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if (action == MappService.DO_PHONE_EXIST_CHECK ||
+                action == MappService.DO_REG_NO_CHECK) {
+            checkDone(action, data);
+            return true;
+        }
+        return false;
+    }
+
+    public void checkDone(int check, Bundle data) {
+        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        if (!data.getBoolean("status")) {
+            if (check == MappService.DO_REG_NO_CHECK) {
+                mRegistrationNumber.setError(getString(R.string.error_duplicate_reg_no));
+                mRegistrationNumber.requestFocus();
+            }
+            if (check == MappService.DO_PHONE_EXIST_CHECK) {
+                mCellphoneview.setError(getString(R.string.error_phone_registered));
+                mCellphoneview.requestFocus();
+            }
+        }
+    }
+
+
+    /*private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "Android File Upload");
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "Oops! Failed create "
+                        + "Android File Upload" + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }*/
+
+
+    /*
     private ServiceConnection mConnection = new ServiceConnection() {
 
         private Messenger mService;
@@ -463,28 +435,26 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     };
 */
 
-    @Override
-    public boolean gotResponse(int action, Bundle data) {
-        if (action == MappService.DO_PHONE_EXIST_CHECK ||
-                action == MappService.DO_REG_NO_CHECK) {
-            checkDone(action, data);
-            return true;
-        }
-        return false;
-    }
 
-    public void checkDone(int check, Bundle data) {
-        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
-        if (!data.getBoolean("status")) {
-            if (check == MappService.DO_REG_NO_CHECK) {
-                mRegistrationNumber.setError(getString(R.string.error_duplicate_reg_no));
-                mRegistrationNumber.requestFocus();
-            }
-            if (check == MappService.DO_PHONE_EXIST_CHECK) {
-                mCellphoneview.setError(getString(R.string.error_phone_registered));
-                mCellphoneview.requestFocus();
-            }
-        }
-    }
+    /*private boolean isRegNoExist(String regNo) {
+        MappDbHelper dbHelper = new MappDbHelper(getActivity());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER
+        };
+
+        String selection = MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER + "=?";
+
+        String[] selectionArgs = {
+                regNo
+        };
+        Cursor c = db.query(MappContract.ServiceProvider.TABLE_NAME,
+                projection, selection, selectionArgs, null, null, null);
+        int count = c.getCount();
+        c.close();
+
+        return (count > 0);
+    }*/
 
 }

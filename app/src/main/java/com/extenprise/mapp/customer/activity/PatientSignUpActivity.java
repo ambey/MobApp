@@ -240,7 +240,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     public void showImageUploadOptions(View view) {
-        Utility.captureImage(this).create().show();
+        Utility.captureImage(this);
     }
 
     /*public void startImageCapture() {
