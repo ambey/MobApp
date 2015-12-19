@@ -732,7 +732,7 @@ public abstract class Utility {
         activity.startActivity(intent);
     }
 
-    public static void captureImage(final Activity activity, final boolean removable, final ImageView img) {
+    public static boolean captureImage(final Activity activity, final boolean removable, final ImageView img) {
         new AlertDialog.Builder(activity)
         .setTitle(R.string.uploadImg)
         .setItems(optionItems(activity, removable), new DialogInterface.OnClickListener() {
@@ -762,6 +762,7 @@ public abstract class Utility {
                 }
             }
         }).create().show();
+        return true;
     }
 
     public static CharSequence[] optionItems(final Activity activity, boolean removable) {

@@ -28,6 +28,17 @@
             android:onClick="changeImage"
             android:background="@drawable/p12" />
 
+        <TextView
+            android:id="@+id/textViewRemovePhoto"
+            android:textColor="@drawable/r_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textViewEditImage"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:onClick="removePhoto"
+            android:text="@string/remove" />
+
     </RelativeLayout>
 
     <TextView

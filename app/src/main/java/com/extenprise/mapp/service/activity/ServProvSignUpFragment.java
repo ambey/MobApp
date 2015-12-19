@@ -77,6 +77,9 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private View mProgressView;
     private boolean imageChanged = false;
     private Bitmap mImgCopy;
+    private int requestGallery = 100;
+    private int requestCamera = 200;
+    private int requestEdit = 300;
 
     @Nullable
     @Override
@@ -248,12 +251,12 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                         /*File f = new File(android.os.Environment
                                 .getExternalStorageDirectory(), "temp.jpg");
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));*/
-                        getActivity().startActivityForResult(intent, R.integer.request_camera);
+                        startActivityForResult(intent, requestCamera);
                         break;
                     case 1:
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        getActivity().startActivityForResult(galleryIntent, R.integer.request_gallery);
+                        startActivityForResult(galleryIntent, requestGallery);
                         break;
                     case 2:
                         dialog.dismiss();
@@ -274,15 +277,15 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             Uri selectedImage = null;
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
-                if ((requestCode == R.integer.request_gallery ||
-                        requestCode == R.integer.request_edit)
+                if ((requestCode == requestGallery ||
+                        requestCode == requestEdit)
                         && null != data) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
 
-                } else if (requestCode == R.integer.request_camera) {
+                } else if (requestCode == requestCamera) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(getActivity(), bitmap);
@@ -290,15 +293,15 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 } else {
                     Utility.showMessage(getActivity(), R.string.error_img_not_picked);
                 }
-            } else if (requestCode == R.integer.request_edit) {
+            } else if (requestCode == requestEdit) {
                 imageChanged = true;
             }
             if (imageChanged) {
-                if (requestCode != R.integer.request_edit) {
+                if (requestCode != requestEdit) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(editIntent, R.integer.request_edit);
+                    startActivityForResult(editIntent, requestEdit);
                 }
             }
         } catch (Exception e) {

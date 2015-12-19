@@ -32,7 +32,6 @@
             <include
                 android:id="@+id/layoutNameAvatar"
                 layout="@layout/layout_name_avatar" />
-
             <View
                 android:id="@+id/linenView"
                 android:layout_width="fill_parent"

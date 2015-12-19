@@ -291,8 +291,9 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         c.getSignInData().setPhone(mMobNo.getText().toString());
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
         c.setlName(mEditTextCustomerLName.getText().toString().trim());
-        c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-
+        if(mImgView.getDrawable() != null) {
+            c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+        }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         try {
