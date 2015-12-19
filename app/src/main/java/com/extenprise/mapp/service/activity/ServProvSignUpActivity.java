@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -212,6 +214,13 @@ public class ServProvSignUpActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
         ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
         fragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
+        fragment.onSaveInstanceState(outState);
     }
 
     /*@Override

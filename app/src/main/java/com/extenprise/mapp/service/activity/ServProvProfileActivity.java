@@ -625,7 +625,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     public void changeImage(View view) {
-        Utility.captureImage(this);
+        Utility.captureImage(this, true, mImgView);
+        if(mImgView.getDrawable() == null) {
+            sendRequest(MappService.DO_REMOVE_PHOTO, null);
+        }
     }
 
     @Override

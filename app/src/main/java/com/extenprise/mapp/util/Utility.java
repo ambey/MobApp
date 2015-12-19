@@ -44,6 +44,7 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.service.activity.ServProvProfileActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
@@ -53,6 +54,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 public abstract class Utility {
     /**
@@ -730,11 +732,10 @@ public abstract class Utility {
         activity.startActivity(intent);
     }
 
-    public static void captureImage(final Activity activity) {
-        //final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
+    public static void captureImage(final Activity activity, final boolean removable, final ImageView img) {
         new AlertDialog.Builder(activity)
-        .setTitle("Upload Image ")
-        .setItems(optionItems(activity), new DialogInterface.OnClickListener() {
+        .setTitle(R.string.uploadImg)
+        .setItems(optionItems(activity, removable), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -752,18 +753,29 @@ public abstract class Utility {
                         activity.startActivityForResult(galleryIntent, R.integer.request_gallery);
                         break;
                     case 2:
-                        dialog.dismiss();
-                        break;
+                        if(!removable) {
+                            dialog.dismiss();
+                            break;
+                        } else {
+                            img.setImageDrawable(null);
+                        }
                 }
             }
         }).create().show();
     }
 
-    public static CharSequence[] optionItems(final Activity activity) {
-        return new CharSequence[]{
-                activity.getString(R.string.take_photo),
-                activity.getString(R.string.from_gallery),
-                activity.getString(R.string.cancel) };
+    public static CharSequence[] optionItems(final Activity activity, boolean removable) {
+        if(!removable) {
+            return new CharSequence[] {
+                    activity.getString(R.string.take_photo),
+                    activity.getString(R.string.from_gallery),
+                    activity.getString(R.string.cancel) };
+        } else {
+            return new CharSequence[] {
+                    activity.getString(R.string.take_photo),
+                    activity.getString(R.string.from_gallery),
+                    activity.getString(R.string.remove) };
+        }
     }
 
     public static boolean areEditFieldsEmpty(Activity activity, EditText[] fields) {

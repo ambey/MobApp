@@ -74,7 +74,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private ImageView mImgView;
 
     private Bitmap mImgCopy;
-    private Bitmap defaultImgBits;
+    private boolean imageChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,17 +99,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     if (Validator.isPhoneValid(mEditTextCellphone.getText().toString().trim())) {
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                        bundle.putParcelable("signInData", getSignUpData(MappService.DO_PHONE_EXIST_CHECK).getSignInData());
-                        mConnection.setData(bundle);
-                        mConnection.setAction(MappService.DO_PHONE_EXIST_CHECK);
-                        if (Utility.doServiceAction(PatientSignUpActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                            Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
-                        }
-                    } else {
-                        mEditTextCellphone.setError(getString(R.string.error_field_required));
-                        //mEditTextCellphone.requestFocus();
+                        sendRequest(MappService.DO_PHONE_EXIST_CHECK);
                     }
                 }
             }
@@ -125,8 +115,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mSpinCity = (Spinner) findViewById(R.id.editTextCity);
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
-
-        defaultImgBits = ((BitmapDrawable) mImgView.getDrawable()).getBitmap();
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -170,34 +158,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 Utility.collapse(mAddrLayout, null);
             }
         }
-        /*
-        TextView dobLbl = (TextView) findViewById(R.id.textViewDOBLbl);
-        TextView heightUnit = (TextView) findViewById(R.id.viewHeightUnit);
-        TextView weightUnit = (TextView) findViewById(R.id.viewWeightUnit);
-
-        if(mEditTextCustomerFName.getVisibility() == View.VISIBLE) {
-            mEditTextCustomerFName.setVisibility(View.GONE);
-            mEditTextCustomerLName.setVisibility(View.GONE);
-            mEditTextCustomerEmail.setVisibility(View.GONE);
-            dobLbl.setVisibility(View.GONE);
-            heightUnit.setVisibility(View.GONE);
-            weightUnit.setVisibility(View.GONE);
-            mTextViewDOB.setVisibility(View.GONE);
-            mSpinGender.setVisibility(View.GONE);
-            mEditTextHeight.setVisibility(View.GONE);
-            mEditTextWeight.setVisibility(View.GONE);
-        } else {
-            mEditTextCustomerFName.setVisibility(View.VISIBLE);
-            mEditTextCustomerLName.setVisibility(View.VISIBLE);
-            mEditTextCustomerEmail.setVisibility(View.VISIBLE);
-            dobLbl.setVisibility(View.VISIBLE);
-            heightUnit.setVisibility(View.VISIBLE);
-            weightUnit.setVisibility(View.VISIBLE);
-            mTextViewDOB.setVisibility(View.VISIBLE);
-            mSpinGender.setVisibility(View.VISIBLE);
-            mEditTextHeight.setVisibility(View.VISIBLE);
-            mEditTextWeight.setVisibility(View.VISIBLE);
-        }*/
     }
 
     @Override
@@ -240,25 +200,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     public void showImageUploadOptions(View view) {
-        Utility.captureImage(this);
+        Utility.captureImage(this, false, mImgView);
     }
-
-    /*public void startImageCapture() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(), "rxCopy.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        mRxUri = Uri.fromFile(photo);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 2);
-        }
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
-            boolean isImageChanged = false;
             Uri selectedImage = null;
             // When an Image is picked
             if (resultCode == RESULT_OK) {
@@ -268,29 +216,26 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
-                    isImageChanged = true;
+                    imageChanged = true;
 
                 } else if (requestCode == R.integer.request_camera) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(this, bitmap);
-                    isImageChanged = true;
+                    imageChanged = true;
                 } else {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
             } else if (requestCode == R.integer.request_edit) {
-                isImageChanged = true;
+                imageChanged = true;
             }
-            if (isImageChanged) {
+            if (imageChanged) {
                 if (requestCode != R.integer.request_edit) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivityForResult(editIntent, R.integer.request_edit);
-                } /*else {
-                    mCustomer.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-                    sendRequest(mCustomer, MappService.DO_UPLOAD_PHOTO);
-                }*/
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -298,28 +243,70 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         }
     }
 
-/*
-
-        String[] projection = { MediaStore.Images.Media.DATA };
-
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
-
-    }
-*/
-
-
     public void registerPatient(View view) {
-        if (!isValidInput()) {
-            return;
+        boolean valid = true;
+        View focusView = null;
+
+        EditText[] fields = { mEditTextCellphone, mEditTextPasswd, mEditTextConPasswd, mEditTextCustomerFName,
+                mEditTextCustomerLName, mEditTextWeight, mEditTextLoc, mEditTextPinCode };
+        if(Utility.areEditFieldsEmpty(this, fields)) {
+            valid = false;
         }
 
-        if(defaultImgBits == ((BitmapDrawable) mImgView.getDrawable()).getBitmap()) {
+        if (!Validator.isOnlyAlpha(mEditTextCustomerFName.getText().toString().trim())) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            focusView = mEditTextCustomerFName;
+            valid = false;
+        }
+        if (!Validator.isOnlyAlpha(mEditTextCustomerLName.getText().toString().trim())) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            focusView = mEditTextCustomerLName;
+            valid = false;
+        }
+        String emailId = mEditTextCustomerEmail.getText().toString().trim();
+        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
+            mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
+            focusView = mEditTextCustomerEmail;
+            valid = false;
+        }
+        if (!mEditTextPasswd.getText().toString().trim().equals(mEditTextConPasswd.getText().toString().trim())) {
+            mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
+            focusView = mEditTextConPasswd;
+            valid = false;
+        }
+        String dob = mTextViewDOB.getText().toString().trim();
+        if (TextUtils.isEmpty(dob)) {
+            mTextViewDOB.setError(getString(R.string.error_field_required));
+            focusView = mTextViewDOB;
+            valid = false;
+        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) < 0) {
+            mTextViewDOB.setError(getString(R.string.error_future_date));
+            focusView = mTextViewDOB;
+            valid = false;
+        }
+        double value = 0.0;
+        try {
+            value = Double.parseDouble(mEditTextWeight.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        if (value <= 0.0) {
+            mEditTextWeight.setError(getString(R.string.error_invalid_weight));
+            focusView = mEditTextWeight;
+            valid = false;
+        }
+        if (Validator.isPinCodeValid(mEditTextPinCode.getText().toString().trim())) {
+            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mEditTextPinCode;
+            valid = false;
+        }
+        if (!valid) {
+            if (focusView != null) {
+                focusView.requestFocus();
+            }
+            return;
+        }
+        if(imageChanged) {
             Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -332,57 +319,24 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             });
         }
 
-        ServiceProvider sp = LoginHolder.servLoginRef;
-        try {
-            sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        sendRequest(MappService.DO_SIGNUP);
+    }
+
+    private void sendRequest(int action) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-        bundle.putParcelable("customer", getSignUpData(MappService.DO_SIGNUP));
+        if(action == MappService.DO_SIGNUP) {
+            bundle.putParcelable("customer", getSignUpData(MappService.DO_SIGNUP));
+        } else if(action == MappService.DO_PHONE_EXIST_CHECK) {
+            bundle.putParcelable("signInData", getSignUpData(action).getSignInData());
+        }
         mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_SIGNUP);
+        mConnection.setAction(action);
         if (Utility.doServiceAction(PatientSignUpActivity.this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
         }
     }
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-/*
-    private ServiceConnection mConnection = new ServiceConnection() {
-        private Messenger mService;
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-            if (mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
-                bundle.putParcelable("signInData", getSignUpData().getSignInData());
-            } else {
-                bundle.putParcelable("customer", getSignUpData());
-            }
-            Message msg = Message.obtain(null, mServiceAction);
-            msg.replyTo = new Messenger(mRespHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
-*/
     @Override
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_SIGNUP) {
@@ -465,87 +419,45 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         return c;
     }
 
-    private boolean isValidInput() {
-        EditText[] fields = { mEditTextCellphone, mEditTextPasswd, mEditTextConPasswd, mEditTextCustomerFName,
-                mEditTextCustomerLName, mEditTextWeight, mEditTextLoc, mEditTextPinCode };
-        if(Utility.areEditFieldsEmpty(this, fields)) {
-           return false;
-        }
-
-        boolean valid = true;
-        View focusView = null;
-
-        String fName = mEditTextCustomerFName.getText().toString().trim();
-        String lName = mEditTextCustomerLName.getText().toString().trim();
-        //String cellPhone = mEditTextCellphone.getText().toString().trim();
-        String emailId = mEditTextCustomerEmail.getText().toString().trim();
-        String passwd1 = mEditTextPasswd.getText().toString().trim();
-        String passwd2 = mEditTextConPasswd.getText().toString().trim();
-        String dob = mTextViewDOB.getText().toString().trim();
-        String weight = mEditTextWeight.getText().toString().trim();
-        //String loc = mEditTextLoc.getText().toString().trim();
-        String pinCode = mEditTextPinCode.getText().toString().trim();
-
-        if (!Validator.isOnlyAlpha(fName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
-            focusView = mEditTextCustomerFName;
-            valid = false;
-        }
-
-        if (!Validator.isOnlyAlpha(lName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
-            focusView = mEditTextCustomerLName;
-            valid = false;
-        }
-
-        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
-            mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
-            focusView = mEditTextCustomerEmail;
-            valid = false;
-        }
-
-        if (!passwd1.equals(passwd2)) {
-            mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
-            focusView = mEditTextConPasswd;
-            valid = false;
-        }
-
-        if (TextUtils.isEmpty(dob)) {
-            mTextViewDOB.setError(getString(R.string.error_field_required));
-            focusView = mTextViewDOB;
-            valid = false;
-        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) < 0) {
-            mTextViewDOB.setError(getString(R.string.error_future_date));
-            focusView = mTextViewDOB;
-            valid = false;
-        }
-
-        double value = 0.0;
-        try {
-            value = Double.parseDouble(weight);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        if (value <= 0.0) {
-            mEditTextWeight.setError(getString(R.string.error_invalid_weight));
-            focusView = mEditTextWeight;
-            valid = false;
-        }
-
-        if (Validator.isPinCodeValid(pinCode)) {
-            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
-            focusView = mEditTextPinCode;
-            valid = false;
-        }
-
-        if (focusView != null) {
-            focusView.requestFocus();
-        }
-        return valid;
-    }
-
     @Override
     public void datePicked(String date) {
         //int age = Utility.getAge(Utility.getStrAsDate(date, "dd/MM/yyyy"));
     }
+
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+/*
+    private ServiceConnection mConnection = new ServiceConnection() {
+        private Messenger mService;
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = new Messenger(service);
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+            if (mServiceAction == MappService.DO_PHONE_EXIST_CHECK) {
+                bundle.putParcelable("signInData", getSignUpData().getSignInData());
+            } else {
+                bundle.putParcelable("customer", getSignUpData());
+            }
+            Message msg = Message.obtain(null, mServiceAction);
+            msg.replyTo = new Messenger(mRespHandler);
+            msg.setData(bundle);
+
+            try {
+                mService.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+    };
+*/
 }

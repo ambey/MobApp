@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -60,7 +61,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
 
-    private View mRootView;
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mCellphoneview;
@@ -71,11 +71,12 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private RadioButton mRadioButtonGender;
     private EditText mRegistrationNumber;
     private ImageView mImgView;
-    private TextView mImgTxtView;
+
+    private View mRootView;
     private View mFormView;
     private View mProgressView;
-    private Uri fileUri; // file url to store image/video
-    private Bitmap defaultImgBits;
+    private boolean imageChanged = false;
+    private Bitmap mImgCopy;
 
     @Nullable
     @Override
@@ -104,7 +105,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
         mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
         mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
-        mImgTxtView = (TextView) mRootView.findViewById(R.id.uploadimage);
+        //mImgTxtView = (TextView) mRootView.findViewById(R.id.uploadimage);
         mRadioGroupGender = (RadioGroup) mRootView.findViewById(R.id.radioGroupGender);
         mRegistrationNumber = (EditText) mRootView.findViewById(R.id.editTextRegistrationNumber);
         mRegistrationNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -123,10 +124,35 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         } else if (category == R.string.diagnosticCenter) {
             mImgView.setImageResource(R.drawable.diagcenter);
         }
-        defaultImgBits = ((BitmapDrawable) mImgView.getDrawable()).getBitmap();
+        //defaultImgBits = ((BitmapDrawable) mImgView.getDrawable()).getBitmap();
+
+        /*if (savedInstanceState != null) {
+            Bitmap bitmap = savedInstanceState.getParcelable("image");
+            mImgView.setImageBitmap(bitmap);
+        } else {
+            mImgCopy = (Bitmap) getActivity().getLastNonConfigurationInstance();
+            if (mImgCopy != null) {
+                mImgView.setImageBitmap(mImgCopy);
+            }
+        }*/
 
         return mRootView;
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        BitmapDrawable drawable = (BitmapDrawable) mImgView.getDrawable();
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            outState.putParcelable("image", bitmap);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    /*@Override
+    public Object onRetainNonConfigurationInstance() {
+        return mImgCopy;
+    }*/
 
     public boolean isValidInput(ViewPager pager) {
         boolean cancel = false;
@@ -194,13 +220,27 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             pager.setCurrentItem(0);
             return false;
         }
+
+        if(!imageChanged) {
+            Utility.confirm(getActivity(), R.string.msg_without_img, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == DialogInterface.BUTTON_NEGATIVE) {
+                        Utility.showMessage(getActivity(), R.string.msg_set_img);
+                        return;
+                    }
+                    dialog.dismiss();
+                }
+            });
+        }
+
         return true;
     }
 
     public void captureImage(View v) {
         new AlertDialog.Builder(getActivity())
         .setTitle("Upload Image ")
-        .setItems(Utility.optionItems(getActivity()), new DialogInterface.OnClickListener() {
+        .setItems(Utility.optionItems(getActivity(), false), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -231,7 +271,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
-            boolean isImageChanged = false;
             Uri selectedImage = null;
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
@@ -241,20 +280,20 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
-                    isImageChanged = true;
+                    imageChanged = true;
 
                 } else if (requestCode == R.integer.request_camera) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(getActivity(), bitmap);
-                    isImageChanged = true;
+                    imageChanged = true;
                 } else {
                     Utility.showMessage(getActivity(), R.string.error_img_not_picked);
                 }
             } else if (requestCode == R.integer.request_edit) {
-                isImageChanged = true;
+                imageChanged = true;
             }
-            if (isImageChanged) {
+            if (imageChanged) {
                 if (requestCode != R.integer.request_edit) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(selectedImage, "image/*");
@@ -269,18 +308,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public void saveData() {
-        if(defaultImgBits == ((BitmapDrawable) mImgView.getDrawable()).getBitmap()) {
-            Utility.confirm(getActivity(), R.string.msg_without_img, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == DialogInterface.BUTTON_NEGATIVE) {
-                        Utility.showMessage(getActivity(), R.string.msg_set_img);
-                        return;
-                    }
-                    dialog.dismiss();
-                }
-            });
-        }
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
             sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
@@ -352,7 +379,6 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             }
         }
     }
-
 
     /*private static File getOutputMediaFile(int type) {
 

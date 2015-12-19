@@ -378,7 +378,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     }
 
     public void changeImg(View view) {
-        Utility.captureImage(this);
+        Utility.captureImage(this, true, mImgView);
     }
 
     @Override

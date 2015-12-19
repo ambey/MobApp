@@ -72,6 +72,7 @@ public class MappService extends Service {
     public static final int DO_UPDATE_REPORT_STATUS = 32;
     public static final int DO_CUST_PAST_APPONT_LIST = 33;
     public static final int DO_UPLOAD_PHOTO = 34;
+    public static final int DO_REMOVE_PHOTO = 35;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -322,6 +323,12 @@ public class MappService extends Service {
                     urlId = R.string.action_upload_photo_cust;
                 }
                 break;
+            case DO_REMOVE_PHOTO:
+                urlId = R.string.action_remove_photo_serv;
+                if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                    urlId = R.string.action_remove_photo_cust;
+                }
+                break;
             default:
                 return null;
         }
@@ -399,6 +406,9 @@ public class MappService extends Service {
                     mService.doGetCustRxList(msg);
                     break;
                 case DO_UPLOAD_PHOTO:
+                    mService.doSignupOrUpdate(msg);
+                    break;
+                case DO_REMOVE_PHOTO:
                     mService.doSignupOrUpdate(msg);
                     break;
                 default:
@@ -482,6 +492,7 @@ public class MappService extends Service {
                         case DO_LOGIN:
                         case DO_SIGNUP:
                         case DO_UPLOAD_PHOTO:
+                        case DO_REMOVE_PHOTO:
                         case DO_UPDATE:
                             if (mLoginType == CUSTOMER_LOGIN) {
                                 mCustomer = gson.fromJson(responseBuf.toString(), Customer.class);
