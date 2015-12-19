@@ -56,7 +56,7 @@ public class ServProvDetailsActivity extends Activity {
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         Service service = spsspt.getService();
         if(service.getCategory().equalsIgnoreCase(getString(R.string.pharmacist))) {
-            bookAppontButton.setEnabled(false);
+            Utility.setEnabledButton(this, bookAppontButton, false);
         }
         textViewClinic.setText(spsspt.getServicePoint().getName());
         textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));

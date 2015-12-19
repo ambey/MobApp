@@ -11,7 +11,6 @@ public abstract class EncryptUtil {
         return new String(Hex.encodeHex(DigestUtils.sha256(str)));
     }
 
-
     public static void main(String[] args) {
         System.out.println("original passwd = " + args[0] + ", encrypted = "
                 + encrypt(args[0]));

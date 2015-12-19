@@ -241,10 +241,6 @@
                 android:value=".service.activity.MedicalStoreHomeActivity" />
         </activity>
         <activity
-            android:name=".service.activity.PendingRxListActivity"
-            android:label="@string/title_activity_pending_rx_list" >
-        </activity>
-        <activity
             android:name=".service.activity.SelectMedicalStoreActivity"
             android:label="@string/title_activity_select_medical_store"
             android:parentActivityName=".service.activity.AppointmentDetailsActivity" >

@@ -1,14 +1,12 @@
 package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,11 +24,13 @@ import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.SearchServProvForm;
+import com.extenprise.mapp.ui.DaysSelectionDialog;
+import com.extenprise.mapp.ui.DialogDismissListener;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 
-public class AdvSearchServProvActivity extends Activity implements ResponseHandler {
+public class AdvSearchServProvActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
     protected CharSequence[] options;
     protected boolean[] selections;
@@ -89,7 +89,12 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         mSpeciality.setAdapter(spinnerAdapter);
 
         mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
-        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+        mMultiSpinnerDays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDaysSelectionDialog();
+            }
+        });
 
         if (mForm != null) {
             mLocation.setText(mForm.getLocation());
@@ -155,72 +160,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             Utility.collapse(mMultiSpinnerDays, null);
         } else {
             Utility.expand(mMultiSpinnerDays, null);
-        }
-    }
-
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog) {
-        super.onPrepareDialog(id, dialog);
-        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-            setupSelection();
-        }
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        return new AlertDialog.Builder(this)
-                .setTitle("Available Days")
-                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
-                .setPositiveButton("OK", new DialogButtonClickHandler())
-                .create();
-    }
-
-    protected void printSelectedDays() {
-        if (selections[0]) {
-            setupAllDaysSelected();
-            return;
-        }
-        int i = 1;
-        selectedDays = getString(R.string.select_days);
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays = options[i++].toString();
-                break;
-            }
-        }
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays += "," + options[i].toString();
-            }
-        }
-    }
-
-    private void setupSelection() {
-        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
-        selections[0] = false;
-        for (String d : selectedDays) {
-            selections[getDayIndex(d)] = true;
-        }
-    }
-
-    private int getDayIndex(String day) {
-        for (int i = 0; i < options.length; i++) {
-            if (day.equals(options[i])) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private void setupAllDaysSelected() {
-        selections[0] = false;
-        selectedDays = options[1].toString();
-        for (int i = 2; i < options.length; i++) {
-            selectedDays += "," + options[i];
         }
     }
 
@@ -317,7 +256,7 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
             }
         }
 
-        if(!valid) {
+        if (!valid) {
             focusView.requestFocus();
             return;
         }
@@ -358,41 +297,6 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
 */
     }
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-/*
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        private Messenger mService;
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            Bundle bundle = new Bundle();
-            if(mAction == MappService.DO_GET_SPECIALITY) {
-                mForm = new SearchServProvForm();
-                mForm.setCategory(mServProvCategory.getSelectedItem().toString());
-            }
-            bundle.putParcelable("form", mForm);
-            Message msg = Message.obtain(null, mAction);
-            msg.replyTo = new Messenger(mResponseHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-        }
-    };
-*/
     @Override
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_SEARCH_SERV_PROV) {
@@ -430,35 +334,21 @@ public class AdvSearchServProvActivity extends Activity implements ResponseHandl
         }
     }
 
-    public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick(View view) {
-            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-                setupSelection();
-            }
-            showDialog(0);
-        }
+    @Override
+    public void onDialogDismissed(DialogFragment dialog) {
+        DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
+        selectedDays = selectionDialog.getSelectedDays();
+        mMultiSpinnerDays.setText(selectedDays);
     }
 
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
-        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
-                for (CharSequence option : options) {
-                    Log.i("ME", option + " selected: " + selected);
-                }
-            } else {
-                Log.i("ME", options[clicked] + " selected: " + selected);
-            }
+    private void showDaysSelectionDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        String selctedDays = "";
+        if (!mMultiSpinnerDays.getText().toString().equals(getString(R.string.select_days))) {
+            selctedDays = mMultiSpinnerDays.getText().toString();
         }
-    }
-
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
-        public void onClick(DialogInterface dialog, int clicked) {
-            switch (clicked) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedDays();
-                    mMultiSpinnerDays.setText(selectedDays);
-                    break;
-            }
-        }
+        DaysSelectionDialog dialog = new DaysSelectionDialog();
+        dialog.setSelectedDays(selctedDays);
+        dialog.show(fragmentManager, "DaysSelect");
     }
 }

@@ -1,17 +1,10 @@
 package com.extenprise.mapp.util;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
-import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.Appointment;
-import com.extenprise.mapp.data.Rx;
-import com.extenprise.mapp.data.RxItem;
 import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.db.MappDbHelper;
 
@@ -39,7 +32,7 @@ public abstract class DBUtil {
                         MappContract.Appointment.COLUMN_NAME_DATE + "=? and ";
             }
             args = new String[argList.size()];
-            for(int i = 0; i < argList.size(); i++) {
+            for (int i = 0; i < argList.size(); i++) {
                 args[i] = argList.get(i);
             }
         }
@@ -292,8 +285,8 @@ public abstract class DBUtil {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selection = MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY + "=?";
         String[] args = {category};
-        return db.query(MappContract.Service.TABLE_NAME, new String[] {MappContract.Service.COLUMN_NAME_SERVICE_NAME},
-                selection, args,null,null,null);
+        return db.query(MappContract.Service.TABLE_NAME, new String[]{MappContract.Service.COLUMN_NAME_SERVICE_NAME},
+                selection, args, null, null, null);
     }
 
     public static ArrayList<String> getSpecOfCategory(MappDbHelper dbHelper, String servCategory) {
@@ -319,7 +312,6 @@ public abstract class DBUtil {
         return specs;
         //setNewSpec(activity, specs, speciality);
     }
-
 
 
     private static String getSelectClauseForAppointment() {

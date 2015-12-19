@@ -6,14 +6,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,14 +27,12 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.SignInData;
-import com.extenprise.mapp.db.MappContract;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -48,18 +41,13 @@ import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
-import com.extenprise.mapp.util.SearchServProv;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 
 public class ServProvProfileActivity extends Activity implements ResponseHandler {
-
 
     //String []selectedDays = new String[_options.length];
     protected CharSequence[] options;
@@ -141,7 +129,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
         Intent intent = getIntent();
         mCategory = intent.getStringExtra("category");
-        if(mCategory.equals("Pharmacist")) {
+        if (mCategory.equals("Pharmacist")) {
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
             //mConsultFee.setEnabled(false);
@@ -163,7 +151,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mLname.setText(mLname.getText().toString() + " : " + mServiceProv.getlName());
         mMobNo.setText(mMobNo.getText().toString() + " : " + mSignInData.getPhone());
         String email = getString(R.string.not_specified);
-        if(mServiceProv.getEmailId() != null) {
+        if (mServiceProv.getEmailId() != null) {
             email = mServiceProv.getEmailId();
         }
         mEmailID.setText(mEmailID.getText().toString() + " : " + email);
@@ -281,7 +269,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
             mPhone1.setText(item.getPhone());
             mPhone2.setText(item.getAltPhone());
             mEmailIdwork.setText(item.getEmailId());
-            if(mCategory.equals(getString(R.string.pharmacist))) {
+            if (mCategory.equals(getString(R.string.pharmacist))) {
                 mConsultFee.setEnabled(false);
             } else {
                 mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
@@ -406,9 +394,9 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     private boolean isValidWorkPlace() {
-        EditText[] fields = { mExperience, mQualification,
-                mName, mLoc, mPinCode, mPhone1, mConsultFee };
-        if(Utility.areEditFieldsEmpty(this, fields)) {
+        EditText[] fields = {mExperience, mQualification,
+                mName, mLoc, mPinCode, mPhone1, mConsultFee};
+        if (Utility.areEditFieldsEmpty(this, fields)) {
             return false;
         }
 
@@ -524,7 +512,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         mFname.setText(mServiceProv.getfName());
         mLname.setText(mServiceProv.getlName());
         String email = getString(R.string.not_specified);
-        if(mServiceProv.getEmailId() != null) {
+        if (mServiceProv.getEmailId() != null) {
             email = mServiceProv.getEmailId();
         }
         mEmailID.setText(email);
@@ -540,8 +528,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText[] fields = { (EditText) mFname, (EditText) mLname, (EditText) mRegNo};
-                if(Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
+                EditText[] fields = {(EditText) mFname, (EditText) mLname, (EditText) mRegNo};
+                if (Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
                     return;
                 }
                 boolean cancel = false;
@@ -695,7 +683,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private void sendRequest(int action, WorkPlace wp) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        if(wp != null) {
+        if (wp != null) {
             bundle.putParcelable("workPlace", wp);
         } else {
             bundle.putParcelable("service", mServiceProv);
