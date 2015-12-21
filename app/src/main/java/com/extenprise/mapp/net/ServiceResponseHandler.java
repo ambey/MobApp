@@ -11,6 +11,7 @@ public class ServiceResponseHandler extends Handler {
     private MappServiceConnection connection;
     private boolean unbind;
 
+
     public ServiceResponseHandler(Context context, ResponseHandler handler) {
         this.context = context;
         this.handler = handler;
@@ -18,6 +19,7 @@ public class ServiceResponseHandler extends Handler {
     }
 
     public void setConnection(MappServiceConnection connection) {
+
         this.connection = connection;
     }
 
@@ -35,9 +37,9 @@ public class ServiceResponseHandler extends Handler {
         }
     }
 
-    /*public void unbindService(ServiceConnection conn) {
+    public void unbindService(ServiceConnection conn) {
         if(unbind) {
             this.unbindService(conn);
         }
-    }*/
+    }
 }

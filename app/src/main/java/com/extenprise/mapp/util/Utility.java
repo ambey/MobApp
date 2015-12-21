@@ -417,13 +417,13 @@ public abstract class Utility {
 
     public static void enlargeImage(ImageView imageView) {
 
-        if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.MATCH_PARENT) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(120, 120);
+        if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.FILL_PARENT) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(140, 140);
             params.gravity = Gravity.CENTER;
             imageView.setLayoutParams(params);
             imageView.setAdjustViewBounds(true);
         } else {
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
@@ -444,6 +444,36 @@ public abstract class Utility {
 // recreate the new Bitmap and set it back
         return Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(), bitmapToScale.getHeight(), matrix, true);*/
     }
+
+    /*public boolean onDoubleTap(MotionEvent e) {
+        ImageView imageView = (ImageView) findViewById(imageViewId);
+        int width = imageView.getWidth();
+        int height = imageView.getWidth();
+        float maxScale;
+        if ( width < height ) {
+            maxScale = (float) (width * Math.pow(1.5, 6));
+        } else {
+            maxScale = (float) (height * Math.pow(1.5, 6));
+        }
+
+        Drawable d = imageView.getDrawable();
+        int imageWidth = d.getIntrinsicWidth();
+        int imageHeight = d.getIntrinsicHeight();
+        float[] value = new float[9];
+        matrix.getValues(value);
+        scaleWidth = (int)(imageWidth * value[Matrix.MSCALE_X]);
+        scaleHeight = (int)(imageHeight * value[Matrix.MSCALE_Y]);
+
+        if ( (scaleWidth * 2) < maxScale ) {
+            matrix.postScale(2, 2, e.getRawX(), e.getRawY());
+        } else {
+            matrix.postScale(0, 0, e.getRawX(), e.getRawY());
+        }
+        isDoubleTab = true;
+        tuneMatrix(matrix);
+        savedMatrix.set(matrix);
+        return false;
+    }*/
 
     public static void expand(final View v, View view) {
         if (view != null) {

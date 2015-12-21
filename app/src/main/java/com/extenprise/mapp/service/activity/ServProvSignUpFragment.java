@@ -257,16 +257,15 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             Uri selectedImage = null;
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
-                if ((requestCode == requestGallery ||
-                        requestCode == requestEdit)
-                        && null != data) {
+                if ((requestCode == requestGallery /*||
+                        requestCode == requestEdit*/)
+                        && data != null) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
 
-                } else if (requestCode == requestCamera) {
-                    assert data != null;
+                } else if (requestCode == requestCamera && data != null) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(getActivity(), bitmap);
@@ -274,17 +273,20 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 } else {
                     Utility.showMessage(getActivity(), R.string.error_img_not_picked);
                 }
-            } else if (requestCode == requestEdit) {
-                imageChanged = true;
             }
-            if (imageChanged) {
+
+            //TODO : Edit request is not working in this case.
+            /*else if (requestCode == requestEdit) {
+                imageChanged = true;
+            }*/
+            /*if (imageChanged) {
                 if (requestCode != requestEdit) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setDataAndType(selectedImage, "image*//*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivityForResult(editIntent, requestEdit);
                 }
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
             Utility.showMessage(getActivity(), R.string.some_error);
@@ -466,5 +468,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
 
         return (count > 0);
     }*/
+
+    public void onBackPressed() {
+        if(mConnection.isConnected()) {
+            getActivity().unbindService(mConnection);
+        }
+    }
 
 }

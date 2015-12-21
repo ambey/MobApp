@@ -13,6 +13,11 @@ public class MappServiceConnection implements ServiceConnection {
     private int action;
     private ServiceResponseHandler respHandler;
     private Bundle data;
+    private boolean connected;
+
+    public boolean isConnected() {
+        return connected;
+    }
 
     public MappServiceConnection(ServiceResponseHandler responseHandler) {
         respHandler = responseHandler;
@@ -27,6 +32,10 @@ public class MappServiceConnection implements ServiceConnection {
         this.data = data;
     }
 
+    public Bundle getData() {
+        return data;
+    }
+
     @Override
     public void onServiceConnected(ComponentName className,
                                    IBinder service) {
@@ -34,6 +43,7 @@ public class MappServiceConnection implements ServiceConnection {
         Message msg = Message.obtain(null, action);
         msg.replyTo = new Messenger(respHandler);
         msg.setData(data);
+        connected = true;
 
         try {
             this.service.send(msg);
@@ -44,6 +54,7 @@ public class MappServiceConnection implements ServiceConnection {
 
     @Override
     public void onServiceDisconnected(ComponentName arg0) {
+        connected = false;
         service = null;
     }
 

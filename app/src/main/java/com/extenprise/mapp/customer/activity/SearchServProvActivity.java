@@ -313,9 +313,13 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         }
         return intent;
     }
-/*
+
+    @Override
     public void onBackPressed() {
-        unbindService(mConnection);
-        startActivity(getParentActivityIntent());
-    }*/
+        if(mConnection.isConnected()) {
+            unbindService(mConnection);
+        }
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

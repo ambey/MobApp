@@ -231,4 +231,11 @@ public class ServProvSignUpActivity extends FragmentActivity {
         }
         super.startActivityForResult(intent, requestCode);
     }*/
+
+    @Override
+    public void onBackPressed() {
+        ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
+        fragment.onBackPressed();
+        super.onBackPressed();
+    }
 }
