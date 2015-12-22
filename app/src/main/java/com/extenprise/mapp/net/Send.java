@@ -53,23 +53,25 @@ public class Send {
 
 
     public static void email(Activity activity, String subject, String msg, String[] to, String[] cc) {
-      Log.i("Send email", "");
-      Intent emailIntent = new Intent(Intent.ACTION_SEND);
+          Log.i("Send email", "");
+          Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-      emailIntent.setData(Uri.parse("mailto:"));
-      emailIntent.setType("text/plain");
-      emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-      emailIntent.putExtra(Intent.EXTRA_CC, cc);
-      emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-      emailIntent.putExtra(Intent.EXTRA_TEXT, msg);
-      try {
-          activity.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-         Log.i("Finished sending email.", "");
-      }
-      catch (android.content.ActivityNotFoundException ex) {
-         //Toast.makeText(activity, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-          Utility.showMessage(activity, R.string.some_error);
-      }
+          emailIntent.setData(Uri.parse("mailto:"));
+          emailIntent.setType("text/plain");
+          emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+            if(cc != null) {
+                emailIntent.putExtra(Intent.EXTRA_CC, cc);
+            }
+          emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+          emailIntent.putExtra(Intent.EXTRA_TEXT, msg);
+          try {
+              activity.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+             Log.i("Finished sending email.", "");
+          }
+          catch (android.content.ActivityNotFoundException ex) {
+             //Toast.makeText(activity, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+              Utility.showMessage(activity, R.string.some_error);
+          }
    }
 
 

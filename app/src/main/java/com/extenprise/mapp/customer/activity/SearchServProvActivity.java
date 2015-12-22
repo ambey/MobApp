@@ -22,6 +22,7 @@ import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
+import com.extenprise.mapp.net.Send;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.util.Utility;
@@ -284,6 +285,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         Utility.showProgress(this, mSearchFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
+            Send.email(this, "Test", "Test Mail From App.", new String[]{"jain_avinash@extenprise.com"}, null);
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
             intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
             startActivity(intent);
@@ -318,6 +320,10 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     public void onBackPressed() {
         if(mConnection.isConnected()) {
             unbindService(mConnection);
+            //finish();
+            //TODO not working as needed, still its returning the response.
+            /*mConnection.setData(null);
+            stopService(getIntent());*/
         }
         //startActivity(getIntent());
         super.onBackPressed();

@@ -46,7 +46,9 @@ public class MappServiceConnection implements ServiceConnection {
         connected = true;
 
         try {
-            this.service.send(msg);
+            if(isConnected()) {
+                this.service.send(msg);
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }

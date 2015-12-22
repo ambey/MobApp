@@ -19,12 +19,14 @@ public class ServiceResponseHandler extends Handler {
     }
 
     public void setConnection(MappServiceConnection connection) {
-
         this.connection = connection;
     }
 
     @Override
     public void handleMessage(Message msg) {
+        /*if(!connection.isConnected()) {
+            return;
+        }*/
         if(unbind) {
             try {
                 context.unbindService(connection);
@@ -37,9 +39,11 @@ public class ServiceResponseHandler extends Handler {
         }
     }
 
+/*
     public void unbindService(ServiceConnection conn) {
         if(unbind) {
             this.unbindService(conn);
         }
     }
+*/
 }

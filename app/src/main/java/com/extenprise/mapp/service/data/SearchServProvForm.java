@@ -39,8 +39,7 @@ public class SearchServProvForm implements Parcelable {
         endTime = fields[count++];
         workDays = fields[count++];
         consultFee = fields[count++];
-        gender = fields[count++];
-
+        gender = fields[count];
     }
 
     public String getName() {

@@ -192,7 +192,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
 
     public void showEndTimePicker(View view) {
         //timePicker(mButttonEndTime);
-        Utility.timePicker(view, mButtonStartTime);
+        Utility.timePicker(view, mButttonEndTime);
     }
 
     public void searchDr(View view) {
@@ -310,6 +310,9 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     }
 
     private void gotSpecialities(Bundle data) {
+        if(this == null) {
+            return;
+        }
         Utility.showProgress(this, mSearchFormView, mProgressView, false);
         ArrayList<String> list = data.getStringArrayList("specialities");
         if (list == null) {
@@ -350,5 +353,17 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         DaysSelectionDialog dialog = new DaysSelectionDialog();
         dialog.setSelectedDays(selctedDays);
         dialog.show(fragmentManager, "DaysSelect");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mConnection.isConnected()) {
+            unbindService(mConnection);
+
+            //finish();
+            stopService(getIntent());
+        }
+        //startActivity(getIntent());
+        super.onBackPressed();
     }
 }
