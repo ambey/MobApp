@@ -62,8 +62,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/viewClinicName"
-        android:layout_toRightOf="@id/viewClinicName"
         android:layout_toEndOf="@id/viewClinicName"
+        android:layout_toRightOf="@id/viewClinicName"
         android:focusable="false"
         android:text="@string/comma" />
 
@@ -87,7 +87,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/available"
-        android:src="@drawable/gcircle" />
+        android:src="@drawable/g_circle" />
     <!--android:background="@drawable/button"
     android:backgroundTint="#f00"-->
     <TextView
@@ -136,8 +136,8 @@
         android:layout_alignBaseline="@id/viewExpValue"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toRightOf="@id/viewExpValue"
         android:layout_toEndOf="@id/viewExpValue"
+        android:layout_toRightOf="@id/viewExpValue"
         android:text="@string/year_short"/>
 
 </RelativeLayout>

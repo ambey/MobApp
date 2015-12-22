@@ -2,6 +2,7 @@ package com.extenprise.mapp.service.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.data.WorkingDataStore;
 import com.extenprise.mapp.service.activity.AppointmentDetailsActivity;
 import com.extenprise.mapp.service.data.AppointmentListItem;
 import com.extenprise.mapp.service.data.ServiceProvider;
@@ -89,7 +91,8 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
-        intent.putExtra("appont", mList.get(position));
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.putParcelable("appont", mList.get(position));
         getContext().startActivity(intent);
     }
 }

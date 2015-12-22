@@ -58,8 +58,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Button mCancelAppontButton = (Button) findViewById(R.id.cancelButton);
         mStatusView = (TextView) findViewById(R.id.statusTextView);
 
-        Intent intent = getIntent();
-        mAppont = intent.getParcelableExtra("appont");
+        Bundle bundle = WorkingDataStore.getBundle();
+        mAppont = bundle.getParcelable("appont");
 
         mServProv = LoginHolder.servLoginRef;
 
