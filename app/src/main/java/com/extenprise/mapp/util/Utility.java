@@ -48,7 +48,6 @@ import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
-import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.service.data.WorkPlace;
 
@@ -403,6 +402,8 @@ public abstract class Utility {
         speciality.setAdapter(spinnerAdapter);
     }
 
+    /* There is already a set of methods named showAlert in this class. */
+    /* Please use showAlert to show alert dialog */
     public static AlertDialog openSpecDialog(final Activity activity, final Spinner speciality) {
         final EditText txtSpec = new EditText(activity);
         txtSpec.setHint("Add Speciality");
@@ -649,6 +650,8 @@ public abstract class Utility {
         return context.getResources().getStringArray(R.array.days);
     }
 
+    /* There is already a set of methods named showAlert in this class. */
+    /* Please use showAlert to show alert dialog */
     public static void confirm(Context activity, int msg, DialogInterface.OnClickListener listener) throws Resources.NotFoundException {
         //final boolean[] confirm = new boolean[1];
         new AlertDialog.Builder(activity)
@@ -657,6 +660,8 @@ public abstract class Utility {
                 .setNegativeButton(R.string.no, listener);
     }
 
+    /* There is already a set of methods named showAlert in this class. */
+    /* Please use showAlert to show alert dialog */
     public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         if (dialogView != null) {
@@ -794,39 +799,8 @@ public abstract class Utility {
         activity.startActivityForResult(galleryIntent, request);
     }
 
-    public static boolean captureImage(final Activity activity, final boolean removable, final ImageView img) {
-        new AlertDialog.Builder(activity)
-                .setTitle(R.string.uploadImg)
-                .setItems(imgOpts(activity), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                activity.startActivityForResult(intent, R.integer.request_camera);
-                                break;
-                            case 1:
-                                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                activity.startActivityForResult(galleryIntent, R.integer.request_gallery);
-                                break;
-                            case 2:
-                                if (!removable) {
-                                    dialog.dismiss();
-                                    break;
-                                } else {
-                                    img.setImageDrawable(null);
-                                }
-                        }
-                    }
-                }).create().show();
-        return true;
-    }
-
-    public static String[] imgOpts(final Activity activity) {
-        return new String[]{activity.getString(R.string.take_photo),
-                activity.getString(R.string.from_gallery),
-                activity.getString(R.string.remove)};
-        /*if (!removable) {
+    public static CharSequence[] optionItems(final Activity activity, boolean removable) {
+        if (!removable) {
             return new CharSequence[]{
                     activity.getString(R.string.take_photo),
                     activity.getString(R.string.from_gallery),
@@ -836,7 +810,7 @@ public abstract class Utility {
                     activity.getString(R.string.take_photo),
                     activity.getString(R.string.from_gallery),
                     activity.getString(R.string.remove)};
-        }*/
+        }
     }
 
     public static boolean areEditFieldsEmpty(Activity activity, EditText[] fields) {
@@ -859,14 +833,17 @@ public abstract class Utility {
         return Uri.parse(path);
     }
 
+    /* Methods in this class should ideally be doing a single well defined task */
+    /* The method name is sendRequest, but it is having some very specific logic */
+    /* The class cast operations should be avoided */
     public static boolean sendRequest(Activity activity, int loginType, int action, Object obj, MappServiceConnection mConnection) {
-        if(obj == null) {
+        if (obj == null) {
             return false;
         }
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", loginType);
 
-        if(loginType == MappService.CUSTOMER_LOGIN) {
+        if (loginType == MappService.CUSTOMER_LOGIN) {
             Customer c = (Customer) obj;
             bundle.putParcelable("customer", c);
         } else {
@@ -891,6 +868,6 @@ public abstract class Utility {
         }
         mConnection.setData(bundle);
         mConnection.setAction(action);
-        return doServiceAction(activity, mConnection, activity.BIND_AUTO_CREATE);
+        return doServiceAction(activity, mConnection, Context.BIND_AUTO_CREATE);
     }
 }

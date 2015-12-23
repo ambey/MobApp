@@ -34,8 +34,6 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
 
     protected CharSequence[] options;
     protected boolean[] selections;
-    ArrayList<String> specList;
-    String selectedDays;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private SearchServProvForm mForm;
     private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
@@ -81,7 +79,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
 
         mForm = getIntent().getParcelableExtra("form");
 
-        specList = getIntent().getStringArrayListExtra("specList");
+        ArrayList<String> specList = getIntent().getStringArrayListExtra("specList");
         if (specList == null) {
             specList = new ArrayList<>();
         }
@@ -310,9 +308,6 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     }
 
     private void gotSpecialities(Bundle data) {
-        if(this == null) {
-            return;
-        }
         Utility.showProgress(this, mSearchFormView, mProgressView, false);
         ArrayList<String> list = data.getStringArrayList("specialities");
         if (list == null) {
@@ -340,7 +335,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     @Override
     public void onDialogDismissed(DialogFragment dialog) {
         DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
-        selectedDays = selectionDialog.getSelectedDays();
+        String selectedDays = selectionDialog.getSelectedDays();
         mMultiSpinnerDays.setText(selectedDays);
     }
 

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -190,19 +191,23 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     public void showImageUploadOptions(View view) {
         final Activity activity = this;
+        final Resources resources = getResources();
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
-                Utility.imgOpts(activity), new DialogInterface.OnClickListener() {
+                new String[]{activity.getString(R.string.take_photo),
+                        activity.getString(R.string.from_gallery),
+                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utility.startCamera(activity, R.integer.request_camera);
+                                Utility.startCamera(activity, resources.getInteger(R.integer.request_camera));
                                 break;
                             case 1:
-                                Utility.pickPhotoFromGallery(activity, R.integer.request_gallery);
+                                Utility.pickPhotoFromGallery(activity, resources.getInteger(R.integer.request_gallery));
                                 break;
                             case 2:
                                 mImgView.setImageBitmap(null);
+                                mImgView.setBackgroundResource(R.drawable.patient);
                                 break;
                         }
 
@@ -215,17 +220,21 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         //super.onActivityResult(requestCode, resultCode, data);
         try {
             Uri selectedImage = null;
+            Resources resources = getResources();
             // When an Image is picked
             if (resultCode == RESULT_OK) {
-                if ((requestCode == R.integer.request_gallery ||
-                        requestCode == R.integer.request_edit)
-                        && null != data) {
+                if (data == null) {
+                    Utility.showMessage(this, R.string.error_img_not_picked);
+                    return;
+                }
+                if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
+                        requestCode == resources.getInteger(R.integer.request_edit))) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
 
-                } else if (requestCode == R.integer.request_camera) {
+                } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(this, bitmap);
@@ -233,15 +242,15 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 } else {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
-            } else if (requestCode == R.integer.request_edit) {
+            } else if (requestCode == resources.getInteger(R.integer.request_edit)) {
                 imageChanged = true;
             }
             if (imageChanged) {
-                if (requestCode != R.integer.request_edit) {
+                if (requestCode != resources.getInteger(R.integer.request_edit)) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(editIntent, R.integer.request_edit);
+                    startActivityForResult(editIntent, resources.getInteger(R.integer.request_edit));
                 }
             }
         } catch (Exception e) {
@@ -330,18 +339,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     private void sendRequest(int action) {
-
-        /*Object obj = null;
-        if (action == MappService.DO_SIGNUP) {
-            obj = getSignUpData(action);
-        } else if (action == MappService.DO_PHONE_EXIST_CHECK) {
-            obj = getSignUpData(action).getSignInData();
-        }
-
-        if(Utility.sendRequest(this, MappService.CUSTOMER_LOGIN, action, obj, mConnection)) {
-            Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
-        }*/
-
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
         if (action == MappService.DO_SIGNUP) {

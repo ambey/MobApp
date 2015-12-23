@@ -4,14 +4,7 @@ import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,14 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.util.Utility;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,7 +199,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
         ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
         fragment.onActivityResult(requestCode, resultCode, data);
     }

@@ -1,15 +1,14 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -38,7 +37,9 @@ import com.extenprise.mapp.util.Validator;
 
 public class ServProvSignUpFragment extends Fragment implements TitleFragment, ResponseHandler {
     // LogCat tag
+/*
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
+*/
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
 
     private EditText mFirstName;
@@ -56,10 +57,11 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     private View mFormView;
     private View mProgressView;
     private boolean imageChanged = false;
-    private Bitmap mImgCopy;
+/*
     private int requestGallery = 100;
     private int requestCamera = 200;
     private int requestEdit = 300;
+*/
 
     @Nullable
     @Override
@@ -141,9 +143,9 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         boolean cancel = false;
         View focusView = null;
 
-        EditText[] fields = { mFirstName, mLastName, mCellphoneview,
-                mPasswdView, mCnfPasswdView, mRegistrationNumber };
-        if(Utility.areEditFieldsEmpty(getActivity(), fields)) {
+        EditText[] fields = {mFirstName, mLastName, mCellphoneview,
+                mPasswdView, mCnfPasswdView, mRegistrationNumber};
+        if (Utility.areEditFieldsEmpty(getActivity(), fields)) {
             pager.setCurrentItem(0);
             cancel = true;
         }
@@ -197,14 +199,14 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         }
 
         if (cancel) {
-            if(focusView != null) {
+            if (focusView != null) {
                 focusView.requestFocus();
             }
             pager.setCurrentItem(0);
             return false;
         }
 
-        if(!imageChanged) {
+        if (!imageChanged) {
             Utility.confirm(getActivity(), R.string.msg_without_img, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -221,29 +223,27 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public void captureImage(View v) {
-        new AlertDialog.Builder(getActivity())
-        .setTitle("Upload Image ")
-        .setItems(Utility.optionItems(getActivity(), false), new DialogInterface.OnClickListener() {
+        final Activity activity = getActivity();
+        Utility.showAlert(activity, getString(R.string.uploadImg), null, false, new String[]{activity.getString(R.string.take_photo),
+                activity.getString(R.string.from_gallery),
+                activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+
+            @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        /*File f = new File(android.os.Environment
-                                .getExternalStorageDirectory(), "temp.jpg");
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));*/
-                        startActivityForResult(intent, requestCamera);
+                        Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera));
                         break;
                     case 1:
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(galleryIntent, requestGallery);
+                        Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
                         break;
                     case 2:
-                        dialog.dismiss();
+                        mImgView.setImageBitmap(null);
+                        mImgView.setBackgroundResource(R.drawable.dr_avatar);
                         break;
                 }
             }
-        }).create().show();
+        });
     }
 
     public void enlargeImg(View view) {
@@ -255,17 +255,19 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         //super.onActivityResult(requestCode, resultCode, data);
         try {
             Uri selectedImage = null;
+            Resources resources = getResources();
+            int requestEdit = resources.getInteger(R.integer.request_edit);
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
-                if ((requestCode == requestGallery /*||
-                        requestCode == requestEdit*/)
+                if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
+                        requestCode == requestEdit)
                         && data != null) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
 
-                } else if (requestCode == requestCamera && data != null) {
+                } else if (requestCode == resources.getInteger(R.integer.request_camera) && data != null) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(getActivity(), bitmap);
@@ -273,20 +275,17 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
                 } else {
                     Utility.showMessage(getActivity(), R.string.error_img_not_picked);
                 }
-            }
-
-            //TODO : Edit request is not working in this case.
-            /*else if (requestCode == requestEdit) {
+            } else if (requestCode == requestEdit) {
                 imageChanged = true;
-            }*/
-            /*if (imageChanged) {
+            }
+            if (imageChanged) {
                 if (requestCode != requestEdit) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image*//*");
+                    editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(editIntent, requestEdit);
+                    getActivity().startActivityForResult(editIntent, requestEdit);
                 }
-            }*/
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Utility.showMessage(getActivity(), R.string.some_error);
@@ -337,7 +336,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         }
         mConnection.setData(bundle);
         mConnection.setAction(check);
-        if(Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
             Utility.showProgress(getActivity(), mFormView, mProgressView, true);
         }
     }
@@ -470,7 +469,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }*/
 
     public void onBackPressed() {
-        if(mConnection.isConnected()) {
+        if (mConnection.isConnected()) {
             getActivity().unbindService(mConnection);
         }
     }

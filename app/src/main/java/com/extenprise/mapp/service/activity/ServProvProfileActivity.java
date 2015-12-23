@@ -3,16 +3,18 @@ package com.extenprise.mapp.service.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,14 +43,15 @@ import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
+import com.extenprise.mapp.ui.DaysSelectionDialog;
+import com.extenprise.mapp.ui.DialogDismissListener;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
-import com.google.android.gms.drive.query.SortOrder;
 
 import java.util.ArrayList;
 
 
-public class ServProvProfileActivity extends Activity implements ResponseHandler {
+public class ServProvProfileActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
     //String []selectedDays = new String[_options.length];
     protected CharSequence[] options;
@@ -86,7 +89,6 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     private EditText mPinCode;
     private Spinner mState;
     private Button mMultiSpinnerDays;
-    private String selectedDays;
     private String mCategory;
 
     @Override
@@ -148,16 +150,16 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         if (mServiceProv.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getPhoto()));
         }
-        mFname.setText(mFname.getText().toString() + " : " + mServiceProv.getfName());
-        mLname.setText(mLname.getText().toString() + " : " + mServiceProv.getlName());
-        mMobNo.setText(mMobNo.getText().toString() + " : " + mSignInData.getPhone());
+        mFname.setText(getString(R.string.first_name_with_lbl, mServiceProv.getfName()));
+        mLname.setText(getString(R.string.last_name_with_lbl, mServiceProv.getlName()));
+        mMobNo.setText(getString(R.string.mobile_no_with_lbl, mSignInData.getPhone()));
         String email = getString(R.string.not_specified);
         if (mServiceProv.getEmailId() != null) {
             email = mServiceProv.getEmailId();
         }
-        mEmailID.setText(mEmailID.getText().toString() + " : " + email);
-        mRegNo.setText(mRegNo.getText().toString() + " : " + mServiceProv.getRegNo());
-        mGenderTextView.setText(mGenderTextView.getText().toString() + " : " + mServiceProv.getGender());
+        mEmailID.setText(getString(R.string.email_id_with_lbl, email));
+        mRegNo.setText(getString(R.string.reg_no_with_lbl, mServiceProv.getRegNo()));
+        mGenderTextView.setText(getString(R.string.gender_with_lbl, mServiceProv.getGender()));
 
         //Get work place list from server
         sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
@@ -312,7 +314,13 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 Utility.timePicker(v, mEndTime);
             }
         });
-        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+        mMultiSpinnerDays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDaysSelectionDialog();
+            }
+        });
+
         mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -608,23 +616,27 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         super.onSaveInstanceState(outState);
     }
 
+/*
     @Override
     public Object onRetainNonConfigurationInstance() {
         return mImgCopy;
     }
+*/
 
     public void changeImage(View view) {
         final Activity activity = this;
         Utility.showAlert(activity, "", null, false,
-                Utility.imgOpts(activity), new DialogInterface.OnClickListener() {
+                new String[]{activity.getString(R.string.take_photo),
+                        activity.getString(R.string.from_gallery),
+                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utility.startCamera(activity, R.integer.request_camera);
+                                Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera));
                                 break;
                             case 1:
-                                Utility.pickPhotoFromGallery(activity, R.integer.request_gallery);
+                                Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
                                 break;
                             case 2:
                                 Utility.showAlert(activity, "", getString(R.string.confirm_remove_photo), true,
@@ -634,7 +646,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
                                                 if (which == -1) {
-                                                    sendRequest(MappService.DO_REMOVE_PHOTO, null);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                                                    bundle.putParcelable("service", mServiceProv);
+                                                    mConnection.setData(bundle);
+                                                    mConnection.setAction(MappService.DO_REMOVE_PHOTO);
+                                                    if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
+                                                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                                                    }
                                                 }
                                             }
                                         });
@@ -662,17 +681,21 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         try {
             boolean isImageChanged = false;
             Uri selectedImage = null;
+            Resources resources = getResources();
             // When an Image is picked
             if (resultCode == RESULT_OK) {
-                if ((requestCode == R.integer.request_gallery ||
-                        requestCode == R.integer.request_edit)
-                        && null != data) {
+                if (data == null) {
+                    Utility.showMessage(this, R.string.error_img_not_picked);
+                    return;
+                }
+                if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
+                        requestCode == resources.getInteger(R.integer.request_edit))) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     isImageChanged = true;
 
-                } else if (requestCode == R.integer.request_camera) {
+                } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(this, bitmap);
@@ -680,16 +703,16 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                 } else {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
-            } else if (requestCode == R.integer.request_edit) {
+            } else if (requestCode == resources.getInteger(R.integer.request_edit)) {
                 isImageChanged = true;
             }
 
             if (isImageChanged) {
-                if (requestCode != R.integer.request_edit) {
+                if (requestCode != resources.getInteger(R.integer.request_edit)) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(editIntent, R.integer.request_edit);
+                    startActivityForResult(editIntent, resources.getInteger(R.integer.request_edit));
                 } else {
                     mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
                     sendRequest(MappService.DO_UPLOAD_PHOTO, null);
@@ -854,491 +877,21 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 ///////////////////////////Multi spinner..../////////////////////////////
 
     @Override
-    protected void onPrepareDialog(int id, Dialog dialog) {
-        super.onPrepareDialog(id, dialog);
-        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-            setupSelection();
-        }
+    public void onDialogDismissed(DialogFragment dialog) {
+        DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
+        String selectedDays = selectionDialog.getSelectedDays();
+        mMultiSpinnerDays.setText(selectedDays);
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        return new AlertDialog.Builder(this)
-                .setTitle("Available Days")
-                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
-                .setPositiveButton("OK", new DialogButtonClickHandler())
-                .create();
+    private void showDaysSelectionDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        String selctedDays = "";
+        if (!mMultiSpinnerDays.getText().toString().equals(getString(R.string.select_days))) {
+            selctedDays = mMultiSpinnerDays.getText().toString();
+        }
+        DaysSelectionDialog dialog = new DaysSelectionDialog();
+        dialog.setSelectedDays(selctedDays);
+        dialog.show(fragmentManager, "DaysSelect");
     }
-
-    protected void printSelectedDays() {
-        if (selections[0]) {
-            setupAllDaysSelected();
-            return;
-        }
-        int i = 1;
-        selectedDays = getString(R.string.select_days);
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays = options[i++].toString();
-                break;
-            }
-        }
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays += "," + options[i].toString();
-            }
-        }
-    }
-
-    private void setupSelection() {
-        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
-        selections[0] = false;
-        for (String d : selectedDays) {
-            selections[getDayIndex(d)] = true;
-        }
-    }
-
-    private int getDayIndex(String day) {
-        for (int i = 0; i < options.length; i++) {
-            if (day.equals(options[i])) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private void setupAllDaysSelected() {
-        selections[0] = false;
-        selectedDays = options[1].toString();
-        for (int i = 2; i < options.length; i++) {
-            selectedDays += "," + options[i];
-        }
-    }
-
-    public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick(View view) {
-            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-                setupSelection();
-            }
-            showDialog(0);
-        }
-    }
-
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
-        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
-                for (CharSequence option : options) {
-                    Log.i("ME", option + " selected: " + selected);
-                }
-            } else {
-                Log.i("ME", options[clicked] + " selected: " + selected);
-            }
-        }
-    }
-
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
-        public void onClick(DialogInterface dialog, int clicked) {
-            switch (clicked) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedDays();
-                    mMultiSpinnerDays.setText(selectedDays);
-                    break;
-            }
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-
-
-
-    /*private void showWorkPlaceList() {
-        final Cursor cursor = SearchServProv.getCursor();
-        String[] values = new String[]{
-                MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY,
-                MappContract.Service.COLUMN_NAME_SERVICE_NAME,
-                MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION,
-                MappContract.ServProvHasServPt.COLUMN_NAME_EXP,
-                MappContract.ServicePoint.COLUMN_NAME_NAME,
-                MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE,
-                MappContract.ServicePoint.COLUMN_NAME_LOCATION,
-                MappContract.ServicePoint.COLUMN_NAME_ID_CITY,
-                MappContract.ServicePoint.COLUMN_NAME_PHONE,
-                MappContract.ServicePoint.COLUMN_NAME_ALT_PHONE,
-                MappContract.ServicePoint.COLUMN_NAME_EMAIL_ID,
-                MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME,
-                MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME,
-                MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS,
-                MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE
-        };
-        int[] viewIds = new int[]{
-                R.id.spinServiceProvCategory,
-                R.id.editTextSpeciality,
-                R.id.editTextQualification,
-                R.id.editTextExperience,
-                R.id.editTextName,
-                R.id.viewWorkPlaceType,
-                R.id.editTextLoc,
-                R.id.editTextCity,
-                R.id.editTextPhone1,
-                R.id.editTextPhone2,
-                R.id.editTextEmail,
-                R.id.buttonStartTime,
-                R.id.buttonEndTime,
-                R.id.editTextWeeklyOff,
-                R.id.editTextConsultationFees
-        };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                R.layout.activity_servprov_wrkdetail_list,
-                cursor,
-                values,
-                viewIds, 0) {
-            @Override
-            public View getView(int position, View convertView,
-                                ViewGroup parent) {
-
-                View view = super.getView(position, convertView, parent);
-                cursor.moveToPosition(position);
-
-                TextView mTextViewEdit = (TextView) findViewById(R.id.textViewEditWrkDetail);
-                TextView mViewEdit = (TextView) findViewById(R.id.viewEditWrkDetail);
-
-                mTextViewEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        editWorkPlaceInfo(v);
-                    }
-                });
-
-                return view;
-            }
-        };
-        listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-        listView.setAdapter(adapter);
-    }*/
-
-
-    /*
-    class SaveServiceData extends AsyncTask<Void, Void, Void> {
-
-        private Activity myActivity;
-
-        public SaveServiceData(Activity activity) {
-            myActivity = activity;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            ServiceProvider sp = LoginHolder.servLoginRef; // TO DO
-            ArrayList<ServProvHasServPt> spsList = sp.getServices();
-
-            if (spsList == null) {
-                return null;
-            }
-            String where = MappContract.ServiceProvider.COLUMN_NAME_CELLPHONE + " = ? ";
-            String[] selectionArgs = {
-                    "" + LoginHolder.servLoginRef.getPhone()
-            };
-
-            MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_FNAME, mFname.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_LNAME, mLname.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_QUALIFICATION, mQualification.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_GENDER, mGenderBtn.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_REGISTRATION_NUMBER, mRegNo.getText().toString());
-            values.put(MappContract.ServiceProvider.COLUMN_NAME_EMAIL_ID, mEmailID.getText().toString());
-
-            db.update(MappContract.ServiceProvider.TABLE_NAME, values, where, selectionArgs);
-
-            for (ServProvHasServPt sps : spsList) {
-                ServicePoint spt = sps.getServicePoint();
-
-                values = new ContentValues();
-                values.put(MappContract.ServicePoint.COLUMN_NAME_NAME, spt.getName());
-                values.put(MappContract.ServicePoint.COLUMN_NAME_LOCATION, spt.getLocation());
-                values.put(MappContract.ServicePoint.COLUMN_NAME_PHONE, spt.getPhone());
-                values.put(MappContract.ServicePoint.COLUMN_NAME_ID_CITY, spt.getCity().getIdCity());
-
-                long sptId = db.insert(MappContract.ServicePoint.TABLE_NAME, null, values);
-
-
-                values = new ContentValues();
-                values.put(MappContract.Service.COLUMN_NAME_SERVICE_NAME, sps.getService().getSpeciality());
-                values.put(MappContract.Service.COLUMN_NAME_SERVICE_CATAGORY, sps.getService().getCategory());
-                long idService = db.insert(MappContract.Service.TABLE_NAME, null, values);
-
-                values = new ContentValues();
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERVICE, idService);
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_EXP, sps.getExperience());
-
-                try {
-                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_START_TIME, sps.getStartTime());
-                    values.put(MappContract.ServProvHasServPt.COLUMN_NAME_END_TIME, sps.getEndTime());
-                } catch (Exception x) {
-                    x.printStackTrace();
-                }
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_SERVICE_POINT_TYPE, sps.getServPointType());
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_CONSULTATION_FEE, sps.getConsultFee());
-                values.put(MappContract.ServProvHasServPt.COLUMN_NAME_WORKING_DAYS, sps.getWorkingDays());
-
-                where = MappContract.ServProvHasServPt.COLUMN_NAME_SERV_PROV_PHONE + " = ? and " +
-                        MappContract.ServProvHasServPt.COLUMN_NAME_ID_SERV_PT + " = ? ";
-                String[] args = {
-                        "" + sp.getPhone(), "" + sptId
-                };
-                db.update(MappContract.ServProvHasServPt.TABLE_NAME, values, where, args);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Utility.showRegistrationAlert(myActivity, "", "Profile updated.");
-            Utility.showProgress(myActivity, mFormView, mProgressView, false);
-            //Intent intent = new Intent(myActivity, LoginActivity.class);
-            //startActivity(intent);
-        }
-
-        @Override
-        protected void onCancelled() {
-            Utility.showProgress(myActivity, mFormView, mProgressView, false);
-        }
-
-    }
-*/
-
-     /*@Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-
-        if (!AdapterView.AdapterContextMenuInfo.class.isInstance (item.getMenuInfo ())) {
-            return false;
-        }
-        AdapterView.AdapterContextMenuInfo cmi =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        mWorkPlace = (WorkPlace) listView.getItemAtPosition(cmi.position);
-
-        try {
-            if (item.getItemId() == R.string.edit1) {
-                getWorkPlaceView(mWorkPlace).show();
-                return true;
-            } else if (item.getItemId() == R.string.remove) {
-                if(Utility.confirm(this, R.string.confirm_remove_workplace)) {
-                    Utility.showProgress(this, mFormView, mProgressView, true);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                    bundle.putParcelable("mWorkPlace", mWorkPlace);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.REMOVE_WORK_PLACE);
-                    Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-                    return true;
-                }
-            }
-        }
-        catch (Exception error) {
-            Utility.showMessage(this, R.string.some_error);
-            return false;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }*/
-
-
-    /*public void showtimeFields(View view) {
-        int[] buttonIds = new int[]{
-                R.id.buttonStartTime,
-                R.id.buttonEndTime,
-        };
-        for (int buttonId : buttonIds) {
-            Button btn = (Button) findViewById(buttonId);
-            if (btn.getVisibility() == View.GONE) {
-                Utility.expand(btn, view);
-            } else {
-                Utility.collapse(btn, view);
-            }
-        }
-    }*/
-
-
-    /*public void editWorkPlaceInfo(View v) {
-        boolean set = true;
-        EditText nm = (EditText) v.findViewById(R.id.editTextName);
-        if (nm.isEnabled()) {
-            set = false;
-        }
-        int[] editTxtIds = new int[]{
-                R.id.editTextQualification,
-                R.id.editTextExperience,
-                R.id.editTextName,
-                R.id.editTextLoc,
-                R.id.editTextPhone1,
-                R.id.editTextPhone2,
-                R.id.editTextEmail,
-                R.id.editTextConsultationFees
-        };
-        for (int editTxtId : editTxtIds) {
-            EditText txt = (EditText) v.findViewById(editTxtId);
-            txt.setEnabled(set);
-        }
-
-        int[] buttonIds = new int[]{
-                R.id.buttonStartTime,
-                R.id.buttonEndTime,
-                R.id.editTextWeeklyOff
-        };
-        for (int buttonId : buttonIds) {
-            Button btn = (Button) v.findViewById(buttonId);
-            btn.setEnabled(set);
-            btn.setClickable(true);
-        }
-
-        int[] spinnerIds = new int[]{
-                R.id.spinServiceProvCategory,
-                R.id.editTextSpeciality,
-                R.id.viewWorkPlaceType,
-                R.id.editTextCity
-        };
-        for (int spinnerId : spinnerIds) {
-            Spinner spn = (Spinner) v.findViewById(spinnerId);
-            spn.setEnabled(set);
-            spn.setClickable(true);
-        }
-    }*/
-
-
-    /*
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        private Messenger mService;
-        private boolean mBound;
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mWorkPlace.setSignInData(LoginHolder.servLoginRef.getSignInData());
-            mService = new Messenger(service);
-            mBound = true;
-            Message msg = null;
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            if (mServiceAction == MappService.DO_UPDATE || mServiceAction == MappService.DO_REG_NO_CHECK) {
-                bundle.putString("regno", mRegNo.getText().toString().trim());
-                bundle.putParcelable("service", LoginHolder.servLoginRef);
-            } else if (mServiceAction == MappService.DO_GET_SPECIALITY) {
-                SearchServProvForm mForm = new SearchServProvForm();
-                mForm.setCategory(mServCatagory.getSelectedItem().toString());
-                bundle.putParcelable("form", mForm);
-            } else {
-                bundle.putParcelable("mWorkPlace", mWorkPlace);
-                //for add, remove and get Workplace.
-            }
-            msg = Message.obtain(null, mServiceAction);
-            msg.replyTo = new Messenger(mResponseHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-
-            mBound = false;
-        }
-    };
-*/
-
-      /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            boolean isImageChanged = false;
-            // When an Image is picked
-            if (resultCode == RESULT_OK) {
-                if (requestCode == R.integer.request_gallery
-                        && null != data) {
-                    // Get the Image from data
-
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);
-                    if (cursor == null) {
-                        return;
-                    }
-                    // Move to first row
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-                    // Set the Image in ImageView after decoding the String
-                    mImgView.setImageBitmap(BitmapFactory
-                            .decodeFile(imgDecodableString));
-                    isImageChanged = true;
-
-                } else if (requestCode == R.integer.request_camera) {
-                    File f = new File(Environment.getExternalStorageDirectory()
-                            .toString());
-                    for (File temp : f.listFiles()) {
-                        if (temp.getName().equals("temp.jpg")) {
-                            f = temp;
-                            break;
-                        }
-                    }
-                    try {
-                        Bitmap bm;
-                        BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-
-                        bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                                btmapOptions);
-
-                        // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
-                        mImgView.setImageBitmap(bm);
-                        isImageChanged = true;
-
-                        String path = android.os.Environment
-                                .getExternalStorageDirectory()
-                                + File.separator
-                                + "Phoenix" + File.separator + "default";
-                        if (f.delete()) {
-                            Log.v(this.getClass().getName(), "File delete successful");
-                        }
-                        OutputStream fOut;
-                        File file = new File(path, String.valueOf(System
-                                .currentTimeMillis()) + ".jpg");
-                        try {
-                            fOut = new FileOutputStream(file);
-                            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
-                            fOut.flush();
-                            fOut.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Utility.showMessage(this, R.string.error_img_not_picked);
-                }
-            }
-            if(isImageChanged) {
-                mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
-                sendRequest(MappService.DO_UPLOAD_PHOTO, null);
-            }
-        } catch (Exception e) {
-            Utility.showMessage(this, R.string.some_error);
-        }
-    }*/
 
 }

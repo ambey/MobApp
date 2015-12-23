@@ -86,42 +86,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textViewEditEducation"
-                    android:text="@string/first_name" />
+                    android:text="@string/first_name_with_lbl" />
 
                 <TextView
                     android:id="@+id/textViewLName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textViewFName"
-                    android:text="@string/last_name" />
+                    android:text="@string/last_name_with_lbl" />
 
                 <TextView
                     android:id="@+id/editTextMobNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textViewLName"
-                    android:text="@string/mob_num" />
+                    android:text="@string/mobile_no_with_lbl" />
 
                 <TextView
                     android:id="@+id/editTextEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/editTextMobNum"
-                    android:text="@string/mail_id" />
+                    android:text="@string/email_id_with_lbl" />
 
                 <TextView
                     android:id="@+id/editTextRegNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/editTextEmail"
-                    android:text="@string/reg_num" />
+                    android:text="@string/reg_no_with_lbl" />
 
                 <TextView
                     android:id="@+id/viewGenderLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/editTextRegNum"
-                    android:text="@string/gender" />
+                    android:text="@string/gender_with_lbl" />
 
             </RelativeLayout>
 

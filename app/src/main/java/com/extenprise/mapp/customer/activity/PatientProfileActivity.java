@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -390,15 +391,22 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     public void changeImg(View view) {
         final Activity activity = this;
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
-                Utility.imgOpts(activity), new DialogInterface.OnClickListener() {
+                /*
+                The array is put here instead of a method call to get the array because
+                OnClickHandler is using array index to take actions, and it helps to understand
+                if the array is infront of us
+                 */
+                new String[]{activity.getString(R.string.take_photo),
+                        activity.getString(R.string.from_gallery),
+                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utility.startCamera(activity, R.integer.request_camera);
+                                Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera));
                                 break;
                             case 1:
-                                Utility.pickPhotoFromGallery(activity, R.integer.request_gallery);
+                                Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
                                 break;
                             case 2:
                                 Utility.showAlert(activity, activity.getString(R.string.remove), getString(R.string.confirm_remove_photo), true,
@@ -408,7 +416,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
-                                                if (which == -1) {
+                                                if (which == DialogInterface.BUTTON_POSITIVE) {
                                                     Bundle bundle = new Bundle();
                                                     bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
                                                     bundle.putParcelable("customer", mCustomer);
@@ -432,17 +440,23 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         try {
             boolean imageChanged = false;
             Uri selectedImage = null;
+            Resources resources = getResources();
+            int requestEdit = resources.getInteger(R.integer.request_edit);
+
             // When an Image is picked
             if (resultCode == RESULT_OK) {
-                if ((requestCode == R.integer.request_gallery ||
-                        requestCode == R.integer.request_edit)
-                        && data != null) {
+                if (data == null) {
+                    Utility.showMessage(this, R.string.error_img_not_picked);
+                    return;
+                }
+                if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
+                        requestCode == requestEdit)) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
 
-                } else if (requestCode == R.integer.request_camera) {
+                } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(this, bitmap);
@@ -451,11 +465,11 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
             }
-            if (imageChanged && requestCode != R.integer.request_edit) {
+            if (imageChanged && requestCode != requestEdit) {
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
                 editIntent.setDataAndType(selectedImage, "image/*");
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivityForResult(editIntent, R.integer.request_edit);
+                startActivityForResult(editIntent, requestEdit);
             }
         } catch (Exception e) {
             e.printStackTrace();
