@@ -2,20 +2,14 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.customer.data.Customer;
@@ -33,15 +26,11 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
-import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.DateChangeListener;
 import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -200,7 +189,27 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     public void showImageUploadOptions(View view) {
-        Utility.captureImage(this, false, mImgView);
+        final Activity activity = this;
+        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
+                new String[]{activity.getString(R.string.take_photo),
+                        activity.getString(R.string.from_gallery),
+                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Utility.startCamera(activity, R.integer.request_camera);
+                                break;
+                            case 1:
+                                Utility.pickPhotoFromGallery(activity, R.integer.request_gallery);
+                                break;
+                            case 2:
+                                mImgView.setImageBitmap(null);
+                                break;
+                        }
+
+                    }
+                });
     }
 
     @Override
@@ -247,9 +256,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         boolean valid = true;
         View focusView = null;
 
-        EditText[] fields = { mEditTextCellphone, mEditTextPasswd, mEditTextConPasswd, mEditTextCustomerFName,
-                mEditTextCustomerLName, mEditTextWeight, mEditTextLoc, mEditTextPinCode };
-        if(Utility.areEditFieldsEmpty(this, fields)) {
+        EditText[] fields = {mEditTextCellphone, mEditTextPasswd, mEditTextConPasswd, mEditTextCustomerFName,
+                mEditTextCustomerLName, mEditTextWeight, mEditTextLoc, mEditTextPinCode};
+        if (Utility.areEditFieldsEmpty(this, fields)) {
             valid = false;
         }
 
@@ -306,7 +315,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             }
             return;
         }
-        if(imageChanged) {
+        if (imageChanged) {
             Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -325,9 +334,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private void sendRequest(int action) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-        if(action == MappService.DO_SIGNUP) {
+        if (action == MappService.DO_SIGNUP) {
             bundle.putParcelable("customer", getSignUpData(MappService.DO_SIGNUP));
-        } else if(action == MappService.DO_PHONE_EXIST_CHECK) {
+        } else if (action == MappService.DO_PHONE_EXIST_CHECK) {
             bundle.putParcelable("signInData", getSignUpData(action).getSignInData());
         }
         mConnection.setData(bundle);
@@ -460,10 +469,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         }
     };
 */
-
     @Override
     public void onBackPressed() {
-        if(mConnection.isConnected()) {
+        if (mConnection.isConnected()) {
             unbindService(mConnection);
         }
         //startActivity(getIntent());

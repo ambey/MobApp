@@ -44,7 +44,6 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
-import com.extenprise.mapp.service.activity.ServProvProfileActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
@@ -54,7 +53,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Objects;
 
 public abstract class Utility {
     /**
@@ -93,7 +91,7 @@ public abstract class Utility {
     }
 
     public static void showAlert(Activity activity, String title, String msg) {
-        showAlert(activity, title, msg, new DialogInterface.OnClickListener() {
+        showAlert(activity, title, msg, false, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -101,13 +99,29 @@ public abstract class Utility {
         });
     }
 
-    public static void showAlert(Activity mActivity, String title, String msg, DialogInterface.OnClickListener listener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(msg);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", listener);
-        alertDialog.setIcon(R.drawable.med_logo_final);
-        alertDialog.show();
+    public static void showAlert(Activity activity, String title, String msg, DialogInterface.OnClickListener listener) {
+        showAlert(activity, title, msg, false, null, listener);
+    }
+
+    public static void showAlert(Activity activity, String title, String msg, boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(title);
+        if (msg != null) {
+            builder.setMessage(msg);
+        }
+        if (menuOptions != null) {
+            builder.setItems(menuOptions, listener);
+        }
+
+        AlertDialog dialog = builder.create();
+        if (menuOptions == null) {
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getString(R.string.ok), listener);
+            if (cancelOpt) {
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(R.string.cancel), listener);
+            }
+        }
+        dialog.setIcon(R.drawable.med_logo_final);
+        dialog.show();
     }
 
     public static int getMinutes(String time) {
@@ -762,55 +776,61 @@ public abstract class Utility {
         activity.startActivity(intent);
     }
 
+    public static void startCamera(Activity activity, int request) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        activity.startActivityForResult(intent, request);
+    }
+
+    public static void pickPhotoFromGallery(Activity activity, int request) {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        activity.startActivityForResult(galleryIntent, request);
+    }
+
     public static boolean captureImage(final Activity activity, final boolean removable, final ImageView img) {
         new AlertDialog.Builder(activity)
-        .setTitle(R.string.uploadImg)
-        .setItems(optionItems(activity, removable), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-/*
-                        File f = new File(android.os.Environment
-                                .getExternalStorageDirectory(), "temp.jpg");
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-*/
-                        activity.startActivityForResult(intent, R.integer.request_camera);
-                        break;
-                    case 1:
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        activity.startActivityForResult(galleryIntent, R.integer.request_gallery);
-                        break;
-                    case 2:
-                        if(!removable) {
-                            dialog.dismiss();
-                            break;
-                        } else {
-                            img.setImageDrawable(null);
+                .setTitle(R.string.uploadImg)
+                .setItems(optionItems(activity, removable), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                activity.startActivityForResult(intent, R.integer.request_camera);
+                                break;
+                            case 1:
+                                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                activity.startActivityForResult(galleryIntent, R.integer.request_gallery);
+                                break;
+                            case 2:
+                                if (!removable) {
+                                    dialog.dismiss();
+                                    break;
+                                } else {
+                                    img.setImageDrawable(null);
+                                }
                         }
-                }
-            }
-        }).create().show();
+                    }
+                }).create().show();
         return true;
     }
 
     public static CharSequence[] optionItems(final Activity activity, boolean removable) {
-        if(!removable) {
-            return new CharSequence[] {
+        if (!removable) {
+            return new CharSequence[]{
                     activity.getString(R.string.take_photo),
                     activity.getString(R.string.from_gallery),
-                    activity.getString(R.string.cancel) };
+                    activity.getString(R.string.cancel)};
         } else {
-            return new CharSequence[] {
+            return new CharSequence[]{
                     activity.getString(R.string.take_photo),
                     activity.getString(R.string.from_gallery),
-                    activity.getString(R.string.remove) };
+                    activity.getString(R.string.remove)};
         }
     }
 
     public static boolean areEditFieldsEmpty(Activity activity, EditText[] fields) {
-        for(EditText field : fields) {
+        for (EditText field : fields) {
             if (field.isEnabled()) {
                 if (TextUtils.isEmpty(field.getText().toString().trim())) {
                     field.setError(activity.getString(R.string.error_field_required));

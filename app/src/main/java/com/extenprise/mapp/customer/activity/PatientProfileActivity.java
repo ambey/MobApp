@@ -243,10 +243,19 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         //sendRequest(getUpdateData(), MappService.DO_UPDATE);
     }
 
+    private void removePhotoDone() {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        mImgView.setBackgroundResource(R.drawable.patient);
+        mImgView.setImageBitmap(null);
+    }
+
     @Override
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_UPDATE) {
             updateDone(data);
+            return true;
+        } else if (action == MappService.DO_REMOVE_PHOTO) {
+            removePhotoDone();
             return true;
         }
         /*if (action == MappService.DO_UPLOAD_PHOTO) {
@@ -291,7 +300,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
         c.getSignInData().setPhone(mMobNo.getText().toString());
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
         c.setlName(mEditTextCustomerLName.getText().toString().trim());
-        if(mImgView.getDrawable() != null) {
+        if (mImgView.getDrawable() != null) {
             c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -379,7 +388,44 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     }
 
     public void changeImg(View view) {
-        Utility.captureImage(this, true, mImgView);
+        final Activity activity = this;
+        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
+                new String[]{activity.getString(R.string.take_photo),
+                        activity.getString(R.string.from_gallery),
+                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Utility.startCamera(activity, R.integer.request_camera);
+                                break;
+                            case 1:
+                                Utility.pickPhotoFromGallery(activity, R.integer.request_gallery);
+                                break;
+                            case 2:
+                                Utility.showAlert(activity, activity.getString(R.string.remove), getString(R.string.confirm_remove_photo), true,
+                                        null,
+                                        new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                if (which == -1) {
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                                                    bundle.putParcelable("customer", mCustomer);
+                                                    mConnection.setData(bundle);
+                                                    mConnection.setAction(MappService.DO_REMOVE_PHOTO);
+                                                    if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
+                                                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                                                    }
+                                                }
+                                            }
+                                        });
+                        }
+
+                    }
+                });
     }
 
     @Override
@@ -406,19 +452,12 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                 } else {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                 }
-            } else if (requestCode == R.integer.request_edit) {
-                imageChanged = true;
             }
-            if (imageChanged) {
-                if (requestCode != R.integer.request_edit) {
-                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
-                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(editIntent, R.integer.request_edit);
-                } /*else {
-                    mCustomer.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-                    sendRequest(mCustomer, MappService.DO_UPLOAD_PHOTO);
-                }*/
+            if (imageChanged && requestCode != R.integer.request_edit) {
+                Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                editIntent.setDataAndType(selectedImage, "image/*");
+                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivityForResult(editIntent, R.integer.request_edit);
             }
         } catch (Exception e) {
             e.printStackTrace();

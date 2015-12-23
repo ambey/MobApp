@@ -36,7 +36,8 @@
             android:layout_centerInParent="true"
             android:clickable="true"
             android:onClick="removePhoto"
-            android:text="@string/remove" />
+            android:text="@string/remove"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

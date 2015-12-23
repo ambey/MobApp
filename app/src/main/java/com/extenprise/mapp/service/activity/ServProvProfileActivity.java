@@ -613,7 +613,44 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
     }
 
     public void changeImage(View view) {
-        Utility.captureImage(this, true, mImgView);
+        final Activity activity = this;
+        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
+                new String[]{activity.getString(R.string.take_photo),
+                        activity.getString(R.string.from_gallery),
+                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Utility.startCamera(activity, R.integer.request_camera);
+                                break;
+                            case 1:
+                                Utility.pickPhotoFromGallery(activity, R.integer.request_gallery);
+                                break;
+                            case 2:
+                                Utility.showAlert(activity, activity.getString(R.string.remove), getString(R.string.confirm_remove_photo), true,
+                                        null,
+                                        new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                if (which == -1) {
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                                                    bundle.putParcelable("service", mServiceProv);
+                                                    mConnection.setData(bundle);
+                                                    mConnection.setAction(MappService.DO_REMOVE_PHOTO);
+                                                    if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
+                                                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                                                    }
+                                                }
+                                            }
+                                        });
+                        }
+
+                    }
+                });
     }
 
     public void removePhoto(View view) {
