@@ -191,9 +191,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     public void showImageUploadOptions(View view) {
         final Activity activity = this;
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
-                new String[]{activity.getString(R.string.take_photo),
-                        activity.getString(R.string.from_gallery),
-                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                Utility.imgOpts(activity), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -332,6 +330,18 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     private void sendRequest(int action) {
+
+        /*Object obj = null;
+        if (action == MappService.DO_SIGNUP) {
+            obj = getSignUpData(action);
+        } else if (action == MappService.DO_PHONE_EXIST_CHECK) {
+            obj = getSignUpData(action).getSignInData();
+        }
+
+        if(Utility.sendRequest(this, MappService.CUSTOMER_LOGIN, action, obj, mConnection)) {
+            Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
+        }*/
+
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
         if (action == MappService.DO_SIGNUP) {

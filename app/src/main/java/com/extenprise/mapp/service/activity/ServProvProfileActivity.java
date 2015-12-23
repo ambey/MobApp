@@ -43,6 +43,7 @@ import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
+import com.google.android.gms.drive.query.SortOrder;
 
 import java.util.ArrayList;
 
@@ -568,28 +569,28 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     public void openPersonalInfo(View view) {
         if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mPersonalInfo, null);
-            //mPersonalInfo.setVisibility(View.GONE);
+            //Utility.collapse(mPersonalInfo, null);
+            mPersonalInfo.setVisibility(View.GONE);
         } else {
-            Utility.expand(mPersonalInfo, null);
-            //mPersonalInfo.setVisibility(View.VISIBLE);
+            //Utility.expand(mPersonalInfo, null);
+            mPersonalInfo.setVisibility(View.VISIBLE);
             if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mWorkPlaceInfo, null);
-                //mWorkPlaceInfo.setVisibility(View.GONE);
+                //Utility.collapse(mWorkPlaceInfo, null);
+                mWorkPlaceInfo.setVisibility(View.GONE);
             }
         }
     }
 
     public void openWorkPlaceInfo(View view) {
         if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mWorkPlaceInfo, null);
-            //mWorkPlaceInfo.setVisibility(View.GONE);
+            //Utility.collapse(mWorkPlaceInfo, null);
+            mWorkPlaceInfo.setVisibility(View.GONE);
         } else {
-            //mWorkPlaceInfo.setVisibility(View.VISIBLE);
-            Utility.expand(mWorkPlaceInfo, null);
+            mWorkPlaceInfo.setVisibility(View.VISIBLE);
+            //Utility.expand(mWorkPlaceInfo, null);
             if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mPersonalInfo, null);
-                //mPersonalInfo.setVisibility(View.GONE);
+                //Utility.collapse(mPersonalInfo, null);
+                mPersonalInfo.setVisibility(View.GONE);
             }
         }
     }
@@ -614,10 +615,8 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
 
     public void changeImage(View view) {
         final Activity activity = this;
-        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
-                new String[]{activity.getString(R.string.take_photo),
-                        activity.getString(R.string.from_gallery),
-                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+        Utility.showAlert(activity, "", null, false,
+                Utility.imgOpts(activity), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -628,22 +627,14 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                                 Utility.pickPhotoFromGallery(activity, R.integer.request_gallery);
                                 break;
                             case 2:
-                                Utility.showAlert(activity, activity.getString(R.string.remove), getString(R.string.confirm_remove_photo), true,
+                                Utility.showAlert(activity, "", getString(R.string.confirm_remove_photo), true,
                                         null,
                                         new DialogInterface.OnClickListener() {
-
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
                                                 if (which == -1) {
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                                                    bundle.putParcelable("service", mServiceProv);
-                                                    mConnection.setData(bundle);
-                                                    mConnection.setAction(MappService.DO_REMOVE_PHOTO);
-                                                    if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
-                                                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
-                                                    }
+                                                    sendRequest(MappService.DO_REMOVE_PHOTO, null);
                                                 }
                                             }
                                         });
@@ -727,7 +718,7 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
         }
         mConnection.setData(bundle);
         mConnection.setAction(action);
-        if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
         }
     }
@@ -803,7 +794,10 @@ public class ServProvProfileActivity extends Activity implements ResponseHandler
                     return true;
                 }
             });
+            //listView.setSelection(adapter.getCount());
+            //listView.setOverscrollFooter(getDrawable(R.drawable.up));
             listView.setAdapter(adapter);
+            listView.setSelection(adapter.getCount());
             registerForContextMenu(listView);
             //listView.setOnCreateContextMenuListener(this);
             Utility.showMessage(this, R.string.work_place_details);

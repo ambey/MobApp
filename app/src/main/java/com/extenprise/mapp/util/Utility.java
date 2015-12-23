@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,8 +43,14 @@ import android.widget.Toast;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
+import com.extenprise.mapp.customer.data.Customer;
+import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
+import com.extenprise.mapp.net.MappServiceConnection;
+import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.service.data.WorkPlace;
 
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
@@ -790,7 +797,7 @@ public abstract class Utility {
     public static boolean captureImage(final Activity activity, final boolean removable, final ImageView img) {
         new AlertDialog.Builder(activity)
                 .setTitle(R.string.uploadImg)
-                .setItems(optionItems(activity, removable), new DialogInterface.OnClickListener() {
+                .setItems(imgOpts(activity), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
@@ -815,8 +822,11 @@ public abstract class Utility {
         return true;
     }
 
-    public static CharSequence[] optionItems(final Activity activity, boolean removable) {
-        if (!removable) {
+    public static String[] imgOpts(final Activity activity) {
+        return new String[]{activity.getString(R.string.take_photo),
+                activity.getString(R.string.from_gallery),
+                activity.getString(R.string.remove)};
+        /*if (!removable) {
             return new CharSequence[]{
                     activity.getString(R.string.take_photo),
                     activity.getString(R.string.from_gallery),
@@ -826,7 +836,7 @@ public abstract class Utility {
                     activity.getString(R.string.take_photo),
                     activity.getString(R.string.from_gallery),
                     activity.getString(R.string.remove)};
-        }
+        }*/
     }
 
     public static boolean areEditFieldsEmpty(Activity activity, EditText[] fields) {
@@ -847,5 +857,40 @@ public abstract class Utility {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 95, bos);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Photo", null);
         return Uri.parse(path);
+    }
+
+    public static boolean sendRequest(Activity activity, int loginType, int action, Object obj, MappServiceConnection mConnection) {
+        if(obj == null) {
+            return false;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", loginType);
+
+        if(loginType == MappService.CUSTOMER_LOGIN) {
+            Customer c = (Customer) obj;
+            bundle.putParcelable("customer", c);
+        } else {
+            try {
+                ServiceProvider sp = (ServiceProvider) obj;
+                bundle.putParcelable("service", sp);
+            } catch (ClassCastException e1) {
+                try {
+                    WorkPlace wp = (WorkPlace) obj;
+                    bundle.putParcelable("workPlace", wp);
+                } catch (ClassCastException e2) {
+                    try {
+                        SignInData in = (SignInData) obj;
+                        bundle.putParcelable("signInData", in);
+                    } catch (ClassCastException e3) {
+                        e3.printStackTrace();
+                        showMessage(activity, R.string.some_error);
+                        return false;
+                    }
+                }
+            }
+        }
+        mConnection.setData(bundle);
+        mConnection.setAction(action);
+        return doServiceAction(activity, mConnection, activity.BIND_AUTO_CREATE);
     }
 }

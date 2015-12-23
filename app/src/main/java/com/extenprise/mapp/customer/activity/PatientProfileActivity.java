@@ -390,9 +390,7 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
     public void changeImg(View view) {
         final Activity activity = this;
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
-                new String[]{activity.getString(R.string.take_photo),
-                        activity.getString(R.string.from_gallery),
-                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                Utility.imgOpts(activity), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
