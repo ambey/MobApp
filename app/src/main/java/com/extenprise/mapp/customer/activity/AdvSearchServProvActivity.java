@@ -87,12 +87,6 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         mSpeciality.setAdapter(spinnerAdapter);
 
         mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
-        mMultiSpinnerDays.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDaysSelectionDialog();
-            }
-        });
 
         if (mForm != null) {
             mLocation.setText(mForm.getLocation());
@@ -339,7 +333,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         mMultiSpinnerDays.setText(selectedDays);
     }
 
-    private void showDaysSelectionDialog() {
+    public void showDaysSelectionDialog(View view) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         String selctedDays = "";
         if (!mMultiSpinnerDays.getText().toString().equals(getString(R.string.select_days))) {
@@ -347,6 +341,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         }
         DaysSelectionDialog dialog = new DaysSelectionDialog();
         dialog.setSelectedDays(selctedDays);
+        dialog.setListener(this);
         dialog.show(fragmentManager, "DaysSelect");
     }
 

@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,13 +34,15 @@ import com.extenprise.mapp.service.data.SearchServProvForm;
 import com.extenprise.mapp.service.data.ServProvHasServPt;
 import com.extenprise.mapp.service.data.ServicePoint;
 import com.extenprise.mapp.service.data.ServiceProvider;
+import com.extenprise.mapp.ui.DaysSelectionDialog;
+import com.extenprise.mapp.ui.DialogDismissListener;
 import com.extenprise.mapp.ui.TitleFragment;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
 
-public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler {
+public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler, DialogDismissListener {
     protected CharSequence[] options;
     protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
@@ -140,7 +144,13 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             }
         });
 
-        mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
+        mMultiSpinnerDays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDaysSelectionDialog(v);
+            }
+        });
+        //mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
 
         int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
         if (category == R.string.medicalStore) {
@@ -211,31 +221,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         }
     }
 
-    private void setupSelection() {
-        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
-        selections[0] = false;
-        for (String d : selectedDays) {
-            selections[getDayIndex(d)] = true;
-        }
-    }
-
-    private int getDayIndex(String day) {
-        for (int i = 0; i < options.length; i++) {
-            if (day.equals(options[i])) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private void setupAllDaysSelected() {
-        selections[0] = false;
-        selectedDays = options[1].toString();
-        for (int i = 2; i < options.length; i++) {
-            selectedDays += "," + options[i];
-        }
-    }
-
     @Override
     public CharSequence getPageTitle() {
         return getString(R.string.work_place_details);
@@ -246,42 +231,24 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         return 0;
     }
 
-    public void onPrepareDialog(int id, Dialog dialog) {
-        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-            setupSelection();
-        }
+    @Override
+    public void onDialogDismissed(DialogFragment dialog) {
+        DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
+        String selectedDays = selectionDialog.getSelectedDays();
+        mMultiSpinnerDays.setText(selectedDays);
     }
 
-    public Dialog onCreateDialog(int id) {
-        return new AlertDialog.Builder(getActivity())
-                .setTitle("Available Days")
-                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
-                .setPositiveButton("OK", new DialogButtonClickHandler())
-                .create();
-    }
-
-    protected void printSelectedDays() {
-        if (selections[0]) {
-            setupAllDaysSelected();
-            return;
+    public void showDaysSelectionDialog(View view) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        //fragmentManager.saveFragmentInstanceState(this);
+        String selctedDays = "";
+        if (!mMultiSpinnerDays.getText().toString().equals(getString(R.string.select_days))) {
+            selctedDays = mMultiSpinnerDays.getText().toString();
         }
-        int i = 1;
-        selectedDays = getString(R.string.select_days);
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays = options[i++].toString();
-                break;
-            }
-        }
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays += "," + options[i].toString();
-            }
-        }
+        DaysSelectionDialog dialog = new DaysSelectionDialog();
+        dialog.setSelectedDays(selctedDays);
+        dialog.setListener(this);
+        dialog.show(fragmentManager, "DaysSelect");
     }
 
     public void addNewWorkPlace(View view) {
@@ -504,7 +471,72 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         Utility.setNewSpec(getActivity(), list, mSpeciality);
     }
 
-    public class ButtonClickHandler implements View.OnClickListener {
+
+    /*
+    protected void printSelectedDays() {
+        if (selections[0]) {
+            setupAllDaysSelected();
+            return;
+        }
+        int i = 1;
+        selectedDays = getString(R.string.select_days);
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
+
+            if (selections[i]) {
+                selectedDays = options[i++].toString();
+                break;
+            }
+        }
+        for (; i < options.length; i++) {
+            Log.i("ME", options[i] + " selected: " + selections[i]);
+
+            if (selections[i]) {
+                selectedDays += "," + options[i].toString();
+            }
+        }
+    }
+
+    private void setupSelection() {
+        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
+        selections[0] = false;
+        for (String d : selectedDays) {
+            selections[getDayIndex(d)] = true;
+        }
+    }
+
+    private int getDayIndex(String day) {
+        for (int i = 0; i < options.length; i++) {
+            if (day.equals(options[i])) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void setupAllDaysSelected() {
+        selections[0] = false;
+        selectedDays = options[1].toString();
+        for (int i = 2; i < options.length; i++) {
+            selectedDays += "," + options[i];
+        }
+    }*/
+
+    /*public void onPrepareDialog(int id, Dialog dialog) {
+        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
+            setupSelection();
+        }
+    }
+
+    public Dialog onCreateDialog(int id) {
+        return new AlertDialog.Builder(getActivity())
+                .setTitle("Available Days")
+                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
+                .setPositiveButton("OK", new DialogButtonClickHandler())
+                .create();
+    }*/
+
+    /*public class ButtonClickHandler implements View.OnClickListener {
         public void onClick(View view) {
             if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
                 setupSelection();
@@ -534,7 +566,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                     break;
             }
         }
-    }
+    }*/
 
 /*
     */

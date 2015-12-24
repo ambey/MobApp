@@ -146,12 +146,25 @@
                 android:layout_below="@+id/textViewWorkDetails"
                 android:visibility="gone">
 
-                <ListView
+                <!--<ListView
                     android:id="@+id/workDetailListView"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:divider="@drawable/divider"
+                    android:dividerHeight="10dp" />-->
+
+                <ListView
+                    android:id="@+id/workDetailListView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:divider="@drawable/divider"
+                    android:clickable="true"
+                    android:animateLayoutChanges="true"
+                    android:fadeScrollbars="false"
                     android:dividerHeight="10dp" />
 
                 <ImageView

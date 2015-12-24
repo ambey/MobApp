@@ -192,6 +192,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:onClick="showDaysSelectionDialog"
                     android:visibility="gone"
                    />
 

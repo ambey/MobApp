@@ -6,8 +6,10 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.extenprise.mapp.R;
+import com.extenprise.mapp.ui.DaysSelectionDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,7 +147,13 @@ public class ServProvSignUpActivity extends FragmentActivity {
         fragment.enlargeImg(view);
     }
 
-    @Override
+
+    /*public void showDaysSelectionDialog(View view) {
+        ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
+        fragment.showDaysSelectionDialog(view);
+    }*/
+
+    /*@Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
@@ -155,7 +164,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
     protected Dialog onCreateDialog(int id) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         return fragment.onCreateDialog(id);
-    }
+    }*/
 
     public void showtimeFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);

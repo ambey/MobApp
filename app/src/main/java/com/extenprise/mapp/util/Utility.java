@@ -467,36 +467,6 @@ public abstract class Utility {
         return Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(), bitmapToScale.getHeight(), matrix, true);*/
     }
 
-    /*public boolean onDoubleTap(MotionEvent e) {
-        ImageView imageView = (ImageView) findViewById(imageViewId);
-        int width = imageView.getWidth();
-        int height = imageView.getWidth();
-        float maxScale;
-        if ( width < height ) {
-            maxScale = (float) (width * Math.pow(1.5, 6));
-        } else {
-            maxScale = (float) (height * Math.pow(1.5, 6));
-        }
-
-        Drawable d = imageView.getDrawable();
-        int imageWidth = d.getIntrinsicWidth();
-        int imageHeight = d.getIntrinsicHeight();
-        float[] value = new float[9];
-        matrix.getValues(value);
-        scaleWidth = (int)(imageWidth * value[Matrix.MSCALE_X]);
-        scaleHeight = (int)(imageHeight * value[Matrix.MSCALE_Y]);
-
-        if ( (scaleWidth * 2) < maxScale ) {
-            matrix.postScale(2, 2, e.getRawX(), e.getRawY());
-        } else {
-            matrix.postScale(0, 0, e.getRawX(), e.getRawY());
-        }
-        isDoubleTab = true;
-        tuneMatrix(matrix);
-        savedMatrix.set(matrix);
-        return false;
-    }*/
-
     public static void expand(final View v, View view) {
         if (view != null) {
             view.setBackgroundResource(R.drawable.expand);
@@ -564,15 +534,6 @@ public abstract class Utility {
 //Start animation
         return anim;
     }
-
-    /*public static void setLastVisited(Activity activity) {
-        SharedPreferences prefer = activity.getSharedPreferences("lastVisit", 0);
-        SharedPreferences.Editor preferencesEditor = prefer.edit();
-        preferencesEditor.putBoolean("saveVisit", true);
-        preferencesEditor.putString("Date", setCurrentDateOnView(null));
-        preferencesEditor.putString("Time", setCurrentTimeOnView(null));
-        preferencesEditor.apply();
-    }*/
 
     public static void setLastVisit(SharedPreferences prefer) {
         //SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);
@@ -684,39 +645,6 @@ public abstract class Utility {
         return builder;
     }
 
-/*
-    public static int option(Context activity, final int opt1, final int opt2) throws Resources.NotFoundException {
-        //final boolean confirm = false;
-        final int[] clicked = new int[1];
-        new AlertDialog.Builder(activity)
-                .setTitle(R.drawable.med_logo_final)
-                .setPositiveButton(opt1,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                clicked[0] = opt1;
-                            }
-                        })
-                .setNegativeButton(opt2,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                clicked[0] = opt2;
-                            }
-                        })
-                .setNeutralButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                clicked[0] = R.string.cancel;
-                                dialog.dismiss();
-                            }
-                        })
-                .show();
-        return clicked[0];
-    }
-*/
-
     public static boolean isDateAfterToday(Date date) {
         Date today = new Date();
         if (today.compareTo(date) < 0) {
@@ -799,20 +727,6 @@ public abstract class Utility {
         activity.startActivityForResult(galleryIntent, request);
     }
 
-    public static CharSequence[] optionItems(final Activity activity, boolean removable) {
-        if (!removable) {
-            return new CharSequence[]{
-                    activity.getString(R.string.take_photo),
-                    activity.getString(R.string.from_gallery),
-                    activity.getString(R.string.cancel)};
-        } else {
-            return new CharSequence[]{
-                    activity.getString(R.string.take_photo),
-                    activity.getString(R.string.from_gallery),
-                    activity.getString(R.string.remove)};
-        }
-    }
-
     public static boolean areEditFieldsEmpty(Activity activity, EditText[] fields) {
         for (EditText field : fields) {
             if (field.isEnabled()) {
@@ -833,9 +747,9 @@ public abstract class Utility {
         return Uri.parse(path);
     }
 
-    /* Methods in this class should ideally be doing a single well defined task */
-    /* The method name is sendRequest, but it is having some very specific logic */
-    /* The class cast operations should be avoided */
+    /* Methods in this class should ideally be doing a single well defined task *//*
+    *//* The method name is sendRequest, but it is having some very specific logic *//*
+    *//* The class cast operations should be avoided *//*
     public static boolean sendRequest(Activity activity, int loginType, int action, Object obj, MappServiceConnection mConnection) {
         if (obj == null) {
             return false;
@@ -869,5 +783,35 @@ public abstract class Utility {
         mConnection.setData(bundle);
         mConnection.setAction(action);
         return doServiceAction(activity, mConnection, Context.BIND_AUTO_CREATE);
-    }
+    }*/
+
+    /*public boolean onDoubleTap(MotionEvent e) {
+        ImageView imageView = (ImageView) findViewById(imageViewId);
+        int width = imageView.getWidth();
+        int height = imageView.getWidth();
+        float maxScale;
+        if ( width < height ) {
+            maxScale = (float) (width * Math.pow(1.5, 6));
+        } else {
+            maxScale = (float) (height * Math.pow(1.5, 6));
+        }
+
+        Drawable d = imageView.getDrawable();
+        int imageWidth = d.getIntrinsicWidth();
+        int imageHeight = d.getIntrinsicHeight();
+        float[] value = new float[9];
+        matrix.getValues(value);
+        scaleWidth = (int)(imageWidth * value[Matrix.MSCALE_X]);
+        scaleHeight = (int)(imageHeight * value[Matrix.MSCALE_Y]);
+
+        if ( (scaleWidth * 2) < maxScale ) {
+            matrix.postScale(2, 2, e.getRawX(), e.getRawY());
+        } else {
+            matrix.postScale(0, 0, e.getRawX(), e.getRawY());
+        }
+        isDoubleTab = true;
+        tuneMatrix(matrix);
+        savedMatrix.set(matrix);
+        return false;
+    }*/
 }

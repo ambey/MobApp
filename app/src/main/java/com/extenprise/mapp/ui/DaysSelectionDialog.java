@@ -19,6 +19,11 @@ public class DaysSelectionDialog extends DialogFragment {
 
     private String selectedDays;
     private ListView listView;
+    private DialogDismissListener listener;
+
+    public void setListener(DialogDismissListener listener) {
+        this.listener = listener;
+    }
 
     public String getSelectedDays() {
         return selectedDays;
@@ -56,7 +61,17 @@ public class DaysSelectionDialog extends DialogFragment {
                 selectedDays += "," + days[i];
             }
         }
-        DialogDismissListener listener = (DialogDismissListener) getActivity();
-        listener.onDialogDismissed(this);
+
+        //DialogDismissListener listener = (DialogDismissListener) getActivity();;
+        /*try {
+            listener = (DialogDismissListener) getActivity();
+        } catch (Exception e) {
+            listener = (DialogDismissListener) getParentFragment();
+            //getTargetFragment();
+        }*/
+
+        if(listener != null) {
+            listener.onDialogDismissed(this);
+        }
     }
 }

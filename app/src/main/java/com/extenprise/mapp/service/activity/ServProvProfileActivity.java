@@ -852,13 +852,13 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    refresh();
                 }
             });
         } else {
             mServiceProv = LoginHolder.servLoginRef;
             Utility.showMessage(this, R.string.some_error);
         }
-        refresh();
         Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
@@ -891,6 +891,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         }
         DaysSelectionDialog dialog = new DaysSelectionDialog();
         dialog.setSelectedDays(selctedDays);
+        dialog.setListener(this);
         dialog.show(fragmentManager, "DaysSelect");
     }
 
