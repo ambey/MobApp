@@ -20,8 +20,8 @@
     <string name="title_activity_sign_up">Register with Medico</string>
     <string name="dob">Date of Birth</string>
     <string name="dob_label">Date of Birth:</string>
-    <string name="dob_with_format">Date of Birth: (dd/mm/YYYY)</string>
-    <string name="dob_format">dd/mm/YYYY *</string>
+    <string name="dob_with_format">Date of Birth: (dd/MM/yyyy)</string>
+    <string name="dob_format">dd/MM/yyyy *</string>
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
     <string name="country_code">+91</string>
@@ -222,4 +222,12 @@
 
     <string name="ok">OK</string>
     <string name="days_avail_pref">Select Your Preferred Days</string>
+
+    <string name="first_name_with_lbl">First Name: %s</string>
+    <string name="last_name_with_lbl">Last Name: %s</string>
+    <string name="mobile_no_with_lbl">Mobile Number: %s</string>
+    <string name="email_id_with_lbl">Email ID: %s</string>
+    <string name="reg_no_with_lbl">Registration Number: %s</string>
+    <string name="gender_with_lbl">Gender: %s</string>
+
 </resources>
