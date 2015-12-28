@@ -1,8 +1,10 @@
 package com.extenprise.mapp.customer.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,11 +21,13 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.activity.ServProvDetailsActivity;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.ui.ServProvListAdapter;
+import com.extenprise.mapp.ui.DialogDismissListener;
+import com.extenprise.mapp.ui.SortActionDialog;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 
-public class SearchServProvResultActivity extends Activity implements ResponseHandler {
+public class SearchServProvResultActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
@@ -61,6 +65,7 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
         if(spl.getWorkingDays() != null) {
             msg = spl.getWorkingDays();
         }
+
         //Toast.makeText(this, "working days : " + msg, Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + "working days : " + msg);
     }
@@ -84,7 +89,18 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
             return true;
         }
 
+        if (id == R.id.action_sort) {
+            showSortDialog();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSortDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        SortActionDialog dialog = new SortActionDialog();
+        dialog.setSortFieldList(getResources().getStringArray(R.array.search_sort_field_list));
+        dialog.setListener(this);
+        dialog.show(fragmentManager, "SearchSort");
     }
 
     private void getDetails(View view, int position) {
@@ -129,6 +145,15 @@ public class SearchServProvResultActivity extends Activity implements ResponseHa
             }
         }
         return intent;
+    }
+
+    @Override
+    public void onDialogDismissed(DialogFragment dialog) {
+        SortActionDialog sortActionDialog = (SortActionDialog) dialog;
+        ListView listView = (ListView) findViewById(R.id.docListView);
+        ServProvListAdapter adapter = (ServProvListAdapter) listView.getAdapter();
+        adapter.setAscending(sortActionDialog.isAscending());
+        adapter.setSortField(sortActionDialog.getSortField());
     }
 }
 

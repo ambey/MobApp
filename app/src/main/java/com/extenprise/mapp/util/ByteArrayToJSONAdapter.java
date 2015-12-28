@@ -18,7 +18,12 @@ import java.lang.reflect.Type;
 public class ByteArrayToJSONAdapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
     @Override
     public byte[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return Base64.decode(json.getAsString(), Base64.NO_WRAP);
+        try {
+            return Base64.decode(json.getAsString(), Base64.NO_WRAP);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

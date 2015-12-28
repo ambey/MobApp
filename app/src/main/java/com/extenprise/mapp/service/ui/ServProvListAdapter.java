@@ -16,24 +16,29 @@ import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by ambey on 4/10/15.
  */
 public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implements AdapterView.OnItemSelectedListener {
-    private ArrayList<ServProvListItem> list;
-    private int selectedPosition;
+    private ArrayList<ServProvListItem> mList;
+    private ArrayList<ServProvListItem> mSortedList;
+    private int mSelectedPosition;
+    private String mSortField;
+    private boolean mAscending;
 
     public ServProvListAdapter(Context context, int resource, ArrayList<ServProvListItem> list) {
         super(context, resource);
-        this.list = list;
-        selectedPosition = -1;
+        this.mList = list;
+        mSelectedPosition = -1;
     }
 
     @Override
     public int getCount() {
         try {
-            return list.size();
+            return mList.size();
         } catch (Exception e) {
             return 0;
         }
@@ -46,7 +51,7 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.activity_search_result, null);
         }
-        ServProvListItem item = list.get(position);
+        ServProvListItem item = getItem(position);
         TextView fnameView = (TextView) v.findViewById(R.id.viewFirstName);
         TextView lnameView = (TextView) v.findViewById(R.id.viewLastName);
         TextView clinicNameView = (TextView) v.findViewById(R.id.viewClinicName);
@@ -70,7 +75,7 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
         specialityView.setText(item.getSpeciality());
         expView.setText(String.format("%.01f", item.getExperience()));
 
-        if (position == selectedPosition) {
+        if (position == mSelectedPosition) {
             int textColor = Color.WHITE;
             v.setBackgroundColor(getContext().getResources().getColor(R.color.ThemeColor));
             fnameView.setTextColor(textColor);
@@ -86,7 +91,10 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
 
     public ServProvListItem getItem(int position) {
         try {
-            return list.get(position);
+            if (mSortField == null) {
+                return mList.get(position);
+            }
+            return mSortedList.get(position);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,13 +103,75 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selectedPosition = position;
+        mSelectedPosition = position;
         notifyDataSetChanged();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        selectedPosition = -1;
+        mSelectedPosition = -1;
         notifyDataSetChanged();
+    }
+
+    public void setSortField(String sortField) {
+        this.mSortField = sortField;
+        if (sortField == null) {
+            return;
+        }
+        Comparator<ServProvListItem> comparator = null;
+        Context context = getContext();
+        if (sortField.equals(context.getString(R.string.by_drname))) {
+            comparator = new Comparator<ServProvListItem>() {
+                @Override
+                public int compare(ServProvListItem lhs, ServProvListItem rhs) {
+                    int result = lhs.getFirstName().toUpperCase().compareTo(rhs.getFirstName().toUpperCase());
+                    if (result == 0) {
+                        return lhs.getLastName().toUpperCase().compareTo(rhs.getLastName().toUpperCase());
+                    }
+                    return result;
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_clinic_name))) {
+            comparator = new Comparator<ServProvListItem>() {
+                @Override
+                public int compare(ServProvListItem lhs, ServProvListItem rhs) {
+                    return lhs.getServPtName().toUpperCase().compareTo(rhs.getServPtName().toUpperCase());
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_experience))) {
+            comparator = new Comparator<ServProvListItem>() {
+                @Override
+                public int compare(ServProvListItem lhs, ServProvListItem rhs) {
+                    return ((int) (lhs.getExperience() * 10) - (int) (rhs.getExperience() * 10));
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_location))) {
+            comparator = new Comparator<ServProvListItem>() {
+                @Override
+                public int compare(ServProvListItem lhs, ServProvListItem rhs) {
+                    return lhs.getServPtLocation().toUpperCase().compareTo(rhs.getServPtLocation().toUpperCase());
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_category))) {
+            comparator = new Comparator<ServProvListItem>() {
+                @Override
+                public int compare(ServProvListItem lhs, ServProvListItem rhs) {
+                    return lhs.getSpeciality().toUpperCase().compareTo(rhs.getSpeciality().toUpperCase());
+                }
+            };
+        }
+        mSortedList = new ArrayList<>();
+        mSortedList.addAll(mList);
+        if (comparator != null) {
+            if (!mAscending) {
+                comparator = Collections.reverseOrder(comparator);
+            }
+            Collections.sort(mSortedList, comparator);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void setAscending(boolean ascending) {
+        this.mAscending = ascending;
     }
 }

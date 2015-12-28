@@ -3,7 +3,7 @@
     <string name="app_name">Professional Details</string>
 
     <!--
-        <string name="server_name">http://10.0.2.2:8080/mapp</string>
+            <string name="server_name">http://10.0.2.2:8080/mapp</string>
     -->
 
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
@@ -233,4 +233,25 @@
     <string name="reg_no_with_lbl">Registration Number: %s</string>
     <string name="gender_with_lbl">Gender: %s</string>
 
+    <string name="sort">Sort</string>
+    <string name="filter">Filter</string>
+    <string name="asc">ASC</string>
+    <string name="desc">DESC</string>
+    <string name="sort_field">By %s</string>
+    <string name="apply_sort">Apply Sort</string>
+
+    <!-- Search Result Sort Fields -->
+    <string name="by_drname">Doctor Name</string>
+    <string name="by_clinic_name">Clinic Name</string>
+    <string name="by_experience">Experience</string>
+    <string name="by_location">Location</string>
+    <string name="by_category">Service Category</string>
+
+    <string-array name="search_sort_field_list">
+        <item>@string/by_drname</item>
+        <item>@string/by_clinic_name</item>
+        <item>@string/by_experience</item>
+        <item>@string/by_location</item>
+        <item>@string/by_category</item>
+    </string-array>
 </resources>
