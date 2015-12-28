@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class PatientProfileActivity extends Activity implements ResponseHandler, DateChangeListener {
+public class PatientProfileActivity extends FragmentActivity implements ResponseHandler, DateChangeListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private Customer mCustomer;
@@ -132,6 +133,8 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
+
+
     }
 
     public void showPersonalFields(View view) {
@@ -346,11 +349,6 @@ public class PatientProfileActivity extends Activity implements ResponseHandler,
             outState.putParcelable("image", bitmap);
         }
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return mImgCopy;
     }
 
     @Override

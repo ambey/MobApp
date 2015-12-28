@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shaded_background"
+    android:padding="4dp">
 
     <TextView
         android:id="@+id/feedBackStatusView"
@@ -55,9 +57,9 @@
         android:id="@+id/medStoreLblView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/feedbackCustNameView"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@id/feedbackCustNameView"
         android:text="@string/medstore_lbl" />
 
     <TextView
@@ -73,17 +75,18 @@
         android:id="@+id/runByLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/medStoreNameView"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@id/medStoreNameView"
-        android:text="@string/run_by"/>
+        android:text="@string/run_by" />
+
     <TextView
         android:id="@+id/medStoreProvView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/runByLbl"
-        android:layout_toEndOf="@id/runByLbl"
         android:layout_alignBottom="@id/runByLbl"
+        android:layout_toEndOf="@id/runByLbl"
+        android:layout_toRightOf="@id/runByLbl"
         android:textColor="#00f" />
 
     <TextView

@@ -1,5 +1,6 @@
 package com.extenprise.mapp.service.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,12 @@ public class RxListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_list);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(R.string.title_activity_rx_list);
+        }
 
         ArrayList<RxInboxItem> mInbox = getIntent().getParcelableArrayListExtra("inbox");
         int feedback = getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal());

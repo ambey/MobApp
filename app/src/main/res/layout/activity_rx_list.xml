@@ -13,10 +13,11 @@
         style="@style/LargeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/error_no_items_found"/>
+        android:text="@string/error_no_items_found" />
+
     <ListView
         android:id="@+id/rxListView"
+        style="@style/ListViewStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
-
 </RelativeLayout>

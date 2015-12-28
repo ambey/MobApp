@@ -47,9 +47,11 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serv_prov);
 
-        if (LoginHolder.custLoginRef != null) {
-            ActionBar actionBar = getActionBar();
-            if (actionBar != null) {
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(false);
+
+            if (LoginHolder.custLoginRef != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
         }
@@ -318,7 +320,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     @Override
     public void onBackPressed() {
-        if(mConnection.isConnected()) {
+        if (mConnection.isConnected()) {
             unbindService(mConnection);
             //finish();
             //TODO not working as needed, still its returning the response.

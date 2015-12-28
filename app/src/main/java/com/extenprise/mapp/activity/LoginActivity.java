@@ -1,5 +1,6 @@
 package com.extenprise.mapp.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -79,8 +80,12 @@ public class LoginActivity extends Activity implements ResponseHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        //final View welcomeView = findViewById(R.id.welcome);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
+
         mLoginFormView = findViewById(R.id.login_form);
         //mLoginFormView.setEnabled(false);
         Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
@@ -282,33 +287,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         return false;
     }
 
-    class SetupEmailAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
-
-        @Override
-        protected List<String> doInBackground(Void... voids) {
-            ArrayList<String> emailAddressCollection = new ArrayList<>();
-
-            // Get all emails from the user's contacts and copy them to a list.
-            ContentResolver cr = getContentResolver();
-            Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                    null, null, null);
-            if (emailCur != null) {
-                while (emailCur.moveToNext()) {
-                    String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
-                            .CommonDataKinds.Phone.DATA));
-                    emailAddressCollection.add(email);
-                }
-                emailCur.close();
-            }
-            return emailAddressCollection;
-        }
-
-        @Override
-        protected void onPostExecute(List<String> emailAddressCollection) {
-            addEmailsToAutoComplete(emailAddressCollection);
-        }
-    }
-
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -321,7 +299,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Utility.showProgress(this, mLoginFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
-            String phone="", type="";
+            String phone, type;
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
@@ -364,6 +342,33 @@ public class LoginActivity extends Activity implements ResponseHandler {
             Utility.showMessage(this, R.string.msg_login_failed);
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();
+        }
+    }
+
+    class SetupEmailAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
+
+        @Override
+        protected List<String> doInBackground(Void... voids) {
+            ArrayList<String> emailAddressCollection = new ArrayList<>();
+
+            // Get all emails from the user's contacts and copy them to a list.
+            ContentResolver cr = getContentResolver();
+            Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                    null, null, null);
+            if (emailCur != null) {
+                while (emailCur.moveToNext()) {
+                    String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
+                            .CommonDataKinds.Phone.DATA));
+                    emailAddressCollection.add(email);
+                }
+                emailCur.close();
+            }
+            return emailAddressCollection;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> emailAddressCollection) {
+            addEmailsToAutoComplete(emailAddressCollection);
         }
     }
 }

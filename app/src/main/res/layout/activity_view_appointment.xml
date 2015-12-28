@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="4dp"
-    android:background="@color/background2">
+    android:background="@drawable/shaded_background"
+    android:padding="4dp">
 
     <TextView
         android:id="@+id/dateView"
@@ -90,6 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/patientAgeTextView"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/patientAgeTextView"
         android:layout_toRightOf="@+id/patientAgeTextView"
         android:text="@string/year"
@@ -131,4 +132,3 @@
         android:layout_below="@+id/appointmentTimeTextView" />
 
 </RelativeLayout>
-

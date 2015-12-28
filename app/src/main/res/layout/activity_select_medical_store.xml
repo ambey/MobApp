@@ -36,20 +36,21 @@
 
     <ListView
         android:id="@+id/medStoreListView"
+        style="@style/ListViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:choiceMode="singleChoice"
-        android:layout_gravity="center_horizontal" />
+        android:choiceMode="singleChoice" />
 
     <Button
         android:id="@+id/sendRxButton"
         style="@style/InactiveExtraWideButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
-        android:onClick="sendRxToMedStore"
+        android:layout_marginTop="20dp"
         android:enabled="false"
+        android:onClick="sendRxToMedStore"
         android:text="@string/send" />
 </LinearLayout>

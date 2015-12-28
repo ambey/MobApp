@@ -46,30 +46,31 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewhistoryLbl"
         android:layout_marginTop="30dp"
-        android:text="@string/past_apponts"/>
+        android:text="@string/past_apponts" />
 
     <ListView
         android:id="@+id/listViewMyAppont"
+        style="@style/ListViewStyle"
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="fill_parent"
         android:layout_below="@+id/textViewMyAppontLbl"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp" />
 
-<!--
-    <TextView
-        android:id="@+id/textViewOtherDataLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/listViewMyAppont"
-        android:layout_marginTop="10dp"
-        android:text="@string/otherData"
-        android:textSize="18sp" />
+    <!--
+        <TextView
+            android:id="@+id/textViewOtherDataLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listViewMyAppont"
+            android:layout_marginTop="10dp"
+            android:text="@string/otherData"
+            android:textSize="18sp" />
 
-    <ListView
-        android:id="@+id/listViewOtherData"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_below="@+id/textViewOtherDataLbl"
-        android:layout_marginTop="10dp"/>
--->
+        <ListView
+            android:id="@+id/listViewOtherData"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_below="@+id/textViewOtherDataLbl"
+            android:layout_marginTop="10dp"/>
+    -->
 </RelativeLayout>

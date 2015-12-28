@@ -43,7 +43,7 @@
 
         <activity
             android:name=".activity.LoginActivity"
-            android:label="Medico"
+            android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustPan|stateHidden" >
 
             <!--
@@ -56,7 +56,7 @@
         </activity>
         <activity
             android:name=".customer.activity.SearchServProvActivity"
-            android:label="Medico" >
+            android:label="@string/title_activity_search_doctor">
 
 
             <!--
@@ -146,7 +146,6 @@
         </activity>
         <activity
             android:name=".activity.SignUpPreviousActivity"
-            android:label="@string/title_activity_sign_up_previous"
             android:parentActivityName=".activity.LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -275,12 +274,14 @@
                 android:value="com.extenprise.mapp.service.activity.RxListActivity" />
         </activity>
         <activity android:name=".customer.activity.ViewAppointmentListActivity"
+            android:label="@string/my_apponts"
             android:parentActivityName=".customer.activity.PatientsHomeScreenActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
         </activity>
         <activity android:name=".customer.activity.ViewRxListActivity"
+            android:label="@string/my_rx_list"
             android:parentActivityName=".customer.activity.PatientsHomeScreenActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

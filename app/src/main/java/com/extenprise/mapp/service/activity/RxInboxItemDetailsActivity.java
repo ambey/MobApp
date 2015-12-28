@@ -47,6 +47,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(R.string.title_activity_rx_feedback);
         }
         Intent intent = getIntent();
         mInbox = intent.getParcelableArrayListExtra("inbox");

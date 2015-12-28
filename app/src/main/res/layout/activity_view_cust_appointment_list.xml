@@ -20,8 +20,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.45"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.45">
 
         <ProgressBar
             android:id="@+id/upcomingProgress"
@@ -32,9 +32,9 @@
 
         <ListView
             android:id="@+id/upcomingAppontsList"
+            style="@style/ListViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent" />
-
         <TextView
             android:id="@+id/appontMsgView"
             style="@style/MediumLabel"
@@ -57,8 +57,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.45"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.45">
 
         <ProgressBar
             android:id="@+id/pastProgress"
@@ -69,9 +69,9 @@
 
         <ListView
             android:id="@+id/pastAppontsList"
+            style="@style/ListViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent" />
-
         <TextView
             android:id="@+id/pastAppontMsgView"
             style="@style/MediumLabel"

@@ -4,7 +4,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
         <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
         <!--
                 <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
         -->
@@ -15,10 +15,18 @@
     </style>
 
     <!-- ActionBar styles -->
-    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <style name="AppTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@drawable/stroked_rect</item>
-        <item name="android:displayOptions">useLogo</item>
-        <item name="displayOptions">useLogo</item>
+        <item name="android:displayOptions">showHome|useLogo|showTitle</item>
+        <item name="displayOptions">showHome|useLogo|showTitle</item>
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="android:logo">@drawable/med_logo_final</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/ThemeColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">21sp</item>
     </style>
 
     <color name="ThemeColor">#c00000</color>
@@ -233,4 +241,8 @@
         <item name="android:windowExitAnimation">@anim/translate_right_side</item>
     </style>
 
+    <style name="ListViewStyle">
+        <item name="android:divider">#0000</item>
+        <item name="android:dividerHeight">8dp</item>
+    </style>
 </resources>

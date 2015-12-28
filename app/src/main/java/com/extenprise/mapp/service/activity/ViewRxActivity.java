@@ -45,6 +45,8 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         view.setVisibility(View.GONE);
 
         View layout = findViewById(R.id.layoutAppont);
+        layout.setBackgroundResource(R.drawable.text);
+
         TextView date = (TextView) layout.findViewById(R.id.dateView);
         TextView fname = (TextView) layout.findViewById(R.id.patientFNameTextView);
         TextView lname = (TextView) layout.findViewById(R.id.patientLNameTextView);

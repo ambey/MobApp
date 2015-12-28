@@ -1,72 +1,75 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.customer.activity.PatientHistoryActivity">
 
-    <TextView
-        android:id="@+id/textViewhistoryLbl"
-        style="@style/TitleText"
-        android:layout_width="wrap_content"
+    <!--
+        <TextView
+            android:id="@+id/textViewhistoryLbl"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/history_data" />
+    -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/history_data" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewFName"
+            style="@style/LargeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/first_name" />
+
+        <TextView
+            android:id="@+id/textViewLName"
+            style="@style/LargeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/last_name" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textViewFName"
-        style="@style/LargeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewhistoryLbl"
-        android:text="@string/first_name" />
-
-    <TextView
-        android:id="@+id/textViewLName"
-        style="@style/LargeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/textViewFName"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/textViewFName"
-        android:layout_toRightOf="@id/textViewFName"
-        android:text="@string/last_name" />
-
-    <TextView
-        android:id="@+id/textViewMyAppontLbl"
         style="@style/LargeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewhistoryLbl"
-        android:layout_marginTop="60dp"
-        android:text="@string/past_apponts"/>
+        android:layout_marginTop="30dp"
+        android:text="@string/past_apponts" />
 
     <ListView
         android:id="@+id/listViewMyAppont"
+        style="@style/ListViewStyle"
         android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:layout_below="@+id/textViewMyAppontLbl"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp" />
 
-<!--
-    <TextView
-        android:id="@+id/textViewOtherDataLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/listViewMyAppont"
-        android:layout_marginTop="30dp"
-        android:text="@string/other_data"
-        android:textSize="18sp" />
+    <!--
+        <TextView
+            android:id="@+id/textViewOtherDataLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listViewMyAppont"
+            android:layout_marginTop="30dp"
+            android:text="@string/other_data"
+            android:textSize="18sp" />
 
-    <ListView
-        android:id="@+id/listViewOtherData"
-        android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:layout_below="@+id/textViewOtherDataLbl"
-        android:layout_marginTop="10dp"/>
--->
+        <ListView
+            android:id="@+id/listViewOtherData"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_below="@+id/textViewOtherDataLbl"
+            android:layout_marginTop="10dp"/>
+    -->
 
-</RelativeLayout>
+</LinearLayout>
