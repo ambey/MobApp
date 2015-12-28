@@ -28,10 +28,28 @@ public class WorkPlace implements Parcelable {
     private float consultFee;
     private int startTime; //as minutes
     private int endTime;//as minutes
+    private int idServicePoint;
+    private int idService;
 
     public WorkPlace() {
         signInData = new SignInData();
         city = new City();
+    }
+
+    public int getIdServicePoint() {
+        return idServicePoint;
+    }
+
+    public void setIdServicePoint(int idServicePoint) {
+        this.idServicePoint = idServicePoint;
+    }
+
+    public int getIdService() {
+        return idService;
+    }
+
+    public void setIdService(int idService) {
+        this.idService = idService;
     }
 
     public WorkPlace(Parcel source) {
@@ -54,6 +72,8 @@ public class WorkPlace implements Parcelable {
         endTime = source.readInt();
 
         city = new City(source);
+        idServicePoint = source.readInt();
+        idService = source.readInt();
     }
 
 
@@ -90,6 +110,8 @@ public class WorkPlace implements Parcelable {
         });
 
         city.writeToParcel(dest, flags);
+        dest.writeInt(idServicePoint);
+        dest.writeInt(idService);
     }
 
     public String getName() {

@@ -239,7 +239,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         getWorkPlaceView(null);
     }
 
-    private AlertDialog getWorkPlaceView(WorkPlace item) {
+    private AlertDialog getWorkPlaceView(final WorkPlace item) {
         int action = MappService.DO_ADD_WORK_PLACE;
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -393,6 +393,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     wp.setSignInData(mSignInData);
                     wp.setPincode(mPinCode.getText().toString().trim());
 
+                    if(finalAction == MappService.DO_EDIT_WORK_PLACE) {
+                        wp.setIdServicePoint(item.getIdServicePoint());
+                        wp.setIdService(item.getIdService());
+                    }
                     sendRequest(finalAction, wp);
                     dialog.dismiss();
                 }
