@@ -254,4 +254,13 @@
         <item>@string/by_location</item>
         <item>@string/by_category</item>
     </string-array>
+
+    <!-- Appointment List Sort Fields -->
+    <string name="by_name">Name</string>
+    <string name="by_date">Date</string>
+
+    <string-array name="appont_sort_field_list">
+        <item>@string/by_name</item>
+        <item>@string/by_date</item>
+    </string-array>
 </resources>

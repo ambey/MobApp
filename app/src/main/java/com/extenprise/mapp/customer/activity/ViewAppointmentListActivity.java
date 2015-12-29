@@ -1,9 +1,12 @@
 package com.extenprise.mapp.customer.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,12 +19,14 @@ import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
+import com.extenprise.mapp.ui.DialogDismissListener;
+import com.extenprise.mapp.ui.SortActionDialog;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ViewAppointmentListActivity extends Activity implements ResponseHandler {
+public class ViewAppointmentListActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
@@ -32,6 +37,8 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
 
     private ProgressBar mUpcomingProgress;
     private ProgressBar mPastProgress;
+    private Button mUpcomingSortBtn;
+    private Button mPastSortBtn;
 
     private Customer mCust;
 
@@ -50,7 +57,33 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         mPastMsgView = (TextView) findViewById(R.id.pastAppontsMsgView);
         mUpcomMsgView = (TextView) findViewById(R.id.upcomingAppontsMsgView);
 
+        mUpcomingSortBtn = (Button) findViewById(R.id.upcomingSortButton);
+        mUpcomingSortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSortDialog(true);
+            }
+        });
+        Utility.setEnabledButton(this, mUpcomingSortBtn, false);
+
+        mPastSortBtn = (Button) findViewById(R.id.pastSortButton);
+        mPastSortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSortDialog(false);
+            }
+        });
+        Utility.setEnabledButton(this, mPastSortBtn, false);
+
         getUpcomingList();
+    }
+
+    private void showSortDialog(boolean upcoming) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        SortActionDialog dialog = new SortActionDialog();
+        dialog.setSortFieldList(getResources().getStringArray(R.array.appont_sort_field_list));
+        dialog.setListener(this);
+        dialog.show(fragmentManager, upcoming ? "UpAppontSort" : "PastAppontSort");
     }
 
     private void setupForm(AppointmentListItem form) {
@@ -96,9 +129,11 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         if (mUpcomingList != null && mUpcomingList.size() > 0) {
             mUpcomMsgView.setVisibility(View.GONE);
             mUpcomingListView.setVisibility(View.VISIBLE);
+            Utility.setEnabledButton(this, mUpcomingSortBtn, true);
         } else {
             mUpcomingListView.setVisibility(View.GONE);
             mUpcomMsgView.setVisibility(View.VISIBLE);
+            Utility.setEnabledButton(this, mUpcomingSortBtn, false);
         }
 
         Utility.showProgress(this, mPastListView, mPastProgress, false);
@@ -109,9 +144,11 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         if (pastList != null && pastList.size() > 0) {
             mPastMsgView.setVisibility(View.GONE);
             mPastListView.setVisibility(View.VISIBLE);
+            Utility.setEnabledButton(this, mPastSortBtn, true);
         } else {
             mPastListView.setVisibility(View.GONE);
             mPastMsgView.setVisibility(View.VISIBLE);
+            Utility.setEnabledButton(this, mPastSortBtn, false);
         }
     }
 
@@ -126,5 +163,18 @@ public class ViewAppointmentListActivity extends Activity implements ResponseHan
         }
 
         return false;
+    }
+
+    @Override
+    public void onDialogDismissed(DialogFragment dialog) {
+        SortActionDialog sortActionDialog = (SortActionDialog) dialog;
+        AppointmentListAdapter adapter;
+        if (dialog.getTag().equals("UpAppontSort")) {
+            adapter = (AppointmentListAdapter) mUpcomingListView.getAdapter();
+        } else {
+            adapter = (AppointmentListAdapter) mPastListView.getAdapter();
+        }
+        adapter.setAscending(sortActionDialog.isAscending());
+        adapter.setSortField(sortActionDialog.getSortField());
     }
 }

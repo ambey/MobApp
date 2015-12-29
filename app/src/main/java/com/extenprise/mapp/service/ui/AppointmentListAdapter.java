@@ -18,6 +18,8 @@ import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by ambey on 10/10/15.
@@ -26,6 +28,9 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
     private ArrayList<AppointmentListItem> mList;
     private ServiceProvider mServProv;
     private boolean mShowDate;
+    private ArrayList<AppointmentListItem> mSortedList;
+    private String mSortField;
+    private boolean mAscending;
 
     public AppointmentListAdapter(Context context, int resource, ArrayList<AppointmentListItem> list, ServiceProvider servProv) {
         super(context, resource);
@@ -64,7 +69,7 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         TextView timeView = (TextView) v.findViewById(R.id.appointmentTimeTextView);
         TextView statusView = (TextView) v.findViewById(R.id.statusTextView);
 
-        AppointmentListItem item = mList.get(position);
+        AppointmentListItem item = getItem(position);
         fnameView.setText(item.getFirstName());
         lnameView.setText(item.getLastName());
         genderView.setText(item.getGender());
@@ -88,6 +93,18 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         return v;
     }
 
+    public AppointmentListItem getItem(int position) {
+        try {
+            if (mSortField == null) {
+                return mList.get(position);
+            }
+            return mSortedList.get(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
@@ -95,4 +112,47 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
         bundle.putParcelable("appont", mList.get(position));
         getContext().startActivity(intent);
     }
+
+    public void setSortField(String sortField) {
+        this.mSortField = sortField;
+        this.mSortField = sortField;
+        if (sortField == null) {
+            return;
+        }
+        Comparator<AppointmentListItem> comparator = null;
+        Context context = getContext();
+        if (sortField.equals(context.getString(R.string.by_name))) {
+            comparator = new Comparator<AppointmentListItem>() {
+                @Override
+                public int compare(AppointmentListItem lhs, AppointmentListItem rhs) {
+                    int result = lhs.getFirstName().toUpperCase().compareTo(rhs.getFirstName().toUpperCase());
+                    if (result == 0) {
+                        return lhs.getLastName().toUpperCase().compareTo(rhs.getLastName().toUpperCase());
+                    }
+                    return result;
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_date))) {
+            comparator = new Comparator<AppointmentListItem>() {
+                @Override
+                public int compare(AppointmentListItem lhs, AppointmentListItem rhs) {
+                    return lhs.getDate().compareTo(rhs.getDate());
+                }
+            };
+        }
+        mSortedList = new ArrayList<>();
+        mSortedList.addAll(mList);
+        if (comparator != null) {
+            if (!mAscending) {
+                comparator = Collections.reverseOrder(comparator);
+            }
+            Collections.sort(mSortedList, comparator);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void setAscending(boolean ascending) {
+        this.mAscending = ascending;
+    }
+
 }
