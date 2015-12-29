@@ -17,7 +17,6 @@ public class ServProvListItem implements Parcelable {
     private String servPtLocation;
     private String workingDays;
 
-
     public ServProvListItem() {
     }
 
@@ -120,7 +119,7 @@ public class ServProvListItem implements Parcelable {
         dest.writeStringArray(new String[] {
                 phone, firstName, lastName, speciality,
                 servPtName, servPtLocation, workingDays
-        } );
+        });
         dest.writeFloat(experience);
         dest.writeInt(idServProvHasServPt);
     }

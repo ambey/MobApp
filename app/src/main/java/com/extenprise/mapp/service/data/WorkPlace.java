@@ -54,26 +54,28 @@ public class WorkPlace implements Parcelable {
 
     public WorkPlace(Parcel source) {
         signInData = source.readParcelable(SignInData.class.getClassLoader());
+
         name = source.readString();
         location = source.readString();
         pincode = source.readString();
         phone = source.readString();
         altPhone = source.readString();
         emailId = source.readString();
-        //city = source.readString();
         servPointType = source.readString();
         servCategory = source.readString();
         speciality = source.readString();
-        experience = source.readFloat();
         qualification = source.readString();
         workingDays = source.readString();
+
+        experience = source.readFloat();
         consultFee = source.readFloat();
+
         startTime = source.readInt();
         endTime = source.readInt();
-
-        city = new City(source);
         idServicePoint = source.readInt();
         idService = source.readInt();
+
+        city = new City(source);
     }
 
 
@@ -98,20 +100,20 @@ public class WorkPlace implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(signInData, flags);
 
+        dest.writeStringArray(new String[]{
+                name, location, pincode, phone, altPhone, emailId,
+                servPointType, servCategory, speciality, qualification, workingDays
+        });
+
         dest.writeFloat(experience);
         dest.writeFloat(consultFee);
 
         dest.writeInt(startTime);
         dest.writeInt(endTime);
-
-        dest.writeStringArray(new String[]{
-                name, location, phone, altPhone, emailId, pincode,
-                servPointType, servCategory, speciality, qualification, workingDays
-        });
-
-        city.writeToParcel(dest, flags);
         dest.writeInt(idServicePoint);
         dest.writeInt(idService);
+
+        city.writeToParcel(dest, flags);
     }
 
     public String getName() {
