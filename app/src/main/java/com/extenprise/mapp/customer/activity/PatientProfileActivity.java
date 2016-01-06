@@ -355,7 +355,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_patient_profile, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

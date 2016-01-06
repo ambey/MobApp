@@ -109,12 +109,11 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(), AppointmentDetailsActivity.class);
         Bundle bundle = WorkingDataStore.getBundle();
-        bundle.putParcelable("appont", mList.get(position));
+        bundle.putParcelable("appont", getItem(position));
         getContext().startActivity(intent);
     }
 
     public void setSortField(String sortField) {
-        this.mSortField = sortField;
         this.mSortField = sortField;
         if (sortField == null) {
             return;

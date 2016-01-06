@@ -548,7 +548,6 @@ public class MappService extends Service {
                             break;
                         case DO_GET_RX:
                         case DO_SAVE_RX:
-                            Log.v("MappService", "ResponseBuf: " + responseBuf.toString());
                             mRx = gson.fromJson(responseBuf.toString(), Rx.class);
                             break;
                         case DO_GET_RX_INBOX:

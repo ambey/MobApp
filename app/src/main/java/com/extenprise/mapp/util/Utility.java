@@ -16,7 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,15 +40,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.activity.LoginActivity;
-import com.extenprise.mapp.customer.data.Customer;
-import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.net.AppStatus;
 import com.extenprise.mapp.net.MappService;
-import com.extenprise.mapp.net.MappServiceConnection;
-import com.extenprise.mapp.service.data.ServiceProvider;
-import com.extenprise.mapp.service.data.WorkPlace;
 
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
@@ -711,6 +706,8 @@ public abstract class Utility {
             loginPrefsEditor.clear();
             loginPrefsEditor.apply();
         }
+        LoginHolder.custLoginRef = null;
+        LoginHolder.servLoginRef = null;
         activity.finish();
         Intent intent = new Intent(activity, LoginActivity.class);
         activity.startActivity(intent);

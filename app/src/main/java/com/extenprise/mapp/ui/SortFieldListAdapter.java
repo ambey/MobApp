@@ -21,10 +21,14 @@ public class SortFieldListAdapter extends ArrayAdapter<String> {
     public SortFieldListAdapter(Context context, int resource, String[] sortFields) {
         super(context, resource);
         this.sortFields = sortFields;
+        selectedPos = -1;
         if (sortFields != null) {
             selection = new boolean[sortFields.length];
+            if (sortFields.length > 0) {
+                selection[0] = true;
+                selectedPos = 0;
+            }
         }
-        selectedPos = -1;
     }
 
     @Override
@@ -55,6 +59,12 @@ public class SortFieldListAdapter extends ArrayAdapter<String> {
                     }
                     selectedPos = position;
                     notifyDataSetChanged();
+                } else if (!isChecked && selectedPos == position) {
+                    selection[position] = true; // Keep the option selected
+                    notifyDataSetChanged();
+/*
+                    selectedPos = -1;
+*/
                 }
             }
         });

@@ -1,10 +1,12 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,13 +15,16 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.data.RxFeedback;
+import com.extenprise.mapp.data.WorkingDataStore;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.ui.RxInboxAdapter;
+import com.extenprise.mapp.ui.DialogDismissListener;
+import com.extenprise.mapp.ui.SortActionDialog;
 
 import java.util.ArrayList;
 
 
-public class RxListActivity extends Activity {
+public class RxListActivity extends FragmentActivity implements DialogDismissListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +40,23 @@ public class RxListActivity extends Activity {
         ArrayList<RxInboxItem> mInbox = getIntent().getParcelableArrayListExtra("inbox");
         int feedback = getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal());
         TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
-        if(mInbox == null) {
+        if (mInbox == null) {
             mInbox = new ArrayList<>();
         }
-        if(mInbox.size() > 0) {
+        if (mInbox.size() > 0) {
             msgView.setVisibility(View.GONE);
         }
         RxFeedback fb = RxFeedback.NONE;
-        if(feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
+        if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
             fb = RxFeedback.GIVE_FEEDBACK;
-        } else if(feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        } else if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             fb = RxFeedback.VIEW_FEEDBACK;
         }
         RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox, fb);
+        Bundle bundle = WorkingDataStore.getBundle();
+        adapter.setAscending(bundle.getBoolean("ascending"));
+        adapter.setSortField(bundle.getString("sortField"));
+
         ListView view = (ListView) findViewById(R.id.rxListView);
         view.setAdapter(adapter);
         view.setOnItemClickListener(adapter);
@@ -57,7 +66,7 @@ public class RxListActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_rx_list, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -68,11 +77,23 @@ public class RxListActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_sort:
+                showSortDialog();
+                break;
+            case R.id.action_settings:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSortDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        SortActionDialog dialog = new SortActionDialog();
+        dialog.setSortFieldList(getResources().getStringArray(R.array.dr_rx_sort_field_list));
+        dialog.setListener(this);
+        dialog.show(fragmentManager, "RxListSort");
     }
 
     @Nullable
@@ -80,7 +101,7 @@ public class RxListActivity extends Activity {
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
         String parentClass = getIntent().getStringExtra("parent-activity");
-        if(parentClass != null) {
+        if (parentClass != null) {
             try {
                 intent = new Intent(this, Class.forName(parentClass));
             } catch (ClassNotFoundException e) {
@@ -88,5 +109,24 @@ public class RxListActivity extends Activity {
             }
         }
         return intent;
+    }
+
+    @Override
+    public void onDialogDismissed(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
+        SortActionDialog sortActionDialog = (SortActionDialog) dialog;
+        ListView listView = (ListView) findViewById(R.id.rxListView);
+        RxInboxAdapter adapter = (RxInboxAdapter) listView.getAdapter();
+        adapter.setAscending(sortActionDialog.isAscending());
+        adapter.setSortField(sortActionDialog.getSortField());
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
     }
 }

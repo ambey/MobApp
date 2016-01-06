@@ -1,7 +1,5 @@
 package com.extenprise.mapp.service.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -236,6 +234,16 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
         String selectedDays = selectionDialog.getSelectedDays();
         mMultiSpinnerDays.setText(selectedDays);
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
     }
 
     public void showDaysSelectionDialog(View view) {

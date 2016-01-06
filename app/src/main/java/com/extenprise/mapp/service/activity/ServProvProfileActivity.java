@@ -169,7 +169,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_serv_prove_profile, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -885,6 +885,16 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
         String selectedDays = selectionDialog.getSelectedDays();
         mMultiSpinnerDays.setText(selectedDays);
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
     }
 
     private void showDaysSelectionDialog() {

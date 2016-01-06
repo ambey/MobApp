@@ -1,8 +1,12 @@
 package com.extenprise.mapp.customer.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -11,16 +15,19 @@ import android.widget.TextView;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.customer.ui.RxListAdapter;
+import com.extenprise.mapp.data.WorkingDataStore;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.RxInboxItem;
+import com.extenprise.mapp.ui.DialogDismissListener;
+import com.extenprise.mapp.ui.SortActionDialog;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 
-public class ViewRxListActivity extends Activity implements ResponseHandler {
+public class ViewRxListActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
@@ -43,12 +50,15 @@ public class ViewRxListActivity extends Activity implements ResponseHandler {
         mRxListProgress = (ProgressBar) findViewById(R.id.rxListProgress);
         mRxMsgView = (TextView) findViewById(R.id.rxMsgView);
 
-        if(rxInboxItems == null) {
+        if (rxInboxItems == null) {
             getRxList();
         } else {
             RxListAdapter adapter = new RxListAdapter(this, 0, rxInboxItems, mCust);
             mRxListView.setAdapter(adapter);
             mRxListView.setOnItemClickListener(adapter);
+            Bundle bundle = WorkingDataStore.getBundle();
+            adapter.setAscending(bundle.getBoolean("ascending"));
+            adapter.setSortField(bundle.getString("sortField"));
         }
     }
 
@@ -88,5 +98,56 @@ public class ViewRxListActivity extends Activity implements ResponseHandler {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_rx_list, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_sort:
+                showSortDialog();
+                break;
+            case R.id.action_settings:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showSortDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        SortActionDialog dialog = new SortActionDialog();
+        dialog.setSortFieldList(getResources().getStringArray(R.array.cust_rx_sort_field_list));
+        dialog.setListener(this);
+        dialog.show(fragmentManager, "RxListSort");
+    }
+
+    @Override
+    public void onDialogDismissed(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
+        SortActionDialog sortActionDialog = (SortActionDialog) dialog;
+        RxListAdapter adapter = (RxListAdapter) mRxListView.getAdapter();
+        adapter.setAscending(sortActionDialog.isAscending());
+        adapter.setSortField(sortActionDialog.getSortField());
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
     }
 }

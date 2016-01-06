@@ -92,7 +92,7 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_view_rx, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         RxInboxItem inboxItem = new RxInboxItem();
         inboxItem.setRx(rx);
         rxList.add(inboxItem);
-        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, rxList, 0, RxFeedback.NONE);
+        ArrayAdapter<RxItem> adapter = new RxItemListAdapter(this, 0, rxList, inboxItem, RxFeedback.NONE);
         rxItemsList.setAdapter(adapter);
     }
 

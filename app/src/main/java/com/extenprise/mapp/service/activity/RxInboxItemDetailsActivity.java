@@ -9,6 +9,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import com.extenprise.mapp.data.Report;
 import com.extenprise.mapp.data.ReportServiceStatus;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxFeedback;
+import com.extenprise.mapp.data.WorkingDataStore;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -33,12 +36,14 @@ import com.extenprise.mapp.util.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.BitSet;
 
 public class RxInboxItemDetailsActivity extends Activity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ArrayList<RxInboxItem> mInbox;
     private RxInboxItem mInboxItem;
     private Button mSendAvailButton;
+    private BitSet mAvailMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +55,18 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(R.string.title_activity_rx_feedback);
         }
+
+        Bundle workingData = WorkingDataStore.getBundle();
+        mInboxItem = workingData.getParcelable("rxItem");
+
         Intent intent = getIntent();
         mInbox = intent.getParcelableArrayListExtra("inbox");
-        int position = intent.getIntExtra("position", 0);
-        mInboxItem = mInbox.get(position);
         Customer customer = intent.getParcelableExtra("customer");
         if(customer != null) {
             mInboxItem.setCustomer(customer);
         }
         int feedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
+        mAvailMap = (BitSet) intent.getSerializableExtra("availMap");
 
         View layoutAppont = findViewById(R.id.layoutAppont);
         layoutAppont.setVisibility(View.GONE);
@@ -136,7 +144,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
-        Rx rx = mInbox.get(position).getRx();
+        Rx rx = mInboxItem.getRx();
         if (rx.getItems().size() == 0) {
             mSendAvailButton.setVisibility(View.GONE);
             resendRxButton.setVisibility(View.GONE);
@@ -154,9 +162,20 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         } else if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
             fb = RxFeedback.GIVE_FEEDBACK;
         }
-        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, position, fb);
+        RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, mInboxItem, fb);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(adapter);
+    }
+
+    public BitSet getAvailMap() {
+        return mAvailMap;
+    }
+
+    public void setAvailabilityChanged(boolean isChanged) {
+        /* Change the state of the button only if the feedback was sent previously */
+        if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal()) {
+            Utility.setEnabledButton(this, mSendAvailButton, isChanged);
+        }
     }
 
     public void sendAvailabilityFeedback(View view) {
@@ -261,4 +280,26 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         }
         return false;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_rx, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

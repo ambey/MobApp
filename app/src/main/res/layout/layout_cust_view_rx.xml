@@ -1,50 +1,113 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/shaded_background"
+    android:orientation="vertical"
+    android:padding="4dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/shaded_background"
-        android:orientation="vertical"
-        android:padding="4dp">
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/statusView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/dateView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/MediumLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/drLbl" />
+
+        <TextView
+            android:id="@+id/drFNameView"
+            style="@style/MediumLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/first_name" />
+
+        <TextView
+            android:id="@+id/drLNameView"
+            style="@style/MediumLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/last_name" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/addressLblView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address_lbl" />
+
+        <TextView
+            android:id="@+id/clinicNameAddressView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/addressLblView"
+            android:layout_toRightOf="@id/addressLblView"
+            android:textColor="#00f" />
+
+        <TextView
+            android:id="@+id/phoneView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/clinicNameAddressView"
+            android:layout_alignStart="@id/clinicNameAddressView"
+            android:layout_below="@id/clinicNameAddressView" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/medStoreLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <TextView
-                style="@style/MediumLabel"
+                style="@style/MediumLabelGreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/drLbl" />
+                android:text="@string/rx_sent_to" />
 
             <TextView
-                android:id="@+id/drFNameView"
-                style="@style/MediumLabel"
+                android:id="@+id/medStoreNameView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:text="@string/first_name" />
 
-            <TextView
-                android:id="@+id/drLNameView"
-                style="@style/MediumLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:text="@string/last_name" />
         </LinearLayout>
 
         <RelativeLayout
@@ -52,106 +115,48 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/addressLblView"
+                android:id="@+id/runByLbl"
+                style="@style/MediumLabelGreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/run_by" />
+
+            <TextView
+                android:id="@+id/firstNameView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/runByLbl"
+                android:layout_toRightOf="@id/runByLbl"
                 android:text="@string/address_lbl" />
 
             <TextView
-                android:id="@+id/clinicNameAddressView"
+                android:id="@+id/lastNameView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/addressLblView"
-                android:layout_toRightOf="@id/addressLblView"
-                android:textColor="#00f" />
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/firstNameView"
+                android:layout_toRightOf="@id/firstNameView" />
 
             <TextView
-                android:id="@+id/phoneView"
+                android:id="@+id/medStoreAddressView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/clinicNameAddressView"
-                android:layout_alignStart="@id/clinicNameAddressView"
-                android:layout_below="@id/clinicNameAddressView" />
-        </RelativeLayout>
+                android:layout_alignLeft="@id/firstNameView"
+                android:layout_alignStart="@id/firstNameView"
+                android:layout_below="@id/firstNameView" />
 
-        <LinearLayout
-            android:id="@+id/medStoreLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/medStorePhoneView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/MediumLabelGreen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/rx_sent_to" />
-
-                <TextView
-                    android:id="@+id/medStoreNameView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/first_name" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/runByLbl"
-                    style="@style/MediumLabelGreen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/run_by" />
-
-                <TextView
-                    android:id="@+id/firstNameView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/runByLbl"
-                    android:layout_toRightOf="@id/runByLbl"
-                    android:text="@string/address_lbl" />
-
-                <TextView
-                    android:id="@+id/lastNameView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_toEndOf="@id/firstNameView"
-                    android:layout_toRightOf="@id/firstNameView" />
-
-                <TextView
-                    android:id="@+id/medStoreAddressView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/firstNameView"
-                    android:layout_alignStart="@id/firstNameView"
-                    android:layout_below="@id/firstNameView" />
-
-                <TextView
-                    android:id="@+id/medStorePhoneView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/medStoreAddressView"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/medStoreAddressView"
-                    android:layout_toRightOf="@id/medStoreAddressView" />
-            </RelativeLayout>
-        </LinearLayout>
+                android:layout_alignBaseline="@id/medStoreAddressView"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/medStoreAddressView"
+                android:layout_toRightOf="@id/medStoreAddressView" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

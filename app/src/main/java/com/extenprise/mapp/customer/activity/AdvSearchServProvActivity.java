@@ -159,7 +159,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.menu_advance__search_doc, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -331,6 +331,15 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
         String selectedDays = selectionDialog.getSelectedDays();
         mMultiSpinnerDays.setText(selectedDays);
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
     }
 
     public void showDaysSelectionDialog(View view) {

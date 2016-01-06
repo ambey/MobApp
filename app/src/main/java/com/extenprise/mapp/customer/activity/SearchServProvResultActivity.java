@@ -34,6 +34,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     private ArrayList<ServProvListItem> mServProvList;
     private View mProgressView;
     private View mSearchResultView;
+    private ArrayAdapter<ServProvListItem> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         Intent intent = getIntent();
         mServProvList = intent.getParcelableArrayListExtra("servProvList");
 
-        ArrayAdapter<ServProvListItem> adapter = new ServProvListAdapter(this,
-                R.layout.activity_search_result, mServProvList);
+        mAdapter = new ServProvListAdapter(this, R.layout.activity_search_result, mServProvList);
 
         ListView listView = (ListView) findViewById(R.id.docListView);
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
@@ -58,11 +58,11 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
                 getDetails(view, position);
             }
         });
-        listView.setAdapter(adapter);
+        listView.setAdapter(mAdapter);
 
         ServProvListItem spl = mServProvList.get(0);
         String msg = "not present";
-        if(spl.getWorkingDays() != null) {
+        if (spl.getWorkingDays() != null) {
             msg = spl.getWorkingDays();
         }
 
@@ -74,7 +74,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search_doc_result_list, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -85,12 +85,12 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        if (id == R.id.action_sort) {
-            showSortDialog();
+        switch (id) {
+            case R.id.action_sort:
+                showSortDialog();
+                break;
+            case R.id.action_settings:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -104,7 +104,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     }
 
     private void getDetails(View view, int position) {
-        ServProvListItem mSelectedItem = mServProvList.get(position);
+        ServProvListItem mSelectedItem = mAdapter.getItem(position);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mSelectedItem);
         mConnection.setData(bundle);
@@ -149,11 +149,20 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
 
     @Override
     public void onDialogDismissed(DialogFragment dialog) {
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
         SortActionDialog sortActionDialog = (SortActionDialog) dialog;
         ListView listView = (ListView) findViewById(R.id.docListView);
         ServProvListAdapter adapter = (ServProvListAdapter) listView.getAdapter();
         adapter.setAscending(sortActionDialog.isAscending());
         adapter.setSortField(sortActionDialog.getSortField());
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
     }
 }
 

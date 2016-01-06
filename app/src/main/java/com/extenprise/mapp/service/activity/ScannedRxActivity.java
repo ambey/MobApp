@@ -67,7 +67,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_scanned_rx, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -196,6 +196,15 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         return false;
     }
 
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
+        assert intent != null;
+        intent.putExtra("appont", mAppont);
+        return intent;
+    }
+
     private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
 
         public SaveBlobTask(Intent data) {
@@ -247,14 +256,5 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         protected void onCancelled() {
         }
 
-    }
-
-    @Nullable
-    @Override
-    public Intent getParentActivityIntent() {
-        Intent intent = super.getParentActivityIntent();
-        assert intent != null;
-        intent.putExtra("appont", mAppont);
-        return intent;
     }
 }

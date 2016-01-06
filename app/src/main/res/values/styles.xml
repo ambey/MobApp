@@ -13,6 +13,13 @@
         <item name="android:spinnerStyle">@style/SpinnerTheme</item>
         <item name="android:actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
         <item name="actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
+        <item name="android:actionMenuTextColor">@color/ThemeColor</item>
+        <item name="actionMenuTextColor">@color/ThemeColor</item>
+        <item name="android:dialogTheme">@style/AppTheme.Dialog</item>
+        <!--
+                <item name="android:popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
+                <item name="popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
+        -->
         <!--<item name="android:buttonStyle">@style/MyButton</item>-->
     </style>
 
@@ -34,6 +41,16 @@
     <style name="AppTheme.ActionBar.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/menu_overflow_icon</item>
     </style>
+
+    <style name="AppTheme.Dialog" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:textColorHint">@color/ThemeColor</item>
+    </style>
+    <!--
+        <style name="AppTheme.ActionBar.OverflowMenu" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
+            <item name="android:popupBackground">@color/ThemeColor</item>
+            <item name="android:actionMenuTextColor">#fff</item>
+        </style>
+    -->
 
     <color name="ThemeColor">#c00000</color>
     <color name="PassiveColor">#cdcdcd</color>

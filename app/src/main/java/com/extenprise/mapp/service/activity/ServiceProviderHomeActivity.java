@@ -100,7 +100,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_service_provider_home, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -118,12 +118,12 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
-                return true;
+                break;
             case R.id.action_settings:
-                return true;
+                break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this);
-                return true;
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

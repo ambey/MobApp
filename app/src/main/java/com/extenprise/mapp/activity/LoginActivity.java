@@ -143,7 +143,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

@@ -1,15 +1,12 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
-import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.ui.DaysSelectionDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +108,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_sign_up, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

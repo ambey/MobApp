@@ -133,8 +133,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         RxInboxItem rxInboxItem = null;
         if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             mInbox = intent.getParcelableArrayListExtra("inbox");
-            int position = intent.getIntExtra("position", 0);
-            rxInboxItem = mInbox.get(position);
+            rxInboxItem = intent.getParcelableExtra("rxItem");
             Customer c = rxInboxItem.getCustomer();
             name.setText(String.format("%s %s", c.getfName(), c.getlName()));
             addButton.setVisibility(View.GONE);
@@ -167,7 +166,7 @@ public class RxActivity extends Activity implements ResponseHandler {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_rx, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -198,7 +197,7 @@ public class RxActivity extends Activity implements ResponseHandler {
                     Intent intent = new Intent(this, Class.forName(mParentActivity));
                     intent.putExtra("feedback", mFeedback);
                     intent.putParcelableArrayListExtra("inbox", mInbox);
-                    intent.putExtra("position", getIntent().getIntExtra("position", 0));
+                    intent.putExtra("rxItem", getIntent().getParcelableExtra("rxItem"));
                     startActivity(intent);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -299,9 +298,8 @@ public class RxActivity extends Activity implements ResponseHandler {
         if (!isValidInput()) {
             return false;
         }
-        int position = getIntent().getIntExtra("position", 0);
         int rxItemPos = getIntent().getIntExtra("rxItemPos", 0);
-        RxInboxItem rxInboxItem = mInbox.get(position);
+        RxInboxItem rxInboxItem = getIntent().getParcelableExtra("rxItem");
         RxItem item = rxInboxItem.getRx().getItems().get(rxItemPos);
         fillRxItem(item);
         return true;
@@ -462,7 +460,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             intent.putExtra("appont", mAppont);
             intent.putExtra("feedback", mFeedback);
             intent.putParcelableArrayListExtra("inbox", mInbox);
-            intent.putExtra("position", getIntent().getIntExtra("position", 0));
+            intent.putExtra("rxItem", getIntent().getParcelableExtra("rxItem"));
             return intent;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

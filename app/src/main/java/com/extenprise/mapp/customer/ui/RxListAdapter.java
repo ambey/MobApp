@@ -2,6 +2,7 @@ package com.extenprise.mapp.customer.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,15 @@ import android.widget.TextView;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.data.RxFeedback;
+import com.extenprise.mapp.data.WorkingDataStore;
 import com.extenprise.mapp.service.activity.RxInboxItemDetailsActivity;
 import com.extenprise.mapp.service.data.RxInboxItem;
 import com.extenprise.mapp.service.data.ServProvListItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by ambey on 10/10/15.
@@ -25,6 +29,10 @@ import java.util.ArrayList;
 public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterView.OnItemClickListener {
     private ArrayList<RxInboxItem> mList;
     private Customer mCust;
+    private ArrayList<RxInboxItem> mSortedList;
+    private int mSelectedPosition;
+    private String mSortField;
+    private boolean mAscending;
 
     public RxListAdapter(Context context, int resource, ArrayList<RxInboxItem> list, Customer c) {
         super(context, resource);
@@ -42,6 +50,18 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         }
     }
 
+    public RxInboxItem getItem(int position) {
+        try {
+            if (mSortField == null) {
+                return mList.get(position);
+            }
+            return mSortedList.get(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
@@ -55,7 +75,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         TextView clinicNameAddrView = (TextView) v.findViewById(R.id.clinicNameAddressView);
         TextView phoneView = (TextView) v.findViewById(R.id.phoneView);
 
-        RxInboxItem item = mList.get(position);
+        RxInboxItem item = getItem(position);
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         dateView.setText(sdf.format(item.getRx().getDate()));
@@ -65,7 +85,9 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         clinicNameAddrView.setText(String.format("%s, %s", servProvItem.getServPtName(), servProvItem.getServPtLocation()));
         phoneView.setText(servProvItem.getPhone());
 
-        if(item.getMedStoreList() != null && item.getMedStoreList().size() > 0) {
+        View medStoreLayout = v.findViewById(R.id.medStoreLayout);
+        if (item.getMedStoreList() != null && item.getMedStoreList().size() > 0) {
+            medStoreLayout.setVisibility(View.VISIBLE);
             TextView medStoreNameView = (TextView) v.findViewById(R.id.medStoreNameView);
             TextView fNameView = (TextView) v.findViewById(R.id.firstNameView);
             TextView lNameView = (TextView) v.findViewById(R.id.lastNameView);
@@ -79,7 +101,6 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
             medStoreAddrView.setText(String.format("%s,", medStore.getServPtLocation()));
             medStorePhView.setText(medStore.getPhone());
         } else {
-            View medStoreLayout = v.findViewById(R.id.medStoreLayout);
             medStoreLayout.setVisibility(View.GONE);
         }
         return v;
@@ -87,12 +108,90 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.putParcelable("rxItem", getItem(position));
+        if (mSortField != null) {
+            bundle.putString("sortField", mSortField);
+            bundle.putBoolean("ascending", mAscending);
+        }
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putParcelableArrayListExtra("inbox", mList);
-        intent.putExtra("position", position);
         intent.putExtra("customer", mCust);
         intent.putExtra("feedback", RxFeedback.NONE.ordinal());
         intent.putExtra("parent-activity", getContext().getClass().getName());
         getContext().startActivity(intent);
     }
+
+    public void setSortField(String sortField) {
+        this.mSortField = sortField;
+        if (sortField == null) {
+            return;
+        }
+        Comparator<RxInboxItem> comparator = null;
+        Context context = getContext();
+        if (sortField.equals(context.getString(R.string.by_drname))) {
+            comparator = new Comparator<RxInboxItem>() {
+                @Override
+                public int compare(RxInboxItem lhs, RxInboxItem rhs) {
+                    int result = lhs.getServProv().getFirstName().toUpperCase().compareTo(rhs.getServProv().getFirstName().toUpperCase());
+                    if (result == 0) {
+                        return lhs.getServProv().getLastName().toUpperCase().compareTo(rhs.getServProv().getLastName().toUpperCase());
+                    }
+                    return result;
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_clinic_name))) {
+            comparator = new Comparator<RxInboxItem>() {
+                @Override
+                public int compare(RxInboxItem lhs, RxInboxItem rhs) {
+                    return lhs.getServProv().getServPtName().toUpperCase().compareTo(rhs.getServProv().getServPtName().toUpperCase());
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_medstore))) {
+            comparator = new Comparator<RxInboxItem>() {
+                @Override
+                public int compare(RxInboxItem lhs, RxInboxItem rhs) {
+                    ServProvListItem lhsItem = null;
+                    if (lhs.getMedStoreList() != null && lhs.getMedStoreList().size() > 0) {
+                        lhsItem = lhs.getMedStoreList().get(0);
+                    }
+                    ServProvListItem rhsItem = null;
+                    if (rhs.getMedStoreList() != null && rhs.getMedStoreList().size() > 0) {
+                        rhsItem = rhs.getMedStoreList().get(0);
+                    }
+                    if (lhsItem == null && rhsItem == null) {
+                        return 0;
+                    }
+                    if (lhsItem == null) {
+                        return 100;
+                    }
+                    if (rhsItem == null) {
+                        return -100;
+                    }
+                    return lhsItem.getServPtName().toUpperCase().compareTo(rhsItem.getServPtName().toUpperCase());
+                }
+            };
+        } else if (sortField.equals(context.getString(R.string.by_date))) {
+            comparator = new Comparator<RxInboxItem>() {
+                @Override
+                public int compare(RxInboxItem lhs, RxInboxItem rhs) {
+                    return lhs.getRx().getDate().compareTo(rhs.getRx().getDate());
+                }
+            };
+        }
+        mSortedList = new ArrayList<>();
+        mSortedList.addAll(mList);
+        if (comparator != null) {
+            if (!mAscending) {
+                comparator = Collections.reverseOrder(comparator);
+            }
+            Collections.sort(mSortedList, comparator);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void setAscending(boolean ascending) {
+        this.mAscending = ascending;
+    }
+
 }

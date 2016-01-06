@@ -3,7 +3,7 @@
     <string name="app_name">Professional Details</string>
 
     <!--
-            <string name="server_name">http://10.0.2.2:8080/mapp</string>
+                <string name="server_name">http://10.0.2.2:8080/mapp</string>
     -->
 
     <string name="server_name">http://208.74.28.39:8080/mapp</string>
@@ -238,7 +238,9 @@
     <string name="asc">ASC</string>
     <string name="desc">DESC</string>
     <string name="sort_field">By %s</string>
+    <string name="sort_options">Sort Options</string>
     <string name="apply_sort">Apply Sort</string>
+    <string name="apply">Apply</string>
 
     <!-- Search Result Sort Fields -->
     <string name="by_drname">Doctor Name</string>
@@ -260,6 +262,27 @@
     <string name="by_date">Date</string>
 
     <string-array name="appont_sort_field_list">
+        <item>@string/by_name</item>
+        <item>@string/by_date</item>
+    </string-array>
+
+    <!-- Rx List For Customer, Sort Fields -->
+    <string name="by_medstore">Medical Store Name</string>
+    <string-array name="cust_rx_sort_field_list">
+        <item>@string/by_drname</item>
+        <item>@string/by_clinic_name</item>
+        <item>@string/by_medstore</item>
+        <item>@string/by_date</item>
+    </string-array>
+
+    <string-array name="dr_rx_sort_field_list">
+        <item>@string/by_name</item>
+        <item>@string/by_medstore</item>
+        <item>@string/by_date</item>
+    </string-array>
+
+    <string-array name="medstore_rx_sort_field_list">
+        <item>@string/by_drname</item>
         <item>@string/by_name</item>
         <item>@string/by_date</item>
     </string-array>

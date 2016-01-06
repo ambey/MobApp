@@ -99,9 +99,6 @@
             -->
         </activity>
         <activity
-            android:name=".service.activity.MainActivity"
-            android:label="Medico" />
-        <activity
             android:name=".service.activity.ServiceProviderHomeActivity"
             android:label="@string/title_activity_service_provider_home" />
         <activity

@@ -97,7 +97,7 @@ public class ServProvDetailsActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_doctor_details, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

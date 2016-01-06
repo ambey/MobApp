@@ -57,7 +57,7 @@ public class SignUpPreviousActivity extends Activity {
         //getMenuInflater().inflate(R.menu.menu_sign_up_previous, menu);
         //return true;
         getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

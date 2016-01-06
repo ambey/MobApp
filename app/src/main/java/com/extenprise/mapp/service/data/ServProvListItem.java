@@ -7,6 +7,17 @@ import android.os.Parcelable;
  * Created by ambey on 4/10/15.
  */
 public class ServProvListItem implements Parcelable {
+    public static final Creator<ServProvListItem> CREATOR = new Creator<ServProvListItem>() {
+        @Override
+        public ServProvListItem createFromParcel(Parcel in) {
+            return new ServProvListItem(in);
+        }
+
+        @Override
+        public ServProvListItem[] newArray(int size) {
+            return new ServProvListItem[size];
+        }
+    };
     private String phone;
     private String firstName;
     private String lastName;
@@ -20,21 +31,34 @@ public class ServProvListItem implements Parcelable {
     public ServProvListItem() {
     }
 
-    public ServProvListItem(Parcel source) {
-        String[] fields = new String[7];
+    protected ServProvListItem(Parcel in) {
+        phone = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+        idServProvHasServPt = in.readInt();
+        speciality = in.readString();
+        experience = in.readFloat();
+        servPtName = in.readString();
+        servPtLocation = in.readString();
+        workingDays = in.readString();
+    }
 
-        source.readStringArray(fields);
-        int count = 0;
-        phone = fields[count++];
-        firstName = fields[count++];
-        lastName = fields[count++];
-        speciality = fields[count++];
-        servPtName = fields[count++];
-        servPtLocation = fields[count++];
-        workingDays = fields[count];
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(phone);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeInt(idServProvHasServPt);
+        dest.writeString(speciality);
+        dest.writeFloat(experience);
+        dest.writeString(servPtName);
+        dest.writeString(servPtLocation);
+        dest.writeString(workingDays);
+    }
 
-        experience = source.readFloat();
-        idServProvHasServPt = source.readInt();
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public String getWorkingDays() {
@@ -108,32 +132,4 @@ public class ServProvListItem implements Parcelable {
     public void setServPtLocation(String servPtLocation) {
         this.servPtLocation = servPtLocation;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {
-                phone, firstName, lastName, speciality,
-                servPtName, servPtLocation, workingDays
-        });
-        dest.writeFloat(experience);
-        dest.writeInt(idServProvHasServPt);
-    }
-
-    public static final Creator<ServProvListItem> CREATOR = new Creator<ServProvListItem>() {
-
-        @Override
-        public ServProvListItem createFromParcel(Parcel source) {
-            return new ServProvListItem(source);
-        }
-
-        @Override
-        public ServProvListItem[] newArray(int size) {
-            return new ServProvListItem[size];
-        }
-    };
 }

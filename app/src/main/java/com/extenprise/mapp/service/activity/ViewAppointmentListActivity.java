@@ -95,7 +95,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_view_appointment_list, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -232,6 +232,10 @@ public class ViewAppointmentListActivity extends FragmentActivity
 
     @Override
     public void onDialogDismissed(DialogFragment dialog) {
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
         SortActionDialog sortActionDialog = (SortActionDialog) dialog;
         AppointmentListAdapter adapter;
         if (dialog.getTag().equals("UpAppontSort")) {
@@ -241,5 +245,10 @@ public class ViewAppointmentListActivity extends FragmentActivity
         }
         adapter.setAscending(sortActionDialog.isAscending());
         adapter.setSortField(sortActionDialog.getSortField());
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
     }
 }

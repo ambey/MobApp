@@ -150,7 +150,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
