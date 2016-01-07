@@ -53,6 +53,7 @@ public class MappServiceConnection implements ServiceConnection {
         msg.replyTo = new Messenger(respHandler);
         msg.setData(data);
         connected = true;
+        setBound(true);
 
         try {
             if (isConnected()) {
