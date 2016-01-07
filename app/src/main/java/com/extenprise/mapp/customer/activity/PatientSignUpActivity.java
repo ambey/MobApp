@@ -143,10 +143,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         if (mContLay.getVisibility() == View.VISIBLE) {
             Utility.collapse(mContLay, null);
         } else {
-            Utility.expand(mContLay, null);
             if (mAddrLayout.getVisibility() == View.VISIBLE) {
                 Utility.collapse(mAddrLayout, null);
             }
+            Utility.expand(mContLay, null);
+            mEditTextCustomerFName.requestFocus();
         }
     }
 
@@ -169,10 +170,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         if (mAddrLayout.getVisibility() == View.VISIBLE) {
             Utility.collapse(mAddrLayout, null);
         } else {
-            Utility.expand(mAddrLayout, null);
             if (mContLay.getVisibility() == View.VISIBLE) {
                 Utility.collapse(mContLay, null);
             }
+            Utility.expand(mAddrLayout, null);
+            mEditTextLoc.requestFocus();
         }
     }
 

@@ -3,7 +3,7 @@
     <string name="error_num_should_be_positive">This field should be a positive number</string>
     <string name="error_invalid_number">Invalid number</string>
     <string name="error_past_date">Selected date has already passed by</string>
-    <string name="error_future_date">Selected date has not yet came</string>
+    <string name="error_future_date">The date selected is in future</string>
     <string name="error_only_alpha">Only letters are allowed</string>
     <string name="error_not_online">You are not online!!!!</string>
     <string name="error_img_not_picked">You haven\'t picked Image</string>
@@ -11,7 +11,7 @@
     <string name="some_error">Something went wrong</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_password">Incorrect login/password entered</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_email_exists">This email Id is already registered.\nPlease enter your password.</string>
     <string name="error_email_registered">This email Id is already registered.\nPlease Sign In.</string>

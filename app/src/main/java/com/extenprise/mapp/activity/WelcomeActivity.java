@@ -31,13 +31,11 @@ import com.extenprise.mapp.util.Utility;
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
 
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
-
-    private int mLoginType;
-
     TextView textLabel;
     ImageView imgLogo;
     Animation textAnimation;
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
+    private int mLoginType;
     private Handler mHandler = new Handler();
 
     @Override
@@ -53,8 +51,8 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         imgLogo = (ImageView) findViewById(R.id.imageViewLogo);
 
         //imgAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
-        textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
 
+        initialize();
         /*
         img1 = (ImageView)findViewById(R.id.img1);
        imgRotation = AnimationUtils.loadAnimation(this, R.anim.img_rotate);
@@ -62,6 +60,17 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         img1.startAnimation(imgRotation);*/
 /* start Animation */
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v("Welcome", "onResume called...");
+        initialize();
+    }
+
+    private void initialize() {
+        textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
         imgLogo.startAnimation(textAnimation);
         textLabel.startAnimation(textAnimation);
 
@@ -99,11 +108,6 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_LOGIN) {
             loginDone(data);
             return true;
@@ -171,11 +175,5 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        mConnection.setBound(false);
-        this.finish();
     }
 }

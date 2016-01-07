@@ -19,11 +19,13 @@ import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.data.Customer;
 import com.extenprise.mapp.util.Utility;
 
+import java.util.Calendar;
+
 
 public class PatientsHomeScreenActivity extends Activity {
 
     private Customer mCustomer;
-    private Boolean exit = false;
+    private boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +38,14 @@ public class PatientsHomeScreenActivity extends Activity {
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
         SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" + mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
-        Boolean saveVisit = prefs.getBoolean("saveVisit", false);
-        if (saveVisit) {
-            mlastDate.setText(prefs.getString("Date", ""));
-            mlastTime.setText(prefs.getString("Time", ""));
-        } else {
-            Utility.setCurrentDateOnView(mlastDate);
-            Utility.setCurrentTimeOnView(mlastTime);
-        }
+        mlastDate.setText(prefs.getString("lastVisitDate", "--"));
+        mlastTime.setText(prefs.getString("lastVisitTime", "--"));
+
+        Calendar calendar = Calendar.getInstance();
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.putString("lastVisitDate", Utility.getDateAsStr(calendar.getTime(), "dd/MM/yyyy"));
+        prefEditor.putString("lastVisitTime", Utility.getFormattedTime(calendar));
+        prefEditor.apply();
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +

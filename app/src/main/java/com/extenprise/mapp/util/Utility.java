@@ -27,6 +27,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -529,29 +530,29 @@ public abstract class Utility {
         //SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);
         SharedPreferences.Editor preferencesEditor = prefer.edit();
         preferencesEditor.putBoolean("saveVisit", true);
-        preferencesEditor.putString("Date", setCurrentDateOnView(null));
-        preferencesEditor.putString("Time", setCurrentTimeOnView(null));
+        Calendar calendar = Calendar.getInstance();
+        preferencesEditor.putString("Date", getDateAsStr(calendar.getTime(), "dd/MM/yyyy"));
+        preferencesEditor.putString("Time", getFormattedTime(calendar));
         preferencesEditor.apply();
     }
 
-    public static String setCurrentDateOnView(TextView v) {
+
+    public static void setCurrentDateOnView(TextView v) {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        String date = sdf.format(c.getTime());
         if (v != null) {
-            v.setText(date);
+            v.setText(getDateAsStr(c.getTime(), "dd/MM/yyyy"));
         }
-        return date;
     }
 
-    public static String setCurrentTimeOnView(TextView v) {
+    public static String getFormattedTime(Calendar calendar) {
+        return String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+    }
+
+    public static void setCurrentTimeOnView(TextView v) {
         Calendar c = Calendar.getInstance();
-        String time = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
         if (v != null) {
-            v.setText(time);
+            v.setText(getFormattedTime(c));
         }
-        return time;
     }
 
     public static int getStringPosInArray(String[] array, String value) {
@@ -695,12 +696,14 @@ public abstract class Utility {
     }
 
     public static void logout(SharedPreferences loginPreferences, Activity activity) {
+/*
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
             SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
             loginPrefsEditor.clear();
             loginPrefsEditor.apply();
         }
+*/
         LoginHolder.custLoginRef = null;
         LoginHolder.servLoginRef = null;
         activity.finish();
@@ -737,6 +740,15 @@ public abstract class Utility {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 95, bos);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Photo", null);
         return Uri.parse(path);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        try {
+            manager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /* Methods in this class should ideally be doing a single well defined task *//*

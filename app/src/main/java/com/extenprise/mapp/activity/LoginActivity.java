@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -23,9 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -69,7 +66,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     // UI references.
-    private AutoCompleteTextView mMobileNumber;
+    private EditText mMobileNumber;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -98,7 +95,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
         // Set up the login form.
-        mMobileNumber = (AutoCompleteTextView) findViewById(R.id.mobileNumber);
+        mMobileNumber = (EditText) findViewById(R.id.mobileNumber);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -133,6 +130,41 @@ public class LoginActivity extends Activity implements ResponseHandler {
         });
 
         mSaveLoginCheckBox = (CheckBox) findViewById(R.id.rememberMe);
+        initialize();
+    }
+
+    private void initialize() {
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin) {
+            mMobileNumber.setText(loginPreferences.getString("username", ""));
+        } else {
+            mPasswordView.setText("");
+            mMobileNumber.setText("");
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = null;
+        if (LoginHolder.custLoginRef != null) {
+            intent = new Intent(this, PatientsHomeScreenActivity.class);
+            startActivity(intent);
+        } else if (LoginHolder.servLoginRef != null) {
+            ServiceProvider sp = LoginHolder.servLoginRef;
+            String spType = sp.getServProvHasServPt(0).getServPointType();
+            if (spType.equalsIgnoreCase(getString(R.string.medical_store))) {
+                intent = new Intent(this, MedicalStoreHomeActivity.class);
+            } else {
+                intent = new Intent(this, ServiceProviderHomeActivity.class);
+            }
+        }
+        if (intent != null) {
+            startActivity(intent);
+        }
+        //initialize();
     }
 
     public void onBackPressed() {
@@ -193,6 +225,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
         int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
         RadioButton mRadioButtonUType;
         if (uTypeID == -1) {
+            /* hide the soft keyboard and show the message */
+            Utility.hideSoftKeyboard(this);
             Utility.showMessage(this, R.string.error_user_type_required);
             //Utility.showAlert(this, "", "Please Select user type.");
             return;
@@ -231,8 +265,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
+            Utility.hideSoftKeyboard(this);
 
             mSignInData.setPhone(phone);
             mSignInData.setPasswd(EncryptUtil.encrypt(passwd));
@@ -253,29 +286,25 @@ public class LoginActivity extends Activity implements ResponseHandler {
                         loginPrefsEditor.putString("logintype", uType);
                         loginPrefsEditor.apply();
                         dialog.dismiss();
-                        //processLogin();
+                        doLogin();
                     }
                 });
             } else {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
-                //processLogin();
+                doLogin();
             }
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            //processLogin();
-/*
-            mAuthTask = new UserLoginTask(this, mobile, password);
-            mAuthTask.execute((Void) null);
-*/
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", mLoginType);
-            bundle.putParcelable("signInData", mSignInData);
-            mConnection.setAction(MappService.DO_LOGIN);
-            mConnection.setData(bundle);
-            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-                Utility.showProgress(this, mLoginFormView, mProgressView, true);
-            }
+        }
+    }
+
+    private void doLogin() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", mLoginType);
+        bundle.putParcelable("signInData", mSignInData);
+        mConnection.setAction(MappService.DO_LOGIN);
+        mConnection.setData(bundle);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgress(this, mLoginFormView, mProgressView, true);
         }
     }
 
@@ -293,7 +322,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-        mMobileNumber.setAdapter(adapter);
+        //mMobileNumber.setAdapter(adapter);
     }
 
     protected void loginDone(Bundle msgData) {

@@ -220,7 +220,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
             valid = false;
-        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) <= 0) {
+        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) < 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
