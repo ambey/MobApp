@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
@@ -75,13 +75,15 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
 
         TextView courseView = (TextView) v.findViewById(R.id.viewCourseDur);
 
-        CheckBox availableCB = (CheckBox) v.findViewById(R.id.checkboxAvailable);
+        RadioButton availableCB = (RadioButton) v.findViewById(R.id.rbAvailable);
+        RadioButton notAvailableCB = (RadioButton) v.findViewById(R.id.rbNotAvailable);
         TextView availableView = (TextView) v.findViewById(R.id.viewAvailable);
 
         final RxItem item = mRxInboxItem.getRx().getItems().get(position);
 
         if (mFeedback != RxFeedback.GIVE_FEEDBACK) {
             availableCB.setVisibility(View.GONE);
+            notAvailableCB.setVisibility(View.GONE);
             int resId = R.string.available;
             int color = Color.GREEN;
             if (item.getAvailable() == 0) {
@@ -102,7 +104,11 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
                     activity.setAvailabilityChanged(!origAvailMap.equals(mAvailMap));
                 }
             });
-            availableCB.setChecked(item.getAvailable() == 1);
+            if (item.getAvailable() == 1) {
+                availableCB.setChecked(true);
+            } else {
+                notAvailableCB.setChecked(true);
+            }
         }/* else {
             availableCB.setVisibility(View.GONE);
             availableView.setVisibility(View.GONE);

@@ -1,7 +1,6 @@
 package com.extenprise.mapp.net;
 
 import android.content.Context;
-import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.Message;
 
@@ -27,14 +26,16 @@ public class ServiceResponseHandler extends Handler {
         /*if(!connection.isConnected()) {
             return;
         }*/
+        boolean bound = connection.isBound();
         if(unbind) {
             try {
                 context.unbindService(connection);
+                connection.setBound(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        if(!handler.gotResponse(msg.what, msg.getData())) {
+        if (bound && !handler.gotResponse(msg.what, msg.getData())) {
             super.handleMessage(msg);
         }
     }

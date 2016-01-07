@@ -478,8 +478,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 */
     @Override
     public void onBackPressed() {
-        if (mConnection.isConnected()) {
-            unbindService(mConnection);
+        if (mConnection.isBound()) {
+            mConnection.setBound(false);
         }
         //startActivity(getIntent());
         super.onBackPressed();

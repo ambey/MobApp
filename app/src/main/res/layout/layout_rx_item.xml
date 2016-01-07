@@ -83,10 +83,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end" />
 
-    <CheckBox
-        android:id="@+id/checkboxAvailable"
+    <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="@string/available" />
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbAvailable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/available" />
+
+        <RadioButton
+            android:id="@+id/rbNotAvailable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_available" />
+    </RadioGroup>
 </LinearLayout>

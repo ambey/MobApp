@@ -14,26 +14,35 @@ public class MappServiceConnection implements ServiceConnection {
     private ServiceResponseHandler respHandler;
     private Bundle data;
     private boolean connected;
-
-    public boolean isConnected() {
-        return connected;
-    }
+    private boolean bound;
 
     public MappServiceConnection(ServiceResponseHandler responseHandler) {
         respHandler = responseHandler;
         respHandler.setConnection(this);
     }
 
+    public synchronized boolean isBound() {
+        return bound;
+    }
+
+    public synchronized void setBound(boolean bound) {
+        this.bound = bound;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
     public void setAction(int action) {
         this.action = action;
     }
 
-    public void setData(Bundle data) {
-        this.data = data;
-    }
-
     public Bundle getData() {
         return data;
+    }
+
+    public void setData(Bundle data) {
+        this.data = data;
     }
 
     @Override
@@ -46,7 +55,7 @@ public class MappServiceConnection implements ServiceConnection {
         connected = true;
 
         try {
-            if(isConnected()) {
+            if (isConnected()) {
                 this.service.send(msg);
             }
         } catch (RemoteException e) {

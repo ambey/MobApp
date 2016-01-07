@@ -76,11 +76,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_below="@id/serviceProviderTextView"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="25dp">
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -91,9 +91,9 @@
                         android:id="@+id/medicalStoreImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
                         android:clickable="true"
                         android:onClick="signUpMedicalStore"
-                        android:layout_gravity="center_horizontal"
                         android:src="@drawable/medstore" />
 
                     <TextView
@@ -119,6 +119,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center_horizontal"
+                        android:clickable="true"
                         android:onClick="signUpServProv"
                         android:src="@drawable/doctor" />
 
@@ -143,17 +144,17 @@
                         android:id="@+id/diagnosticImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
                         android:clickable="true"
                         android:onClick="signUpDiagCenter"
-                        android:layout_gravity="center_horizontal"
                         android:src="@drawable/diagcenter" />
 
                     <TextView
                         android:id="@+id/diagnosticTextView"
-                        android:clickable="true"
-                        android:onClick="signUpDiagCenter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="signUpDiagCenter"
                         android:text="@string/diagnosticCenter"
                         android:textColor="#000" />
                 </LinearLayout>
