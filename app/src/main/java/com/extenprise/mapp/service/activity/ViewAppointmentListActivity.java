@@ -251,4 +251,11 @@ public class ViewAppointmentListActivity extends FragmentActivity
     public void onCancelDone(DialogFragment dialog) {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

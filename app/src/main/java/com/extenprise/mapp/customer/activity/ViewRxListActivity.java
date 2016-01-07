@@ -150,4 +150,11 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     public void onCancelDone(DialogFragment dialog) {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

@@ -151,4 +151,11 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         }
         return false;
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

@@ -172,4 +172,10 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        this.finish();
+    }
 }

@@ -296,4 +296,11 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         }
         return intent;
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

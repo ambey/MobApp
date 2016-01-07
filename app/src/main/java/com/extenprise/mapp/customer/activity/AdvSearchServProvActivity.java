@@ -356,13 +356,8 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
 
     @Override
     public void onBackPressed() {
-        if(mConnection.isConnected()) {
-            unbindService(mConnection);
-
-            //finish();
-            stopService(getIntent());
-        }
-        //startActivity(getIntent());
+        mConnection.setBound(false);
+        stopService(getIntent());
         super.onBackPressed();
     }
 }

@@ -386,11 +386,6 @@ public abstract class Utility {
         Log.v("Home", "############################" + context.getString(msgId));
     }
 
-    public static void showMessage(Context context, String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-        Log.v("Home", "############################" + msg);
-    }
-
     public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
         specs.add("Other");
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, specs);

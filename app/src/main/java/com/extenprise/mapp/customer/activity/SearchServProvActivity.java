@@ -320,13 +320,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 
     @Override
     public void onBackPressed() {
-        if (mConnection.isConnected()) {
-            unbindService(mConnection);
-            //finish();
-            //TODO not working as needed, still its returning the response.
-            /*mConnection.setData(null);
-            stopService(getIntent());*/
-        }
+        mConnection.setBound(false);
         //startActivity(getIntent());
         super.onBackPressed();
     }

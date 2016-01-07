@@ -909,4 +909,11 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         dialog.show(fragmentManager, "DaysSelect");
     }
 
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
+
 }

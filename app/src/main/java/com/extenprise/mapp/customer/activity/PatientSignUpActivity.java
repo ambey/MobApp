@@ -285,11 +285,19 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mEditTextCustomerEmail;
             valid = false;
         }
-        if (!mEditTextPasswd.getText().toString().trim().equals(mEditTextConPasswd.getText().toString().trim())) {
+
+        String passwd = mEditTextPasswd.getText().toString().trim();
+        if (!Validator.isPasswordValid(passwd)) {
+            mEditTextPasswd.setError(getString(R.string.error_invalid_password));
+            focusView = mEditTextPasswd;
+            valid = false;
+        }
+        if (!passwd.equals(mEditTextConPasswd.getText().toString().trim())) {
             mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
             focusView = mEditTextConPasswd;
             valid = false;
         }
+
         String dob = mTextViewDOB.getText().toString().trim();
         if (TextUtils.isEmpty(dob)) {
             mTextViewDOB.setError(getString(R.string.error_field_required));

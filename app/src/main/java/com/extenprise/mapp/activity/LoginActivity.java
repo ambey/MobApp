@@ -136,6 +136,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
     }
 
     public void onBackPressed() {
+        mConnection.setBound(false);
         this.finish();
     }
 

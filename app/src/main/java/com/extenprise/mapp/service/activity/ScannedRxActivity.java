@@ -255,6 +255,12 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         @Override
         protected void onCancelled() {
         }
+    }
 
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
     }
 }

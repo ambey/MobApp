@@ -164,6 +164,13 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     public void onCancelDone(DialogFragment dialog) {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }
 
 

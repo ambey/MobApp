@@ -493,4 +493,11 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     Utility.getAge(mCustomer.getDob())));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

@@ -130,6 +130,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     @Override
     public void onBackPressed() {
+        mConnection.setBound(false);
         if (exit) {
             Log.v("onBackPressed", "ServiceProviderHomeActivity called.. calling finish.");
             finish(); // finish activity

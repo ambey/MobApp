@@ -467,4 +467,11 @@ public class RxActivity extends Activity implements ResponseHandler {
         }
         return super.getParentActivityIntent();
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

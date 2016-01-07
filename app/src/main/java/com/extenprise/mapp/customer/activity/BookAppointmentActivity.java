@@ -218,4 +218,11 @@ public class BookAppointmentActivity extends Activity
         }
         return intent;
     }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }

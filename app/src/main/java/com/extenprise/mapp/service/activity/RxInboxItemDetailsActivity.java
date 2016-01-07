@@ -302,4 +302,11 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
+
 }

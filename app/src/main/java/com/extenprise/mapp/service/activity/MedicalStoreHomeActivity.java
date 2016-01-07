@@ -141,6 +141,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
     @Override
     public void onBackPressed() {
+        mConnection.setBound(false);
         if (exit) {
             Log.v("onBackPressed", "MedicalStoreHomeActivity called.. calling finish.");
             finish(); // finish activity

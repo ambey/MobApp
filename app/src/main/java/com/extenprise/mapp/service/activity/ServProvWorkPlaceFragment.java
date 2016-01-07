@@ -479,6 +479,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         Utility.setNewSpec(getActivity(), list, mSpeciality);
     }
 
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        getActivity().onBackPressed();
+    }
 
     /*
     protected void printSelectedDays() {

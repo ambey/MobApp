@@ -210,4 +210,10 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
 }
