@@ -23,6 +23,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -65,7 +66,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     // UI references.
-    private EditText mMobileNumber;
+    private AutoCompleteTextView mMobileNumber;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -94,7 +95,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
         // Set up the login form.
-        mMobileNumber = (EditText) findViewById(R.id.mobileNumber);
+        mMobileNumber = (AutoCompleteTextView) findViewById(R.id.mobileNumber);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -331,7 +332,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-        //mMobileNumber.setAdapter(adapter);
+        mMobileNumber.setAdapter(adapter);
     }
 
     protected void loginDone(Bundle msgData) {
