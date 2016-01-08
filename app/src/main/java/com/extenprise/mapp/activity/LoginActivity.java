@@ -48,7 +48,6 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -137,7 +136,16 @@ public class LoginActivity extends Activity implements ResponseHandler {
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
-            mMobileNumber.setText(loginPreferences.getString("username", ""));
+            String userType = loginPreferences.getString("logintype", null);
+            if (userType != null) {
+                int utype = findLoginType(userType);
+                if (utype == MappService.CUSTOMER_LOGIN) {
+                    mRadioGroupUType.check(R.id.radioButtonPatient);
+                } else {
+                    mRadioGroupUType.check(R.id.radioButtonMedServiceProvider);
+                }
+                mMobileNumber.setText(loginPreferences.getString("username", ""));
+            }
         } else {
             mPasswordView.setText("");
             mMobileNumber.setText("");
@@ -163,8 +171,9 @@ public class LoginActivity extends Activity implements ResponseHandler {
         }
         if (intent != null) {
             startActivity(intent);
+        } else {
+            initialize();
         }
-        //initialize();
     }
 
     public void onBackPressed() {
@@ -272,9 +281,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
             SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
             final SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
-
-            loginPrefsEditor.putString("passwd", String.valueOf(Calendar.getInstance().getTime()));
-            if (mSaveLoginCheckBox.isChecked()) {
+            boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+            if (!saveLogin && mSaveLoginCheckBox.isChecked()) {
                 final AlertDialog dialog = Utility.customDialogBuilder(this, null, R.string.confirm_remember).create();
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -289,11 +297,12 @@ public class LoginActivity extends Activity implements ResponseHandler {
                         doLogin();
                     }
                 });
-            } else {
+                return;
+            } else if (!mSaveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
-                doLogin();
             }
+            doLogin();
         }
     }
 

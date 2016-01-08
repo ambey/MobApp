@@ -744,10 +744,9 @@ public abstract class Utility {
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        try {
-            manager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-        } catch (Exception e) {
-            e.printStackTrace();
+        View focusView = activity.getCurrentFocus();
+        if (focusView != null) {
+            manager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
         }
     }
 
