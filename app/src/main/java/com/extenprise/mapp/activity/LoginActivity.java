@@ -4,21 +4,27 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
@@ -26,10 +32,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
+import android.widget.Filterable;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.provider.ContactsContract.Contacts;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -49,7 +59,11 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -73,6 +87,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
     private CheckBox mSaveLoginCheckBox;
     private RadioGroup mRadioGroupUType;
 
+    private boolean exit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +110,22 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mSignInData = new SignInData();
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
+
         // Set up the login form.
         mMobileNumber = (AutoCompleteTextView) findViewById(R.id.mobileNumber);
-        populateAutoComplete();
+        //populateAutoComplete();
+
+        SharedPreferences preferences = getSharedPreferences("autoComplete", MODE_PRIVATE);
+        Set<String> set = preferences.getStringSet("autoCompleteValues", new HashSet<String>());
+        if(set == null) {
+            set = new HashSet<>();
+        }
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(LoginActivity.this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        new ArrayList<>(set));
+        mMobileNumber.setAdapter(adapter);
+
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -132,6 +161,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mSaveLoginCheckBox = (CheckBox) findViewById(R.id.rememberMe);
         initialize();
     }
+
 
     private void initialize() {
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -179,7 +209,19 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     public void onBackPressed() {
         mConnection.setBound(false);
-        this.finish();
+        if (exit) {
+            finish();
+            moveTaskToBack(true);
+        } else {
+            Utility.showMessage(this, R.string.msg_press_back_button);
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+        }
     }
 
     @Override
@@ -207,13 +249,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void populateAutoComplete() {
-        if (VERSION.SDK_INT >= 8) {
-            // Use AccountManager (API 8+)
-            new SetupEmailAutoCompleteTask().execute(null, null);
-        }
     }
 
     /**
@@ -327,14 +362,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         return false;
     }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-        mMobileNumber.setAdapter(adapter);
-    }
-
     protected void loginDone(Bundle msgData) {
         Utility.showProgress(this, mLoginFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
@@ -376,7 +403,20 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 type = "servprov";
             }
             Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
+
+            SharedPreferences preferences = getSharedPreferences("autoComplete", MODE_PRIVATE);
+            Set<String> list = preferences.getStringSet("autoCompleteValues", new HashSet<String>());
+            if(list == null) {
+                list = new HashSet<>();
+            }
+            Set<String> in = new HashSet<String>(list);
+            in.add(phone);
+            preferences.edit().putStringSet("autoCompleteValues", in).apply();
+            /*editor.putString("autoCompleteValues", TextUtils.join(",", list));*/
+
             Utility.showMessage(this, R.string.msg_login_done);
+            mMobileNumber.setText("");
+            mPasswordView.setText("");
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.msg_login_failed);
@@ -385,30 +425,52 @@ public class LoginActivity extends Activity implements ResponseHandler {
         }
     }
 
-    class SetupEmailAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
+    /*private void populateAutoComplete() {
+        if (VERSION.SDK_INT >= 8) {
+            // Use AccountManager (API 8+)
+            new SetupMobileAutoCompleteTask().execute(null, null);
+        }
+    }
+
+    class SetupMobileAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
 
         @Override
         protected List<String> doInBackground(Void... voids) {
-            ArrayList<String> emailAddressCollection = new ArrayList<>();
+            ArrayList<String> mobileCollection = new ArrayList<>();
 
             // Get all emails from the user's contacts and copy them to a list.
             ContentResolver cr = getContentResolver();
-            Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+
+            *//*Uri uri = Contacts.CONTENT_URI.buildUpon()
+                    .appendQueryParameter(Contacts.EXTRA_ADDRESS_BOOK_INDEX, "true")
+                    .build();*//*
+            Cursor mobCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                     null, null, null);
-            if (emailCur != null) {
-                while (emailCur.moveToNext()) {
-                    String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
-                            .CommonDataKinds.Phone.DATA));
-                    emailAddressCollection.add(email);
+
+            *//*cr.query(ContactsContract.Contacts.CONTENT_URI, null ,    buffer == null ? null : buffer.toString(), args,
+                    ContactsContract.Contacts.DISPLAY_NAME);*//*
+            if (mobCur != null) {
+                while (mobCur.moveToNext()) {
+                    String phone = mobCur.getString(
+                            mobCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    mobileCollection.add(phone);
                 }
-                emailCur.close();
+                mobCur.close();
             }
-            return emailAddressCollection;
+            return mobileCollection;
         }
 
         @Override
-        protected void onPostExecute(List<String> emailAddressCollection) {
-            addEmailsToAutoComplete(emailAddressCollection);
+        protected void onPostExecute(List<String> mobileCollection) {
+            addPhonesToAutoComplete(mobileCollection);
         }
     }
+
+    private void addPhonesToAutoComplete(List<String> phoneCollection) {
+        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(LoginActivity.this,
+                        android.R.layout.simple_dropdown_item_1line, phoneCollection);
+        mMobileNumber.setAdapter(adapter);
+    }*/
 }

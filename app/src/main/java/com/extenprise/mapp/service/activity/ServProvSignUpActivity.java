@@ -231,4 +231,20 @@ public class ServProvSignUpActivity extends FragmentActivity {
         fragment.onBackPressed();
         super.onBackPressed();
     }
+
+    /*@Override
+    public void onBackPressed() {
+
+        mPagerAdapter.getItem(0);
+
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
+
+    }*/
 }

@@ -482,7 +482,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public void onBackPressed() {
         mConnection.setBound(false);
         //startActivity(getIntent());
-        getActivity().onBackPressed();
+        //getActivity().onBackPressed();
     }
 
     /*

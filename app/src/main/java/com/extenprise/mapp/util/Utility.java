@@ -696,14 +696,13 @@ public abstract class Utility {
     }
 
     public static void logout(SharedPreferences loginPreferences, Activity activity) {
-/*
-        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (saveLogin) {
-            SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
+        if (loginPreferences.getBoolean("saveLogin", false)) {
+            /*SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
             loginPrefsEditor.clear();
             loginPrefsEditor.apply();
+            loginPrefsEditor.commit();*/
+            loginPreferences.edit().clear().apply();
         }
-*/
         LoginHolder.custLoginRef = null;
         LoginHolder.servLoginRef = null;
         activity.finish();

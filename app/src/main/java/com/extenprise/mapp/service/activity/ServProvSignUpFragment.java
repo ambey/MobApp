@@ -471,7 +471,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     public void onBackPressed() {
         mConnection.setBound(false);
         //startActivity(getIntent());
-        getActivity().onBackPressed();
+        //getActivity().onBackPressed();
     }
 
 }

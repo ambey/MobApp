@@ -106,6 +106,28 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
 
+        mEditTextPasswd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!Validator.isPasswordValid(mEditTextPasswd.getText().toString().trim())) {
+                        mEditTextPasswd.setError(getString(R.string.error_invalid_password));
+                    }
+                }
+            }
+        });
+
+        mEditTextConPasswd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!mEditTextPasswd.getText().toString().trim().equals(mEditTextConPasswd.getText().toString().trim())) {
+                        mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
+                    }
+                }
+            }
+        });
+
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
             mImgView.setImageBitmap(bitmap);
