@@ -59,6 +59,13 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
         TextView specialityView = (TextView) v.findViewById(R.id.viewDocSpeciality);
         TextView expView = (TextView) v.findViewById(R.id.viewExpValue);
         ImageView imgAvail = (ImageView) v.findViewById(R.id.imageViewAvailability);
+        TextView lbl = (TextView) v.findViewById(R.id.viewDr);
+
+        if(item.getServCategory() != null) {
+            if(!item.getServCategory().equals(getContext().getString(R.string.physician))) {
+                    lbl.setText("");
+            }
+        }
 
         if (item.getWorkingDays() != null) {
             if (Utility.findDocAvailability(item.getWorkingDays(), Calendar.getInstance())) {

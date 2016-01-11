@@ -27,6 +27,7 @@ public class ServProvListItem implements Parcelable {
     private String servPtName;
     private String servPtLocation;
     private String workingDays;
+    private String servCategory;
 
     public ServProvListItem() {
     }
@@ -41,6 +42,7 @@ public class ServProvListItem implements Parcelable {
         servPtName = in.readString();
         servPtLocation = in.readString();
         workingDays = in.readString();
+        servCategory = in.readString();
     }
 
     @Override
@@ -54,11 +56,20 @@ public class ServProvListItem implements Parcelable {
         dest.writeString(servPtName);
         dest.writeString(servPtLocation);
         dest.writeString(workingDays);
+        dest.writeString(servCategory);
     }
 
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public String getServCategory() {
+        return servCategory;
+    }
+
+    public void setServCategory(String servCategory) {
+        this.servCategory = servCategory;
     }
 
     public String getWorkingDays() {

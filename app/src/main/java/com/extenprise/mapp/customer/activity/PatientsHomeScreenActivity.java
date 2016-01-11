@@ -40,12 +40,7 @@ public class PatientsHomeScreenActivity extends Activity {
         SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" + mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
         mlastDate.setText(prefs.getString("lastVisitDate", "--"));
         mlastTime.setText(prefs.getString("lastVisitTime", "--"));
-
-        Calendar calendar = Calendar.getInstance();
-        SharedPreferences.Editor prefEditor = prefs.edit();
-        prefEditor.putString("lastVisitDate", Utility.getDateAsStr(calendar.getTime(), "dd/MM/yyyy"));
-        prefEditor.putString("lastVisitTime", Utility.getFormattedTime(calendar));
-        prefEditor.apply();
+        Utility.setLastVisit(prefs);
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +

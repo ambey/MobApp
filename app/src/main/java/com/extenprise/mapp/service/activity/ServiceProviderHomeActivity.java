@@ -48,14 +48,9 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
         SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
-        Boolean saveVisit = prefs.getBoolean("saveVisit", false);
-        if (saveVisit) {
-            mlastDate.setText(prefs.getString("Date", ""));
-            mlastTime.setText(prefs.getString("Time", ""));
-        } else {
-            Utility.setCurrentDateOnView(mlastDate);
-            Utility.setCurrentTimeOnView(mlastTime);
-        }
+        mlastDate.setText(prefs.getString("lastVisitDate", "--"));
+        mlastTime.setText(prefs.getString("lastVisitTime", "--"));
+        Utility.setLastVisit(prefs);
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         String label = welcomeView.getText().toString() + " " +

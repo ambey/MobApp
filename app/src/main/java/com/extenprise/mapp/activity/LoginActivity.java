@@ -319,21 +319,21 @@ public class LoginActivity extends Activity implements ResponseHandler {
             final SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
             boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
             if (!saveLogin && mSaveLoginCheckBox.isChecked()) {
-                final AlertDialog dialog = Utility.customDialogBuilder(this, null, R.string.confirm_remember).create();
+                /*final AlertDialog dialog = Utility.customDialogBuilder(this, null, R.string.confirm_remember).create();
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        loginPrefsEditor.putBoolean("saveLogin", true);
-                        loginPrefsEditor.putString("username", mSignInData.getPhone());
-                        loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
-                        loginPrefsEditor.putString("logintype", uType);
-                        loginPrefsEditor.apply();
-                        dialog.dismiss();
+                    public void onClick(View v) {*/
+                loginPrefsEditor.putBoolean("saveLogin", true);
+                loginPrefsEditor.putString("username", mSignInData.getPhone());
+                loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
+                loginPrefsEditor.putString("logintype", uType);
+                loginPrefsEditor.apply();
+                        /*dialog.dismiss();
                         doLogin();
                     }
                 });
-                return;
+                return;*/
             } else if (!mSaveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
@@ -402,7 +402,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 phone = serviceProvider.getSignInData().getPhone();
                 type = "servprov";
             }
-            Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
+            //Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
 
             SharedPreferences preferences = getSharedPreferences("autoComplete", MODE_PRIVATE);
             Set<String> list = preferences.getStringSet("autoCompleteValues", new HashSet<String>());

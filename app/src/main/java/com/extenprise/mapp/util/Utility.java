@@ -531,9 +531,14 @@ public abstract class Utility {
         SharedPreferences.Editor preferencesEditor = prefer.edit();
         preferencesEditor.putBoolean("saveVisit", true);
         Calendar calendar = Calendar.getInstance();
-        preferencesEditor.putString("Date", getDateAsStr(calendar.getTime(), "dd/MM/yyyy"));
+        /*preferencesEditor.putString("Date", getDateAsStr(calendar.getTime(), "dd/MM/yyyy"));
         preferencesEditor.putString("Time", getFormattedTime(calendar));
-        preferencesEditor.apply();
+        preferencesEditor.apply();*/
+
+        SharedPreferences.Editor prefEditor = prefer.edit();
+        prefEditor.putString("lastVisitDate", Utility.getDateAsStr(calendar.getTime(), "dd/MM/yyyy"));
+        prefEditor.putString("lastVisitTime", Utility.getFormattedTime(calendar));
+        prefEditor.apply();
     }
 
 

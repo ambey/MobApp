@@ -67,7 +67,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.activity_sign_up, container, false);
-        LoginHolder.servLoginRef = new ServiceProvider();
+        //LoginHolder.servLoginRef = new ServiceProvider();
 
         //mRootView.findViewById(R.id.next).setVisibility(View.GONE);
         mFormView = mRootView.findViewById(R.id.signUpForm);
@@ -89,6 +89,29 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         mEmailID = (EditText) mRootView.findViewById(R.id.editTextEmail);
         mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
         mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
+
+        mPasswdView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!Validator.isPasswordValid(mPasswdView.getText().toString().trim())) {
+                        mPasswdView.setError(getString(R.string.error_invalid_password));
+                    }
+                }
+            }
+        });
+
+        mCnfPasswdView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!mPasswdView.getText().toString().trim().equals(mCnfPasswdView.getText().toString().trim())) {
+                        mCnfPasswdView.setError(getString(R.string.error_password_not_matching));
+                    }
+                }
+            }
+        });
+
         mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
         //mImgTxtView = (TextView) mRootView.findViewById(R.id.uploadimage);
         mRadioGroupGender = (RadioGroup) mRootView.findViewById(R.id.radioGroupGender);
@@ -293,18 +316,22 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public void saveData() {
+        if (LoginHolder.servLoginRef == null) {
+            LoginHolder.servLoginRef = new ServiceProvider();
+        }
         ServiceProvider sp = LoginHolder.servLoginRef;
         try {
             sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        sp.setfName(mFirstName.getText().toString());
-        sp.setlName(mLastName.getText().toString());
-        sp.setPhone(mCellphoneview.getText().toString());
+        sp.setfName(mFirstName.getText().toString().trim());
+        sp.setlName(mLastName.getText().toString().trim());
+        sp.setPhone(mCellphoneview.getText().toString().trim());
         sp.setGender(mRadioButtonGender.getText().toString());
-        sp.setRegNo(mRegistrationNumber.getText().toString());
-        sp.setPasswd(EncryptUtil.encrypt(mPasswdView.getText().toString()));
+        sp.setRegNo(mRegistrationNumber.getText().toString().trim());
+        sp.setEmailId(mEmailID.getText().toString().trim());
+        sp.setPasswd(EncryptUtil.encrypt(mPasswdView.getText().toString().trim()));
     }
 
     @Override

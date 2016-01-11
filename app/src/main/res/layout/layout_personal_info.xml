@@ -22,6 +22,8 @@
                         android:ems="10"
                         android:hint="@string/first_name"
                         android:inputType="text|textNoSuggestions"
+                        android:imeOptions="actionNext"
+                        android:nextFocusForward="@+id/editTextLName"
                         android:textColor="@color/black" />
 
                     <EditText
@@ -33,6 +35,8 @@
                         android:layout_weight="0.5"
                         android:ems="10"
                         android:hint="@string/last_name"
+                        android:imeOptions="actionNext"
+                        android:nextFocusForward="@+id/editTextCellphone"
                         android:inputType="text|textNoSuggestions" />
 
                 </LinearLayout>
@@ -59,6 +63,8 @@
                         android:hint="@string/cellPhoneNo"
                         android:inputType="number"
                         android:maxLength="10"
+                        android:imeOptions="actionNext"
+                        android:nextFocusForward="@+id/editTextEmail"
                         android:paddingLeft="40dp" />
                 </RelativeLayout>
 
@@ -69,6 +75,8 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="@string/email"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@+id/editTextPasswd"
                     android:inputType="textEmailAddress" />
 
                 <EditText
@@ -78,6 +86,8 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="@string/passWd"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@+id/editTextCnfPasswd"
                     android:inputType="textPassword" />
 
                 <EditText
@@ -87,6 +97,8 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="@string/passWdCon"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@+id/editTextRegistrationNumber"
                     android:inputType="textPassword" />
 
                 <RadioGroup
