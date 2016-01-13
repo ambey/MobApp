@@ -754,6 +754,17 @@ public abstract class Utility {
         }
     }
 
+    public static long strToLong(String string) {
+        string = string.trim();
+        if( string.contains( "." )){
+            final int index = string.lastIndexOf( "." );
+            return strToLong(string.substring(0, index))* 100 + strToLong( string.substring( index + 1 ));
+        }
+        else {
+            return Long.valueOf( string );
+        }
+    }
+
     /* Methods in this class should ideally be doing a single well defined task *//*
     *//* The method name is sendRequest, but it is having some very specific logic *//*
     *//* The class cast operations should be avoided *//*

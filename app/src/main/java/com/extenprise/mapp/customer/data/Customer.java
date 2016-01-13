@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.City;
+import com.extenprise.mapp.data.LastVisited;
 import com.extenprise.mapp.data.SignInData;
 import com.extenprise.mapp.util.Utility;
 
@@ -43,6 +44,7 @@ public class Customer implements Parcelable {
     private String pincode;
     private byte[] photo;
     private ArrayList<Appointment> appointments;
+    private LastVisited lastVisited;
 
     public byte[] getPhoto() {
         return photo;
@@ -56,12 +58,14 @@ public class Customer implements Parcelable {
         signInData = new SignInData();
         city = new City();
         appointments = new ArrayList<>();
+        lastVisited = new LastVisited();
     }
 
     public Customer(Parcel source) {
         signInData = new SignInData();
         city = new City();
         appointments = new ArrayList<>();
+        lastVisited = new LastVisited();
 
         idCustomer = source.readInt();
 
@@ -83,14 +87,24 @@ public class Customer implements Parcelable {
         age = source.readInt();
         weight = source.readFloat();
         height = source.readFloat();
+        SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
         try {
-            SimpleDateFormat sdf = (SimpleDateFormat)SimpleDateFormat.getDateInstance();
-            sdf.applyPattern("dd/MM/yyyy");
             dob = sdf.parse(source.readString());
+            lastVisited.setLastVisitedDate(sdf.parse(source.readString()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        lastVisited.setLastVisitedTime(source.readInt());
         photo = source.createByteArray();
+    }
+
+    public LastVisited getLastVisited() {
+        return lastVisited;
+    }
+
+    public void setLastVisited(LastVisited lastVisited) {
+        this.lastVisited = lastVisited;
     }
 
     public ArrayList<Appointment> getAppointments() {
@@ -225,12 +239,17 @@ public class Customer implements Parcelable {
         dest.writeFloat(height);
 
         String dateStr = "";
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("dd/MM/yyyy");
         if(dob != null) {
-            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-            sdf.applyPattern("dd/MM/yyyy");
             dateStr = sdf.format(dob);
         }
         dest.writeString(dateStr);
+        if(lastVisited.getLastVisitedDate() != null) {
+            dateStr = sdf.format(lastVisited.getLastVisitedDate());
+        }
+        dest.writeString(dateStr);
+        dest.writeInt(lastVisited.getLastVisitedTime());
         dest.writeByteArray(photo);
     }
 }

@@ -3,6 +3,7 @@ package com.extenprise.mapp.service.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.extenprise.mapp.data.LastVisited;
 import com.extenprise.mapp.data.SignInData;
 
 import java.text.ParseException;
@@ -26,6 +27,7 @@ public class ServiceProvider implements Parcelable {
     private ArrayList<ServProvHasServPt> services;
     //private ArrayList<ServiceProvider> links;
     private byte[] photo;
+    private LastVisited lastVisited;
 
     public byte[] getPhoto() {
         return photo;
@@ -38,7 +40,16 @@ public class ServiceProvider implements Parcelable {
     public ServiceProvider() {
         signInData = new SignInData();
         services = new ArrayList<>();
+        lastVisited = new LastVisited();
         //links = new ArrayList<>();
+    }
+
+    public LastVisited getLastVisited() {
+        return lastVisited;
+    }
+
+    public void setLastVisited(LastVisited lastVisited) {
+        this.lastVisited = lastVisited;
     }
 
     public ServiceProvider(Parcel source) {
@@ -74,6 +85,14 @@ public class ServiceProvider implements Parcelable {
             services.add(s);
         }
         photo = source.createByteArray();
+
+        lastVisited = new LastVisited();
+        try {
+            lastVisited.setLastVisitedDate(sdf.parse(source.readString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        lastVisited.setLastVisitedTime(source.readInt());
     }
 
     public String getRegNo() {
@@ -238,6 +257,12 @@ public class ServiceProvider implements Parcelable {
             s.writeToParcel(dest, flags);
         }
         dest.writeByteArray(photo);
+        String dateStr = "";
+        if(lastVisited.getLastVisitedDate() != null) {
+            dateStr = sdf.format(lastVisited.getLastVisitedDate());
+        }
+        dest.writeString(dateStr);
+        dest.writeInt(lastVisited.getLastVisitedTime());
     }
 
     public static final Creator<ServiceProvider> CREATOR = new Creator<ServiceProvider>() {

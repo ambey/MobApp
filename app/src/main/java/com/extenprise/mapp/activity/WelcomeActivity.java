@@ -2,9 +2,17 @@ package com.extenprise.mapp.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import org.jsoup.Jsoup;
 
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
@@ -27,6 +36,8 @@ import com.extenprise.mapp.service.activity.MedicalStoreHomeActivity;
 import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
+import com.google.android.gms.tagmanager.Container;
+import com.google.android.gms.tagmanager.TagManager;
 
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
@@ -37,6 +48,34 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
     private Handler mHandler = new Handler();
+
+    private static final String LOG_TAG = "AppUpgrade";
+    private int versionCode = 0;
+    String appURI = "";
+    private DownloadManager downloadManager;
+    private long downloadReference;
+
+    //broadcast receiver to get notification about ongoing downloads
+    private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            //check if the broadcast message is for our Enqueued download
+            long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            if(downloadReference == referenceId){
+
+                Log.v(LOG_TAG, "Downloading of the new app version complete");
+                //start the installation of the latest version
+                Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                installIntent.setDataAndType(downloadManager.getUriForDownloadedFile(downloadReference),
+                        "application/vnd.android.package-archive");
+                installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(installIntent);
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +92,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         //imgAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
 
         initialize();
+
         /*
         img1 = (ImageView)findViewById(R.id.img1);
        imgRotation = AnimationUtils.loadAnimation(this, R.anim.img_rotate);
@@ -60,7 +100,78 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         img1.startAnimation(imgRotation);*/
 /* start Animation */
 
+        //TODO
+        try {
+            String curVersion = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            String newVersion = curVersion;
+            //NetworkOnMainThreadException
+            newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + getPackageName() + "&hl=en")
+                    .timeout(30000)
+                    .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                    .referrer("http://www.google.com")
+                    .get()
+                    .select("div[itemprop=softwareVersion]")
+                    .first()
+                    .ownText();
+            Utility.showMessage(this, R.string.msg_new_version_available);
+            if(Utility.strToLong(curVersion) < Utility.strToLong(newVersion)) {
+                //Utility.showMessage(this, R.string.msg_new_version_available);
+                Utility.showAlert(this, "", getString(R.string.msg_new_version_available), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+                        Uri Download_Uri = Uri.parse(appURI);//TODO should have to get from server.
+                        DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
+                        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+                        request.setAllowedOverRoaming(false);
+                        request.setTitle("My Andorid App Download");
+                        request.setDestinationInExternalFilesDir(WelcomeActivity.this, Environment.DIRECTORY_DOWNLOADS,"mapp.apk");
+                        downloadReference = downloadManager.enqueue(request);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    /*private boolean web_update(){
+        try {
+            String curVersion = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            String newVersion = curVersion;
+            newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + getPackageName() + "&hl=en")
+                    .timeout(30000)
+                    .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                    .referrer("http://www.google.com")
+                    .get()
+                    .select("div[itemprop=softwareVersion]")
+                    .first()
+                    .ownText();
+            return (Utility.strToLong(curVersion) < Utility.strToLong(newVersion));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+
+        *//*Container container = TagManager.getInstance(this).openContainer(myContainerId);
+        long latestVersionCode = container.getLong("latestAppVersion");
+
+// get currently running app version code
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        long versionCode = pInfo.versionCode;
+
+// check if update is needed
+        if(versionCode < latestVersionCode) {
+            // remind user to update his version
+        }*//*
+    }*/
 
     @Override
     protected void onResume() {

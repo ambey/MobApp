@@ -25,5 +25,6 @@
     <string name="msg_set_img">Please set Image</string>
     <string name="msg_upload_photo">Photo Uploaded Successfully</string>
     <string name="confirm_remove_photo">Do you want to remove photo?</string>
+    <string name="msg_new_version_available">New Version Available for updates.\n Upgrade now?</string>
 
 </resources>

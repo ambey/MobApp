@@ -134,6 +134,7 @@ public class MappService extends Service {
 
     public void doRegNoExistsCheck(Message msg) {
         Bundle data = msg.getData();
+        mLoginType = data.getInt("loginType");
         Gson gson = new Gson();
         sendAsyncMsg(msg, gson.toJson(data.getParcelable("service")));
     }

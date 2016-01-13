@@ -45,7 +45,7 @@ public class ServProvDetailsActivity extends Activity {
         TextView textViewClinicTime = (TextView) findViewById(R.id.textviewFirstclinictime);
         TextView textViewDocSpeciality = (TextView) findViewById(R.id.textviewDocspeciality);
         ImageView imageViewAvailable = (ImageView) findViewById(R.id.imageViewAvailable);
-
+        TextView lbl = (TextView) findViewById(R.id.textview);
         TextView textViewFees = (TextView) findViewById(R.id.textviewFees);
 /*
         TextView textViewReviews = (TextView) findViewById(R.id.textviewReviews);
@@ -58,6 +58,11 @@ public class ServProvDetailsActivity extends Activity {
         if(service.getCategory().equalsIgnoreCase(getString(R.string.pharmacist))) {
             Utility.setEnabledButton(this, bookAppontButton, false);
         }
+
+        if(!service.getCategory().equalsIgnoreCase(getString(R.string.physician))) {
+            lbl.setText("");
+        }
+
         textViewClinic.setText(spsspt.getServicePoint().getName());
         textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));
         textViewClinicTime.setText(String.format("%s to %s",
