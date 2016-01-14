@@ -301,7 +301,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         workhourLBL.setClickable(false);
         mSpeciality.setClickable(true);
-        mServCatagory.setClickable(true);
+        mServCatagory.setClickable(false);
         mStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

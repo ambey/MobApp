@@ -104,6 +104,14 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mMultiSpinnerDays = (Button) mRootview.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) mRootview.findViewById(R.id.spinServiceProvCategory);
 
+        int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
+        mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, getString(category)));
+        mServCatagory.setClickable(false);
+
+        if (category == R.string.pharmacist) {
+            mConsultFee.setEnabled(false);
+        }
+
         mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -149,11 +157,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             }
         });
         //mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
-
-        int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
-        if (category == R.string.medicalStore) {
-            mConsultFee.setEnabled(false);
-        }
 
         //collapse fields on create.
         Utility.collapse(mLayoutWorkHrs, null);

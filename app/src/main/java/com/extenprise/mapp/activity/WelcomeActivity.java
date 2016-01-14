@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.jsoup.Jsoup;
 
+import com.androidquery.service.MarketService;
 import com.extenprise.mapp.LoginHolder;
 import com.extenprise.mapp.R;
 import com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity;
@@ -89,21 +90,25 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         textLabel = (TextView) findViewById(R.id.textViewlogo);
         imgLogo = (ImageView) findViewById(R.id.imageViewLogo);
 
-        //imgAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
+        //Checking for updates in version of app.
+        MarketService ms = new MarketService(this);
+        ms.level(MarketService.MINOR).checkVersion();
 
         initialize();
-
         /*
         img1 = (ImageView)findViewById(R.id.img1);
-       imgRotation = AnimationUtils.loadAnimation(this, R.anim.img_rotate);
+        imgRotation = AnimationUtils.loadAnimation(this, R.anim.img_rotate);
         imgRotation.setRepeatCount(Animation.INFINITE);
         img1.startAnimation(imgRotation);*/
+        //imgAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
 /* start Animation */
+    }
 
-        //TODO
-        try {
-            String curVersion = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            String newVersion = curVersion;
+    /*private boolean web_update(){
+         try {
+            String curVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            Log.v("Current Version : - ", curVersion);
+            String newVersion = "";
             //NetworkOnMainThreadException
             newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + getPackageName() + "&hl=en")
                     .timeout(30000)
@@ -120,7 +125,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
-                        Uri Download_Uri = Uri.parse(appURI);//TODO should have to get from server.
+                        Uri Download_Uri = Uri.parse(appURI);
                         DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
                         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
                         request.setAllowedOverRoaming(false);
@@ -133,27 +138,6 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /*private boolean web_update(){
-        try {
-            String curVersion = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            String newVersion = curVersion;
-            newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + getPackageName() + "&hl=en")
-                    .timeout(30000)
-                    .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-                    .referrer("http://www.google.com")
-                    .get()
-                    .select("div[itemprop=softwareVersion]")
-                    .first()
-                    .ownText();
-            return (Utility.strToLong(curVersion) < Utility.strToLong(newVersion));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-
 
         *//*Container container = TagManager.getInstance(this).openContainer(myContainerId);
         long latestVersionCode = container.getLong("latestAppVersion");

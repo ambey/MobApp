@@ -35,13 +35,13 @@ public class SignUpPreviousActivity extends Activity {
 
     public void signUpServProv(View view) {
         Intent intent = new Intent(this, ServProvSignUpActivity.class);
-        intent.putExtra("category", R.string.practitionar);
+        intent.putExtra("category", R.string.physician);
         startActivity(intent);
     }
 
     public void signUpMedicalStore(View view) {
         Intent intent = new Intent(this, ServProvSignUpActivity.class);
-        intent.putExtra("category", R.string.medicalStore);
+        intent.putExtra("category", R.string.pharmacist);
         startActivity(intent);
     }
 

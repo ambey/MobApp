@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:design:22.2.0'
     compile files('libs/commons-codec.jar')
     compile 'org.jsoup:jsoup:+'
+    compile files('libs/android-query-full.0.26.8.jar')
 }

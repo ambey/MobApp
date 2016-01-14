@@ -53,13 +53,16 @@ public class ServProvDetailsActivity extends Activity {
         TextView textViewDocQualification = (TextView) findViewById(R.id.textviewDocQualification);
         Button bookAppontButton = (Button) findViewById(R.id.buttonBookAppointment);
 
+        if(mServProv == null) {
+            mServProv = new ServiceProvider();
+        }
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         Service service = spsspt.getService();
-        if(service.getCategory().equalsIgnoreCase(getString(R.string.pharmacist))) {
+        if (service.getCategory().equalsIgnoreCase(getString(R.string.pharmacist))) {
             Utility.setEnabledButton(this, bookAppontButton, false);
         }
 
-        if(!service.getCategory().equalsIgnoreCase(getString(R.string.physician))) {
+        if (!service.getCategory().equalsIgnoreCase(getString(R.string.physician))) {
             lbl.setText("");
         }
 
