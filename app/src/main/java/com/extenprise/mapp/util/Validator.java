@@ -119,4 +119,9 @@ public abstract class Validator {
         }
         return true;
     }
+
+    public static boolean isFeeValid(String val) {
+        int i = val.lastIndexOf('.');
+        return val.length() > 6 || !(val.length() > 4 && i == -1) && !(i != -1 && val.substring(i + 1).length() > 2);
+    }
 }

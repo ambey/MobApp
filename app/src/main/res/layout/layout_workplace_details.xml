@@ -262,6 +262,8 @@
                 android:layout_toEndOf="@+id/viewRsSign"
                 android:layout_toRightOf="@+id/viewRsSign"
                 android:hint="@string/consult_fees"
+                android:maxLength="4"
+                android:ems="4"
                 android:inputType="number" />
 
 

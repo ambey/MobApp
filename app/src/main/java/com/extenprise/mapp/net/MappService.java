@@ -73,6 +73,7 @@ public class MappService extends Service {
     public static final int DO_CUST_PAST_APPONT_LIST = 33;
     public static final int DO_UPLOAD_PHOTO = 34;
     public static final int DO_REMOVE_PHOTO = 35;
+    public static final int DO_GET_NEW_VERSION = 36;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -93,6 +94,12 @@ public class MappService extends Service {
     public IBinder onBind(Intent intent) {
         mAction = intent.getIntExtra("action", -1);
         return mMessenger.getBinder();
+    }
+
+    public void doGetNewVersion(Message msg) {
+        Bundle data = msg.getData();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+        //sendAsyncMsg(msg, gson.toJson(signInData));
     }
 
     public void doLogin(Message msg) {
@@ -210,6 +217,8 @@ public class MappService extends Service {
     private URL getURL(int action) throws MalformedURLException {
         int urlId;
         switch (action) {
+            case DO_GET_NEW_VERSION:
+                urlId = R.string.action_check_version_update;
             case DO_LOGIN:
                 urlId = R.string.action_signin_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
@@ -348,6 +357,8 @@ public class MappService extends Service {
         public void handleMessage(Message msg) {
             mService.setAction(msg.what);
             switch (msg.what) {
+                case DO_GET_NEW_VERSION:
+                    mService.doGetNewVersion(msg);
                 case DO_LOGIN:
                     mService.doLogin(msg);
                     break;

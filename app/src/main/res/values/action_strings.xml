@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="action_check_version_update">service/GetNewVersion.action</string>
+
     <string name="action_signin_serv">service/SignIn.action</string>
     <string name="action_signup_serv">service/SignUp.action</string>
     <string name="action_update_serv">service/Update.action</string>
