@@ -2,6 +2,7 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -13,12 +14,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -61,6 +65,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     private Spinner mSpinState;
     private Spinner mSpinGender;
     private ImageView mImgView;
+
+    private EditText mOldPwd;
+    private boolean isPwdCorrect;
 
     private Bitmap mImgCopy;
 
@@ -253,6 +260,28 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mImgView.setImageBitmap(null);
     }
 
+    private void changePwdDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_change_pwd);
+        } else {
+            Utility.hideSoftKeyboard(this);
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+    private void pwdCheckDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        if (data.getBoolean("status")) {
+            isPwdCorrect = true;
+        } else {
+            isPwdCorrect = false;
+            Utility.hideSoftKeyboard(this);
+            mOldPwd.setError(getString(R.string.error_wrong_pwd));
+            mOldPwd.requestFocus();
+        }
+    }
+
     @Override
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_UPDATE) {
@@ -260,6 +289,12 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             return true;
         } else if (action == MappService.DO_REMOVE_PHOTO) {
             removePhotoDone();
+            return true;
+        } else if(action == MappService.DO_PWD_CHECK) {
+            pwdCheckDone(data);
+            return true;
+        } else if(action == MappService.DO_CHANGE_PWD) {
+            changePwdDone(data);
             return true;
         }
         /*if (action == MappService.DO_UPLOAD_PHOTO) {
@@ -368,6 +403,82 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == R.id.action_changepwd) {
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.layout_change_pwd, null);
+
+            mOldPwd = (EditText) dialogView.findViewById(R.id.editTextOldPasswd);
+            final EditText newPwd = (EditText) dialogView.findViewById(R.id.editTextNewPasswd);
+            final EditText confPwd = (EditText) dialogView.findViewById(R.id.editTextCnfPasswd);
+
+            mOldPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        String oldpwd = mOldPwd.getText().toString().trim();
+                        if (Validator.isPasswordValid(oldpwd)) {
+                            mCustomer.getSignInData().setPasswd(oldpwd);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                            bundle.putParcelable("customer", mCustomer);
+                            mConnection.setData(bundle);
+                            mConnection.setAction(MappService.DO_PWD_CHECK);
+                            if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                                Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                            }
+                        }
+                    }
+                }
+            });
+
+            final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
+            dialog.show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!isPwdCorrect) {
+                        Utility.showMessage(PatientProfileActivity.this, R.string.msg_verify_pwd);
+                        return;
+                    }
+                    EditText[] fields = {newPwd, confPwd};
+                    if (Utility.areEditFieldsEmpty(PatientProfileActivity.this, fields)) {
+                        return;
+                    }
+
+                    boolean cancel = false;
+                    View focusView = null;
+                    String newpwd = newPwd.getText().toString().trim();
+                    if (!Validator.isPasswordValid(newpwd)) {
+                        newPwd.setError(getString(R.string.error_invalid_password));
+                        focusView = newPwd;
+                        cancel = true;
+                    }
+                    String confpwd = confPwd.getText().toString().trim();
+                    if (!confpwd.equals(newpwd)) {
+                        confPwd.setError(getString(R.string.error_password_not_matching));
+                        focusView = confPwd;
+                        cancel = true;
+                    }
+
+                    if (cancel) {
+                        focusView.requestFocus();
+                        return;
+                    }
+
+                    mCustomer.getSignInData().setPasswd(newpwd);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                    bundle.putParcelable("customer", mCustomer);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.DO_CHANGE_PWD);
+                    if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                        Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                    }
+
+                    dialog.dismiss();
+                }
+            });
         }
 
         return super.onOptionsItemSelected(item);

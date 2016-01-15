@@ -74,6 +74,8 @@ public class MappService extends Service {
     public static final int DO_UPLOAD_PHOTO = 34;
     public static final int DO_REMOVE_PHOTO = 35;
     public static final int DO_GET_NEW_VERSION = 36;
+    public static final int DO_PWD_CHECK = 37;
+    public static final int DO_CHANGE_PWD = 38;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -217,8 +219,21 @@ public class MappService extends Service {
     private URL getURL(int action) throws MalformedURLException {
         int urlId;
         switch (action) {
+            case DO_PWD_CHECK:
+                urlId = R.string.action_check_pwd_serv;
+                if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                    urlId = R.string.action_check_pwd_cust;
+                }
+                break;
+            case DO_CHANGE_PWD:
+                urlId = R.string.action_change_pwd_serv;
+                if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                    urlId = R.string.action_change_pwd_cust;
+                }
+                break;
             case DO_GET_NEW_VERSION:
                 urlId = R.string.action_check_version_update;
+                break;
             case DO_LOGIN:
                 urlId = R.string.action_signin_serv;
                 if (mLoginType == MappService.CUSTOMER_LOGIN) {
@@ -359,6 +374,13 @@ public class MappService extends Service {
             switch (msg.what) {
                 case DO_GET_NEW_VERSION:
                     mService.doGetNewVersion(msg);
+                    break;
+                case DO_CHANGE_PWD:
+                    mService.doSignupOrUpdate(msg);
+                    break;
+                case DO_PWD_CHECK:
+                    mService.doSignupOrUpdate(msg);
+                    break;
                 case DO_LOGIN:
                     mService.doLogin(msg);
                     break;
@@ -502,6 +524,8 @@ public class MappService extends Service {
                     Gson gson = gsonBuilder.create();
                     switch (mAction) {
                         case DO_LOGIN:
+                        case DO_CHANGE_PWD:
+                        case DO_PWD_CHECK:
                         case DO_SIGNUP:
                         case DO_UPLOAD_PHOTO:
                         case DO_REMOVE_PHOTO:

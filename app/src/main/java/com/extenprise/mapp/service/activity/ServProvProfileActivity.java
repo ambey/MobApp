@@ -91,6 +91,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private Button mMultiSpinnerDays;
     private String mCategory;
 
+    private EditText mOldPwd;
+    private boolean isPwdCorrect;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,6 +184,82 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == R.id.action_changepwd) {
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.layout_change_pwd, null);
+
+            mOldPwd = (EditText) dialogView.findViewById(R.id.editTextOldPasswd);
+            final EditText newPwd = (EditText) dialogView.findViewById(R.id.editTextNewPasswd);
+            final EditText confPwd = (EditText) dialogView.findViewById(R.id.editTextCnfPasswd);
+
+            mOldPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        String oldpwd = mOldPwd.getText().toString().trim();
+                        if (Validator.isPasswordValid(oldpwd)) {
+                            mServiceProv.getSignInData().setPasswd(oldpwd);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                            bundle.putParcelable("service", mServiceProv);
+                            mConnection.setData(bundle);
+                            mConnection.setAction(MappService.DO_PWD_CHECK);
+                            if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                                Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                            }
+                        }
+                    }
+                }
+            });
+
+            final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
+            dialog.show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!isPwdCorrect) {
+                        Utility.showMessage(ServProvProfileActivity.this, R.string.msg_verify_pwd);
+                        return;
+                    }
+                    EditText[] fields = {newPwd, confPwd};
+                    if (Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
+                        return;
+                    }
+
+                    boolean cancel = false;
+                    View focusView = null;
+                    String newpwd = newPwd.getText().toString().trim();
+                    if (!Validator.isPasswordValid(newpwd)) {
+                        newPwd.setError(getString(R.string.error_invalid_password));
+                        focusView = newPwd;
+                        cancel = true;
+                    }
+                    String confpwd = confPwd.getText().toString().trim();
+                    if (!confpwd.equals(newpwd)) {
+                        confPwd.setError(getString(R.string.error_password_not_matching));
+                        focusView = confPwd;
+                        cancel = true;
+                    }
+
+                    if (cancel) {
+                        focusView.requestFocus();
+                        return;
+                    }
+
+                    mServiceProv.getSignInData().setPasswd(newpwd);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                    bundle.putParcelable("service", mServiceProv);
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.DO_CHANGE_PWD);
+                    if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                        Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                    }
+
+                    dialog.dismiss();
+                }
+            });
         }
         return super.onOptionsItemSelected(item);
     }
@@ -777,11 +856,37 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             case MappService.DO_UPLOAD_PHOTO:
                 uploadPhotoDone(data);
                 break;
+            case MappService.DO_PWD_CHECK:
+                pwdCheckDone(data);
+                break;
+            case MappService.DO_CHANGE_PWD:
+                changePwdDone(data);
+                break;
 
             default:
                 return false;
         }
         return true;
+    }
+
+    private void changePwdDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_change_pwd);
+        } else {
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+    private void pwdCheckDone(Bundle data) {
+        Utility.showProgress(this, mFormView, mProgressView, false);
+        if (data.getBoolean("status")) {
+            isPwdCorrect = true;
+        } else {
+            isPwdCorrect = false;
+            mOldPwd.setError(getString(R.string.error_wrong_pwd));
+            mOldPwd.requestFocus();
+        }
     }
 
     private void uploadPhotoDone(Bundle data) {

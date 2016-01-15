@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<ProgressBar
+        android:id="@+id/progressView"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+        The progress bar should display in dialogs if there is a request from it.
+        //TODO
+        -->
+
+    <EditText
+        android:id="@+id/editTextOldPasswd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/oldPwd"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/editTextCnfPasswd"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/editTextNewPasswd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/newPwd"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/editTextCnfPasswd"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/editTextCnfPasswd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/passWdCon"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/editTextRegistrationNumber"
+        android:inputType="textPassword" />
+
+</LinearLayout>

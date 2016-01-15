@@ -34,6 +34,9 @@
     <string name="action_update_report_status">service/UpdateReportServiceStatus.action</string>
     <string name="action_upload_photo_serv">service/UploadPhoto.action</string>
     <string name="action_remove_photo_serv">service/RemovePhoto.action</string>
+    <string name="action_check_pwd_serv">service/CheckPwd.action</string>
+    <string name="action_change_pwd_serv">service/ChangePwd.action</string>
+    <string name="action_forgot_pwd_serv">service/ForgotPwd.action</string>
 
     <string name="action_signin_cust">customer/SignIn.action</string>
     <string name="action_signup_cust">customer/SignUp.action</string>
@@ -44,4 +47,7 @@
     <string name="action_get_cust_rx_list">customer/GetRxList.action</string>
     <string name="action_upload_photo_cust">customer/UploadPhoto.action</string>
     <string name="action_remove_photo_cust">customer/RemovePhoto.action</string>
+    <string name="action_change_pwd_cust">customer/ChangePwd.action</string>
+    <string name="action_forgot_pwd_cust">customer/ForgotPwd.action</string>
+    <string name="action_check_pwd_cust">customer/CheckPwd.action</string>
 </resources>

@@ -25,5 +25,6 @@
     <string name="error_invalid_endtime">End time should be ateast 60 minutes ahead of the Start time</string>
     <string name="error_select_gender">Please select Gender.</string>
     <string name="error_invalid_pincode">Invalid Pin Code</string>
+    <string name="error_wrong_pwd">Wrong Password</string>
 
 </resources>

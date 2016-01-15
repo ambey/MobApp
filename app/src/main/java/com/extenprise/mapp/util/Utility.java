@@ -162,15 +162,6 @@ public abstract class Utility {
         return availDaysList.contains(searchDay);
     }
 
-
-    /*public static int getAge(String dob) {
-
-        long ageInMillis = new Date().getTime() - getMinutes(dob);
-        Date age = new Date(ageInMillis);
-        return age.getYear();
-
-    }*/
-
     public static int getAge(Date dob) {
         Calendar birthCal = Calendar.getInstance();
         birthCal.setTime(dob);
@@ -187,37 +178,6 @@ public abstract class Utility {
         }
         return age;
     }
-
-    public static int getAge(String dob, String sep) {
-
-        int year = 0, month = 0, day = 0;
-        if (!dob.equals("")) {
-            if (dob.contains(sep)) {
-                String[] dobStr = dob.split(sep, 3);
-                if (dobStr.length == 3) {
-                    day = Integer.parseInt(dobStr[0]);
-                    month = Integer.parseInt(dobStr[1]);
-                    year = Integer.parseInt(dobStr[2]);
-                }
-            }
-        }
-        GregorianCalendar cal = new GregorianCalendar();
-        int y, m, d, a;
-
-        y = cal.get(Calendar.YEAR);
-        m = cal.get(Calendar.MONTH);
-        d = cal.get(Calendar.DAY_OF_MONTH);
-        cal.set(year, month, day);
-
-        a = y - cal.get(Calendar.YEAR);
-        if ((m < cal.get(Calendar.MONTH))
-                || ((m == cal.get(Calendar.MONTH)) && (d < cal
-                .get(Calendar.DAY_OF_MONTH)))) {
-            --a;
-        }
-        return a;
-    }
-
 
     public static void timePicker(View view, final TextView button) {
         // Process to get Current Time
@@ -247,7 +207,6 @@ public abstract class Utility {
         final int month = c.get(Calendar.MONTH);
         final int day = c.get(Calendar.DAY_OF_MONTH);
 
-        // Launch Time Picker Dialog
         DatePickerDialog dpd = new DatePickerDialog(view.getContext(),
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -267,38 +226,6 @@ public abstract class Utility {
             dpd.getDatePicker().setMinDate(minTime);
         }
         dpd.show();
-    }
-
-    public static void datePicker(View view, final TextView button, final DateChangeListener listener) {
-        datePicker(view, button, listener, Calendar.getInstance().getTimeInMillis(), -1, -1);
-    }
-
-    public static void datePicker(View view, final TextView button) {
-        datePicker(view, button, null, Calendar.getInstance().getTimeInMillis(), -1, -1);
-    }
-
-    public static String getCommaSepparatedString(String[] arr) {
-        try {
-            String value = arr[0];
-            for (int i = 1; i < arr.length; i++) {
-                value += "," + arr[i];
-            }
-            return value;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public static String getDays(Context context) {
-        return getCommaSepparatedString(context.getResources().getStringArray(R.array.days));
-    }
-
-    public static String getDateAsString(String sep) {
-        Calendar c = Calendar.getInstance();
-        return String.format("%02d/%02d/%04d", c.get(Calendar.DAY_OF_MONTH)
-                , c.get(Calendar.MONTH) + 1
-                , c.get(Calendar.YEAR));
     }
 
     public static Date getStrAsDate(String date, String pattern) {
@@ -322,34 +249,6 @@ public abstract class Utility {
             }
         }
         return index;
-    }
-
-    public static void expandOrCollapse(final View v, String exp_or_colpse) {
-        TranslateAnimation anim;
-        if (exp_or_colpse.equals("expand")) {
-            anim = new TranslateAnimation(0.0f, 0.0f, -v.getHeight(), 0.0f);
-            v.setVisibility(View.VISIBLE);
-        } else {
-            anim = new TranslateAnimation(0.0f, 0.0f, 0.0f, -v.getHeight());
-            Animation.AnimationListener collapselistener = new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    v.setVisibility(View.GONE);
-                }
-            };
-            anim.setAnimationListener(collapselistener);
-        }
-        anim.setDuration(300);
-        anim.setInterpolator(new AccelerateInterpolator(0.5f));
-        v.startAnimation(anim);
     }
 
     public static byte[] getBytesFromBitmap(Bitmap bitmap) {
@@ -429,7 +328,6 @@ public abstract class Utility {
     }
 
     public static void enlargeImage(ImageView imageView) {
-
         if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.FILL_PARENT) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(140, 140);
             params.gravity = Gravity.CENTER;
@@ -439,8 +337,6 @@ public abstract class Utility {
             imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         }
-
-
         /*Bitmap bitmapToScale = imageView.getDrawingCache();
 
         if(bitmapToScale == null)
@@ -490,9 +386,7 @@ public abstract class Utility {
         if (view != null) {
             view.setBackgroundResource(R.drawable.label);
         }
-
         final int initialHeight = v.getMeasuredHeight();
-
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
@@ -503,27 +397,13 @@ public abstract class Utility {
                     v.requestLayout();
                 }
             }
-
             @Override
             public boolean willChangeBounds() {
                 return true;
             }
         };
-
         a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
-    }
-
-    public static Animation imgAnim() {
-        RotateAnimation anim = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-
-//Setup anim with desired properties
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(Animation.INFINITE); //Repeat animation indefinitely
-        anim.setDuration(700); //Put desired duration per anim cycle here, in milliseconds
-
-//Start animation
-        return anim;
     }
 
     public static void setLastVisit(SharedPreferences prefer) {
@@ -702,10 +582,6 @@ public abstract class Utility {
 
     public static void logout(SharedPreferences loginPreferences, Activity activity) {
         if (loginPreferences.getBoolean("saveLogin", false)) {
-            /*SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
-            loginPrefsEditor.clear();
-            loginPrefsEditor.apply();
-            loginPrefsEditor.commit();*/
             loginPreferences.edit().clear().apply();
         }
         LoginHolder.custLoginRef = null;
@@ -754,56 +630,79 @@ public abstract class Utility {
         }
     }
 
-    /*public static long strToLong(String string) {
-        string = string.trim();
-        if( string.contains( "." )){
-            final int index = string.lastIndexOf( "." );
-            return strToLong(string.substring(0, index))* 100 + strToLong( string.substring( index + 1 ));
+    public static String getCommaSepparatedString(String[] arr) {
+        try {
+            String value = arr[0];
+            for (int i = 1; i < arr.length; i++) {
+                value += "," + arr[i];
+            }
+            return value;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else {
-            return Long.valueOf( string );
-        }
-    }*/
+        return "";
+    }
 
-    /* Methods in this class should ideally be doing a single well defined task *//*
-    *//* The method name is sendRequest, but it is having some very specific logic *//*
-    *//* The class cast operations should be avoided *//*
-    public static boolean sendRequest(Activity activity, int loginType, int action, Object obj, MappServiceConnection mConnection) {
-        if (obj == null) {
-            return false;
-        }
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", loginType);
 
-        if (loginType == MappService.CUSTOMER_LOGIN) {
-            Customer c = (Customer) obj;
-            bundle.putParcelable("customer", c);
-        } else {
-            try {
-                ServiceProvider sp = (ServiceProvider) obj;
-                bundle.putParcelable("service", sp);
-            } catch (ClassCastException e1) {
-                try {
-                    WorkPlace wp = (WorkPlace) obj;
-                    bundle.putParcelable("workPlace", wp);
-                } catch (ClassCastException e2) {
-                    try {
-                        SignInData in = (SignInData) obj;
-                        bundle.putParcelable("signInData", in);
-                    } catch (ClassCastException e3) {
-                        e3.printStackTrace();
-                        showMessage(activity, R.string.some_error);
-                        return false;
-                    }
+
+
+    ///////////////////////////////////////////////////Un Used Method /////////////////////
+
+
+    public static String getDays(Context context) {
+        return getCommaSepparatedString(context.getResources().getStringArray(R.array.days));
+    }
+
+    public static String getDateAsString(String sep) {
+        Calendar c = Calendar.getInstance();
+        return String.format("%02d/%02d/%04d", c.get(Calendar.DAY_OF_MONTH)
+                , c.get(Calendar.MONTH) + 1
+                , c.get(Calendar.YEAR));
+    }
+
+    public static void datePicker(View view, final TextView button, final DateChangeListener listener) {
+        datePicker(view, button, listener, Calendar.getInstance().getTimeInMillis(), -1, -1);
+    }
+
+    public static void datePicker(View view, final TextView button) {
+        datePicker(view, button, null, Calendar.getInstance().getTimeInMillis(), -1, -1);
+    }
+
+    /*public static int getAge(String dob, String sep) {
+
+        *//*long ageInMillis = new Date().getTime() - getMinutes(dob);
+        Date age = new Date(ageInMillis);
+        return age.getYear();*//*
+
+        int year = 0, month = 0, day = 0;
+        if (!dob.equals("")) {
+            if (dob.contains(sep)) {
+                String[] dobStr = dob.split(sep, 3);
+                if (dobStr.length == 3) {
+                    day = Integer.parseInt(dobStr[0]);
+                    month = Integer.parseInt(dobStr[1]);
+                    year = Integer.parseInt(dobStr[2]);
                 }
             }
         }
-        mConnection.setData(bundle);
-        mConnection.setAction(action);
-        return doServiceAction(activity, mConnection, Context.BIND_AUTO_CREATE);
-    }*/
+        GregorianCalendar cal = new GregorianCalendar();
+        int y, m, d, a;
 
-    /*public boolean onDoubleTap(MotionEvent e) {
+        y = cal.get(Calendar.YEAR);
+        m = cal.get(Calendar.MONTH);
+        d = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(year, month, day);
+
+        a = y - cal.get(Calendar.YEAR);
+        if ((m < cal.get(Calendar.MONTH))
+                || ((m == cal.get(Calendar.MONTH)) && (d < cal
+                .get(Calendar.DAY_OF_MONTH)))) {
+            --a;
+        }
+        return a;
+    }
+
+    *//*public boolean onDoubleTap(MotionEvent e) {
         ImageView imageView = (ImageView) findViewById(imageViewId);
         int width = imageView.getWidth();
         int height = imageView.getWidth();
@@ -831,5 +730,45 @@ public abstract class Utility {
         tuneMatrix(matrix);
         savedMatrix.set(matrix);
         return false;
+    }*//*
+
+    public static void expandOrCollapse(final View v, String exp_or_colpse) {
+        TranslateAnimation anim;
+        if (exp_or_colpse.equals("expand")) {
+            anim = new TranslateAnimation(0.0f, 0.0f, -v.getHeight(), 0.0f);
+            v.setVisibility(View.VISIBLE);
+        } else {
+            anim = new TranslateAnimation(0.0f, 0.0f, 0.0f, -v.getHeight());
+            Animation.AnimationListener collapselistener = new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    v.setVisibility(View.GONE);
+                }
+            };
+            anim.setAnimationListener(collapselistener);
+        }
+        anim.setDuration(300);
+        anim.setInterpolator(new AccelerateInterpolator(0.5f));
+        v.startAnimation(anim);
+    }
+
+    public static Animation imgAnim() {
+        RotateAnimation anim = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
+//Setup anim with desired properties
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE); //Repeat animation indefinitely
+        anim.setDuration(700); //Put desired duration per anim cycle here, in milliseconds
+
+//Start animation
+        return anim;
     }*/
 }

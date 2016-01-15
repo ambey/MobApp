@@ -26,5 +26,7 @@
     <string name="msg_upload_photo">Photo Uploaded Successfully</string>
     <string name="confirm_remove_photo">Do you want to remove photo?</string>
     <string name="msg_new_version_available">New Version Available for updates.\n Upgrade now?</string>
+    <string name="msg_change_pwd">Password changed successfully</string>
+    <string name="msg_verify_pwd">Verify Old Password</string>
 
 </resources>

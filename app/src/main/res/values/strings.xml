@@ -246,6 +246,10 @@
     <string name="sort_options">Sort Options</string>
     <string name="apply_sort">Apply Sort</string>
     <string name="apply">Apply</string>
+    <string name="changepwd">Change Password</string>
+    <string name="forgotpwd">Forgot Password</string>
+    <string name="oldPwd">Old Password *</string>
+    <string name="newPwd">New Password *</string>
 
     <!-- Search Result Sort Fields -->
     <string name="by_drname">Doctor Name</string>

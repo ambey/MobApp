@@ -362,6 +362,10 @@ public class LoginActivity extends Activity implements ResponseHandler {
         return false;
     }
 
+    public void forgotPwd(View view) {
+        Utility.showMessage(this, R.string.forgotpwd);
+    }
+
     protected void loginDone(Bundle msgData) {
         Utility.showProgress(this, mLoginFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
