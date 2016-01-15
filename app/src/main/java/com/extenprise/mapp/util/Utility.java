@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -60,6 +61,13 @@ public abstract class Utility {
     /**
      * Shows the progress UI and hides the login form.
      */
+    /*public static void showProgress(Context context, ProgressDialog progressDialog, boolean show) {
+        if(show) {
+            progressDialog = ProgressDialog.show(context, "", "Please Wait...", true);
+        } else {
+            progressDialog.dismiss();
+        }
+    }*/
     public static void showProgress(Context context, final View formView, final View progressView, final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in

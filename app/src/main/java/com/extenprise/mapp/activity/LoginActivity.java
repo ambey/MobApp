@@ -3,6 +3,7 @@ package com.extenprise.mapp.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -86,6 +87,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
     private View mLoginFormView;
     private CheckBox mSaveLoginCheckBox;
     private RadioGroup mRadioGroupUType;
+
+    ProgressDialog progressDialog;
 
     private boolean exit = false;
 
@@ -349,7 +352,10 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mConnection.setAction(MappService.DO_LOGIN);
         mConnection.setData(bundle);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mLoginFormView, mProgressView, true);
+            /*Utility.showProgress(this, mLoginFormView, mProgressView, true);*/
+            progressDialog = ProgressDialog.show(this, "", "Please Wait...", true);
+
+            //Utility.showProgress(this, progressDialog, true);
         }
     }
 
@@ -367,7 +373,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
     }
 
     protected void loginDone(Bundle msgData) {
-        Utility.showProgress(this, mLoginFormView, mProgressView, false);
+        //Utility.showProgress(this, mLoginFormView, mProgressView, false);
+        progressDialog.dismiss();
         boolean success = msgData.getBoolean("status");
         if (success) {
             String phone, type;
