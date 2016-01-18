@@ -45,6 +45,7 @@ public class ServProvDetailsActivity extends Activity {
         TextView textViewClinicTime = (TextView) findViewById(R.id.textviewFirstclinictime);
         TextView textViewDocSpeciality = (TextView) findViewById(R.id.textviewDocspeciality);
         ImageView imageViewAvailable = (ImageView) findViewById(R.id.imageViewAvailable);
+        ImageView imageViewUser = (ImageView) findViewById(R.id.imageViewUser);
         TextView lbl = (TextView) findViewById(R.id.textview);
         TextView textViewFees = (TextView) findViewById(R.id.textviewFees);
 /*
@@ -58,14 +59,21 @@ public class ServProvDetailsActivity extends Activity {
         }
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         Service service = spsspt.getService();
-        if (service.getCategory().equalsIgnoreCase(getString(R.string.pharmacist))) {
-            Utility.setEnabledButton(this, bookAppontButton, false);
-        }
 
-        if (!service.getCategory().equalsIgnoreCase(getString(R.string.physician))) {
+        String category = service.getCategory();
+        if (category.equalsIgnoreCase(getString(R.string.pharmacist))) {
+            Utility.setEnabledButton(this, bookAppontButton, false);
+            imageViewUser.setImageResource(R.drawable.medstore);
+            lbl.setText("");
+        }
+        if (category.equalsIgnoreCase(getString(R.string.diagnosticCenter))) {
+            imageViewUser.setImageResource(R.drawable.diagcenter);
             lbl.setText("");
         }
 
+        if(mServProv.getPhoto() != null) {
+            imageViewUser.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto()));
+        }
         textViewClinic.setText(spsspt.getServicePoint().getName());
         textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));
         textViewClinicTime.setText(String.format("%s to %s",

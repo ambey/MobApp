@@ -368,6 +368,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             valid = false;
         }
 
+        if (Validator.isPinCodeValid(mPinCode.getText().toString().trim())) {
+            mPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mPinCode;
+            valid = false;
+        }
+
         if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {
             mEndTime.setError(getString(R.string.error_field_required));
             focusView = mEndTime;

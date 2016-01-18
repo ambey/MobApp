@@ -61,9 +61,11 @@ public class ServProvListAdapter extends ArrayAdapter<ServProvListItem> implemen
         ImageView imgAvail = (ImageView) v.findViewById(R.id.imageViewAvailability);
         TextView lbl = (TextView) v.findViewById(R.id.viewDr);
 
-        if(item.getServCategory() != null) {
-            if(!item.getServCategory().equals(getContext().getString(R.string.physician))) {
-                    lbl.setText("");
+        if(item.getCategory() != null) {
+            if(item.getCategory().equalsIgnoreCase(getContext().getString(R.string.physician))) {
+                lbl.setText(getContext().getString(R.string.drLbl));
+            } else {
+                lbl.setText("");
             }
         }
 

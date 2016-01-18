@@ -34,6 +34,7 @@ import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
 import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.util.DateChangeListener;
+import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
@@ -418,7 +419,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     if (!hasFocus) {
                         String oldpwd = mOldPwd.getText().toString().trim();
                         if (Validator.isPasswordValid(oldpwd)) {
-                            mCustomer.getSignInData().setPasswd(oldpwd);
+                            mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
                             Bundle bundle = new Bundle();
                             bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
                             bundle.putParcelable("customer", mCustomer);
@@ -466,7 +467,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                         return;
                     }
 
-                    mCustomer.getSignInData().setPasswd(newpwd);
+                    mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
                     bundle.putParcelable("customer", mCustomer);

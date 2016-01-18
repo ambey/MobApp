@@ -45,6 +45,7 @@ import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.ui.DaysSelectionDialog;
 import com.extenprise.mapp.ui.DialogDismissListener;
+import com.extenprise.mapp.util.EncryptUtil;
 import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
@@ -199,7 +200,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     if (!hasFocus) {
                         String oldpwd = mOldPwd.getText().toString().trim();
                         if (Validator.isPasswordValid(oldpwd)) {
-                            mServiceProv.getSignInData().setPasswd(oldpwd);
+                            mServiceProv.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
                             Bundle bundle = new Bundle();
                             bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                             bundle.putParcelable("service", mServiceProv);
@@ -247,7 +248,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                         return;
                     }
 
-                    mServiceProv.getSignInData().setPasswd(newpwd);
+                    mServiceProv.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     bundle.putParcelable("service", mServiceProv);
@@ -540,6 +541,11 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
             mEmailIdwork.setError(getString(R.string.error_invalid_email));
             focusView = mEmailIdwork;
+            valid = false;
+        }
+        if (Validator.isPinCodeValid(mPinCode.getText().toString().trim())) {
+            mPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mPinCode;
             valid = false;
         }
         if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {

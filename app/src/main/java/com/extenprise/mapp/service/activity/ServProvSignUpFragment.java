@@ -127,7 +127,7 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
             }
         });
         int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
-        if (category == R.string.medicalStore) {
+        if (category == R.string.pharmacist) {
             mImgView.setImageResource(R.drawable.medstore);
         } else if (category == R.string.diagnosticCenter) {
             mImgView.setImageResource(R.drawable.diagcenter);
