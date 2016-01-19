@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,6 +67,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     private Spinner mSpinState;
     private Spinner mSpinGender;
     private ImageView mImgView;
+    private Button mUpdateButton;
 
     private EditText mOldPwd;
     private boolean isPwdCorrect;
@@ -104,6 +106,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mSpinCity = (Spinner) findViewById(R.id.editTextCity);
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
+        mUpdateButton = (Button) findViewById(R.id.buttonViewUpdate);
 
         mPname.setText(String.format("%s %s\n(%d years)", mCustomer.getfName(), mCustomer.getlName(),
                 Utility.getAge(mCustomer.getDob())));
@@ -143,6 +146,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         }
 
 
+
     }
 
     public void showPersonalFields(View view) {
@@ -179,6 +183,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mSpinCity.setEnabled(set);
         mSpinState.setEnabled(set);
         mSpinGender.setEnabled(set);
+        Utility.setEnabledButton(this, mUpdateButton, set);
     }
 
     public void editPatientProf(View v) {

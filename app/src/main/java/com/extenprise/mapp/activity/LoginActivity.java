@@ -353,7 +353,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mConnection.setData(bundle);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             /*Utility.showProgress(this, mLoginFormView, mProgressView, true);*/
-            progressDialog = ProgressDialog.show(this, "", "Please Wait...", true);
+            progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
 
             //Utility.showProgress(this, progressDialog, true);
         }
@@ -374,7 +374,9 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     protected void loginDone(Bundle msgData) {
         //Utility.showProgress(this, mLoginFormView, mProgressView, false);
-        progressDialog.dismiss();
+        if(progressDialog != null) {
+            progressDialog.dismiss();
+        }
         boolean success = msgData.getBoolean("status");
         if (success) {
             String phone, type;

@@ -28,5 +28,6 @@
     <string name="msg_new_version_available">New Version Available for updates.\n Upgrade now?</string>
     <string name="msg_change_pwd">Password changed successfully</string>
     <string name="msg_verify_pwd">Verify Old Password</string>
+    <string name="msg_please_wait">Please Wait...</string>
 
 </resources>

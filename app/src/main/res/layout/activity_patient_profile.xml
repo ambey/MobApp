@@ -56,33 +56,11 @@
         android:layout_marginTop="30dp"
         android:background="#9d9d9d" />
 
-    <TextView
-        android:id="@+id/mobnumLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/mobnumValue"
-        android:layout_marginTop="20dp"
-        android:text="@string/mob_num" />
-
-    <TextView
-        android:id="@+id/mobnumValue"
-        style="@style/LargeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linenView"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/mobnumLabel"
-        android:layout_toRightOf="@+id/mobnumLabel"
-        android:hint="@string/mob_num"/>
-
-
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mobnumLabel">
+        android:layout_below="@+id/linenView">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -90,11 +68,35 @@
             android:layout_marginTop="10dp"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/mobnumLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/mob_num" />
+
+            <TextView
+                android:id="@+id/mobnumValue"
+                style="@style/LargeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_toEndOf="@+id/mobnumLabel"
+                android:layout_toRightOf="@+id/mobnumLabel"
+                android:hint="@string/mob_num"/>
+            </RelativeLayout>
+
             <ImageView
                 android:id="@+id/imageViewEdit1"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
                 android:clickable="true"
                 android:onClick="editPatientProf"
                 android:src="@drawable/editpen" />

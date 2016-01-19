@@ -2,6 +2,7 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ListView mMedStoreList;
     private Rx mRx;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,9 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         bundle.putParcelable("form", form);
         mConnection.setAction(MappService.DO_SEND_RX);
         mConnection.setData(bundle);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+        }
     }
 
     private void gotMedStoreList(Bundle data) {
@@ -85,6 +89,9 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
     }
 
     private void rxSentToMedStore() {
+        if(progressDialog != null) {
+            progressDialog.dismiss();
+        }
         Utility.showAlert(this, "", getString(R.string.msg_rx_sent_to_medstore), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

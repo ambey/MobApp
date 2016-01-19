@@ -1,6 +1,7 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     private ArrayList<AppointmentListItem> mPastApponts;
     private TextView mStatusView;
     private int lastAppontIndex = 0;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +225,9 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         bundle.putParcelable("form", mAppont);
         mConnection.setData(bundle);
         mConnection.setAction(action);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+        }
     }
 
     public void confirmAppointment(View view) {
@@ -270,6 +274,9 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             gotPastAppointments(data);
             return true;
         } else if (action == MappService.DO_CONFIRM_APPONT) {
+            if(progressDialog != null) {
+                progressDialog.dismiss();
+            }
             mAppont.setConfirmed(true);
             mStatusView.setText(getString(R.string.confirmed));
             statusChangeDone(R.string.msg_appont_confirmed);

@@ -248,6 +248,33 @@ public abstract class Utility {
         return d;
     }
 
+    public static boolean isTimePassed(String t) {
+        Date todayDate, date;
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("HH:mm");
+        Calendar now = Calendar.getInstance();
+        try {
+            todayDate = sdf.parse(now.get(Calendar.HOUR) + ":" + now.get(Calendar.MINUTE));
+            date = sdf.parse(t);
+        } catch (java.text.ParseException e) {
+            todayDate = new Date(0);
+            date = new Date(0);
+        }
+        return date.before(todayDate);
+    }
+
+    public static boolean isDateToday(Date date) {
+        Calendar cal = Calendar.getInstance();
+        //120; // For todays appointment, available time slots would start two hours from now
+        // Set the hour, minute and other components to zero, so that we can compare the date.
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date todayDate = cal.getTime();
+        return date.compareTo(todayDate) == 0;
+    }
+
     public static int getSpinnerIndex(Spinner spinner, String str) {
         int index = 0;
         for (int i = 0; i < spinner.getCount(); i++) {

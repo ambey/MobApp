@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class BookAppointmentActivity extends Activity
@@ -137,6 +138,11 @@ public class BookAppointmentActivity extends Activity
         ArrayList<String> list = data.getStringArrayList("timeSlots");
         if (list == null) {
             return;
+        }
+        for(String t : list) {
+            if(Utility.isDateToday(mSelectedDate) && Utility.isTimePassed(t)) {
+                list.remove(t);
+            }
         }
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
         mSpinnerTimeSlots.setAdapter(spinnerAdapter);
