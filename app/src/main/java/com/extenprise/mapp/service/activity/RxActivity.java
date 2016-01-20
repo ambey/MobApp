@@ -100,14 +100,20 @@ public class RxActivity extends Activity implements ResponseHandler {
                 if (arrayId != -1) {
                     mDoseMUnit.setAdapter(new ArrayAdapter<>(RxActivity.this,
                             R.layout.layout_spinner, getResources().getStringArray(arrayId)));
+                    mDoseMUnit.setVisibility(View.VISIBLE);
                     mDoseAUnit.setAdapter(new ArrayAdapter<>(RxActivity.this,
                             R.layout.layout_spinner, getResources().getStringArray(arrayId)));
+                    mDoseAUnit.setVisibility(View.VISIBLE);
                     mDoseEUnit.setAdapter(new ArrayAdapter<>(RxActivity.this,
                             R.layout.layout_spinner, getResources().getStringArray(arrayId)));
+                    mDoseEUnit.setVisibility(View.VISIBLE);
                 } else {
                     mDoseMUnit.setAdapter(null);
+                    mDoseMUnit.setVisibility(View.GONE);
                     mDoseAUnit.setAdapter(null);
+                    mDoseAUnit.setVisibility(View.GONE);
                     mDoseEUnit.setAdapter(null);
+                    mDoseEUnit.setVisibility(View.GONE);
                 }
             }
 

@@ -270,13 +270,13 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        if(progressDialog != null) {
+            progressDialog.dismiss();
+        }
         if (action == MappService.DO_CUST_PAST_APPONT_LIST) {
             gotPastAppointments(data);
             return true;
         } else if (action == MappService.DO_CONFIRM_APPONT) {
-            if(progressDialog != null) {
-                progressDialog.dismiss();
-            }
             mAppont.setConfirmed(true);
             mStatusView.setText(getString(R.string.confirmed));
             statusChangeDone(R.string.msg_appont_confirmed);
