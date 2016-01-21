@@ -135,7 +135,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     public void viewProfile(View view) {
         Intent intent = new Intent(this, ServProvProfileActivity.class);
         intent.putExtra("service", mServProv);
-        intent.putExtra("category", "Pharmacist");
+        intent.putExtra("category", getString(R.string.pharmacist));
         startActivity(intent);
     }
 

@@ -136,7 +136,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         Intent intent = getIntent();
         mCategory = intent.getStringExtra("category");
-        if (mCategory.equals("Pharmacist")) {
+        if (mCategory.equals(getString(R.string.pharmacist))) {
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
             //mConsultFee.setEnabled(false);
@@ -219,7 +219,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!isPwdCorrect) {
+                    if (!isPwdCorrect) {
                         Utility.showMessage(ServProvProfileActivity.this, R.string.msg_verify_pwd);
                         return;
                     }
@@ -343,6 +343,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
         TextView workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
+
+        mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, mCategory));
 
         if (item != null) {
             action = MappService.DO_EDIT_WORK_PLACE;
@@ -487,8 +489,12 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private boolean isValidWorkPlace() {
-        EditText[] fields = {mExperience, mQualification,
-                mName, mLoc, mPinCode, mPhone1, mConsultFee};
+        EditText[] fields = { mExperience, mQualification,
+                mName, mLoc, mPinCode, mPhone1, mConsultFee };
+        if (mCategory.equals(getString(R.string.pharmacist))) {
+            fields = new EditText[] { mExperience, mQualification,
+                    mName, mLoc, mPinCode, mPhone1 };
+        }
         if (Utility.areEditFieldsEmpty(this, fields)) {
             return false;
         }

@@ -140,7 +140,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             mInbox = intent.getParcelableArrayListExtra("inbox");
             rxInboxItem = intent.getParcelableExtra("rxItem");
-            Customer c = rxInboxItem.getCustomer();
+            Customer c = rxInboxItem.getCustomer();//TODO nullpointerexception
             name.setText(String.format("%s %s", c.getfName(), c.getlName()));
             addButton.setVisibility(View.GONE);
         } else {

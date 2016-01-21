@@ -354,7 +354,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             /*Utility.showProgress(this, mLoginFormView, mProgressView, true);*/
             progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
-
             //Utility.showProgress(this, progressDialog, true);
         }
     }

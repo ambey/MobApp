@@ -2,6 +2,7 @@ package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -44,6 +45,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     private RxInboxItem mInboxItem;
     private Button mSendAvailButton;
     private BitSet mAvailMap;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +197,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         data.putParcelable("form", availability);
         mConnection.setData(data);
         mConnection.setAction(MappService.DO_SEND_AVAILABILITY);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+        }
     }
 
     public void resendRx(View view) {
@@ -207,6 +211,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void sentAvailabilityFeedback() {
+        if(progressDialog != null) {
+            progressDialog.dismiss();
+        }
         mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         Utility.showAlert(this, "", getString(R.string.msg_availablity_sent), new DialogInterface.OnClickListener() {
             @Override

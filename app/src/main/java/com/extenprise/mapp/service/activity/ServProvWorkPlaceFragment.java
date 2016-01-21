@@ -104,9 +104,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mMultiSpinnerDays = (Button) mRootview.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) mRootview.findViewById(R.id.spinServiceProvCategory);
 
-        int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
-        mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, getString(category)));
-        mServCatagory.setClickable(false);
+        int category = getActivity().getIntent().getIntExtra("category", R.string.physician);
+        /*mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, getString(category)));
+        mServCatagory.setClickable(false);*/
 
         if (category == R.string.pharmacist) {
             mConsultFee.setEnabled(false);
@@ -314,6 +314,10 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public boolean isValidInput() {
         EditText[] fields = { mExperience, mQualification,
                 mName, mLoc, mPinCode, mPhone1, mConsultFee };
+        if(mServCatagory.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.pharmacist))) {
+            fields = new EditText[] { mExperience, mQualification,
+                    mName, mLoc, mPinCode, mPhone1 };
+        }
         if(Utility.areEditFieldsEmpty(getActivity(), fields)) {
             return false;
         }
