@@ -431,6 +431,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         a.setDate(mAppont.getDate());
         a.setIdServProvHasServPt(mAppont.getIdServProvHasServPt());
         a.setIdCustomer(mAppont.getIdCustomer());
+        a.setFrom(Utility.getMinutes(mAppont.getTime()));
         mRx.setDate(new Date());
         Utility.showProgress(this, mForm, mProgressBar, false);
     }

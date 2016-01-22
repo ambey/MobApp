@@ -82,8 +82,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     public void viewRxFeedback(View view) {
         Bundle bundle = new Bundle();
         bundle.putInt("id", mServiceProv.getServProvHasServPt(0).getIdServProvHasServPt());
-        //SPSSPT ID is not fetching from server.. so its giving null Exception.
-        //TODO
         bundle.putInt("status", ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
         mConnection.setData(bundle);

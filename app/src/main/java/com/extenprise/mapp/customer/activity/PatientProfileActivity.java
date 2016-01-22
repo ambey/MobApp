@@ -422,18 +422,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
-                        String oldpwd = mOldPwd.getText().toString().trim();
-                        if (Validator.isPasswordValid(oldpwd)) {
-                            mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                            bundle.putParcelable("customer", mCustomer);
-                            mConnection.setData(bundle);
-                            mConnection.setAction(MappService.DO_PWD_CHECK);
-                            if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                                Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
-                            }
-                        }
+                        checkPwd();
                     }
                 }
             });
@@ -444,6 +433,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 @Override
                 public void onClick(View v) {
                     if(!isPwdCorrect) {
+                        checkPwd();
                         Utility.showMessage(PatientProfileActivity.this, R.string.msg_verify_pwd);
                         return;
                     }
@@ -488,6 +478,23 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void checkPwd() {
+        String oldpwd = mOldPwd.getText().toString().trim();
+        if (Validator.isPasswordValid(oldpwd)) {
+            mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+            bundle.putParcelable("customer", mCustomer);
+            mConnection.setData(bundle);
+            mConnection.setAction(MappService.DO_PWD_CHECK);
+            if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+            }
+        } else {
+            mOldPwd.setError(getString(R.string.error_wrong_pwd));
+        }
     }
 
     public void showDatePicker(View view) {

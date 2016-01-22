@@ -198,18 +198,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
-                        String oldpwd = mOldPwd.getText().toString().trim();
-                        if (Validator.isPasswordValid(oldpwd)) {
-                            mServiceProv.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                            bundle.putParcelable("service", mServiceProv);
-                            mConnection.setData(bundle);
-                            mConnection.setAction(MappService.DO_PWD_CHECK);
-                            if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                                Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
-                            }
-                        }
+                        checkPwd();
                     }
                 }
             });
@@ -220,6 +209,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 @Override
                 public void onClick(View v) {
                     if (!isPwdCorrect) {
+                        checkPwd();
                         Utility.showMessage(ServProvProfileActivity.this, R.string.msg_verify_pwd);
                         return;
                     }
@@ -263,6 +253,23 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             });
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void checkPwd() {
+        String oldpwd = mOldPwd.getText().toString().trim();
+        if (Validator.isPasswordValid(oldpwd)) {
+            mServiceProv.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            bundle.putParcelable("service", mServiceProv);
+            mConnection.setData(bundle);
+            mConnection.setAction(MappService.DO_PWD_CHECK);
+            if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+            }
+        } else {
+            mOldPwd.setError(getString(R.string.error_wrong_pwd));
+        }
     }
 
     @Override
