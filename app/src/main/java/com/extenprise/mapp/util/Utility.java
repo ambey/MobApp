@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,16 +17,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public abstract class Utility {
     /**
@@ -304,16 +299,16 @@ public abstract class Utility {
         button.setEnabled(enabled);
         if (enabled) {
             button.setBackgroundResource(R.drawable.button);
-            button.setTextColor(context.getResources().getColor(R.color.ThemeColor));
+            button.setTextColor(ContextCompat.getColor(context, R.color.ThemeColor));
         } else {
             button.setBackgroundResource(R.drawable.inactive_button);
-            button.setTextColor(context.getResources().getColor(R.color.PassiveColor));
+            button.setTextColor(ContextCompat.getColor(context, R.color.PassiveColor));
         }
     }
 
     public static void setEnabledButton(Context context, Button button, boolean enabled, int color) {
         button.setEnabled(enabled);
-        button.setTextColor(context.getResources().getColor(color));
+        button.setTextColor(ContextCompat.getColor(context, color));
     }
 
     public static void showMessage(Context context, int msgId) {

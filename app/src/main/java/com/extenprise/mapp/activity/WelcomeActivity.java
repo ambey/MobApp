@@ -5,14 +5,9 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
@@ -21,7 +16,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import org.jsoup.Jsoup;
 
 import com.androidquery.service.MarketService;
 import com.extenprise.mapp.LoginHolder;
@@ -37,22 +31,19 @@ import com.extenprise.mapp.service.activity.MedicalStoreHomeActivity;
 import com.extenprise.mapp.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.service.data.ServiceProvider;
 import com.extenprise.mapp.util.Utility;
-import com.google.android.gms.tagmanager.Container;
-import com.google.android.gms.tagmanager.TagManager;
 
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
 
+    private static final String LOG_TAG = "AppUpgrade";
     TextView textLabel;
     ImageView imgLogo;
     Animation textAnimation;
+    String appURI = "";
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
     private Handler mHandler = new Handler();
-
-    private static final String LOG_TAG = "AppUpgrade";
     private int versionCode = 0;
-    String appURI = "";
     private DownloadManager downloadManager;
     private long downloadReference;
 
@@ -170,8 +161,9 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         textLabel.startAnimation(textAnimation);
 
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (saveLogin) {
+        boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        boolean logoutDone = loginPreferences.getBoolean("logout", false);
+        if (saveLogin && !logoutDone) {
             SignInData signInData = new SignInData();
             signInData.setPhone(loginPreferences.getString("username", ""));
             signInData.setPasswd(loginPreferences.getString("passwd", ""));

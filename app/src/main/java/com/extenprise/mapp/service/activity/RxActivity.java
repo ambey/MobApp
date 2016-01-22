@@ -23,6 +23,7 @@ import com.extenprise.mapp.data.Appointment;
 import com.extenprise.mapp.data.Rx;
 import com.extenprise.mapp.data.RxFeedback;
 import com.extenprise.mapp.data.RxItem;
+import com.extenprise.mapp.data.WorkingDataStore;
 import com.extenprise.mapp.net.MappService;
 import com.extenprise.mapp.net.MappServiceConnection;
 import com.extenprise.mapp.net.ResponseHandler;
@@ -139,8 +140,10 @@ public class RxActivity extends Activity implements ResponseHandler {
         RxInboxItem rxInboxItem = null;
         if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             mInbox = intent.getParcelableArrayListExtra("inbox");
-            rxInboxItem = intent.getParcelableExtra("rxItem");
-            Customer c = rxInboxItem.getCustomer();//TODO nullpointerexception
+            Bundle bundle = WorkingDataStore.getBundle();
+            rxInboxItem = bundle.getParcelable("rxItem");
+            assert rxInboxItem != null;
+            Customer c = rxInboxItem.getCustomer();
             name.setText(String.format("%s %s", c.getfName(), c.getlName()));
             addButton.setVisibility(View.GONE);
         } else {
@@ -355,7 +358,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             focusView = mCourseDur;
             valid = false;
         } else {
-            if(!Validator.isValuePositive(value)) {
+            if (!Validator.isValuePositive(value)) {
                 mCourseDur.setError(getString(R.string.error_invalid_number));
                 focusView = mCourseDur;
                 valid = false;
@@ -376,7 +379,7 @@ public class RxActivity extends Activity implements ResponseHandler {
                 focusView = mMDose;
                 valid = false;
             } else {
-                if(!Validator.isValuePositive(value)) {
+                if (!Validator.isValuePositive(value)) {
                     mMDose.setError(getString(R.string.error_invalid_number));
                     focusView = mMDose;
                     valid = false;
@@ -390,7 +393,7 @@ public class RxActivity extends Activity implements ResponseHandler {
                 focusView = mADose;
                 valid = false;
             } else {
-                if(!Validator.isValuePositive(value)) {
+                if (!Validator.isValuePositive(value)) {
                     mADose.setError(getString(R.string.error_invalid_number));
                     focusView = mADose;
                     valid = false;
@@ -404,7 +407,7 @@ public class RxActivity extends Activity implements ResponseHandler {
                 focusView = mEDose;
                 valid = false;
             } else {
-                if(!Validator.isValuePositive(value)) {
+                if (!Validator.isValuePositive(value)) {
                     mEDose.setError(getString(R.string.error_invalid_number));
                     focusView = mEDose;
                     valid = false;
@@ -466,7 +469,6 @@ public class RxActivity extends Activity implements ResponseHandler {
             intent.putExtra("appont", mAppont);
             intent.putExtra("feedback", mFeedback);
             intent.putParcelableArrayListExtra("inbox", mInbox);
-            intent.putExtra("rxItem", getIntent().getParcelableExtra("rxItem"));
             return intent;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
