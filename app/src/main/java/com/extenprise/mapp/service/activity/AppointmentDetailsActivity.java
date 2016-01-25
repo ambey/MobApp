@@ -69,9 +69,21 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Date today = cal.getTime();
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        Date appontDate = mAppont.getDate();
+        
+        dateView.setText(sdf.format(mAppont.getDate()));
+        fNameView.setText(mAppont.getFirstName());
+        lNameView.setText(mAppont.getLastName());
+        timeView.setText(mAppont.getTime());
+        genderView.setText(mAppont.getGender());
+        ageView.setText(String.format("%d", mAppont.getAge()));
+        wtView.setText(String.format("%.1f", mAppont.getWeight()));
+        
+        /*Date appontDate = mAppont.getDate();
         int appontTime = Utility.getMinutes(mAppont.getTime());
-        appontDate.setTime(appontDate.getTime() + appontTime * 60 * 1000);
+        appontDate.setTime(appontDate.getTime() + appontTime * 60 * 1000);*/
+        Date appontDate = new Date(
+                mAppont.getDate().getTime()
+                        + Utility.getMinutes(mAppont.getTime()) * 60 * 1000);
 
         if (appontDate.after(today)) {
             //Utility.setEnabledButton(this, rxButton, false);
@@ -111,14 +123,6 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
             Utility.setEnabledButton(this, mConfirmAppontButton, false);
             Utility.setEnabledButton(this, mCancelAppontButton, false);
         }
-
-        dateView.setText(sdf.format(appontDate));
-        fNameView.setText(mAppont.getFirstName());
-        lNameView.setText(mAppont.getLastName());
-        timeView.setText(mAppont.getTime());
-        genderView.setText(mAppont.getGender());
-        ageView.setText(String.format("%d", mAppont.getAge()));
-        wtView.setText(String.format("%.1f", mAppont.getWeight()));
 
         fillPastAppointements();
     }
