@@ -45,7 +45,7 @@
 
     <TextView
         android:id="@+id/viewWorkPlaceType"
-        android:layout_width="170dp"
+        android:layout_width="180dp"
         android:layout_height="20dp"
         android:layout_below="@+id/editTextExperience"
         android:text="@string/work_place_type"

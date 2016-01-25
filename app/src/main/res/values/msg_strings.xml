@@ -29,5 +29,6 @@
     <string name="msg_change_pwd">Password changed successfully</string>
     <string name="msg_verify_pwd">Verify Old Password</string>
     <string name="msg_please_wait">Please Wait...</string>
+    <string name="msg_cant_upload">Can\'t Upload Now. Retry.</string>
 
 </resources>

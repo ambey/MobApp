@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -63,7 +64,7 @@ public abstract class Utility {
             progressDialog.dismiss();
         }
     }*/
-    public static void showProgress(Context context, final View formView, final View progressView, final boolean show) {
+    public static void showProgress(final Context context, final View formView, final View progressView, final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -93,6 +94,15 @@ public abstract class Utility {
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
             formView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+
+        /*Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showProgress(context, formView, progressView, false);
+                showMessage(context, R.string.msg_cant_upload);
+            }
+        }, 5000);*/
     }
 
     public static void showAlert(Activity activity, String title, String msg) {

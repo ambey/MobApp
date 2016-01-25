@@ -52,26 +52,27 @@ public class Send {
     } */
 
 
-    public static void email(Activity activity, String subject, String msg, String[] to, String[] cc) {
-          Log.i("Send email", "");
-          Intent emailIntent = new Intent(Intent.ACTION_SEND);
+    public static void email(Activity activity, String subject, String body, String to) {
+        Log.i("Send email", "");
+        //Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        /*if(cc != null) {
+            emailIntent.putExtra(Intent.EXTRA_CC, cc);
+        }*/
 
-          emailIntent.setData(Uri.parse("mailto:"));
-          emailIntent.setType("text/plain");
-          emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-            if(cc != null) {
-                emailIntent.putExtra(Intent.EXTRA_CC, cc);
-            }
-          emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-          emailIntent.putExtra(Intent.EXTRA_TEXT, msg);
-          try {
-              activity.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-             Log.i("Finished sending email.", "");
-          }
-          catch (android.content.ActivityNotFoundException ex) {
-             //Toast.makeText(activity, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-              Utility.showMessage(activity, R.string.some_error);
-          }
+        Intent intent = new Intent(Intent.ACTION_SENDTO); // it's not ACTION_SEND
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_EMAIL, to);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, body);
+        intent.setData(Uri.parse("mailto:")); // or just "mailto:" for blank
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+        try {
+            activity.startActivity(intent);
+            Log.i("Finished sending email.", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i("email Can not be sent.", "");
+        }
    }
 
 

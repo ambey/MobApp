@@ -50,6 +50,8 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class ServProvProfileActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
@@ -472,7 +474,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     wp.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
                     wp.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
                     wp.setWorkingDays(mMultiSpinnerDays.getText().toString());
-                    wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
                     wp.setServCategory(mServCatagory.getSelectedItem().toString());
                     wp.setSpeciality(mSpeciality.getSelectedItem().toString());
                     wp.setServPointType(mServPtType.getSelectedItem().toString());
@@ -481,11 +482,14 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     wp.setQualification(mQualification.getText().toString().trim());
                     wp.setSignInData(mSignInData);
                     wp.setPincode(mPinCode.getText().toString().trim());
-
+                    if(mConsultFee.isEnabled()) {
+                        wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    }
                     if(finalAction == MappService.DO_EDIT_WORK_PLACE) {
                         wp.setIdServicePoint(item.getIdServicePoint());
                         wp.setIdService(item.getIdService());
                     }
+
                     sendRequest(finalAction, wp);
                     dialog.dismiss();
                 }
@@ -498,10 +502,15 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private boolean isValidWorkPlace() {
         EditText[] fields = { mExperience, mQualification,
                 mName, mLoc, mPinCode, mPhone1, mConsultFee };
+        /*ArrayList<EditText> list = new ArrayList<>(Arrays.asList(mExperience, mQualification,
+                mName, mLoc, mPinCode, mPhone1));
         if (mCategory.equals(getString(R.string.pharmacist))) {
+            list.add(mConsultFee);
+        }*/
+       /* if (mCategory.equals(getString(R.string.pharmacist))) {
             fields = new EditText[] { mExperience, mQualification,
                     mName, mLoc, mPinCode, mPhone1 };
-        }
+        }*/
         if (Utility.areEditFieldsEmpty(this, fields)) {
             return false;
         }

@@ -287,7 +287,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         Utility.showProgress(this, mSearchFormView, mProgressView, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
-            Send.email(this, "Test", "Test Mail From App.", new String[]{"jain_avinash@extenprise.com"}, null);
+            //Send.email(this, "Test", "Test Mail From Mob App.", "jain_avinash@extenprise.com");
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
             intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
             startActivity(intent);
