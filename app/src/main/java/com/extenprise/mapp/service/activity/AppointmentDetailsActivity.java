@@ -81,6 +81,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         /*Date appontDate = mAppont.getDate();
         int appontTime = Utility.getMinutes(mAppont.getTime());
         appontDate.setTime(appontDate.getTime() + appontTime * 60 * 1000);*/
+
         Date appontDate = new Date(
                 mAppont.getDate().getTime()
                         + Utility.getMinutes(mAppont.getTime()) * 60 * 1000);
