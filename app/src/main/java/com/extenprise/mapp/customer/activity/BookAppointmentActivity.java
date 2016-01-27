@@ -91,7 +91,6 @@ public class BookAppointmentActivity extends Activity
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_BOOK_APPONT);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-        Utility.setEnabledButton(this, mBookButton, false);
         mMsgView.setVisibility(View.VISIBLE);
     }
 
@@ -162,6 +161,7 @@ public class BookAppointmentActivity extends Activity
                     startActivity(intent);
                 }
             });
+            Utility.setEnabledButton(this, mBookButton, false);
             Appointment appointment = data.getParcelable("form");
             mCust.getAppointments().add(appointment);
             mServProv.getServProvHasServPt(0).getAppointments().add(appointment);

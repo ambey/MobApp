@@ -23,6 +23,10 @@ public class City implements Parcelable {
                 ", Country : " + country;
     }
 
+    public String toWPstr() {
+        return city + ", " + state + ", " + country;
+    }
+
     public City(Parcel source) {
         idCity = source.readInt();
         city = source.readString();

@@ -51,6 +51,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 public abstract class Utility {
@@ -135,7 +136,7 @@ public abstract class Utility {
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(R.string.cancel), listener);
             }
         }
-        dialog.setIcon(R.drawable.med_logo_final);
+        //dialog.setIcon(R.drawable.med_logo_final);
         dialog.show();
     }
 
@@ -326,10 +327,21 @@ public abstract class Utility {
         Log.v("Home", "############################" + context.getString(msgId));
     }
 
-    public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
+    /*public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
         specs.add("Other");
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, specs);
         speciality.setAdapter(spinnerAdapter);
+    }*/
+
+    public static void setNewSpinner(Context activity, ArrayList<String> list, Spinner spinner, String[] str) {
+        if(list == null) {
+            list = new ArrayList<>();
+        }
+        if(str != null) {
+            Collections.addAll(list, str);
+        }
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, list);
+        spinner.setAdapter(spinnerAdapter);
     }
 
     /* There is already a set of methods named showAlert in this class. */
@@ -346,7 +358,8 @@ public abstract class Utility {
                         String newSpec = txtSpec.getText().toString();
                         ArrayList<String> specs = new ArrayList<>();
                         specs.add(newSpec);
-                        setNewSpec(activity, specs, speciality);
+                        //setNewSpec(activity, specs, speciality);
+                        setNewSpinner(activity, specs, speciality, new String[]{activity.getString(R.string.other)});
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

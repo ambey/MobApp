@@ -108,9 +108,21 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         /*mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, getString(category)));
         mServCatagory.setClickable(false);*/
 
-        if (category == R.string.pharmacist) {
-            mConsultFee.setEnabled(false);
+        ArrayList<String> listWPType = new ArrayList<>();
+        if(category == R.string.physician) {
+            listWPType.add(getString(R.string.clinic));
         }
+        else if (category == R.string.pharmacist) {
+            mConsultFee.setEnabled(false);
+            listWPType.add(getString(R.string.medical_store));
+        } else {
+            listWPType.add(getString(R.string.path_lab));
+            listWPType.add(getString(R.string.scan_lab));
+        }
+        Utility.setNewSpinner(getActivity(), listWPType, mServPtType, null);
+
+        Utility.setNewSpinner(getActivity(), null, mServCatagory,
+                new String[] { getString(R.string.select_category), getString(category) });
 
         mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -139,7 +151,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String spec = mSpeciality.getSelectedItem().toString();
-                if (spec.equals("Other")) {
+                if (spec.equals(getString(R.string.other))) {
                     openSpecDialog();
                 }
             }
@@ -489,7 +501,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         if (list == null) {
             list = new ArrayList<>();
         }
-        Utility.setNewSpec(getActivity(), list, mSpeciality);
+        //Utility.setNewSpec(getActivity(), list, mSpeciality);
+        Utility.setNewSpinner(getActivity(), list, mSpeciality, new String[]{getString(R.string.other)});
     }
 
     public void onBackPressed() {

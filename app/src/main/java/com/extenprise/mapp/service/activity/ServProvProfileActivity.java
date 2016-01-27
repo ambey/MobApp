@@ -50,8 +50,6 @@ import com.extenprise.mapp.util.Utility;
 import com.extenprise.mapp.util.Validator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class ServProvProfileActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
@@ -353,6 +351,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
         TextView workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
+        Utility.setNewSpinner(this, null, mServCatagory,
+                new String[] { getString(R.string.select_category), mCategory });
         mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, mCategory));
 
         if (item != null) {
@@ -383,7 +383,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
             ArrayList<String> specs = new ArrayList<>();
             specs.add(item.getSpeciality());
-            Utility.setNewSpec(this, specs, mSpeciality);
+            //Utility.setNewSpec(this, specs, mSpeciality);
+            Utility.setNewSpinner(this, specs, mSpeciality, new String[]{getString(R.string.other)});
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
             /*specs.clear();
             specs.add(item.getServCategory());
@@ -443,7 +444,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 String spec = mSpeciality.getSelectedItem().toString();
                 String servCategory = mServCatagory.getSelectedItem().toString();
                 if (!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
-                    if (spec.equals("Other")) {
+                    if (spec.equals(getString(R.string.other))) {
                         Utility.openSpecDialog(ServProvProfileActivity.this, mSpeciality);
                     }
                 }
@@ -933,7 +934,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
             mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
             WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
-                    R.layout.layout_workplace, mWorkPlaceList);
+                    R.layout.layout_wp_list_item, mWorkPlaceList);
             listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
             listView.setOnTouchListener(new ListView.OnTouchListener() {
                 @Override
@@ -979,7 +980,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (list == null) {
             list = new ArrayList<>();
         }
-        Utility.setNewSpec(this, list, mSpeciality);
+        Utility.setNewSpinner(this, list, mSpeciality, new String[]{getString(R.string.other)});
     }
 
     private void updateDone(int msg, Bundle data) {

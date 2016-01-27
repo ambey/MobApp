@@ -138,6 +138,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
+                    android:maxLength="1"
                     android:hint="@string/dose"
                     android:inputType="number" />
 
@@ -173,6 +174,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
+                    android:maxLength="1"
                     android:hint="@string/dose"
                     android:inputType="number" />
 
@@ -207,6 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:hint="@string/dose"
+                    android:maxLength="1"
                     android:inputType="number" />
 
                 <Spinner

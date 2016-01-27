@@ -2,8 +2,14 @@ package com.extenprise.mapp.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -30,7 +36,7 @@ import com.extenprise.mapp.util.Utility;
 import java.util.ArrayList;
 
 
-public class SearchServProvActivity extends Activity implements ResponseHandler {
+public class SearchServProvActivity extends Activity implements ResponseHandler, LocationListener {
 
     SearchServProvForm mForm;
     ArrayList<String> specList;
@@ -41,6 +47,9 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
     private EditText mLocation;
     private View mProgressView;
     private View mSearchFormView;
+
+    private LocationManager locationManager;
+    private String provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,39 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
                 // your code here
             }
         });
+
+
+        //Prompt the user to Enabled GPS
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!enabled) {
+            Utility.showAlert(this, getString(R.string.msg_use_loc), getString(R.string.msg_use_gps),
+                    true, null, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    if (which == -1) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = null;
+        try {
+            location = locationManager.getLastKnownLocation(provider);
+        } catch(SecurityException e) {
+            e.printStackTrace();
+        }
+        if (location != null) {
+            System.out.println("Provider " + provider + " has been selected.");
+            onLocationChanged(location);
+        } /*else {
+            mLocation.setError("Location Unavailable");
+        }*/
 
         /*ArrayList<String> list = new ArrayList<>();
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, list);
@@ -239,7 +281,93 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
 */
     }
 
-/*
+    protected void searchDone(Bundle msgData) {
+        Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        boolean success = msgData.getBoolean("status");
+        if (success) {
+            //Send.email(this, "Test", "Test Mail From Mob App.", "jain_avinash@extenprise.com");
+            Intent intent = new Intent(this, SearchServProvResultActivity.class);
+            intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
+            startActivity(intent);
+        } else {
+            Utility.showMessage(this, R.string.msg_no_result);
+        }
+    }
+
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if (action == MappService.DO_SEARCH_SERV_PROV) {
+            searchDone(data);
+            return true;
+        } else if (action == MappService.DO_GET_SPECIALITY) {
+            gotSpecialities(data);
+            return true;
+        }
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
+        if (LoginHolder.custLoginRef != null) {
+            intent = new Intent(this, PatientsHomeScreenActivity.class);
+        }
+        return intent;
+    }
+
+    @Override
+    public void onBackPressed() {
+        mConnection.setBound(false);
+        //startActivity(getIntent());
+        super.onBackPressed();
+    }
+
+    /* Request updates at startup */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            locationManager.requestLocationUpdates(provider, 400, 1, this);
+        } catch(SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* Remove the locationlistener updates when Activity is paused */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            locationManager.removeUpdates(this);
+        } catch(SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        int lat = (int) (location.getLatitude());
+        int lng = (int) (location.getLongitude());
+        mLocation.setText(String.format("%s%s%s", String.valueOf(lat), getString(R.string.comma), String.valueOf(lng)));
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    /*
     public class UserSearchTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity mActivity;
@@ -282,46 +410,4 @@ public class SearchServProvActivity extends Activity implements ResponseHandler 
         }
     }
 */
-
-    protected void searchDone(Bundle msgData) {
-        Utility.showProgress(this, mSearchFormView, mProgressView, false);
-        boolean success = msgData.getBoolean("status");
-        if (success) {
-            //Send.email(this, "Test", "Test Mail From Mob App.", "jain_avinash@extenprise.com");
-            Intent intent = new Intent(this, SearchServProvResultActivity.class);
-            intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
-            startActivity(intent);
-        } else {
-            Utility.showMessage(this, R.string.msg_no_result);
-        }
-    }
-
-    @Override
-    public boolean gotResponse(int action, Bundle data) {
-        if (action == MappService.DO_SEARCH_SERV_PROV) {
-            searchDone(data);
-            return true;
-        } else if (action == MappService.DO_GET_SPECIALITY) {
-            gotSpecialities(data);
-            return true;
-        }
-        return false;
-    }
-
-    @Nullable
-    @Override
-    public Intent getParentActivityIntent() {
-        Intent intent = super.getParentActivityIntent();
-        if (LoginHolder.custLoginRef != null) {
-            intent = new Intent(this, PatientsHomeScreenActivity.class);
-        }
-        return intent;
-    }
-
-    @Override
-    public void onBackPressed() {
-        mConnection.setBound(false);
-        //startActivity(getIntent());
-        super.onBackPressed();
-    }
 }

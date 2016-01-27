@@ -30,5 +30,7 @@
     <string name="msg_verify_pwd">Verify Old Password</string>
     <string name="msg_please_wait">Please Wait...</string>
     <string name="msg_cant_upload">Can\'t Upload Now. Retry.</string>
+    <string name="msg_use_loc">Use Location?</string>
+    <string name="msg_use_gps">Use GPS, Wi-Fi and mobile networks for location.</string>
 
 </resources>

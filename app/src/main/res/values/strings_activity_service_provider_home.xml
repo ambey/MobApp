@@ -2,4 +2,12 @@
 <resources>
     <string name="view_appoint">View Appointments</string>
     <string name="view_report">View Reports</string>
+
+    <string name="wp_fee">Consult Fee : </string>
+    <string name="wp_days">Practice Days</string>
+    <string name="wp_work_hrs">Work Hours : </string>
+    <string name="wp_exp">Experience : </string>
+    <string name="wp_spec">Speciality : </string>
+    <string name="wp_cat">Category : </string>
+    <string name="wp_quali">Qualification : </string>
 </resources>

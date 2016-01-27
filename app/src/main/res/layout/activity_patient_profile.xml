@@ -8,13 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.customer.activity.PatientProfileActivity">
 
-    <ProgressBar
-        android:id="@+id/progressView"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/imageViewPatient"
         android:layout_width="120dp"
@@ -55,6 +49,16 @@
         android:layout_below="@+id/imageViewPatient"
         android:layout_marginTop="30dp"
         android:background="#9d9d9d" />
+
+    <ProgressBar
+        android:id="@+id/progressView"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linenView"
+        android:layout_marginBottom="8dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
     <ScrollView
         android:id="@+id/scrollView"

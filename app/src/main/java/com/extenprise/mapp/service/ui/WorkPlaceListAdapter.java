@@ -1,26 +1,16 @@
 package com.extenprise.mapp.service.ui;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.extenprise.mapp.R;
-import com.extenprise.mapp.net.MappService;
-import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.data.WorkPlace;
 import com.extenprise.mapp.util.Utility;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -51,44 +41,50 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         View v = convertView;
         if (v == null){
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.layout_workplace, null);
+            v = inflater.inflate(R.layout.layout_wp_list_item, null);
         }
         WorkPlace item = list.get(position);
 
+        TextView  mServCatagory = (TextView) v.findViewById(R.id.spinServiceProvCategory);
+        TextView  mSpeciality = (TextView) v.findViewById(R.id.editTextSpeciality);
+        TextView mQualification = (TextView) v.findViewById(R.id.editTextQualification);
+        TextView mExperience = (TextView) v.findViewById(R.id.editTextExperience);
         TextView mName = (TextView) v.findViewById(R.id.editTextName);
+        TextView mServPtType = (TextView) v.findViewById(R.id.viewWorkPlaceType);
         TextView mLoc = (TextView) v.findViewById(R.id.editTextLoc);
         TextView  mPhone1 = (TextView) v.findViewById(R.id.editTextPhone1);
-        TextView mPhone2 = (TextView) v.findViewById(R.id.editTextPhone2);
         TextView  mEmailIdwork = (TextView) v.findViewById(R.id.editTextEmail);
-        TextView mConsultFee = (TextView) v.findViewById(R.id.editTextConsultationFees);
-        TextView mServPtType = (TextView) v.findViewById(R.id.viewWorkPlaceType);
-        TextView  mCity = (TextView) v.findViewById(R.id.editTextCity);
-        TextView  mStartTime = (TextView) v.findViewById(R.id.buttonStartTime);
-        TextView  mSpeciality = (TextView) v.findViewById(R.id.editTextSpeciality);
-        TextView mExperience = (TextView) v.findViewById(R.id.editTextExperience);
-        TextView mQualification = (TextView) v.findViewById(R.id.editTextQualification);
         TextView  mMultiSpinnerDays = (TextView) v.findViewById(R.id.editTextWeeklyOff);
-        TextView  mServCatagory = (TextView) v.findViewById(R.id.spinServiceProvCategory);
-        TextView mPinCode = (TextView) v.findViewById(R.id.editTextPinCode);
+        TextView  mStartTime = (TextView) v.findViewById(R.id.buttonStartTime);
+        TextView mConsultFee = (TextView) v.findViewById(R.id.editTextConsultationFees);
+        /*TextView mPhone2 = (TextView) v.findViewById(R.id.editTextPhone2);
+        TextView  mCity = (TextView) v.findViewById(R.id.editTextCity);
+        TextView mPinCode = (TextView) v.findViewById(R.id.editTextPinCode);*/
 
-        mName.setText("Name : " + item.getName());
-        mLoc.setText("Location : " + item.getLocation());
-        mPhone1.setText("Phone : " + item.getPhone());
-        mPhone2.setText("Alt Phone : " + item.getAltPhone());
-        mEmailIdwork.setText("EmailID : " + item.getEmailId());
-        mConsultFee.setText("Fee : " + String.format("%.2f", item.getConsultFee()));
-        mServPtType.setText("Service Point Type : " + item.getServPointType());
-        mCity.setText(item.getCity().toString());
-        mStartTime.setText("Practice Hours : " + Utility.getTimeString(item.getStartTime()) +
-                " To " + Utility.getTimeString(item.getEndTime()));
-        mQualification.setText("Qualification : " + item.getQualification());
-        mMultiSpinnerDays.setText("Working Days : " + item.getWorkingDays());
-        mExperience.setText("Experience : " + String.format("%.01f", item.getExperience()) + " years");
-        mSpeciality.setText("Speciality : " + item.getSpeciality());
-        mServCatagory.setText("Service Category : " + item.getServCategory());
-        if(item.getPincode() != null) {
-            mPinCode.setText("PinCode : " + item.getPincode());
+        mServCatagory.setText(String.format("%s%s", getContext().getString(R.string.wp_cat),
+                item.getServCategory()));
+        mSpeciality.setText(String.format("%s%s", getContext().getString(R.string.wp_spec),
+                item.getSpeciality()));
+        mQualification.setText(String.format("%s%s", getContext().getString(R.string.wp_quali),
+                item.getQualification()));
+        mExperience.setText(String.format("%s%s years", getContext().getString(R.string.wp_exp),
+                String.format("%.01f", item.getExperience())));
+        mName.setText(item.getName());
+        mServPtType.setText(String.format(" (%s) ", item.getServPointType()));
+        mLoc.setText(String.format("%s, %s -%s", item.getLocation(), item.getCity().toWPstr(), item.getPincode()));
+
+        String phone = item.getPhone();
+        if(item.getAltPhone() != null && !item.getAltPhone().equals("")) {
+            phone += phone + ", " + item.getAltPhone();
         }
+        mPhone1.setText(phone);
+        mEmailIdwork.setText(item.getEmailId());
+        mMultiSpinnerDays.setText(String.format("%s : %s", getContext().getString(R.string.wp_days),
+                item.getWorkingDays()));
+        mStartTime.setText(String.format("%s%s To %s", getContext().getString(R.string.wp_work_hrs),
+                Utility.getTimeString(item.getStartTime()), Utility.getTimeString(item.getEndTime())));
+        mConsultFee.setText(String.format("%s%s", getContext().getString(R.string.wp_fee),
+                String.format("%.2f", item.getConsultFee())));
 
         /*v.setOnClickListener(new View.OnClickListener() {
             @Override
