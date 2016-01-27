@@ -182,8 +182,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:visibility="gone"
-                    android:layout_weight="0.3" />
+                    android:layout_weight="0.3"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -215,8 +215,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:visibility="gone"
-                    android:layout_weight="0.3" />
+                    android:layout_weight="0.3"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -285,7 +285,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:onClick="doneRx"
-                android:text="@string/done" />
+                android:text="@string/done_with_rx" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

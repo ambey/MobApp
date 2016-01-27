@@ -291,7 +291,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             if (mDoseAUnit.getSelectedItem() != null) {
                 unit = mDoseAUnit.getSelectedItem().toString();
             }
-            rxItem.setmDose(String.format("%s %s", mADose.getText().toString(), unit));
+            rxItem.setaDose(String.format("%s %s", mADose.getText().toString(), unit));
         }
         rxItem.setEvening(mEvening.isChecked());
         if (mEvening.isChecked()) {
@@ -299,7 +299,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             if (mDoseEUnit.getSelectedItem() != null) {
                 unit = mDoseEUnit.getSelectedItem().toString();
             }
-            rxItem.setmDose(String.format("%s %s", mEDose.getText().toString(), unit));
+            rxItem.seteDose(String.format("%s %s", mEDose.getText().toString(), unit));
         }
     }
 

@@ -171,9 +171,9 @@ public class MappService extends Service {
 
     public void doGetRxInbox(Message msg) {
         Bundle data = msg.getData();
-        int id = data.getInt("id");
+        String phone = data.getString("phone");
         int status = data.getInt("status");
-        sendAsyncMsg(msg, "{\"id\": " + id + ", \"status\": " + status + "}");
+        sendAsyncMsg(msg, "{\"phone\": " + phone + ", \"status\": " + status + "}");
     }
 
     public void doGetRxCopy(Message msg) {

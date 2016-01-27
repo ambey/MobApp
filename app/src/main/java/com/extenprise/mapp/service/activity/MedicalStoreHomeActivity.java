@@ -106,7 +106,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
     public void viewRxInbox(View view) {
         Bundle bundle = new Bundle();
-        bundle.putInt("id", mServProv.getServProvHasServPt(0).getIdServProvHasServPt());
+        bundle.putString("phone", mServProv.getSignInData().getPhone());
         mConnection.setAction(MappService.DO_GET_RX_INBOX);
         mConnection.setData(bundle);
         mMsgView.setVisibility(View.VISIBLE);

@@ -101,17 +101,17 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/mobileNumber"
-                    android:completionThreshold="1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:completionThreshold="1"
                     android:ems="10"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:hint="@string/regMobNo"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="10"
                     android:maxLines="1"
-                    android:imeOptions="actionNext"
                     android:nextFocusForward="@+id/password"
                     android:singleLine="true" />
             </LinearLayout>
@@ -164,13 +164,13 @@
                     style="@style/LargeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_below="@+id/email_sign_in_button"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/forgotpwd"
-                    android:onClick="forgotPwd"
+                    android:layout_marginTop="20dp"
                     android:clickable="true"
-                    android:visibility="visible" />
+                    android:onClick="forgotPwd"
+                    android:text="@string/forgotpwd"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
