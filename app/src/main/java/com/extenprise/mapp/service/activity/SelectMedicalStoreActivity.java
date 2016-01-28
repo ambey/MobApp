@@ -1,12 +1,14 @@
 package com.extenprise.mapp.service.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,17 +26,19 @@ import com.extenprise.mapp.net.ServiceResponseHandler;
 import com.extenprise.mapp.service.data.MedStoreRxForm;
 import com.extenprise.mapp.service.data.ServProvListItem;
 import com.extenprise.mapp.service.ui.MedStoreListAdapter;
+import com.extenprise.mapp.ui.DialogDismissListener;
+import com.extenprise.mapp.ui.SortActionDialog;
 import com.extenprise.mapp.util.Utility;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SelectMedicalStoreActivity extends Activity implements ResponseHandler {
+public class SelectMedicalStoreActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
+    ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ListView mMedStoreList;
     private Rx mRx;
-    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +145,22 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_sort:
+                showSortDialog();
+                break;
+            case R.id.action_settings:
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSortDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        SortActionDialog dialog = new SortActionDialog();
+        dialog.setSortFieldList(getResources().getStringArray(R.array.medstore_rx_sort_field_list));
+        dialog.setListener(this);
+        dialog.show(fragmentManager, "MedStoreListSort");
     }
 
     @Override
@@ -154,4 +170,18 @@ public class SelectMedicalStoreActivity extends Activity implements ResponseHand
         super.onBackPressed();
     }
 
+    @Override
+    public void onDialogDismissed(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onApplyDone(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onCancelDone(DialogFragment dialog) {
+
+    }
 }
