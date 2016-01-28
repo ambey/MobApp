@@ -2,14 +2,10 @@ package com.extenprise.mapp.medico.customer.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -47,8 +43,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     private View mProgressView;
     private View mSearchFormView;
 
-    private LocationManager locationManager;
-    private String provider;
+    /*private LocationManager locationManager;
+    private String provider;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +81,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
 
 
         //Prompt the user to Enabled GPS
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        /*locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!enabled) {
             Utility.showAlert(this, getString(R.string.msg_use_loc), getString(R.string.msg_use_gps),
@@ -112,7 +108,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         if (location != null) {
             System.out.println("Provider " + provider + " has been selected.");
             onLocationChanged(location);
-        } /*else {
+        }*/ /*else {
             mLocation.setError("Location Unavailable");
         }*/
 
@@ -326,29 +322,29 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     protected void onResume() {
         super.onResume();
-        try {
+        /*try {
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         } catch(SecurityException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /* Remove the locationlistener updates when Activity is paused */
     @Override
     protected void onPause() {
         super.onPause();
-        try {
+        /*try {
             locationManager.removeUpdates(this);
         } catch(SecurityException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        int lat = (int) (location.getLatitude());
+        /*int lat = (int) (location.getLatitude());
         int lng = (int) (location.getLongitude());
-        mLocation.setText(String.format("%s%s%s", String.valueOf(lat), getString(R.string.comma), String.valueOf(lng)));
+        mLocation.setText(String.format("%s%s%s", String.valueOf(lat), getString(R.string.comma), String.valueOf(lng)));*/
     }
 
     @Override

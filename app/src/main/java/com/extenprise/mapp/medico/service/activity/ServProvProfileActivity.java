@@ -353,7 +353,20 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         Utility.setNewSpinner(this, null, mServCatagory,
                 new String[] { getString(R.string.select_category), mCategory });
-        mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, mCategory));
+        //mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, mCategory));
+
+        ArrayList<String> listWPType = new ArrayList<>();
+        if(mCategory.equalsIgnoreCase(getString(R.string.physician))) {
+            listWPType.add(getString(R.string.clinic));
+        }
+        else if(mCategory.equalsIgnoreCase(getString(R.string.pharmacist))) {
+            mConsultFee.setEnabled(false);
+            listWPType.add(getString(R.string.medical_store));
+        } else {
+            listWPType.add(getString(R.string.path_lab));
+            listWPType.add(getString(R.string.scan_lab));
+        }
+        Utility.setNewSpinner(this, listWPType, mServPtType, null);
 
         if (item != null) {
             action = MappService.DO_EDIT_WORK_PLACE;
@@ -363,11 +376,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mPhone1.setText(item.getPhone());
             mPhone2.setText(item.getAltPhone());
             mEmailIdwork.setText(item.getEmailId());
-            if (mCategory.equals(getString(R.string.pharmacist))) {
-                mConsultFee.setEnabled(false);
-            } else {
-                mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
-            }
+            mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
             mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
             mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity().getCity()));
             mState.setSelection(Utility.getSpinnerIndex(mState, item.getCity().getState()));
@@ -376,16 +385,15 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mQualification.setText(item.getQualification());
             mMultiSpinnerDays.setText(item.getWorkingDays());
             mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
-            //mSpeciality.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getSpeciality()));
+            mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
             mExperience.setText(String.format("%.01f", item.getExperience()));
             if (item.getPincode() != null) {
                 mPinCode.setText(item.getPincode());
             }
-            ArrayList<String> specs = new ArrayList<>();
+            /*ArrayList<String> specs = new ArrayList<>();
             specs.add(item.getSpeciality());
             //Utility.setNewSpec(this, specs, mSpeciality);
-            Utility.setNewSpinner(this, specs, mSpeciality, new String[]{getString(R.string.other)});
-            mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
+            Utility.setNewSpinner(this, specs, mSpeciality, new String[]{getString(R.string.other)});*/
             /*specs.clear();
             specs.add(item.getServCategory());
             Utility.setNewSpec(this, specs, mServCatagory);*/
@@ -393,7 +401,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         workhourLBL.setClickable(false);
         mSpeciality.setClickable(true);
-        mServCatagory.setClickable(false);
+        mServCatagory.setClickable(true);
         mStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -609,6 +617,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         dialogView.findViewById(R.id.editTextCellphone).setVisibility(View.GONE);
         dialogView.findViewById(R.id.editTextPasswd).setVisibility(View.GONE);
         dialogView.findViewById(R.id.editTextCnfPasswd).setVisibility(View.GONE);
+        dialogView.findViewById(R.id.phonePrefix).setVisibility(View.GONE);
 
         mFname = (EditText) dialogView.findViewById(R.id.editTextFName);
         mLname = (EditText) dialogView.findViewById(R.id.editTextLName);

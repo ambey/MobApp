@@ -594,6 +594,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         } catch (Exception e) {
             e.printStackTrace();
             Utility.showMessage(this, R.string.some_error);
+        } finally {
+            Utility.setEnabledButton(this, mUpdateButton, true);
         }
     }
 

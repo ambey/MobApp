@@ -9,6 +9,14 @@
     tools:context="com.extenprise.mapp.medico.customer.activity.PatientProfileActivity">
 
 
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/imageViewPatient"
         android:layout_width="120dp"
@@ -60,15 +68,10 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linenView">
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/linenView"
             android:layout_marginTop="10dp"
             android:orientation="vertical">
 
@@ -132,5 +135,6 @@
                 android:onClick="updateProfile"
                 android:text="@string/update" />
         </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

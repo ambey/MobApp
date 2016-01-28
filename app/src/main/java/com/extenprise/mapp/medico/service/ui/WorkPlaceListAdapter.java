@@ -61,12 +61,9 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         TextView  mCity = (TextView) v.findViewById(R.id.editTextCity);
         TextView mPinCode = (TextView) v.findViewById(R.id.editTextPinCode);*/
 
-        mServCatagory.setText(String.format("%s%s", getContext().getString(R.string.wp_cat),
-                item.getServCategory()));
-        mSpeciality.setText(String.format("%s%s", getContext().getString(R.string.wp_spec),
-                item.getSpeciality()));
-        mQualification.setText(String.format("%s%s", getContext().getString(R.string.wp_quali),
-                item.getQualification()));
+        mServCatagory.setText(item.getServCategory());
+        mSpeciality.setText(item.getSpeciality());
+        mQualification.setText(item.getQualification());
         mExperience.setText(String.format("%s%s years", getContext().getString(R.string.wp_exp),
                 String.format("%.01f", item.getExperience())));
         mName.setText(item.getName());

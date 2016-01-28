@@ -119,10 +119,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             listWPType.add(getString(R.string.path_lab));
             listWPType.add(getString(R.string.scan_lab));
         }
-        Utility.setNewSpinner(getActivity(), listWPType, mServPtType, null);
 
+        Utility.setNewSpinner(getActivity(), listWPType, mServPtType, null);
         Utility.setNewSpinner(getActivity(), null, mServCatagory,
                 new String[] { getString(R.string.select_category), getString(category) });
+        Utility.setNewSpinner(getActivity(), null, mSpeciality,
+                new String[] { getString(R.string.select_speciality) });
 
         mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -146,7 +148,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                 // your code here
             }
         });
-
         mSpeciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -161,7 +162,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                 // your code here
             }
         });
-
         mMultiSpinnerDays.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -501,6 +501,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         if (list == null) {
             list = new ArrayList<>();
         }
+        list.add(0, getString(R.string.select_speciality));
         //Utility.setNewSpec(getActivity(), list, mSpeciality);
         Utility.setNewSpinner(getActivity(), list, mSpeciality, new String[]{getString(R.string.other)});
     }

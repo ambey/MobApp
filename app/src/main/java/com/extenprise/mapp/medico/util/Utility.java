@@ -148,6 +148,7 @@ public abstract class Utility {
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(R.string.cancel), listener);
             }
         }
+        dialog.setCanceledOnTouchOutside(false);
         //dialog.setIcon(R.drawable.med_logo_final);
         dialog.show();
     }

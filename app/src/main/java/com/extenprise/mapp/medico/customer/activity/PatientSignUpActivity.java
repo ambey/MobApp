@@ -299,7 +299,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             valid = false;
         }
         if (!Validator.isOnlyAlpha(mEditTextCustomerLName.getText().toString().trim())) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            mEditTextCustomerLName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerLName;
             valid = false;
         }

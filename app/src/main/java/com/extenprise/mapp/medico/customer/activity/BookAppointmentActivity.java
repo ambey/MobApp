@@ -78,6 +78,17 @@ public class BookAppointmentActivity extends Activity
     }
 
     public void bookAppointment(View view) {
+        /*Calendar cal = Calendar.getInstance();
+        int hh = cal.get(Calendar.HOUR_OF_DAY);
+        int mm = cal.get(Calendar.MINUTE);
+        int nowTime = Utility.getMinutes(hh + ":" + mm);
+        int from = Utility.getMinutes(mSpinnerTimeSlots.getSelectedItem().toString());
+        if (mSelectedDate.compareTo(getTodayDate()) == 0 &&
+                from <= nowTime) {
+            Utility.showMessage(this, R.string.msg_invalid_time);
+            return;
+        }*/
+
         /* Send request to book appointment */
         Appointment form = new Appointment();
         form.setIdCustomer(mCust.getIdCustomer());
@@ -98,21 +109,20 @@ public class BookAppointmentActivity extends Activity
 
         Calendar cal = Calendar.getInstance();
         int minutes = cal.get(Calendar.HOUR_OF_DAY) * 60 +
-                cal.get(Calendar.MINUTE);// +
-        //120; // For todays appointment, available time slots would start two hours from now
-        // Set the hour, minute and other components to zero, so that we can compare the date.
+                cal.get(Calendar.MINUTE);
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        Date todayDate = cal.getTime();
-        cal.setTime(mSelectedDate);
-        if (mSelectedDate.compareTo(todayDate) < 0) {
+        Date todayDate =  cal.getTime();
+        //120; // For todays appointment, available time slots would start two hours from now
+        // Set the hour, minute and other components to zero, so that we can compare the date.
+        /*if (mSelectedDate.compareTo(todayDate) < 0) {
             Utility.showAlert(this, getString(R.string.title_activity_book_appointment),
                     getString(R.string.error_past_date));
             return;
-        }
-
+        }*/
+        cal.setTime(mSelectedDate);
         ServProvHasServPt spspt = mServProv.getServProvHasServPt(0);
         if (!(Utility.findDocAvailability(spspt.getWorkingDays(), cal))) {
             Utility.showAlert(this, "", "Doctor is not available on the given date.");
