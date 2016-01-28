@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
 
-    tools:context="com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity">
+    tools:context="com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity">
 
 
     <TextView
@@ -126,8 +126,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/linenView4"
                 android:layout_toRightOf="@+id/linenView4"
-                android:text="@string/my_rx"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:text="@string/my_rx" />
 
             <View
                 android:id="@+id/linenView6"

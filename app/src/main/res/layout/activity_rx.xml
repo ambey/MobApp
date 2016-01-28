@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.util.RxActivity">
+    tools:context="com.extenprise.mapp.medico.util.RxActivity">
 
     <TextView
         android:id="@+id/rxForLbl"
@@ -138,9 +138,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:maxLength="1"
                     android:hint="@string/dose"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="1" />
 
                 <Spinner
                     android:id="@+id/drugUnitMSpinner"
@@ -174,9 +174,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:maxLength="1"
                     android:hint="@string/dose"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="1" />
 
                 <Spinner
                     android:id="@+id/drugUnitASpinner"
@@ -209,8 +209,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:hint="@string/dose"
-                    android:maxLength="1"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="1" />
 
                 <Spinner
                     android:id="@+id/drugUnitESpinner"

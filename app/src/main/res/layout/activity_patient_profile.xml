@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.customer.activity.PatientProfileActivity">
+    tools:context="com.extenprise.mapp.medico.customer.activity.PatientProfileActivity">
 
 
     <ImageView
@@ -56,8 +56,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linenView"
-        android:layout_marginBottom="8dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
     <ScrollView

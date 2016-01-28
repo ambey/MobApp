@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.customer.activity.ViewAppointmentListActivity">
+    tools:context="com.extenprise.mapp.medico.customer.activity.ViewAppointmentListActivity">
 
     <TextView
         style="@style/ListHeading"

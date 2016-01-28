@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.extenprise.mapp" >
+    package="com.extenprise.mapp.medico">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -198,7 +198,7 @@
             android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
+                android:value=".service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
             android:name=".customer.activity.PatientHistoryActivity"
@@ -206,7 +206,7 @@
             android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
+                android:value=".service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
             android:name=".service.activity.ScannedRxActivity"
@@ -214,7 +214,7 @@
             android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
+                android:value=".service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
             android:name=".activity.FirstFlipperActivity"
@@ -226,7 +226,7 @@
             android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.service.activity.ServiceProviderHomeActivity" />
+                android:value=".service.activity.ServiceProviderHomeActivity" />
         </activity>
         <activity
             android:name=".customer.activity.PatientProfileActivity"
@@ -234,7 +234,7 @@
             android:parentActivityName=".customer.activity.PatientsHomeScreenActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.customer.activity.PatientsHomeScreenActivity" />
+                android:value=".customer.activity.PatientsHomeScreenActivity" />
         </activity>
 
         <service
@@ -261,7 +261,7 @@
             android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.service.activity.AppointmentDetailsActivity" />
+                android:value=".service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
             android:name=".activity.WelcomeActivity"
@@ -278,7 +278,7 @@
             android:parentActivityName=".service.activity.RxListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.extenprise.mapp.service.activity.RxListActivity" />
+                android:value=".service.activity.RxListActivity" />
         </activity>
         <activity android:name=".customer.activity.ViewAppointmentListActivity"
             android:label="@string/my_apponts"

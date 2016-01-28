@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.service.activity.ServProvDetailsActivity">
+    tools:context="com.extenprise.mapp.medico.service.activity.ServProvDetailsActivity">
 
 
     <ProgressBar
@@ -33,8 +33,8 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/dr_avatar"
-                android:contentDescription="@string/serv_prov" />
+                android:contentDescription="@string/serv_prov"
+                android:src="@drawable/dr_avatar" />
 
             <TextView
                 android:id="@+id/textview"

@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.customer.activity.PatientSignUpActivity">
+    tools:context="com.extenprise.mapp.medico.customer.activity.PatientSignUpActivity">
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -57,9 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                   android:layout_marginTop="6dp"
+                    android:paddingLeft="5dp"
                     android:text="@string/country_code"
-                    android:textSize="17sp"
-                    android:paddingLeft="5dp"/>
+                    android:textSize="17sp" />
 
                 <EditText
                     android:id="@+id/editTextCellphone"

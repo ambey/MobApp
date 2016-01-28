@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.service.activity.ServProvProfileActivity">
+    tools:context="com.extenprise.mapp.medico.service.activity.ServProvProfileActivity">
 
     <ProgressBar
         android:id="@+id/progressView"
@@ -158,14 +158,14 @@
                     android:id="@+id/workDetailListView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
                     android:layout_marginTop="10dp"
-                    android:divider="@drawable/divider"
-                    android:clickable="true"
                     android:animateLayoutChanges="true"
+                    android:clickable="true"
+                    android:divider="@drawable/divider"
+                    android:dividerHeight="10dp"
                     android:fadeScrollbars="false"
-                    android:dividerHeight="10dp" />
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
 
                 <ImageView
                     android:id="@+id/textViewAddNewWork"

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.activity.SignUpPreviousActivity">
+    tools:context="com.extenprise.mapp.medico.activity.SignUpPreviousActivity">
 
     <ScrollView
         android:id="@+id/signup_form"
