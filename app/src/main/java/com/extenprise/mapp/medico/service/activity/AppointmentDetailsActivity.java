@@ -85,14 +85,14 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
                         + Utility.getMinutes(mAppont.getTime()) * 60 * 1000);
 
         if (appontDate.after(today)) {
-            //Utility.setEnabledButton(this, rxButton, false);
+            Utility.setEnabledButton(this, rxButton, false);
             Utility.setEnabledButton(this, uploadRxButton, false);
         } else if (appontDate.before(today)) {
             int day = cal.get(Calendar.DAY_OF_MONTH);
             cal.setTime(appontDate);
             int apptDay = cal.get(Calendar.DAY_OF_MONTH);
             if (apptDay != day) { /* appointment day has passed */
-                //Utility.setEnabledButton(this, rxButton, false);
+                Utility.setEnabledButton(this, rxButton, true);
                 Utility.setEnabledButton(this, uploadRxButton, true);
             } else { /* appointment was today but the time has passed */
                 Utility.setEnabledButton(this, rxButton, true);

@@ -152,7 +152,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         }
         mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
         if (mServiceProv.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(LoginHolder.servLoginRef.getPhoto()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
         }
         mFname.setText(getString(R.string.first_name_with_lbl, mServiceProv.getfName()));
         mLname.setText(getString(R.string.last_name_with_lbl, mServiceProv.getlName()));
@@ -953,7 +953,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Utility.showMessage(this, R.string.msg_upload_photo);
             LoginHolder.servLoginRef.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
-            mImgView.setImageBitmap(mImgCopy);
+            if (mServiceProv.getPhoto() != null) {
+                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
+            }
             Utility.showMessage(this, R.string.some_error);
         }
     }
