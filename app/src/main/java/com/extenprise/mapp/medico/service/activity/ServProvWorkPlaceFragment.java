@@ -96,6 +96,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mEndTime = (Button) mRootview.findViewById(R.id.buttonEndTime);
         //mGender = (Spinner) rootView.findViewById(R.id.spinGender);
         mConsultFee = (EditText) mRootview.findViewById(R.id.editTextConsultationFees);
+        mConsultFee.setText("0");
         mServPtType = (Spinner) mRootview.findViewById(R.id.viewWorkPlaceType);
         mSpeciality = (Spinner) mRootview.findViewById(R.id.editTextSpeciality);
         mExperience = (EditText) mRootview.findViewById(R.id.editTextExperience);
@@ -139,7 +140,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_GET_SPECIALITY);
                     if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
-                        Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+                        //Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+                        Utility.showProgressDialog(getActivity(), true);
                     }
                 }
             }
@@ -453,7 +455,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SIGNUP);
         if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
-            Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+            //Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+            Utility.showProgressDialog(getActivity(), true);
         }
 /*
         SaveServiceData task = new SaveServiceData(this);
@@ -492,11 +495,13 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         } else {
             Utility.showMessage(getActivity(), R.string.some_error);
         }
-        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        //Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        Utility.showProgressDialog(getActivity(), false);
     }
 
     private void getSpecialitiesDone(Bundle data) {
-        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        //Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        Utility.showProgressDialog(getActivity(), false);
         ArrayList<String> list = data.getStringArrayList("specialities");
         if (list == null) {
             list = new ArrayList<>();

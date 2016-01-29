@@ -1,7 +1,6 @@
 package com.extenprise.mapp.medico.service.activity;
 
 import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +34,7 @@ import java.util.Date;
 
 public class SelectMedicalStoreActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
-    ProgressDialog progressDialog;
+    //ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ListView mMedStoreList;
     private Rx mRx;
@@ -78,7 +77,8 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
         mConnection.setAction(MappService.DO_SEND_RX);
         mConnection.setData(bundle);
         if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+            //progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -93,9 +93,10 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     }
 
     private void rxSentToMedStore() {
-        if(progressDialog != null) {
+        /*if(progressDialog != null) {
             progressDialog.dismiss();
-        }
+        }*/
+        Utility.showProgressDialog(this, false);
         Utility.showAlert(this, "", getString(R.string.msg_rx_sent_to_medstore), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

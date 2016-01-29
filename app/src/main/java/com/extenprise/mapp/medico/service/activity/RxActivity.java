@@ -167,7 +167,8 @@ public class RxActivity extends Activity implements ResponseHandler {
         mConnection.setAction(MappService.DO_GET_RX);
         mConnection.setData(bundle);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mForm, mProgressBar, true);
+            //Utility.showProgress(this, mForm, mProgressBar, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -225,7 +226,8 @@ public class RxActivity extends Activity implements ResponseHandler {
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SAVE_RX);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mForm, mProgressBar, true);
+            //Utility.showProgress(this, mForm, mProgressBar, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -433,11 +435,13 @@ public class RxActivity extends Activity implements ResponseHandler {
         a.setIdCustomer(mAppont.getIdCustomer());
         a.setFrom(Utility.getMinutes(mAppont.getTime()));
         mRx.setDate(new Date());
-        Utility.showProgress(this, mForm, mProgressBar, false);
+        //Utility.showProgress(this, mForm, mProgressBar, false);
+        Utility.showProgressDialog(this, false);
     }
 
     private void saveRxDone(Bundle data) {
-        Utility.showProgress(this, mForm, mProgressBar, false);
+        //Utility.showProgress(this, mForm, mProgressBar, false);
+        Utility.showProgressDialog(this, false);
         Rx rx = data.getParcelable("rx");
         if (rx != null) {
             mRx.setIdReport(rx.getIdReport());

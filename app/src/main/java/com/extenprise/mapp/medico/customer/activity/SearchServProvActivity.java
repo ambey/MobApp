@@ -130,12 +130,14 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_SPECIALITY);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            //Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
     private void gotSpecialities(Bundle data) {
-        Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
 
         specList = data.getStringArrayList("specialities");
         if (specList == null) {
@@ -266,7 +268,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            //Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
         }
 
         /*SearchServProv.mDbHelper = new MappDbHelper(getApplicationContext());*/
@@ -277,7 +280,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     }
 
     protected void searchDone(Bundle msgData) {
-        Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
             //Send.email(this, "Test", "Test Mail From Mob App.", "jain_avinash@extenprise.com");

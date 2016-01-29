@@ -129,7 +129,8 @@ public class ViewAppointmentListActivity extends FragmentActivity
         mConnection.setAction(MappService.DO_UPCOMING_APPONT_LIST);
         //mMsgView.setVisibility(View.GONE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
+            //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -146,9 +147,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
         bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_PAST_APPONT_LIST);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mPastListView, mPastProgress, true);
-        }
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     private void setupForm(AppointmentListItem form) {
@@ -168,7 +167,8 @@ public class ViewAppointmentListActivity extends FragmentActivity
     }
 
     private void gotPastAppontList(Bundle data) {
-        Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, false);
+        //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, false);
+        Utility.showProgressDialog(this, false);
         AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, mUpcomingList, mServiceProv);
         adapter.setShowDate(true);
         mUpcomingListView.setAdapter(adapter);
@@ -182,7 +182,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
             Utility.setEnabledButton(this, mUpcomingSortBtn, false);
         }
 
-        Utility.showProgress(this, mPastListView, mPastProgress, false);
+        //Utility.showProgress(this, mPastListView, mPastProgress, false);
         if (mPastList == null) {
             mPastList = data.getParcelableArrayList("appontList");
             Bundle bundle = WorkingDataStore.getBundle();

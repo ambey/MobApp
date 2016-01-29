@@ -41,6 +41,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         setContentView(R.layout.activity_service_provider_home);
 
         mServiceProv = LoginHolder.servLoginRef;
+        String servPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
 
         mMsgView = (TextView) findViewById(R.id.msgView);
 
@@ -53,10 +54,12 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         Utility.setLastVisit(prefs);
 
         TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        String label = welcomeView.getText().toString() + " " +
-                mServiceProv.getfName() + " " +
+        String label = welcomeView.getText().toString();
+        if(!servPointType.equalsIgnoreCase(getString(R.string.clinic))) {
+            label = getString(R.string.hello);
+        }
+        label += " " + mServiceProv.getfName() + " " +
                 mServiceProv.getlName();
-
         welcomeView.setText(label);
 
         ImageView img = (ImageView) findViewById(R.id.imageDoctor);

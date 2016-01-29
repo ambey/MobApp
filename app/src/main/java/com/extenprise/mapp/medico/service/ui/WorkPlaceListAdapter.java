@@ -80,7 +80,7 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
                 item.getWorkingDays()));
         mStartTime.setText(String.format("%s%s To %s", getContext().getString(R.string.wp_work_hrs),
                 Utility.getTimeString(item.getStartTime()), Utility.getTimeString(item.getEndTime())));
-        mConsultFee.setText(String.format("%s%s", getContext().getString(R.string.wp_fee),
+        mConsultFee.setText(String.format("%s%s", getContext().getString(R.string.consult_fees),
                 String.format("%.2f", item.getConsultFee())));
 
         /*v.setOnClickListener(new View.OnClickListener() {

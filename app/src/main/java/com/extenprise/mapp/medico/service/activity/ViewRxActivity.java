@@ -85,7 +85,9 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         bundle.putParcelable("form", mAppont);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_RX);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
+        }
     }
 
     @Override
@@ -128,6 +130,7 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
     }
 
     private void gotRx(Bundle data) {
+        Utility.showProgressDialog(this, false);
         Rx rx = data.getParcelable("rx");
         if (rx == null || rx.getRxItemCount() == 0) {
             TextView msgView = (TextView) findViewById(R.id.viewMsgNoItems);

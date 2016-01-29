@@ -110,12 +110,14 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SERV_PROV_DETAILS);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
+            //Utility.showProgress(view.getContext(), mSearchResultView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
     public void gotDetails(Bundle data) {
-        Utility.showProgress(this, mSearchResultView, mProgressView, false);
+        //Utility.showProgress(this, mSearchResultView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
         intent.putParcelableArrayListExtra("servProvList", mServProvList);
         intent.putExtra("myparent-activity", getIntent().getStringExtra("parent-activity"));

@@ -1,7 +1,6 @@
 package com.extenprise.mapp.medico.service.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +31,7 @@ import java.util.Date;
 
 public class AppointmentDetailsActivity extends Activity implements ResponseHandler {
 
-    ProgressDialog progressDialog;
+    //ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private AppointmentListItem mAppont;
     private ServiceProvider mServProv;
@@ -230,7 +229,8 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         mConnection.setData(bundle);
         mConnection.setAction(action);
         if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+            //progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -274,9 +274,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        if(progressDialog != null) {
-            progressDialog.dismiss();
-        }
+        Utility.showProgressDialog(this, false);
         if (action == MappService.DO_CUST_PAST_APPONT_LIST) {
             gotPastAppointments(data);
             return true;

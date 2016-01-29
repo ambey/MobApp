@@ -63,7 +63,8 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     }
 
     private void getRxList() {
-        Utility.showProgress(this, mRxListView, mRxListProgress, true);
+        //Utility.showProgress(this, mRxListView, mRxListProgress, true);
+        Utility.showProgressDialog(this, true);
         RxInboxItem item = new RxInboxItem();
         Customer c = new Customer();
         c.setIdCustomer(mCust.getIdCustomer());
@@ -76,7 +77,8 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     }
 
     private void gotRxList(Bundle data) {
-        Utility.showProgress(this, mRxListView, mRxListProgress, false);
+        //Utility.showProgress(this, mRxListView, mRxListProgress, false);
+        Utility.showProgressDialog(this, false);
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         RxListAdapter adapter = new RxListAdapter(this, 0, list, mCust);
         mRxListView.setAdapter(adapter);

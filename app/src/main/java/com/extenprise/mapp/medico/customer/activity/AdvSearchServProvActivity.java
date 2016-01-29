@@ -24,6 +24,7 @@ import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.SearchServProvForm;
+import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.DaysSelectionDialog;
 import com.extenprise.mapp.medico.ui.DialogDismissListener;
 import com.extenprise.mapp.medico.util.Utility;
@@ -119,7 +120,8 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
                 mConnection.setData(bundle);
                 mConnection.setAction(MappService.DO_GET_SPECIALITY);
                 if (Utility.doServiceAction(AdvSearchServProvActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                    Utility.showProgress(AdvSearchServProvActivity.this, mSearchFormView, mProgressView, true);
+                    //Utility.showProgress(AdvSearchServProvActivity.this, mSearchFormView, mProgressView, true);
+                    Utility.showProgressDialog(AdvSearchServProvActivity.this, true);
                 }
                 //getSpecialityList();
             }
@@ -262,6 +264,9 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
             }
         }
 
+        if(mForm == null) {
+            mForm = new SearchServProvForm();
+        }
         mForm.setClinic(clinic);
         mForm.setName(name);
         mForm.setStartTime(startTime);
@@ -280,7 +285,8 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SEARCH_SERV_PROV);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            //Utility.showProgress(this, mSearchFormView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
         }
 /*
         mSearchTask = new UserSearchTask(this, dr, clinic, sp, sc, loc,
@@ -302,7 +308,8 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     }
 
     private void gotSpecialities(Bundle data) {
-        Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         ArrayList<String> list = data.getStringArrayList("specialities");
         if (list == null) {
             list = new ArrayList<>();
@@ -313,7 +320,8 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     }
 
     private void searchDone(Bundle data) {
-        Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         boolean success = data.getBoolean("status");
         if (success) {
             Intent intent = new Intent(this, SearchServProvResultActivity.class);

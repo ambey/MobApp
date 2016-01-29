@@ -245,7 +245,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_CHANGE_PWD);
                     if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                        Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                        //Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                        Utility.showProgressDialog(ServProvProfileActivity.this, true);
                     }
 
                     dialog.dismiss();
@@ -265,7 +266,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mConnection.setData(bundle);
             mConnection.setAction(MappService.DO_PWD_CHECK);
             if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                //Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                Utility.showProgressDialog(this, true);
             }
         } else {
             mOldPwd.setError(getString(R.string.error_wrong_pwd));
@@ -436,7 +438,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_GET_SPECIALITY);
                     if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                        //Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                        Utility.showProgressDialog(ServProvProfileActivity.this, true);
                     }
                 }
             }
@@ -516,10 +519,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (mCategory.equals(getString(R.string.pharmacist))) {
             list.add(mConsultFee);
         }*/
-       /* if (mCategory.equals(getString(R.string.pharmacist))) {
+        if (mCategory.equals(getString(R.string.pharmacist))) {
             fields = new EditText[] { mExperience, mQualification,
                     mName, mLoc, mPinCode, mPhone1 };
-        }*/
+        }
         if (Utility.areEditFieldsEmpty(this, fields)) {
             return false;
         }
@@ -621,7 +624,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         mFname = (EditText) dialogView.findViewById(R.id.editTextFName);
         mLname = (EditText) dialogView.findViewById(R.id.editTextLName);
+        mLname.setNextFocusForwardId(R.id.editTextEmail);
         mEmailID = (EditText) dialogView.findViewById(R.id.editTextEmail);
+        mEmailID.setNextFocusForwardId(R.id.editTextRegistrationNumber);
         mGender = (RadioGroup) dialogView.findViewById(R.id.radioGroupGender);
         mMale = (RadioButton) dialogView.findViewById(R.id.radioButtonMale);
         mFemale = (RadioButton) dialogView.findViewById(R.id.radioButtonFemale);
@@ -668,6 +673,16 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
                     mEmailID.setError(getString(R.string.error_invalid_email));
                     focusView = mEmailID;
+                    cancel = true;
+                }
+                if (!Validator.isOnlyAlpha(mFname.getText().toString().trim())) {
+                    mFname.setError(getString(R.string.error_only_alpha));
+                    focusView = mFname;
+                    cancel = true;
+                }
+                if (!Validator.isOnlyAlpha(mLname.getText().toString().trim())) {
+                    mLname.setError(getString(R.string.error_only_alpha));
+                    focusView = mLname;
                     cancel = true;
                 }
                 int genderID = mGender.getCheckedRadioButtonId();
@@ -773,7 +788,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                                                     mConnection.setData(bundle);
                                                     mConnection.setAction(MappService.DO_REMOVE_PHOTO);
                                                     if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
-                                                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                                                        //Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                                                        Utility.showProgressDialog(ServProvProfileActivity.this, true);
                                                     }
                                                 }
                                             }
@@ -863,7 +879,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mConnection.setData(bundle);
         mConnection.setAction(action);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+            //Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -908,7 +925,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void changePwdDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_change_pwd);
         } else {
@@ -917,7 +935,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void pwdCheckDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             isPwdCorrect = true;
         } else {
@@ -928,7 +947,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void uploadPhotoDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
             LoginHolder.servLoginRef.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
@@ -972,7 +992,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             //listView.setOnCreateContextMenuListener(this);
             Utility.showMessage(this, R.string.work_place_details);
         }
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
     }
 
     public void regNoCheckDone(Bundle data) {
@@ -980,15 +1001,18 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mRegNo.setError("This Registration Number is already Registered.");
             mRegNo.requestFocus();
         }
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
     }
 
     private void getSpecialitiesDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         ArrayList<String> list = data.getStringArrayList("specialities");
         if (list == null) {
             list = new ArrayList<>();
         }
+        list.add(0, getString(R.string.select_speciality));
         Utility.setNewSpinner(this, list, mSpeciality, new String[]{getString(R.string.other)});
     }
 
@@ -1006,7 +1030,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mServiceProv = LoginHolder.servLoginRef;
             Utility.showMessage(this, R.string.some_error);
         }
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
     }
 
     private void refresh() {

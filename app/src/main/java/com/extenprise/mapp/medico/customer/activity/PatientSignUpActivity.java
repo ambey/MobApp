@@ -381,7 +381,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mConnection.setData(bundle);
         mConnection.setAction(action);
         if (Utility.doServiceAction(PatientSignUpActivity.this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
+            //Utility.showProgress(PatientSignUpActivity.this, mFormView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -399,7 +400,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     private void phoneCheckComplete(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (!data.getBoolean("status")) {
             mEditTextCellphone.setError(getString(R.string.error_phone_registered));
             mEditTextCellphone.requestFocus();
@@ -420,7 +422,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         } else {
             Utility.showMessage(this, R.string.some_error);
         }
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
     }
 
     private Customer getSignUpData(int action) {

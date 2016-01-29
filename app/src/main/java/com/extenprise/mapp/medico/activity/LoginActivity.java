@@ -2,7 +2,6 @@ package com.extenprise.mapp.medico.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -54,7 +53,7 @@ import java.util.Set;
  */
 public class LoginActivity extends Activity implements ResponseHandler {
 
-    ProgressDialog progressDialog;
+    //ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
     private SignInData mSignInData;

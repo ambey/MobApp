@@ -94,13 +94,10 @@
 
     <TextView
         android:id="@+id/editTextConsultationFees"
-        android:layout_width="170dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:hint="@string/consult_fees"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@+id/editTextWeeklyOff"
-        android:layout_toRightOf="@+id/buttonStartTime"
-        android:layout_toEndOf="@+id/buttonStartTime" />
+        android:layout_below="@+id/buttonStartTime" />
 
 
 </RelativeLayout>

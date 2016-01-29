@@ -35,7 +35,7 @@ import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
-public class ServProvSignUpFragment extends Fragment implements TitleFragment, ResponseHandler {
+public class ServProvSignUpFragment extends Fragment implements ResponseHandler, TitleFragment  {
     // LogCat tag
 /*
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
@@ -364,7 +364,8 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
         mConnection.setData(bundle);
         mConnection.setAction(check);
         if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
-            Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+            //Utility.showProgress(getActivity(), mFormView, mProgressView, true);
+            Utility.showProgressDialog(getActivity(), true);
         }
     }
 
@@ -379,7 +380,8 @@ public class ServProvSignUpFragment extends Fragment implements TitleFragment, R
     }
 
     public void checkDone(int check, Bundle data) {
-        Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        //Utility.showProgress(getActivity(), mFormView, mProgressView, false);
+        Utility.showProgressDialog(getActivity(), false);
         if (!data.getBoolean("status")) {
             if (check == MappService.DO_REG_NO_CHECK) {
                 mRegistrationNumber.setError(getString(R.string.error_duplicate_reg_no));

@@ -388,6 +388,7 @@ public abstract class Utility {
             showMessage(context, R.string.error_not_online);
             return false;
         }
+        //Utility.showProgressDialog(context, true);
         Intent intent = new Intent(context, MappService.class);
         context.bindService(intent, connection, flag);
         return true;

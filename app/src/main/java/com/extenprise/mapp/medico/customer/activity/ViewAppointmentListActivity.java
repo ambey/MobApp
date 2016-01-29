@@ -103,7 +103,8 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_CUST_UPCOMING_APPONTS);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
+            //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -114,9 +115,7 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
         bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_CUST_PAST_APPONTS);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mPastListView, mPastProgress, true);
-        }
+        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
     }
 
     private void gotUpcomingApponts(Bundle data) {
@@ -125,7 +124,8 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
     }
 
     private void gotPastApponts(Bundle data) {
-        Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, false);
+        //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, false);
+        Utility.showProgressDialog(this, false);
         AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, mUpcomingList);
         mUpcomingListView.setAdapter(adapter);
         if (mUpcomingList != null && mUpcomingList.size() > 0) {
@@ -138,7 +138,7 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
             Utility.setEnabledButton(this, mUpcomingSortBtn, false);
         }
 
-        Utility.showProgress(this, mPastListView, mPastProgress, false);
+        //Utility.showProgress(this, mPastListView, mPastProgress, false);
         ArrayList<AppointmentListItem> pastList = data.getParcelableArrayList("appontList");
         adapter = new AppointmentListAdapter(this, 0, pastList);
         mPastListView.setAdapter(adapter);

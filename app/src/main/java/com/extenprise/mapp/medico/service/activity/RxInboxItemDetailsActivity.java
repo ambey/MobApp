@@ -2,7 +2,6 @@ package com.extenprise.mapp.medico.service.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,7 +39,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 
 public class RxInboxItemDetailsActivity extends Activity implements ResponseHandler {
-    ProgressDialog progressDialog;
+    //ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ArrayList<RxInboxItem> mInbox;
     private RxInboxItem mInboxItem;
@@ -198,7 +197,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         mConnection.setData(data);
         mConnection.setAction(MappService.DO_SEND_AVAILABILITY);
         if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+            //progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -211,9 +211,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void sentAvailabilityFeedback() {
-        if(progressDialog != null) {
-            progressDialog.dismiss();
-        }
+        Utility.showProgressDialog(this, false);
         mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         Utility.showAlert(this, "", getString(R.string.msg_availablity_sent), new DialogInterface.OnClickListener() {
             @Override

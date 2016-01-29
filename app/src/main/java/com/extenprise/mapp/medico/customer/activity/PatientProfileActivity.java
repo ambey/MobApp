@@ -253,19 +253,22 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_UPDATE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgress(this, mFormView, mProgressView, true);
+            //Utility.showProgress(this, mFormView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
         }
         //sendRequest(getUpdateData(), MappService.DO_UPDATE);
     }
 
     private void removePhotoDone() {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         mImgView.setBackgroundResource(R.drawable.patient);
         mImgView.setImageBitmap(null);
     }
 
     private void changePwdDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_change_pwd);
         } else {
@@ -275,7 +278,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void pwdCheckDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             isPwdCorrect = true;
         } else {
@@ -321,7 +325,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }*/
 
     private void updateDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showAlert(this, "", getString(R.string.msg_profile_updated), new DialogInterface.OnClickListener() {
                 @Override
@@ -467,7 +472,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_CHANGE_PWD);
                     if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                        Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                        //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                        Utility.showProgressDialog(PatientProfileActivity.this, true);
                     }
 
                     dialog.dismiss();
@@ -488,7 +494,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mConnection.setData(bundle);
             mConnection.setAction(MappService.DO_PWD_CHECK);
             if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                Utility.showProgressDialog(this, true);
             }
         } else {
             mOldPwd.setError(getString(R.string.error_wrong_pwd));
@@ -543,7 +550,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                                     mConnection.setData(bundle);
                                                     mConnection.setAction(MappService.DO_REMOVE_PHOTO);
                                                     if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
-                                                        Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                                                        //Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
+                                                        Utility.showProgressDialog(PatientProfileActivity.this, true);
                                                     }
                                                 }
                                             }
