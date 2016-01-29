@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,6 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     private ImageView mImgView;
 
     private View mRootView;
-    private View mFormView;
-    private View mProgressView;
     private boolean imageChanged = false;
 /*
     private int requestGallery = 100;
@@ -70,9 +69,6 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         //LoginHolder.servLoginRef = new ServiceProvider();
 
         //mRootView.findViewById(R.id.next).setVisibility(View.GONE);
-        mFormView = mRootView.findViewById(R.id.signUpForm);
-        mProgressView = mRootView.findViewById(R.id.progressView);
-
         mFirstName = (EditText) mRootView.findViewById(R.id.editTextFName);
         mLastName = (EditText) mRootView.findViewById(R.id.editTextLName);
         mCellphoneview = (EditText) mRootView.findViewById(R.id.editTextCellphone);
@@ -82,6 +78,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                 if (!hasFocus) {
                     if (Validator.isPhoneValid(mCellphoneview.getText().toString().trim())) {
                         checkExistence(MappService.DO_PHONE_EXIST_CHECK);
+                        Log.v(this.getClass().getName(), "Checking for phone number...");
                     }
                 }
             }
@@ -122,6 +119,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                 if (!hasFocus) {
                     if (!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
                         checkExistence(MappService.DO_REG_NO_CHECK);
+                        Log.v(this.getClass().getName(), "Checking registration number...");
                     }
                 }
             }

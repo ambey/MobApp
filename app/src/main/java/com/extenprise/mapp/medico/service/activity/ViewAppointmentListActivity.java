@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
@@ -42,12 +41,11 @@ public class ViewAppointmentListActivity extends FragmentActivity
 
     private ListView mUpcomingListView;
     private ListView mPastListView;
-    private ProgressBar mUpcomingProgress;
-    private ProgressBar mPastProgress;
     private TextView mUpcomingMsgView;
     private TextView mPastMsgView;
     private Button mUpcomingSortBtn;
     private Button mPastSortBtn;
+    private boolean mReqSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +56,6 @@ public class ViewAppointmentListActivity extends FragmentActivity
 
         mUpcomingListView = (ListView) findViewById(R.id.upcomingAppontsList);
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
-        mUpcomingProgress = (ProgressBar) findViewById(R.id.upcomingProgress);
-        mPastProgress = (ProgressBar) findViewById(R.id.pastProgress);
         mUpcomingMsgView = (TextView) findViewById(R.id.upcomingAppontsMsgView);
         mPastMsgView = (TextView) findViewById(R.id.pastAppontsMsgView);
 
@@ -81,6 +77,14 @@ public class ViewAppointmentListActivity extends FragmentActivity
         Utility.setEnabledButton(this, mPastSortBtn, false);
 
         getUpcomingList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mReqSent) {
+            getUpcomingList();
+        }
     }
 
     private void showSortDialog(boolean upcoming) {
@@ -130,6 +134,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
         //mMsgView.setVisibility(View.GONE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
+            mReqSent = true;
             Utility.showProgressDialog(this, true);
         }
     }
@@ -168,6 +173,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
 
     private void gotPastAppontList(Bundle data) {
         //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, false);
+        mReqSent = false;
         Utility.showProgressDialog(this, false);
         AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, mUpcomingList, mServiceProv);
         adapter.setShowDate(true);

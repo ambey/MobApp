@@ -1,142 +1,141 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/signUpForm"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background">
-            <LinearLayout
-                android:id="@+id/signUpForm"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:background="@drawable/background"
+    android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/editTextFName"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:ems="10"
-                        android:hint="@string/first_name"
-                        android:inputType="text|textNoSuggestions"
-                        android:imeOptions="actionNext"
-                        android:nextFocusForward="@+id/editTextLName"
-                        android:textColor="@color/black" />
+        <EditText
+            android:id="@+id/editTextFName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="@string/first_name"
+            android:imeOptions="actionNext"
+            android:inputType="text|textNoSuggestions"
+            android:nextFocusForward="@+id/editTextLName"
+            android:textColor="@color/black" />
 
-                    <EditText
-                        android:id="@+id/editTextLName"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="0.5"
-                        android:ems="10"
-                        android:hint="@string/last_name"
-                        android:imeOptions="actionNext"
-                        android:nextFocusForward="@+id/editTextCellphone"
-                        android:inputType="text|textNoSuggestions" />
+        <EditText
+            android:id="@+id/editTextLName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="@string/last_name"
+            android:imeOptions="actionNext"
+            android:inputType="text|textNoSuggestions"
+            android:nextFocusForward="@+id/editTextCellphone" />
 
-                </LinearLayout>
+    </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/phonePrefix"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="@string/country_code"
-                        android:textSize="17sp"
-                        android:paddingLeft="5dp"/>
+        <TextView
+            android:id="@+id/phonePrefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/country_code"
+            android:textSize="17sp" />
 
-                    <EditText
-                        android:id="@+id/editTextCellphone"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/cellPhoneNo"
-                        android:inputType="number"
-                        android:maxLength="10"
-                        android:imeOptions="actionNext"
-                        android:nextFocusForward="@+id/editTextEmail"
-                        android:paddingLeft="40dp" />
-                </RelativeLayout>
+        <EditText
+            android:id="@+id/editTextCellphone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/phonePrefix"
+            android:layout_toRightOf="@id/phonePrefix"
+            android:ems="10"
+            android:hint="@string/cellPhoneNo"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:maxLength="10"
+            android:nextFocusForward="@+id/editTextEmail" />
+    </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/editTextEmail"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:ems="10"
-                    android:hint="@string/email"
-                    android:imeOptions="actionNext"
-                    android:nextFocusForward="@+id/editTextPasswd"
-                    android:inputType="textEmailAddress" />
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/email"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        android:nextFocusForward="@+id/editTextPasswd" />
 
-                <EditText
-                    android:id="@+id/editTextPasswd"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:ems="10"
-                    android:hint="@string/passWd"
-                    android:imeOptions="actionNext"
-                    android:nextFocusForward="@+id/editTextCnfPasswd"
-                    android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/editTextPasswd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/passWd"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword"
+        android:nextFocusForward="@+id/editTextCnfPasswd" />
 
-                <EditText
-                    android:id="@+id/editTextCnfPasswd"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:ems="10"
-                    android:hint="@string/passWdCon"
-                    android:imeOptions="actionNext"
-                    android:nextFocusForward="@+id/editTextRegistrationNumber"
-                    android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/editTextCnfPasswd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/passWdCon"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword"
+        android:nextFocusForward="@+id/editTextRegistrationNumber" />
 
-                <RadioGroup
-                    android:id="@+id/radioGroupGender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:orientation="horizontal">
+    <RadioGroup
+        android:id="@+id/radioGroupGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/radioButtonMale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+        <RadioButton
+            android:id="@+id/radioButtonMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-                        android:focusable="true"
-                        android:text="@string/male" />
+            android:focusable="true"
+            android:text="@string/male" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonFemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+        <RadioButton
+            android:id="@+id/radioButtonFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginStart="30dp"
-                        android:focusable="true"
-                        android:text="@string/female" />
-                </RadioGroup>
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:focusable="true"
+            android:text="@string/female" />
+    </RadioGroup>
 
-                <EditText
-                    android:id="@+id/editTextRegistrationNumber"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ems="10"
-                    android:hint="@string/reg_no" />
+    <EditText
+        android:id="@+id/editTextRegistrationNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="@string/reg_no"
+        android:inputType="text" />
 
-            </LinearLayout>
-        </LinearLayout>
+</LinearLayout>
