@@ -45,7 +45,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
     String selectedDays;
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
+    private MappServiceConnection mConnection;
     private View mRootview;
     private EditText mName;
     private EditText mLoc;
@@ -75,6 +75,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.activity_add_workplace, container, false);
+        mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
         //LoginHolder.spsspt = new ServProvHasServPt();
 
         options = Utility.getDaysOptions(getActivity());

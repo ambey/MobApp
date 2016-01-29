@@ -26,5 +26,6 @@
     <string name="error_select_gender">Please select Gender.</string>
     <string name="error_invalid_pincode">Invalid Pin Code</string>
     <string name="error_wrong_pwd">Wrong Password</string>
+    <string name="error_server_connect">Unable to connect to remote server.\nPlease try after sometime.</string>
 
 </resources>

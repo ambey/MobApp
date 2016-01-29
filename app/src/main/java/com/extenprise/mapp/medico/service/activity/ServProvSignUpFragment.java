@@ -41,7 +41,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
 /*
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
 */
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
+    private MappServiceConnection mConnection;
 
     private EditText mFirstName;
     private EditText mLastName;
@@ -66,6 +66,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.activity_sign_up, container, false);
+        mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
         //LoginHolder.servLoginRef = new ServiceProvider();
 
         //mRootView.findViewById(R.id.next).setVisibility(View.GONE);
