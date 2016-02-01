@@ -252,7 +252,6 @@
 
     <!-- Search Result Sort Fields -->
     <string name="by_drname">Doctor Name</string>
-    <string name="by_ptname">Patient Name</string>
     <string name="by_clinic_name">Clinic Name</string>
     <string name="by_experience">Experience</string>
     <string name="by_location">Location</string>
@@ -301,12 +300,6 @@
         <item>@string/by_medstore</item>
         <item>@string/by_medstore_owner</item>
         <item>@string/by_location</item>
-    </string-array>
-
-    <string-array name="medstore_rx_inbox_sort_field_list">
-        <item>@string/by_drname</item>
-        <item>@string/by_ptname</item>
-        <item>@string/by_date</item>
     </string-array>
 
 </resources>

@@ -206,6 +206,17 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
                     return lhs.getRx().getDate().compareTo(rhs.getRx().getDate());
                 }
             };
+        } else if (sortField.equals(context.getString(R.string.by_drname))) {
+            comparator = new Comparator<RxInboxItem>() {
+                @Override
+                public int compare(RxInboxItem lhs, RxInboxItem rhs) {
+                    int result = lhs.getServProv().getFirstName().toUpperCase().compareTo(rhs.getServProv().getFirstName().toUpperCase());
+                    if (result == 0) {
+                        return lhs.getServProv().getLastName().toUpperCase().compareTo(rhs.getServProv().getLastName().toUpperCase());
+                    }
+                    return result;
+                }
+            };
         }
         mSortedRxList = new ArrayList<>();
         mSortedRxList.addAll(mRxList);

@@ -92,7 +92,7 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     private void showSortDialog() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         SortActionDialog dialog = new SortActionDialog();
-        int list = R.array.medstore_rx_inbox_sort_field_list;
+        int list = R.array.medstore_rx_sort_field_list;
         if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             list = R.array.dr_rx_sort_field_list;
         }
