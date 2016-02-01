@@ -43,6 +43,7 @@ import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.net.AppStatus;
+import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
 
 import java.io.ByteArrayOutputStream;
@@ -338,6 +339,16 @@ public abstract class Utility {
     public static void showMessage(Context context, int msgId) {
         Toast.makeText(context, context.getString(msgId), Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + context.getString(msgId));
+    }
+
+    public static void showErrorMessage(Context context, int errorCode) {
+        switch (errorCode) {
+            case ErrorCode.ERROR_SERVER_UNAVAILABLE:
+                showMessage(context, R.string.error_server_connect);
+                return;
+            case ErrorCode.ERROR_NETWORK_PROBLEM:
+                showMessage(context, R.string.error_not_online);
+        }
     }
 
     /*public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {

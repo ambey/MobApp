@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -40,8 +41,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     private Spinner mSpeciality;
     private Spinner mServProvCategory;
     private EditText mLocation;
-    private View mProgressView;
-    private View mSearchFormView;
 
     /*private LocationManager locationManager;
     private String provider;*/
@@ -64,8 +63,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         mSpeciality = (Spinner) findViewById(R.id.editTextSearchSp);
         mServProvCategory = (Spinner) findViewById(R.id.spinServiceProvCategory);
         mLocation = (EditText) findViewById(R.id.editTextSearchLoc);
-        mSearchFormView = findViewById(R.id.search_form);
-        mProgressView = findViewById(R.id.search_progress);
 
         mServProvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -136,9 +133,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     }
 
     private void gotSpecialities(Bundle data) {
-        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
-
         specList = data.getStringArrayList("specialities");
         if (specList == null) {
             specList = new ArrayList<>();
@@ -280,13 +274,10 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     }
 
     protected void searchDone(Bundle msgData) {
-        //Utility.showProgress(this, mSearchFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
-        boolean success = msgData.getBoolean("status");
-        if (success) {
-            //Send.email(this, "Test", "Test Mail From Mob App.", "jain_avinash@extenprise.com");
+        ArrayList<Parcelable> list = msgData.getParcelableArrayList("servProvList");
+        if (list != null && list.size() > 0) {
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
-            intent.putParcelableArrayListExtra("servProvList", msgData.getParcelableArrayList("servProvList"));
+            intent.putParcelableArrayListExtra("servProvList", list);
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.msg_no_result);
@@ -295,14 +286,17 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
+        boolean success = data.getBoolean("status");
+        if (!success) {
+            return false;
+        }
         if (action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
-            return true;
         } else if (action == MappService.DO_GET_SPECIALITY) {
             gotSpecialities(data);
-            return true;
         }
-        return false;
+        return true;
     }
 
     @Nullable

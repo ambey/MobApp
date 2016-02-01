@@ -505,6 +505,8 @@ public class MappService extends Service {
                     wr.close();
                 } catch (IOException x) {
                     x.printStackTrace();
+                    mResponsecode = ErrorCode.ERROR_SERVER_UNAVAILABLE;
+                    return false;
                 }
 
                 //Get Response

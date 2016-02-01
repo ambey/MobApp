@@ -1,8 +1,11 @@
 package com.extenprise.mapp.medico.net;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import com.extenprise.mapp.medico.util.Utility;
 
 public class ServiceResponseHandler extends Handler {
     private Context context;
@@ -23,9 +26,6 @@ public class ServiceResponseHandler extends Handler {
 
     @Override
     public void handleMessage(Message msg) {
-        /*if(!connection.isConnected()) {
-            return;
-        }*/
         boolean bound = connection.isBound();
         if(unbind) {
             try {
@@ -35,7 +35,9 @@ public class ServiceResponseHandler extends Handler {
                 e.printStackTrace();
             }
         }
-        if (bound && !handler.gotResponse(msg.what, msg.getData())) {
+        Bundle data = msg.getData();
+        if (bound && !handler.gotResponse(msg.what, data)) {
+            Utility.showErrorMessage(context, data.getInt("responseCode"));
             super.handleMessage(msg);
         }
     }

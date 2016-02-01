@@ -29,8 +29,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/doctor"
-        android:logo="@drawable/doctor"
+        android:icon="@mipmap/ic_medico_launcher"
+        android:logo="@mipmap/ic_medico_logo"
         android:theme="@style/AppTheme" >
 
         <!--
