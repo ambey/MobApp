@@ -99,7 +99,6 @@ public class AppointmentListAdapter extends ArrayAdapter<AppointmentListItem> im
 
     public void setSortField(String sortField) {
         this.mSortField = sortField;
-        this.mSortField = sortField;
         if (sortField == null) {
             return;
         }

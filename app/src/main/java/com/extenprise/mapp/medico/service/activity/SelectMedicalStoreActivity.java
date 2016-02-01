@@ -159,7 +159,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     private void showSortDialog() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         SortActionDialog dialog = new SortActionDialog();
-        dialog.setSortFieldList(getResources().getStringArray(R.array.medstore_rx_sort_field_list));
+        dialog.setSortFieldList(getResources().getStringArray(R.array.medstore_sort_field_list));
         dialog.setListener(this);
         dialog.show(fragmentManager, "MedStoreListSort");
     }
@@ -178,7 +178,10 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
 
     @Override
     public void onApplyDone(DialogFragment dialog) {
-
+        SortActionDialog sortActionDialog = (SortActionDialog) dialog;
+        MedStoreListAdapter adapter = (MedStoreListAdapter) mMedStoreList.getAdapter();
+        adapter.setAscending(sortActionDialog.isAscending());
+        adapter.setSortField(sortActionDialog.getSortField());
     }
 
     @Override
