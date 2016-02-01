@@ -154,7 +154,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             Bundle bundle = new Bundle();
             bundle.putInt("idRx", rx.getIdReport());
             mConnection.setData(bundle);
-            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+            if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                Utility.showProgressDialog(this, true);
+            }
             return;
         }
         RxFeedback fb = RxFeedback.NONE;
@@ -211,7 +213,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void sentAvailabilityFeedback() {
-        Utility.showProgressDialog(this, false);
         mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         Utility.showAlert(this, "", getString(R.string.msg_availablity_sent), new DialogInterface.OnClickListener() {
             @Override
@@ -276,6 +277,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (action == MappService.DO_SEND_AVAILABILITY) {
             sentAvailabilityFeedback();
             return true;

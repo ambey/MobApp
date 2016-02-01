@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 public class RxListActivity extends FragmentActivity implements DialogDismissListener {
 
+    private int mFeedback;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +39,7 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
         }
 
         ArrayList<RxInboxItem> mInbox = getIntent().getParcelableArrayListExtra("inbox");
-        int feedback = getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal());
+        mFeedback = getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal());
         TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
         if (mInbox == null) {
             mInbox = new ArrayList<>();
@@ -47,9 +48,9 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
             msgView.setVisibility(View.GONE);
         }
         RxFeedback fb = RxFeedback.NONE;
-        if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
+        if (mFeedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
             fb = RxFeedback.GIVE_FEEDBACK;
-        } else if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        } else if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             fb = RxFeedback.VIEW_FEEDBACK;
         }
         RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox, fb);
@@ -91,7 +92,11 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     private void showSortDialog() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         SortActionDialog dialog = new SortActionDialog();
-        dialog.setSortFieldList(getResources().getStringArray(R.array.dr_rx_sort_field_list));
+        int list = R.array.medstore_rx_inbox_sort_field_list;
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+            list = R.array.dr_rx_sort_field_list;
+        }
+        dialog.setSortFieldList(getResources().getStringArray(list));
         dialog.setListener(this);
         dialog.show(fragmentManager, "RxListSort");
     }

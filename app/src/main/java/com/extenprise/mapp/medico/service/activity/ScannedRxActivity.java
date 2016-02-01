@@ -191,6 +191,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_SAVE_SCANNED_RX_COPY) {
             //displayScanCopy();
+            Utility.showProgressDialog(ScannedRxActivity.this, false);
             sendRxToMedStore(data);
         }
         return false;
@@ -312,7 +313,9 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
             bundle.putParcelable("form", mAppont);
             mConnection.setData(bundle);
             mConnection.setAction(MappService.DO_SAVE_SCANNED_RX_COPY);
-            Utility.doServiceAction(ScannedRxActivity.this, mConnection, BIND_AUTO_CREATE);
+            if(Utility.doServiceAction(ScannedRxActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                Utility.showProgressDialog(ScannedRxActivity.this, true);
+            }
         }
 
         @Override

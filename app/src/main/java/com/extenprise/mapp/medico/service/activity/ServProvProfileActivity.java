@@ -61,36 +61,36 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private ArrayList<WorkPlace> mWorkPlaceList;
     private ServiceProvider mServiceProv;
     private SignInData mSignInData;
+    private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
+    private ListView mListViewWP;
+    private String mCategory, mSpecStr;
+
+    private ImageView mImgView;
     private TextView mEmailID;
     private TextView mRegNo;
     private TextView mFname;
     private TextView mLname;
     private RadioGroup mGender;
     private RadioButton mMale, mFemale, mGenderBtn;
-    private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
-    private ListView listView;
-    private View mFormView;
-    private View mProgressView;
-    private ImageView mImgView;
-    private Bitmap mImgCopy;
+    private EditText mQualification;
+
     private EditText mName;
     private EditText mLoc;
-    private Spinner mCity;
     private EditText mPhone1;
     private EditText mPhone2;
     private EditText mEmailIdwork;
+    private Spinner mCity;
+    private Spinner mState;
+    private EditText mPinCode;
+
     private EditText mConsultFee;
+    private EditText mExperience;
     private Spinner mServPtType;
     private Spinner mServCatagory;
+    private Spinner mSpeciality;
     private Button mStartTime;
     private Button mEndTime;
-    private Spinner mSpeciality;
-    private EditText mExperience;
-    private EditText mQualification;
-    private EditText mPinCode;
-    private Spinner mState;
     private Button mMultiSpinnerDays;
-    private String mCategory;
 
     private EditText mOldPwd;
     private boolean isPwdCorrect;
@@ -114,8 +114,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mSignInData.setPhone(LoginHolder.servLoginRef.getPhone());
         mWorkPlace.setSignInData(mSignInData);
 
-        mFormView = findViewById(R.id.updateServProvform);
-        mProgressView = findViewById(R.id.progressView);
+        /*mFormView = findViewById(R.id.updateServProvform);
+        mProgressView = findViewById(R.id.progressView);*/
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
 
@@ -127,7 +127,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mMale = (RadioButton) findViewById(R.id.radioButtonMale);
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
-        listView = (ListView) findViewById(R.id.workDetailListView);
+        mListViewWP = (ListView) findViewById(R.id.workDetailListView);
 
         TextView mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
         TextView mMobNo = (TextView) findViewById(R.id.editTextMobNum);
@@ -139,13 +139,15 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (mCategory.equals(getString(R.string.pharmacist))) {
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.medstore);
-            //mConsultFee.setEnabled(false);
+        } else if(mCategory.equals(getString(R.string.diagnostic_center))) {
+            mViewdrLbl.setText(getString(R.string.welcome));
+            mImgView.setImageResource(R.drawable.diagcenter);
         }
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
             mImgView.setImageBitmap(bitmap);
         } else {
-            mImgCopy = (Bitmap) getLastNonConfigurationInstance();
+            Bitmap mImgCopy = (Bitmap) getLastNonConfigurationInstance();
             if (mImgCopy != null) {
                 mImgView.setImageBitmap(mImgCopy);
             }
@@ -287,14 +289,14 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        final WorkPlace wp = (WorkPlace) listView.getItemAtPosition(info.position);
+        final WorkPlace wp = (WorkPlace) mListViewWP.getItemAtPosition(info.position);
         wp.setSignInData(mSignInData);
         if (item.getTitle() == getString(R.string.edit)) {
             getWorkPlaceView(wp);
             //editWorkPlaceInfo(item.getActionView());
             return true;
         } else if (item.getTitle() == getString(R.string.remove)) {
-            //ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
+            //ArrayAdapter adapter = (ArrayAdapter) mListViewWP.getAdapter();
             //this.resultsList.remove((int) info.id);
             //adapter.removeItem(adapter.getItem(position));
             //adapter.remove(item);
@@ -315,7 +317,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     public void addNewWorkPlace(View view) {
-        /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) mListViewWP.getAdapter();
         adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
 
         *//*MatrixCursor extras = new MatrixCursor(new String[] { "_id", "title" });
@@ -387,7 +389,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mQualification.setText(item.getQualification());
             mMultiSpinnerDays.setText(item.getWorkingDays());
             mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
-            mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
+            //mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
+            mSpecStr = item.getSpeciality();
             mExperience.setText(String.format("%.01f", item.getExperience()));
             if (item.getPincode() != null) {
                 mPinCode.setText(item.getPincode());
@@ -966,8 +969,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
             WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
                     R.layout.layout_wp_list_item, mWorkPlaceList);
-            listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-            listView.setOnTouchListener(new ListView.OnTouchListener() {
+            mListViewWP.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+            mListViewWP.setOnTouchListener(new ListView.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     int action = event.getAction();
@@ -986,12 +989,12 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     return true;
                 }
             });
-            //listView.setSelection(adapter.getCount());
-            //listView.setOverscrollFooter(getDrawable(R.drawable.up));
-            listView.setAdapter(adapter);
-            listView.setSelection(adapter.getCount());
-            registerForContextMenu(listView);
-            //listView.setOnCreateContextMenuListener(this);
+            //mListViewWP.setSelection(adapter.getCount());
+            //mListViewWP.setOverscrollFooter(getDrawable(R.drawable.up));
+            mListViewWP.setAdapter(adapter);
+            mListViewWP.setSelection(adapter.getCount());
+            registerForContextMenu(mListViewWP);
+            //mListViewWP.setOnCreateContextMenuListener(this);
             Utility.showMessage(this, R.string.work_place_details);
         }
         //Utility.showProgress(this, mFormView, mProgressView, false);
@@ -1016,6 +1019,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         }
         list.add(0, getString(R.string.select_speciality));
         Utility.setNewSpinner(this, list, mSpeciality, new String[]{getString(R.string.other)});
+        if(mSpecStr != null && mSpecStr.equals("")) {
+            mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mSpecStr));
+        }
     }
 
     private void updateDone(int msg, Bundle data) {
