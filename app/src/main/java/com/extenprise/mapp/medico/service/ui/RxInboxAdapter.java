@@ -168,9 +168,9 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
             comparator = new Comparator<RxInboxItem>() {
                 @Override
                 public int compare(RxInboxItem lhs, RxInboxItem rhs) {
-                    int result = lhs.getCustomer().getfName().toUpperCase().compareTo(rhs.getCustomer().getfName().toUpperCase());
+                    int result = lhs.getCustomer().getlName().toUpperCase().compareTo(rhs.getCustomer().getlName().toUpperCase());
                     if (result == 0) {
-                        return lhs.getCustomer().getlName().toUpperCase().compareTo(rhs.getCustomer().getlName().toUpperCase());
+                        return lhs.getCustomer().getfName().toUpperCase().compareTo(rhs.getCustomer().getfName().toUpperCase());
                     }
                     return result;
                 }
@@ -210,9 +210,9 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
             comparator = new Comparator<RxInboxItem>() {
                 @Override
                 public int compare(RxInboxItem lhs, RxInboxItem rhs) {
-                    int result = lhs.getServProv().getFirstName().toUpperCase().compareTo(rhs.getServProv().getFirstName().toUpperCase());
+                    int result = lhs.getServProv().getLastName().toUpperCase().compareTo(rhs.getServProv().getLastName().toUpperCase());
                     if (result == 0) {
-                        return lhs.getServProv().getLastName().toUpperCase().compareTo(rhs.getServProv().getLastName().toUpperCase());
+                        return lhs.getServProv().getFirstName().toUpperCase().compareTo(rhs.getServProv().getFirstName().toUpperCase());
                     }
                     return result;
                 }
