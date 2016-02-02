@@ -430,55 +430,61 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 }
             });
 
-            final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
-            dialog.show();
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!isPwdCorrect) {
-                        checkPwd();
-                        Utility.showMessage(PatientProfileActivity.this, R.string.msg_verify_pwd);
-                        return;
-                    }
-                    EditText[] fields = {newPwd, confPwd};
-                    if (Utility.areEditFieldsEmpty(PatientProfileActivity.this, fields)) {
-                        return;
-                    }
+            Utility.showAlert(this, getString(R.string.changepwd), "", dialogView, true, null,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(which == AlertDialog.BUTTON_NEGATIVE) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            if(!isPwdCorrect) {
+                                checkPwd();
+                                Utility.showMessage(PatientProfileActivity.this, R.string.msg_verify_pwd);
+                                return;
+                            }
+                            EditText[] fields = {newPwd, confPwd};
+                            if (Utility.areEditFieldsEmpty(PatientProfileActivity.this, fields)) {
+                                return;
+                            }
 
-                    boolean cancel = false;
-                    View focusView = null;
-                    String newpwd = newPwd.getText().toString().trim();
-                    if (!Validator.isPasswordValid(newpwd)) {
-                        newPwd.setError(getString(R.string.error_invalid_password));
-                        focusView = newPwd;
-                        cancel = true;
-                    }
-                    String confpwd = confPwd.getText().toString().trim();
-                    if (!confpwd.equals(newpwd)) {
-                        confPwd.setError(getString(R.string.error_password_not_matching));
-                        focusView = confPwd;
-                        cancel = true;
-                    }
+                            boolean cancel = false;
+                            View focusView = null;
+                            String newpwd = newPwd.getText().toString().trim();
+                            if (!Validator.isPasswordValid(newpwd)) {
+                                newPwd.setError(getString(R.string.error_invalid_password));
+                                focusView = newPwd;
+                                cancel = true;
+                            }
+                            String confpwd = confPwd.getText().toString().trim();
+                            if (!confpwd.equals(newpwd)) {
+                                confPwd.setError(getString(R.string.error_password_not_matching));
+                                focusView = confPwd;
+                                cancel = true;
+                            }
 
-                    if (cancel) {
-                        focusView.requestFocus();
-                        return;
-                    }
+                            if (cancel) {
+                                focusView.requestFocus();
+                                return;
+                            }
 
-                    mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                    bundle.putParcelable("customer", mCustomer);
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.DO_CHANGE_PWD);
-                    if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                        //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
-                        Utility.showProgressDialog(PatientProfileActivity.this, true);
-                    }
+                            mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                            bundle.putParcelable("customer", mCustomer);
+                            mConnection.setData(bundle);
+                            mConnection.setAction(MappService.DO_CHANGE_PWD);
+                            if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                                //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                                Utility.showProgressDialog(PatientProfileActivity.this, true);
+                            }
 
-                    dialog.dismiss();
-                }
-            });
+                            dialog.dismiss();
+                        }
+                    });
+
+            /*final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
+            dialog.show();*/
         }
 
         return super.onOptionsItemSelected(item);
@@ -517,7 +523,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     public void changeImg(View view) {
         final Activity activity = this;
-        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
+        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, null, false,
                 /*
                 The array is put here instead of a method call to get the array because
                 OnClickHandler is using array index to take actions, and it helps to understand
@@ -536,7 +542,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                 Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
                                 break;
                             case 2:
-                                Utility.showAlert(activity, activity.getString(R.string.remove), getString(R.string.confirm_remove_photo), true,
+                                Utility.showAlert(activity, activity.getString(R.string.remove), getString(R.string.confirm_remove_photo), null, true,
                                         null,
                                         new DialogInterface.OnClickListener() {
 

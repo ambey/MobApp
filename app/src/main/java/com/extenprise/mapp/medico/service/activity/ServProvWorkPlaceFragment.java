@@ -44,7 +44,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     protected CharSequence[] options;
     protected boolean[] selections;
     //String []selectedDays = new String[_options.length];
-    String selectedDays;
+    //String selectedDays;
     private MappServiceConnection mConnection;
     private View mRootview;
     private EditText mName;
@@ -65,11 +65,13 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     //private Spinner mWeeklyOff;
     private Spinner mServPtType;
     private Spinner mServCatagory;
-    private View mFormView;
-    private View mProgressView;
+    //private View mFormView;
+    //private View mProgressView;
     private RelativeLayout mRelLayout2;
     private LinearLayout mLayoutWorkHrs;
     private Button mMultiSpinnerDays;
+
+    private ArrayList<String> mSpecialityList;
 
     @Nullable
     @Override
@@ -80,9 +82,10 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
         options = Utility.getDaysOptions(getActivity());
         selections = new boolean[options.length];
+        mSpecialityList = new ArrayList<>();
 
-        mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);
-        mProgressView = mRootview.findViewById(R.id.progressView);
+        /*mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);
+        mProgressView = mRootview.findViewById(R.id.progressView);*/
         mRelLayout2 = (RelativeLayout) mRootview.findViewById(R.id.relLayout2);
         mLayoutWorkHrs = (LinearLayout) mRootview.findViewById(R.id.layoutWorkHrs);
 
@@ -156,7 +159,19 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String spec = mSpeciality.getSelectedItem().toString();
                 if (spec.equals(getString(R.string.other))) {
-                    openSpecDialog();
+                    //Utility.openSpecDialog(getActivity(), mSpeciality);
+                    final EditText txtSpec = new EditText(getActivity());
+                    txtSpec.setHint(getString(R.string.speciality));
+                    Utility.showAlert(getActivity(), getString(R.string.add_new_spec), "", txtSpec, true, null,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mSpecialityList.add(txtSpec.getText().toString().trim());
+                                    Utility.setNewSpinner(getActivity(), mSpecialityList, mSpeciality,
+                                            new String[]{ getString(R.string.other) });
+                                    dialog.dismiss();
+                                }
+                            });
                 }
             }
 
@@ -178,10 +193,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         Utility.collapse(mRelLayout2, null);
 
         return mRootview;
-    }
-
-    private void openSpecDialog() {
-        Utility.openSpecDialog(getActivity(), mSpeciality);
     }
 
     public void showStartTimePicker(View view) {
@@ -503,13 +514,13 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private void getSpecialitiesDone(Bundle data) {
         //Utility.showProgress(getActivity(), mFormView, mProgressView, false);
         Utility.showProgressDialog(getActivity(), false);
-        ArrayList<String> list = data.getStringArrayList("specialities");
-        if (list == null) {
-            list = new ArrayList<>();
+        mSpecialityList = data.getStringArrayList("specialities");
+        if (mSpecialityList == null) {
+            mSpecialityList = new ArrayList<>();
         }
-        list.add(0, getString(R.string.select_speciality));
+        mSpecialityList.add(0, getString(R.string.select_speciality));
         //Utility.setNewSpec(getActivity(), list, mSpeciality);
-        Utility.setNewSpinner(getActivity(), list, mSpeciality, new String[]{getString(R.string.other)});
+        Utility.setNewSpinner(getActivity(), mSpecialityList, mSpeciality, new String[]{getString(R.string.other)});
     }
 
     public void onBackPressed() {

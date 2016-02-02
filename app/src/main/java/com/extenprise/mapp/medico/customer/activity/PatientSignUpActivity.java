@@ -216,7 +216,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     public void showImageUploadOptions(View view) {
         final Activity activity = this;
         final Resources resources = getResources();
-        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, false,
+        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, null, false,
                 new String[]{activity.getString(R.string.take_photo),
                         activity.getString(R.string.from_gallery),
                         activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
@@ -355,7 +355,23 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             return;
         }
         if (imageChanged) {
-            Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
+            Utility.showAlert(this, "", getString(R.string.msg_without_img), null, false,
+                    new String[]{getString(R.string.yes), getString(R.string.no)},
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    break;
+                                case 1:
+                                    Utility.showMessage(PatientSignUpActivity.this, R.string.msg_set_img);
+                                    break;
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+
+            /*Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == DialogInterface.BUTTON_NEGATIVE) {
@@ -364,7 +380,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                     }
                     dialog.dismiss();
                 }
-            });
+            });*/
         }
 
         sendRequest(MappService.DO_SIGNUP);

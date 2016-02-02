@@ -354,12 +354,6 @@ public abstract class Utility {
         }
     }
 
-    /*public static void setNewSpec(Context activity, ArrayList<String> specs, Spinner speciality) {
-        specs.add("Other");
-        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, specs);
-        speciality.setAdapter(spinnerAdapter);
-    }*/
-
     public static void setNewSpinner(Context activity, ArrayList<String> list, Spinner spinner, String[] str) {
         if (list == null) {
             list = new ArrayList<>();
@@ -369,32 +363,6 @@ public abstract class Utility {
         }
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.layout_spinner, list);
         spinner.setAdapter(spinnerAdapter);
-    }
-
-    /* There is already a set of methods named showAlert in this class. */
-    /* Please use showAlert to show alert dialog */
-    public static AlertDialog openSpecDialog(final Activity activity, final Spinner speciality) {
-        final EditText txtSpec = new EditText(activity);
-        txtSpec.setHint("Add Speciality");
-
-        return new AlertDialog.Builder(activity)
-                .setTitle("Add Speciality")
-                .setView(txtSpec)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String newSpec = txtSpec.getText().toString();
-                        ArrayList<String> specs = new ArrayList<>();
-                        specs.add(newSpec);
-                        //setNewSpec(activity, specs, speciality);
-                        setNewSpinner(activity, specs, speciality, new String[]{activity.getString(R.string.other)});
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
     }
 
     public static boolean doServiceAction(Context context, ServiceConnection connection, int flag) {
@@ -565,41 +533,8 @@ public abstract class Utility {
 
     public static String[] getDaysOptions(Context context) {
         return context.getResources().getStringArray(R.array.days);
-    }
 
-    /* There is already a set of methods named showAlert in this class. */
-    /* Please use showAlert to show alert dialog */
-    public static void confirm(Context activity, int msg, DialogInterface.OnClickListener listener) throws Resources.NotFoundException {
-        //final boolean[] confirm = new boolean[1];
-        new AlertDialog.Builder(activity)
-                .setMessage(msg)
-                .setPositiveButton(R.string.yes, listener)
-                .setNegativeButton(R.string.no, listener);
-    }
-
-    /* There is already a set of methods named showAlert in this class. */
-    /* Please use showAlert to show alert dialog */
-    public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        if (dialogView != null) {
-            builder.setTitle(title);
-            builder.setView(dialogView);
-        } else {
-            builder.setMessage(title);
-        }
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        return builder;
-    }
+       }
 
     public static boolean isDateAfterToday(Date date) {
         Date today = new Date();
@@ -710,7 +645,33 @@ public abstract class Utility {
         }
     }
 
-    public static String getCommaSepparatedString(String[] arr) {
+    ///////////////////////////////////////////////////Un Used Method /////////////////////
+
+/*
+
+public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+    if (dialogView != null) {
+        builder.setTitle(title);
+        builder.setView(dialogView);
+    } else {
+        builder.setMessage(title);
+    }
+    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+        }
+    });
+    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+        }
+    });
+    return builder;
+}
+
+public static String getCommaSepparatedString(String[] arr) {
         try {
             String value = arr[0];
             for (int i = 1; i < arr.length; i++) {
@@ -723,8 +684,6 @@ public abstract class Utility {
         return "";
     }
 
-
-    ///////////////////////////////////////////////////Un Used Method /////////////////////
 
 
     public static String getDays(Context context) {
@@ -746,7 +705,46 @@ public abstract class Utility {
         datePicker(view, button, null, Calendar.getInstance().getTimeInMillis(), -1, -1);
     }
 
-    /*public static int getAge(String dob, String sep) {
+
+
+
+    public static AlertDialog openSpecDialog(final Activity activity, final Spinner speciality) {
+        final EditText txtSpec = new EditText(activity);
+        txtSpec.setHint(activity.getString(R.string.speciality));
+
+        final ArrayList<String> specs = new ArrayList<>();
+        SpinnerAdapter adapter = speciality.getAdapter();
+
+        if(adapter != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                specs.add(adapter.getItem(i).toString());
+            }
+        }
+
+    return new AlertDialog.Builder(activity)
+            .setTitle(activity.getString(R.string.add_new_spec))
+            .setView(txtSpec)
+    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            String newSpec = txtSpec.getText().toString();
+            ArrayList<String> specs = new ArrayList<>();
+            specs.add(newSpec);
+            //setNewSpec(activity, specs, speciality);
+            setNewSpinner(activity, specs, speciality, new String[]{activity.getString(R.string.other)});
+        }
+    })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            dialog.dismiss();
+        }
+    })
+            .show();
+}
+
+
+
+
+    public static int getAge(String dob, String sep) {
 
         *//*long ageInMillis = new Date().getTime() - getMinutes(dob);
         Date age = new Date(ageInMillis);

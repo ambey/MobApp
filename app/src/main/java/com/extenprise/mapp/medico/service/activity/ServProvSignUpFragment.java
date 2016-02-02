@@ -229,16 +229,21 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         }
 
         if (!imageChanged) {
-            Utility.confirm(getActivity(), R.string.msg_without_img, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == DialogInterface.BUTTON_NEGATIVE) {
-                        Utility.showMessage(getActivity(), R.string.msg_set_img);
-                        return;
-                    }
-                    dialog.dismiss();
-                }
-            });
+            Utility.showAlert(getActivity(), "", getString(R.string.msg_without_img), null, false,
+                    new String[]{getString(R.string.yes), getString(R.string.no)},
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    break;
+                                case 1:
+                                    Utility.showMessage(getActivity(), R.string.msg_set_img);
+                                    break;
+                            }
+                            dialog.dismiss();
+                        }
+                    });
         }
 
         return true;
@@ -246,7 +251,8 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
 
     public void captureImage(View v) {
         final Activity activity = getActivity();
-        Utility.showAlert(activity, getString(R.string.uploadImg), null, false, new String[]{activity.getString(R.string.take_photo),
+        Utility.showAlert(activity, getString(R.string.uploadImg), null, null, false,
+                new String[]{activity.getString(R.string.take_photo),
                 activity.getString(R.string.from_gallery),
                 activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
 
