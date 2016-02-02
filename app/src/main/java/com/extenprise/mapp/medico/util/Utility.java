@@ -120,7 +120,7 @@ public abstract class Utility {
     }
 
     public static void showAlert(Activity activity, String title, String msg) {
-        showAlert(activity, title, msg, false, null, new DialogInterface.OnClickListener() {
+        showAlert(activity, title, msg, null, false, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -129,12 +129,15 @@ public abstract class Utility {
     }
 
     public static void showAlert(Activity activity, String title, String msg, DialogInterface.OnClickListener listener) {
-        showAlert(activity, title, msg, false, null, listener);
+        showAlert(activity, title, msg, null, false, null, listener);
     }
 
-    public static void showAlert(Activity activity, String title, String msg, boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
+    public static void showAlert(Activity activity, String title, String msg, View view, boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
+        if (view != null) {
+            builder.setView(view);
+        }
         if (msg != null) {
             builder.setMessage(msg);
         }
