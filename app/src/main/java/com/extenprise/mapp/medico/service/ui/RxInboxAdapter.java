@@ -19,7 +19,6 @@ import com.extenprise.mapp.medico.data.RxItem;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.service.activity.RxInboxItemDetailsActivity;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
-import com.extenprise.mapp.medico.service.data.ServProvListItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -179,24 +178,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
             comparator = new Comparator<RxInboxItem>() {
                 @Override
                 public int compare(RxInboxItem lhs, RxInboxItem rhs) {
-                    ServProvListItem lhsItem = null;
-                    if (lhs.getMedStoreList() != null && lhs.getMedStoreList().size() > 0) {
-                        lhsItem = lhs.getMedStoreList().get(0);
-                    }
-                    ServProvListItem rhsItem = null;
-                    if (rhs.getMedStoreList() != null && rhs.getMedStoreList().size() > 0) {
-                        rhsItem = rhs.getMedStoreList().get(0);
-                    }
-                    if (lhsItem == null && rhsItem == null) {
-                        return 0;
-                    }
-                    if (lhsItem == null) {
-                        return 100;
-                    }
-                    if (rhsItem == null) {
-                        return -100;
-                    }
-                    return lhsItem.getServPtName().toUpperCase().compareTo(rhsItem.getServPtName().toUpperCase());
+                    return lhs.getServProv().getServPtName().toUpperCase().compareTo(rhs.getServProv().getServPtName().toUpperCase());
                 }
             };
         } else if (sortField.equals(context.getString(R.string.by_date))) {
