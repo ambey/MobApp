@@ -1,5 +1,6 @@
 package com.extenprise.mapp.medico.service.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -159,19 +160,50 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String spec = mSpeciality.getSelectedItem().toString();
                 if (spec.equals(getString(R.string.other))) {
-                    //Utility.openSpecDialog(getActivity(), mSpeciality);
                     final EditText txtSpec = new EditText(getActivity());
                     txtSpec.setHint(getString(R.string.speciality));
-                    Utility.showAlert(getActivity(), getString(R.string.add_new_spec), "", txtSpec, true, null,
+                    final AlertDialog dialog = Utility.customDialogBuilder(getActivity(), txtSpec, R.string.add_new_spec).create();
+                    dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).
+                            setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String txt = txtSpec.getText().toString().trim();
+                                    boolean cancel = false;
+                                    if(TextUtils.isEmpty(txt)) {
+                                        txtSpec.setError(getString(R.string.error_field_required));
+                                        txtSpec.requestFocus();
+                                        cancel = true;
+                                    }
+                                    if(!Validator.isOnlyAlpha(txt)) {
+                                        txtSpec.setError(getString(R.string.error_only_alpha));
+                                        txtSpec.requestFocus();
+                                        cancel = true;
+                                    }
+                                    if(!cancel) {
+                                        mSpecialityList.add(0, txt);
+                                        if (!mSpecialityList.contains(getString(R.string.other))) {
+                                            mSpecialityList.add(getString(R.string.other));
+                                        }
+                                        Utility.setNewSpinner(getActivity(), mSpecialityList, mSpeciality, null);
+                                        dialog.dismiss();
+                                    }
+                                }
+                            });
+                    //Utility.openSpecDialog(getActivity(), mSpeciality);
+
+                   /*
+                   This is not allowing the validation to be done.. as its closing the dialog even when returning.
+
+                   Utility.showAlert(getActivity(), getString(R.string.add_new_spec), "", txtSpec, true, null,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mSpecialityList.add(txtSpec.getText().toString().trim());
-                                    Utility.setNewSpinner(getActivity(), mSpecialityList, mSpeciality,
-                                            new String[]{ getString(R.string.other) });
-                                    dialog.dismiss();
+                                    if(which == DialogInterface.BUTTON_POSITIVE) {
+
+                                    }
                                 }
-                            });
+                            });*/
                 }
             }
 
@@ -519,8 +551,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             mSpecialityList = new ArrayList<>();
         }
         mSpecialityList.add(0, getString(R.string.select_speciality));
+        if(!mSpecialityList.contains(getString(R.string.other))) {
+            mSpecialityList.add(getString(R.string.other));
+        }
         //Utility.setNewSpec(getActivity(), list, mSpeciality);
-        Utility.setNewSpinner(getActivity(), mSpecialityList, mSpeciality, new String[]{getString(R.string.other)});
+        Utility.setNewSpinner(getActivity(), mSpecialityList, mSpeciality, null);
     }
 
     public void onBackPressed() {

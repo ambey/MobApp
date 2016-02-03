@@ -54,6 +54,12 @@ public class BookAppointmentActivity extends Activity
         mServProv = intent.getParcelableExtra("servProv");
         mCust = intent.getParcelableExtra("customer");
 
+        TextView lbl = (TextView) findViewById(R.id.tvDrLbl);
+        if(!mServProv.getServProvHasServPt(0).getService().getCategory().
+                equalsIgnoreCase(getString(R.string.physician))) {
+            lbl.setText(getString(R.string.welcome));
+        }
+
         TextView textViewDocFName = (TextView) findViewById(R.id.tvDocFName);
         TextView textViewDocLName = (TextView) findViewById(R.id.tvDocLName);
         TextView textViewDocSpeciality = (TextView) findViewById(R.id.tvDocSpec);
@@ -63,11 +69,10 @@ public class BookAppointmentActivity extends Activity
         mBookButton = (Button) findViewById(R.id.buttonBook);
         mMsgView = (TextView) findViewById(R.id.viewMsg);
 
-        ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
-
+        //ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         textViewDocFName.setText(mServProv.getfName());
         textViewDocLName.setText(mServProv.getlName());
-        textViewDocSpeciality.setText(spsspt.getService().getSpeciality());
+        textViewDocSpeciality.setText(mServProv.getServProvHasServPt(0).getService().getSpeciality());
         textViewQualification.setText(String.format("(%s)", mServProv.getQualification()));
 
         mSelectedDate = new Date();

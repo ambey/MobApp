@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.data.Customer;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -259,11 +260,16 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         //sendRequest(getUpdateData(), MappService.DO_UPDATE);
     }
 
-    private void removePhotoDone() {
+    private void removePhotoDone(Bundle data) {
         //Utility.showProgress(this, mFormView, mProgressView, false);
         Utility.showProgressDialog(this, false);
-        mImgView.setBackgroundResource(R.drawable.patient);
-        mImgView.setImageBitmap(null);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_photo_removed);
+            mImgView.setBackgroundResource(R.drawable.patient);
+            mImgView.setImageBitmap(null);
+        } else {
+            Utility.showMessage(this, R.string.some_error);
+        }
     }
 
     private void changePwdDone(Bundle data) {
@@ -296,7 +302,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             updateDone(data);
             return true;
         } else if (action == MappService.DO_REMOVE_PHOTO) {
-            removePhotoDone();
+            removePhotoDone(data);
             return true;
         } else if(action == MappService.DO_PWD_CHECK) {
             pwdCheckDone(data);
@@ -430,25 +436,23 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 }
             });
 
-            Utility.showAlert(this, getString(R.string.changepwd), "", dialogView, true, null,
-                    new DialogInterface.OnClickListener() {
+            final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
+            dialog.show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).
+                    setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(which == AlertDialog.BUTTON_NEGATIVE) {
-                                dialog.dismiss();
-                                return;
-                            }
-                            if(!isPwdCorrect) {
+                        public void onClick(View v) {
+                            boolean cancel = false;
+                            if (!isPwdCorrect) {
                                 checkPwd();
                                 Utility.showMessage(PatientProfileActivity.this, R.string.msg_verify_pwd);
-                                return;
+                                cancel = true;
                             }
                             EditText[] fields = {newPwd, confPwd};
                             if (Utility.areEditFieldsEmpty(PatientProfileActivity.this, fields)) {
-                                return;
+                                cancel = true;
                             }
 
-                            boolean cancel = false;
                             View focusView = null;
                             String newpwd = newPwd.getText().toString().trim();
                             if (!Validator.isPasswordValid(newpwd)) {
@@ -464,24 +468,39 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                             }
 
                             if (cancel) {
-                                focusView.requestFocus();
-                                return;
+                                if (focusView != null) {
+                                    focusView.requestFocus();
+                                }
+                            } else {
+                                mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                                bundle.putParcelable("customer", mCustomer);
+                                mConnection.setData(bundle);
+                                mConnection.setAction(MappService.DO_CHANGE_PWD);
+                                if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                                    //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                                    Utility.showProgressDialog(PatientProfileActivity.this, true);
+                                }
+                                dialog.dismiss();
                             }
-
-                            mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                            bundle.putParcelable("customer", mCustomer);
-                            mConnection.setData(bundle);
-                            mConnection.setAction(MappService.DO_CHANGE_PWD);
-                            if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                                //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
-                                Utility.showProgressDialog(PatientProfileActivity.this, true);
-                            }
-
-                            dialog.dismiss();
                         }
                     });
+
+            /*
+            //Not working as per requirement ,,, validation not allowing, as closing the dialog..
+
+            Utility.showAlert(this, getString(R.string.changepwd), "", dialogView, true, null,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(which == AlertDialog.BUTTON_NEGATIVE) {
+                                dialog.dismiss();
+                            } else {
+
+                            }
+                        }
+                    });*/
 
             /*final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
             dialog.show();*/
@@ -542,7 +561,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                 Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
                                 break;
                             case 2:
-                                Utility.showAlert(activity, activity.getString(R.string.remove), getString(R.string.confirm_remove_photo), null, true,
+                                Utility.showAlert(activity, activity.getString(R.string.remove),
+                                        getString(R.string.confirm_remove_photo), null, true,
                                         null,
                                         new DialogInterface.OnClickListener() {
 
@@ -634,6 +654,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     @Override
     public void onBackPressed() {
+        /*Bundle bundle = WorkingDataStore.getBundle();
+        bundle.putParcelable("customer", getUpdateData());*/
         mConnection.setBound(false);
         //startActivity(getIntent());
         super.onBackPressed();

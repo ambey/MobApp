@@ -147,8 +147,10 @@ public abstract class Utility {
 
         AlertDialog dialog = builder.create();
         if (menuOptions == null) {
+            //builder.setPositiveButton(R.string.ok, listener);
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getString(R.string.ok), listener);
             if (cancelOpt) {
+                //builder.setNegativeButton(R.string.cancel, listener);
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(R.string.cancel), listener);
             }
         }
@@ -645,31 +647,36 @@ public abstract class Utility {
         }
     }
 
+
+    //While using show Alert method for dialogs having views... its not displaying the buttons.
+    //while there is no any difference, so for now am using this method only for showing dialogs..
+    public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        if (dialogView != null) {
+            builder.setTitle(title);
+            builder.setView(dialogView);
+        } else {
+            builder.setMessage(title);
+        }
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        return builder;
+    }
+
     ///////////////////////////////////////////////////Un Used Method /////////////////////
 
 /*
 
-public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-    if (dialogView != null) {
-        builder.setTitle(title);
-        builder.setView(dialogView);
-    } else {
-        builder.setMessage(title);
-    }
-    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-        }
-    });
-    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            dialog.dismiss();
-        }
-    });
-    return builder;
-}
+
 
 public static String getCommaSepparatedString(String[] arr) {
         try {

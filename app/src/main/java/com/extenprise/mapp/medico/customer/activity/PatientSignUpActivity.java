@@ -210,7 +210,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     public void enlargeImg(View view) {
-        Utility.enlargeImage(mImgView);
+        //Utility.enlargeImage(mImgView);
     }
 
     public void showImageUploadOptions(View view) {
@@ -251,6 +251,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                     Utility.showMessage(this, R.string.error_img_not_picked);
                     return;
                 }
+                mImgView.setBackgroundResource(0);
                 if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
                         requestCode == resources.getInteger(R.integer.request_edit))) {
                     // Get the Image from data
@@ -354,7 +355,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             }
             return;
         }
-        if (imageChanged) {
+        /*if (imageChanged) {
             Utility.showAlert(this, "", getString(R.string.msg_without_img), null, false,
                     new String[]{getString(R.string.yes), getString(R.string.no)},
                     new DialogInterface.OnClickListener() {
@@ -371,7 +372,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                         }
                     });
 
-            /*Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
+            *//*Utility.confirm(this, R.string.msg_without_img, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == DialogInterface.BUTTON_NEGATIVE) {
@@ -380,8 +381,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                     }
                     dialog.dismiss();
                 }
-            });*/
-        }
+            });*//*
+        }*/
 
         sendRequest(MappService.DO_SIGNUP);
     }

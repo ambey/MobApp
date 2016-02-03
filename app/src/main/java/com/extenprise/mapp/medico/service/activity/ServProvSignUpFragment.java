@@ -13,7 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,6 +119,10 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         mRegistrationNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                /*String txt = "";
+                if(hasFocus) {
+                    txt = mRegistrationNumber.getText().toString().trim();
+                }*/
                 if (!hasFocus) {
                     if (!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
                         checkExistence(MappService.DO_REG_NO_CHECK);
@@ -125,6 +131,28 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                 }
             }
         });
+        /*mRegistrationNumber.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(mRegistrationNumber.getText().toString().trim())) {
+                    checkExistence(MappService.DO_REG_NO_CHECK);
+                    Log.v(this.getClass().getName(), "Checking registration number...");
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                *//*if(s.length() != 0)
+                    Field2.setText("");*//*
+            }
+        });*/
         int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
         if (category == R.string.pharmacist) {
             mImgView.setImageResource(R.drawable.medstore);
@@ -228,7 +256,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             return false;
         }
 
-        if (!imageChanged) {
+        /*if (!imageChanged) {
             Utility.showAlert(getActivity(), "", getString(R.string.msg_without_img), null, false,
                     new String[]{getString(R.string.yes), getString(R.string.no)},
                     new DialogInterface.OnClickListener() {
@@ -244,7 +272,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                             dialog.dismiss();
                         }
                     });
-        }
+        }*/
 
         return true;
     }
@@ -275,7 +303,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     }
 
     public void enlargeImg(View view) {
-        Utility.enlargeImage(mImgView);
+        //Utility.enlargeImage(mImgView);
     }
 
     @Override
@@ -287,15 +315,19 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             int requestEdit = resources.getInteger(R.integer.request_edit);
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
+                if (data == null) {
+                    Utility.showMessage(getActivity(), R.string.error_img_not_picked);
+                    return;
+                }
+                mImgView.setBackgroundResource(0);
                 if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
-                        requestCode == requestEdit)
-                        && data != null) {
+                        requestCode == requestEdit)) {
                     // Get the Image from data
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
 
-                } else if (requestCode == resources.getInteger(R.integer.request_camera) && data != null) {
+                } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     mImgView.setImageBitmap(bitmap);
                     selectedImage = Utility.getImageUri(getActivity(), bitmap);

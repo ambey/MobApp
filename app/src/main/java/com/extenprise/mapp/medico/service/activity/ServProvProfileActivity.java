@@ -135,7 +135,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         TextView mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
         TextView mDocName = (TextView) findViewById(R.id.textviewDocname);
 
-        Intent intent = getIntent();
+ /*       Intent intent = getIntent();
         mCategory = intent.getStringExtra("category");
         if (mCategory.equals(getString(R.string.pharmacist))) {
             mViewdrLbl.setText(getString(R.string.welcome));
@@ -143,7 +143,19 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         } else if(mCategory.equals(getString(R.string.diagnostic_center))) {
             mViewdrLbl.setText(getString(R.string.welcome));
             mImgView.setImageResource(R.drawable.diagcenter);
+        }*/
+
+        mCategory = getString(R.string.physician);
+        String servPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
+        if(!servPointType.equalsIgnoreCase(getString(R.string.clinic))) {
+            if(servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
+                mCategory = getString(R.string.pharmacist);
+            } else {
+                mCategory = getString(R.string.diagnostic_center);
+            }
+            mViewdrLbl.setText(getString(R.string.welcome));
         }
+
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
             mImgView.setImageBitmap(bitmap);
@@ -206,25 +218,23 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 }
             });
 
-            Utility.showAlert(this, getString(R.string.changepwd), "", dialogView, true, null,
-                    new DialogInterface.OnClickListener() {
+            final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
+            dialog.show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).
+                    setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (which == AlertDialog.BUTTON_NEGATIVE) {
-                                dialog.dismiss();
-                                return;
-                            }
+                        public void onClick(View v) {
+                            boolean cancel = false;
                             if (!isPwdCorrect) {
                                 checkPwd();
                                 Utility.showMessage(ServProvProfileActivity.this, R.string.msg_verify_pwd);
-                                return;
+                                cancel = true;
                             }
                             EditText[] fields = {newPwd, confPwd};
                             if (Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
-                                return;
+                                cancel = true;
                             }
 
-                            boolean cancel = false;
                             View focusView = null;
                             String newpwd = newPwd.getText().toString().trim();
                             if (!Validator.isPasswordValid(newpwd)) {
@@ -240,22 +250,22 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                             }
 
                             if (cancel) {
-                                focusView.requestFocus();
-                                return;
+                                if (focusView != null) {
+                                    focusView.requestFocus();
+                                }
+                            } else {
+                                mServiceProv.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                                bundle.putParcelable("service", mServiceProv);
+                                mConnection.setData(bundle);
+                                mConnection.setAction(MappService.DO_CHANGE_PWD);
+                                if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                                    //Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
+                                    Utility.showProgressDialog(ServProvProfileActivity.this, true);
+                                }
+                                dialog.dismiss();
                             }
-
-                            mServiceProv.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                            bundle.putParcelable("service", mServiceProv);
-                            mConnection.setData(bundle);
-                            mConnection.setAction(MappService.DO_CHANGE_PWD);
-                            if (Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                                //Utility.showProgress(ServProvProfileActivity.this, mFormView, mProgressView, true);
-                                Utility.showProgressDialog(ServProvProfileActivity.this, true);
-                            }
-
-                            dialog.dismiss();
                         }
                     });
         }
@@ -306,7 +316,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             //adapter.remove(item);
             //item.getActionView().setVisibility(View.GONE);
             /*if(Utility.confirm(this, R.string.confirm_remove_workplace)) {*/
-            Utility.showAlert(this, getString(R.string.confirm_remove_workplace), "", null, true, null,
+            Utility.showAlert(this, "", getString(R.string.confirm_remove_workplace), null, true, null,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -464,17 +474,34 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 String servCategory = mServCatagory.getSelectedItem().toString();
                 if (!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
                     if (spec.equals(getString(R.string.other))) {
-                        //Utility.openSpecDialog(ServProvProfileActivity.this, mSpeciality);
                         final EditText txtSpec = new EditText(ServProvProfileActivity.this);
                         txtSpec.setHint(getString(R.string.speciality));
-                        Utility.showAlert(ServProvProfileActivity.this, getString(R.string.add_new_spec), "", txtSpec, true, null,
-                                new DialogInterface.OnClickListener() {
+                        final AlertDialog dialog = Utility.customDialogBuilder(ServProvProfileActivity.this, txtSpec, R.string.add_new_spec).create();
+                        dialog.show();
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).
+                                setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mSpecialityList.add(txtSpec.getText().toString().trim());
-                                        Utility.setNewSpinner(ServProvProfileActivity.this, mSpecialityList, mSpeciality,
-                                                new String[]{getString(R.string.other)});
-                                        dialog.dismiss();
+                                    public void onClick(View v) {
+                                        String txt = txtSpec.getText().toString().trim();
+                                        boolean cancel = false;
+                                        if(TextUtils.isEmpty(txt)) {
+                                            txtSpec.setError(getString(R.string.error_field_required));
+                                            txtSpec.requestFocus();
+                                            cancel = true;
+                                        }
+                                        if(!Validator.isOnlyAlpha(txt)) {
+                                            txtSpec.setError(getString(R.string.error_only_alpha));
+                                            txtSpec.requestFocus();
+                                            cancel = true;
+                                        }
+                                        if(!cancel) {
+                                            mSpecialityList.add(0, txt);
+                                            if (!mSpecialityList.contains(getString(R.string.other))) {
+                                                mSpecialityList.add(getString(R.string.other));
+                                            }
+                                            Utility.setNewSpinner(ServProvProfileActivity.this, mSpecialityList, mSpeciality, null);
+                                            dialog.dismiss();
+                                        }
                                     }
                                 });
                     }
@@ -487,7 +514,49 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
         });
 
+        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.work_place_details).create();
+        dialog.show();
+
         final int finalAction = action;
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isValidWorkPlace()) {
+                    WorkPlace wp = new WorkPlace();
+                    wp.setName(mName.getText().toString().trim());
+                    wp.setLocation(mLoc.getText().toString().trim());
+                    wp.getCity().setCity(mCity.getSelectedItem().toString());
+                    wp.getCity().setState(mState.getSelectedItem().toString());
+                    wp.setPhone(mPhone1.getText().toString().trim());
+                    wp.setAltPhone(mPhone2.getText().toString().trim());
+                    wp.setEmailId(mEmailIdwork.getText().toString().trim());
+                    wp.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
+                    wp.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
+                    wp.setWorkingDays(mMultiSpinnerDays.getText().toString());
+                    wp.setServCategory(mServCatagory.getSelectedItem().toString());
+                    wp.setSpeciality(mSpeciality.getSelectedItem().toString());
+                    wp.setServPointType(mServPtType.getSelectedItem().toString());
+                    wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wp.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
+                    wp.setQualification(mQualification.getText().toString().trim());
+                    wp.setSignInData(mSignInData);
+                    wp.setPincode(mPinCode.getText().toString().trim());
+                    if (mConsultFee.isEnabled()) {
+                        wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    }
+                    if (finalAction == MappService.DO_EDIT_WORK_PLACE) {
+                        wp.setIdServicePoint(item.getIdServicePoint());
+                        wp.setIdService(item.getIdService());
+                    }
+
+                    sendRequest(finalAction, wp);
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        /*
+        This code is not displaying buttons properly.
         Utility.showAlert(this, getString(R.string.work_place_details), "", dialogView, true, null,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -496,39 +565,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                             dialog.dismiss();
                             return;
                         }
-                        if (isValidWorkPlace()) {
-                            WorkPlace wp = new WorkPlace();
-                            wp.setName(mName.getText().toString().trim());
-                            wp.setLocation(mLoc.getText().toString().trim());
-                            wp.getCity().setCity(mCity.getSelectedItem().toString());
-                            wp.getCity().setState(mState.getSelectedItem().toString());
-                            wp.setPhone(mPhone1.getText().toString().trim());
-                            wp.setAltPhone(mPhone2.getText().toString().trim());
-                            wp.setEmailId(mEmailIdwork.getText().toString().trim());
-                            wp.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
-                            wp.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
-                            wp.setWorkingDays(mMultiSpinnerDays.getText().toString());
-                            wp.setServCategory(mServCatagory.getSelectedItem().toString());
-                            wp.setSpeciality(mSpeciality.getSelectedItem().toString());
-                            wp.setServPointType(mServPtType.getSelectedItem().toString());
-                            wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                            wp.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
-                            wp.setQualification(mQualification.getText().toString().trim());
-                            wp.setSignInData(mSignInData);
-                            wp.setPincode(mPinCode.getText().toString().trim());
-                            if (mConsultFee.isEnabled()) {
-                                wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
-                            }
-                            if (finalAction == MappService.DO_EDIT_WORK_PLACE) {
-                                wp.setIdServicePoint(item.getIdServicePoint());
-                                wp.setIdService(item.getIdService());
-                            }
 
-                            sendRequest(finalAction, wp);
-                            dialog.dismiss();
-                        }
                     }
-                });
+                });*/
         /*final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.work_place_details).create();
         dialog.show();*/
     }
@@ -680,60 +719,73 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mFemale.setChecked(true);
         }
 
-        Utility.showAlert(this, getString(R.string.personalDetails), "", dialogView, true, null,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == AlertDialog.BUTTON_NEGATIVE) {
-                            dialog.dismiss();
-                            return;
-                        }
-                        EditText[] fields = {(EditText) mFname, (EditText) mLname, (EditText) mRegNo};
-                        if (Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
-                            return;
-                        }
-                        boolean cancel = false;
-                        View focusView = null;
-                        String email = mEmailID.getText().toString().trim();
-                        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
-                            mEmailID.setError(getString(R.string.error_invalid_email));
-                            focusView = mEmailID;
-                            cancel = true;
-                        }
-                        if (!Validator.isOnlyAlpha(mFname.getText().toString().trim())) {
-                            mFname.setError(getString(R.string.error_only_alpha));
-                            focusView = mFname;
-                            cancel = true;
-                        }
-                        if (!Validator.isOnlyAlpha(mLname.getText().toString().trim())) {
-                            mLname.setError(getString(R.string.error_only_alpha));
-                            focusView = mLname;
-                            cancel = true;
-                        }
-                        int genderID = mGender.getCheckedRadioButtonId();
-                        if (genderID == -1) {
-                            mFemale.setError(getString(R.string.error_select_gender));
-                            focusView = mFemale;
-                            cancel = true;
-                        } else {
-                            mGenderBtn = (RadioButton) dialogView.findViewById(genderID);
-                        }
+        final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.personalDetails).create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).
+                setOnClickListener(new View.OnClickListener() {
+                                       @Override
+                                       public void onClick(View v) {
+                                           EditText[] fields = {(EditText) mFname, (EditText) mLname, (EditText) mRegNo};
+                                           if (Utility.areEditFieldsEmpty(ServProvProfileActivity.this, fields)) {
+                                               return;
+                                           }
+                                           boolean cancel = false;
+                                           View focusView = null;
+                                           String email = mEmailID.getText().toString().trim();
+                                           if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
+                                               mEmailID.setError(getString(R.string.error_invalid_email));
+                                               focusView = mEmailID;
+                                               cancel = true;
+                                           }
+                                           if (!Validator.isOnlyAlpha(mFname.getText().toString().trim())) {
+                                               mFname.setError(getString(R.string.error_only_alpha));
+                                               focusView = mFname;
+                                               cancel = true;
+                                           }
+                                           if (!Validator.isOnlyAlpha(mLname.getText().toString().trim())) {
+                                               mLname.setError(getString(R.string.error_only_alpha));
+                                               focusView = mLname;
+                                               cancel = true;
+                                           }
+                                           int genderID = mGender.getCheckedRadioButtonId();
+                                           if (genderID == -1) {
+                                               mFemale.setError(getString(R.string.error_select_gender));
+                                               focusView = mFemale;
+                                               cancel = true;
+                                           } else {
+                                               mGenderBtn = (RadioButton) dialogView.findViewById(genderID);
+                                           }
 
-                        if (cancel && focusView != null) {
-                            focusView.requestFocus();
-                            return;
-                        }
-                        mServiceProv.setfName(mFname.getText().toString().trim());
-                        mServiceProv.setlName(mLname.getText().toString().trim());
-                        mServiceProv.setEmailId(email);
-                        mServiceProv.setGender(mGenderBtn.getText().toString());
-                        mServiceProv.setRegNo(mRegNo.getText().toString());
-                        mServiceProv.setSignInData(mSignInData);
+                                           if (cancel && focusView != null) {
+                                               focusView.requestFocus();
+                                               return;
+                                           }
+                                           mServiceProv.setfName(mFname.getText().toString().trim());
+                                           mServiceProv.setlName(mLname.getText().toString().trim());
+                                           mServiceProv.setEmailId(email);
+                                           mServiceProv.setGender(mGenderBtn.getText().toString());
+                                           mServiceProv.setRegNo(mRegNo.getText().toString());
+                                           mServiceProv.setSignInData(mSignInData);
 
-                        sendRequest(MappService.DO_UPDATE, null);
-                        dialog.dismiss();
-                    }
-                });
+                                           sendRequest(MappService.DO_UPDATE, null);
+                                           dialog.dismiss();
+                                       }
+                                   }
+                );
+
+                /*
+                This code is not showing the buttons properly.
+
+                Utility.showAlert(this, getString(R.string.personalDetails), "", dialogView, true, null,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == AlertDialog.BUTTON_NEGATIVE) {
+                                    dialog.dismiss();
+                                    return;
+                                }
+                            }
+                        });*/
 
         /*final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.personalDetails).create();
         dialog.show();*/
@@ -809,7 +861,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
-                                                if (which == -1) {
+                                                if (which == DialogInterface.BUTTON_POSITIVE) {
                                                     Bundle bundle = new Bundle();
                                                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                                                     bundle.putParcelable("service", mServiceProv);
@@ -850,6 +902,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Resources resources = getResources();
             // When an Image is picked
             if (resultCode == RESULT_OK) {
+                mImgView.setBackgroundResource(0);
                 if (data == null) {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                     return;
@@ -946,11 +999,24 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             case MappService.DO_CHANGE_PWD:
                 changePwdDone(data);
                 break;
-
+            case MappService.DO_REMOVE_PHOTO:
+                removePhotoDone(data);
+                break;
             default:
                 return false;
         }
         return true;
+    }
+
+    private void removePhotoDone(Bundle data) {
+        Utility.showProgressDialog(this, false);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_photo_removed);
+            mImgView.setBackgroundResource(R.drawable.dr_avatar);
+            mImgView.setImageBitmap(null);
+        } else {
+            Utility.showMessage(this, R.string.some_error);
+        }
     }
 
     private void changePwdDone(Bundle data) {
@@ -990,6 +1056,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void getWorkPlaceListDone(Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
             mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
@@ -1024,16 +1091,15 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Utility.showMessage(this, R.string.work_place_details);
         }
         //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
     }
 
     public void regNoCheckDone(Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("exists")) {
             mRegNo.setError("This Registration Number is already Registered.");
             mRegNo.requestFocus();
         }
         //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
     }
 
     private void getSpecialitiesDone(Bundle data) {
@@ -1044,13 +1110,17 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mSpecialityList = new ArrayList<>();
         }
         mSpecialityList.add(0, getString(R.string.select_speciality));
-        Utility.setNewSpinner(this, mSpecialityList, mSpeciality, new String[]{getString(R.string.other)});
-        if(mSpecStr != null && mSpecStr.equals("")) {
+        if(!mSpecialityList.contains(getString(R.string.other))) {
+            mSpecialityList.add(getString(R.string.other));
+        }
+        Utility.setNewSpinner(this, mSpecialityList, mSpeciality, null);
+        if(mSpecStr != null && !mSpecStr.equals("")) {
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mSpecStr));
         }
     }
 
     private void updateDone(int msg, Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             LoginHolder.servLoginRef = mServiceProv;
             Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
@@ -1065,7 +1135,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Utility.showMessage(this, R.string.some_error);
         }
         //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
+
     }
 
     private void refresh() {

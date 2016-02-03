@@ -35,7 +35,8 @@ public class PatientsHomeScreenActivity extends Activity {
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
-        SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" + mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
+                mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
         mlastDate.setText(prefs.getString("lastVisitDate", "--"));
         mlastTime.setText(prefs.getString("lastVisitTime", "--"));
         Utility.setLastVisit(prefs);

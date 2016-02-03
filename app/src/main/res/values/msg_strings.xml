@@ -33,5 +33,6 @@
     <string name="msg_use_loc">Use Location?</string>
     <string name="msg_use_gps">Use GPS, Wi-Fi and mobile networks for location.</string>
     <string name="msg_invalid_time">Time Already Passed.</string>
+    <string name="msg_photo_removed">Photo Removed.</string>
 
 </resources>
