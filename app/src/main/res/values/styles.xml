@@ -90,12 +90,29 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="FlatButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ThemeColor</item>
+        <item name="android:height">36dp</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:background">@drawable/flat_button_bg</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
+
     <style name="MyButton">
         <item name="android:background">@drawable/button</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/ThemeColor</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:height">36dp</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
     </style>
 
     <style name="WideButton">

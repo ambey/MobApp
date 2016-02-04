@@ -3,4 +3,7 @@
     <color name="gray">#9d9d9d</color>
     <color name="background2">#88fffae3</color>
     <color name="list_item_bg">#fffae3</color>
+    <color name="button_pressed_bg">#66999999</color>
+    <color name="button_focussed_bg">#1f999999</color>
+    <color name="button_bg">#00000000</color>
 </resources>

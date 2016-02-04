@@ -12,11 +12,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -47,6 +47,7 @@ import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,6 +57,9 @@ import java.util.Collections;
 import java.util.Date;
 
 public abstract class Utility {
+    public static final String photoFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "photo.jpg";
+    public static final String photoEditFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "photoEdit.jpg";
+
     private static ProgressDialog _progressDialog;
 
     /**
@@ -130,6 +134,10 @@ public abstract class Utility {
 
     public static void showAlert(Activity activity, String title, String msg, DialogInterface.OnClickListener listener) {
         showAlert(activity, title, msg, null, false, null, listener);
+    }
+
+    public static void showAlert(Activity activity, String title, String msg, boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
+        showAlert(activity, title, msg, null, cancelOpt, menuOptions, listener);
     }
 
     public static void showAlert(Activity activity, String title, String msg, View view, boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
@@ -536,7 +544,7 @@ public abstract class Utility {
     public static String[] getDaysOptions(Context context) {
         return context.getResources().getStringArray(R.array.days);
 
-       }
+    }
 
     public static boolean isDateAfterToday(Date date) {
         Date today = new Date();
@@ -606,6 +614,12 @@ public abstract class Utility {
         activity.finish();
         Intent intent = new Intent(activity, LoginActivity.class);
         activity.startActivity(intent);
+    }
+
+    public static void startCamera(Activity activity, int request, File destination) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
+        activity.startActivityForResult(intent, request);
     }
 
     public static void startCamera(Activity activity, int request) {

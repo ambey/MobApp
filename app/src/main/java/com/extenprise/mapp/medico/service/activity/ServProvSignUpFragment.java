@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,7 +38,9 @@ import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
-public class ServProvSignUpFragment extends Fragment implements ResponseHandler, TitleFragment  {
+import java.io.File;
+
+public class ServProvSignUpFragment extends Fragment implements ResponseHandler, TitleFragment {
     // LogCat tag
 /*
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
@@ -277,27 +281,28 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
 
     public void captureImage(View v) {
         final Activity activity = getActivity();
+        final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         Utility.showAlert(activity, getString(R.string.uploadImg), null, null, false,
                 new String[]{activity.getString(R.string.take_photo),
-                activity.getString(R.string.from_gallery),
-                activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                        activity.getString(R.string.from_gallery),
+                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera));
-                        break;
-                    case 1:
-                        Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
-                        break;
-                    case 2:
-                        mImgView.setImageBitmap(null);
-                        mImgView.setBackgroundResource(R.drawable.dr_avatar);
-                        break;
-                }
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera), destination);
+                                break;
+                            case 1:
+                                Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
+                                break;
+                            case 2:
+                                mImgView.setImageBitmap(null);
+                                mImgView.setBackgroundResource(R.drawable.dr_avatar);
+                                break;
+                        }
+                    }
+                });
     }
 
     public void enlargeImg(View view) {
@@ -313,22 +318,35 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             int requestEdit = resources.getInteger(R.integer.request_edit);
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
-                mImgView.setBackgroundResource(0);
-                if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
-                        requestCode == requestEdit)
-                        && data != null) {
-                    // Get the Image from data
-                    selectedImage = data.getData();
+                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
+                    String photoFileName = Utility.photoFileName;
+                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
+                        photoFileName = Utility.photoEditFileName;
+                    }
+                    File photo = new File(photoFileName);
+                    selectedImage = Uri.fromFile(new File(photoFileName));
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
-
-                } else if (requestCode == resources.getInteger(R.integer.request_camera) && data != null) {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    mImgView.setImageBitmap(bitmap);
-                    selectedImage = Utility.getImageUri(getActivity(), bitmap);
-                    imageChanged = true;
                 } else {
-                    Utility.showMessage(getActivity(), R.string.error_img_not_picked);
+                    mImgView.setBackgroundResource(0);
+                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
+                        // Get the Image from data
+                        selectedImage = data.getData();
+                        mImgView.setImageURI(selectedImage);
+                        imageChanged = true;
+                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        if (bitmap != null) {
+                            mImgView.setImageBitmap(bitmap);
+                            selectedImage = Utility.getImageUri(getActivity(), bitmap);
+                        } else {
+                            selectedImage = data.getData();
+                        }
+                        mImgView.setImageURI(selectedImage);
+                        imageChanged = true;
+                    } else {
+                        Utility.showMessage(getActivity(), R.string.error_img_not_picked);
+                    }
                 }
             } else if (requestCode == requestEdit) {
                 imageChanged = true;
@@ -338,6 +356,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
                     getActivity().startActivityForResult(editIntent, requestEdit);
                 }
             }

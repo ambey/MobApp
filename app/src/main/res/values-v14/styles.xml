@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="FlatButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ThemeColor</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/flat_button_bg</item>
+        <item name="android:height">36dp</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
+</resources>
