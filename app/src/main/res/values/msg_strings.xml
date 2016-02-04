@@ -35,5 +35,6 @@
     <string name="msg_invalid_time">Time Already Passed.</string>
     <string name="msg_photo_removed">Photo Removed.</string>
     <string name="msg_can_not_proceed">Can\'t Proceed.. Please Check Your Network.</string>
+    <string name="msg_time_collapse">Work Places timing collapse.</string>
 
 </resources>

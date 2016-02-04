@@ -18,6 +18,8 @@ import com.extenprise.mapp.medico.service.activity.RxInboxItemDetailsActivity;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServProvListItem;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,6 +76,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         TextView drLnameView = (TextView) v.findViewById(R.id.drLNameView);
         TextView clinicNameAddrView = (TextView) v.findViewById(R.id.clinicNameAddressView);
         TextView phoneView = (TextView) v.findViewById(R.id.phoneView);
+        TextView lbl = (TextView) v.findViewById(R.id.lbl);
 
         RxInboxItem item = getItem(position);
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -84,6 +87,13 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         drLnameView.setText(servProvItem.getLastName());
         clinicNameAddrView.setText(String.format("%s, %s", servProvItem.getServPtName(), servProvItem.getServPtLocation()));
         phoneView.setText(servProvItem.getPhone());
+
+        String category = servProvItem.getCategory();
+        if(category != null) {
+            if (category.equalsIgnoreCase(getContext().getString(R.string.diagnostic_center))) {
+                lbl.setText("");
+            }
+        }
 
         View medStoreLayout = v.findViewById(R.id.medStoreLayout);
         if (item.getMedStoreList() != null && item.getMedStoreList().size() > 0) {
