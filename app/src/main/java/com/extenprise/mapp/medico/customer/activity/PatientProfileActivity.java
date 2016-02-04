@@ -51,8 +51,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     private LinearLayout mContLay;
     private LinearLayout mAddrLayout;
-    private View mFormView;
-    private View mProgressView;
+    /*private View mFormView;
+    private View mProgressView;*/
 
     private TextView mPname, mTextViewDOB, mMobNo;
     private EditText mEditTextCustomerFName;
@@ -87,8 +87,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
 
-        mFormView = findViewById(R.id.scrollView);
-        mProgressView = findViewById(R.id.progressView);
+        /*mFormView = findViewById(R.id.scrollView);
+        mProgressView = findViewById(R.id.progressView);*/
 
         mPname = (TextView) findViewById(R.id.textviewPname);
         mMobNo = (TextView) findViewById(R.id.mobnumValue);
@@ -143,9 +143,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
-
-
-
     }
 
     public void showPersonalFields(View view) {
@@ -219,7 +216,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             valid = false;
         }
         if (!Validator.isOnlyAlpha(lName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            mEditTextCustomerLName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerLName;
             valid = false;
         }
@@ -603,6 +600,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     Utility.showMessage(this, R.string.error_img_not_picked);
                     return;
                 }
+                mImgView.setBackgroundResource(0);
                 if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
                         requestCode == requestEdit)) {
                     // Get the Image from data

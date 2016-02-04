@@ -902,11 +902,11 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Resources resources = getResources();
             // When an Image is picked
             if (resultCode == RESULT_OK) {
-                mImgView.setBackgroundResource(0);
                 if (data == null) {
                     Utility.showMessage(this, R.string.error_img_not_picked);
                     return;
                 }
+                mImgView.setBackgroundResource(0);
                 if ((requestCode == resources.getInteger(R.integer.request_gallery) ||
                         requestCode == resources.getInteger(R.integer.request_edit))) {
                     // Get the Image from data

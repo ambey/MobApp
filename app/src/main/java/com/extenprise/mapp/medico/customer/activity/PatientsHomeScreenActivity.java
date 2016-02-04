@@ -24,6 +24,9 @@ public class PatientsHomeScreenActivity extends Activity {
 
     private Customer mCustomer;
     private boolean exit = false;
+    private TextView mWelcomeView;
+    private ImageView mImg;
+    private boolean mReqSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,28 +34,38 @@ public class PatientsHomeScreenActivity extends Activity {
         setContentView(R.layout.activity_patients_home_screen);
 
         mCustomer = LoginHolder.custLoginRef;
+        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        mImg = (ImageView) findViewById(R.id.imagePatient);
 
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
-
         SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
                 mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
         mlastDate.setText(prefs.getString("lastVisitDate", "--"));
         mlastTime.setText(prefs.getString("lastVisitTime", "--"));
         Utility.setLastVisit(prefs);
 
-        TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        String label = welcomeView.getText().toString() + " " +
+        profile();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mReqSent) {
+            profile();
+        }
+    }
+
+    private void profile() {
+        mCustomer = LoginHolder.custLoginRef;
+        String label = getString(R.string.hello) + " " +
                 mCustomer.getfName() + " " +
                 mCustomer.getlName();
-        welcomeView.setText(label);
+        mWelcomeView.setText(label);
 
-        ImageView img = (ImageView) findViewById(R.id.imagePatient);
         if (mCustomer.getPhoto() != null) {
-            img.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
+            mImg.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
         }
-
-        //Utility.setLastVisit(this, mCustomer.getSignInData().getPhone(), "customer");
     }
 
     public void viewRxList(View view) {
@@ -68,6 +81,7 @@ public class PatientsHomeScreenActivity extends Activity {
     }
 
     public void viewProfile(View view) {
+        mReqSent = true;
         Intent intent = new Intent(this, PatientProfileActivity.class);
         intent.putExtra("customer", mCustomer);
         startActivity(intent);

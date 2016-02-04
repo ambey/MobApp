@@ -34,6 +34,11 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     private ServiceProvider mServiceProv;
     private boolean exit = false;
     private TextView mMsgView;
+    private TextView mWelcomeView;
+    private ImageView mImg;
+    private String mServPointType;
+
+    private boolean mReqSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,32 +46,44 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         setContentView(R.layout.activity_service_provider_home);
 
         mServiceProv = LoginHolder.servLoginRef;
-        String servPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
+        mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
 
         mMsgView = (TextView) findViewById(R.id.msgView);
+        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        mImg = (ImageView) findViewById(R.id.imageDoctor);
 
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
-
         SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
         mlastDate.setText(prefs.getString("lastVisitDate", "--"));
         mlastTime.setText(prefs.getString("lastVisitTime", "--"));
         Utility.setLastVisit(prefs);
 
-        TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        String label = welcomeView.getText().toString();
-        if(!servPointType.equalsIgnoreCase(getString(R.string.clinic))) {
+        profile();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mReqSent) {
+            profile();
+        }
+    }
+
+    private void profile() {
+        mServiceProv = LoginHolder.servLoginRef;
+        String label = getString(R.string.hello_dr);
+        if(!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             label = getString(R.string.hello);
         }
         label += " " + mServiceProv.getfName() + " " +
                 mServiceProv.getlName();
-        welcomeView.setText(label);
+        mWelcomeView.setText(label);
 
-        ImageView img = (ImageView) findViewById(R.id.imageDoctor);
+        mImg = (ImageView) findViewById(R.id.imageDoctor);
         if (mServiceProv.getPhoto() != null) {
-            img.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
+            mImg.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
         }
-        //Utility.setLastVisited(this);
     }
 
     public void viewAppointment(View view) {
@@ -76,6 +93,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     }
 
     public void viewProfile(View view) {
+        mReqSent = true;
         Intent intent = new Intent(this, ServProvProfileActivity.class);
         intent.putExtra("service", mServiceProv);
         intent.putExtra("category", getString(R.string.physician));
