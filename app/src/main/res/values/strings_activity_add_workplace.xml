@@ -17,6 +17,7 @@
     <string name="phone1">Phone 1 *</string>
     <string name="phone2">Phone 2 (Optional)</string>
     <string name="email">Email ID</string>
+    <string name="nm">Name</string>
 
     <string name="error_invalid_phone">Invalid Phone Number</string>
     <string name="error_endtime">End Time is invalid</string>

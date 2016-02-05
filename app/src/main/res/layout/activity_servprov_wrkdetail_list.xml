@@ -96,6 +96,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
+        android:maxLength="2"
         android:layout_toEndOf="@+id/editTextQualification"
         android:layout_toRightOf="@+id/editTextQualification"
         android:hint="@string/experience"

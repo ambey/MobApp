@@ -30,15 +30,10 @@ public class ServProvDetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serv_prov_details);
-
 /*
         View formView = findViewById(R.id.bookAppointmentForm);
         View progressView = findViewById(R.id.progressView);
 */
-
-        Intent intent = getIntent();
-        mServProv = intent.getParcelableExtra("service");
-
         TextView textViewClinic = (TextView) findViewById(R.id.textviewFirstClinic);
         TextView textViewDocExperience = (TextView) findViewById(R.id.textviewDocExperience);
         TextView textViewDocname = (TextView) findViewById(R.id.textviewDocname);
@@ -48,12 +43,15 @@ public class ServProvDetailsActivity extends Activity {
         ImageView imageViewUser = (ImageView) findViewById(R.id.imageViewUser);
         TextView lbl = (TextView) findViewById(R.id.textview);
         TextView textViewFees = (TextView) findViewById(R.id.textviewFees);
+        TextView sptType = (TextView) findViewById(R.id.textviewClinicName);
 /*
         TextView textViewReviews = (TextView) findViewById(R.id.textviewReviews);
 */
         TextView textViewDocQualification = (TextView) findViewById(R.id.textviewDocQualification);
         Button bookAppontButton = (Button) findViewById(R.id.buttonBookAppointment);
 
+        Intent intent = getIntent();
+        mServProv = intent.getParcelableExtra("service");
         if(mServProv == null) {
             mServProv = new ServiceProvider();
         }
@@ -80,10 +78,9 @@ public class ServProvDetailsActivity extends Activity {
                 Utility.getTimeString(spsspt.getStartTime()), Utility.getTimeString(spsspt.getEndTime())));
         textViewDocname.setText(String.format("%s %s", mServProv.getfName(), mServProv.getlName()));
         textViewDocSpeciality.setText(String.format("(%s)", spsspt.getService().getSpeciality()));
-
-        //mTextViewReviews.setText("11");
         textViewDocQualification.setText(mServProv.getQualification());
         textViewFees.setText(String.format("%.2f", spsspt.getConsultFee()));
+        sptType.setText(String.format("%s %s", spsspt.getServPointType(), getString(R.string.nm)));
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
         if (Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
@@ -93,7 +90,6 @@ public class ServProvDetailsActivity extends Activity {
             imageViewAvailable.setImageResource(R.drawable.r_circle);
             availability.setText(getString(R.string.unavailable));
         }
-
     }
 
     public void bookAppointment(View view) {

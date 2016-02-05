@@ -193,6 +193,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
             //displayScanCopy();
             Utility.showProgressDialog(ScannedRxActivity.this, false);
             sendRxToMedStore(data);
+            return true;
         }
         return false;
     }

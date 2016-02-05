@@ -407,6 +407,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.msg_login_failed);
+            mPasswordView.setText("");
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();
         }

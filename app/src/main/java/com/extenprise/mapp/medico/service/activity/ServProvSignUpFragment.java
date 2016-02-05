@@ -60,6 +60,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
 
     private View mRootView;
     private boolean imageChanged = false;
+    int category;
 /*
     private int requestGallery = 100;
     private int requestCamera = 200;
@@ -76,6 +77,9 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         //mRootView.findViewById(R.id.next).setVisibility(View.GONE);
         mFirstName = (EditText) mRootView.findViewById(R.id.editTextFName);
         mLastName = (EditText) mRootView.findViewById(R.id.editTextLName);
+        mEmailID = (EditText) mRootView.findViewById(R.id.editTextEmail);
+        mRadioGroupGender = (RadioGroup) mRootView.findViewById(R.id.radioGroupGender);
+
         mCellphoneview = (EditText) mRootView.findViewById(R.id.editTextCellphone);
         mCellphoneview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -88,10 +92,8 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                 }
             }
         });
-        mEmailID = (EditText) mRootView.findViewById(R.id.editTextEmail);
-        mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
-        mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
 
+        mPasswdView = (EditText) mRootView.findViewById(R.id.editTextPasswd);
         mPasswdView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -103,6 +105,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             }
         });
 
+        mCnfPasswdView = (EditText) mRootView.findViewById(R.id.editTextCnfPasswd);
         mCnfPasswdView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -114,9 +117,6 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             }
         });
 
-        mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
-        //mImgTxtView = (TextView) mRootView.findViewById(R.id.uploadimage);
-        mRadioGroupGender = (RadioGroup) mRootView.findViewById(R.id.radioGroupGender);
         mRegistrationNumber = (EditText) mRootView.findViewById(R.id.editTextRegistrationNumber);
         mRegistrationNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -133,6 +133,15 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                 }
             }
         });
+
+        mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
+        category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
+        if (category == R.string.pharmacist) {
+            mImgView.setImageResource(R.drawable.medstore);
+        } else if (category == R.string.diagnosticCenter) {
+            mImgView.setImageResource(R.drawable.diagcenter);
+        }
+
         /*mRegistrationNumber.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -155,12 +164,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                     Field2.setText("");*//*
             }
         });*/
-        int category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
-        if (category == R.string.pharmacist) {
-            mImgView.setImageResource(R.drawable.medstore);
-        } else if (category == R.string.diagnosticCenter) {
-            mImgView.setImageResource(R.drawable.diagcenter);
-        }
+
         //defaultImgBits = ((BitmapDrawable) mImgView.getDrawable()).getBitmap();
 
         /*if (savedInstanceState != null) {
@@ -202,10 +206,10 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             cancel = true;
         }
 
-        String fnm = mFirstName.getText().toString();
-        String lnm = mLastName.getText().toString();
-        String cnfPasswd = mCnfPasswdView.getText().toString();
-        String passwd = mPasswdView.getText().toString();
+        String fnm = mFirstName.getText().toString().trim();
+        String lnm = mLastName.getText().toString().trim();
+        String cnfPasswd = mCnfPasswdView.getText().toString().trim();
+        String passwd = mPasswdView.getText().toString().trim();
         String email = mEmailID.getText().toString().trim();
 
         if (!passwd.equals(cnfPasswd)) {
@@ -218,7 +222,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             focusView = mPasswdView;
             cancel = true;
         }
-        if (!Validator.isPhoneValid(mCellphoneview.getText().toString())) {
+        if (!Validator.isPhoneValid(mCellphoneview.getText().toString().trim())) {
             mCellphoneview.setError(getString(R.string.error_invalid_phone));
             focusView = mCellphoneview;
             cancel = true;
@@ -298,7 +302,12 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                                 break;
                             case 2:
                                 mImgView.setImageBitmap(null);
-                                mImgView.setBackgroundResource(R.drawable.dr_avatar);
+                                mImgView.setImageResource(R.drawable.dr_avatar);
+                                if (category == R.string.pharmacist) {
+                                    mImgView.setImageResource(R.drawable.medstore);
+                                } else if (category == R.string.diagnosticCenter) {
+                                    mImgView.setImageResource(R.drawable.diagcenter);
+                                }
                                 break;
                         }
                     }
@@ -318,6 +327,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             int requestEdit = resources.getInteger(R.integer.request_edit);
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
+                mImgView.setBackgroundResource(0);
                 if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
                     String photoFileName = Utility.photoFileName;
                     if (requestCode == resources.getInteger(R.integer.request_edit)) {
@@ -328,7 +338,6 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
                 } else {
-                    mImgView.setBackgroundResource(0);
                     if (requestCode == resources.getInteger(R.integer.request_gallery)) {
                         // Get the Image from data
                         selectedImage = data.getData();

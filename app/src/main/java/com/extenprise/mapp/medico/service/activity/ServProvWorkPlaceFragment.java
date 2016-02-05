@@ -462,36 +462,36 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             valid = false;
         }
 
+        if(LoginHolder.servLoginRef != null) {
+            for (int i = 0; i < LoginHolder.servLoginRef.getServiceCount(); i++) {
+                ServProvHasServPt spspt = LoginHolder.servLoginRef.getServProvHasServPt(i);
+                if (spspt == null) {
+                    continue;
+                }
+                String[] workdays = spspt.getWorkingDays().split(getString(R.string.comma));
+                for (String workday : workdays) {
+                    String[] workdays2 = days.split(getString(R.string.comma));
+                    for (String aWorkdays2 : workdays2) {
+                        if (workday.equals(aWorkdays2)) {
+                            int st1 = spspt.getStartTime();
+                            int en1 = spspt.getEndTime();
+                            int st2 = Utility.getMinutes(mStartTime.getText().toString());
+                            int en2 = Utility.getMinutes(mEndTime.getText().toString());
 
-        /*for(int i = 0; i < LoginHolder.servLoginRef.getServiceCount(); i++) {
-            ServProvHasServPt spspt = LoginHolder.servLoginRef.getServProvHasServPt(i);
-            if(spspt == null) {
-                continue;
-            }
-            *//*if(spspt.getWorkingDays().equals(days)) {
-
-            }*//*
-            String[] workdays = spspt.getWorkingDays().split(",");
-            for (String workday : workdays) {
-                String[] workdays2 = days.split(",");
-                for (String aWorkdays2 : workdays2) {
-                    if (workday.equals(aWorkdays2)) {
-                        int st1 = spspt.getStartTime();
-                        int en1 = spspt.getEndTime();
-                        int st2 = Utility.getMinutes(mStartTime.getText().toString());
-                        int en2 = Utility.getMinutes(mEndTime.getText().toString());
-
-                        if (st2 == st1 || en1 == en2 ||
-                                (st2 > st1 && st2 < en1) ||
-                                (en2 > st1 && en2 < en1) ||
-                                (st2 < st1 && en2 > en1)) {
-                            Utility.showAlert(getActivity(), "", getString(R.string.msg_time_collapse));
-                            return false;
+                            if (st2 == st1 || en1 == en2 ||
+                                    (st2 > st1 && st2 < en1) ||
+                                    (en2 > st1 && en2 < en1) ||
+                                    (st2 < st1 && en2 > en1)) {
+                                //Utility.showAlert(getActivity(), "", getString(R.string.msg_time_collapse));
+                                mEndTime.setError(getString(R.string.msg_time_reserved));
+                                mEndTime.requestFocus();
+                                return false;
+                            }
                         }
                     }
                 }
             }
-        }*/
+        }
 
         if (focusView != null) {
             focusView.requestFocus();

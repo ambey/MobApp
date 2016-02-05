@@ -79,6 +79,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         TextView dateView;
         TextView custNameView;
         TextView custPhoneView;
+        TextView lbl;
 
         if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
             View layoutRxHead = findViewById(R.id.layoutRxHead);
@@ -102,6 +103,14 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             servProvNameView = (TextView) findViewById(R.id.drNameView);
             servPointView = (TextView) findViewById(R.id.drClinicView);
             servProvPhoneView = (TextView) findViewById(R.id.drPhoneView);
+            lbl = (TextView) findViewById(R.id.drNameLblView);
+
+            String category = mInboxItem.getServProv().getCategory();
+            if(category != null) {
+                if (category.equalsIgnoreCase(getString(R.string.diagnostic_center))) {
+                    lbl.setText("");
+                }
+            }
         }
 
         mSendAvailButton = (Button) findViewById(R.id.buttonSendAvailability);

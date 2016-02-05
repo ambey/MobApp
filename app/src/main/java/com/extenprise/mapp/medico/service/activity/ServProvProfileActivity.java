@@ -40,6 +40,7 @@ import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.SearchServProvForm;
+import com.extenprise.mapp.medico.service.data.ServProvHasServPt;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.service.data.WorkPlace;
 import com.extenprise.mapp.medico.service.ui.WorkPlaceListAdapter;
@@ -306,7 +307,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         final WorkPlace wp = (WorkPlace) mListViewWP.getItemAtPosition(info.position);
         wp.setSignInData(mSignInData);
         if (item.getTitle() == getString(R.string.edit)) {
-            getWorkPlaceView(wp);
+            getWorkPlaceView(wp, info.position);
             //editWorkPlaceInfo(item.getActionView());
             return true;
         } else if (item.getTitle() == getString(R.string.remove)) {
@@ -342,10 +343,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         Cursor extendedCursor = new MergeCursor(cursors);
         adapter.notifyDataSetChanged();
 */
-        getWorkPlaceView(null);
+        getWorkPlaceView(null, -1);
     }
 
-    private void getWorkPlaceView(final WorkPlace item) {
+    private void getWorkPlaceView(final WorkPlace item, final int position) {
         int action = MappService.DO_ADD_WORK_PLACE;
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -522,6 +523,36 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             @Override
             public void onClick(View v) {
                 if (isValidWorkPlace()) {
+                    for ( int i = 0; i < mWorkPlaceList.size(); i++ ) {
+                        if(item != null && i == position) {
+                            continue;
+                        }
+                        WorkPlace w = mWorkPlaceList.get(i);
+
+                        String[] workdays = w.getWorkingDays().split(getString(R.string.comma));
+                        for (String workday : workdays) {
+                            String[] workdays2 = mMultiSpinnerDays.getText().toString().split(getString(R.string.comma));
+                            for (String aWorkdays2 : workdays2) {
+                                if (workday.equals(aWorkdays2)) {
+                                    int st1 = w.getStartTime();
+                                    int en1 = w.getEndTime();
+                                    int st2 = Utility.getMinutes(mStartTime.getText().toString());
+                                    int en2 = Utility.getMinutes(mEndTime.getText().toString());
+
+                                    if (st2 == st1 || en1 == en2 ||
+                                            (st2 > st1 && st2 < en1) ||
+                                            (en2 > st1 && en2 < en1) ||
+                                            (st2 < st1 && en2 > en1)) {
+                                        //Utility.showAlert(getActivity(), "", getString(R.string.msg_time_collapse));
+                                        mEndTime.setError(getString(R.string.msg_time_reserved));
+                                        mEndTime.requestFocus();
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     WorkPlace wp = new WorkPlace();
                     wp.setName(mName.getText().toString().trim());
                     wp.setLocation(mLoc.getText().toString().trim());
