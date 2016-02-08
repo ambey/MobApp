@@ -9,150 +9,122 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity">
 
-
-    <TextView
-        android:id="@+id/viewWelcomeLbl"
+    <LinearLayout
+        android:id="@+id/headerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/imagePatient"
-        android:layout_toRightOf="@+id/imagePatient"
-        android:text="@string/hello"
-        android:textSize="18sp" />
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/imagePatient"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:src="@drawable/patient" />
+        <ImageView
+            android:id="@+id/imagePatient"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:src="@drawable/patient" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/imagePatient"
-        android:layout_toRightOf="@+id/imagePatient"
-        android:text="@string/last_modified" />
-
-    <TextView
-        android:id="@+id/textViewDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/textView1"
-        android:layout_toRightOf="@+id/textView1"
-        android:hint="@string/date" />
-
-    <TextView
-        android:id="@+id/textViewTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/textViewDate"
-        android:layout_toRightOf="@+id/textViewDate"
-        android:hint="@string/time" />
-
-    <View
-        android:id="@+id/linenView"
-       style="@style/HorizontalLineview"
-        android:layout_marginTop="120dp"
-      />
-
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/linenView">
-
-        <Button
-            android:id="@+id/buttonDoctorsAppointment"
-            style="@style/RectButton"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView5"
-            android:layout_alignEnd="@+id/linenView2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/linenView2"
-            android:onClick="viewAppointments"
-            android:text="@string/doc_appoint" />
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/viewWelcomeLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hello"
+                android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/buttonViewReport"
-            style="@style/InactiveRectButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView5"
-            android:layout_alignLeft="@+id/linenView2"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/linenView2"
-            android:enabled="false"
-            android:text="@string/view_other_reports" />
-
-
-        <Button
-            android:id="@+id/buttonViewRx"
-            style="@style/RectButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView2"
-            android:layout_alignEnd="@+id/linenView2"
-            android:layout_alignRight="@+id/linenView2"
-            android:layout_below="@+id/linenView5"
-            android:onClick="viewRxList"
-            android:text="@string/view_rx"/>
-
-        <Button
-            android:id="@+id/buttonViewProfile"
-            style="@style/RectButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView2"
-            android:layout_alignLeft="@+id/linenView2"
-            android:layout_alignStart="@+id/linenView2"
-            android:layout_below="@+id/linenView5"
-            android:onClick="viewProfile"
-            android:text="@string/profile_text" />
-        <Button
-            android:id="@+id/buttonSearchDoc"
-            style="@style/RectButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/buttonViewProfile"
-            android:onClick="searchDoc"
-            android:text="@string/search_doctor" />
-
+            <TextView
+                android:id="@+id/lastVisitedView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/last_visited" />
+        </LinearLayout>
+    </LinearLayout>
+    <!--
         <View
-            android:id="@+id/linenView2"
-           style="@style/VerticallLineview"
-            android:layout_alignBottom="@+id/linenView4"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-           />
-
-        <View
-            android:id="@+id/linenView4"
-          style="@style/HorizontalLineview"
-            android:layout_marginTop="240dp"
-            />
-
-        <View
-            android:id="@+id/linenView5"
+            android:id="@+id/linenView"
            style="@style/HorizontalLineview"
             android:layout_marginTop="120dp"
-            />
+          />
+    -->
 
-    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerView"
+        android:layout_marginTop="24dp"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="96dp"
+            android:layout_margin="2dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/buttonDoctorsAppointment"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="0.5"
+                android:onClick="viewAppointments"
+                android:text="@string/doc_appoint" />
+
+            <Button
+                android:id="@+id/buttonViewReport"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                android:enabled="false"
+                android:text="@string/view_other_reports" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="96dp"
+            android:layout_margin="2dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/buttonViewRx"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="0.5"
+                android:onClick="viewRxList"
+                android:text="@string/view_rx" />
+
+            <Button
+                android:id="@+id/buttonViewProfile"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                android:onClick="viewProfile"
+                android:text="@string/profile_text" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonSearchDoc"
+            style="@style/MyButton"
+            android:layout_width="fill_parent"
+            android:layout_height="64dp"
+            android:layout_margin="6dp"
+            android:onClick="searchDoc"
+            android:text="@string/search_doctor" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -24,7 +24,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="10dp">
 
             <ImageView
                 android:id="@+id/uploadimageview"
@@ -99,7 +101,7 @@
 
             <Button
                 android:id="@+id/buttonCustomerSignUp"
-                style="@style/ExtraWideButton"
+                style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

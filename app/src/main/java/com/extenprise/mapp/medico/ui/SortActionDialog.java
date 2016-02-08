@@ -1,5 +1,6 @@
 package com.extenprise.mapp.medico.ui;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -35,7 +37,9 @@ public class SortActionDialog extends DialogFragment implements View.OnClickList
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getDialog().setTitle(R.string.sort_options);
+        Dialog dialog = getDialog();
+        dialog.setTitle(R.string.sort_options);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.layout_sort_dialog, container);
         mAscButton = (RadioButton) view.findViewById(R.id.ascending);
         mListView = (ListView) view.findViewById(R.id.sortFieldsList);

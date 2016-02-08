@@ -37,12 +37,13 @@ public class PatientsHomeScreenActivity extends Activity {
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImg = (ImageView) findViewById(R.id.imagePatient);
 
-        TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
-        TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
+        TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
                 mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
-        mlastDate.setText(prefs.getString("lastVisitDate", "--"));
-        mlastTime.setText(prefs.getString("lastVisitTime", "--"));
+        lastVisited.setText(String.format("%s %s %s",
+                getString(R.string.last_visited),
+                prefs.getString("lastVisitDate", "--"),
+                prefs.getString("lastVisitTime", "--")));
         Utility.setLastVisit(prefs);
 
         profile();
@@ -58,10 +59,8 @@ public class PatientsHomeScreenActivity extends Activity {
 
     private void profile() {
         mCustomer = LoginHolder.custLoginRef;
-        String label = getString(R.string.hello) + " " +
-                mCustomer.getfName() + " " +
-                mCustomer.getlName();
-        mWelcomeView.setText(label);
+        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
+                mCustomer.getfName(), mCustomer.getlName()));
 
         if (mCustomer.getPhoto() != null) {
             mImg.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));

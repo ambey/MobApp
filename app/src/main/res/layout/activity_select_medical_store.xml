@@ -45,7 +45,7 @@
 
     <Button
         android:id="@+id/sendRxButton"
-        style="@style/InactiveExtraWideButton"
+        style="@style/MyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

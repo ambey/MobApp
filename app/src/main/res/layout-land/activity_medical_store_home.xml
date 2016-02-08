@@ -96,7 +96,7 @@
 
             <Button
                 android:id="@+id/buttonViewPendrx"
-                style="@style/InactiveRectButton"
+                style="@style/RectButton"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/linenView5"

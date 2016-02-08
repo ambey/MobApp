@@ -74,7 +74,9 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="10dp">
 
 
             <LinearLayout
@@ -186,13 +188,13 @@
                     android:id="@+id/spinAvailDays"
                     android:layout_width="160dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/spinner"
-                    android:text="@string/select_days"
-                    android:layout_below="@+id/viewWeeklyOffLbl"
-                    android:layout_marginTop="10dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:layout_below="@+id/viewWeeklyOffLbl"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/spinner"
                     android:onClick="showDaysSelectionDialog"
+                    android:text="@string/select_days"
                     android:visibility="gone"
                    />
 
@@ -200,15 +202,15 @@
                     android:id="@+id/spinGender"
                     android:layout_width="160dp"
                     android:layout_height="30dp"
-                    android:layout_below="@+id/viewGender"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
+                    android:layout_below="@+id/viewGender"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/spinner"
                     android:entries="@array/gender_search"
                     android:prompt="@string/gender"
                     android:spinnerMode="dropdown"
                     android:visibility="gone"
-                    android:layout_marginTop="10dp"
 
 
                    />
@@ -256,7 +258,7 @@
 
             <Button
                 android:id="@+id/buttonSearch"
-                style="@style/ExtraWideButton"
+                style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/servProLay6"

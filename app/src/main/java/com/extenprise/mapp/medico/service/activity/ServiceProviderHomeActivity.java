@@ -52,11 +52,12 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImg = (ImageView) findViewById(R.id.imageDoctor);
 
-        TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
-        TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
+        TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
-        mlastDate.setText(prefs.getString("lastVisitDate", "--"));
-        mlastTime.setText(prefs.getString("lastVisitTime", "--"));
+        lastVisited.setText(String.format("%s %s %s",
+                getString(R.string.last_visited),
+                prefs.getString("lastVisitDate", "--"),
+                prefs.getString("lastVisitTime", "--")));
         Utility.setLastVisit(prefs);
 
         profile();

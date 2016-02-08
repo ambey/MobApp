@@ -335,13 +335,15 @@ public abstract class Utility {
 
     public static void setEnabledButton(Context context, Button button, boolean enabled) {
         button.setEnabled(enabled);
+/*
         if (enabled) {
-            button.setBackgroundResource(R.drawable.button);
+            button.setBackgroundResource(R.drawable.raised_button_bg);
             button.setTextColor(ContextCompat.getColor(context, R.color.ThemeColor));
         } else {
             button.setBackgroundResource(R.drawable.inactive_button);
             button.setTextColor(ContextCompat.getColor(context, R.color.PassiveColor));
         }
+*/
     }
 
     public static void setEnabledButton(Context context, Button button, boolean enabled, int color) {

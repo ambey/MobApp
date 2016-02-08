@@ -74,8 +74,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="@string/experience"
-                    android:maxLength="2"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="2" />
 
 
                 <EditText
@@ -128,7 +128,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical">
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
 
                     <include
                         android:id="@+id/workPlaceDetailLayout"
@@ -140,13 +142,15 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        android:orientation="horizontal">
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp">
 
                         <Button
                             android:id="@+id/buttonAddWorkPlace"
                             style="@style/MyButton"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="64dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="0.5"
                             android:onClick="addNewWorkPlace"
@@ -156,7 +160,7 @@
                             android:id="@+id/buttonDone"
                             style="@style/MyButton"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="64dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_marginStart="10dp"

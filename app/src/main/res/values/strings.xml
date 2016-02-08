@@ -3,7 +3,7 @@
     <string name="app_name">Professional Details</string>
 
     <!--
-                    <string name="server_name">http://10.0.2.2:8080/mapp</string>
+                        <string name="server_name">http://10.0.2.2:8080/mapp</string>
     -->
     <!--
                 <string name="server_name">http://122.170.15.3:8080/mapp</string>
@@ -249,6 +249,7 @@
     <string name="forgotpwd">Forgot Password</string>
     <string name="oldPwd">Old Password *</string>
     <string name="newPwd">New Password *</string>
+    <string name="last_visited">Last Visited:</string>
 
     <!-- Search Result Sort Fields -->
     <string name="by_drname">Doctor Name</string>

@@ -5,5 +5,9 @@
     <color name="list_item_bg">#fffae3</color>
     <color name="button_pressed_bg">#66999999</color>
     <color name="button_focussed_bg">#1f999999</color>
-    <color name="button_bg">#00000000</color>
+    <color name="flat_button_bg">#00000000</color>
+    <color name="raised_button_bg">#fff</color>
+    <color name="button_deactivated_bg">#1f000000</color>
+    <color name="button_text_deactivated">#4d000000</color>
+    <color name="button_text">@color/ThemeColor</color>
 </resources>

@@ -17,124 +17,128 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/imageViewPatient"
-        android:layout_width="120dp"
-        android:layout_height="100dp"
-        android:clickable="true"
-        android:onClick="changeImg"
-        android:src="@drawable/patient" />
-
-    <TextView
-        android:id="@+id/textViewEditImage"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignBottom="@+id/imageViewPatient"
-        android:layout_alignEnd="@+id/imageViewPatient"
-        android:layout_alignRight="@+id/imageViewPatient"
-        android:background="@drawable/p12"
-        android:clickable="true"
-        android:onClick="changeImg" />
-
-    <TextView
-        android:id="@+id/textviewPname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/imageViewPatient"
-        android:layout_toRightOf="@+id/imageViewPatient"
-        android:hint="@string/patient_name"
-        android:textColor="#006600"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <View
-        android:id="@+id/linenView"
-        android:layout_width="fill_parent"
-        android:layout_height="0.4dp"
-        android:layout_below="@+id/imageViewPatient"
-        android:layout_marginTop="30dp"
-        android:background="#9d9d9d" />
-
-    <ProgressBar
-        android:id="@+id/progressView"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linenView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/linenView"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/mobnumLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/mob_num" />
-
-            <TextView
-                android:id="@+id/mobnumValue"
-                style="@style/LargeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                android:layout_toEndOf="@+id/mobnumLabel"
-                android:layout_toRightOf="@+id/mobnumLabel"
-                android:hint="@string/mob_num"/>
-            </RelativeLayout>
 
             <ImageView
-                android:id="@+id/imageViewEdit1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:id="@+id/imageViewPatient"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
                 android:clickable="true"
-                android:onClick="editPatientProf"
-                android:src="@drawable/editpen" />
+                android:onClick="changeImg"
+                android:src="@drawable/patient" />
 
             <TextView
-                android:id="@+id/textViewEdit1"
+                android:id="@+id/textViewEditImage"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignBottom="@+id/imageViewPatient"
+                android:layout_alignEnd="@+id/imageViewPatient"
+                android:layout_alignRight="@+id/imageViewPatient"
+                android:background="@drawable/p12"
+                android:clickable="true"
+                android:onClick="changeImg" />
+
+            <TextView
+                android:id="@+id/textviewPname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:clickable="true"
-                android:onClick="editPatientProf"
-                android:text="@string/edit_info"
-                android:textSize="12sp" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_toEndOf="@+id/imageViewPatient"
+                android:layout_toRightOf="@+id/imageViewPatient"
+                android:hint="@string/patient_name"
+                android:textColor="#006600"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <include
-                android:id="@+id/customerInfo"
-                layout="@layout/layout_patient_detail"
+            <View
+                android:id="@+id/linenView"
+                android:layout_width="fill_parent"
+                android:layout_height="0.4dp"
+                android:layout_below="@+id/imageViewPatient"
+                android:layout_marginTop="30dp"
+                android:background="#9d9d9d" />
+
+            <ProgressBar
+                android:id="@+id/progressView"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linenView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_below="@+id/linenView"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
 
-            <Button
-                android:id="@+id/buttonViewUpdate"
-                style="@style/ExtraWideButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:onClick="updateProfile"
-                android:text="@string/update" />
-        </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/mobnumLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="@string/mob_num" />
+
+                    <TextView
+                        android:id="@+id/mobnumValue"
+                        style="@style/LargeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_toEndOf="@+id/mobnumLabel"
+                        android:layout_toRightOf="@+id/mobnumLabel"
+                        android:hint="@string/mob_num" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageViewEdit1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:clickable="true"
+                    android:onClick="editPatientProf"
+                    android:src="@drawable/editpen" />
+
+                <TextView
+                    android:id="@+id/textViewEdit1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:clickable="true"
+                    android:onClick="editPatientProf"
+                    android:text="@string/edit_info"
+                    android:textSize="12sp" />
+
+                <include
+                    android:id="@+id/customerInfo"
+                    layout="@layout/layout_patient_detail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
+                    android:id="@+id/buttonViewUpdate"
+                    style="@style/MyButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:onClick="updateProfile"
+                    android:text="@string/update" />
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

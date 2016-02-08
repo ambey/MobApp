@@ -266,7 +266,7 @@
 
             <Button
                 android:id="@+id/addButton"
-                style="@style/ExtraWideButton"
+                style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/altDrugLayout"
@@ -277,7 +277,7 @@
 
             <Button
                 android:id="@+id/doneButton"
-                style="@style/ExtraWideButton"
+                style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/addButton"

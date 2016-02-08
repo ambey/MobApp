@@ -7,8 +7,8 @@
     <string name="action_sign_in_short">Sign In</string>
     <string name="passWd">Password *</string>
     <string name="regMobNo">Registered Mobile Number *</string>
-    <string name="rememberMe">Keep Me Log In.</string>
-    <string name="login">Log In</string>
+    <string name="rememberMe">Keep Me Signed In.</string>
+    <string name="login">Sign In</string>
     <string name="notReg">Not Registered With Us?</string>
 
 </resources>

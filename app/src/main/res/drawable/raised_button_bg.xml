@@ -2,5 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/button_pressed_bg" android:state_pressed="true" />
     <item android:drawable="@color/button_focussed_bg" android:state_focused="true" />
-    <item android:drawable="@color/flat_button_bg" />
+    <item android:drawable="@color/button_deactivated_bg" android:state_enabled="false" />
+    <item android:drawable="@color/raised_button_bg" />
 </selector>

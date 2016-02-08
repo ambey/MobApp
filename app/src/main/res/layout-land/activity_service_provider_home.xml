@@ -99,7 +99,7 @@
 
             <Button
                 android:id="@+id/buttonViewReport"
-                style="@style/InactiveRectButton"
+                style="@style/RectButton"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/linenView5"
@@ -120,7 +120,7 @@
 
             <Button
                 android:id="@+id/buttonViewRx"
-                style="@style/InactiveRectButton"
+                style="@style/RectButton"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/linenView5"

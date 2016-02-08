@@ -56,6 +56,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" >
 
             <!--
@@ -68,7 +69,8 @@
         </activity>
         <activity
             android:name=".customer.activity.SearchServProvActivity"
-            android:label="@string/title_activity_search_doctor">
+            android:label="@string/title_activity_search_doctor"
+            android:screenOrientation="portrait">
 
 
             <!--
@@ -82,7 +84,8 @@
         <activity
             android:name=".service.activity.ServProvSignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".activity.SignUpPreviousActivity" >
+            android:parentActivityName=".activity.SignUpPreviousActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.SignUpPreviousActivity" />
@@ -112,11 +115,13 @@
         </activity>
         <activity
             android:name=".service.activity.ServiceProviderHomeActivity"
-            android:label="@string/title_activity_service_provider_home" />
+            android:label="@string/title_activity_service_provider_home"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".customer.activity.AdvSearchServProvActivity"
             android:label="@string/title_activity_search_doctor"
-            android:parentActivityName=".customer.activity.SearchServProvActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.SearchServProvActivity" />
@@ -124,7 +129,8 @@
         <activity
             android:name=".service.activity.ServProvDetailsActivity"
             android:label="@string/title_activity_doctor_details"
-            android:parentActivityName=".customer.activity.SearchServProvResultActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvResultActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.SearchServProvResultActivity" />
@@ -132,7 +138,8 @@
         <activity
             android:name=".customer.activity.SearchServProvResultActivity"
             android:label="@string/title_activity_search_doc_result_list"
-            android:parentActivityName=".customer.activity.SearchServProvActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.SearchServProvActivity" />
@@ -140,7 +147,8 @@
         <activity
             android:name=".service.activity.AppointmentDetailsActivity"
             android:label="@string/title_activity_appointment_details"
-            android:parentActivityName=".service.activity.ViewAppointmentListActivity" >
+            android:parentActivityName=".service.activity.ViewAppointmentListActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.ViewAppointmentListActivity" />
@@ -148,14 +156,16 @@
         <activity
             android:name=".customer.activity.BookAppointmentActivity"
             android:label="@string/title_activity_book_appointment"
-            android:parentActivityName=".customer.activity.SearchServProvResultActivity" >
+            android:parentActivityName=".customer.activity.SearchServProvResultActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.SearchServProvResultActivity" />
         </activity>
         <activity
             android:name=".activity.SignUpPreviousActivity"
-            android:parentActivityName=".activity.LoginActivity" >
+            android:parentActivityName=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
@@ -170,7 +180,8 @@
         <activity
             android:name=".service.activity.ViewAppointmentListActivity"
             android:label="@string/title_activity_view_appointment_list"
-            android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
+            android:parentActivityName=".service.activity.ServiceProviderHomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.ServiceProviderHomeActivity" />
@@ -178,18 +189,21 @@
         <activity
             android:name=".customer.activity.PatientSignUpActivity"
             android:label="@string/title_activity_customer_sign_up"
-            android:parentActivityName=".activity.SignUpPreviousActivity" >
+            android:parentActivityName=".activity.SignUpPreviousActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.SignUpPreviousActivity" />
         </activity>
         <activity
             android:name=".customer.activity.PatientsHomeScreenActivity"
-            android:label="@string/title_activity_patients_home_screen" />
+            android:label="@string/title_activity_patients_home_screen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".service.activity.RxActivity"
             android:label="@string/title_activity_rx_activity"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.AppointmentDetailsActivity" />
@@ -197,7 +211,8 @@
         <activity
             android:name=".service.activity.ViewRxActivity"
             android:label="@string/title_activity_view_rx"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.AppointmentDetailsActivity" />
@@ -205,7 +220,8 @@
         <activity
             android:name=".customer.activity.PatientHistoryActivity"
             android:label="@string/title_activity_patient_history"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.AppointmentDetailsActivity" />
@@ -213,19 +229,22 @@
         <activity
             android:name=".service.activity.ScannedRxActivity"
             android:label="@string/title_activity_scanned_rx"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
             android:name=".activity.FirstFlipperActivity"
-            android:label="@string/title_activity_first_flipper" >
+            android:label="@string/title_activity_first_flipper"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".service.activity.ServProvProfileActivity"
             android:label="@string/title_activity_serv_prove_profile"
-            android:parentActivityName=".service.activity.ServiceProviderHomeActivity" >
+            android:parentActivityName=".service.activity.ServiceProviderHomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.ServiceProviderHomeActivity" />
@@ -233,7 +252,8 @@
         <activity
             android:name=".customer.activity.PatientProfileActivity"
             android:label="@string/title_activity_patient_profile"
-            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity" >
+            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
@@ -247,12 +267,14 @@
 
         <activity
             android:name=".service.activity.MedicalStoreHomeActivity"
-            android:label="@string/title_activity_medical_store_home" >
+            android:label="@string/title_activity_medical_store_home"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".service.activity.RxListActivity"
             android:label="@string/title_activity_rx_list"
-            android:parentActivityName=".service.activity.MedicalStoreHomeActivity" >
+            android:parentActivityName=".service.activity.MedicalStoreHomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.MedicalStoreHomeActivity" />
@@ -260,14 +282,16 @@
         <activity
             android:name=".service.activity.SelectMedicalStoreActivity"
             android:label="@string/title_activity_select_medical_store"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity" >
+            android:parentActivityName=".service.activity.AppointmentDetailsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
             android:name=".activity.WelcomeActivity"
-            android:label="Medico" >
+            android:label="Medico"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -277,21 +301,24 @@
         <activity
             android:name=".service.activity.RxInboxItemDetailsActivity"
             android:label="@string/title_activity_rx_inbox_item_details"
-            android:parentActivityName=".service.activity.RxListActivity" >
+            android:parentActivityName=".service.activity.RxListActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.RxListActivity" />
         </activity>
         <activity android:name=".customer.activity.ViewAppointmentListActivity"
             android:label="@string/my_apponts"
-            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity">
+            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
         </activity>
         <activity android:name=".customer.activity.ViewRxListActivity"
             android:label="@string/my_rx_list"
-            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity">
+            android:parentActivityName=".customer.activity.PatientsHomeScreenActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
