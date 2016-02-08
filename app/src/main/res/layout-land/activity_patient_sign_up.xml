@@ -214,7 +214,7 @@
                 android:layout_height="30dp"
                 android:layout_below="@+id/editTextHeight"
                 android:layout_marginTop="30dp"
-                android:onClick="showAddressFields"
+                android:onClick="showFields"
                 android:text="@string/address" />
 
             <EditText
@@ -293,7 +293,7 @@
                 android:layout_height="30dp"
                 android:layout_below="@+id/editTextConPasswd"
                 android:layout_marginTop="30dp"
-                android:onClick="showPersonalFields"
+                android:onClick="showFields"
                 android:text="@string/personalDetails" />
 
         </RelativeLayout>

@@ -2,9 +2,9 @@ package com.extenprise.mapp.medico.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.DownloadManager;
+/*import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.Context;*/
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,19 +34,21 @@ import com.extenprise.mapp.medico.util.Utility;
 
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
-
-    private static final String LOG_TAG = "AppUpgrade";
     TextView textLabel;
     ImageView imgLogo;
     Animation textAnimation;
-    String appURI = "";
+
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
     private Handler mHandler = new Handler();
+
+    /*
+    private static final String LOG_TAG = "AppUpgrade";
     private int versionCode = 0;
     private DownloadManager downloadManager;
     private long downloadReference;
 
+    //String appURI = "";
     //broadcast receiver to get notification about ongoing downloads
     private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
 
@@ -67,7 +69,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
             }
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

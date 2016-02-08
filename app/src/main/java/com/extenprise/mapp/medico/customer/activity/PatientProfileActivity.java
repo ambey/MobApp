@@ -28,7 +28,6 @@ import android.widget.TextView;
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.data.Customer;
-import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -70,8 +69,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     private EditText mOldPwd;
     private boolean isPwdCorrect;
-
-    private Bitmap mImgCopy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,34 +135,37 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             Bitmap bitmap = savedInstanceState.getParcelable("image");
             mImgView.setImageBitmap(bitmap);
         } else {
-            mImgCopy = (Bitmap) getLastNonConfigurationInstance();
+            Bitmap mImgCopy = (Bitmap) getLastNonConfigurationInstance();
             if (mImgCopy != null) {
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
     }
 
-    public void showPersonalFields(View view) {
-        if (mContLay.getVisibility() == View.VISIBLE) {
+    public void showFields(View view) {
+        /*if (mContLay.getVisibility() == View.VISIBLE) {
             Utility.collapse(mContLay, null);
         } else {
             Utility.expand(mContLay, null);
             if (mAddrLayout.getVisibility() == View.VISIBLE) {
                 Utility.collapse(mAddrLayout, null);
             }
-        }
+        }*/
+        Utility.collapseExpand(mAddrLayout);
+        Utility.collapseExpand(mContLay);
     }
 
-    public void showAddressFields(View view) {
-        if (mAddrLayout.getVisibility() == View.VISIBLE) {
+    /*public void showAddressFields(View view) {
+        *//*if (mAddrLayout.getVisibility() == View.VISIBLE) {
             Utility.collapse(mAddrLayout, null);
         } else {
             Utility.expand(mAddrLayout, null);
             if (mContLay.getVisibility() == View.VISIBLE) {
                 Utility.collapse(mContLay, null);
             }
-        }
-    }
+        }*//*
+
+    }*/
 
     private void setFieldsEnability(boolean set) {
         mEditTextCustomerFName.setEnabled(set);
@@ -179,17 +179,16 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mSpinCity.setEnabled(set);
         mSpinState.setEnabled(set);
         mSpinGender.setEnabled(set);
+
         Utility.setEnabledButton(this, mUpdateButton, set);
     }
 
     public void editPatientProf(View v) {
-        if (mEditTextCustomerFName.isEnabled()) {
-            setFieldsEnability(false);
-        } else {
-            setFieldsEnability(true);
-        }
+        setFieldsEnability(mEditTextCustomerFName.isEnabled());
         //showPersonalFields(v);
         mContLay.setVisibility(View.VISIBLE);
+        /*Utility.expand(mContLay, null);
+        Utility.collapseExpand(mContLay);*/
     }
 
     public void updateProfile(View v) {

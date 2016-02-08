@@ -18,7 +18,7 @@ import com.extenprise.mapp.medico.service.activity.RxInboxItemDetailsActivity;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServProvListItem;
 
-import org.w3c.dom.Text;
+//import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
     private ArrayList<RxInboxItem> mList;
     private Customer mCust;
     private ArrayList<RxInboxItem> mSortedList;
-    private int mSelectedPosition;
+    //private int mSelectedPosition;
     private String mSortField;
     private boolean mAscending;
 

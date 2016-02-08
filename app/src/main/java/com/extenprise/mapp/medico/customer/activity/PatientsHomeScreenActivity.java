@@ -159,9 +159,9 @@ public class PatientsHomeScreenActivity extends Activity {
         return null;
     }
 
-    private void refresh() {
+    /*private void refresh() {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
-    }
+    }*/
 }

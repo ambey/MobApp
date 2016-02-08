@@ -167,7 +167,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
         fragment.showtimeFields(view);
     }
 
-    public void showFeeFields(View view) {
+    /*public void showFeeFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showFeeFields(view);
     }
@@ -175,7 +175,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
     public void showDaysFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showDaysFields(view);
-    }
+    }*/
 
     public void showWorkFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);

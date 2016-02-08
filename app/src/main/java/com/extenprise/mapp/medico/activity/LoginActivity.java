@@ -63,8 +63,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
     // UI references.
     private AutoCompleteTextView mMobileNumber;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
     private CheckBox mSaveLoginCheckBox;
     private RadioGroup mRadioGroupUType;
     private boolean exit = false;
@@ -79,22 +77,19 @@ public class LoginActivity extends Activity implements ResponseHandler {
             actionBar.setDisplayShowHomeEnabled(false);
         }
 
-        mLoginFormView = findViewById(R.id.login_form);
+        View mLoginFormView = findViewById(R.id.login_form);
         //mLoginFormView.setEnabled(false);
         Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
         rLayoutAnim.setDuration(3000);
         mLoginFormView.startAnimation(rLayoutAnim);
 
-        mProgressView = findViewById(R.id.login_progress);
-
+        //mProgressView = findViewById(R.id.login_progress);
         mSignInData = new SignInData();
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
-
 
         // Set up the login form.
         mMobileNumber = (AutoCompleteTextView) findViewById(R.id.mobileNumber);
         //populateAutoComplete();
-
         SharedPreferences preferences = getSharedPreferences("autoComplete", MODE_PRIVATE);
         Set<String> set = preferences.getStringSet("autoCompleteValues", new HashSet<String>());
         ArrayAdapter<String> adapter =
@@ -102,7 +97,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
                         android.R.layout.simple_dropdown_item_1line,
                         new ArrayList<>(set));
         mMobileNumber.setAdapter(adapter);
-
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -123,7 +117,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 attemptLogin();
             }
         });
-        mLoginFormView = emailSignInButton;
 
         TextView mRegisterButton = (TextView) findViewById(R.id.notRegistered);
         mRegisterButton.setOnClickListener(new OnClickListener() {
@@ -169,8 +162,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
             intent = new Intent(this, PatientsHomeScreenActivity.class);
             startActivity(intent);
         } else if (LoginHolder.servLoginRef != null) {
-            ServiceProvider sp = LoginHolder.servLoginRef;
-            String spType = sp.getServProvHasServPt(0).getServPointType();
+            //ServiceProvider sp = LoginHolder.servLoginRef;
+            String spType = LoginHolder.servLoginRef.getServProvHasServPt(0).getServPointType();
             if (spType.equalsIgnoreCase(getString(R.string.medical_store))) {
                 intent = new Intent(this, MedicalStoreHomeActivity.class);
             } else {
@@ -356,7 +349,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Utility.showProgressDialog(this, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
-            String phone, type;
+            String phone;
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
@@ -377,7 +370,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 LoginHolder.custLoginRef = customer;
                 assert customer != null;
                 phone = customer.getSignInData().getPhone();
-                type = "customer";
             } else {
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
                 assert serviceProvider != null;
@@ -390,7 +382,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 }
                 intent.putExtra("servprov", serviceProvider);
                 phone = serviceProvider.getSignInData().getPhone();
-                type = "servprov";
             }
             //Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
 

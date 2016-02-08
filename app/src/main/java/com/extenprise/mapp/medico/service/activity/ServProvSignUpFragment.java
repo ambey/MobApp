@@ -333,7 +333,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                     if (requestCode == resources.getInteger(R.integer.request_edit)) {
                         photoFileName = Utility.photoEditFileName;
                     }
-                    File photo = new File(photoFileName);
+                    //File photo = new File(photoFileName);
                     selectedImage = Uri.fromFile(new File(photoFileName));
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;

@@ -221,8 +221,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         //mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
 
         //collapse fields on create.
-        Utility.collapse(mLayoutWorkHrs, null);
-        Utility.collapse(mRelLayout2, null);
+        /*Utility.collapse(mLayoutWorkHrs, null);
+        Utility.collapse(mRelLayout2, null);*/
+
+        Utility.collapseExpand(mLayoutWorkHrs);
+        Utility.collapseExpand(mRelLayout2);
 
         return mRootview;
     }
@@ -237,14 +240,16 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     public void showtimeFields(View view) {
         Log.v(this.getClass().getName(), "view: " + view.toString() + "workhrsLayout: " + mLayoutWorkHrs);
-        if (mLayoutWorkHrs.getVisibility() == View.VISIBLE) {
+        /*if (mLayoutWorkHrs.getVisibility() == View.VISIBLE) {
             Utility.collapse(mLayoutWorkHrs, null);
         } else {
             Utility.expand(mLayoutWorkHrs, null);
-        }
+        }*/
+
+        Utility.collapseExpand(mLayoutWorkHrs);
     }
 
-    public void showFeeFields(View view) {
+   /* public void showFeeFields(View view) {
         Log.v(this.getClass().getName(), "view: " + view.toString() + "consult Fee: " + mConsultFee);
         TextView rupeeSign = (TextView) mRootview.findViewById(R.id.viewRsSign);
         if (mConsultFee.getVisibility() == View.VISIBLE) {
@@ -268,16 +273,17 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             //mMultiSpinnerDays.setVisibility(View.VISIBLE);
             Utility.expand(mMultiSpinnerDays, null);
         }
-    }
+    }*/
 
     public void showWorkFields(View view) {
-        if (mRelLayout2.getVisibility() == View.VISIBLE) {
+        /*if (mRelLayout2.getVisibility() == View.VISIBLE) {
             //mRelLayout2.setVisibility(View.GONE);
             Utility.collapse(mRelLayout2, null);
         } else {
             Utility.expand(mRelLayout2, null);
             //mRelLayout2.setVisibility(View.VISIBLE);
-        }
+        }*/
+        Utility.collapseExpand(mRelLayout2);
     }
 
     @Override

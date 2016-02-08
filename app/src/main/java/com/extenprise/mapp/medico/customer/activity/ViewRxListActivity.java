@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+//import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
@@ -32,7 +32,7 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ListView mRxListView;
-    private ProgressBar mRxListProgress;
+    //private ProgressBar mRxListProgress;
     private TextView mRxMsgView;
 
     private Customer mCust;
@@ -47,7 +47,7 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         ArrayList<RxInboxItem> rxInboxItems = intent.getParcelableArrayListExtra("inbox");
 
         mRxListView = (ListView) findViewById(R.id.rxListView);
-        mRxListProgress = (ProgressBar) findViewById(R.id.rxListProgress);
+        //mRxListProgress = (ProgressBar) findViewById(R.id.rxListProgress);
         mRxMsgView = (TextView) findViewById(R.id.rxMsgView);
 
         if (rxInboxItems == null) {

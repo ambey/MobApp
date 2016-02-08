@@ -32,8 +32,8 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ArrayList<ServProvListItem> mServProvList;
-    private View mProgressView;
-    private View mSearchResultView;
+    /*private View mProgressView;
+    private View mSearchResultView;*/
     private ArrayAdapter<ServProvListItem> mAdapter;
 
     @Override
@@ -41,8 +41,8 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serv_prov_result);
 
-        mSearchResultView = findViewById(R.id.formServProvResult);
-        mProgressView = findViewById(R.id.progressBar);
+        /*mSearchResultView = findViewById(R.id.formServProvResult);
+        mProgressView = findViewById(R.id.progressBar);*/
 
         Intent intent = getIntent();
         mServProvList = intent.getParcelableArrayListExtra("servProvList");
@@ -55,7 +55,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getDetails(view, position);
+                getDetails(position);
             }
         });
         listView.setAdapter(mAdapter);
@@ -103,7 +103,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         dialog.show(fragmentManager, "SearchSort");
     }
 
-    private void getDetails(View view, int position) {
+    private void getDetails(int position) {
         ServProvListItem mSelectedItem = mAdapter.getItem(position);
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mSelectedItem);

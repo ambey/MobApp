@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
@@ -45,8 +46,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private LinearLayout mContLay;
     private LinearLayout mAddrLayout;
 
-    private View mFormView;
-    private View mProgressView;
+    /*private View mFormView;
+    private View mProgressView;*/
     private TextView mTextViewDOB;
     private EditText mEditTextCustomerFName;
     private EditText mEditTextCustomerLName;
@@ -78,8 +79,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
 
-        mFormView = findViewById(R.id.scrollView);
-        mProgressView = findViewById(R.id.progressView);
+        /*mFormView = findViewById(R.id.scrollView);
+        mProgressView = findViewById(R.id.progressView);*/
         mTextViewDOB = (TextView) findViewById(R.id.textViewDOB);
         mEditTextCustomerFName = (EditText) findViewById(R.id.editTextCustomerFName);
         mEditTextCustomerLName = (EditText) findViewById(R.id.editTextCustomerLName);
@@ -161,7 +162,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         return super.onOptionsItemSelected(item);
     }
 
-    public void showPersonalFields(View view) {
+    /*public void showPersonalFields(View view) {
         if (mContLay.getVisibility() == View.VISIBLE) {
             Utility.collapse(mContLay, null);
         } else {
@@ -171,7 +172,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             Utility.expand(mContLay, null);
             mEditTextCustomerFName.requestFocus();
         }
-    }
+    }*/
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -188,8 +189,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         return mImgCopy;
     }
 
-    public void showAddressFields(View view) {
-        if (mAddrLayout.getVisibility() == View.VISIBLE) {
+    public void showFields(View view) {
+        /*if (mAddrLayout.getVisibility() == View.VISIBLE) {
             Utility.collapse(mAddrLayout, null);
         } else {
             if (mContLay.getVisibility() == View.VISIBLE) {
@@ -197,7 +198,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             }
             Utility.expand(mAddrLayout, null);
             mEditTextLoc.requestFocus();
-        }
+        }*/
+        Utility.collapseExpand(mAddrLayout);
+        Utility.collapseExpand(mContLay);
     }
 
     public void showDatePicker(View view) {
@@ -484,6 +487,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getCity().setCountry("India");
         c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
 
+        LoginHolder.custLoginRef = c;
         return c;
     }
 

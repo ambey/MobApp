@@ -24,7 +24,6 @@ import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.SearchServProvForm;
-import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.DaysSelectionDialog;
 import com.extenprise.mapp.medico.ui.DialogDismissListener;
 import com.extenprise.mapp.medico.util.Utility;
@@ -37,7 +36,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     protected boolean[] selections;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private SearchServProvForm mForm;
-    private Button /*mSearchButn,*/ mButtonStartTime, mButttonEndTime;
+    private Button mButtonStartTime, mButttonEndTime;
     private EditText mDrClinicName;
     private Spinner mSpeciality;
     private Spinner mServProvCategory;
@@ -47,8 +46,8 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     private LinearLayout mServProLay3;
     private Spinner mGender;
     private Spinner mConsultFee;
-    private View mProgressView;
-    private View mSearchFormView;
+    /*private View mProgressView;
+    private View mSearchFormView;*/
     private Button mMultiSpinnerDays;
 
     @Override
@@ -74,11 +73,9 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         mExperience = (EditText) findViewById(R.id.editTextExp);
         mConsultFee = (Spinner) findViewById(R.id.spinConsultationFees);
         mServProLay3 = (LinearLayout) findViewById(R.id.servProLay3);
-
-        mSearchFormView = findViewById(R.id.advSearchForm);
-        mProgressView = findViewById(R.id.search_progress);
-
-        mForm = getIntent().getParcelableExtra("form");
+        mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
+        /*mSearchFormView = findViewById(R.id.advSearchForm);
+        mProgressView = findViewById(R.id.search_progress);*/
 
         ArrayList<String> specList = getIntent().getStringArrayListExtra("specList");
         if (specList == null) {
@@ -87,8 +84,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
         mSpeciality.setAdapter(spinnerAdapter);
 
-        mMultiSpinnerDays = (Button) findViewById(R.id.spinAvailDays);
-
+        mForm = getIntent().getParcelableExtra("form");
         if (mForm != null) {
             mLocation.setText(mForm.getLocation());
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
@@ -134,27 +130,30 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     }
 
     public void showtimeFields(View view) {
-        if (mServProLay3.getVisibility() == View.VISIBLE) {
+        /*if (mServProLay3.getVisibility() == View.VISIBLE) {
             Utility.collapse(mServProLay3, null);
         } else {
             Utility.expand(mServProLay3, null);
-        }
+        }*/
+        Utility.collapseExpand(mServProLay3);
     }
 
     public void showGenderField(View view) {
-        if (mGender.getVisibility() == View.VISIBLE) {
+        /*if (mGender.getVisibility() == View.VISIBLE) {
             Utility.collapse(mGender, null);
         } else {
             Utility.expand(mGender, null);
-        }
+        }*/
+        Utility.collapseExpand(mGender);
     }
 
     public void showDaysField(View view) {
-        if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
+        /*if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
             Utility.collapse(mMultiSpinnerDays, null);
         } else {
             Utility.expand(mMultiSpinnerDays, null);
-        }
+        }*/
+        Utility.collapseExpand(mMultiSpinnerDays);
     }
 
     @Override

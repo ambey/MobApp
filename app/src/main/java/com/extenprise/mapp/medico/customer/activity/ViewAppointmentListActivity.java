@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
@@ -37,8 +36,8 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
     private ArrayList<AppointmentListItem> mUpcomingList;
     private TextView mPastMsgView, mUpcomMsgView;
 
-    private ProgressBar mUpcomingProgress;
-    private ProgressBar mPastProgress;
+    /*private ProgressBar mUpcomingProgress;
+    private ProgressBar mPastProgress;*/
     private Button mUpcomingSortBtn;
     private Button mPastSortBtn;
 
@@ -54,8 +53,8 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
 
         mUpcomingListView = (ListView) findViewById(R.id.upcomingAppontsList);
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
-        mUpcomingProgress = (ProgressBar) findViewById(R.id.upcomingProgress);
-        mPastProgress = (ProgressBar) findViewById(R.id.pastProgress);
+        /*mUpcomingProgress = (ProgressBar) findViewById(R.id.upcomingProgress);
+        mPastProgress = (ProgressBar) findViewById(R.id.pastProgress);*/
         mPastMsgView = (TextView) findViewById(R.id.pastAppontsMsgView);
         mUpcomMsgView = (TextView) findViewById(R.id.upcomingAppontsMsgView);
 

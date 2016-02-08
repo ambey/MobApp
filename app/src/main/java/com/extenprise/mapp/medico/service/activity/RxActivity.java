@@ -40,8 +40,8 @@ import java.util.Date;
 public class RxActivity extends Activity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
-    private View mForm;
-    private View mProgressBar;
+    /*private View mForm;
+    private View mProgressBar;*/
     private TextView mSrNo;
     private TextView mDrugName;
     private Spinner mDrugForm;
@@ -76,8 +76,8 @@ public class RxActivity extends Activity implements ResponseHandler {
         mAppont = intent.getParcelableExtra("appont");
         mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
 
-        mForm = findViewById(R.id.rxItemForm);
-        mProgressBar = findViewById(R.id.rxSave_progress);
+        /*mForm = findViewById(R.id.rxItemForm);
+        mProgressBar = findViewById(R.id.rxSave_progress);*/
 
         Button addButton = (Button) findViewById(R.id.addButton);
         TextView name = (TextView) findViewById(R.id.nameTextView);

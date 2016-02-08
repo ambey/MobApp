@@ -411,46 +411,31 @@ public abstract class Utility {
         return Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(), bitmapToScale.getHeight(), matrix, true);*/
     }
 
-    public static void expand(final View v, View view) {
-        if (view != null) {
-            view.setBackgroundResource(R.drawable.expand);
+    public static void collapseExpand(final View v) {
+        final boolean collapse = v.getVisibility() == View.VISIBLE;
+        if(!collapse) {
+            v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         }
-        v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        final int targtetHeight = v.getMeasuredHeight();
+        final int height = v.getMeasuredHeight();
+        if(!collapse) {
+            v.getLayoutParams().height = 0;
+            v.setVisibility(View.VISIBLE);
+        }
 
-        v.getLayoutParams().height = 0;
-        v.setVisibility(View.VISIBLE);
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1
-                        ? LayoutParams.WRAP_CONTENT
-                        : (int) (targtetHeight * interpolatedTime);
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
-    }
-
-    public static void collapse(final View v, View view) {
-        if (view != null) {
-            view.setBackgroundResource(R.drawable.label);
-        }
-        final int initialHeight = v.getMeasuredHeight();
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
+                if(collapse) {
+                    if (interpolatedTime == 1) {
+                        v.setVisibility(View.GONE);
+                    } else {
+                        v.getLayoutParams().height = height - (int) (height * interpolatedTime);
+                        v.requestLayout();
+                    }
                 } else {
-                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.getLayoutParams().height = interpolatedTime == 1
+                            ? LayoutParams.WRAP_CONTENT
+                            : (int) (height * interpolatedTime);
                     v.requestLayout();
                 }
             }
@@ -460,9 +445,16 @@ public abstract class Utility {
                 return true;
             }
         };
-        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+
+        a.setDuration((int) (height / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
+
+    /*public static void fieldsEnability(View[] views, boolean set) {
+        for (View view : views) {
+            view.setEnabled(set);
+        }
+    }*/
 
     public static void setLastVisit(SharedPreferences prefer) {
         //SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);
@@ -664,6 +656,7 @@ public abstract class Utility {
 
     //While using show Alert method for dialogs having views... its not displaying the buttons.
     //while there is no any difference, so for now am using this method only for showing dialogs..
+    //and buttons onclick is not returning thr for validation... its closing the dialog...
     public static AlertDialog.Builder customDialogBuilder(final Activity activity, View dialogView, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         if (dialogView != null) {
@@ -686,10 +679,37 @@ public abstract class Utility {
         return builder;
     }
 
-    ///////////////////////////////////////////////////Un Used Method /////////////////////
+    ///////////////////////////////////////////////////Un Used Methods /////////////////////
 
 /*
 
+public static void expand(final View v, View view) {
+        if (view != null) {
+            view.setBackgroundResource(R.drawable.expand);
+        }
+        v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        final int targtetHeight = v.getMeasuredHeight();
+
+        v.getLayoutParams().height = 0;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? LayoutParams.WRAP_CONTENT
+                        : (int) (targtetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
 
 
 public static String getCommaSepparatedString(String[] arr) {
@@ -867,5 +887,34 @@ public static String getCommaSepparatedString(String[] arr) {
 
 //Start animation
         return anim;
-    }*/
+    }
+
+
+
+    public static void collapse(final View v, View view) {
+        if (view != null) {
+            view.setBackgroundResource(R.drawable.label);
+        }
+        final int initialHeight = v.getMeasuredHeight();
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if (interpolatedTime == 1) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
+
+    */
 }
