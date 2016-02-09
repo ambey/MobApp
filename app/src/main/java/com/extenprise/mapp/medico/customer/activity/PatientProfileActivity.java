@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -37,6 +40,7 @@ import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -80,6 +84,10 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         }
 
         mCustomer = LoginHolder.custLoginRef;
+        if (mCustomer == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
@@ -184,9 +192,17 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     public void editPatientProf(View v) {
-        setFieldsEnability(mEditTextCustomerFName.isEnabled());
+        if (!mEditTextCustomerFName.isEnabled()) {
+            setFieldsEnability(true);
+        } else {
+            setFieldsEnability(false);
+        }
+        if (mAddrLayout.getVisibility() != View.VISIBLE) {
+            Utility.collapseExpand(mAddrLayout);
+            Utility.collapseExpand(mContLay);
+        }
         //showPersonalFields(v);
-        mContLay.setVisibility(View.VISIBLE);
+        //mContLay.setVisibility(View.VISIBLE);
         /*Utility.expand(mContLay, null);
         Utility.collapseExpand(mContLay);*/
     }
@@ -538,6 +554,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     public void changeImg(View view) {
         final Activity activity = this;
+        final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, null, false,
                 /*
                 The array is put here instead of a method call to get the array because
@@ -551,7 +568,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera));
+                                Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera), destination);
                                 break;
                             case 1:
                                 Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
@@ -584,7 +601,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 });
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
@@ -618,7 +635,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             }
             if (imageChanged && requestCode != requestEdit) {
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                editIntent.setDataAndType(selectedImage, "image/*");
+                editIntent.setDataAndType(selectedImage, "image*//*");
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(editIntent, requestEdit);
             }
@@ -627,6 +644,64 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             Utility.showMessage(this, R.string.some_error);
         } finally {
             Utility.setEnabledButton(this, mUpdateButton, true);
+        }
+    }*/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        try {
+            boolean isImageChanged = false;
+            Uri selectedImage = null;
+            Resources resources = getResources();
+            int requestEdit = resources.getInteger(R.integer.request_edit);
+            // When an Image is picked
+            if (resultCode == Activity.RESULT_OK) {
+                mImgView.setBackgroundResource(0);
+                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
+                    String photoFileName = Utility.photoFileName;
+                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
+                        photoFileName = Utility.photoEditFileName;
+                    }
+                    //File photo = new File(photoFileName);
+                    selectedImage = Uri.fromFile(new File(photoFileName));
+                    mImgView.setImageURI(selectedImage);
+                    isImageChanged = true;
+                } else {
+                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
+                        // Get the Image from data
+                        selectedImage = data.getData();
+                        mImgView.setImageURI(selectedImage);
+                        isImageChanged = true;
+                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        if (bitmap != null) {
+                            mImgView.setImageBitmap(bitmap);
+                            selectedImage = Utility.getImageUri(this, bitmap);
+                        } else {
+                            selectedImage = data.getData();
+                        }
+                        mImgView.setImageURI(selectedImage);
+                        isImageChanged = true;
+                    } else {
+                        Utility.showMessage(this, R.string.error_img_not_picked);
+                    }
+                }
+            } else if (requestCode == requestEdit) {
+                isImageChanged = true;
+            }
+            if (isImageChanged) {
+                if (requestCode != requestEdit) {
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
+                    startActivityForResult(editIntent, requestEdit);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utility.showMessage(this, R.string.some_error);
         }
     }
 

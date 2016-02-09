@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -53,7 +54,10 @@ public class ViewAppointmentListActivity extends FragmentActivity
         setContentView(R.layout.activity_view_appointment_list);
 
         mServiceProv = LoginHolder.servLoginRef;
-
+        if (mServiceProv == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         mUpcomingListView = (ListView) findViewById(R.id.upcomingAppontsList);
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
         mUpcomingMsgView = (TextView) findViewById(R.id.upcomingAppontsMsgView);

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.util.Utility;
 
@@ -34,6 +35,10 @@ public class PatientsHomeScreenActivity extends Activity {
         setContentView(R.layout.activity_patients_home_screen);
 
         mCustomer = LoginHolder.custLoginRef;
+        if (mCustomer == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImg = (ImageView) findViewById(R.id.imagePatient);
 
@@ -59,6 +64,10 @@ public class PatientsHomeScreenActivity extends Activity {
 
     private void profile() {
         mCustomer = LoginHolder.custLoginRef;
+        if (mCustomer == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 mCustomer.getfName(), mCustomer.getlName()));
 

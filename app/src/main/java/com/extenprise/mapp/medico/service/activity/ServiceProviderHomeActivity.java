@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.ReportServiceStatus;
 import com.extenprise.mapp.medico.data.RxFeedback;
 import com.extenprise.mapp.medico.net.MappService;
@@ -46,6 +47,10 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         setContentView(R.layout.activity_service_provider_home);
 
         mServiceProv = LoginHolder.servLoginRef;
+        if (mServiceProv == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
 
         mMsgView = (TextView) findViewById(R.id.msgView);
@@ -73,6 +78,10 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     private void profile() {
         mServiceProv = LoginHolder.servLoginRef;
+        if (mServiceProv == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         String label = getString(R.string.hello_dr);
         if(!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             label = getString(R.string.hello);
@@ -108,7 +117,9 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
         mConnection.setData(bundle);
         mMsgView.setVisibility(View.VISIBLE);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
+        }
     }
 
     @Override
@@ -175,6 +186,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     }
 
     private void gotRxInbox(Bundle data) {
+        Utility.showProgressDialog(this, false);
         mMsgView.setVisibility(View.GONE);
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);

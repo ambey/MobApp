@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.RxFeedback;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -43,6 +44,10 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         mMsgView = (TextView)findViewById(R.id.msgView);
 
         mServProv = LoginHolder.servLoginRef;
+        if (mServProv == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
 
         TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);

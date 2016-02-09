@@ -27,6 +27,7 @@ import android.widget.RadioGroup;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -41,12 +42,12 @@ import com.extenprise.mapp.medico.util.Validator;
 import java.io.File;
 
 public class ServProvSignUpFragment extends Fragment implements ResponseHandler, TitleFragment {
+    int category;
     // LogCat tag
 /*
     private static final String TAG = ServProvSignUpActivity.class.getSimpleName();
 */
     private MappServiceConnection mConnection;
-
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mCellphoneview;
@@ -57,10 +58,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     private RadioButton mRadioButtonGender;
     private EditText mRegistrationNumber;
     private ImageView mImgView;
-
     private View mRootView;
-    private boolean imageChanged = false;
-    int category;
 /*
     private int requestGallery = 100;
     private int requestCamera = 200;
@@ -322,6 +320,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
+            boolean imageChanged = false;
             Uri selectedImage = null;
             Resources resources = getResources();
             int requestEdit = resources.getInteger(R.integer.request_edit);
@@ -380,7 +379,12 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             LoginHolder.servLoginRef = new ServiceProvider();
         }
         ServiceProvider sp = LoginHolder.servLoginRef;
+        if (sp == null) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        }
         try {
+            assert sp != null;
             sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } catch (Exception e) {
             e.printStackTrace();

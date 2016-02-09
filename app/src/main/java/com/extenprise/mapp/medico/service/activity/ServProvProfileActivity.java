@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,12 +21,12 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -34,13 +36,13 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.SearchServProvForm;
-import com.extenprise.mapp.medico.service.data.ServProvHasServPt;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.service.data.WorkPlace;
 import com.extenprise.mapp.medico.service.ui.WorkPlaceListAdapter;
@@ -50,6 +52,7 @@ import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -63,8 +66,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private ServiceProvider mServiceProv;
     private SignInData mSignInData;
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
+    private LinearLayout mInfo, mPInfo;
     private ListView mListViewWP;
-    private String mCategory, mSpecStr;
+    private String mCategory; /*mSpecStr*/
     private ArrayList<String> mSpecialityList;
 
     private ImageView mImgView;
@@ -113,6 +117,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mServiceProv = new ServiceProvider();
         mSignInData = new SignInData();
         mServiceProv = LoginHolder.servLoginRef;
+        if (mServiceProv == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         mSignInData.setPhone(LoginHolder.servLoginRef.getPhone());
         mWorkPlace.setSignInData(mSignInData);
 
@@ -120,6 +128,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mProgressView = findViewById(R.id.progressView);*/
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
+        mInfo = (LinearLayout) findViewById(R.id.info);
+        mPInfo = (LinearLayout) findViewById(R.id.pInfo);
 
         mFname = (TextView) findViewById(R.id.textViewFName);
         mLname = (TextView) findViewById(R.id.textViewLName);
@@ -373,7 +383,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         Utility.setNewSpinner(this, null, mServCatagory,
                 new String[] { getString(R.string.select_category), mCategory });
-        //mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, mCategory));
+        Utility.setNewSpinner(this, mSpecialityList, mSpeciality, null);
 
         ArrayList<String> listWPType = new ArrayList<>();
         if(mCategory.equalsIgnoreCase(getString(R.string.physician))) {
@@ -405,8 +415,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mQualification.setText(item.getQualification());
             mMultiSpinnerDays.setText(item.getWorkingDays());
             mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
-            //mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
-            mSpecStr = item.getSpeciality();
+            mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
+            //mSpecStr = item.getSpeciality();
             mExperience.setText(String.format("%.01f", item.getExperience()));
             if (item.getPincode() != null) {
                 mPinCode.setText(item.getPincode());
@@ -442,12 +452,12 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
         });
 
-        mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String servCategory = mServCatagory.getSelectedItem().toString();
-                /*MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
-                DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);*/
+                *//*MappDbHelper dbHelper = new MappDbHelper(getApplicationContext());
+                DBUtil.setSpecOfCategory(getApplicationContext(), dbHelper, servCategory, mSpeciality);*//*
                 if (!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
@@ -467,7 +477,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
-        });
+        });*/
         mSpeciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -824,30 +834,36 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     public void openPersonalInfo(View view) {
         if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-            //Utility.collapse(mPersonalInfo, null);
             mPersonalInfo.setVisibility(View.GONE);
+            mInfo.setVisibility(View.VISIBLE);
         } else {
-            //Utility.expand(mPersonalInfo, null);
             mPersonalInfo.setVisibility(View.VISIBLE);
+            mInfo.setVisibility(View.GONE);
             if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-                //Utility.collapse(mWorkPlaceInfo, null);
                 mWorkPlaceInfo.setVisibility(View.GONE);
             }
         }
+        /*Utility.collapseExpand(mInfo);
+        Utility.collapseExpand(mPersonalInfo);
+        Utility.collapseExpand(mWorkPlaceInfo);*/
     }
 
     public void openWorkPlaceInfo(View view) {
         if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
-            //Utility.collapse(mWorkPlaceInfo, null);
             mWorkPlaceInfo.setVisibility(View.GONE);
+            mInfo.setVisibility(View.VISIBLE);
+            mPInfo.setVisibility(View.VISIBLE);
         } else {
             mWorkPlaceInfo.setVisibility(View.VISIBLE);
-            //Utility.expand(mWorkPlaceInfo, null);
             if (mPersonalInfo.getVisibility() == View.VISIBLE) {
-                //Utility.collapse(mPersonalInfo, null);
                 mPersonalInfo.setVisibility(View.GONE);
             }
+            mInfo.setVisibility(View.GONE);
+            mPInfo.setVisibility(View.GONE);
         }
+        /*Utility.collapseExpand(mInfo);
+        Utility.collapseExpand(mPInfo);
+        Utility.collapseExpand(mWorkPlaceInfo);*/
     }
 
 
@@ -872,6 +888,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     public void changeImage(View view) {
         final Activity activity = this;
+        final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         Utility.showAlert(activity, "", null, null, false,
                 new String[]{activity.getString(R.string.take_photo),
                         activity.getString(R.string.from_gallery),
@@ -880,7 +897,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera));
+                                //Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera));
+                                Utility.startCamera(activity, getResources().getInteger(R.integer.request_camera), destination);
                                 break;
                             case 1:
                                 Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
@@ -925,6 +943,64 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        try {
+            boolean isImageChanged = false;
+            Uri selectedImage = null;
+            Resources resources = getResources();
+            int requestEdit = resources.getInteger(R.integer.request_edit);
+            // When an Image is picked
+            if (resultCode == Activity.RESULT_OK) {
+                mImgView.setBackgroundResource(0);
+                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
+                    String photoFileName = Utility.photoFileName;
+                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
+                        photoFileName = Utility.photoEditFileName;
+                    }
+                    //File photo = new File(photoFileName);
+                    selectedImage = Uri.fromFile(new File(photoFileName));
+                    mImgView.setImageURI(selectedImage);
+                    isImageChanged = true;
+                } else {
+                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
+                        // Get the Image from data
+                        selectedImage = data.getData();
+                        mImgView.setImageURI(selectedImage);
+                        isImageChanged = true;
+                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        if (bitmap != null) {
+                            mImgView.setImageBitmap(bitmap);
+                            selectedImage = Utility.getImageUri(this, bitmap);
+                        } else {
+                            selectedImage = data.getData();
+                        }
+                        mImgView.setImageURI(selectedImage);
+                        isImageChanged = true;
+                    } else {
+                        Utility.showMessage(this, R.string.error_img_not_picked);
+                    }
+                }
+            } else if (requestCode == requestEdit) {
+                isImageChanged = true;
+            }
+            if (isImageChanged) {
+                if (requestCode != requestEdit) {
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
+                    startActivityForResult(editIntent, requestEdit);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
@@ -960,22 +1036,22 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             if (isImageChanged) {
                 if (requestCode != resources.getInteger(R.integer.request_edit)) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setDataAndType(selectedImage, "image*//*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivityForResult(editIntent, resources.getInteger(R.integer.request_edit));
                 } else {
                     mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
                     sendRequest(MappService.DO_UPLOAD_PHOTO, null);
 
-                    /*mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
-                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);*/
+                    *//*mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);*//*
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             Utility.showMessage(this, R.string.some_error);
         }
-    }
+    }*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1087,14 +1163,14 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void getWorkPlaceListDone(Bundle data) {
-        Utility.showProgressDialog(this, false);
+        //Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
             mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
             WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
                     R.layout.layout_wp_list_item, mWorkPlaceList);
             mListViewWP.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
-            mListViewWP.setOnTouchListener(new ListView.OnTouchListener() {
+            /*mListViewWP.setOnTouchListener(new ListView.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     int action = event.getAction();
@@ -1112,15 +1188,28 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     v.onTouchEvent(event);
                     return true;
                 }
-            });
+            });*/
             //mListViewWP.setSelection(adapter.getCount());
             //mListViewWP.setOverscrollFooter(getDrawable(R.drawable.up));
             mListViewWP.setAdapter(adapter);
             mListViewWP.setSelection(adapter.getCount());
             registerForContextMenu(mListViewWP);
-            //mListViewWP.setOnCreateContextMenuListener(this);
             Utility.showMessage(this, R.string.work_place_details);
-        }
+
+            //Getting speciality list...
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+            SearchServProvForm mForm = new SearchServProvForm();
+            mForm.setCategory(mCategory);
+            bundle.putParcelable("form", mForm);
+            mConnection.setData(bundle);
+            mConnection.setAction(MappService.DO_GET_SPECIALITY);
+            Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
+
+            //mListViewWP.setOnCreateContextMenuListener(this);
+        } /*else {
+            Utility.showMessage(this, R.string.some_error);
+        }*/
         //Utility.showProgress(this, mFormView, mProgressView, false);
     }
 
@@ -1144,10 +1233,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if(!mSpecialityList.contains(getString(R.string.other))) {
             mSpecialityList.add(getString(R.string.other));
         }
-        Utility.setNewSpinner(this, mSpecialityList, mSpeciality, null);
+        /*Utility.setNewSpinner(this, mSpecialityList, mSpeciality, null);
         if(mSpecStr != null && !mSpecStr.equals("")) {
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mSpecStr));
-        }
+        }*/
     }
 
     private void updateDone(int msg, Bundle data) {
@@ -1163,6 +1252,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             });
         } else {
             mServiceProv = LoginHolder.servLoginRef;
+            if (mServiceProv == null) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+            }
             Utility.showMessage(this, R.string.some_error);
         }
         //Utility.showProgress(this, mFormView, mProgressView, false);
