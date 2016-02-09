@@ -11,7 +11,7 @@
     </style>
 
     <style name="MyButton" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/raised_button_bg</item>
+        <item name="android:background">@drawable/raised_button_21</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color</item>
         <item name="android:minHeight">36dp</item>
