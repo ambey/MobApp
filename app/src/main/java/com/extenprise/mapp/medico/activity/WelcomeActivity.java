@@ -2,16 +2,12 @@ package com.extenprise.mapp.medico.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-/*import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;*/
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -31,6 +27,10 @@ import com.extenprise.mapp.medico.service.activity.MedicalStoreHomeActivity;
 import com.extenprise.mapp.medico.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.util.Utility;
+
+/*import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;*/
 
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
@@ -247,22 +247,6 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_welcome_acitivity, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 }

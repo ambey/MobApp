@@ -82,10 +82,11 @@
                         android:id="@+id/mStoreTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:clickable="true"
                         android:onClick="signUpMedicalStore"
                         android:text="@string/medicalStore"
-                        android:textColor="#000" />
+                        android:textColor="@color/primary_text" />
 
                 </LinearLayout>
 
@@ -111,10 +112,11 @@
                         android:id="@+id/docTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:clickable="true"
                         android:onClick="signUpServProv"
                         android:text="@string/practitionar"
-                        android:textColor="#000" />
+                        android:textColor="@color/primary_text" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -137,10 +139,11 @@
                         android:id="@+id/diagnosticTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:clickable="true"
                         android:onClick="signUpDiagCenter"
                         android:text="@string/diagnosticCenter"
-                        android:textColor="#000" />
+                        android:textColor="@color/primary_text" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
