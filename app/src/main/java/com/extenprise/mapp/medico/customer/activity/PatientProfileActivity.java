@@ -194,12 +194,12 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     public void editPatientProf(View v) {
         if (!mEditTextCustomerFName.isEnabled()) {
             setFieldsEnability(true);
+            if (mAddrLayout.getVisibility() != View.VISIBLE) {
+                Utility.collapseExpand(mAddrLayout);
+                Utility.collapseExpand(mContLay);
+            }
         } else {
             setFieldsEnability(false);
-        }
-        if (mAddrLayout.getVisibility() != View.VISIBLE) {
-            Utility.collapseExpand(mAddrLayout);
-            Utility.collapseExpand(mContLay);
         }
         //showPersonalFields(v);
         //mContLay.setVisibility(View.VISIBLE);

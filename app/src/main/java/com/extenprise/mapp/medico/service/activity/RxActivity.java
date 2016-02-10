@@ -160,16 +160,18 @@ public class RxActivity extends Activity implements ResponseHandler {
                 mMDose.setEnabled(isChecked);
             }
         });
-        mAfternnon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mADose.setEnabled(isChecked);
-            }
-        });
+
         mEvening.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mEDose.setEnabled(isChecked);
+            }
+        });
+
+        mAfternnon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mADose.setEnabled(isChecked);
             }
         });
 
