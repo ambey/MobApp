@@ -133,7 +133,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         });
 
         mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
-        category = getActivity().getIntent().getIntExtra("category", R.string.practitionar);
+        category = getActivity().getIntent().getIntExtra("category", R.string.practitioner);
         if (category == R.string.pharmacist) {
             mImgView.setImageResource(R.drawable.medstore);
         } else if (category == R.string.diagnosticCenter) {

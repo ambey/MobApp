@@ -16,15 +16,15 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission  android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!--<uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />-->
@@ -33,7 +33,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_medico_launcher"
         android:logo="@mipmap/ic_medico_logo"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!--
         <activity
@@ -238,8 +238,7 @@
         <activity
             android:name=".activity.FirstFlipperActivity"
             android:label="@string/title_activity_first_flipper"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".service.activity.ServProvProfileActivity"
             android:label="@string/title_activity_serv_prove_profile"
@@ -262,14 +261,12 @@
         <service
             android:name=".net.MappService"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true" />
 
         <activity
             android:name=".service.activity.MedicalStoreHomeActivity"
             android:label="@string/title_activity_medical_store_home"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".service.activity.RxListActivity"
             android:label="@string/title_activity_rx_list"
@@ -291,6 +288,7 @@
         <activity
             android:name=".activity.WelcomeActivity"
             android:label="Medico"
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar">
             <intent-filter>
@@ -308,7 +306,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".service.activity.RxListActivity" />
         </activity>
-        <activity android:name=".customer.activity.ViewAppointmentListActivity"
+        <activity
+            android:name=".customer.activity.ViewAppointmentListActivity"
             android:label="@string/my_apponts"
             android:parentActivityName=".customer.activity.PatientsHomeScreenActivity"
             android:screenOrientation="portrait">
@@ -316,7 +315,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
         </activity>
-        <activity android:name=".customer.activity.ViewRxListActivity"
+        <activity
+            android:name=".customer.activity.ViewRxListActivity"
             android:label="@string/my_rx_list"
             android:parentActivityName=".customer.activity.PatientsHomeScreenActivity"
             android:screenOrientation="portrait">

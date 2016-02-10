@@ -39,7 +39,6 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -70,7 +69,6 @@
         android:id="@+id/editTextEmail"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/email"
         android:imeOptions="actionNext"
@@ -81,7 +79,6 @@
         android:id="@+id/editTextPasswd"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/passWd"
         android:imeOptions="actionNext"
@@ -92,7 +89,6 @@
         android:id="@+id/editTextCnfPasswd"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/passWdCon"
         android:imeOptions="actionNext"
@@ -103,7 +99,6 @@
         android:id="@+id/radioGroupGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="horizontal">
@@ -112,7 +107,6 @@
             android:id="@+id/radioButtonMale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:focusable="true"
             android:text="@string/male" />
 
@@ -120,7 +114,6 @@
             android:id="@+id/radioButtonFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginLeft="30dp"
             android:layout_marginStart="30dp"
             android:focusable="true"
@@ -131,7 +124,6 @@
         android:id="@+id/editTextRegistrationNumber"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/reg_no"
         android:inputType="text" />

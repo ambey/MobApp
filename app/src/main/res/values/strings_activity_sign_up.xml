@@ -12,9 +12,7 @@
     <string name="address">Address</string>
     <string name="personalDetails">Personal Details</string>
 
-    <string name="medicalStore">Medical Store</string>
-    <string name="practitionar">Practitioner</string>
-    <string name="diagnosticCenter">Diagnostic Center</string>
-
-
+    <string name="medicalStore">Pharmacy</string>
+    <string name="practitioner">Doctor</string>
+    <string name="diagnosticCenter">Diagnostic Lab</string>
 </resources>

@@ -10,6 +10,13 @@
         <item name="android:elevation">4dp</item>
     </style>
 
+    <style name="IconButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/raised_button_21</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
     <style name="MyButton" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/raised_button_21</item>
         <item name="android:textStyle">bold</item>

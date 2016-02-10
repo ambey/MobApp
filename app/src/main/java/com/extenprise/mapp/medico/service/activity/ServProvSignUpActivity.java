@@ -42,7 +42,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
         mViewPager.setAdapter(mPagerAdapter);
 
         Intent intent = getIntent();
-        int category = intent.getIntExtra("category", R.string.practitionar);
+        int category = intent.getIntExtra("category", R.string.practitioner);
         Log.v(this.getClass().getName(), "category: " + getString(category));
 
         //mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);

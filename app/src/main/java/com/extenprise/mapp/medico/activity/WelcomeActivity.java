@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -34,8 +35,8 @@ import android.content.Context;*/
 
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
-    TextView textLabel;
-    ImageView imgLogo;
+    TextView mTextLabel;
+    ImageView mImgLogo;
     Animation textAnimation;
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
@@ -80,8 +81,8 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.hide();
         }
-        textLabel = (TextView) findViewById(R.id.textViewlogo);
-        imgLogo = (ImageView) findViewById(R.id.imageViewLogo);
+        mTextLabel = (TextView) findViewById(R.id.textViewlogo);
+        mImgLogo = (ImageView) findViewById(R.id.imageViewLogo);
 
         //Checking for updates in version of app.
         MarketService ms = new MarketService(this);
@@ -159,8 +160,8 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
     private void initialize() {
         textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
-        imgLogo.startAnimation(textAnimation);
-        textLabel.startAnimation(textAnimation);
+        mImgLogo.startAnimation(textAnimation);
+        mTextLabel.startAnimation(textAnimation);
 
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
@@ -187,9 +188,11 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    WelcomeActivity.this.finish();
                     Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                     startActivity(intent);
+                    mImgLogo.setVisibility(View.GONE);
+                    mTextLabel.setVisibility(View.GONE);
+                    //WelcomeActivity.this.finish();
                 }
             }, 3800);
         }

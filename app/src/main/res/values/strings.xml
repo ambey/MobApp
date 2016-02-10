@@ -27,7 +27,7 @@
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
     <string name="country_code">+91</string>
-    <string name="medical_store">Medical Store</string>
+    <string name="medical_store">Pharmacy</string>
     <string name="clinic">Clinic</string>
     <string name="path_lab">Path Lab</string>
     <string name="scan_lab">Scanner Lab</string>
@@ -56,7 +56,7 @@
     <string name="title_activity_serv_prove_profile">Profile</string>
     <string name="title_activity_medical_store_home">My Home</string>
     <string name="title_activity_rx_list">Rx List</string>
-    <string name="title_activity_select_medical_store">Select Medical Store</string>
+    <string name="title_activity_select_medical_store">Select Pharmacy</string>
     <string name="title_activity_rx_inbox_item_details">Rx Details</string>
     <string name="title_activity_rx_feedback">Rx Feedback</string>
     <string name="title_activity_service_provider_home">My Home</string>
@@ -170,7 +170,7 @@
     <string name="alt_phone">Alternate Phone : </string>
     <string name="phone_lbl">Phone : </string>
     <string name="dr_lbl">Doctor:</string>
-    <string name="medstore_lbl">Medical Store:</string>
+    <string name="medstore_lbl">Pharmacy:</string>
     <string name="primary_phone_no">Primary Phone Number *</string>
     <string name="title_activity_patient_profile">PatientProfile</string>
     <string name="pinfo">Personal Info</string>
@@ -189,7 +189,7 @@
     <string name="rx_pend">Pending Rx List</string>
     <string name="rx_num">Rx Number</string>
     <string name="send">Send</string>
-    <string name="send_rx_to_mstore">Send Rx to a\nMedical Store</string>
+    <string name="send_rx_to_mstore">Send Rx to a\nPharmacy</string>
     <string name="add_new_rx_item">Add New Rx Item</string>
     <string name="done_with_rx">Done With Rx</string>
     <string name="rx_sent_to">Rx Sent To:</string>
@@ -237,6 +237,7 @@
     <string name="reg_no_with_lbl">Registration Number: %s</string>
     <string name="gender_with_lbl">Gender: %s</string>
 
+    <string name="medico_logo">Medico Logo</string>
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
     <string name="asc">ASC</string>
@@ -276,7 +277,7 @@
     </string-array>
 
     <!-- Rx List For Customer, Sort Fields -->
-    <string name="by_medstore">Medical Store Name</string>
+    <string name="by_medstore">Pharmacy Name</string>
     <string-array name="cust_rx_sort_field_list">
         <item>@string/by_drname</item>
         <item>@string/by_clinic_name</item>
@@ -296,7 +297,7 @@
         <item>@string/by_date</item>
     </string-array>
 
-    <string name="by_medstore_owner">Medical Store Owner</string>
+    <string name="by_medstore_owner">Pharmacy Owner</string>
     <string-array name="medstore_sort_field_list">
         <item>@string/by_medstore</item>
         <item>@string/by_medstore_owner</item>

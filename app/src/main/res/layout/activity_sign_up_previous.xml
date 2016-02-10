@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,143 +9,89 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.medico.activity.SignUpPreviousActivity">
 
-    <ScrollView
-        android:id="@+id/signup_form"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="4dp">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/medico_logo"
+            android:src="@drawable/med_logo_final" />
+
+        <Button
+            style="@style/MyButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:layout_marginTop="48dp"
+            android:onClick="signUpPatient"
+            android:text="@string/signUpPatient" />
 
-            <ImageView
-                android:layout_width="250dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="24dp"
-                android:src="@drawable/med_logo_final" />
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/signUpButton"
-                style="@style/MyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="48dp"
-                android:layout_marginTop="24dp"
-                android:onClick="signUpPatient"
-                android:text="@string/signUpPatient" />
+    <View
+        style="@style/Divider"
+        android:layout_width="fill_parent"
+        android:layout_centerVertical="true" />
 
-            <View
-                style="@style/Divider"
-                android:layout_width="fill_parent" />
+    <LinearLayout
+        android:id="@+id/servProvIconLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:weightSum="0.99">
 
-            <TextView
-                style="@style/LinkButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="48dp"
-                android:text="@string/areYouServProv"
-                android:visibility="visible" />
+        <Button
+            style="@style/IconButton"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_gravity="top"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_weight="0.33"
+            android:drawableTop="@mipmap/ic_medstore_launcher"
+            android:onClick="signUpMedicalStore"
+            android:text="@string/medicalStore" />
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="24dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:padding="4dp">
+        <Button
+            style="@style/IconButton"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_gravity="top"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_weight="0.33"
+            android:drawableTop="@mipmap/ic_medico_launcher"
+            android:onClick="signUpServProv"
+            android:text="@string/practitioner" />
 
-                <LinearLayout
-                    style="@style/MyButton"
-                    android:layout_width="0dp"
-                    android:layout_height="96dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_weight="0.33"
-                    android:orientation="vertical">
+        <Button
+            style="@style/IconButton"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_gravity="top"
+            android:layout_weight="0.33"
+            android:drawableTop="@mipmap/ic_diagcenter_launcher"
+            android:onClick="signUpDiagCenter"
+            android:text="@string/diagnosticCenter" />
+    </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/medicalStoreImage"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_horizontal"
-                        android:clickable="true"
-                        android:onClick="signUpMedicalStore"
-                        android:src="@drawable/medstore" />
+    <TextView
+        style="@style/LinkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/servProvIconLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:text="@string/areYouServProv"
+        android:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/mStoreTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:clickable="true"
-                        android:onClick="signUpMedicalStore"
-                        android:text="@string/medicalStore"
-                        android:textColor="@color/primary_text" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/MyButton"
-                    android:layout_width="0dp"
-                    android:layout_height="96dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_weight="0.33"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/doctorImage"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_horizontal"
-                        android:clickable="true"
-                        android:onClick="signUpServProv"
-                        android:src="@drawable/doctor" />
-
-                    <TextView
-                        android:id="@+id/docTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:clickable="true"
-                        android:onClick="signUpServProv"
-                        android:text="@string/practitionar"
-                        android:textColor="@color/primary_text" />
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/MyButton"
-                    android:layout_width="0dp"
-                    android:layout_height="96dp"
-                    android:layout_weight="0.33"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/diagnosticImage"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_horizontal"
-                        android:clickable="true"
-                        android:onClick="signUpDiagCenter"
-                        android:src="@drawable/diagcenter" />
-
-                    <TextView
-                        android:id="@+id/diagnosticTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:clickable="true"
-                        android:onClick="signUpDiagCenter"
-                        android:text="@string/diagnosticCenter"
-                        android:textColor="@color/primary_text" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+</RelativeLayout>

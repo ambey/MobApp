@@ -124,6 +124,12 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
+    <style name="IconButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/raised_button</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:minHeight">64dp</item>
+    </style>
+
     <style name="MyButton" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/raised_button</item>
         <item name="android:textStyle">bold</item>
