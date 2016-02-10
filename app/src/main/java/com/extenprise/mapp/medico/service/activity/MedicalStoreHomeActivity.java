@@ -35,6 +35,9 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private ServiceProvider mServProv;
     private Boolean exit = false;
     private TextView mMsgView;
+    private TextView mWelcomeView;
+    private boolean mReqSent;
+    private ImageView mImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         setContentView(R.layout.activity_medical_store_home);
 
         mMsgView = (TextView)findViewById(R.id.msgView);
+        mImg = (ImageView) findViewById(R.id.imageMedstore);
+        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
 
         mServProv = LoginHolder.servLoginRef;
         if (mServProv == null) {
@@ -49,7 +54,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
             startActivity(intent);
         }
 
-        TextView mlastDate = (TextView) findViewById(R.id.textViewDate);
+        /*extView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
         SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
@@ -60,18 +65,42 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         } else {
             Utility.setCurrentDateOnView(mlastDate);
             Utility.setCurrentTimeOnView(mlastTime);
+        }*/
+
+        TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
+        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServProv.getSignInData().getPhone(), MODE_PRIVATE);
+        lastVisited.setText(String.format("%s %s %s",
+                getString(R.string.last_visited),
+                prefs.getString("lastVisitDate", "--"),
+                prefs.getString("lastVisitTime", "--")));
+        Utility.setLastVisit(prefs);
+
+        profile();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mReqSent) {
+            profile();
+        }
+    }
+
+    private void profile() {
+        mServProv = LoginHolder.servLoginRef;
+        if (mServProv == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
-        TextView welcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        String label = welcomeView.getText().toString() + " " +
+        String label = mWelcomeView.getText().toString() + " " +
                 mServProv.getfName() + " " +
                 mServProv.getlName();
+        mWelcomeView.setText(label);
 
-        welcomeView.setText(label);
-
-        ImageView img = (ImageView) findViewById(R.id.imageMedstore);
         if (mServProv.getPhoto() != null) {
-            img.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto()));
+            mImg.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto()));
         }
     }
 
@@ -138,6 +167,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     }
 
     public void viewProfile(View view) {
+        mReqSent = true;
         Intent intent = new Intent(this, ServProvProfileActivity.class);
         intent.putExtra("service", mServProv);
         intent.putExtra("category", getString(R.string.pharmacist));

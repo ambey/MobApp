@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -152,6 +153,25 @@ public class RxActivity extends Activity implements ResponseHandler {
             sdf.applyPattern("dd/MM/yyyy");
             //date.setText(sdf.format(mAppont.getDate()));
         }
+
+        mMorning.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mMDose.setEnabled(isChecked);
+            }
+        });
+        mAfternnon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mADose.setEnabled(isChecked);
+            }
+        });
+        mEvening.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mEDose.setEnabled(isChecked);
+            }
+        });
 
         fillRx(rxInboxItem);
     }

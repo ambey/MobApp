@@ -59,6 +59,12 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
             }
         }
 
+        /*if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }*/
+
+
         mDrClinicName = (EditText) findViewById(R.id.editTextSearchDr);
         mSpeciality = (Spinner) findViewById(R.id.editTextSearchSp);
         mServProvCategory = (Spinner) findViewById(R.id.spinServiceProvCategory);

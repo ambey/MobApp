@@ -67,7 +67,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_weight="0.5"
                 android:onClick="viewAppointment"
-                android:text="@string/doc_appoint" />
+                android:text="@string/view_appoint" />
 
             <Button
                 android:id="@+id/buttonViewReport"

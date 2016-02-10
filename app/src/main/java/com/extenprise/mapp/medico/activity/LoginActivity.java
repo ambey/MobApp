@@ -75,7 +75,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowHomeEnabled(false);
+            //actionBar.hide();
         }
+
+        /*requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
+
 
         View mLoginFormView = findViewById(R.id.login_form);
         //mLoginFormView.setEnabled(false);

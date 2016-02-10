@@ -1,153 +1,120 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.extenprise.mapp.medico.service.activity.MedicalStoreHomeActivity">
+    tools:context=".MedicalStoreHomeActivity">
 
-    <TextView
-        android:id="@+id/viewWelcomeLbl"
-        style="@style/LargeText"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/imageMedstore"
-        android:layout_toRightOf="@+id/imageMedstore"
-        android:text="@string/hello" />
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/imageMedstore"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:src="@drawable/medstore" />
+        <ImageView
+            android:id="@+id/imageMedstore"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:src="@drawable/medstore" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/imageMedstore"
-        android:layout_toRightOf="@+id/imageMedstore"
-        android:text="@string/last_modified" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/textView1"
-        android:layout_toRightOf="@+id/textView1"
-        android:hint="@string/date" />
+            <TextView
+                android:id="@+id/viewWelcomeLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hello"
+                android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/textViewTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewWelcomeLbl"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/textViewDate"
-        android:layout_toRightOf="@+id/textViewDate"
-        android:hint="@string/time" />
+            <TextView
+                android:id="@+id/lastVisitedView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/last_visited" />
+        </LinearLayout>
+    </LinearLayout>
 
-    <View
-        android:id="@+id/linenView"
-        style="@style/HorizontalLineview"
-        android:layout_marginTop="120dp" />
-
-    <RelativeLayout
-        android:id="@+id/layoutCenterButtons"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linenView">
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <Button
-            android:id="@+id/buttonOpenRx"
-            style="@style/RectButton"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView5"
-            android:layout_alignEnd="@+id/linenView2"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/linenView2"
-            android:enabled="true"
-            android:onClick="viewRxInbox"
-            android:text="@string/open_rx" />
+            android:layout_height="96dp"
+            android:layout_margin="2dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
-        <Button
-            android:id="@+id/buttonViewPendrx"
-            style="@style/RectButton"
+            <Button
+                android:id="@+id/buttonOpenRx"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="0.5"
+                android:onClick="viewRxInbox"
+                android:text="@string/open_rx" />
+
+            <Button
+                android:id="@+id/buttonViewPendrx"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                android:enabled="false"
+                android:text="@string/pend_rx" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView5"
-            android:layout_alignLeft="@+id/linenView2"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/linenView2"
-            android:enabled="false"
-            android:text="@string/pend_rx" />
+            android:layout_height="96dp"
+            android:layout_margin="2dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
+            <Button
+                android:id="@+id/buttonView"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="0.5" />
 
-        <Button
-            android:id="@+id/buttonView"
-            style="@style/RectButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView4"
-            android:layout_alignEnd="@+id/linenView2"
-            android:layout_alignRight="@+id/linenView2"
-            android:layout_below="@+id/linenView5"
-            android:enabled="false" />
-
-        <Button
-            android:id="@+id/buttonViewProfile"
-            style="@style/RectButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/linenView4"
-            android:layout_alignLeft="@+id/linenView2"
-            android:layout_alignStart="@+id/linenView2"
-            android:layout_below="@+id/linenView5"
-            android:onClick="viewProfile"
-            android:text="@string/profile_text" />
-
-        <View
-            android:id="@+id/linenView2"
-            style="@style/VerticallLineview"
-            android:layout_alignBottom="@+id/linenView4"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <View
-            android:id="@+id/linenView4"
-            style="@style/HorizontalLineview"
-            android:layout_marginTop="240dp" />
-
-        <View
-            android:id="@+id/linenView5"
-            style="@style/HorizontalLineview"
-            android:layout_marginTop="120dp" />
-
-
-    </RelativeLayout>
+            <Button
+                android:id="@+id/buttonViewProfile"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                android:onClick="viewProfile"
+                android:text="@string/profile_text" />
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/msgView"
         style="@style/MediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layoutCenterButtons"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:text="@string/loading_page"
         android:visibility="gone" />
 
-
-</RelativeLayout>
+</LinearLayout>
