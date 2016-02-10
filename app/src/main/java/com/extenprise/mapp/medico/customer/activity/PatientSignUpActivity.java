@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -33,6 +35,7 @@ import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -218,6 +221,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     public void showImageUploadOptions(View view) {
         final Activity activity = this;
+        final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         final Resources resources = getResources();
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, null, false,
                 new String[]{activity.getString(R.string.take_photo),
@@ -227,7 +231,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utility.startCamera(activity, resources.getInteger(R.integer.request_camera));
+                                Utility.startCamera(activity, resources.getInteger(R.integer.request_camera), destination);
                                 break;
                             case 1:
                                 Utility.pickPhotoFromGallery(activity, resources.getInteger(R.integer.request_gallery));
@@ -242,7 +246,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 });
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         try {
@@ -276,9 +280,67 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             if (imageChanged) {
                 if (requestCode != resources.getInteger(R.integer.request_edit)) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setDataAndType(selectedImage, "image*//*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivityForResult(editIntent, resources.getInteger(R.integer.request_edit));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+*/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        try {
+            boolean isImageChanged = false;
+            Uri selectedImage = null;
+            Resources resources = getResources();
+            int requestEdit = resources.getInteger(R.integer.request_edit);
+            // When an Image is picked
+            if (resultCode == Activity.RESULT_OK) {
+                mImgView.setBackgroundResource(0);
+                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
+                    String photoFileName = Utility.photoFileName;
+                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
+                        photoFileName = Utility.photoEditFileName;
+                    }
+                    //File photo = new File(photoFileName);
+                    selectedImage = Uri.fromFile(new File(photoFileName));
+                    mImgView.setImageURI(selectedImage);
+                    isImageChanged = true;
+                } else {
+                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
+                        // Get the Image from data
+                        selectedImage = data.getData();
+                        mImgView.setImageURI(selectedImage);
+                        isImageChanged = true;
+                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        if (bitmap != null) {
+                            mImgView.setImageBitmap(bitmap);
+                            selectedImage = Utility.getImageUri(this, bitmap);
+                        } else {
+                            selectedImage = data.getData();
+                        }
+                        mImgView.setImageURI(selectedImage);
+                        isImageChanged = true;
+                    } else {
+                        Utility.showMessage(this, R.string.error_img_not_picked);
+                    }
+                }
+            } else if (requestCode == requestEdit) {
+                isImageChanged = true;
+            }
+            if (isImageChanged) {
+                if (requestCode != requestEdit) {
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
+                    startActivityForResult(editIntent, requestEdit);
                 }
             }
         } catch (Exception e) {

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.activity.PatientHistoryActivity;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
@@ -62,6 +63,10 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         mAppont = bundle.getParcelable("appont");
 
         mServProv = LoginHolder.servLoginRef;
+        if (mServProv == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
 
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();

@@ -300,6 +300,10 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public void onDialogDismissed(DialogFragment dialog) {
         DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
         String selectedDays = selectionDialog.getSelectedDays();
+        /*String[] days = selectionDialog.getSelectedDays().split(getString(R.string.comma));
+        if(days.length > 2) {
+            selectedDays = days[0] + getString(R.string.comma) + " " + days[1] + " ...";
+        }*/
         mMultiSpinnerDays.setText(selectedDays);
     }
 
