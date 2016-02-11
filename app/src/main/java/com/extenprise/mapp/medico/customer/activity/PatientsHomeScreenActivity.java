@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.util.Utility;
 
@@ -36,21 +35,23 @@ public class PatientsHomeScreenActivity extends Activity {
 
         mCustomer = LoginHolder.custLoginRef;
         if (mCustomer == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Utility.goTOLoginPage(this);
         }
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImg = (ImageView) findViewById(R.id.imagePatient);
 
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
-                mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
-        lastVisited.setText(String.format("%s %s %s",
-                getString(R.string.last_visited),
-                prefs.getString("lastVisitDate", "--"),
-                prefs.getString("lastVisitTime", "--")));
-        Utility.setLastVisit(prefs);
-
+        try {
+            SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
+                    mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
+            lastVisited.setText(String.format("%s %s %s",
+                    getString(R.string.last_visited),
+                    prefs.getString("lastVisitDate", "--"),
+                    prefs.getString("lastVisitTime", "--")));
+            Utility.setLastVisit(prefs);
+        } catch (Exception e) {
+            Utility.goTOLoginPage(this);
+        }
         profile();
     }
 
@@ -65,14 +66,17 @@ public class PatientsHomeScreenActivity extends Activity {
     private void profile() {
         mCustomer = LoginHolder.custLoginRef;
         if (mCustomer == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Utility.goTOLoginPage(this);
         }
-        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
-                mCustomer.getfName(), mCustomer.getlName()));
+        try {
+            mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
+                    mCustomer.getfName(), mCustomer.getlName()));
 
-        if (mCustomer.getPhoto() != null) {
-            mImg.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
+            if (mCustomer.getPhoto() != null) {
+                mImg.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
+            }
+        } catch (Exception e) {
+            Utility.goTOLoginPage(this);
         }
     }
 

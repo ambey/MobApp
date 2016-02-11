@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.RxFeedback;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -50,8 +49,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
         mServProv = LoginHolder.servLoginRef;
         if (mServProv == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Utility.goTOLoginPage(this);
         }
 
         /*extView mlastDate = (TextView) findViewById(R.id.textViewDate);
@@ -66,15 +64,17 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
             Utility.setCurrentDateOnView(mlastDate);
             Utility.setCurrentTimeOnView(mlastTime);
         }*/
-
-        TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServProv.getSignInData().getPhone(), MODE_PRIVATE);
-        lastVisited.setText(String.format("%s %s %s",
-                getString(R.string.last_visited),
-                prefs.getString("lastVisitDate", "--"),
-                prefs.getString("lastVisitTime", "--")));
-        Utility.setLastVisit(prefs);
-
+        try {
+            TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
+            SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServProv.getSignInData().getPhone(), MODE_PRIVATE);
+            lastVisited.setText(String.format("%s %s %s",
+                    getString(R.string.last_visited),
+                    prefs.getString("lastVisitDate", "--"),
+                    prefs.getString("lastVisitTime", "--")));
+            Utility.setLastVisit(prefs);
+        } catch (Exception e) {
+            Utility.goTOLoginPage(this);
+        }
         profile();
     }
 
@@ -90,8 +90,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private void profile() {
         mServProv = LoginHolder.servLoginRef;
         if (mServProv == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Utility.goTOLoginPage(this);
         }
 
         String label = mWelcomeView.getText().toString() + " " +

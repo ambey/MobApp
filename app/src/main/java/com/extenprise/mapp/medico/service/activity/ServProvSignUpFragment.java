@@ -27,7 +27,6 @@ import android.widget.RadioGroup;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -379,10 +378,6 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             LoginHolder.servLoginRef = new ServiceProvider();
         }
         ServiceProvider sp = LoginHolder.servLoginRef;
-        if (sp == null) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-        }
         try {
             assert sp != null;
             sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));

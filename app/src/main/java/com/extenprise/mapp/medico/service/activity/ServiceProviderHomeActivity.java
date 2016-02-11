@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.ReportServiceStatus;
 import com.extenprise.mapp.medico.data.RxFeedback;
 import com.extenprise.mapp.medico.net.MappService;
@@ -48,22 +47,27 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
         mServiceProv = LoginHolder.servLoginRef;
         if (mServiceProv == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Utility.goTOLoginPage(this);
         }
-        mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
+
 
         mMsgView = (TextView) findViewById(R.id.msgView);
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImg = (ImageView) findViewById(R.id.imageDoctor);
 
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
-        lastVisited.setText(String.format("%s %s %s",
-                getString(R.string.last_visited),
-                prefs.getString("lastVisitDate", "--"),
-                prefs.getString("lastVisitTime", "--")));
-        Utility.setLastVisit(prefs);
+        try {
+            mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
+
+            SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
+            lastVisited.setText(String.format("%s %s %s",
+                    getString(R.string.last_visited),
+                    prefs.getString("lastVisitDate", "--"),
+                    prefs.getString("lastVisitTime", "--")));
+            Utility.setLastVisit(prefs);
+        } catch (Exception e) {
+            Utility.goTOLoginPage(this);
+        }
 
         profile();
     }
@@ -79,20 +83,23 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     private void profile() {
         mServiceProv = LoginHolder.servLoginRef;
         if (mServiceProv == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Utility.goTOLoginPage(this);
         }
         String label = getString(R.string.hello_dr);
-        if(!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
-            label = getString(R.string.hello);
-        }
-        label += " " + mServiceProv.getfName() + " " +
-                mServiceProv.getlName();
-        mWelcomeView.setText(label);
+        try {
+            if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
+                label = getString(R.string.hello);
+            }
+            label += " " + mServiceProv.getfName() + " " +
+                    mServiceProv.getlName();
+            mWelcomeView.setText(label);
 
-        mImg = (ImageView) findViewById(R.id.imageDoctor);
-        if (mServiceProv.getPhoto() != null) {
-            mImg.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
+            mImg = (ImageView) findViewById(R.id.imageDoctor);
+            if (mServiceProv.getPhoto() != null) {
+                mImg.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
+            }
+        } catch (Exception e) {
+            Utility.goTOLoginPage(this);
         }
     }
 

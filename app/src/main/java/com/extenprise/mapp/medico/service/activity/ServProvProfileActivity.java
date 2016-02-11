@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -119,8 +118,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mSignInData = new SignInData();
         mServiceProv = LoginHolder.servLoginRef;
         if (mServiceProv == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Utility.goTOLoginPage(this);
         }
         mSignInData.setPhone(LoginHolder.servLoginRef.getPhone());
         mWorkPlace.setSignInData(mSignInData);
@@ -1131,6 +1129,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
             mImgView.setBackgroundResource(R.drawable.dr_avatar);
+            //mImgView.setImageDrawable(getDrawable(R.drawable.dr_avatar)); require API level 21
             mImgView.setImageBitmap(null);
         } else {
             Utility.showMessage(this, R.string.some_error);
@@ -1264,8 +1263,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         } else {
             mServiceProv = LoginHolder.servLoginRef;
             if (mServiceProv == null) {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                Utility.goTOLoginPage(this);
             }
             Utility.showMessage(this, R.string.some_error);
         }

@@ -468,11 +468,17 @@ public abstract class Utility {
         preferencesEditor.apply();*/
 
         SharedPreferences.Editor prefEditor = prefer.edit();
+        //prefEditor.clear();// Clearing editor before using it.... Should we do so?
         prefEditor.putString("lastVisitDate", Utility.getDateAsStr(calendar.getTime(), "dd/MM/yyyy"));
         prefEditor.putString("lastVisitTime", Utility.getFormattedTime(calendar));
         prefEditor.apply();
     }
 
+    public static void goTOLoginPage(Activity activity) {
+        Log.v("Home", "############################" + activity.getString(R.string.msg_exception));
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
+    }
 
     public static void setCurrentDateOnView(TextView v) {
         Calendar c = Calendar.getInstance();

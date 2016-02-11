@@ -278,6 +278,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
             mImgView.setBackgroundResource(R.drawable.patient);
+            //mImgView.setImageDrawable(getDrawable(R.drawable.patient)); require API level 21
             mImgView.setImageBitmap(null);
         } else {
             Utility.showMessage(this, R.string.some_error);
