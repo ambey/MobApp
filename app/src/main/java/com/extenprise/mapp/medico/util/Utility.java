@@ -73,12 +73,12 @@ public abstract class Utility {
         }
     }*/
     public static void showProgressDialog(Context context, boolean show) {
+        if (_progressDialog != null) {
+            _progressDialog.dismiss();
+            _progressDialog = null;
+        }
         if (show) {
             _progressDialog = ProgressDialog.show(context, "", context.getString(R.string.msg_please_wait), true);
-        } else {
-            if (_progressDialog != null) {
-                _progressDialog.dismiss();
-            }
         }
     }
 

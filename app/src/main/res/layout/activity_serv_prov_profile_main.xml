@@ -31,194 +31,173 @@
                 android:layout_height="wrap_content">-->
 
 
-    <LinearLayout
-        android:id="@+id/info"
+    <include
+        android:id="@+id/layoutNameAvatar"
+        layout="@layout/layout_name_avatar" />
+
+    <View
+        style="@style/Divider"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textViewDoc"
+        style="@style/CollapseFormHeading"
+        android:layout_width="fill_parent"
+        android:layout_height="36dp"
+        android:clickable="true"
+        android:onClick="openPersonalInfo"
+        android:padding="6dp"
+        android:text="@string/personalDetails" />
+
+    <RelativeLayout
+        android:id="@+id/personalInfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/viewEditEducation"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:onClick="editPersonalInfo"
+            android:src="@drawable/editpen" />
+
+        <TextView
+            android:id="@+id/textViewEditEducation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/viewEditEducation"
+            android:layout_alignStart="@+id/viewEditEducation"
+            android:layout_below="@+id/viewEditEducation"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:onClick="editPersonalInfo"
+            android:text="@string/edit_info"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textViewFName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewEditEducation"
+            android:text="@string/first_name_with_lbl" />
+
+        <TextView
+            android:id="@+id/textViewLName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewFName"
+            android:text="@string/last_name_with_lbl" />
+
+        <TextView
+            android:id="@+id/editTextMobNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewLName"
+            android:text="@string/mobile_no_with_lbl" />
+
+        <TextView
+            android:id="@+id/editTextEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextMobNum"
+            android:text="@string/email_id_with_lbl" />
+
+        <TextView
+            android:id="@+id/editTextRegNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextEmail"
+            android:text="@string/reg_no_with_lbl" />
+
+        <TextView
+            android:id="@+id/viewGenderLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextRegNum"
+            android:text="@string/gender_with_lbl" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textViewWorkDetails"
+        style="@style/CollapseFormHeading"
+        android:layout_width="fill_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:onClick="openWorkPlaceInfo"
+        android:padding="6dp"
+        android:text="@string/wrk_det" />
+
+    <RelativeLayout
+        android:id="@+id/workPlaceInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:orientation="vertical">
-            <include
-                android:id="@+id/layoutNameAvatar"
-                layout="@layout/layout_name_avatar" />
-            <View
-                android:id="@+id/linenView"
-                android:layout_width="fill_parent"
-                android:layout_height="0.4dp"
-                android:layout_marginTop="20dp"
-                android:background="#9d9d9d" />
-    </LinearLayout>
+        android:clipToPadding="false"
+        android:padding="12dp"
+        android:visibility="visible">
 
-    <LinearLayout
-        android:id="@+id/pInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:orientation="vertical">
-            <TextView
-                android:id="@+id/textViewDoc"
-                style="@style/CollapseFormHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="30dp"
+        <!--<ListView
+            android:id="@+id/workDetailListView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:divider="@drawable/divider"
+            android:dividerHeight="10dp" />-->
 
-                android:clickable="true"
-                android:onClick="openPersonalInfo"
-                android:text="@string/personalDetails" />
+        <ListView
+            android:id="@+id/workDetailListView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:animateLayoutChanges="true"
+            android:clickable="true"
+            android:divider="@drawable/divider"
+            android:dividerHeight="10dp"
+            android:fadeScrollbars="false"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
 
+        <ImageButton
+            android:id="@+id/textViewAddNewWork"
+            style="@style/FloatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/oval"
+            android:contentDescription="@string/add_new_work_place"
+            android:onClick="addNewWorkPlace"
+            android:src="@mipmap/add_new" />
 
-            <RelativeLayout
-                android:id="@+id/personalInfo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+        <!--<TextView
+            android:id="@+id/textViewRemoveWork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/workDetailListView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/textViewAddNewWork"
+            android:layout_toRightOf="@+id/textViewAddNewWork"
+            android:onClick="removeWorkPlace"
+            android:text="@string/remove_work_place"
+            android:visibility="gone" />-->
 
-                <ImageView
-                    android:id="@+id/viewEditEducation"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:clickable="true"
-                    android:onClick="editPersonalInfo"
-                    android:src="@drawable/editpen" />
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/textViewEditEducation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/viewEditEducation"
-                    android:layout_alignStart="@+id/viewEditEducation"
-                    android:layout_below="@+id/viewEditEducation"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="20dp"
-                    android:clickable="true"
-                    android:onClick="editPersonalInfo"
-                    android:text="@string/edit_info"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/textViewFName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewEditEducation"
-                    android:text="@string/first_name_with_lbl" />
-
-                <TextView
-                    android:id="@+id/textViewLName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewFName"
-                    android:text="@string/last_name_with_lbl" />
-
-                <TextView
-                    android:id="@+id/editTextMobNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewLName"
-                    android:text="@string/mobile_no_with_lbl" />
-
-                <TextView
-                    android:id="@+id/editTextEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/editTextMobNum"
-                    android:text="@string/email_id_with_lbl" />
-
-                <TextView
-                    android:id="@+id/editTextRegNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/editTextEmail"
-                    android:text="@string/reg_no_with_lbl" />
-
-                <TextView
-                    android:id="@+id/viewGenderLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/editTextRegNum"
-                    android:text="@string/gender_with_lbl" />
-
-            </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/wInfo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-            <TextView
-                android:id="@+id/textViewWorkDetails"
-                style="@style/CollapseFormHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="30dp"
-                android:clickable="true"
-                android:onClick="openWorkPlaceInfo"
-                android:text="@string/wrk_det" />
-
-
-            <RelativeLayout
-                android:id="@+id/workPlaceInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-
-                <!--<ListView
-                    android:id="@+id/workDetailListView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:divider="@drawable/divider"
-                    android:dividerHeight="10dp" />-->
-
-                <ListView
-                    android:id="@+id/workDetailListView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/textViewAddNewWork"
-                    android:layout_marginTop="10dp"
-                    android:animateLayoutChanges="true"
-                    android:clickable="true"
-                    android:divider="@drawable/divider"
-                    android:dividerHeight="10dp"
-                    android:fadeScrollbars="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp" />
-
-                <ImageView
-                    android:id="@+id/textViewAddNewWork"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="20dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/add_new_work_place"
-                    android:onClick="addNewWorkPlace"
-                    android:src="@drawable/addnew_icon" />
-
-                <!--<TextView
-                    android:id="@+id/textViewRemoveWork"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/workDetailListView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_toEndOf="@+id/textViewAddNewWork"
-                    android:layout_toRightOf="@+id/textViewAddNewWork"
-                    android:onClick="removeWorkPlace"
-                    android:text="@string/remove_work_place"
-                    android:visibility="gone" />-->
-
-            </RelativeLayout>
-    </LinearLayout>
-
-            <!--style="?android:textAppearanceSmall"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:background="@drawable/button"
-            android:textColor="#fff"-->
+    <!--style="?android:textAppearanceSmall"
+    android:textSize="18sp"
+    android:textStyle="bold"
+    android:background="@drawable/button"
+    android:textColor="#fff"-->
 
 
 </LinearLayout>

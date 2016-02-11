@@ -124,6 +124,8 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
+    <style name="FloatButton" parent="@android:style/Widget.Button"></style>
+
     <style name="IconButton" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/raised_button</item>
         <item name="android:textColor">@color/primary_text</item>

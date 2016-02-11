@@ -26,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -66,7 +65,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private ServiceProvider mServiceProv;
     private SignInData mSignInData;
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
-    private LinearLayout mInfo, mPInfo;
+    /*
+        private LinearLayout mInfo, mPInfo;
+    */
     private ListView mListViewWP;
     private String mCategory; /*mSpecStr*/
     private ArrayList<String> mSpecialityList;
@@ -128,8 +129,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mProgressView = findViewById(R.id.progressView);*/
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
+/*
         mInfo = (LinearLayout) findViewById(R.id.info);
         mPInfo = (LinearLayout) findViewById(R.id.pInfo);
+*/
 
         mFname = (TextView) findViewById(R.id.textViewFName);
         mLname = (TextView) findViewById(R.id.textViewLName);
@@ -835,10 +838,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     public void openPersonalInfo(View view) {
         if (mPersonalInfo.getVisibility() == View.VISIBLE) {
             mPersonalInfo.setVisibility(View.GONE);
-            mInfo.setVisibility(View.VISIBLE);
+//            mInfo.setVisibility(View.VISIBLE);
         } else {
             mPersonalInfo.setVisibility(View.VISIBLE);
-            mInfo.setVisibility(View.GONE);
+            //          mInfo.setVisibility(View.GONE);
             if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
                 mWorkPlaceInfo.setVisibility(View.GONE);
             }
@@ -851,15 +854,19 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     public void openWorkPlaceInfo(View view) {
         if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
             mWorkPlaceInfo.setVisibility(View.GONE);
+/*
             mInfo.setVisibility(View.VISIBLE);
             mPInfo.setVisibility(View.VISIBLE);
+*/
         } else {
             mWorkPlaceInfo.setVisibility(View.VISIBLE);
             if (mPersonalInfo.getVisibility() == View.VISIBLE) {
                 mPersonalInfo.setVisibility(View.GONE);
             }
+/*
             mInfo.setVisibility(View.GONE);
             mPInfo.setVisibility(View.GONE);
+*/
         }
         /*Utility.collapseExpand(mInfo);
         Utility.collapseExpand(mPInfo);
