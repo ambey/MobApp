@@ -999,7 +999,11 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
                     startActivityForResult(editIntent, requestEdit);
+                } else {
+                    mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);
                 }
+                //*mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
             }
         } catch (Exception e) {
             e.printStackTrace();
