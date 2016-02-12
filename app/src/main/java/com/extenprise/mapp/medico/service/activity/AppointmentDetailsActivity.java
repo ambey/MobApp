@@ -64,6 +64,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         mServProv = LoginHolder.servLoginRef;
         if (mServProv == null) {
             Utility.goTOLoginPage(this);
+            return;
         }
 
         Calendar cal = Calendar.getInstance();
@@ -127,6 +128,14 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         }
 
         fillPastAppointements();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mServProv == null) {
+            Utility.goTOLoginPage(this);
+        }
     }
 
     private void statusChangeDone(int msg) {

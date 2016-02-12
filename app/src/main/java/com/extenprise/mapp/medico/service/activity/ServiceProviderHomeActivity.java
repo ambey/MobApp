@@ -48,15 +48,15 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mServiceProv = LoginHolder.servLoginRef;
         if (mServiceProv == null) {
             Utility.goTOLoginPage(this);
+            return;
         }
-
 
         mMsgView = (TextView) findViewById(R.id.msgView);
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImg = (ImageView) findViewById(R.id.imageDoctor);
 
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        try {
+        //try {
             mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
 
             SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
@@ -65,16 +65,20 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
                     prefs.getString("lastVisitDate", "--"),
                     prefs.getString("lastVisitTime", "--")));
             Utility.setLastVisit(prefs);
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             Utility.goTOLoginPage(this);
-        }
-
+            return;
+        }*/
         profile();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (mServiceProv == null) {
+            Utility.goTOLoginPage(this);
+            return;
+        }
         if (mReqSent) {
             profile();
         }
@@ -82,24 +86,17 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     private void profile() {
         mServiceProv = LoginHolder.servLoginRef;
-        if (mServiceProv == null) {
-            Utility.goTOLoginPage(this);
-        }
         String label = getString(R.string.hello_dr);
-        try {
-            if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
-                label = getString(R.string.hello);
-            }
-            label += " " + mServiceProv.getfName() + " " +
-                    mServiceProv.getlName();
-            mWelcomeView.setText(label);
+        if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
+            label = getString(R.string.hello);
+        }
+        label += " " + mServiceProv.getfName() + " " +
+                mServiceProv.getlName();
+        mWelcomeView.setText(label);
 
-            mImg = (ImageView) findViewById(R.id.imageDoctor);
-            if (mServiceProv.getPhoto() != null) {
-                mImg.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
-            }
-        } catch (Exception e) {
-            Utility.goTOLoginPage(this);
+        mImg = (ImageView) findViewById(R.id.imageDoctor);
+        if (mServiceProv.getPhoto() != null) {
+            mImg.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
         }
     }
 

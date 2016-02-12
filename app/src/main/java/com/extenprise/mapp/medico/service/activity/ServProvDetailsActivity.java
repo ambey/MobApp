@@ -92,6 +92,14 @@ public class ServProvDetailsActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mServProv == null) {
+            Utility.goTOLoginPage(this);
+        }
+    }
+
     public void bookAppointment(View view) {
         Intent intent = new Intent(this, BookAppointmentActivity.class);
         if (LoginHolder.custLoginRef == null) {

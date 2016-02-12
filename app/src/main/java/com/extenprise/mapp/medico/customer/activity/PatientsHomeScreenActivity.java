@@ -36,6 +36,7 @@ public class PatientsHomeScreenActivity extends Activity {
         mCustomer = LoginHolder.custLoginRef;
         if (mCustomer == null) {
             Utility.goTOLoginPage(this);
+            return;
         }
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImg = (ImageView) findViewById(R.id.imagePatient);
@@ -58,6 +59,10 @@ public class PatientsHomeScreenActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (mCustomer == null) {
+            Utility.goTOLoginPage(this);
+            return;
+        }
         if (mReqSent) {
             profile();
         }
@@ -65,18 +70,10 @@ public class PatientsHomeScreenActivity extends Activity {
 
     private void profile() {
         mCustomer = LoginHolder.custLoginRef;
-        if (mCustomer == null) {
-            Utility.goTOLoginPage(this);
-        }
-        try {
-            mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
-                    mCustomer.getfName(), mCustomer.getlName()));
-
-            if (mCustomer.getPhoto() != null) {
-                mImg.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
-            }
-        } catch (Exception e) {
-            Utility.goTOLoginPage(this);
+        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
+                mCustomer.getfName(), mCustomer.getlName()));
+        if (mCustomer.getPhoto() != null) {
+            mImg.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
         }
     }
 

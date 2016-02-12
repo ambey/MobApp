@@ -150,6 +150,14 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mCustomer == null) {
+            Utility.goTOLoginPage(this);
+        }
+    }
+
     public void showFields(View view) {
         /*if (mContLay.getVisibility() == View.VISIBLE) {
             Utility.collapse(mContLay, null);

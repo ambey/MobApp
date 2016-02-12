@@ -119,6 +119,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mServiceProv = LoginHolder.servLoginRef;
         if (mServiceProv == null) {
             Utility.goTOLoginPage(this);
+            return;
         }
         mSignInData.setPhone(LoginHolder.servLoginRef.getPhone());
         mWorkPlace.setSignInData(mSignInData);
@@ -194,6 +195,14 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         //Get work place mSpecialityList from server
         sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mServiceProv == null) {
+            Utility.goTOLoginPage(this);
+        }
     }
 
     @Override
@@ -1264,6 +1273,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mServiceProv = LoginHolder.servLoginRef;
             if (mServiceProv == null) {
                 Utility.goTOLoginPage(this);
+                return;
             }
             Utility.showMessage(this, R.string.some_error);
         }

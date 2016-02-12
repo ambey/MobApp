@@ -55,6 +55,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
         mServiceProv = LoginHolder.servLoginRef;
         if (mServiceProv == null) {
             Utility.goTOLoginPage(this);
+            return;
         }
         mUpcomingListView = (ListView) findViewById(R.id.upcomingAppontsList);
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
@@ -84,6 +85,10 @@ public class ViewAppointmentListActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+        if (mServiceProv == null) {
+            Utility.goTOLoginPage(this);
+            return;
+        }
         if (!mReqSent) {
             getUpcomingList();
         }

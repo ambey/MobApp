@@ -50,8 +50,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         mServProv = LoginHolder.servLoginRef;
         if (mServProv == null) {
             Utility.goTOLoginPage(this);
+            return;
         }
-
         /*extView mlastDate = (TextView) findViewById(R.id.textViewDate);
         TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
 
@@ -74,25 +74,24 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
             Utility.setLastVisit(prefs);
         } catch (Exception e) {
             Utility.goTOLoginPage(this);
+            return;
         }
         profile();
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
+        if (mServProv == null) {
+            Utility.goTOLoginPage(this);
+            return;
+        }
         if (mReqSent) {
             profile();
         }
     }
 
     private void profile() {
-        mServProv = LoginHolder.servLoginRef;
-        if (mServProv == null) {
-            Utility.goTOLoginPage(this);
-        }
-
         String label = mWelcomeView.getText().toString() + " " +
                 mServProv.getfName() + " " +
                 mServProv.getlName();

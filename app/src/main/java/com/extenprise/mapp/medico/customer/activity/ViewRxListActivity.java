@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-//import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
@@ -26,6 +25,8 @@ import com.extenprise.mapp.medico.ui.SortActionDialog;
 import com.extenprise.mapp.medico.util.Utility;
 
 import java.util.ArrayList;
+
+//import android.widget.ProgressBar;
 
 public class ViewRxListActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
@@ -59,6 +60,14 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
             Bundle bundle = WorkingDataStore.getBundle();
             adapter.setAscending(bundle.getBoolean("ascending"));
             adapter.setSortField(bundle.getString("sortField"));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mCust == null) {
+            Utility.goTOLoginPage(this);
         }
     }
 

@@ -82,6 +82,14 @@ public class BookAppointmentActivity extends Activity
         setTimeSlots();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mServProv == null || mCust == null) {
+            Utility.goTOLoginPage(this);
+        }
+    }
+
     public void bookAppointment(View view) {
         /*Calendar cal = Calendar.getInstance();
         int hh = cal.get(Calendar.HOUR_OF_DAY);
