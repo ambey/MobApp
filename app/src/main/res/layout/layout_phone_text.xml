@@ -14,40 +14,47 @@
 
     <View style="@style/Divider" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/msg_input_phone" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="8dp">
+        android:orientation="vertical"
+        android:padding="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/country_code" />
+            android:layout_marginBottom="16dp"
+            android:text="@string/msg_input_phone" />
 
-        <EditText
-            android:id="@+id/phoneText"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:hint="@string/mobile_no"
-            android:inputType="number" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/submitButton"
-            style="@style/MyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/submit" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/country_code" />
+
+            <EditText
+                android:id="@+id/phoneText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:hint="@string/mobile_no"
+                android:inputType="number" />
+
+        </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/submitButton"
+        style="@style/FlatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/submit" />
 </LinearLayout>
