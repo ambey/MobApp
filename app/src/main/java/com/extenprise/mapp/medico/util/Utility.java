@@ -124,7 +124,7 @@ public abstract class Utility {
     }
 
     public static void showAlert(Activity activity, String title, String msg) {
-        showAlert(activity, title, msg, null, false, null, new DialogInterface.OnClickListener() {
+        showAlert(activity, title, msg, null, false, null, activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -133,14 +133,21 @@ public abstract class Utility {
     }
 
     public static void showAlert(Activity activity, String title, String msg, DialogInterface.OnClickListener listener) {
-        showAlert(activity, title, msg, null, false, null, listener);
+        showAlert(activity, title, msg, null, false, null, activity.getString(R.string.ok), listener);
     }
 
-    public static void showAlert(Activity activity, String title, String msg, boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
-        showAlert(activity, title, msg, null, cancelOpt, menuOptions, listener);
+    public static void showAlert(Activity activity, String title, String msg,
+                                 boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
+        showAlert(activity, title, msg, null, cancelOpt, menuOptions, activity.getString(R.string.ok), listener);
     }
 
-    public static void showAlert(Activity activity, String title, String msg, View view, boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
+    public static void showAlert(Activity activity, String title, String msg, View view,
+                                 boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
+        showAlert(activity, title, msg, view, cancelOpt, menuOptions, activity.getString(R.string.ok), listener);
+    }
+
+    public static void showAlert(Activity activity, String title, String msg, View view,
+                                 boolean cancelOpt, String[] menuOptions, String okLabel, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
         if (view != null) {
@@ -156,7 +163,7 @@ public abstract class Utility {
         AlertDialog dialog = builder.create();
         if (menuOptions == null) {
             //builder.setPositiveButton(R.string.ok, listener);
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getString(R.string.ok), listener);
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE, okLabel, listener);
             if (cancelOpt) {
                 //builder.setNegativeButton(R.string.cancel, listener);
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(R.string.cancel), listener);
@@ -415,11 +422,11 @@ public abstract class Utility {
 
     public static void collapseExpand(final View v) {
         final boolean collapse = v.getVisibility() == View.VISIBLE;
-        if(!collapse) {
+        if (!collapse) {
             v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         }
         final int height = v.getMeasuredHeight();
-        if(!collapse) {
+        if (!collapse) {
             v.getLayoutParams().height = 0;
             v.setVisibility(View.VISIBLE);
         }
@@ -427,7 +434,7 @@ public abstract class Utility {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(collapse) {
+                if (collapse) {
                     if (interpolatedTime == 1) {
                         v.setVisibility(View.GONE);
                     } else {

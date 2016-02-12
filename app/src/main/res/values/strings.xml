@@ -9,7 +9,7 @@
                 <string name="server_name">http://122.170.15.3:8080/mapp</string>
     -->
 
-        <string name="server_name">http://208.74.28.39:8080/mapp</string>
+    <string name="server_name">http://208.74.28.39:8080/mappTest</string>
 
     <string name="by_exp">By Extenprise</string>
     <string name="hello_world">Hello world!</string>
@@ -238,6 +238,8 @@
     <string name="gender_with_lbl">Gender: %s</string>
 
     <string name="medico_logo">Medico Logo</string>
+    <string name="mobile_no">Mobile Number</string>
+    <string name="submit">Submit</string>
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
     <string name="asc">ASC</string>

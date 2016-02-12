@@ -28,7 +28,7 @@
     <string name="msg_new_version_available">New Version Available for updates.\n Upgrade now?</string>
     <string name="msg_change_pwd">Password changed successfully</string>
     <string name="msg_verify_pwd">Verify Old Password</string>
-    <string name="msg_please_wait">Please Wait...</string>
+    <string name="msg_please_wait">Please Wait…</string>
     <string name="msg_cant_upload">Can\'t Upload Now. Retry.</string>
     <string name="msg_use_loc">Use Location?</string>
     <string name="msg_use_gps">Use GPS, Wi-Fi and mobile networks for location.</string>
@@ -38,4 +38,6 @@
     <string name="msg_time_reserved">Time Already Reserved.</string>
     <string name="msg_exception">Some Exception Occurs.</string>
 
+    <string name="msg_sign_up">Our Customer Representative Will Contact You Soon</string>
+    <string name="msg_input_phone">Please Submit Your Mobile Number</string>
 </resources>
