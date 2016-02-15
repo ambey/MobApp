@@ -15,4 +15,5 @@
     <string name="medicalStore">Pharmacy</string>
     <string name="practitioner">Doctor</string>
     <string name="diagnosticCenter">Diagnostic Lab</string>
+    <string name="medStoreOld">Medical Store</string>
 </resources>

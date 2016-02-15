@@ -361,7 +361,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 Log.v("LoginActivity", "service category: " + servPointType);
                 workingData.putParcelable("servProv", serviceProvider);
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
-                if (servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
+                if (servPointType.equalsIgnoreCase(getString(R.string.medical_store)) ||
+                        servPointType.equalsIgnoreCase(getString(R.string.medStoreOld))) {
                     intent = new Intent(this, MedicalStoreHomeActivity.class);
                 }
                 phone = serviceProvider.getSignInData().getPhone();

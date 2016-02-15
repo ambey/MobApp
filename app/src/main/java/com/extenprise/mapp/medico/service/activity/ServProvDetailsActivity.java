@@ -56,6 +56,7 @@ public class ServProvDetailsActivity extends Activity {
         } else {
             mServProv = intent.getParcelableExtra("servProv");
         }
+        assert mServProv != null;
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         Service service = spsspt.getService();
 
