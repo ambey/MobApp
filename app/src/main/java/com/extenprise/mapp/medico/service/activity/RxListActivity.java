@@ -38,6 +38,11 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
             actionBar.setTitle(R.string.title_activity_rx_list);
         }
 
+        Intent intent = getIntent();
+        if (savedInstanceState != null) {
+            intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
+            intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
+        }
         ArrayList<RxInboxItem> mInbox = getIntent().getParcelableArrayListExtra("inbox");
         mFeedback = getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal());
         TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
@@ -61,6 +66,14 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
         ListView view = (ListView) findViewById(R.id.rxListView);
         view.setAdapter(adapter);
         view.setOnItemClickListener(adapter);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Intent intent = getIntent();
+        outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
+        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE.ordinal()));
     }
 
     @Override

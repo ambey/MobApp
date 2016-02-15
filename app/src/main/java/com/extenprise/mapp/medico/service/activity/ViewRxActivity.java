@@ -31,7 +31,6 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private String mParentActivity;
-    private AppointmentListItem mOrigAppont;
     private AppointmentListItem mAppont;
 
     @Override
@@ -61,12 +60,13 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         resendRxButton.setVisibility(View.GONE);
 
         Intent intent = getIntent();
-
-        mParentActivity = intent.getStringExtra("parent-activity");
-
-        mOrigAppont = intent.getParcelableExtra("appont");
-        mAppont = intent.getParcelableExtra("pastAppont");
-
+        if (savedInstanceState != null) {
+            mParentActivity = savedInstanceState.getString("parent-activity");
+            mAppont = savedInstanceState.getParcelable("pastAppont");
+        } else {
+            mParentActivity = intent.getStringExtra("parent-activity");
+            mAppont = intent.getParcelableExtra("pastAppont");
+        }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         date.setText(sdf.format(mAppont.getDate()));
@@ -80,12 +80,28 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
         fillRxItems();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("appont", getIntent().getParcelableExtra("appont"));
+        outState.putParcelable("pastAppont", getIntent().getParcelableExtra("pastAppont"));
+        outState.putString("parent-activity", getIntent().getStringExtra("parent-activity"));
+        outState.putString("super_parent_activity", getIntent().getStringExtra("super_parent_activity"));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        getIntent().putExtra("appont", savedInstanceState.getParcelable("appont"));
+        getIntent().putExtra("super_parent_activity", savedInstanceState.getString("super_parent_activity"));
+    }
+
     private void fillRxItems() {
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mAppont);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_RX);
-        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgressDialog(this, true);
         }
     }
@@ -122,7 +138,7 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
             }
         }
         if (intent != null) {
-            intent.putExtra("appont", mOrigAppont);
+            intent.putExtra("appont", getIntent().getParcelableExtra("appont"));
             intent.putParcelableArrayListExtra("appontList", getIntent().getParcelableArrayListExtra("appontList"));
             intent.putExtra("parent-activity", getIntent().getParcelableExtra("super_parent_activity"));
         }

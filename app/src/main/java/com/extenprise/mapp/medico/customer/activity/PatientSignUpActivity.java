@@ -22,10 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -492,6 +492,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
+            WorkingDataStore.getBundle().putParcelable("customer", data.getParcelable("customer"));
             Utility.showAlert(this, "", getString(R.string.msg_registration_done), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -549,7 +550,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getCity().setCountry("India");
         c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
 
-        LoginHolder.custLoginRef = c;
         return c;
     }
 

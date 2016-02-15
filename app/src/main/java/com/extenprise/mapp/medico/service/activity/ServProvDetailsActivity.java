@@ -10,10 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.activity.BookAppointmentActivity;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.service.data.ServProvHasServPt;
 import com.extenprise.mapp.medico.service.data.Service;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
@@ -51,9 +51,10 @@ public class ServProvDetailsActivity extends Activity {
         Button bookAppontButton = (Button) findViewById(R.id.buttonBookAppointment);
 
         Intent intent = getIntent();
-        mServProv = intent.getParcelableExtra("service");
-        if(mServProv == null) {
-            mServProv = new ServiceProvider();
+        if (savedInstanceState != null) {
+            mServProv = savedInstanceState.getParcelable("servProv");
+        } else {
+            mServProv = intent.getParcelableExtra("servProv");
         }
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         Service service = spsspt.getService();
@@ -69,7 +70,7 @@ public class ServProvDetailsActivity extends Activity {
             lbl.setText("");
         }
 
-        if(mServProv.getPhoto() != null) {
+        if (mServProv.getPhoto() != null) {
             imageViewUser.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto()));
         }
         textViewClinic.setText(spsspt.getServicePoint().getName());
@@ -93,20 +94,37 @@ public class ServProvDetailsActivity extends Activity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("servProv", getIntent().getParcelableExtra("servProv"));
+        outState.putParcelableArrayList("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+        outState.putString("myparent-activity", getIntent().getStringExtra("myparent-activity"));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        getIntent().putParcelableArrayListExtra("servProvList", savedInstanceState.getParcelableArrayList("servProvList"));
+        getIntent().putExtra("myparent-activity", savedInstanceState.getString("myparent-activity"));
+    }
+
+    /*
+    @Override
     protected void onResume() {
         super.onResume();
         if (mServProv == null) {
-            Utility.goTOLoginPage(this);
+            Utility.goTOLoginPage(this, LoginActivity.class);
         }
     }
+*/
 
     public void bookAppointment(View view) {
         Intent intent = new Intent(this, BookAppointmentActivity.class);
-        if (LoginHolder.custLoginRef == null) {
+        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
             intent = new Intent(this, LoginActivity.class);
             intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
         } else {
-            intent.putExtra("customer", LoginHolder.custLoginRef);
+            intent.putExtra("customer", WorkingDataStore.getBundle().getParcelable("customer"));
         }
         intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
         intent.putExtra("servProv", mServProv);

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.service.ui.ServProvSignUpPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,12 @@ public class ServProvSignUpActivity extends FragmentActivity {
         mViewPager.setAdapter(mPagerAdapter);
 
         Intent intent = getIntent();
-        int category = intent.getIntExtra("category", R.string.practitioner);
+        int category;
+        if (savedInstanceState != null) {
+            category = savedInstanceState.getInt("category");
+        } else {
+            category = intent.getIntExtra("category", R.string.practitioner);
+        }
         Log.v(this.getClass().getName(), "category: " + getString(category));
 
         //mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
@@ -212,6 +218,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt("category", getIntent().getIntExtra("category", R.string.practitioner));
         ServProvSignUpFragment fragment = (ServProvSignUpFragment) mPagerAdapter.getItem(0);
         fragment.onSaveInstanceState(outState);
     }

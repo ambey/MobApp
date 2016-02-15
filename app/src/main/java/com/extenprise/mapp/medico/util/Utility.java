@@ -39,9 +39,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.net.AppStatus;
 import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
@@ -481,9 +479,9 @@ public abstract class Utility {
         prefEditor.apply();
     }
 
-    public static void goTOLoginPage(Activity activity) {
+    public static void goTOLoginPage(Activity activity, Class targetClass) {
         Log.v("Home", "############################" + activity.getString(R.string.msg_exception));
-        Intent intent = new Intent(activity, LoginActivity.class);
+        Intent intent = new Intent(activity, targetClass);
         activity.startActivity(intent);
     }
 
@@ -612,14 +610,12 @@ public abstract class Utility {
         return sdf.format(date);
     }
 
-    public static void logout(SharedPreferences loginPreferences, Activity activity) {
+    public static void logout(SharedPreferences loginPreferences, Activity activity, Class targetClass) {
         if (loginPreferences.getBoolean("saveLogin", false)) {
             loginPreferences.edit().clear().apply();
         }
-        LoginHolder.custLoginRef = null;
-        LoginHolder.servLoginRef = null;
         activity.finish();
-        Intent intent = new Intent(activity, LoginActivity.class);
+        Intent intent = new Intent(activity, targetClass);
         activity.startActivity(intent);
     }
 

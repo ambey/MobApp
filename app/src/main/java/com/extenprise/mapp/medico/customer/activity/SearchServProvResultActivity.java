@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 public class SearchServProvResultActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
 
+    private static String parentActivity;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ArrayList<ServProvListItem> mServProvList;
@@ -45,8 +46,15 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         mProgressView = findViewById(R.id.progressBar);*/
 
         Intent intent = getIntent();
-        mServProvList = intent.getParcelableArrayListExtra("servProvList");
+        if (intent.getStringExtra("parent-activity") != null) {
+            SearchServProvResultActivity.parentActivity = intent.getStringExtra("parent-activity");
+        }
 
+        if (savedInstanceState != null) {
+            mServProvList = savedInstanceState.getParcelableArrayList("servProvList");
+        } else {
+            mServProvList = intent.getParcelableArrayListExtra("servProvList");
+        }
         mAdapter = new ServProvListAdapter(this, R.layout.activity_search_result, mServProvList);
 
         ListView listView = (ListView) findViewById(R.id.docListView);
@@ -68,6 +76,22 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
 
         //Toast.makeText(this, "working days : " + msg, Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + "working days : " + msg);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("servProvList", mServProvList);
+        outState.putParcelable("form", getIntent().getParcelableExtra("form"));
+        outState.putString("parent-activity", getIntent().getStringExtra("parent-actvity"));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Intent intent = getIntent();
+        intent.putExtra("parent-activity", savedInstanceState.getString("parent-activity"));
+        intent.putExtra("form", savedInstanceState.getParcelable("form"));
     }
 
     @Override
@@ -120,8 +144,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         Utility.showProgressDialog(this, false);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
         intent.putParcelableArrayListExtra("servProvList", mServProvList);
-        intent.putExtra("myparent-activity", getIntent().getStringExtra("parent-activity"));
-        intent.putExtra("service", data.getParcelable("service"));
+        intent.putExtra("servProv", data.getParcelable("service"));
         startActivity(intent);
     }
 
@@ -136,15 +159,12 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
 
     @Override
     public Intent getParentActivityIntent() {
-        Intent intent = super.getParentActivityIntent();
-        String parentClass = getIntent().getStringExtra("parent-activity");
-        if (parentClass != null) {
-            try {
-                intent = new Intent(this, Class.forName(parentClass));
-                intent.putExtra("form", getIntent().getParcelableExtra("form"));
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+        Intent intent = null;
+        try {
+            intent = new Intent(this, Class.forName(SearchServProvResultActivity.parentActivity));
+            intent.putExtra("form", getIntent().getParcelableExtra("form"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return intent;
     }

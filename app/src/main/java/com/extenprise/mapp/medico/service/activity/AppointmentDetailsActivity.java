@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.activity.PatientHistoryActivity;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
@@ -60,12 +60,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
         Bundle bundle = WorkingDataStore.getBundle();
         mAppont = bundle.getParcelable("appont");
-
-        mServProv = LoginHolder.servLoginRef;
-        if (mServProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
+        mServProv = bundle.getParcelable("servProv");
 
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
@@ -134,7 +129,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     protected void onResume() {
         super.onResume();
         if (mServProv == null) {
-            Utility.goTOLoginPage(this);
+            Utility.goTOLoginPage(this, LoginActivity.class);
         }
     }
 
@@ -258,7 +253,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Intent intent = new Intent(this, RxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("appont", mAppont);
-        intent.putExtra("service", mServProv);
+        intent.putExtra("servProv", mServProv);
         startActivity(intent);
     }
 

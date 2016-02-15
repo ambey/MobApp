@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.Appointment;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -40,8 +41,6 @@ public class BookAppointmentActivity extends Activity
     private Spinner mSpinnerTimeSlots;
     private TextView mTextViewDate;
     private Button mBookButton;
-    private ServiceProvider mServProv;
-    private Customer mCust;
     private Date mSelectedDate;
     private TextView mMsgView;
 
@@ -51,11 +50,14 @@ public class BookAppointmentActivity extends Activity
         setContentView(R.layout.activity_book_appointment);
 
         Intent intent = getIntent();
-        mServProv = intent.getParcelableExtra("servProv");
-        mCust = intent.getParcelableExtra("customer");
+        if (savedInstanceState != null) {
+            intent.putExtra("servProv", savedInstanceState.getParcelable("servProv"));
+            intent.putParcelableArrayListExtra("servProvList", savedInstanceState.getParcelableArrayList("servProvList"));
+        }
+        ServiceProvider serviceProvider = intent.getParcelableExtra("servProv");
 
         TextView lbl = (TextView) findViewById(R.id.tvDrLbl);
-        if(!mServProv.getServProvHasServPt(0).getService().getCategory().
+        if (!serviceProvider.getServProvHasServPt(0).getService().getCategory().
                 equalsIgnoreCase(getString(R.string.physician))) {
             lbl.setText(getString(R.string.welcome));
         }
@@ -70,10 +72,10 @@ public class BookAppointmentActivity extends Activity
         mMsgView = (TextView) findViewById(R.id.viewMsg);
 
         //ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
-        textViewDocFName.setText(mServProv.getfName());
-        textViewDocLName.setText(mServProv.getlName());
-        textViewDocSpeciality.setText(mServProv.getServProvHasServPt(0).getService().getSpeciality());
-        textViewQualification.setText(String.format("(%s)", mServProv.getQualification()));
+        textViewDocFName.setText(serviceProvider.getfName());
+        textViewDocLName.setText(serviceProvider.getlName());
+        textViewDocSpeciality.setText(serviceProvider.getServProvHasServPt(0).getService().getSpeciality());
+        textViewQualification.setText(String.format("(%s)", serviceProvider.getQualification()));
 
         mSelectedDate = new Date();
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -82,30 +84,13 @@ public class BookAppointmentActivity extends Activity
         setTimeSlots();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mServProv == null || mCust == null) {
-            Utility.goTOLoginPage(this);
-        }
-    }
-
     public void bookAppointment(View view) {
-        /*Calendar cal = Calendar.getInstance();
-        int hh = cal.get(Calendar.HOUR_OF_DAY);
-        int mm = cal.get(Calendar.MINUTE);
-        int nowTime = Utility.getMinutes(hh + ":" + mm);
-        int from = Utility.getMinutes(mSpinnerTimeSlots.getSelectedItem().toString());
-        if (mSelectedDate.compareTo(getTodayDate()) == 0 &&
-                from <= nowTime) {
-            Utility.showMessage(this, R.string.msg_invalid_time);
-            return;
-        }*/
-
         /* Send request to book appointment */
         Appointment form = new Appointment();
-        form.setIdCustomer(mCust.getIdCustomer());
-        form.setIdServProvHasServPt(mServProv.getServices().get(0).getIdServProvHasServPt());
+        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+        ServiceProvider serviceProvider = getIntent().getParcelableExtra("servProv");
+        form.setIdCustomer(customer.getIdCustomer());
+        form.setIdServProvHasServPt(serviceProvider.getServices().get(0).getIdServProvHasServPt());
         form.setDate(mSelectedDate);
         form.setFrom(Utility.getMinutes(mSpinnerTimeSlots.getSelectedItem().toString()));
         Bundle bundle = new Bundle();
@@ -136,7 +121,8 @@ public class BookAppointmentActivity extends Activity
             return;
         }*/
         cal.setTime(mSelectedDate);
-        ServProvHasServPt spspt = mServProv.getServProvHasServPt(0);
+        ServiceProvider serviceProvider = getIntent().getParcelableExtra("servProv");
+        ServProvHasServPt spspt = serviceProvider.getServProvHasServPt(0);
         if (!(Utility.findDocAvailability(spspt.getWorkingDays(), cal))) {
             Utility.showAlert(this, "", "Doctor is not available on the given date.");
             return;
@@ -145,7 +131,7 @@ public class BookAppointmentActivity extends Activity
         //get time slots
         Bundle bundle = new Bundle();
         AppointmentTimeslotsForm form = new AppointmentTimeslotsForm();
-        form.setIdService(mServProv.getServProvHasServPt(0).getIdServProvHasServPt());
+        form.setIdService(serviceProvider.getServProvHasServPt(0).getIdServProvHasServPt());
         form.setDate(mSelectedDate);
         form.setTodayDate(todayDate);
         form.setTime(minutes);
@@ -185,11 +171,21 @@ public class BookAppointmentActivity extends Activity
             });
             Utility.setEnabledButton(this, mBookButton, false);
             Appointment appointment = data.getParcelable("form");
-            mCust.getAppointments().add(appointment);
-            mServProv.getServProvHasServPt(0).getAppointments().add(appointment);
+            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+            customer.getAppointments().add(appointment);
+            ServiceProvider serviceProvider = getIntent().getParcelableExtra("servProv");
+            serviceProvider.getServProvHasServPt(0).getAppointments().add(appointment);
         } else {
             Utility.showAlert(this, "", getString(R.string.error_appont));
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Intent intent = getIntent();
+        outState.putParcelable("servProv", intent.getParcelableExtra("servProv"));
+        outState.putStringArrayList("servProvList", intent.getStringArrayListExtra("servProvList"));
     }
 
     @Override
@@ -253,10 +249,8 @@ public class BookAppointmentActivity extends Activity
         Intent intent = getParentActivityIntent();
         if (intent != null) {
             startActivity(intent);
-        } else {
-            Utility.showMessage(this, R.string.some_error);
+            return;
         }
-        //startActivity(getIntent());
-        //super.onBackPressed();
+        super.onBackPressed();
     }
 }

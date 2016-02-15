@@ -33,6 +33,11 @@ public class PatientHistoryActivity extends Activity {
         //ListView lvOthAppont = (ListView) findViewById(R.id.listViewOtherData);
 
         Intent intent = getIntent();
+        if (savedInstanceState != null) {
+            mParentActivity = savedInstanceState.getString("parent-activity");
+            mAppont = savedInstanceState.getParcelable("appont");
+            mApponts = savedInstanceState.getParcelableArrayList("appontList");
+        }
         mParentActivity = intent.getStringExtra("parent-activity");
         mAppont = intent.getParcelableExtra("appont");
         mApponts = intent.getParcelableArrayListExtra("appontList");
@@ -42,6 +47,14 @@ public class PatientHistoryActivity extends Activity {
 
         AppontHistListAdapter adapter = new AppontHistListAdapter(this, 0, mAppont, mApponts);
         lvMyAppont.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("parent-activity", mParentActivity);
+        outState.putParcelable("appont", mAppont);
+        outState.putParcelableArrayList("appontList", mApponts);
     }
 
     @Override

@@ -22,9 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -340,10 +340,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         if (!activity.isValidInput()) {
             return false;
         }
-        if (LoginHolder.servLoginRef == null) {
-            LoginHolder.servLoginRef = new ServiceProvider();
+        ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+        if (serviceProvider == null) {
+            serviceProvider = new ServiceProvider();
         }
-        LoginHolder.servLoginRef.setQualification(mQualification.getText().toString().trim());
+        serviceProvider.setQualification(mQualification.getText().toString().trim());
 
         ServicePoint spt = new ServicePoint();
         ServProvHasServPt spsspt = new ServProvHasServPt();
@@ -359,7 +360,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
         spsspt.getService().setSpeciality(mSpeciality.getSelectedItem().toString());
         spsspt.getService().setCategory(mServCatagory.getSelectedItem().toString());
-        spsspt.setServProvPhone(LoginHolder.servLoginRef.getPhone());
+        spsspt.setServProvPhone(serviceProvider.getPhone());
         spsspt.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
         spsspt.setServPointType(mServPtType.getSelectedItem().toString());
         spsspt.setStartTime(Utility.getMinutes(mStartTime.getText().toString()));
@@ -370,12 +371,13 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         }
         spsspt.setServicePoint(spt);
 
-        LoginHolder.servLoginRef.addServProvHasServPt(spsspt);
+        serviceProvider.addServProvHasServPt(spsspt);
 
         clearWorkPlace();
-        int count = LoginHolder.servLoginRef.getServiceCount() + 1;
+        int count = serviceProvider.getServiceCount() + 1;
         TextView countView = (TextView) mRootview.findViewById(R.id.viewWorkPlaceCount);
         countView.setText(String.format("#%d", count));
+        WorkingDataStore.getBundle().putParcelable("servProv", serviceProvider);
         return true;
     }
 
@@ -472,9 +474,10 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
             valid = false;
         }
 
-        if(LoginHolder.servLoginRef != null) {
-            for (int i = 0; i < LoginHolder.servLoginRef.getServiceCount(); i++) {
-                ServProvHasServPt spspt = LoginHolder.servLoginRef.getServProvHasServPt(i);
+        ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+        if (serviceProvider != null) {
+            for (int i = 0; i < serviceProvider.getServiceCount(); i++) {
+                ServProvHasServPt spspt = serviceProvider.getServProvHasServPt(i);
                 if (spspt == null) {
                     continue;
                 }
@@ -536,7 +539,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public void saveData() {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        bundle.putParcelable("service", LoginHolder.servLoginRef);
+        bundle.putParcelable("service", WorkingDataStore.getBundle().getParcelable("servProv"));
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SIGNUP);
         if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {

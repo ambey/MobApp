@@ -1,4 +1,4 @@
-package com.extenprise.mapp.medico.service.activity;
+package com.extenprise.mapp.medico.service.ui;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

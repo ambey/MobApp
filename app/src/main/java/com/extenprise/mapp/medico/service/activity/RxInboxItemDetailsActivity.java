@@ -28,7 +28,6 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
-import com.extenprise.mapp.medico.service.data.ReportService;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.RxItemAvailability;
 import com.extenprise.mapp.medico.service.ui.RxItemListAdapter;
@@ -41,7 +40,6 @@ import java.util.BitSet;
 public class RxInboxItemDetailsActivity extends Activity implements ResponseHandler {
     //ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
-    private ArrayList<RxInboxItem> mInbox;
     private RxInboxItem mInboxItem;
     private Button mSendAvailButton;
     private BitSet mAvailMap;
@@ -61,7 +59,13 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         mInboxItem = workingData.getParcelable("rxItem");
 
         Intent intent = getIntent();
-        mInbox = intent.getParcelableArrayListExtra("inbox");
+        if (savedInstanceState != null) {
+            intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
+            intent.putExtra("customer", savedInstanceState.getParcelable("customer"));
+            intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
+            intent.putExtra("availMap", savedInstanceState.getSerializable("availMap"));
+        }
+        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
         Customer customer = intent.getParcelableExtra("customer");
         if(customer != null) {
             mInboxItem.setCustomer(customer);
@@ -179,6 +183,16 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         listView.setOnItemClickListener(adapter);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Intent intent = getIntent();
+        outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
+        outState.putParcelable("customer", intent.getParcelableExtra("customer"));
+        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE.ordinal()));
+        outState.putSerializable("availMap", intent.getSerializableExtra("availMap"));
+    }
+
     public BitSet getAvailMap() {
         return mAvailMap;
     }
@@ -265,6 +279,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
                 return null;
             }
         }
+/*
         ReportService service = mInboxItem.getReportService();
         if(service != null) {
             if (service.getStatus() == ReportServiceStatus.STATUS_NEW.ordinal()) {
@@ -277,7 +292,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
 
         }
-        intent.putParcelableArrayListExtra("inbox", mInbox);
+*/
+        intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));
         intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal()));
         intent.putExtra("customer", getIntent().getParcelableExtra("customer"));
         intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));

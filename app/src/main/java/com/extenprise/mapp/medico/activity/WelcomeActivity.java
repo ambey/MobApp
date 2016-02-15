@@ -7,19 +7,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.androidquery.service.MarketService;
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.SignInData;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -37,7 +35,6 @@ import android.content.Context;*/
 public class WelcomeActivity extends Activity implements ResponseHandler {
     TextView mTextLabel;
     ImageView mImgLogo;
-    Animation textAnimation;
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
@@ -85,10 +82,12 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         mImgLogo = (ImageView) findViewById(R.id.imageViewLogo);
 
         //Checking for updates in version of app.
+/*
         MarketService ms = new MarketService(this);
         ms.level(MarketService.MINOR).checkVersion();
+*/
 
-        initialize();
+//        initialize();
         /*
         img1 = (ImageView)findViewById(R.id.img1);
         imgRotation = AnimationUtils.loadAnimation(this, R.anim.img_rotate);
@@ -159,7 +158,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     }
 
     private void initialize() {
-        textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
+        Animation textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
         mImgLogo.startAnimation(textAnimation);
         mTextLabel.startAnimation(textAnimation);
 
@@ -212,6 +211,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         boolean success = msgData.getBoolean("status");
         if (success) {
             Intent intent;
+            Bundle workingData = WorkingDataStore.getBundle();
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
                 String targetActivity = getIntent().getStringExtra("target-activity");
@@ -227,13 +227,13 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
                     intent = new Intent(this, PatientsHomeScreenActivity.class);
                 }
                 intent.putExtra("customer", customer);
-                LoginHolder.custLoginRef = customer;
+                workingData.putParcelable("customer", customer);
             } else {
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
                 assert serviceProvider != null;
                 String servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
                 Log.v("LoginActivity", "service category: " + servPointType);
-                LoginHolder.servLoginRef = serviceProvider;
+                workingData.putParcelable("servProv", serviceProvider);
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
                 if (servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                     intent = new Intent(this, MedicalStoreHomeActivity.class);
@@ -245,11 +245,5 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             /*mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();*/
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        return false;
     }
 }

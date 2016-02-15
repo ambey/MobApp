@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,7 +48,11 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         setContentView(R.layout.activity_scanned_rx);
 
         Intent intent = getIntent();
-        mAppont = intent.getParcelableExtra("appont");
+        if (savedInstanceState != null) {
+            mAppont = savedInstanceState.getParcelable("appont");
+        } else {
+            mAppont = intent.getParcelableExtra("appont");
+        }
 
         mRxView = (ImageView) findViewById(R.id.rxCopyImageView);
         if (savedInstanceState != null) {
@@ -138,6 +141,9 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Intent intent = getIntent();
+        outState.putParcelable("appont", intent.getParcelableExtra("appont"));
+
         BitmapDrawable drawable = (BitmapDrawable) mRxView.getDrawable();
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
@@ -198,15 +204,17 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         return false;
     }
 
-    @Nullable
-    @Override
-    public Intent getParentActivityIntent() {
-        Intent intent = super.getParentActivityIntent();
-        assert intent != null;
-        intent.putExtra("appont", mAppont);
-        return intent;
-    }
+    /*
+        @Nullable
+        @Override
+        public Intent getParentActivityIntent() {
+            Intent intent = super.getParentActivityIntent();
+            assert intent != null;
+            intent.putExtra("appont", mAppont);
+            return intent;
+        }
 
+    */
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);

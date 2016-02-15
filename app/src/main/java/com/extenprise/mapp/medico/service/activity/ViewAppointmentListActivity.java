@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
@@ -45,18 +44,14 @@ public class ViewAppointmentListActivity extends FragmentActivity
     private TextView mPastMsgView;
     private Button mUpcomingSortBtn;
     private Button mPastSortBtn;
-    private boolean mReqSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_appointment_list);
 
-        mServiceProv = LoginHolder.servLoginRef;
-        if (mServiceProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
+        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+
         mUpcomingListView = (ListView) findViewById(R.id.upcomingAppontsList);
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
         mUpcomingMsgView = (TextView) findViewById(R.id.upcomingAppontsMsgView);
@@ -78,20 +73,12 @@ public class ViewAppointmentListActivity extends FragmentActivity
             }
         });
         Utility.setEnabledButton(this, mPastSortBtn, false);
-
-        getUpcomingList();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mServiceProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
-        if (!mReqSent) {
-            getUpcomingList();
-        }
+        getUpcomingList();
     }
 
     private void showSortDialog(boolean upcoming) {
@@ -141,7 +128,6 @@ public class ViewAppointmentListActivity extends FragmentActivity
         //mMsgView.setVisibility(View.GONE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, true);
-            mReqSent = true;
             Utility.showProgressDialog(this, true);
         }
     }
@@ -180,7 +166,6 @@ public class ViewAppointmentListActivity extends FragmentActivity
 
     private void gotPastAppontList(Bundle data) {
         //Utility.showProgress(this, mUpcomingListView, mUpcomingProgress, false);
-        mReqSent = false;
         Utility.showProgressDialog(this, false);
         AppointmentListAdapter adapter = new AppointmentListAdapter(this, 0, mUpcomingList, mServiceProv);
         adapter.setShowDate(true);
@@ -236,11 +221,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.remove("upcomingList");
         bundle.remove("pastList");
-        Intent intent = super.getParentActivityIntent();
-        if (intent != null) {
-            intent.putExtra("service", mServiceProv);
-        }
-        return intent;
+        return super.getParentActivityIntent();
     }
 
     @Override

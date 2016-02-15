@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,29 +40,14 @@ public class SignUpPreviousActivity extends FragmentActivity {
 
     public void signUpServProv(View view) {
         showSignUpDialog();
-/*
-        Intent intent = new Intent(this, ServProvSignUpActivity.class);
-        intent.putExtra("category", R.string.physician);
-        startActivity(intent);
-*/
     }
 
     public void signUpMedicalStore(View view) {
         showSignUpDialog();
-/*
-        Intent intent = new Intent(this, ServProvSignUpActivity.class);
-        intent.putExtra("category", R.string.pharmacist);
-        startActivity(intent);
-*/
     }
 
     public void signUpDiagCenter(View view) {
         showSignUpDialog();
-/*
-        Intent intent = new Intent(this, ServProvSignUpActivity.class);
-        intent.putExtra("category", R.string.diagnosticCenter);
-        startActivity(intent);
-*/
     }
 
     @Override
@@ -89,9 +73,6 @@ public class SignUpPreviousActivity extends FragmentActivity {
 
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
             case R.id.action_search:
                 Intent intent = new Intent(this, SearchServProvActivity.class);
                 startActivity(intent);

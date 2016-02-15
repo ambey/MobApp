@@ -73,10 +73,15 @@ public class RxActivity extends Activity implements ResponseHandler {
         setContentView(R.layout.activity_rx);
 
         Intent intent = getIntent();
-        mParentActivity = intent.getStringExtra("parent-activity");
-        mAppont = intent.getParcelableExtra("appont");
-        mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
-
+        if (savedInstanceState != null) {
+            mParentActivity = savedInstanceState.getString("parent-activity");
+            mAppont = savedInstanceState.getParcelable("appont");
+            mFeedback = savedInstanceState.getInt("feedback");
+        } else {
+            mParentActivity = intent.getStringExtra("parent-activity");
+            mAppont = intent.getParcelableExtra("appont");
+            mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
+        }
         /*mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);*/
 
@@ -140,7 +145,11 @@ public class RxActivity extends Activity implements ResponseHandler {
 
         RxInboxItem rxInboxItem = null;
         if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
-            mInbox = intent.getParcelableArrayListExtra("inbox");
+            if (savedInstanceState != null) {
+                mInbox = savedInstanceState.getParcelableArrayList("inbox");
+            } else {
+                mInbox = intent.getParcelableArrayListExtra("inbox");
+            }
             Bundle bundle = WorkingDataStore.getBundle();
             rxInboxItem = bundle.getParcelable("rxItem");
             assert rxInboxItem != null;
@@ -176,6 +185,18 @@ public class RxActivity extends Activity implements ResponseHandler {
         });
 
         fillRx(rxInboxItem);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Intent intent = getIntent();
+        outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
+        outState.putParcelable("appont", intent.getParcelableExtra("appont"));
+        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE.ordinal()));
+        outState.putString("parent-activity", intent.getStringExtra("parent-activity"));
+        outState.putInt("rxItemPos", intent.getIntExtra("rxItemPos", 0));
+        outState.putParcelable("servProv", intent.getParcelableExtra("servProv"));
     }
 
     private void fillRx(RxInboxItem rxInboxItem) {
@@ -472,7 +493,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
         intent.putExtra("rx", mRx);
         intent.putExtra("appont", mAppont);
-        intent.putExtra("service", getIntent().getParcelableExtra("service"));
+        intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
         startActivity(intent);
     }
 

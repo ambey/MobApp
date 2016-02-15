@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,12 +25,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.medico.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.SignInData;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -39,6 +38,7 @@ import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.activity.MedicalStoreHomeActivity;
 import com.extenprise.mapp.medico.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
+import com.extenprise.mapp.medico.ui.BackButtonHandler;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
@@ -56,7 +56,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
     //ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
-    private SignInData mSignInData;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -65,7 +64,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
     private EditText mPasswordView;
     private CheckBox mSaveLoginCheckBox;
     private RadioGroup mRadioGroupUType;
-    private boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +88,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mLoginFormView.startAnimation(rLayoutAnim);
 
         //mProgressView = findViewById(R.id.login_progress);
-        mSignInData = new SignInData();
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
         // Set up the login form.
@@ -138,14 +135,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
         initialize();
     }
 
-
     private void initialize() {
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
             String userType = loginPreferences.getString("logintype", null);
             if (userType != null) {
-                int utype = findLoginType(userType);
+                int utype = whichLoginType(userType);
                 if (utype == MappService.CUSTOMER_LOGIN) {
                     mRadioGroupUType.check(R.id.radioButtonPatient);
                 } else {
@@ -157,44 +153,22 @@ public class LoginActivity extends Activity implements ResponseHandler {
             mPasswordView.setText("");
             mMobileNumber.setText("");
         }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent intent = null;
-        if (LoginHolder.custLoginRef != null) {
-            intent = new Intent(this, PatientsHomeScreenActivity.class);
-            startActivity(intent);
-        } else if (LoginHolder.servLoginRef != null) {
-            //ServiceProvider sp = LoginHolder.servLoginRef;
-            String spType = LoginHolder.servLoginRef.getServProvHasServPt(0).getServPointType();
-            if (spType.equalsIgnoreCase(getString(R.string.medical_store))) {
-                intent = new Intent(this, MedicalStoreHomeActivity.class);
-            } else {
-                intent = new Intent(this, ServiceProviderHomeActivity.class);
-            }
-        }
-        if (intent != null) {
-            startActivity(intent);
-        } else {
-            initialize();
-        }
     }
 
     public void onBackPressed() {
         mConnection.setBound(false);
-        if (exit) {
+        final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
+        if (buttonHandler.isBackPressed()) {
+            buttonHandler.setBackPressed(false);
             finish();
             moveTaskToBack(true);
         } else {
+            buttonHandler.setBackPressed(true);
             Utility.showMessage(this, R.string.msg_press_back_button);
-            exit = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    exit = false;
+                    buttonHandler.setBackPressed(false);
                 }
             }, 3 * 1000);
         }
@@ -214,9 +188,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
             case R.id.action_search:
                 Intent intent = new Intent(this, SearchServProvActivity.class);
                 startActivity(intent);
@@ -233,7 +204,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
      * errors are presented and no actual login attempt is made.
      */
 
-    private int findLoginType(String loginType) {
+    private int whichLoginType(String loginType) {
         if (loginType.equalsIgnoreCase(getString(R.string.patient))) {
             return MappService.CUSTOMER_LOGIN;
         } else if (loginType.equalsIgnoreCase(getString(R.string.serv_prov))) {
@@ -261,7 +232,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
         // Store values at the time of the login attempt.
         final String uType = mRadioButtonUType.getText().toString().trim();
-        mLoginType = findLoginType(uType);
+        mLoginType = whichLoginType(uType);
         String phone = mMobileNumber.getText().toString().trim();
         String passwd = mPasswordView.getText().toString();
 
@@ -288,9 +259,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         } else {
             Utility.hideSoftKeyboard(this);
 
-            mSignInData.setPhone(phone);
-            mSignInData.setPasswd(EncryptUtil.encrypt(passwd));
-
+            String encryptedPasswd = EncryptUtil.encrypt(passwd);
             SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
             final SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
             boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
@@ -301,8 +270,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
                     @Override
                     public void onClick(View v) {*/
                 loginPrefsEditor.putBoolean("saveLogin", true);
-                loginPrefsEditor.putString("username", mSignInData.getPhone());
-                loginPrefsEditor.putString("passwd", mSignInData.getPasswd());
+                loginPrefsEditor.putString("username", phone);
+                loginPrefsEditor.putString("passwd", encryptedPasswd);
                 loginPrefsEditor.putString("logintype", uType);
                 loginPrefsEditor.apply();
                         /*dialog.dismiss();
@@ -314,14 +283,17 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.apply();
             }
-            doLogin();
+            doLogin(phone, encryptedPasswd);
         }
     }
 
-    private void doLogin() {
+    private void doLogin(String phone, String encryptedPasswd) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", mLoginType);
-        bundle.putParcelable("signInData", mSignInData);
+        SignInData signInData = new SignInData();
+        signInData.setPhone(phone);
+        signInData.setPasswd(encryptedPasswd);
+        bundle.putParcelable("signInData", signInData);
         mConnection.setAction(MappService.DO_LOGIN);
         mConnection.setData(bundle);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
@@ -345,16 +317,23 @@ public class LoginActivity extends Activity implements ResponseHandler {
         Utility.showMessage(this, R.string.forgotpwd);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("target-activity", getIntent().getStringExtra("target-activity"));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        getIntent().putExtra("target-activity", savedInstanceState.getString("target-activity"));
+    }
+
     protected void loginDone(Bundle msgData) {
-        //Utility.showProgress(this, mLoginFormView, mProgressView, false);
-/*
-        if(progressDialog != null) {
-            progressDialog.dismiss();
-        }
-*/
         Utility.showProgressDialog(this, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
+            Bundle workingData = WorkingDataStore.getBundle();
             String phone;
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
@@ -372,8 +351,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 } else {
                     intent = new Intent(this, PatientsHomeScreenActivity.class);
                 }
-                intent.putExtra("customer", customer);
-                LoginHolder.custLoginRef = customer;
+                workingData.putParcelable("customer", customer);
                 assert customer != null;
                 phone = customer.getSignInData().getPhone();
             } else {
@@ -381,12 +359,11 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 assert serviceProvider != null;
                 String servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
                 Log.v("LoginActivity", "service category: " + servPointType);
-                LoginHolder.servLoginRef = serviceProvider;
+                workingData.putParcelable("servProv", serviceProvider);
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
                 if (servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                     intent = new Intent(this, MedicalStoreHomeActivity.class);
                 }
-                intent.putExtra("servprov", serviceProvider);
                 phone = serviceProvider.getSignInData().getPhone();
             }
             //Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
@@ -399,63 +376,15 @@ public class LoginActivity extends Activity implements ResponseHandler {
             /*editor.putString("autoCompleteValues", TextUtils.join(",", list));*/
 
             Utility.showMessage(this, R.string.msg_login_done);
+/*
             mMobileNumber.setText("");
             mPasswordView.setText("");
+*/
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.msg_login_failed);
-            mPasswordView.setText("");
-            mPasswordView.setError(getString(R.string.error_incorrect_password));
-            mPasswordView.requestFocus();
+            mMobileNumber.setError(getString(R.string.error_incorrect_password));
+            mMobileNumber.requestFocus();
         }
     }
-
-    /*private void populateAutoComplete() {
-        if (VERSION.SDK_INT >= 8) {
-            // Use AccountManager (API 8+)
-            new SetupMobileAutoCompleteTask().execute(null, null);
-        }
-    }
-
-    class SetupMobileAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
-
-        @Override
-        protected List<String> doInBackground(Void... voids) {
-            ArrayList<String> mobileCollection = new ArrayList<>();
-
-            // Get all emails from the user's contacts and copy them to a list.
-            ContentResolver cr = getContentResolver();
-
-            *//*Uri uri = Contacts.CONTENT_URI.buildUpon()
-                    .appendQueryParameter(Contacts.EXTRA_ADDRESS_BOOK_INDEX, "true")
-                    .build();*//*
-            Cursor mobCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                    null, null, null);
-
-            *//*cr.query(ContactsContract.Contacts.CONTENT_URI, null ,    buffer == null ? null : buffer.toString(), args,
-                    ContactsContract.Contacts.DISPLAY_NAME);*//*
-            if (mobCur != null) {
-                while (mobCur.moveToNext()) {
-                    String phone = mobCur.getString(
-                            mobCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    mobileCollection.add(phone);
-                }
-                mobCur.close();
-            }
-            return mobileCollection;
-        }
-
-        @Override
-        protected void onPostExecute(List<String> mobileCollection) {
-            addPhonesToAutoComplete(mobileCollection);
-        }
-    }
-
-    private void addPhonesToAutoComplete(List<String> phoneCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, phoneCollection);
-        mMobileNumber.setAdapter(adapter);
-    }*/
 }

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,10 +13,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.ReportServiceStatus;
 import com.extenprise.mapp.medico.data.RxFeedback;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -34,30 +34,21 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     private ServiceProvider mServiceProv;
     private boolean exit = false;
     private TextView mMsgView;
-    private TextView mWelcomeView;
-    private ImageView mImg;
-    private String mServPointType;
-
-    private boolean mReqSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
-        mServiceProv = LoginHolder.servLoginRef;
-        if (mServiceProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
+        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
 
         mMsgView = (TextView) findViewById(R.id.msgView);
-        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        mImg = (ImageView) findViewById(R.id.imageDoctor);
+        TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        ImageView mImg = (ImageView) findViewById(R.id.imageDoctor);
 
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         //try {
-            mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
+        String mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
 
             SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
             lastVisited.setText(String.format("%s %s %s",
@@ -69,23 +60,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
             Utility.goTOLoginPage(this);
             return;
         }*/
-        profile();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mServiceProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
-        if (mReqSent) {
-            profile();
-        }
-    }
-
-    private void profile() {
-        mServiceProv = LoginHolder.servLoginRef;
         String label = getString(R.string.hello_dr);
         if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             label = getString(R.string.hello);
@@ -94,22 +68,33 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
                 mServiceProv.getlName();
         mWelcomeView.setText(label);
 
-        mImg = (ImageView) findViewById(R.id.imageDoctor);
         if (mServiceProv.getPhoto() != null) {
             mImg.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
         }
     }
 
+    /*
+        @Override
+        protected void onResume() {
+            super.onResume();
+            if (mReqSent) {
+                profile();
+            }
+        }
+
+        private void profile() {
+        }
+
+    */
     public void viewAppointment(View view) {
         Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-        intent.putExtra("service", mServiceProv);
+        intent.putExtra("servProv", mServiceProv);
         startActivity(intent);
     }
 
     public void viewProfile(View view) {
-        mReqSent = true;
         Intent intent = new Intent(this, ServProvProfileActivity.class);
-        intent.putExtra("service", mServiceProv);
+        intent.putExtra("servProv", mServiceProv);
         intent.putExtra("category", getString(R.string.physician));
         startActivity(intent);
     }
@@ -146,13 +131,11 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         }*/
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                break;
             case R.id.action_settings:
                 break;
             case R.id.logout:
-                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this);
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
         return super.onOptionsItemSelected(item);

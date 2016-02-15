@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,91 +13,61 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
+import com.extenprise.mapp.medico.ui.BackButtonHandler;
 import com.extenprise.mapp.medico.util.Utility;
 
 
 public class PatientsHomeScreenActivity extends Activity {
-
-    private Customer mCustomer;
-    private boolean exit = false;
-    private TextView mWelcomeView;
-    private ImageView mImg;
-    private boolean mReqSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
 
-        mCustomer = LoginHolder.custLoginRef;
-        if (mCustomer == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
-        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        mImg = (ImageView) findViewById(R.id.imagePatient);
+        TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        ImageView mImg = (ImageView) findViewById(R.id.imagePatient);
 
+        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
+                customer.getfName(), customer.getlName()));
+        if (customer.getPhoto() != null) {
+            mImg.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto()));
+        }
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         try {
             SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
-                    mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
+                    customer.getSignInData().getPhone(), MODE_PRIVATE);
             lastVisited.setText(String.format("%s %s %s",
                     getString(R.string.last_visited),
                     prefs.getString("lastVisitDate", "--"),
                     prefs.getString("lastVisitTime", "--")));
             Utility.setLastVisit(prefs);
         } catch (Exception e) {
-            Utility.goTOLoginPage(this);
-        }
-        profile();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mCustomer == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
-        if (mReqSent) {
-            profile();
-        }
-    }
-
-    private void profile() {
-        mCustomer = LoginHolder.custLoginRef;
-        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
-                mCustomer.getfName(), mCustomer.getlName()));
-        if (mCustomer.getPhoto() != null) {
-            mImg.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
+            Utility.goTOLoginPage(this, LoginActivity.class);
         }
     }
 
     public void viewRxList(View view) {
         Intent intent = new Intent(this, ViewRxListActivity.class);
-        intent.putExtra("customer", mCustomer);
         startActivity(intent);
     }
 
     public void viewAppointments(View view) {
         Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-        intent.putExtra("customer", mCustomer);
         startActivity(intent);
     }
 
     public void viewProfile(View view) {
-        mReqSent = true;
         Intent intent = new Intent(this, PatientProfileActivity.class);
-        intent.putExtra("customer", mCustomer);
         startActivity(intent);
     }
 
     public void searchDoc(View view) {
         Intent intent = new Intent(this, SearchServProvActivity.class);
-        intent.putExtra("customer", mCustomer);
         intent.putExtra("parent-activity", this.getClass().getName());
         startActivity(intent);
     }
@@ -124,13 +93,11 @@ public class PatientsHomeScreenActivity extends Activity {
 
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
             case R.id.action_settings:
                 return true;
             case R.id.logout:
-                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this);
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -139,18 +106,18 @@ public class PatientsHomeScreenActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (exit) {
-            Log.v("onBackPressed", "PatientsHomeScreenActivity called.. calling finish.");
-            finish(); // finish activity
-            moveTaskToBack(true); // exist app
-            //finish(); // finish activity
+        final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
+        if (buttonHandler.isBackPressed()) {
+            buttonHandler.setBackPressed(false);
+            finish();
+            moveTaskToBack(true);
         } else {
+            buttonHandler.setBackPressed(true);
             Utility.showMessage(this, R.string.msg_press_back_button);
-            exit = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    exit = false;
+                    buttonHandler.setBackPressed(false);
                 }
             }, 3 * 1000);
         }

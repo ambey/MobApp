@@ -27,10 +27,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -50,7 +49,6 @@ import java.util.Date;
 public class PatientProfileActivity extends FragmentActivity implements ResponseHandler, DateChangeListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
-    private Customer mCustomer;
 
     private LinearLayout mContLay;
     private LinearLayout mAddrLayout;
@@ -83,11 +81,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mCustomer = LoginHolder.custLoginRef;
-        if (mCustomer == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
+        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
@@ -112,30 +106,30 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
         mUpdateButton = (Button) findViewById(R.id.buttonViewUpdate);
 
-        mPname.setText(String.format("%s %s\n(%d years)", mCustomer.getfName(), mCustomer.getlName(),
-                Utility.getAge(mCustomer.getDob())));
-        mMobNo.setText(mCustomer.getSignInData().getPhone());
-        if (mCustomer.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto()));
+        mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
+                Utility.getAge(customer.getDob())));
+        mMobNo.setText(customer.getSignInData().getPhone());
+        if (customer.getPhoto() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto()));
         }
-        mEditTextCustomerFName.setText(mCustomer.getfName());
-        mEditTextCustomerLName.setText(mCustomer.getlName());
-        mEditTextCustomerEmail.setText(mCustomer.getEmailId());
+        mEditTextCustomerFName.setText(customer.getfName());
+        mEditTextCustomerLName.setText(customer.getlName());
+        mEditTextCustomerEmail.setText(customer.getEmailId());
 
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        Date dt = mCustomer.getDob();
+        Date dt = customer.getDob();
         if (dt != null) {
-            String dob = sdf.format(mCustomer.getDob());
+            String dob = sdf.format(customer.getDob());
             mTextViewDOB.setText(dob);
         }
-        mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, mCustomer.getGender()));
-        mEditTextHeight.setText(String.format("%.1f", mCustomer.getHeight()));
-        mEditTextWeight.setText(String.format("%.1f", mCustomer.getWeight()));
-        mEditTextLoc.setText(mCustomer.getLocation());
-        mEditTextPinCode.setText(mCustomer.getPincode());
-        mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, mCustomer.getCity().getCity()));
-        mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, mCustomer.getCity().getState()));
+        mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, customer.getGender()));
+        mEditTextHeight.setText(String.format("%.1f", customer.getHeight()));
+        mEditTextWeight.setText(String.format("%.1f", customer.getWeight()));
+        mEditTextLoc.setText(customer.getLocation());
+        mEditTextPinCode.setText(customer.getPincode());
+        mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, customer.getCity().getCity()));
+        mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, customer.getCity().getState()));
 
         setFieldsEnability(false);
 
@@ -147,14 +141,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             if (mImgCopy != null) {
                 mImgView.setImageBitmap(mImgCopy);
             }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mCustomer == null) {
-            Utility.goTOLoginPage(this);
         }
     }
 
@@ -270,7 +256,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-        bundle.putParcelable("customer", getUpdateData());
+        bundle.putParcelable("customer", getUpdateData(new Customer()));
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_UPDATE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
@@ -359,7 +345,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    LoginHolder.custLoginRef = getUpdateData();
+                    Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+                    getUpdateData(customer);
                     Intent intent = getIntent();
                     finish();
                     startActivity(intent);
@@ -370,8 +357,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         }
     }
 
-    private Customer getUpdateData() {
-        Customer c = new Customer();
+    private Customer getUpdateData(Customer c) {
         c.getSignInData().setPhone(mMobNo.getText().toString());
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
         c.setlName(mEditTextCustomerLName.getText().toString().trim());
@@ -493,10 +479,11 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                     focusView.requestFocus();
                                 }
                             } else {
-                                mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                                Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+                                customer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                                bundle.putParcelable("customer", mCustomer);
+                                bundle.putParcelable("customer", customer);
                                 mConnection.setData(bundle);
                                 mConnection.setAction(MappService.DO_CHANGE_PWD);
                                 if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
@@ -533,10 +520,11 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     private void checkPwd() {
         String oldpwd = mOldPwd.getText().toString().trim();
         if (Validator.isPasswordValid(oldpwd)) {
-            mCustomer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
+            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+            customer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-            bundle.putParcelable("customer", mCustomer);
+            bundle.putParcelable("customer", customer);
             mConnection.setData(bundle);
             mConnection.setAction(MappService.DO_PWD_CHECK);
             if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
@@ -594,7 +582,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                                 if (which == DialogInterface.BUTTON_POSITIVE) {
                                                     Bundle bundle = new Bundle();
                                                     bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                                                    bundle.putParcelable("customer", mCustomer);
+                                                    Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+                                                    bundle.putParcelable("customer", customer);
                                                     mConnection.setData(bundle);
                                                     mConnection.setAction(MappService.DO_REMOVE_PHOTO);
                                                     if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
@@ -719,7 +708,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
         if (intent != null) {
-            intent.putExtra("customer", getIntent().getParcelableExtra("customer"));
+            intent.putExtra("customer", WorkingDataStore.getBundle().getParcelable("customer"));
         }
         return intent;
     }
@@ -728,8 +717,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     public void datePicked(String date) {
         Date datePicked = Utility.getStrAsDate(date, "dd/MM/yyyy");
         if (!Utility.isDateAfterToday(datePicked)) {
-            mPname.setText(String.format("%s %s\n(%d years)", mCustomer.getfName(), mCustomer.getlName(),
-                    Utility.getAge(mCustomer.getDob())));
+            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+            mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
+                    Utility.getAge(customer.getDob())));
         }
     }
 

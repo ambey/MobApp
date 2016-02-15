@@ -25,9 +25,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.data.SignInData;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -374,12 +374,12 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     }
 
     public void saveData() {
-        if (LoginHolder.servLoginRef == null) {
-            LoginHolder.servLoginRef = new ServiceProvider();
+        ServiceProvider sp = WorkingDataStore.getBundle().getParcelable("servProv");
+        if (sp == null) {
+            sp = new ServiceProvider();
+            WorkingDataStore.getBundle().putParcelable("servProv", sp);
         }
-        ServiceProvider sp = LoginHolder.servLoginRef;
         try {
-            assert sp != null;
             sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } catch (Exception e) {
             e.printStackTrace();

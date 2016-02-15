@@ -6,23 +6,23 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.RxFeedback;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
+import com.extenprise.mapp.medico.ui.BackButtonHandler;
 import com.extenprise.mapp.medico.util.Utility;
 
 import java.util.ArrayList;
@@ -32,38 +32,18 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private ServiceProvider mServProv;
-    private Boolean exit = false;
     private TextView mMsgView;
-    private TextView mWelcomeView;
-    private boolean mReqSent;
-    private ImageView mImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medical_store_home);
 
-        mMsgView = (TextView)findViewById(R.id.msgView);
-        mImg = (ImageView) findViewById(R.id.imageMedstore);
-        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        mMsgView = (TextView) findViewById(R.id.msgView);
+        ImageView mImg = (ImageView) findViewById(R.id.imageMedstore);
+        TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
 
-        mServProv = LoginHolder.servLoginRef;
-        if (mServProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
-        /*extView mlastDate = (TextView) findViewById(R.id.textViewDate);
-        TextView mlastTime = (TextView) findViewById(R.id.textViewTime);
-
-        SharedPreferences prefs = getSharedPreferences("lastVisit", MODE_PRIVATE);
-        Boolean saveVisit = prefs.getBoolean("saveVisit", false);
-        if(saveVisit) {
-            mlastDate.setText(prefs.getString("Date", ""));
-            mlastTime.setText(prefs.getString("Time", ""));
-        } else {
-            Utility.setCurrentDateOnView(mlastDate);
-            Utility.setCurrentTimeOnView(mlastTime);
-        }*/
+        mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
         try {
             TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
             SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServProv.getSignInData().getPhone(), MODE_PRIVATE);
@@ -73,25 +53,9 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
                     prefs.getString("lastVisitTime", "--")));
             Utility.setLastVisit(prefs);
         } catch (Exception e) {
-            Utility.goTOLoginPage(this);
+            Utility.goTOLoginPage(this, LoginActivity.class);
             return;
         }
-        profile();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mServProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
-        if (mReqSent) {
-            profile();
-        }
-    }
-
-    private void profile() {
         String label = mWelcomeView.getText().toString() + " " +
                 mServProv.getfName() + " " +
                 mServProv.getlName();
@@ -123,13 +87,11 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                break;
             case R.id.action_settings:
                 break;
             case R.id.logout:
-                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this);
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
 
@@ -165,7 +127,6 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     }
 
     public void viewProfile(View view) {
-        mReqSent = true;
         Intent intent = new Intent(this, ServProvProfileActivity.class);
         intent.putExtra("service", mServProv);
         intent.putExtra("category", getString(R.string.pharmacist));
@@ -175,18 +136,18 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        if (exit) {
-            Log.v("onBackPressed", "MedicalStoreHomeActivity called.. calling finish.");
-            finish(); // finish activity
-            moveTaskToBack(true); // exist app
-            //finish(); // finish activity
+        final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
+        if (buttonHandler.isBackPressed()) {
+            buttonHandler.setBackPressed(false);
+            finish();
+            moveTaskToBack(true);
         } else {
+            buttonHandler.setBackPressed(true);
             Utility.showMessage(this, R.string.msg_press_back_button);
-            exit = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    exit = false;
+                    buttonHandler.setBackPressed(false);
                 }
             }, 3 * 1000);
         }

@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.data.ReportServiceStatus;
 import com.extenprise.mapp.medico.data.Rx;
@@ -57,6 +56,12 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
         bundle.putInt("id", mRx.getAppointment().getIdServProvHasServPt());
         mConnection.setData(bundle);
         Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("rx", getIntent().getParcelableExtra("rx"));
     }
 
     public void sendRxToMedStore(View view) {
@@ -102,7 +107,6 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Intent intent = new Intent(SelectMedicalStoreActivity.this, ServiceProviderHomeActivity.class);
-                intent.putExtra("service", LoginHolder.servLoginRef);
                 startActivity(intent);
             }
         });
@@ -126,7 +130,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
         Intent intent = super.getParentActivityIntent();
         if (intent != null) {
             intent.putExtra("appont", getIntent().getParcelableExtra("appont"));
-            intent.putExtra("service", getIntent().getParcelableExtra("service"));
+            intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
         }
         return intent;
     }

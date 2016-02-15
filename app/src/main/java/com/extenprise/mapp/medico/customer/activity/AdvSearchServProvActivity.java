@@ -77,6 +77,11 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         /*mSearchFormView = findViewById(R.id.advSearchForm);
         mProgressView = findViewById(R.id.search_progress);*/
 
+        if (savedInstanceState != null) {
+            Intent intent = getIntent();
+            intent.putStringArrayListExtra("specList", savedInstanceState.getStringArrayList("specList"));
+            intent.putExtra("form", savedInstanceState.getParcelable("form"));
+        }
         ArrayList<String> specList = getIntent().getStringArrayListExtra("specList");
         if (specList == null) {
             specList = new ArrayList<>();
@@ -127,6 +132,14 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
                 // your code here
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Intent intent = getIntent();
+        outState.putStringArrayList("specList", intent.getStringArrayListExtra("specList"));
+        outState.putParcelable("form", intent.getParcelableExtra("form"));
     }
 
     public void showtimeFields(View view) {

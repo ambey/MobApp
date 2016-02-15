@@ -33,9 +33,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.SignInData;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -116,12 +117,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mWorkPlaceList = new ArrayList<>();
         mServiceProv = new ServiceProvider();
         mSignInData = new SignInData();
-        mServiceProv = LoginHolder.servLoginRef;
-        if (mServiceProv == null) {
-            Utility.goTOLoginPage(this);
-            return;
-        }
-        mSignInData.setPhone(LoginHolder.servLoginRef.getPhone());
+
+        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mSignInData.setPhone(mServiceProv.getPhone());
         mWorkPlace.setSignInData(mSignInData);
 
         /*mFormView = findViewById(R.id.updateServProvform);
@@ -197,13 +195,15 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
     }
 
+/*
     @Override
     protected void onResume() {
         super.onResume();
         if (mServiceProv == null) {
-            Utility.goTOLoginPage(this);
+            Utility.goTOLoginPage(this, LoginActivity.class);
         }
     }
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1172,7 +1172,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
-            LoginHolder.servLoginRef.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+            ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+            serviceProvider.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
             if (mServiceProv.getPhoto() != null) {
                 mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
@@ -1261,7 +1262,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private void updateDone(int msg, Bundle data) {
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
-            LoginHolder.servLoginRef = mServiceProv;
+            //LoginHolder.servLoginRef = mServiceProv;
             Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -1270,9 +1271,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 }
             });
         } else {
-            mServiceProv = LoginHolder.servLoginRef;
+            //mServiceProv = LoginHolder.servLoginRef;
             if (mServiceProv == null) {
-                Utility.goTOLoginPage(this);
+                Utility.goTOLoginPage(this, LoginActivity.class);
                 return;
             }
             Utility.showMessage(this, R.string.some_error);

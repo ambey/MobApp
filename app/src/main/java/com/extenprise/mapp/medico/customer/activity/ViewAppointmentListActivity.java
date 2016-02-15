@@ -1,6 +1,5 @@
 package com.extenprise.mapp.medico.customer.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +15,7 @@ import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.data.AppointmentListItem;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.customer.ui.AppointmentListAdapter;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -41,15 +41,10 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
     private Button mUpcomingSortBtn;
     private Button mPastSortBtn;
 
-    private Customer mCust;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_appointment_list);
-
-        Intent intent = getIntent();
-        mCust = intent.getParcelableExtra("customer");
 
         mUpcomingListView = (ListView) findViewById(R.id.upcomingAppontsList);
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
@@ -88,7 +83,8 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
     }
 
     private void setupForm(AppointmentListItem form) {
-        form.setIdCustomer(mCust.getIdCustomer());
+        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+        form.setIdCustomer(customer.getIdCustomer());
         Calendar cal = Calendar.getInstance();
         form.setDate(cal.getTime());
         form.setTime(String.format("%d:%d", cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));

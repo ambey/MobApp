@@ -36,17 +36,18 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     //private ProgressBar mRxListProgress;
     private TextView mRxMsgView;
 
-    private Customer mCust;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cust_rx_list);
 
         Intent intent = getIntent();
-        mCust = intent.getParcelableExtra("customer");
-        ArrayList<RxInboxItem> rxInboxItems = intent.getParcelableArrayListExtra("inbox");
-
+        ArrayList<RxInboxItem> rxInboxItems;
+        if (savedInstanceState != null) {
+            rxInboxItems = savedInstanceState.getParcelableArrayList("inbox");
+        } else {
+            rxInboxItems = intent.getParcelableArrayListExtra("inbox");
+        }
         mRxListView = (ListView) findViewById(R.id.rxListView);
         //mRxListProgress = (ProgressBar) findViewById(R.id.rxListProgress);
         mRxMsgView = (TextView) findViewById(R.id.rxMsgView);
@@ -54,7 +55,8 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         if (rxInboxItems == null) {
             getRxList();
         } else {
-            RxListAdapter adapter = new RxListAdapter(this, 0, rxInboxItems, mCust);
+            Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
+            RxListAdapter adapter = new RxListAdapter(this, 0, rxInboxItems, cust);
             mRxListView.setAdapter(adapter);
             mRxListView.setOnItemClickListener(adapter);
             Bundle bundle = WorkingDataStore.getBundle();
@@ -63,21 +65,12 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mCust == null) {
-            Utility.goTOLoginPage(this);
-        }
-    }
-
     private void getRxList() {
         //Utility.showProgress(this, mRxListView, mRxListProgress, true);
         Utility.showProgressDialog(this, true);
         RxInboxItem item = new RxInboxItem();
-        Customer c = new Customer();
-        c.setIdCustomer(mCust.getIdCustomer());
-        item.setCustomer(c);
+        Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
+        item.setCustomer(cust);
         Bundle bundle = new Bundle();
         bundle.putParcelable("rxItem", item);
         mConnection.setData(bundle);
@@ -89,7 +82,8 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         //Utility.showProgress(this, mRxListView, mRxListProgress, false);
         Utility.showProgressDialog(this, false);
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
-        RxListAdapter adapter = new RxListAdapter(this, 0, list, mCust);
+        Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
+        RxListAdapter adapter = new RxListAdapter(this, 0, list, cust);
         mRxListView.setAdapter(adapter);
         mRxListView.setOnItemClickListener(adapter);
 

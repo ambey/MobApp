@@ -8,7 +8,6 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,10 +17,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
-import com.extenprise.mapp.medico.LoginHolder;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.FirstFlipperActivity;
 import com.extenprise.mapp.medico.activity.LoginActivity;
+import com.extenprise.mapp.medico.customer.data.Customer;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -50,11 +50,11 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serv_prov);
 
+        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(false);
-
-            if (LoginHolder.custLoginRef != null) {
+            if (customer != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
         }
@@ -188,7 +188,11 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
+        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+            getMenuInflater().inflate(R.menu.menu_patients_home_screen, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -199,13 +203,13 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
             case R.id.action_search:
                 return true;
             case R.id.action_sign_in:
                 showSignInScreen(null);
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
 
@@ -214,7 +218,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
 
     public void showSignInScreen(View v) {
         Intent intent;
-        if (LoginHolder.custLoginRef != null) {
+        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
             intent = new Intent(this, PatientsHomeScreenActivity.class);
         } else {
             intent = new Intent(this, LoginActivity.class);
@@ -284,6 +288,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         if (list != null && list.size() > 0) {
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
             intent.putParcelableArrayListExtra("servProvList", list);
+            intent.putExtra("parent-activity", this.getClass().getName());
+            intent.putExtra("myparent-activity", getIntent().getStringExtra("parent-activity"));
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.msg_no_result);
@@ -309,7 +315,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        if (LoginHolder.custLoginRef != null) {
+        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
             intent = new Intent(this, PatientsHomeScreenActivity.class);
         }
         return intent;
@@ -322,33 +328,9 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         super.onBackPressed();
     }
 
-    /* Request updates at startup */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /*try {
-            locationManager.requestLocationUpdates(provider, 400, 1, this);
-        } catch(SecurityException e) {
-            e.printStackTrace();
-        }*/
-    }
-
-    /* Remove the locationlistener updates when Activity is paused */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        /*try {
-            locationManager.removeUpdates(this);
-        } catch(SecurityException e) {
-            e.printStackTrace();
-        }*/
-    }
-
     @Override
     public void onLocationChanged(Location location) {
-        /*int lat = (int) (location.getLatitude());
-        int lng = (int) (location.getLongitude());
-        mLocation.setText(String.format("%s%s%s", String.valueOf(lat), getString(R.string.comma), String.valueOf(lng)));*/
+
     }
 
     @Override
