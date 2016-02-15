@@ -193,17 +193,16 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     }
 
     public void showFields(View view) {
-        /*if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mAddrLayout, null);
-        } else {
-            if (mContLay.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mContLay, null);
-            }
-            Utility.expand(mAddrLayout, null);
-            mEditTextLoc.requestFocus();
-        }*/
-        Utility.collapseExpand(mAddrLayout);
-        Utility.collapseExpand(mContLay);
+        int vID = view.getId();
+        if (vID == R.id.textViewPersonalFields) {
+            Utility.collapse(mAddrLayout, false);
+            //Utility.collapseExpand(mContLay, (mContLay.getVisibility() != View.VISIBLE));
+            Utility.collapse(mContLay, true);
+        } else if (vID == R.id.viewAddress) {
+            Utility.collapse(mContLay, false);
+            //Utility.collapseExpand(mAddrLayout, (mAddrLayout.getVisibility() != View.VISIBLE));
+            Utility.collapse(mAddrLayout, true);
+        }
     }
 
     public void showDatePicker(View view) {

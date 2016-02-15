@@ -419,7 +419,10 @@ public abstract class Utility {
     }
 
     public static void collapseExpand(final View v) {
-        final boolean collapse = v.getVisibility() == View.VISIBLE;
+        collapse(v, (v.getVisibility() == View.VISIBLE));
+    }
+
+    public static void collapse(final View v, final boolean collapse) {
         if (!collapse) {
             v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         }

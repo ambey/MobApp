@@ -106,6 +106,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
         mUpdateButton = (Button) findViewById(R.id.buttonViewUpdate);
 
+        //assert customer != null;
         mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
                 Utility.getAge(customer.getDob())));
         mMobNo.setText(customer.getSignInData().getPhone());
@@ -145,29 +146,15 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     public void showFields(View view) {
-        /*if (mContLay.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mContLay, null);
-        } else {
-            Utility.expand(mContLay, null);
-            if (mAddrLayout.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mAddrLayout, null);
-            }
-        }*/
-        Utility.collapseExpand(mAddrLayout);
-        Utility.collapseExpand(mContLay);
+        int vID = view.getId();
+        if (vID == R.id.textViewPersonalFields) {
+            Utility.collapse(mAddrLayout, true);
+            Utility.collapse(mContLay, false);
+        } else if (vID == R.id.viewAddress) {
+            Utility.collapse(mContLay, true);
+            Utility.collapse(mAddrLayout, false);
+        }
     }
-
-    /*public void showAddressFields(View view) {
-        *//*if (mAddrLayout.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mAddrLayout, null);
-        } else {
-            Utility.expand(mAddrLayout, null);
-            if (mContLay.getVisibility() == View.VISIBLE) {
-                Utility.collapse(mContLay, null);
-            }
-        }*//*
-
-    }*/
 
     private void setFieldsEnability(boolean set) {
         mEditTextCustomerFName.setEnabled(set);
@@ -186,19 +173,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     public void editPatientProf(View v) {
-        if (!mEditTextCustomerFName.isEnabled()) {
-            setFieldsEnability(true);
-            if (mAddrLayout.getVisibility() != View.VISIBLE) {
-                Utility.collapseExpand(mAddrLayout);
-                Utility.collapseExpand(mContLay);
-            }
-        } else {
-            setFieldsEnability(false);
-        }
-        //showPersonalFields(v);
-        //mContLay.setVisibility(View.VISIBLE);
-        /*Utility.expand(mContLay, null);
-        Utility.collapseExpand(mContLay);*/
+        setFieldsEnability((!mEditTextCustomerFName.isEnabled()));
+        Utility.collapse(mContLay, false);
+        Utility.collapse(mAddrLayout, true);
     }
 
     public void updateProfile(View v) {
@@ -305,37 +282,39 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        if (action == MappService.DO_UPDATE) {
-            updateDone(data);
-            return true;
-        } else if (action == MappService.DO_REMOVE_PHOTO) {
-            removePhotoDone(data);
-            return true;
-        } else if(action == MappService.DO_PWD_CHECK) {
-            pwdCheckDone(data);
-            return true;
-        } else if(action == MappService.DO_CHANGE_PWD) {
-            changePwdDone(data);
-            return true;
+        switch (action) {
+            case MappService.DO_UPDATE:
+                updateDone(data);
+                break;
+            case MappService.DO_REMOVE_PHOTO:
+                removePhotoDone(data);
+                break;
+            case MappService.DO_PWD_CHECK:
+                pwdCheckDone(data);
+                break;
+            case MappService.DO_CHANGE_PWD:
+                changePwdDone(data);
+                break;
+            case MappService.DO_UPLOAD_PHOTO:
+                uploadPhotoDone(data);
+                break;
+            default:
+                return false;
         }
-        /*if (action == MappService.DO_UPLOAD_PHOTO) {
-            uploadPhotoDone(data);
-            return true;
-        }*/
-        return false;
+        return true;
     }
 
-    /*private void uploadPhotoDone(Bundle data) {
-        Utility.showProgress(this, mFormView, mProgressView, false);
+    private void uploadPhotoDone(Bundle data) {
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
-            LoginHolder.custLoginRef.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
             Utility.showMessage(this, R.string.msg_upload_photo);
+            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+            customer.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
-            mImgView.setImageBitmap(mImgCopy);
             Utility.showMessage(this, R.string.some_error);
         }
-        refresh();
-    }*/
+    }
 
     private void updateDone(Bundle data) {
         //Utility.showProgress(this, mFormView, mProgressView, false);
@@ -695,6 +674,18 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
                     startActivityForResult(editIntent, requestEdit);
+                } else {
+                    /*Customer c = new Customer();
+                    c.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));*/
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                    bundle.putParcelable("customer", getUpdateData(new Customer()));
+                    mConnection.setData(bundle);
+                    mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
+                    if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                        //Utility.showProgress(this, mFormView, mProgressView, true);
+                        Utility.showProgressDialog(this, true);
+                    }
                 }
             }
         } catch (Exception e) {

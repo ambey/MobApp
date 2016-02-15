@@ -119,6 +119,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mSignInData = new SignInData();
 
         mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        //assert mServiceProv != null;
         mSignInData.setPhone(mServiceProv.getPhone());
         mWorkPlace.setSignInData(mSignInData);
 
@@ -161,8 +162,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if(!servPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             if(servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                 mCategory = getString(R.string.pharmacist);
+                mImgView.setImageResource(R.drawable.medstore);
             } else {
                 mCategory = getString(R.string.diagnostic_center);
+                mImgView.setImageResource(R.drawable.diagcenter);
             }
             mViewdrLbl.setText(getString(R.string.welcome));
         }
