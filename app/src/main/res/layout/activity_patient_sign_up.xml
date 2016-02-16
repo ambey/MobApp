@@ -56,10 +56,10 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textViewCountryCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                  android:layout_marginTop="6dp"
-                    android:paddingLeft="5dp"
+                    android:layout_alignBaseline="@+id/editTextCellphone"
                     android:text="@string/country_code"
                     android:textSize="17sp" />
 
@@ -67,11 +67,12 @@
                     android:id="@+id/editTextCellphone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/textViewCountryCode"
+                    android:layout_toRightOf="@id/textViewCountryCode"
                     android:ems="10"
                     android:hint="@string/primary_phone_no"
                     android:inputType="number"
-                    android:maxLength="10"
-                    android:paddingLeft="40dp" />
+                    android:maxLength="10" />
             </RelativeLayout>
 
             <EditText
@@ -108,8 +109,6 @@
                 android:layout_marginTop="40dp"
                 android:onClick="registerPatient"
                 android:text="@string/done" />
-
-
         </LinearLayout>
     </ScrollView>
 

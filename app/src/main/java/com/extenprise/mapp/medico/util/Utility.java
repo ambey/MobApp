@@ -392,13 +392,13 @@ public abstract class Utility {
     }
 
     public static void enlargeImage(ImageView imageView) {
-        if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.FILL_PARENT) {
+        if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.MATCH_PARENT) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(140, 140);
             params.gravity = Gravity.CENTER;
             imageView.setLayoutParams(params);
             imageView.setAdjustViewBounds(true);
         } else {
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         }
         /*Bitmap bitmapToScale = imageView.getDrawingCache();

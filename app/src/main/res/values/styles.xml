@@ -16,8 +16,6 @@
         <item name="actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
         <item name="android:actionMenuTextColor">@color/ThemeColor</item>
         <item name="actionMenuTextColor">@color/ThemeColor</item>
-        <item name="android:dialogTheme">@style/AppTheme.Dialog</item>
-        <item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>
         <!--
                 <item name="android:popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
                 <item name="popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
@@ -47,11 +45,6 @@
 
     <style name="AppTheme.ActionBar.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/menu_overflow_icon</item>
-    </style>
-
-    <style name="AppTheme.Dialog" parent="@android:style/Theme.Holo.Light.Dialog">
-        <item name="android:textColorHint">@color/ThemeColor</item>
-        <item name="android:titleTextStyle">@color/ThemeColor</item>
     </style>
 
     <style name="DialogTitleText">

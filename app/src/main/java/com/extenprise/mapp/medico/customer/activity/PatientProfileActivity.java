@@ -3,6 +3,7 @@ package com.extenprise.mapp.medico.customer.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -106,7 +107,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
         mUpdateButton = (Button) findViewById(R.id.buttonViewUpdate);
 
-        //assert customer != null;
         mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
                 Utility.getAge(customer.getDob())));
         mMobNo.setText(customer.getSignInData().getPhone());
@@ -405,7 +405,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (id == R.id.action_settings) {
             return true;
         }
-        if(id == R.id.action_changepwd) {
+        if (id == R.id.action_changepwd) {
             LayoutInflater inflater = this.getLayoutInflater();
             final View dialogView = inflater.inflate(R.layout.layout_change_pwd, null);
 
@@ -673,7 +673,11 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     editIntent.setDataAndType(selectedImage, "image/*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
-                    startActivityForResult(editIntent, requestEdit);
+                    try {
+                        startActivityForResult(editIntent, requestEdit);
+                    } catch (ActivityNotFoundException e) {
+                        Utility.showMessage(this, R.string.msg_no_photo_editor);
+                    }
                 } else {
                     /*Customer c = new Customer();
                     c.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));*/

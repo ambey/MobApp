@@ -195,13 +195,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     public void showFields(View view) {
         int vID = view.getId();
         if (vID == R.id.textViewPersonalFields) {
-            Utility.collapse(mAddrLayout, false);
-            //Utility.collapseExpand(mContLay, (mContLay.getVisibility() != View.VISIBLE));
-            Utility.collapse(mContLay, true);
-        } else if (vID == R.id.viewAddress) {
-            Utility.collapse(mContLay, false);
-            //Utility.collapseExpand(mAddrLayout, (mAddrLayout.getVisibility() != View.VISIBLE));
             Utility.collapse(mAddrLayout, true);
+            Utility.collapse(mContLay, (mContLay.getVisibility() == View.VISIBLE));
+        } else if (vID == R.id.viewAddress) {
+            Utility.collapse(mContLay, true);
+            Utility.collapse(mAddrLayout, (mAddrLayout.getVisibility() == View.VISIBLE));
         }
     }
 
