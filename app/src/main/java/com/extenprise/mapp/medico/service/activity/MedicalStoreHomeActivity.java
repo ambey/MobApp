@@ -104,10 +104,13 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         mConnection.setAction(MappService.DO_GET_RX_INBOX);
         mConnection.setData(bundle);
         mMsgView.setVisibility(View.VISIBLE);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
+        }
     }
 
     private void gotRxInbox(Bundle data) {
+        Utility.showProgressDialog(this, false);
         mMsgView.setVisibility(View.GONE);
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);

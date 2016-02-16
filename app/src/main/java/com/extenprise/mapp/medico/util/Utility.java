@@ -14,6 +14,8 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -134,6 +136,11 @@ public abstract class Utility {
         showAlert(activity, title, msg, null, false, null, activity.getString(R.string.ok), listener);
     }
 
+    /*public static void showAlert(Activity activity, String title, String msg,
+                                 DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener cancelListener) {
+        showAlert(activity, title, msg, null, false, null, activity.getString(R.string.ok), listener);
+    }*/
+
     public static void showAlert(Activity activity, String title, String msg,
                                  boolean cancelOpt, String[] menuOptions, DialogInterface.OnClickListener listener) {
         showAlert(activity, title, msg, null, cancelOpt, menuOptions, activity.getString(R.string.ok), listener);
@@ -146,6 +153,13 @@ public abstract class Utility {
 
     public static void showAlert(Activity activity, String title, String msg, View view,
                                  boolean cancelOpt, String[] menuOptions, String okLabel, DialogInterface.OnClickListener listener) {
+        showAlert(activity, title, msg, view, cancelOpt, menuOptions, okLabel, listener, null);
+    }
+
+    public static void showAlert(Activity activity, String title, String msg, View view,
+                                 boolean cancelOpt, String[] menuOptions, String okLabel,
+                                 DialogInterface.OnClickListener listener,
+                                 DialogInterface.OnCancelListener cancelListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
         if (view != null) {
@@ -167,7 +181,13 @@ public abstract class Utility {
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(R.string.cancel), listener);
             }
         }
+
+        if (cancelListener != null) {
+            dialog.setOnCancelListener(cancelListener);
+        }
+
         dialog.setCanceledOnTouchOutside(false);
+        //dialog.setCancelable(false);
         //dialog.setIcon(R.drawable.med_logo_final);
         dialog.show();
     }
@@ -460,12 +480,6 @@ public abstract class Utility {
         v.startAnimation(a);
     }
 
-    /*public static void fieldsEnability(View[] views, boolean set) {
-        for (View view : views) {
-            view.setEnabled(set);
-        }
-    }*/
-
     public static void setLastVisit(SharedPreferences prefer) {
         //SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);
         SharedPreferences.Editor preferencesEditor = prefer.edit();
@@ -481,6 +495,12 @@ public abstract class Utility {
         prefEditor.putString("lastVisitTime", Utility.getFormattedTime(calendar));
         prefEditor.apply();
     }
+
+    /*public static void fieldsEnability(View[] views, boolean set) {
+        for (View view : views) {
+            view.setEnabled(set);
+        }
+    }*/
 
     public static void goTOLoginPage(Activity activity, Class targetClass) {
         Log.v("Home", "############################" + activity.getString(R.string.msg_exception));
@@ -667,7 +687,6 @@ public abstract class Utility {
         }
     }
 
-
     //While using show Alert method for dialogs having views... its not displaying the buttons.
     //while there is no any difference, so for now am using this method only for showing dialogs..
     //and buttons onclick is not returning thr for validation... its closing the dialog...
@@ -691,6 +710,13 @@ public abstract class Utility {
             }
         });
         return builder;
+    }
+
+    private Drawable resize(Activity activity, Drawable image) {
+        Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap,
+                (int) (bitmap.getWidth() * 0.5), (int) (bitmap.getHeight() * 0.5), false);
+        return new BitmapDrawable(activity.getResources(), bitmapResized);
     }
 
     ///////////////////////////////////////////////////Un Used Methods /////////////////////

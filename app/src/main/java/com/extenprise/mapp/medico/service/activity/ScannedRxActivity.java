@@ -195,9 +195,13 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(ScannedRxActivity.this, false);
         if (action == MappService.DO_SAVE_SCANNED_RX_COPY) {
             //displayScanCopy();
-            Utility.showProgressDialog(ScannedRxActivity.this, false);
+            if (!data.getBoolean("status")) {
+                Utility.showMessage(this, R.string.msg_try_again);
+                return false;
+            }
             sendRxToMedStore(data);
             return true;
         }

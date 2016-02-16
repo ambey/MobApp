@@ -149,10 +149,10 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         int vID = view.getId();
         if (vID == R.id.textViewPersonalFields) {
             Utility.collapse(mAddrLayout, true);
-            Utility.collapse(mContLay, false);
+            Utility.collapse(mContLay, (mContLay.getVisibility() == View.VISIBLE));
         } else if (vID == R.id.viewAddress) {
             Utility.collapse(mContLay, true);
-            Utility.collapse(mAddrLayout, false);
+            Utility.collapse(mAddrLayout, (mAddrLayout.getVisibility() == View.VISIBLE));
         }
     }
 
@@ -248,6 +248,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
+            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+            customer.setPhoto(null);
             mImgView.setBackgroundResource(R.drawable.patient);
             //mImgView.setImageDrawable(getDrawable(R.drawable.patient)); require API level 21
             mImgView.setImageBitmap(null);

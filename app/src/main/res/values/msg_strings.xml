@@ -41,4 +41,5 @@
 
     <string name="msg_sign_up">Our Customer Representative Will Contact You Soon</string>
     <string name="msg_input_phone">Please Submit Your details</string>
+    <string name="msg_try_again">Please Try Again.</string>
 </resources>

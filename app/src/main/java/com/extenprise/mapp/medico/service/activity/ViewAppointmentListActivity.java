@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -78,6 +79,11 @@ public class ViewAppointmentListActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        if (mServiceProv == null) {
+            Utility.goTOLoginPage(this, LoginActivity.class);
+            return;
+        }
         getUpcomingList();
     }
 

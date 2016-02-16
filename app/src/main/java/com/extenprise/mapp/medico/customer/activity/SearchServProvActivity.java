@@ -300,15 +300,12 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     public boolean gotResponse(int action, Bundle data) {
         Utility.showProgressDialog(this, false);
         boolean success = data.getBoolean("status");
-        if (!success) {
-            return false;
-        }
         if (action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
-        } else if (action == MappService.DO_GET_SPECIALITY) {
+        } else if (action == MappService.DO_GET_SPECIALITY && success) {
             gotSpecialities(data);
         }
-        return true;
+        return success;
     }
 
     @Nullable

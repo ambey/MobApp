@@ -490,9 +490,17 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
             WorkingDataStore.getBundle().putParcelable("customer", data.getParcelable("customer"));
-            Utility.showAlert(this, "", getString(R.string.msg_registration_done), new DialogInterface.OnClickListener() {
+            Utility.showAlert(this, "", getString(R.string.msg_registration_done), null, false, null, getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(PatientSignUpActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }, new DialogInterface.OnCancelListener() {
+
+                @Override
+                public void onCancel(DialogInterface dialog) {
                     dialog.dismiss();
                     Intent intent = new Intent(PatientSignUpActivity.this, LoginActivity.class);
                     startActivity(intent);

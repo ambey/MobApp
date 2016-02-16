@@ -141,7 +141,6 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
 
     public void gotDetails(Bundle data) {
         //Utility.showProgress(this, mSearchResultView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
         intent.putParcelableArrayListExtra("servProvList", mServProvList);
         intent.putExtra("servProv", data.getParcelable("service"));
@@ -150,7 +149,12 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (action == MappService.DO_SERV_PROV_DETAILS) {
+            if (!data.getBoolean("status")) {
+                Utility.showMessage(this, R.string.msg_try_again);
+                return false;
+            }
             gotDetails(data);
             return true;
         }
