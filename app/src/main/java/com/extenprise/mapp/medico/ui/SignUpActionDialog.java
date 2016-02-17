@@ -36,6 +36,13 @@ public class SignUpActionDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.layout_phone_text, container);
 
         final EditText phoneText = (EditText) view.findViewById(R.id.editTextPhone);
+        final EditText fname = (EditText) view.findViewById(R.id.editTextFName);
+        final EditText lname = (EditText) view.findViewById(R.id.editTextLName);
+
+        phoneText.setHint(String.format("%s *", context.getString(R.string.mobile_no)));
+        fname.setHint(String.format("%s *", context.getString(R.string.first_name)));
+        lname.setHint(String.format("%s *", context.getString(R.string.last_name)));
+
         final Button submitButton = (Button) view.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
