@@ -23,25 +23,25 @@ import com.extenprise.mapp.medico.util.Utility;
 
 public class PatientsHomeScreenActivity extends Activity {
 
+    TextView mWelcomeView;
+    ImageView mImgView;
+    Customer mCustomer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients_home_screen);
 
-        TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        ImageView mImgView = (ImageView) findViewById(R.id.imagePatient);
+        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        mImgView = (ImageView) findViewById(R.id.imagePatient);
 
-        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
-                customer.getfName(), customer.getlName()));
-        if (customer.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
-        }
+        mCustomer = WorkingDataStore.getBundle().getParcelable("customer");
+        profile();
+
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         try {
             SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
-                    customer.getSignInData().getPhone(), MODE_PRIVATE);
+                    mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
             lastVisited.setText(String.format("%s %s %s",
                     getString(R.string.last_visited),
                     prefs.getString("lastVisitDate", "--"),
@@ -49,6 +49,22 @@ public class PatientsHomeScreenActivity extends Activity {
             Utility.setLastVisit(prefs);
         } catch (Exception e) {
             Utility.goTOLoginPage(this, LoginActivity.class);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCustomer = WorkingDataStore.getBundle().getParcelable("customer");
+        profile();
+    }
+
+    private void profile() {
+        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
+                mCustomer.getfName(), mCustomer.getlName()));
+        if (mCustomer.getPhoto() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
     }
 

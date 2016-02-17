@@ -33,6 +33,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
     private ServiceProvider mServProv;
     private TextView mMsgView;
+    private ImageView mImgView;
+    private TextView mWelcomeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +58,20 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
             Utility.goTOLoginPage(this, LoginActivity.class);
             return;
         }
-        String label = mWelcomeView.getText().toString() + " " +
-                mServProv.getfName() + " " +
-                mServProv.getlName();
-        mWelcomeView.setText(label);
+
+        profile();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        profile();
+    }
+
+    private void profile() {
+        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
+                mServProv.getfName(), mServProv.getlName()));
 
         if (mServProv.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto(),

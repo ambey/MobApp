@@ -1142,6 +1142,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
             mImgView.setBackgroundResource(R.drawable.dr_avatar);
+            ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+            serviceProvider.setPhoto(null);
             //mImgView.setImageDrawable(getDrawable(R.drawable.dr_avatar)); require API level 21
             mImgView.setImageBitmap(null);
         } else {
