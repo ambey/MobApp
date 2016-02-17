@@ -63,7 +63,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private EditText mEditTextWeight;
     private EditText mEditTextLoc;
     private EditText mEditTextPinCode;
-    private Spinner mSpinCity;
+    /*private Spinner mSpinCity;*/
+    private EditText mSpinCity;
     private Spinner mSpinState;
     private ImageView mImgView;
 
@@ -106,7 +107,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mEditTextLoc = (EditText) findViewById(R.id.editTextLoc);
         mEditTextPinCode = (EditText) findViewById(R.id.editTextZipCode);
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
-        mSpinCity = (Spinner) findViewById(R.id.editTextCity);
+        mSpinCity = (EditText) findViewById(R.id.editTextCity);
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mImgView = (ImageView) findViewById(R.id.uploadimageview);
 
@@ -351,7 +352,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         View focusView = null;
 
         EditText[] fields = {mEditTextCellphone, mEditTextPasswd, mEditTextConPasswd, mEditTextCustomerFName,
-                mEditTextCustomerLName, mEditTextWeight, mEditTextLoc, mEditTextPinCode};
+                mEditTextCustomerLName, mEditTextWeight, mEditTextLoc, mEditTextPinCode, mSpinCity};
         if (Utility.areEditFieldsEmpty(this, fields)) {
             valid = false;
         }
@@ -411,6 +412,12 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mEditTextPinCode;
             valid = false;
         }
+        if (!Validator.isOnlyAlpha(mSpinCity.getText().toString().trim())) {
+            mSpinCity.setError(getString(R.string.error_only_alpha));
+            focusView = mSpinCity;
+            valid = false;
+        }
+
         if (!valid) {
             if (focusView != null) {
                 focusView.requestFocus();
@@ -550,7 +557,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getSignInData().setPasswd(EncryptUtil.encrypt(mEditTextPasswd.getText().toString()));
         c.setLocation(mEditTextLoc.getText().toString().trim());
         c.setPincode(mEditTextPinCode.getText().toString().trim());
-        c.getCity().setCity(mSpinCity.getSelectedItem().toString());
+        c.getCity().setCity(mSpinCity.getText().toString().trim());
         c.getCity().setState(mSpinState.getSelectedItem().toString());
         c.getCity().setCountry("India");
         c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));

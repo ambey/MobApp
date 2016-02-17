@@ -64,7 +64,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     private EditText mEditTextWeight;
     private EditText mEditTextLoc;
     private EditText mEditTextPinCode;
-    private Spinner mSpinCity;
+    private EditText mSpinCity;
     private Spinner mSpinState;
     private Spinner mSpinGender;
     private ImageView mImgView;
@@ -72,6 +72,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     private EditText mOldPwd;
     private boolean isPwdCorrect;
+    private Customer mCust;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+        mCust = WorkingDataStore.getBundle().getParcelable("customer");
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
@@ -102,36 +103,37 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mEditTextWeight = (EditText) findViewById(R.id.editTextWeight);
         mEditTextLoc = (EditText) findViewById(R.id.editTextLoc);
         mEditTextPinCode = (EditText) findViewById(R.id.editTextZipCode);
-        mSpinCity = (Spinner) findViewById(R.id.editTextCity);
+        mSpinCity = (EditText) findViewById(R.id.editTextCity);
         mSpinState = (Spinner) findViewById(R.id.editTextState);
         mSpinGender = (Spinner) findViewById(R.id.spinGender);
         mUpdateButton = (Button) findViewById(R.id.buttonViewUpdate);
 
-        mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
-                Utility.getAge(customer.getDob())));
-        mMobNo.setText(customer.getSignInData().getPhone());
-        if (customer.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto(),
+        mPname.setText(String.format("%s %s\n(%d years)", mCust.getfName(), mCust.getlName(),
+                Utility.getAge(mCust.getDob())));
+        mMobNo.setText(mCust.getSignInData().getPhone());
+        if (mCust.getPhoto() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
-        mEditTextCustomerFName.setText(customer.getfName());
-        mEditTextCustomerLName.setText(customer.getlName());
-        mEditTextCustomerEmail.setText(customer.getEmailId());
+        mEditTextCustomerFName.setText(mCust.getfName());
+        mEditTextCustomerLName.setText(mCust.getlName());
+        mEditTextCustomerEmail.setText(mCust.getEmailId());
 
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        Date dt = customer.getDob();
+        Date dt = mCust.getDob();
         if (dt != null) {
-            String dob = sdf.format(customer.getDob());
+            String dob = sdf.format(mCust.getDob());
             mTextViewDOB.setText(dob);
         }
-        mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, customer.getGender()));
-        mEditTextHeight.setText(String.format("%.1f", customer.getHeight()));
-        mEditTextWeight.setText(String.format("%.1f", customer.getWeight()));
-        mEditTextLoc.setText(customer.getLocation());
-        mEditTextPinCode.setText(customer.getPincode());
-        mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, customer.getCity().getCity()));
-        mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, customer.getCity().getState()));
+        mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, mCust.getGender()));
+        mEditTextHeight.setText(String.format("%.1f", mCust.getHeight()));
+        mEditTextWeight.setText(String.format("%.1f", mCust.getWeight()));
+        mEditTextLoc.setText(mCust.getLocation());
+        mEditTextPinCode.setText(mCust.getPincode());
+        mSpinCity.setText(mCust.getCity().getCity());
+        // mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, customer.getCity().getCity()));
+        mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, mCust.getCity().getState()));
 
         setFieldsEnability(false);
 
@@ -181,7 +183,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     public void updateProfile(View v) {
         EditText[] fields = {mEditTextCustomerFName, mEditTextCustomerLName, mEditTextWeight,
-                mEditTextLoc, mEditTextPinCode};
+                mEditTextLoc, mEditTextPinCode, mSpinCity};
         if (Utility.areEditFieldsEmpty(this, fields)) {
             return;
         }
@@ -226,6 +228,11 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             focusView = mEditTextPinCode;
             valid = false;
         }
+        if (!Validator.isOnlyAlpha(mSpinCity.getText().toString().trim())) {
+            mSpinCity.setError(getString(R.string.error_only_alpha));
+            focusView = mSpinCity;
+            valid = false;
+        }
 
         if (!valid && focusView != null) {
             focusView.requestFocus();
@@ -242,21 +249,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             Utility.showProgressDialog(this, true);
         }
         //sendRequest(getUpdateData(), MappService.DO_UPDATE);
-    }
-
-    private void removePhotoDone(Bundle data) {
-        //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
-        if (data.getBoolean("status")) {
-            Utility.showMessage(this, R.string.msg_photo_removed);
-            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            customer.setPhoto(null);
-            mImgView.setBackgroundResource(R.drawable.patient);
-            //mImgView.setImageDrawable(getDrawable(R.drawable.patient)); require API level 21
-            mImgView.setImageBitmap(null);
-        } else {
-            Utility.showMessage(this, R.string.some_error);
-        }
     }
 
     private void changePwdDone(Bundle data) {
@@ -312,9 +304,33 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
-            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            customer.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+            mCust = WorkingDataStore.getBundle().getParcelable("customer");
+            mCust.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
+            if (mCust.getPhoto() != null) {
+                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
+                        mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
+            }
+            Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+    private void removePhotoDone(Bundle data) {
+        //Utility.showProgress(this, mFormView, mProgressView, false);
+        Utility.showProgressDialog(this, false);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_photo_removed);
+            mImgView.setBackgroundResource(R.drawable.patient);
+            mCust = WorkingDataStore.getBundle().getParcelable("customer");
+            //customer.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
+            mCust.setPhoto(null);
+            //mImgView.setImageDrawable(getDrawable(R.drawable.patient)); require API level 21
+            //mImgView.setImageBitmap(null);
+        } else {
+            if (mCust.getPhoto() != null) {
+                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
+                        mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
+            }
             Utility.showMessage(this, R.string.some_error);
         }
     }
@@ -373,7 +389,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         c.setWeight(weight);
         c.setLocation(mEditTextLoc.getText().toString().trim());
         c.setPincode(mEditTextPinCode.getText().toString().trim());
-        c.getCity().setCity(mSpinCity.getSelectedItem().toString());
+        c.getCity().setCity(mSpinCity.getText().toString().trim());
         c.getCity().setState(mSpinState.getSelectedItem().toString());
         c.getCity().setCountry("India");
 
