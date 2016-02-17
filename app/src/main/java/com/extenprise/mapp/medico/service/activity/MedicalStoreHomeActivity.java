@@ -40,7 +40,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         setContentView(R.layout.activity_medical_store_home);
 
         mMsgView = (TextView) findViewById(R.id.msgView);
-        ImageView mImg = (ImageView) findViewById(R.id.imageMedstore);
+        ImageView mImgView = (ImageView) findViewById(R.id.imageMedstore);
         TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
 
         mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
@@ -62,7 +62,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         mWelcomeView.setText(label);
 
         if (mServProv.getPhoto() != null) {
-            mImg.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
     }
 

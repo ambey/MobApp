@@ -29,13 +29,14 @@ public class PatientsHomeScreenActivity extends Activity {
         setContentView(R.layout.activity_patients_home_screen);
 
         TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        ImageView mImg = (ImageView) findViewById(R.id.imagePatient);
+        ImageView mImgView = (ImageView) findViewById(R.id.imagePatient);
 
         Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 customer.getfName(), customer.getlName()));
         if (customer.getPhoto() != null) {
-            mImg.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         try {

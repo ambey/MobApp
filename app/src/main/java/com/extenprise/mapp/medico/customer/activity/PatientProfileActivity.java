@@ -111,7 +111,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 Utility.getAge(customer.getDob())));
         mMobNo.setText(customer.getSignInData().getPhone());
         if (customer.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(customer.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
         mEditTextCustomerFName.setText(customer.getfName());
         mEditTextCustomerLName.setText(customer.getlName());

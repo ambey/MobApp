@@ -181,7 +181,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         }
         mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
         if (mServiceProv.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
         mFname.setText(getString(R.string.first_name_with_lbl, mServiceProv.getfName()));
         mLname.setText(getString(R.string.last_name_with_lbl, mServiceProv.getlName()));
@@ -1179,7 +1180,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             serviceProvider.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
             if (mServiceProv.getPhoto() != null) {
-                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
+                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
+                        mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
             }
             Utility.showMessage(this, R.string.some_error);
         }

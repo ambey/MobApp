@@ -44,18 +44,18 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
         mMsgView = (TextView) findViewById(R.id.msgView);
         TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-        ImageView mImg = (ImageView) findViewById(R.id.imageDoctor);
+        ImageView mImgView = (ImageView) findViewById(R.id.imageDoctor);
 
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         //try {
         String mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
 
-            SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
-            lastVisited.setText(String.format("%s %s %s",
-                    getString(R.string.last_visited),
-                    prefs.getString("lastVisitDate", "--"),
-                    prefs.getString("lastVisitTime", "--")));
-            Utility.setLastVisit(prefs);
+        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
+        lastVisited.setText(String.format("%s %s %s",
+                getString(R.string.last_visited),
+                prefs.getString("lastVisitDate", "--"),
+                prefs.getString("lastVisitTime", "--")));
+        Utility.setLastVisit(prefs);
         /*} catch (Exception e) {
             Utility.goTOLoginPage(this);
             return;
@@ -69,7 +69,8 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mWelcomeView.setText(label);
 
         if (mServiceProv.getPhoto() != null) {
-            mImg.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto()));
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
     }
 

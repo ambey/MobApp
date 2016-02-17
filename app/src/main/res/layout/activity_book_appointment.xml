@@ -92,7 +92,7 @@
         style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spinnerTimeSlots"
+        android:layout_alignBaseline="@+id/tvDate"
         android:layout_alignLeft="@id/tvDrLbl"
         android:layout_alignStart="@id/tvDrLbl"
         android:hint="@string/date" />
@@ -100,23 +100,24 @@
     <TextView
         android:id="@+id/tvDate"
         style="@style/MediumText"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/spinnerTimeSlots"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_alignBottom="@+id/spinnerTimeSlots"
         android:layout_toEndOf="@id/tvDateLbl"
         android:layout_toRightOf="@id/tvDateLbl"
         android:clickable="true"
         android:hint="@string/date_format"
-        android:onClick="showDatePicker" />
+        android:minHeight="36dp"
+        android:minWidth="100dp"
+        android:onClick="showDatePicker"
+        android:padding="6dp" />
 
     <TextView
         android:id="@+id/tvTimeLbl"
         style="@style/LargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spinnerTimeSlots"
+        android:layout_alignBaseline="@+id/tvDate"
         android:layout_toEndOf="@id/tvDate"
         android:layout_toRightOf="@id/tvDate"
         android:text="@string/time" />

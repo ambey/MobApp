@@ -353,8 +353,29 @@ public abstract class Utility {
         return stream.toByteArray();
     }
 
+    public static Bitmap getBitmapFromBytes(byte[] image, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(image, 0, image.length, options);
+        int imageHeight = options.outHeight;
+        int imageWidth = options.outWidth;
+
+        int inSampleSize = 1;
+        if (imageHeight > height || imageWidth > width) {
+            final int halfHeight = imageHeight / 2;
+            final int halfWidth = imageWidth / 2;
+            while ((halfHeight / inSampleSize) > height
+                    && (halfWidth / inSampleSize) > width) {
+                inSampleSize *= 2;
+            }
+        }
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        return BitmapFactory.decodeByteArray(image, 0, image.length, options);
+    }
+
     // convert from byte array to bitmap
-    public static Bitmap getBitmapFromBytes(byte[] image) {
+    public static Bitmap getBitmapFromBytes(byte[] image) throws Exception {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
