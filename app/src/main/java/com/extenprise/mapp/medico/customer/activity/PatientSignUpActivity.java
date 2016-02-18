@@ -70,6 +70,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     private Bitmap mImgCopy;
     private boolean imageChanged = false;
+    private String mPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mPhone = "";
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
 
@@ -93,7 +95,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (Validator.isPhoneValid(mEditTextCellphone.getText().toString().trim())) {
+                    String ph = mEditTextCellphone.getText().toString().trim();
+                    if (Validator.isPhoneValid(ph) && !mPhone.equals(ph)) {
                         sendRequest(MappService.DO_PHONE_EXIST_CHECK);
                     }
                 }
@@ -491,6 +494,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         if (!data.getBoolean("status")) {
             mEditTextCellphone.setError(getString(R.string.error_phone_registered));
             mEditTextCellphone.requestFocus();
+        } else {
+            mEditTextCellphone.setError(null);
+            mPhone = mEditTextCellphone.getText().toString().trim();
         }
     }
 
@@ -567,6 +573,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     @Override
     public void datePicked(String date) {
+        mTextViewDOB.setError(null);
         //int age = Utility.getAge(Utility.getStrAsDate(date, "dd/MM/yyyy"));
     }
 

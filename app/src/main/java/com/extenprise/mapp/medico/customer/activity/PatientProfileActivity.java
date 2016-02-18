@@ -178,8 +178,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     public void editPatientProf(View v) {
         setFieldsEnability((!mEditTextCustomerFName.isEnabled()));
-        Utility.collapse(mContLay, false);
-        Utility.collapse(mAddrLayout, true);
+        /*Utility.collapse(mContLay, false);
+        Utility.collapse(mAddrLayout, true);*/
     }
 
     public void updateProfile(View v) {
