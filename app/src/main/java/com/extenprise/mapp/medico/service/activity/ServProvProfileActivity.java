@@ -1138,7 +1138,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
-            mImgView.setBackgroundResource(R.drawable.dr_avatar);
+            mImgView.setImageResource(R.drawable.dr_avatar);
             ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
             serviceProvider.setPhoto(null);
             //mImgView.setImageDrawable(getDrawable(R.drawable.dr_avatar)); require API level 21
@@ -1151,6 +1151,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     private void setPhoto() {
         if (mServiceProv.getPhoto() != null) {
+            mImgView.setBackgroundResource(0);
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }

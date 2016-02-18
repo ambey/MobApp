@@ -112,6 +112,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 Utility.getAge(mCust.getDob())));
         mMobNo.setText(mCust.getSignInData().getPhone());
         if (mCust.getPhoto() != null) {
+            /*mImgView.setBackgroundResource(0);*/
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
@@ -308,6 +309,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mCust.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
             if (mCust.getPhoto() != null) {
+                /*mImgView.setBackgroundResource(0);*/
                 mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
                         mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
             }
@@ -320,7 +322,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
-            mImgView.setBackgroundResource(R.drawable.patient);
+            mImgView.setImageResource(R.drawable.patient);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
             //customer.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
             mCust.setPhoto(null);

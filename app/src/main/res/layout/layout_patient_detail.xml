@@ -172,7 +172,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewAddress"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"

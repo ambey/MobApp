@@ -74,7 +74,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         }
         mWelcomeView.setText(String.format("%s %s %s", label,
                 mServiceProv.getfName(), mServiceProv.getlName()));
-        mImgView.setBackgroundResource(R.drawable.dr_avatar);
+        mImgView.setImageResource(R.drawable.dr_avatar);
         if (mServiceProv.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
