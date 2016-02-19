@@ -36,7 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:hint="@string/first_name"
+                android:hint="@string/fnm"
                 android:inputType="textPersonName"
                 android:nextFocusForward="@+id/editTextLName" />
 
@@ -47,7 +47,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_weight="0.5"
-                android:hint="@string/last_name"
+                android:hint="@string/lnm"
                 android:inputType="textPersonName"
                 android:nextFocusForward="@+id/editTextPhone" />
         </LinearLayout>
@@ -99,7 +99,7 @@
                 android:layout_toEndOf="@id/phonePrefix"
                 android:layout_toRightOf="@id/phonePrefix"
                 android:ems="10"
-                android:hint="@string/mobile_no"
+                android:hint="@string/cellPhoneNo"
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="10"

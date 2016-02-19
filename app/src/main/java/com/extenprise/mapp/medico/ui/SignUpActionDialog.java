@@ -47,7 +47,7 @@ public class SignUpActionDialog extends DialogFragment {
                 boolean cancel = false;
                 View focusView = null;
 
-                EditText[] fields = {firstNameTxt, lastNameTxt, phoneText, emailIDtxt};
+                EditText[] fields = {firstNameTxt, lastNameTxt, phoneText};
                 if (Utility.areEditFieldsEmpty(getActivity(), fields)) {
                     cancel = true;
                 }

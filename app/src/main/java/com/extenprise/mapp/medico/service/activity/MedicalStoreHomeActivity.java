@@ -42,8 +42,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         setContentView(R.layout.activity_medical_store_home);
 
         mMsgView = (TextView) findViewById(R.id.msgView);
-        ImageView mImgView = (ImageView) findViewById(R.id.imageMedstore);
-        TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        mImgView = (ImageView) findViewById(R.id.imageMedstore);
+        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
 
         mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
         try {
@@ -72,7 +72,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private void profile() {
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 mServProv.getfName(), mServProv.getlName()));
-
+        mImgView.setImageResource(R.drawable.medstore);
         if (mServProv.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));

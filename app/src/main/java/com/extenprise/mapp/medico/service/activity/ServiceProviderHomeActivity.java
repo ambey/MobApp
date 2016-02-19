@@ -67,14 +67,15 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     }
 
     private void profile() {
+        mImgView.setImageResource(R.drawable.dr_avatar);
         String mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
         String label = getString(R.string.hello_dr);
         if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             label = getString(R.string.hello);
+            mImgView.setImageResource(R.drawable.diagcenter);
         }
         mWelcomeView.setText(String.format("%s %s %s", label,
                 mServiceProv.getfName(), mServiceProv.getlName()));
-        mImgView.setImageResource(R.drawable.dr_avatar);
         if (mServiceProv.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));

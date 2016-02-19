@@ -59,9 +59,9 @@ public abstract class Validator {
     }
 
     public static boolean isValidEmaillId(String email) {
-        //int i = email.indexOf("@");
-        //int j = email.lastIndexOf(".");
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        return email.equals("") || android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+//int i = email.indexOf("@");
+//int j = email.lastIndexOf(".");
     }
 
     /*private static boolean validatePhoneNumber(String phoneNo) {
