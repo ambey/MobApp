@@ -161,12 +161,28 @@ public class BookAppointmentActivity extends Activity
     private void gotAppont(Bundle data) {
         mMsgView.setVisibility(View.GONE);
         if (data.getBoolean("status")) {
-            Utility.showAlert(this, "", getString(R.string.msg_appont_booked), new DialogInterface.OnClickListener() {
+            /*Utility.showAlert(this, "", getString(R.string.msg_appont_booked), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     Intent intent = new Intent(BookAppointmentActivity.this, PatientsHomeScreenActivity.class);
                     startActivity(intent);
+                }
+            });*/
+
+            Utility.showAlert(this, "", getString(R.string.msg_appont_booked), null, false, null, getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Utility.goTOLoginPage(BookAppointmentActivity.this, PatientsHomeScreenActivity.class);
+                }
+            }, new DialogInterface.OnCancelListener() {
+
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    dialog.dismiss();
+                    Utility.goTOLoginPage(BookAppointmentActivity.this, PatientsHomeScreenActivity.class);
+
                 }
             });
             Utility.setEnabledButton(this, mBookButton, false);
