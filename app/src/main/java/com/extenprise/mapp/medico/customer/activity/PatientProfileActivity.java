@@ -192,15 +192,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         boolean valid = true;
         View focusView = null;
 
-        String fName = mEditTextCustomerFName.getText().toString().trim();
-        String lName = mEditTextCustomerLName.getText().toString().trim();
-        String emailId = mEditTextCustomerEmail.getText().toString().trim();
-        String dob = mTextViewDOB.getText().toString();
-        //String weight = mEditTextWeight.getText().toString().trim();
-        //String loc = mEditTextLoc.getText().toString().trim();
-        String pinCode = mEditTextPinCode.getText().toString().trim();
-
-        if (!Validator.isOnlyAlpha(fName)) {
+        /*if (!Validator.isOnlyAlpha(fName)) {
             mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerFName;
             valid = false;
@@ -209,12 +201,29 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mEditTextCustomerLName.setError(getString(R.string.error_only_alpha));
             focusView = mEditTextCustomerLName;
             valid = false;
+        }*/
+
+        int nmValid = Validator.isNameValid(mEditTextCustomerFName.getText().toString().trim());
+        if (nmValid != -1) {
+            mEditTextCustomerFName.setError(getString(nmValid));
+            focusView = mEditTextCustomerFName;
+            valid = false;
         }
+        nmValid = Validator.isNameValid(mEditTextCustomerLName.getText().toString().trim());
+        if (nmValid != -1) {
+            mEditTextCustomerLName.setError(getString(nmValid));
+            focusView = mEditTextCustomerLName;
+            valid = false;
+        }
+
+        String emailId = mEditTextCustomerEmail.getText().toString().trim();
         if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
             mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEditTextCustomerEmail;
             valid = false;
         }
+
+        String dob = mTextViewDOB.getText().toString();
         if (TextUtils.isEmpty(dob)) {
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
@@ -224,11 +233,13 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             focusView = mTextViewDOB;
             valid = false;
         }
-        if (Validator.isPinCodeValid(pinCode)) {
+
+        if (Validator.isPinCodeValid(mEditTextPinCode.getText().toString().trim())) {
             mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
             focusView = mEditTextPinCode;
             valid = false;
         }
+
         if (!Validator.isOnlyAlpha(mSpinCity.getText().toString().trim())) {
             mSpinCity.setError(getString(R.string.error_only_alpha));
             focusView = mSpinCity;

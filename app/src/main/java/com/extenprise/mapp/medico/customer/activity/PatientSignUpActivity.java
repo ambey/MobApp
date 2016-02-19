@@ -292,6 +292,36 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         }
     }
 */
+
+
+    /*public static Bitmap rotateImage(String path, Bitmap source) {
+        float angle = -1;
+        ExifInterface ei = null;
+        int orientation = 0;
+        try {
+            ei = new ExifInterface(path);
+            orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        switch(orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                angle = 90;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                angle = 180;
+                break;
+        }
+
+        if(angle != -1) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(angle);
+            source = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+        }
+        return source;
+    }*/
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
@@ -360,16 +390,25 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             valid = false;
         }
 
-        if (!Validator.isOnlyAlpha(mEditTextCustomerFName.getText().toString().trim())) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+        int nmValid = Validator.isNameValid(mEditTextCustomerFName.getText().toString().trim());
+        if (nmValid != -1) {
+            mEditTextCustomerFName.setError(getString(nmValid));
             focusView = mEditTextCustomerFName;
             valid = false;
         }
-        if (!Validator.isOnlyAlpha(mEditTextCustomerLName.getText().toString().trim())) {
-            mEditTextCustomerLName.setError(getString(R.string.error_only_alpha));
+        nmValid = Validator.isNameValid(mEditTextCustomerLName.getText().toString().trim());
+        if (nmValid != -1) {
+            mEditTextCustomerLName.setError(getString(nmValid));
             focusView = mEditTextCustomerLName;
             valid = false;
         }
+
+        /*if (!Validator.isOnlyAlpha(mEditTextCustomerFName.getText().toString().trim())) {
+            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
+            focusView = mEditTextCustomerFName;
+            valid = false;
+        }*/
+
         String emailId = mEditTextCustomerEmail.getText().toString().trim();
         if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
             mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
@@ -503,22 +542,21 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
             WorkingDataStore.getBundle().putParcelable("customer", data.getParcelable("customer"));
-            Utility.showAlert(this, "", getString(R.string.msg_registration_done), null, false, null, getString(R.string.ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    Intent intent = new Intent(PatientSignUpActivity.this, LoginActivity.class);
-                    startActivity(intent);
+            Utility.showAlert(this, "", getString(R.string.msg_registration_done), null, false, null, getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Utility.goTOLoginPage(PatientSignUpActivity.this, LoginActivity.class);
+                        }
+                    }, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dialog.dismiss();
+                            Utility.goTOLoginPage(PatientSignUpActivity.this, LoginActivity.class);
+                        }
                 }
-            }, new DialogInterface.OnCancelListener() {
-
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    dialog.dismiss();
-                    Intent intent = new Intent(PatientSignUpActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-            });
+            );
             //Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         } else {
             Utility.showMessage(this, R.string.some_error);

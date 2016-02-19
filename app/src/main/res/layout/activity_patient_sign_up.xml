@@ -39,7 +39,7 @@
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:contentDescription="@string/patient"
-                android:onClick="enlargeImg"
+                android:onClick="showImageUploadOptions"
                 android:scaleType="centerInside"
                 android:src="@drawable/patient" />
             <!--</HorizontalScrollView>-->

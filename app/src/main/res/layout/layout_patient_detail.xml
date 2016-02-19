@@ -38,7 +38,8 @@
                 android:layout_weight="0.5"
                 android:ems="10"
                 android:hint="@string/fnm"
-                android:inputType="text|textNoSuggestions" />
+                android:inputType="text|textNoSuggestions"
+                android:maxLength="25" />
 
             <EditText
                 android:id="@+id/editTextCustomerLName"
@@ -49,7 +50,8 @@
                 android:layout_weight="0.5"
                 android:ems="10"
                 android:hint="@string/lnm"
-                android:inputType="text|textNoSuggestions"/>
+                android:inputType="text|textNoSuggestions"
+                android:maxLength="25" />
         </LinearLayout>
 
         <EditText
@@ -59,7 +61,8 @@
             android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:maxLength="40" />
 
 
         <LinearLayout
@@ -186,7 +189,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:hint="@string/loc"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="25" />
 
             <EditText
                 android:id="@+id/editTextCity"
@@ -194,7 +198,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:hint="@string/city"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="25" />
 
             <!--<Spinner
                 android:id="@+id/editTextCity"

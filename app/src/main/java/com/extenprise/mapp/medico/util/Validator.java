@@ -1,5 +1,7 @@
 package com.extenprise.mapp.medico.util;
 
+import com.extenprise.mapp.medico.R;
+
 /**
  * Created by ambey on 22/7/15.
  */
@@ -31,6 +33,19 @@ public abstract class Validator {
             }
         }
         return true;
+    }
+
+    public static int isNameValid(String name) {
+        char[] carray = name.toCharArray();
+        for (char c : carray) {
+            if (!Character.isLetter(c) && !Character.isSpaceChar(c)) {
+                return R.string.error_only_alpha;
+            }
+        }
+        if (name.length() < 2) {
+            return R.string.error_name_min_length;
+        }
+        return -1;
     }
 
     public static boolean isPinCodeValid(String pinCode) {
