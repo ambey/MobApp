@@ -22,8 +22,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="vertical"
         android:animateLayoutChanges="true"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <LinearLayout
@@ -114,9 +114,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.90"
-                android:maxLength="3"
                 android:hint="@string/height"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:maxLength="3" />
 
             <TextView
                 android:id="@+id/viewHeightUnit"
@@ -136,9 +136,9 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_weight="0.90"
-                android:maxLength="3"
                 android:hint="@string/weight"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:maxLength="3" />
 
             <TextView
                 android:id="@+id/viewWeightUnit"
@@ -184,12 +184,19 @@
                 android:id="@+id/editTextLoc"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_weight="0.5"
                 android:hint="@string/loc"
                 android:inputType="text" />
 
-            <Spinner
+            <EditText
+                android:id="@+id/editTextCity"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/city"
+                android:inputType="text" />
+
+            <!--<Spinner
                 android:id="@+id/editTextCity"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -201,7 +208,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:padding="5dp"
-                android:prompt="@string/city" />
+                android:prompt="@string/city" />-->
         </LinearLayout>
 
         <LinearLayout
@@ -216,9 +223,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="0.5"
-                android:maxLength="6"
                 android:hint="@string/pincode"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="6" />
 
             <Spinner
                 android:id="@+id/editTextState"

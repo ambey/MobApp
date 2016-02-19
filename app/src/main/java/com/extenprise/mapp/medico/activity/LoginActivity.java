@@ -377,6 +377,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             /*editor.putString("autoCompleteValues", TextUtils.join(",", list));*/
 
             Utility.showMessage(this, R.string.msg_login_done);
+            mPasswordView.setText("");
 /*
             mMobileNumber.setText("");
             mPasswordView.setText("");

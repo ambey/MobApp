@@ -1,7 +1,5 @@
 package com.extenprise.mapp.medico.util;
 
-import java.util.regex.Pattern;
-
 /**
  * Created by ambey on 22/7/15.
  */
@@ -39,14 +37,14 @@ public abstract class Validator {
         return !(pinCode == null || pinCode.length() == 6);
     }
 
-    public static boolean isValidEmaillId(String email){
+    /*public static boolean isValidEmaillId(String email){
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
                 + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
-    }
+    }*/
 
     public static boolean isValuePositive(String val) {
         try {
@@ -60,12 +58,12 @@ public abstract class Validator {
         return true;
     }
 
-    /*public static boolean isEmailValid(String email) {
-        //int i = email.indexOf("@");
-        //int j = email.lastIndexOf(".");
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    public static boolean isValidEmaillId(String email) {
+        return email.equals("") || android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+//int i = email.indexOf("@");
+//int j = email.lastIndexOf(".");
     }
-    */
+
     /*private static boolean validatePhoneNumber(String phoneNo) {
         //validate phone numbers of format "1234567890"
         if (phoneNo.matches("\\d{10}")) return true;

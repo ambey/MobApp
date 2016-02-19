@@ -180,10 +180,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
         }
         mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
-        if (mServiceProv.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
-        }
+        setPhoto();
         mFname.setText(getString(R.string.first_name_with_lbl, mServiceProv.getfName()));
         mLname.setText(getString(R.string.last_name_with_lbl, mServiceProv.getlName()));
         mMobNo.setText(getString(R.string.mobile_no_with_lbl, mSignInData.getPhone()));
@@ -1141,11 +1138,22 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
-            mImgView.setBackgroundResource(R.drawable.dr_avatar);
+            mImgView.setImageResource(R.drawable.dr_avatar);
+            ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+            serviceProvider.setPhoto(null);
             //mImgView.setImageDrawable(getDrawable(R.drawable.dr_avatar)); require API level 21
             mImgView.setImageBitmap(null);
         } else {
+            setPhoto();
             Utility.showMessage(this, R.string.some_error);
+        }
+    }
+
+    private void setPhoto() {
+        if (mServiceProv.getPhoto() != null) {
+            mImgView.setBackgroundResource(0);
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
     }
 
@@ -1179,10 +1187,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
             serviceProvider.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
-            if (mServiceProv.getPhoto() != null) {
-                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
-                        mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
-            }
+            setPhoto();
             Utility.showMessage(this, R.string.some_error);
         }
     }

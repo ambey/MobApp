@@ -33,6 +33,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
     private ServiceProvider mServProv;
     private TextView mMsgView;
+    private ImageView mImgView;
+    private TextView mWelcomeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         setContentView(R.layout.activity_medical_store_home);
 
         mMsgView = (TextView) findViewById(R.id.msgView);
-        ImageView mImgView = (ImageView) findViewById(R.id.imageMedstore);
-        TextView mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
+        mImgView = (ImageView) findViewById(R.id.imageMedstore);
+        mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
 
         mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
         try {
@@ -56,11 +58,21 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
             Utility.goTOLoginPage(this, LoginActivity.class);
             return;
         }
-        String label = mWelcomeView.getText().toString() + " " +
-                mServProv.getfName() + " " +
-                mServProv.getlName();
-        mWelcomeView.setText(label);
 
+        profile();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        profile();
+    }
+
+    private void profile() {
+        mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
+                mServProv.getfName(), mServProv.getlName()));
+        mImgView.setImageResource(R.drawable.medstore);
         if (mServProv.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));

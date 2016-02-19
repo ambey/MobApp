@@ -8,7 +8,7 @@
     <string name="error_not_online">You are not online!!!!</string>
     <string name="error_img_not_picked">You haven\'t picked Image</string>
     <string name="error_user_type_required">Please Select User Type</string>
-    <string name="some_error">Something went wrong</string>
+    <string name="some_error">Please Try Again</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">Incorrect login/password entered</string>
