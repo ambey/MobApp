@@ -11,10 +11,17 @@ import android.view.View;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.activity.PatientSignUpActivity;
 import com.extenprise.mapp.medico.customer.activity.SearchServProvActivity;
+import com.extenprise.mapp.medico.net.MappService;
+import com.extenprise.mapp.medico.net.MappServiceConnection;
+import com.extenprise.mapp.medico.net.ResponseHandler;
+import com.extenprise.mapp.medico.net.ServiceResponseHandler;
+import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.SignUpActionDialog;
+import com.extenprise.mapp.medico.util.Utility;
 
 
-public class SignUpPreviousActivity extends FragmentActivity {
+public class SignUpPreviousActivity extends FragmentActivity implements ResponseHandler {
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +39,43 @@ public class SignUpPreviousActivity extends FragmentActivity {
         startActivity(intent);
     }
 
-    private void showSignUpDialog() {
-        SignUpActionDialog dialog = new SignUpActionDialog();
+    private void showSignUpDialog(int id) {
+        final SignUpActionDialog dialog = new SignUpActionDialog();
+        dialog.setSignupBy(id);
         dialog.setContext(this);
+        dialog.setSubmitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dialog.isInputValid()) {
+                    ServiceProvider sp = dialog.getInputForm();
+                    mConnection.setAction(MappService.DO_SIGNUP_REQ);
+                    Bundle data = new Bundle();
+                    data.putParcelable("form", sp);
+                    mConnection.setData(data);
+                    dialog.onDismiss(dialog.getDialog());
+                    Utility.showProgressDialog(SignUpPreviousActivity.this, true);
+                    Utility.doServiceAction(SignUpPreviousActivity.this, mConnection, BIND_AUTO_CREATE);
+                }
+            }
+        });
         dialog.show(getSupportFragmentManager(), "Sign Up");
     }
 
+    private void doneSignupReq(Bundle data) {
+        Utility.showProgressDialog(this, false);
+        Utility.showMessage(this, R.string.msg_sign_up);
+    }
+
     public void signUpServProv(View view) {
-        showSignUpDialog();
+        showSignUpDialog(R.string.practitioner);
     }
 
     public void signUpMedicalStore(View view) {
-        showSignUpDialog();
+        showSignUpDialog(R.string.medical_store);
     }
 
     public void signUpDiagCenter(View view) {
-        showSignUpDialog();
+        showSignUpDialog(R.string.scan_lab);
     }
 
     @Override
@@ -85,4 +113,11 @@ public class SignUpPreviousActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean gotResponse(int action, Bundle data) {
+        if (action == MappService.DO_SIGNUP_REQ) {
+            doneSignupReq(data);
+        }
+        return false;
+    }
 }

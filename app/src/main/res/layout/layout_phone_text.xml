@@ -31,6 +31,12 @@
             android:layout_height="wrap_content"
             android:weightSum="1">
 
+            <TextView
+                android:id="@+id/textViewSalut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/drLbl" />
+
             <EditText
                 android:id="@+id/editTextFName"
                 android:layout_width="0dp"
@@ -68,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:ems="10"
+                android:ems="12"
                 android:hint="@string/mobile_no"
                 android:inputType="number"
                 android:maxLength="10"
@@ -105,6 +111,36 @@
                 android:maxLength="10"
                 android:nextFocusForward="@+id/editTextEmail" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutLandline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/editTextStdCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="4"
+                android:hint="@string/std_code"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:text="@string/hyphen" />
+
+            <EditText
+                android:id="@+id/editTextLandline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="8"
+                android:hint="@string/landline_no"
+                android:inputType="number" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/editTextEmail"

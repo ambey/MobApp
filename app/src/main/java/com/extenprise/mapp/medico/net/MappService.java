@@ -76,6 +76,7 @@ public class MappService extends Service {
     public static final int DO_GET_NEW_VERSION = 36;
     public static final int DO_PWD_CHECK = 37;
     public static final int DO_CHANGE_PWD = 38;
+    public static final int DO_SIGNUP_REQ = 39;
 
     public static final int CUSTOMER_LOGIN = 0x10;
     public static final int SERVICE_LOGIN = 0x11;
@@ -354,6 +355,9 @@ public class MappService extends Service {
                     urlId = R.string.action_remove_photo_cust;
                 }
                 break;
+            case DO_SIGNUP_REQ:
+                urlId = R.string.action_signup_req;
+                break;
             default:
                 return null;
         }
@@ -421,6 +425,7 @@ public class MappService extends Service {
                 case DO_GET_CUST_UPCOMING_APPONTS:
                 case DO_GET_CUST_PAST_APPONTS:
                 case DO_CUST_PAST_APPONT_LIST:
+                case DO_SIGNUP_REQ:
                     mService.doSubmitForm(msg);
                     break;
                 case DO_SAVE_RX:
@@ -532,21 +537,6 @@ public class MappService extends Service {
                         case DO_UPLOAD_PHOTO:
                         case DO_REMOVE_PHOTO:
                         case DO_UPDATE:
-                            if (mLoginType == CUSTOMER_LOGIN) {
-                                mCustomer = gson.fromJson(responseBuf.toString(), Customer.class);
-                            } else {
-                                mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
-                            }
-                            break;
-                        case DO_ADD_WORK_PLACE:
-                            mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlace.class);
-                            break;
-                        case DO_EDIT_WORK_PLACE:
-                            mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlace.class);
-                            break;
-                        case DO_REMOVE_WORK_PLACE:
-                            mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlace.class);
-                            break;
                         case DO_PHONE_EXIST_CHECK:
                             if (mLoginType == CUSTOMER_LOGIN) {
                                 mCustomer = gson.fromJson(responseBuf.toString(), Customer.class);
@@ -554,16 +544,19 @@ public class MappService extends Service {
                                 mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             }
                             break;
+                        case DO_ADD_WORK_PLACE:
+                        case DO_EDIT_WORK_PLACE:
+                        case DO_REMOVE_WORK_PLACE:
+                            mWorkPlace = gson.fromJson(responseBuf.toString(), WorkPlace.class);
+                            break;
                         case DO_REG_NO_CHECK:
+                        case DO_SERV_PROV_DETAILS:
                             mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             break;
                         case DO_SEARCH_SERV_PROV:
                         case DO_GET_MEDSTORE_LIST:
                             mServProvList = gson.fromJson(responseBuf.toString(), new TypeToken<ArrayList<ServProvListItem>>() {
                             }.getType());
-                            break;
-                        case DO_SERV_PROV_DETAILS:
-                            mServProv = gson.fromJson(responseBuf.toString(), ServiceProvider.class);
                             break;
                         case DO_APPONT_TIME_SLOTS:
                         case DO_GET_SPECIALITY:

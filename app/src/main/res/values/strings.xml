@@ -253,4 +253,7 @@
     <string name="oldPwd">Old Password *</string>
     <string name="newPwd">New Password *</string>
     <string name="last_visited">Last Visited:</string>
+    <string name="hyphen">-</string>
+    <string name="std_code">STD</string>
+    <string name="landline_no">Landline Number</string>
 </resources>

@@ -10,4 +10,5 @@ public class ErrorCode {
     public static final int ERROR_INVALID_USER_OR_PASSWD = 413;
     public static final int ERROR_USER_EXISTS = 414;
     public static final int ERROR_SERVER_UNAVAILABLE = 415;
+    public static final int ERROR_PHONE_EXISTS = 416;
 }

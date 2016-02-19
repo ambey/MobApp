@@ -16,8 +16,8 @@ public class ServiceProvider implements Parcelable {
 
     public static final Creator<ServiceProvider> CREATOR = new Creator<ServiceProvider>() {
         @Override
-        public ServiceProvider createFromParcel(Parcel source) {
-            return new ServiceProvider(source);
+        public ServiceProvider createFromParcel(Parcel in) {
+            return new ServiceProvider(in);
         }
 
         @Override
@@ -27,6 +27,8 @@ public class ServiceProvider implements Parcelable {
     };
     private int idServiceProvider;
     private SignInData signInData;
+    private String stdCode;
+    private String landlineNo;
     private String fName;
     private String lName;
     private String emailId;
@@ -47,47 +49,61 @@ public class ServiceProvider implements Parcelable {
         //links = new ArrayList<>();
     }
 
-    public ServiceProvider(Parcel source) {
-        //links = new ArrayList<>();
+    protected ServiceProvider(Parcel in) {
+        idServiceProvider = in.readInt();
+        signInData = in.readParcelable(SignInData.class.getClassLoader());
+        stdCode = in.readString();
+        landlineNo = in.readString();
+        fName = in.readString();
+        lName = in.readString();
+        emailId = in.readString();
+        gender = in.readString();
+        qualification = in.readString();
+        regNo = in.readString();
+        subscribed = in.readInt();
+        services = in.createTypedArrayList(ServProvHasServPt.CREATOR);
+        photo = in.createByteArray();
+        lastVisited = in.readParcelable(LastVisited.class.getClassLoader());
 
-        idServiceProvider = source.readInt();
-        subscribed = source.readInt();
-
-        String[] fields = new String[7];
-        int i = 0;
-        source.readStringArray(fields);
-        fName = fields[i++];
-        lName = fields[i++];
-        emailId = fields[i++];
-        gender = fields[i++];
-        qualification = fields[i++];
-        regNo = fields[i++];
-
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        try {
-            if(fields[i] != null) {
-                subsDate = sdf.parse(fields[i]);
+        String date = in.readString();
+        if (!date.equals("")) {
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+            sdf.applyPattern("dd/MM/yyyy");
+            try {
+                subsDate = sdf.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
-        signInData = new SignInData(source);
-        services = new ArrayList<>();
-        int count = source.readInt();
-        for(i = 0; i < count; i++) {
-            ServProvHasServPt s = new ServProvHasServPt(source);
-            services.add(s);
-        }
-        photo = source.createByteArray();
+    }
 
-        lastVisited = new LastVisited();
-        try {
-            lastVisited.setLastVisitedDate(sdf.parse(source.readString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idServiceProvider);
+        dest.writeParcelable(signInData, flags);
+        dest.writeString(stdCode);
+        dest.writeString(landlineNo);
+        dest.writeString(fName);
+        dest.writeString(lName);
+        dest.writeString(emailId);
+        dest.writeString(gender);
+        dest.writeString(qualification);
+        dest.writeString(regNo);
+        dest.writeInt(subscribed);
+        dest.writeTypedList(services);
+        dest.writeByteArray(photo);
+        dest.writeParcelable(lastVisited, flags);
+        String date = "";
+        if (subsDate != null) {
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+            date = sdf.format(subsDate);
         }
-        lastVisited.setLastVisitedTime(source.readInt());
+        dest.writeString(date);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public byte[] getPhoto() {
@@ -243,44 +259,27 @@ public class ServiceProvider implements Parcelable {
         this.services = services;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(idServiceProvider);
-        dest.writeInt(subscribed);
-
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        String subsDate = null;
-        if(this.subsDate != null) {
-            subsDate = sdf.format(this.subsDate);
-        }
-        dest.writeStringArray(new String[]{
-                fName, lName, emailId, gender, qualification, regNo, subsDate
-        });
-        signInData.writeToParcel(dest, flags);
-        dest.writeInt(services.size());
-        for(ServProvHasServPt s : services) {
-            s.writeToParcel(dest, flags);
-        }
-        dest.writeByteArray(photo);
-        String dateStr = "";
-        if(lastVisited.getLastVisitedDate() != null) {
-            dateStr = sdf.format(lastVisited.getLastVisitedDate());
-        }
-        dest.writeString(dateStr);
-        dest.writeInt(lastVisited.getLastVisitedTime());
-    }
-
     public SignInData getSignInData() {
         return signInData;
     }
 
     public void setSignInData(SignInData signInData) {
         this.signInData = signInData;
+    }
+
+    public String getLandlineNo() {
+        return landlineNo;
+    }
+
+    public void setLandlineNo(String landlineNo) {
+        this.landlineNo = landlineNo;
+    }
+
+    public String getStdCode() {
+        return stdCode;
+    }
+
+    public void setStdCode(String stdCode) {
+        this.stdCode = stdCode;
     }
 }

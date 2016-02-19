@@ -87,52 +87,49 @@
         android:layout_toRightOf="@id/tvDocSpec"
         android:text="@string/qualification" />
 
-    <TextView
-        android:id="@+id/tvDateLbl"
-        style="@style/LargeText"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvDate"
-        android:layout_alignLeft="@id/tvDrLbl"
-        android:layout_alignStart="@id/tvDrLbl"
-        android:hint="@string/date" />
-
-    <TextView
-        android:id="@+id/tvDate"
-        style="@style/MediumText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spinnerTimeSlots"
-        android:layout_toEndOf="@id/tvDateLbl"
-        android:layout_toRightOf="@id/tvDateLbl"
-        android:clickable="true"
-        android:hint="@string/date_format"
-        android:minHeight="36dp"
-        android:minWidth="100dp"
-        android:onClick="showDatePicker"
-        android:padding="6dp" />
-
-    <TextView
-        android:id="@+id/tvTimeLbl"
-        style="@style/LargeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvDate"
-        android:layout_toEndOf="@id/tvDate"
-        android:layout_toRightOf="@id/tvDate"
-        android:text="@string/time" />
-
-    <Spinner
-        android:id="@+id/spinnerTimeSlots"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvDocSpec"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_below="@id/tvQualification"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/tvTimeLbl"
-        android:layout_toRightOf="@id/tvTimeLbl"
-        android:choiceMode="singleChoice" />
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LargeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:hint="@string/date" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            style="@style/MediumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:hint="@string/date_format"
+            android:minHeight="36dp"
+            android:minWidth="100dp"
+            android:onClick="showDatePicker"
+            android:padding="6dp" />
+
+        <TextView
+            style="@style/LargeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/time" />
+
+        <Spinner
+            android:id="@+id/spinnerTimeSlots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:choiceMode="singleChoice" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonBook"

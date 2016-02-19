@@ -50,4 +50,5 @@
     <string name="action_change_pwd_cust">customer/ChangePwd.action</string>
     <string name="action_forgot_pwd_cust">customer/ForgotPwd.action</string>
     <string name="action_check_pwd_cust">customer/CheckPwd.action</string>
+    <string name="action_signup_req">service/SignUpReq.action</string>
 </resources>
