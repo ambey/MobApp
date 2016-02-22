@@ -352,6 +352,22 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         return super.onContextItemSelected(item);
     }
 
+    public void editWorkPlace(View view) {
+        WorkPlaceListAdapter adapter = (WorkPlaceListAdapter) mListViewWP.getAdapter();
+        if (adapter == null) {
+            return;
+        }
+        int selectedPos = adapter.getSelectedPosition();
+        if (selectedPos == -1 && mWorkPlaceList.size() == 1) {
+            selectedPos = 0;
+        } else if (selectedPos == -1) {
+            Utility.showMessage(this, R.string.msg_select_edit_work_place);
+            return;
+        }
+        WorkPlace workPlace = mWorkPlaceList.get(selectedPos);
+        getWorkPlaceView(workPlace, selectedPos);
+    }
+
     public void addNewWorkPlace(View view) {
         /*SimpleCursorAdapter adapter = (SimpleCursorAdapter) mListViewWP.getAdapter();
         adapter.changeCursorAndColumns( SearchServProv.getCursor(), new String[]{}, new int[]{});
@@ -1093,6 +1109,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
         switch (action) {
             case MappService.DO_ADD_WORK_PLACE:
                 updateDone(R.string.msg_add_wp_done, data);
@@ -1132,7 +1149,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void removePhotoDone(Bundle data) {
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
             mImgView.setImageResource(R.drawable.dr_avatar);
@@ -1155,7 +1171,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     private void changePwdDone(Bundle data) {
         //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_change_pwd);
         }
@@ -1163,7 +1178,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     private void pwdCheckDone(Bundle data) {
         //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             isPwdCorrect = true;
         } else {
@@ -1175,7 +1189,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     private void uploadPhotoDone(Bundle data) {
         //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
             ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
@@ -1186,7 +1199,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void getWorkPlaceListDone(Bundle data) {
-        //Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
             mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
@@ -1237,7 +1249,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     public void regNoCheckDone(Bundle data) {
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("exists")) {
             mRegNo.setError("This Registration Number is already Registered.");
             mRegNo.requestFocus();
@@ -1247,7 +1258,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     private void getSpecialitiesDone(Bundle data) {
         //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         mSpecialityList = data.getStringArrayList("specialities");
         if (mSpecialityList == null) {
             mSpecialityList = new ArrayList<>();
@@ -1263,7 +1273,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void updateDone(int msg, Bundle data) {
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             //LoginHolder.servLoginRef = mServiceProv;
             Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {

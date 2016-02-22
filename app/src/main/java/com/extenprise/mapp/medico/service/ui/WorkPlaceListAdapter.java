@@ -134,6 +134,10 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         notifyDataSetChanged();
     }
 
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+
     /*private String replaceMark(TextView tv) {
         return tv.getText().toString().replace("*", ":");
     }*/

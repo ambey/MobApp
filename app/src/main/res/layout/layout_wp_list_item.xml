@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="20dp"
@@ -8,19 +7,19 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-
     <TextView
         android:id="@+id/spinServiceProvCategory"
         android:layout_width="170dp"
         android:layout_height="20dp"
         android:hint="@string/cate" />
+
     <TextView
         android:id="@+id/editTextSpeciality"
         android:layout_width="170dp"
         android:layout_height="20dp"
-        android:hint="@string/speciality"
         android:layout_toEndOf="@+id/spinServiceProvCategory"
-        android:layout_toRightOf="@+id/spinServiceProvCategory" />
+        android:layout_toRightOf="@+id/spinServiceProvCategory"
+        android:hint="@string/speciality" />
 
     <TextView
         android:id="@+id/editTextQualification"
@@ -28,6 +27,7 @@
         android:layout_height="20dp"
         android:layout_below="@+id/spinServiceProvCategory"
         android:hint="@string/qualification" />
+
     <TextView
         android:id="@+id/editTextExperience"
         android:layout_width="170dp"
@@ -39,22 +39,22 @@
 
     <TextView
         android:id="@+id/editTextName"
-        android:layout_below="@+id/editTextExperience"
-        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:hint="@string/name"/>
+        android:layout_below="@+id/editTextExperience"
+        android:layout_marginTop="5dp"
+        android:hint="@string/name"
+        android:textSize="@dimen/abc_text_size_large_material" />
 
     <TextView
         android:id="@+id/viewWorkPlaceType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/work_place_type"
-        android:layout_marginLeft="10dp"
         android:layout_alignBottom="@+id/editTextName"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/editTextName"
-        android:layout_toRightOf="@+id/editTextName"/>
+        android:layout_toRightOf="@+id/editTextName"
+        android:hint="@string/work_place_type" />
 
     <TextView
         android:id="@+id/editTextLoc"
@@ -80,9 +80,9 @@
     <TextView
         android:id="@+id/editTextWeeklyOff"
         android:layout_width="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextEmail"
+        android:layout_marginTop="10dp"
         android:text="@string/practice_days" />
 
     <TextView
@@ -96,8 +96,7 @@
         android:id="@+id/editTextConsultationFees"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/consult_fees"
-        android:layout_below="@+id/buttonStartTime" />
-
+        android:layout_below="@+id/buttonStartTime"
+        android:hint="@string/consult_fees" />
 
 </RelativeLayout>

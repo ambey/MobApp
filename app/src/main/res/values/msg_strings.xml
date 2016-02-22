@@ -42,4 +42,5 @@
     <string name="msg_sign_up">Thanks For Registration. We Will Contact You Soon</string>
     <string name="msg_input_phone">Please Submit Your details</string>
     <string name="msg_try_again">Please Try Again.</string>
+    <string name="msg_select_edit_work_place">Please select a work place to edit.</string>
 </resources>
