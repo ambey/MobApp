@@ -137,9 +137,8 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_GET_RX_INBOX) {
             gotRxInbox(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     public void viewProfile(View view) {

@@ -31,6 +31,7 @@ import com.extenprise.mapp.medico.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
+import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -308,9 +309,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_LOGIN) {
             loginDone(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     public void forgotPwd(View view) {
@@ -385,7 +385,9 @@ public class LoginActivity extends Activity implements ResponseHandler {
             startActivity(intent);
         } else {
             Utility.showMessage(this, R.string.msg_login_failed);
-            mMobileNumber.setError(getString(R.string.error_incorrect_password));
+            if (msgData.getInt("responseCode") == ErrorCode.ERROR_INVALID_USER_OR_PASSWD) {
+                mMobileNumber.setError(getString(R.string.error_incorrect_password));
+            }
             mMobileNumber.requestFocus();
         }
     }

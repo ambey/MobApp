@@ -63,7 +63,9 @@ public class SignUpPreviousActivity extends FragmentActivity implements Response
 
     private void doneSignupReq(Bundle data) {
         Utility.showProgressDialog(this, false);
-        Utility.showMessage(this, R.string.msg_sign_up);
+        if (data.getBoolean("status")) {
+            Utility.showMessage(this, R.string.msg_sign_up);
+        }
     }
 
     public void signUpServProv(View view) {
@@ -118,6 +120,6 @@ public class SignUpPreviousActivity extends FragmentActivity implements Response
         if (action == MappService.DO_SIGNUP_REQ) {
             doneSignupReq(data);
         }
-        return false;
+        return data.getBoolean("status");
     }
 }

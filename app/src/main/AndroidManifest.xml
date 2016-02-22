@@ -32,6 +32,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_medico_launcher"
+        android:label="@string/app_name"
         android:logo="@mipmap/ic_medico_logo"
         android:theme="@style/AppTheme">
 

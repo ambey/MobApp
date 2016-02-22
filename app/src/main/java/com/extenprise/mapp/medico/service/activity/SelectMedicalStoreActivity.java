@@ -130,12 +130,10 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_GET_MEDSTORE_LIST) {
             gotMedStoreList(data);
-            return true;
         } else if (action == MappService.DO_SEND_RX) {
             rxSentToMedStore();
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     @Nullable

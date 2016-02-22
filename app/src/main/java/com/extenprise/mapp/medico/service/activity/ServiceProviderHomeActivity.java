@@ -183,8 +183,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_GET_RX_FEEDBACK) {
             gotRxInbox(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 }

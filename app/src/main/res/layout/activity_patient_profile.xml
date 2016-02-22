@@ -78,12 +78,11 @@
                 android:orientation="vertical"
                 android:paddingBottom="10dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/mobnumLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
@@ -97,30 +96,8 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="30dp"
-                        android:layout_toEndOf="@+id/mobnumLabel"
-                        android:layout_toRightOf="@+id/mobnumLabel"
                         android:hint="@string/mob_num" />
-                </RelativeLayout>
-
-                <ImageView
-                    android:id="@+id/imageViewEdit1"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="30dp"
-                    android:clickable="true"
-                    android:onClick="editPatientProf"
-                    android:src="@drawable/editpen" />
-
-                <TextView
-                    android:id="@+id/textViewEdit1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:clickable="true"
-                    android:onClick="editPatientProf"
-                    android:text="@string/edit_info"
-                    android:textSize="12sp" />
+                </LinearLayout>
 
                 <include
                     android:id="@+id/customerInfo"

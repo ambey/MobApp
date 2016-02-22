@@ -39,7 +39,7 @@
     <string name="msg_exception">Some Exception Occurs.</string>
     <string name="msg_no_photo_editor">No photo editor found on the device</string>
 
-    <string name="msg_sign_up">Our Customer Representative Will Contact You Soon</string>
+    <string name="msg_sign_up">Thanks For Registration. We Will Contact You Soon</string>
     <string name="msg_input_phone">Please Submit Your details</string>
     <string name="msg_try_again">Please Try Again.</string>
 </resources>

@@ -305,12 +305,10 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         Utility.showProgressDialog(this, false);
         if (action == MappService.DO_SEND_AVAILABILITY) {
             sentAvailabilityFeedback();
-            return true;
         } else if (action == MappService.DO_GET_RX_SCANNED_COPY) {
             gotRxScannedCopy(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     @Override

@@ -433,9 +433,8 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         if (action == MappService.DO_PHONE_EXIST_CHECK ||
                 action == MappService.DO_REG_NO_CHECK) {
             checkDone(action, data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     public void checkDone(int check, Bundle data) {

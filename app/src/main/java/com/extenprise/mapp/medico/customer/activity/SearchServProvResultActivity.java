@@ -151,14 +151,9 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     public boolean gotResponse(int action, Bundle data) {
         Utility.showProgressDialog(this, false);
         if (action == MappService.DO_SERV_PROV_DETAILS) {
-            if (!data.getBoolean("status")) {
-                Utility.showMessage(this, R.string.msg_try_again);
-                return false;
-            }
             gotDetails(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     @Override

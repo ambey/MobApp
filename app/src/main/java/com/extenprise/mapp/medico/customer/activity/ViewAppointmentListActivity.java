@@ -153,13 +153,11 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_GET_CUST_UPCOMING_APPONTS) {
             gotUpcomingApponts(data);
-            return true;
         } else if (action == MappService.DO_GET_CUST_PAST_APPONTS) {
             gotPastApponts(data);
-            return true;
         }
 
-        return false;
+        return data.getBoolean("status");
     }
 
     @Override

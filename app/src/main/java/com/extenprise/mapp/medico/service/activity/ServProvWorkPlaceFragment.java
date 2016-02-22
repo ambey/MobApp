@@ -554,19 +554,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        try {
-            getActivity().unbindService(mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (action == MappService.DO_SIGNUP) {
             signUpDone(data);
-            return true;
         } else if (action == MappService.DO_GET_SPECIALITY) {
             getSpecialitiesDone(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     private void signUpDone(Bundle data) {
@@ -579,9 +572,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                     startActivity(intent);
                 }
             });
-            //Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
-        } else {
-            Utility.showMessage(getActivity(), R.string.some_error);
         }
         //Utility.showProgress(getActivity(), mFormView, mProgressView, false);
         Utility.showProgressDialog(getActivity(), false);

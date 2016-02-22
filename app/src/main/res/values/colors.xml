@@ -12,4 +12,6 @@
     <color name="button_text">@color/primary_color</color>
     <color name="primary_text">#df000000</color>
     <color name="primary_color">#d50000</color>
+    <color name="light_shadow">#1f000000</color>
+    <color name="dark_shadow">#4d000000</color>
 </resources>

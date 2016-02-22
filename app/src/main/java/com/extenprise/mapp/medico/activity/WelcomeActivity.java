@@ -201,9 +201,8 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_LOGIN) {
             loginDone(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     protected void loginDone(Bundle msgData) {
@@ -241,7 +240,9 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             }
             startActivity(intent);
         } else {
-            Utility.showMessage(this, R.string.some_error);
+            Utility.showMessage(this, R.string.msg_login_failed);
+            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+            startActivity(intent);
             /*mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();*/
         }

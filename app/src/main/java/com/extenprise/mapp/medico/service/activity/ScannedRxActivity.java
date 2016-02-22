@@ -203,12 +203,11 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
             //displayScanCopy();
             if (data.getBoolean("status")) {
                 sendRxToMedStore(data);
-                return true;
+            } else {
+                mResendRx.setVisibility(View.VISIBLE);
             }
-            mResendRx.setVisibility(View.VISIBLE);
-            Utility.showMessage(this, R.string.msg_try_again);
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     /*

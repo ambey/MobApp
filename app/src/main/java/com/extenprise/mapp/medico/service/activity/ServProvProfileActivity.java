@@ -34,7 +34,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
-import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
@@ -1128,10 +1127,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             case MappService.DO_REMOVE_PHOTO:
                 removePhotoDone(data);
                 break;
-            default:
-                return false;
         }
-        return true;
+        return data.getBoolean("status");
     }
 
     private void removePhotoDone(Bundle data) {
@@ -1145,7 +1142,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mImgView.setImageBitmap(null);
         } else {
             setPhoto();
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -1162,8 +1158,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_change_pwd);
-        } else {
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -1188,7 +1182,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             serviceProvider.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
             setPhoto();
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -1280,13 +1273,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     refresh();
                 }
             });
-        } else {
-            //mServiceProv = LoginHolder.servLoginRef;
-            if (mServiceProv == null) {
-                Utility.goTOLoginPage(this, LoginActivity.class);
-                return;
-            }
-            Utility.showMessage(this, R.string.some_error);
         }
         //Utility.showProgress(this, mFormView, mProgressView, false);
 

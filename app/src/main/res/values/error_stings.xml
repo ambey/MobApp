@@ -31,5 +31,12 @@
     <string name="error_name_min_length">Minimum Two Characters</string>
     <string name="error_mobile_or_landline_req">Either mobile or landline number required</string>
     <string name="error_invalid_std_code">Invalid std code. Should start with zero.</string>
-
+    <string name="error_request_already_made">SignUp request already made for this number.</string>
+    <string name="error_request_failed">Sorry! The request could not be completed at this time.</string>
+    <string name="error_appointment_clash">Your another appointment is clashing with this one.\nPlease select another date or time.</string>
+    <string name="error_invalid_user_or_passwd">Invalid user name or password.</string>
+    <string name="error_wrong_passwd">Incorrect old password entered.</string>
+    <string name="error_no_matching_result">No result found for your search.</string>
+    <string name="error_no_available_timeslot">Sorry! No timeslot is available on this day.</string>
+    <string name="error_no_workplace_found">No work place is added yet. Please add a work place.</string>
 </resources>

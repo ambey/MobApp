@@ -166,9 +166,8 @@ public class ViewRxActivity extends Activity implements ResponseHandler {
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_GET_RX) {
             gotRx(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     @Override

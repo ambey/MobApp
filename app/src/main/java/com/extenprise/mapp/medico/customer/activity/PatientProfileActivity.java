@@ -136,7 +136,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         // mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, customer.getCity().getCity()));
         mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, mCust.getCity().getState()));
 
-        setFieldsEnability(false);
+        setPersonalInfoEditable(false);
+        setAddressEditable(false);
+        Utility.setEnabledButton(this, mUpdateButton, false);
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -160,27 +162,42 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         }
     }
 
-    private void setFieldsEnability(boolean set) {
-        mEditTextCustomerFName.setEnabled(set);
-        mEditTextCustomerLName.setEnabled(set);
-        mEditTextCustomerEmail.setEnabled(set);
-        mEditTextPinCode.setEnabled(set);
-        mEditTextLoc.setEnabled(set);
-        mEditTextWeight.setEnabled(set);
-        mEditTextHeight.setEnabled(set);
-        mTextViewDOB.setEnabled(set);
-        mSpinCity.setEnabled(set);
-        mSpinState.setEnabled(set);
-        mSpinGender.setEnabled(set);
-
-        Utility.setEnabledButton(this, mUpdateButton, set);
+    private void setAddressEditable(boolean editable) {
+        mEditTextPinCode.setEnabled(editable);
+        mEditTextLoc.setEnabled(editable);
+        mSpinCity.setEnabled(editable);
+        mSpinState.setEnabled(editable);
     }
 
+    private void setPersonalInfoEditable(boolean editable) {
+        mEditTextCustomerFName.setEnabled(editable);
+        mEditTextCustomerLName.setEnabled(editable);
+        mEditTextCustomerEmail.setEnabled(editable);
+        mEditTextWeight.setEnabled(editable);
+        mEditTextHeight.setEnabled(editable);
+        mTextViewDOB.setEnabled(editable);
+        mSpinGender.setEnabled(editable);
+    }
+
+    public void editPersonalInfo(View view) {
+        setPersonalInfoEditable(true);
+        Utility.setEnabledButton(this, mUpdateButton, true);
+    }
+
+    public void editAddress(View view) {
+        setAddressEditable(true);
+        Utility.setEnabledButton(this, mUpdateButton, true);
+    }
+
+/*
     public void editPatientProf(View v) {
-        setFieldsEnability((!mEditTextCustomerFName.isEnabled()));
-        /*Utility.collapse(mContLay, false);
-        Utility.collapse(mAddrLayout, true);*/
+        //setFieldsEnability((!mEditTextCustomerFName.isEnabled()));
+        */
+/*Utility.collapse(mContLay, false);
+        Utility.collapse(mAddrLayout, true);*//*
+
     }
+*/
 
     public void updateProfile(View v) {
         EditText[] fields = {mEditTextCustomerFName, mEditTextCustomerLName, mEditTextWeight,
@@ -270,7 +287,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             Utility.showMessage(this, R.string.msg_change_pwd);
         } else {
             Utility.hideSoftKeyboard(this);
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -305,10 +321,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             case MappService.DO_UPLOAD_PHOTO:
                 uploadPhotoDone(data);
                 break;
-            default:
-                return false;
         }
-        return true;
+        return data.getBoolean("status");
     }
 
     private void uploadPhotoDone(Bundle data) {
@@ -324,7 +338,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
                         mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
             }
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -344,7 +357,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
                         mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
             }
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -363,8 +375,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     startActivity(intent);
                 }
             });
-        } else {
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 

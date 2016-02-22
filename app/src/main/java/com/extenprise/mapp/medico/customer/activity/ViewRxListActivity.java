@@ -100,9 +100,8 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_GET_CUST_RX_LIST) {
             gotRxList(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     @Override

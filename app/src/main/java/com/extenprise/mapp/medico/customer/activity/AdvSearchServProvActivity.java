@@ -85,6 +85,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         ArrayList<String> specList = getIntent().getStringArrayListExtra("specList");
         if (specList == null) {
             specList = new ArrayList<>();
+            specList.add(getString(R.string.select_speciality));
         }
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
         mSpeciality.setAdapter(spinnerAdapter);
@@ -311,12 +312,10 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_SEARCH_SERV_PROV) {
             searchDone(data);
-            return true;
         } else if (action == MappService.DO_GET_SPECIALITY) {
             gotSpecialities(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     private void gotSpecialities(Bundle data) {
@@ -341,8 +340,6 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
             intent.putExtra("parent-activity", this.getClass().getName());
             intent.putExtra("form", mForm);
             startActivity(intent);
-        } else {
-            Utility.showMessage(this, R.string.msg_no_result);
         }
     }
 

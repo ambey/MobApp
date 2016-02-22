@@ -284,19 +284,16 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Utility.showProgressDialog(this, false);
         if (action == MappService.DO_CUST_PAST_APPONT_LIST) {
             gotPastAppointments(data);
-            return true;
         } else if (action == MappService.DO_CONFIRM_APPONT) {
             mAppont.setConfirmed(true);
             mStatusView.setText(getString(R.string.confirmed));
             statusChangeDone(R.string.msg_appont_confirmed);
-            return true;
         } else if (action == MappService.DO_CANCEL_APPONT) {
             mAppont.setCanceled(true);
             mStatusView.setText(getString(R.string.canceled));
             statusChangeDone(R.string.msg_appont_canceled);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     @Nullable

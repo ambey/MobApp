@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
@@ -32,6 +33,7 @@ public class SignUpActionDialog extends DialogFragment {
     private EditText mEmailID;
     private Button mSubmitButton;
     private int mSignupBy;
+    private View.OnClickListener mListener;
 
     public void setContext(Context context) {
         this.mContext = context;
@@ -60,6 +62,8 @@ public class SignUpActionDialog extends DialogFragment {
         if (mSignupBy != R.string.practitioner) {
             landline.setVisibility(View.VISIBLE);
             salut.setVisibility(View.GONE);
+            ((LinearLayout.LayoutParams) mFName.getLayoutParams()).weight = 0.5f;
+            ((LinearLayout.LayoutParams) mLName.getLayoutParams()).weight = 0.5f;
             mPhoneText.setHint(String.format("%s **", mContext.getString(R.string.mobile_no)));
             mLandlineText.setHint(String.format("%s **", mContext.getString(R.string.landline_no)));
         } else {
@@ -69,6 +73,7 @@ public class SignUpActionDialog extends DialogFragment {
         mLName.setHint(String.format("%s *", mContext.getString(R.string.last_name)));
 
         mSubmitButton = (Button) view.findViewById(R.id.submitButton);
+        mSubmitButton.setOnClickListener(mListener);
         return view;
     }
 
@@ -161,7 +166,7 @@ public class SignUpActionDialog extends DialogFragment {
     }
 
     public void setSubmitListener(View.OnClickListener listener) {
-        mSubmitButton.setOnClickListener(listener);
+        mListener = listener;
     }
 
     @Override

@@ -406,9 +406,40 @@ public abstract class Utility {
         switch (errorCode) {
             case ErrorCode.ERROR_SERVER_UNAVAILABLE:
                 showMessage(context, R.string.error_server_connect);
-                return;
+                break;
             case ErrorCode.ERROR_NETWORK_PROBLEM:
                 showMessage(context, R.string.error_not_online);
+                break;
+            case ErrorCode.ERROR_APPONT_CONFLICT:
+                showMessage(context, R.string.error_appointment_clash);
+                break;
+            case ErrorCode.ERROR_INVALID_USER_OR_PASSWD:
+                showMessage(context, R.string.error_invalid_user_or_passwd);
+                break;
+            case ErrorCode.ERROR_PHONE_EXISTS:
+                showMessage(context, R.string.error_request_already_made);
+                break;
+            case ErrorCode.ERROR_WRONG_PASSWD:
+                showMessage(context, R.string.error_wrong_passwd);
+                break;
+            case ErrorCode.ERROR_NO_RX_FOUND:
+                showMessage(context, R.string.error_no_rx_found);
+                break;
+            case ErrorCode.ERROR_NO_MATCHING_RESULT:
+                showMessage(context, R.string.error_no_matching_result);
+                break;
+            case ErrorCode.ERROR_NO_AVAILABLE_TIMESLOT:
+                showMessage(context, R.string.error_no_available_timeslot);
+                break;
+            case ErrorCode.ERROR_NO_WORKPLACE_FOUND:
+                showMessage(context, R.string.error_no_workplace_found);
+                break;
+            case ErrorCode.ERROR_USER_EXISTS:
+                showMessage(context, R.string.error_phone_registered);
+                break;
+            case ErrorCode.ERROR_REQUEST_FAILED:
+                showMessage(context, R.string.error_request_failed);
+                break;
         }
     }
 

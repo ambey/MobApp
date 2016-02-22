@@ -518,13 +518,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_SIGNUP) {
             signUpDone(data);
-            return true;
-        }
-        if (action == MappService.DO_PHONE_EXIST_CHECK) {
+        } else if (action == MappService.DO_PHONE_EXIST_CHECK) {
             phoneCheckComplete(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     private void phoneCheckComplete(Bundle data) {
@@ -558,8 +555,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 }
             );
             //Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
-        } else {
-            Utility.showMessage(this, R.string.some_error);
         }
         //Utility.showProgress(this, mFormView, mProgressView, false);
         Utility.showProgressDialog(this, false);

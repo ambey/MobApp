@@ -153,6 +153,17 @@
                 android:layout_weight="1.2"
                 android:text="@string/kg" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonEditPersonalInfo"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/button_float_edit"
+            android:onClick="editPersonalInfo"
+            android:padding="6dp" />
     </LinearLayout>
 
 
@@ -160,7 +171,6 @@
         android:id="@+id/viewAddress"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
-        android:layout_below="@+id/contLay"
         android:layout_marginTop="20dp"
         android:background="@drawable/label"
         android:clickable="true"
@@ -173,7 +183,6 @@
         android:id="@+id/addrLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewAddress"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -246,6 +255,18 @@
                 android:padding="5dp"
                 android:prompt="@string/state" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonEditAddr"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/button_float_edit"
+            android:onClick="editAddress"
+            android:padding="6dp" />
     </LinearLayout>
 
 

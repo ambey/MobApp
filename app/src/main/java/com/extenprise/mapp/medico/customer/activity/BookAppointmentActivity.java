@@ -191,8 +191,6 @@ public class BookAppointmentActivity extends Activity
             customer.getAppointments().add(appointment);
             ServiceProvider serviceProvider = getIntent().getParcelableExtra("servProv");
             serviceProvider.getServProvHasServPt(0).getAppointments().add(appointment);
-        } else {
-            Utility.showAlert(this, "", getString(R.string.error_appont));
         }
     }
 
@@ -241,12 +239,10 @@ public class BookAppointmentActivity extends Activity
     public boolean gotResponse(int action, Bundle data) {
         if (action == MappService.DO_APPONT_TIME_SLOTS) {
             gotTimeSlots(data);
-            return true;
         } else if (action == MappService.DO_BOOK_APPONT) {
             gotAppont(data);
-            return true;
         }
-        return false;
+        return data.getBoolean("status");
     }
 
     @Override

@@ -291,8 +291,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
             intent.putExtra("parent-activity", this.getClass().getName());
             intent.putExtra("myparent-activity", getIntent().getStringExtra("parent-activity"));
             startActivity(intent);
-        } else {
-            Utility.showMessage(this, R.string.msg_no_result);
         }
     }
 
