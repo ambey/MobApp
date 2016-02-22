@@ -25,6 +25,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
@@ -79,6 +81,8 @@ public abstract class Utility {
         }
         if (show) {
             _progressDialog = ProgressDialog.show(context, "", context.getString(R.string.msg_please_wait), true);
+            /*_progressDialog.setProgressDrawable();*/
+            //_progressDialog.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
         }
     }
 
@@ -463,6 +467,12 @@ public abstract class Utility {
         return context.bindService(intent, connection, flag);
     }
 
+    public static void enlargeImg(Activity activity, ImageView imgV) {
+        imgV.setScaleType(ImageView.ScaleType.FIT_XY);
+        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        activity.getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        //activity.getSupportActionBar().hide();
+    }
     public static void enlargeImage(ImageView imageView) {
         if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.MATCH_PARENT) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(140, 140);

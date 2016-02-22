@@ -23,7 +23,9 @@
                 android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:clickable="true"
+                android:contentDescription="@string/patient"
                 android:onClick="changeImg"
+                android:scaleType="centerInside"
                 android:src="@drawable/patient" />
 
             <TextView

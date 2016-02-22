@@ -40,11 +40,33 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/mob_num" />
+
+        <TextView
+            android:id="@+id/mobnumValue"
+            style="@style/LargeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:hint="@string/mob_num" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/textViewDoc"
         style="@style/CollapseFormHeading"
         android:layout_width="fill_parent"
         android:layout_height="36dp"
+        android:layout_marginTop="20dp"
         android:clickable="true"
         android:onClick="openPersonalInfo"
         android:padding="6dp"
@@ -56,7 +78,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone">
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/viewEditEducation"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -78,13 +100,13 @@
             android:clickable="true"
             android:onClick="editPersonalInfo"
             android:text="@string/edit_info"
-            android:textSize="12sp" />
+            android:textSize="12sp" />-->
 
         <TextView
             android:id="@+id/textViewFName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewEditEducation"
+            android:layout_marginTop="10dp"
             android:text="@string/first_name_with_lbl" />
 
         <TextView
@@ -121,6 +143,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editTextRegNum"
             android:text="@string/gender_with_lbl" />
+
+        <ImageButton
+            android:id="@+id/viewEditEducation"
+            style="@style/FloatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/oval"
+            android:contentDescription="@string/add_new_work_place"
+            android:onClick="editPersonalInfo"
+            android:src="@mipmap/ic_edit" />
 
     </RelativeLayout>
 

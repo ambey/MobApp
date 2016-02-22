@@ -53,8 +53,9 @@ public class SignUpPreviousActivity extends FragmentActivity implements Response
                     data.putParcelable("form", sp);
                     mConnection.setData(data);
                     dialog.onDismiss(dialog.getDialog());
-                    Utility.showProgressDialog(SignUpPreviousActivity.this, true);
-                    Utility.doServiceAction(SignUpPreviousActivity.this, mConnection, BIND_AUTO_CREATE);
+                    if (Utility.doServiceAction(SignUpPreviousActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                        Utility.showProgressDialog(SignUpPreviousActivity.this, true);
+                    }
                 }
             }
         });
@@ -65,6 +66,8 @@ public class SignUpPreviousActivity extends FragmentActivity implements Response
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_sign_up);
+        } else {
+            Utility.showMessage(this, R.string.msg_can_not_proceed);
         }
     }
 

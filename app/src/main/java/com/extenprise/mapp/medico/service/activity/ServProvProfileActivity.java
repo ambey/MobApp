@@ -130,6 +130,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mInfo = (LinearLayout) findViewById(R.id.info);
         mPInfo = (LinearLayout) findViewById(R.id.pInfo);
 */
+        TextView mobNo = (TextView) findViewById(R.id.mobnumValue);
+        mobNo.setText(mServiceProv.getSignInData().getPhone());
 
         mFname = (TextView) findViewById(R.id.textViewFName);
         mLname = (TextView) findViewById(R.id.textViewLName);
@@ -859,7 +861,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     public void openPersonalInfo(View view) {
-        if (mPersonalInfo.getVisibility() == View.VISIBLE) {
+        Utility.goTOLoginPage(this, ServProvPersonalInfo.class);
+        /*if (mPersonalInfo.getVisibility() == View.VISIBLE) {
             mPersonalInfo.setVisibility(View.GONE);
 //            mInfo.setVisibility(View.VISIBLE);
         } else {
@@ -868,7 +871,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
                 mWorkPlaceInfo.setVisibility(View.GONE);
             }
-        }
+        }*/
         /*Utility.collapseExpand(mInfo);
         Utility.collapseExpand(mPersonalInfo);
         Utility.collapseExpand(mWorkPlaceInfo);*/

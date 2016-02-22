@@ -84,6 +84,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mPhone = "";
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
+        findViewById(R.id.buttonEditPersonalInfo).setVisibility(View.GONE);
+        findViewById(R.id.buttonEditAddr).setVisibility(View.GONE);
 
         /*mFormView = findViewById(R.id.scrollView);
         mProgressView = findViewById(R.id.progressView);*/
@@ -266,6 +268,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                     selectedImage = data.getData();
                     mImgView.setImageURI(selectedImage);
                     imageChanged = true;
+
 
                 } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
@@ -454,8 +457,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mEditTextPinCode;
             valid = false;
         }
-        if (!Validator.isOnlyAlpha(mSpinCity.getText().toString().trim())) {
-            mSpinCity.setError(getString(R.string.error_only_alpha));
+
+        nmValid = Validator.isNameValid(mSpinCity.getText().toString().trim());
+        if (nmValid != -1) {
+            mSpinCity.setError(getString(nmValid));
             focusView = mSpinCity;
             valid = false;
         }
@@ -527,12 +532,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private void phoneCheckComplete(Bundle data) {
         //Utility.showProgress(this, mFormView, mProgressView, false);
         Utility.showProgressDialog(this, false);
-        if (!data.getBoolean("status")) {
-            mEditTextCellphone.setError(getString(R.string.error_phone_registered));
-            mEditTextCellphone.requestFocus();
-        } else {
+        if (data.getBoolean("status")) {
             mEditTextCellphone.setError(null);
             mPhone = mEditTextCellphone.getText().toString().trim();
+        } else {
+            mEditTextCellphone.requestFocus();
         }
     }
 

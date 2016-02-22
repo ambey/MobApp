@@ -19,6 +19,8 @@
             android:id="@+id/imagePatient"
             android:layout_width="100dp"
             android:layout_height="80dp"
+            android:clickable="true"
+            android:onClick="enlargeImg"
             android:src="@drawable/patient" />
 
         <LinearLayout
@@ -79,13 +81,14 @@
                 android:text="@string/doc_appoint" />
 
             <Button
-                android:id="@+id/buttonViewReport"
+                android:id="@+id/buttonViewRx"
                 style="@style/MyButton"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"
-                android:enabled="false"
-                android:text="@string/view_other_reports" />
+                android:onClick="viewRxList"
+                android:text="@string/view_rx" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -97,15 +100,15 @@
             android:padding="4dp">
 
             <Button
-                android:id="@+id/buttonViewRx"
+                android:id="@+id/buttonViewReport"
                 style="@style/MyButton"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginEnd="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="0.5"
-                android:onClick="viewRxList"
-                android:text="@string/view_rx" />
+                android:enabled="false"
+                android:text="@string/view_other_reports" />
 
             <Button
                 android:id="@+id/buttonViewProfile"
@@ -114,7 +117,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"
                 android:onClick="viewProfile"
-                android:text="@string/profile_text" />
+                android:text="@string/profile_text_pt" />
         </LinearLayout>
 
         <Button

@@ -69,6 +69,11 @@ public class PatientsHomeScreenActivity extends Activity {
         }
     }
 
+    public void enlargeImg(View view) {
+        Utility.enlargeImg(this, mImgView);
+        //mImgView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION );
+    }
+
     public void viewRxList(View view) {
         Intent intent = new Intent(this, ViewRxListActivity.class);
         startActivity(intent);

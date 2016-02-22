@@ -144,6 +144,7 @@
     <string name="title_activity_first_flipper">FirstFlipperActivity</string>
     <string name="uploadImg">Upload Image</string>
     <string name="profile_text">View/Edit Profile</string>
+    <string name="profile_text_pt">Edit Profile</string>
 
     <string name="edit_info">Edit Info</string>
     <string name="edit_wrk">Edit Work\nDetails</string>
@@ -258,4 +259,6 @@
     <string name="hyphen">-</string>
     <string name="std_code">STD</string>
     <string name="landline_no">Landline Number</string>
+    <string name="title_activity_serv_prov_personal_info">ServProvPersonalInfo</string>
+    <string name="title_activity_serv_prov_work_info">ServProvWorkInfo</string>
 </resources>

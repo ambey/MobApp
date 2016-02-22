@@ -592,6 +592,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                 Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
                                 break;
                             case 2:
+                                //if(mImgView.getDrawable() != null || mImgView.getDrawable() == getDrawable(R.drawable.patient))
                                 Utility.showAlert(activity, activity.getString(R.string.remove),
                                         getString(R.string.confirm_remove_photo), null, true,
                                         null,
