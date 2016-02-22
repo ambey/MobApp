@@ -28,6 +28,7 @@
     <string name="error_wrong_pwd">Wrong Password</string>
     <string name="error_server_connect">Unable to connect to remote server.\nPlease try after sometime.</string>
     <string name="error_display_photo">Unable to display photo</string>
+    <string name="error_name_min_length">Minimum Two Characters</string>
     <string name="error_mobile_or_landline_req">Either mobile or landline number required</string>
     <string name="error_invalid_std_code">Invalid std code. Should start with zero.</string>
 

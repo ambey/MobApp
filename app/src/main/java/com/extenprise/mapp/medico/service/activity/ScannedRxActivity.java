@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     private ImageView mRxView;
     private Uri mRxUri;
     private Intent mData;
+    private Button mResendRx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
                 mRxView.setImageBitmap(mRxCopy);
             }
         }
+        mResendRx = (Button) findViewById(R.id.btnResend);
     }
 
     @Override
@@ -198,12 +201,12 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         Utility.showProgressDialog(ScannedRxActivity.this, false);
         if (action == MappService.DO_SAVE_SCANNED_RX_COPY) {
             //displayScanCopy();
-            if (!data.getBoolean("status")) {
-                Utility.showMessage(this, R.string.msg_try_again);
-                return false;
+            if (data.getBoolean("status")) {
+                sendRxToMedStore(data);
+                return true;
             }
-            sendRxToMedStore(data);
-            return true;
+            mResendRx.setVisibility(View.VISIBLE);
+            Utility.showMessage(this, R.string.msg_try_again);
         }
         return false;
     }
@@ -282,6 +285,20 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     }
 */
 
+    public void sendRx(View view) {
+        sendRx();
+    }
+
+    private void sendRx() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("form", mAppont);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_SAVE_SCANNED_RX_COPY);
+        if (Utility.doServiceAction(ScannedRxActivity.this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(ScannedRxActivity.this, true);
+        }
+    }
+
     private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
 
         public SaveBlobTask(Intent data) {
@@ -322,13 +339,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("form", mAppont);
-            mConnection.setData(bundle);
-            mConnection.setAction(MappService.DO_SAVE_SCANNED_RX_COPY);
-            if(Utility.doServiceAction(ScannedRxActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                Utility.showProgressDialog(ScannedRxActivity.this, true);
-            }
+            sendRx();
         }
 
         @Override
