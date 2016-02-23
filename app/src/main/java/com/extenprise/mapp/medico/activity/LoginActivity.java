@@ -136,19 +136,32 @@ public class LoginActivity extends Activity implements ResponseHandler {
         initialize();
     }
 
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        Log.v("Welcome", "onResume called...");
+        initialize();
+    }*/
+
     private void initialize() {
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
             String userType = loginPreferences.getString("logintype", null);
             if (userType != null) {
-                int utype = whichLoginType(userType);
-                if (utype == MappService.CUSTOMER_LOGIN) {
+                mLoginType = whichLoginType(userType);
+                if (mLoginType == MappService.CUSTOMER_LOGIN) {
                     mRadioGroupUType.check(R.id.radioButtonPatient);
                 } else {
                     mRadioGroupUType.check(R.id.radioButtonMedServiceProvider);
                 }
                 mMobileNumber.setText(loginPreferences.getString("username", ""));
+
+                /*boolean logoutDone = loginPreferences.getBoolean("logout", false);
+                if (!logoutDone) {
+                    doLogin(loginPreferences.getString("username", ""),
+                            loginPreferences.getString("passwd", ""));
+                }*/
             }
         } else {
             mPasswordView.setText("");
@@ -161,7 +174,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
         if (buttonHandler.isBackPressed()) {
             buttonHandler.setBackPressed(false);
-            finish();
+            //finish();
             moveTaskToBack(true);
         } else {
             buttonHandler.setBackPressed(true);
@@ -298,10 +311,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mConnection.setAction(MappService.DO_LOGIN);
         mConnection.setData(bundle);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            /*Utility.showProgress(this, mLoginFormView, mProgressView, true);*/
-            //progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
             Utility.showProgressDialog(this, true);
-            //Utility.showProgress(this, progressDialog, true);
         }
     }
 

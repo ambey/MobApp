@@ -89,6 +89,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private Spinner mState;
     private EditText mPinCode;
 
+    private EditText mNotes;
     private EditText mConsultFee;
     private EditText mExperience;
     private Spinner mServPtType;
@@ -396,6 +397,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mPhone2 = (EditText) dialogView.findViewById(R.id.editTextPhone2);
         mEmailIdwork = (EditText) dialogView.findViewById(R.id.editTextEmail);
         mConsultFee = (EditText) dialogView.findViewById(R.id.editTextConsultationFees);
+        mNotes = (EditText) dialogView.findViewById(R.id.editTextNotes);
         mServPtType = (Spinner) dialogView.findViewById(R.id.viewWorkPlaceType);
         mCity = (Spinner) dialogView.findViewById(R.id.editTextCity);
         mState = (Spinner) dialogView.findViewById(R.id.editTextState);
@@ -435,6 +437,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mPhone2.setText(item.getAltPhone());
             mEmailIdwork.setText(item.getEmailId());
             mConsultFee.setText(String.format("%.2f", item.getConsultFee()));
+            mNotes.setText(item.getNotes());
             mServPtType.setSelection(Utility.getSpinnerIndex(mServPtType, item.getServPointType()));
             mCity.setSelection(Utility.getSpinnerIndex(mCity, item.getCity().getCity()));
             mState.setSelection(Utility.getSpinnerIndex(mState, item.getCity().getState()));
@@ -606,6 +609,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     wp.setSpeciality(mSpeciality.getSelectedItem().toString());
                     wp.setServPointType(mServPtType.getSelectedItem().toString());
                     wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                    wp.setNotes(mNotes.getText().toString().trim());
                     wp.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
                     wp.setQualification(mQualification.getText().toString().trim());
                     wp.setSignInData(mSignInData);
@@ -643,7 +647,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     private boolean isValidWorkPlace() {
         EditText[] fields = { mExperience, mQualification,
-                mName, mLoc, mPinCode, mPhone1, mConsultFee };
+                mName, mLoc, mPinCode, mPhone1};
         /*ArrayList<EditText> mSpecialityList = new ArrayList<>(Arrays.asList(mExperience, mQualification,
                 mName, mLoc, mPinCode, mPhone1));
         if (mCategory.equals(getString(R.string.pharmacist))) {
@@ -861,7 +865,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     public void openPersonalInfo(View view) {
-        Utility.goTOLoginPage(this, ServProvPersonalInfo.class);
+        Utility.goTOLoginPage(this, ServProvPersonalInfoActivity.class);
         /*if (mPersonalInfo.getVisibility() == View.VISIBLE) {
             mPersonalInfo.setVisibility(View.GONE);
 //            mInfo.setVisibility(View.VISIBLE);
@@ -878,27 +882,22 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     public void openWorkPlaceInfo(View view) {
+        /*Intent intent = new Intent(this, ServProvWorkInfoActivity.class);
+        //intent.putStringArrayListExtra("wplist", mWorkPlaceList);
+        intent.putParcelableArrayListExtra("wplist", mWorkPlaceList);
+        intent.putExtra("category", mWorkPlaceList.get(0).getServCategory());
+        intent.putExtra("wpListSize", mWorkPlaceList.size());
+        startActivity(intent);*/
+
         if (mWorkPlaceInfo.getVisibility() == View.VISIBLE) {
             mWorkPlaceInfo.setVisibility(View.GONE);
-/*
-            mInfo.setVisibility(View.VISIBLE);
-            mPInfo.setVisibility(View.VISIBLE);
-*/
         } else {
             mWorkPlaceInfo.setVisibility(View.VISIBLE);
             if (mPersonalInfo.getVisibility() == View.VISIBLE) {
                 mPersonalInfo.setVisibility(View.GONE);
             }
-/*
-            mInfo.setVisibility(View.GONE);
-            mPInfo.setVisibility(View.GONE);
-*/
         }
-        /*Utility.collapseExpand(mInfo);
-        Utility.collapseExpand(mPInfo);
-        Utility.collapseExpand(mWorkPlaceInfo);*/
     }
-
 
     /////////////////////////////Image Upload/////////////////////////////
 

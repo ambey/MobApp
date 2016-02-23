@@ -722,16 +722,25 @@ public abstract class Utility {
     }
 
     public static boolean areEditFieldsEmpty(Activity activity, EditText[] fields) {
+        boolean empty = false;
         for (EditText field : fields) {
             if (field.isEnabled()) {
                 if (TextUtils.isEmpty(field.getText().toString().trim())) {
                     field.setError(activity.getString(R.string.error_field_required));
                     field.requestFocus();
-                    return true;
+                    empty = true;
                 }
             }
         }
-        return false;
+        return empty;
+    }
+
+    public static void setSpinError(Spinner spin, String msg) {
+        View tV = spin.getSelectedView();
+        if (tV != null && tV instanceof TextView) {
+            TextView selectedtV = (TextView) tV;
+            selectedtV.setError(msg);
+        }
     }
 
     public static Uri getImageUri(Context context, Bitmap bitmap) {

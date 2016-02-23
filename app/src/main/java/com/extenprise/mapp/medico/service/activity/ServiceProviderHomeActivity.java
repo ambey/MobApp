@@ -142,7 +142,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mConnection.setBound(false);
         if (exit) {
             Log.v("onBackPressed", "ServiceProviderHomeActivity called.. calling finish.");
-            finish(); // finish activity
+            //finish(); // finish activity
             moveTaskToBack(true); // exist app
             //finish(); // finish activity
         } else {

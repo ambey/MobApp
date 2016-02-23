@@ -329,10 +329,10 @@
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
         </activity>
         <activity
-            android:name=".service.activity.ServProvPersonalInfo"
+            android:name=".service.activity.ServProvPersonalInfoActivity"
             android:label="@string/title_activity_serv_prov_personal_info"></activity>
         <activity
-            android:name=".service.activity.ServProvWorkInfo"
+            android:name=".service.activity.ServProvWorkInfoActivity"
             android:label="@string/title_activity_serv_prov_work_info">
         </activity>
     </application>

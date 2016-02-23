@@ -157,7 +157,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/buttonStartTime"
@@ -266,6 +267,14 @@
                 android:inputType="number"
                 android:maxLength="4" />
 
+            <EditText
+                android:id="@+id/editTextNotes"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextConsultationFees"
+                android:layout_marginTop="10dp"
+                android:hint="@string/notes"
+                android:inputType="text" />
 
         </RelativeLayout>
     </LinearLayout>

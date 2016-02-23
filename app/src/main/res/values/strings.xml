@@ -6,13 +6,11 @@
                             <string name="server_name">http://10.0.2.2:8080/mappTest</string>
     -->
 
-    <!--
         <string name="server_name">http://122.170.15.3:8080/mappTest</string>
-    -->
 
+    <!--<string name="server_name">http://208.74.28.39:8080/mappTest</string>-->
 
-    <string name="server_name">http://208.74.28.39:8080/mappTest</string>
-
+    <string name="notes">Notes</string>
     <string name="by_exp">By Extenprise</string>
     <string name="hello_world">Hello world!</string>
     <string name="welcome">Welcome!</string>
@@ -34,6 +32,7 @@
     <string name="path_lab">Path Lab</string>
     <string name="scan_lab">Scanner Lab</string>
     <string name="reg_no">Registration Number *</string>
+    <string name="wp">Work Place</string>
 
     <string name="title_activity_advance__search_doc">Advance Search Page</string>
     <string name="title_activity_search_result">Search Result List</string>
@@ -65,6 +64,8 @@
     <string name="title_activity_search_doctor">Find A Doctor</string>
     <string name="title_activity_login">Sign In</string>
     <string name="title_activity_sign_up">Registration</string>
+    <string name="title_activity_serv_prov_personal_info">Personal Info</string>
+    <string name="title_activity_serv_prov_work_info">Work Place Info</string>
 
     <string name="morning">Morning</string>
     <string name="afternoon">Afternoon</string>
@@ -259,6 +260,5 @@
     <string name="hyphen">-</string>
     <string name="std_code">STD</string>
     <string name="landline_no">Landline Number</string>
-    <string name="title_activity_serv_prov_personal_info">ServProvPersonalInfo</string>
-    <string name="title_activity_serv_prov_work_info">ServProvWorkInfo</string>
+
 </resources>

@@ -23,6 +23,7 @@
     </string-array>
 
     <string-array name="gender_type">
+        <item>@string/gender</item>
         <item>@string/male</item>
         <item>@string/female</item>
     </string-array>
@@ -61,6 +62,7 @@
     </string-array>
 
     <string-array name="state">
+        <item>@string/state</item>
         <item>Andhra Pradesh</item>
         <item>Arunachal Pradesh</item>
         <item>Assam</item>

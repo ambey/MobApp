@@ -41,11 +41,9 @@ import com.extenprise.mapp.medico.util.Validator;
 
 import java.util.ArrayList;
 
-public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment, ResponseHandler, DialogDismissListener {
+public class ServProvWPListFragment extends Fragment implements TitleFragment, ResponseHandler, DialogDismissListener {
     protected CharSequence[] options;
     protected boolean[] selections;
-    //String []selectedDays = new String[_options.length];
-    //String selectedDays;
     private MappServiceConnection mConnection;
     private View mRootview;
     private EditText mName;
@@ -61,14 +59,9 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     private Button mStartTime;
     private Button mEndTime;
     private EditText mPinCode;
-    //private Spinner mGender;
     private EditText mConsultFee;
-    private EditText mNotes;
-    //private Spinner mWeeklyOff;
     private Spinner mServPtType;
     private Spinner mServCatagory;
-    //private View mFormView;
-    //private View mProgressView;
     private RelativeLayout mRelLayout2;
     private LinearLayout mLayoutWorkHrs;
     private Button mMultiSpinnerDays;
@@ -80,14 +73,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.activity_add_workplace, container, false);
         mConnection = new MappServiceConnection(new ServiceResponseHandler(getActivity(), this));
-        //LoginHolder.spsspt = new ServProvHasServPt();
 
         options = Utility.getDaysOptions(getActivity());
         selections = new boolean[options.length];
         mSpecialityList = new ArrayList<>();
 
-        /*mFormView = mRootview.findViewById(R.id.addWorkPlaceForm);
-        mProgressView = mRootview.findViewById(R.id.progressView);*/
         mRelLayout2 = (RelativeLayout) mRootview.findViewById(R.id.relLayout2);
         mLayoutWorkHrs = (LinearLayout) mRootview.findViewById(R.id.layoutWorkHrs);
 
@@ -100,8 +90,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mEmailId = (EditText) mRootview.findViewById(R.id.editTextEmail);
         mStartTime = (Button) mRootview.findViewById(R.id.buttonStartTime);
         mEndTime = (Button) mRootview.findViewById(R.id.buttonEndTime);
-        //mGender = (Spinner) rootView.findViewById(R.id.spinGender);
-        mNotes = (EditText) mRootview.findViewById(R.id.editTextNotes);
         mConsultFee = (EditText) mRootview.findViewById(R.id.editTextConsultationFees);
         mConsultFee.setText("0");
         mServPtType = (Spinner) mRootview.findViewById(R.id.viewWorkPlaceType);
@@ -113,14 +101,11 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mServCatagory = (Spinner) mRootview.findViewById(R.id.spinServiceProvCategory);
 
         int category = getActivity().getIntent().getIntExtra("category", R.string.physician);
-        /*mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, getString(category)));
-        mServCatagory.setClickable(false);*/
 
         ArrayList<String> listWPType = new ArrayList<>();
-        if(category == R.string.physician) {
+        if (category == R.string.physician) {
             listWPType.add(getString(R.string.clinic));
-        }
-        else if (category == R.string.pharmacist) {
+        } else if (category == R.string.pharmacist) {
             mConsultFee.setEnabled(false);
             listWPType.add(getString(R.string.medical_store));
         } else {
@@ -130,15 +115,15 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
         Utility.setNewSpinner(getActivity(), listWPType, mServPtType, null);
         Utility.setNewSpinner(getActivity(), null, mServCatagory,
-                new String[] { getString(R.string.select_category), getString(category) });
+                new String[]{getString(R.string.select_category), getString(category)});
         Utility.setNewSpinner(getActivity(), null, mSpeciality,
-                new String[] { getString(R.string.select_speciality) });
+                new String[]{getString(R.string.select_speciality)});
 
         mServCatagory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String servCategory = mServCatagory.getSelectedItem().toString();
-                if(!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
+                if (!TextUtils.isEmpty(servCategory) && !servCategory.equals(getString(R.string.select_category))) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
                     SearchServProvForm mForm = new SearchServProvForm();
@@ -147,16 +132,17 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                     mConnection.setData(bundle);
                     mConnection.setAction(MappService.DO_GET_SPECIALITY);
                     if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
-                        //Utility.showProgress(getActivity(), mFormView, mProgressView, true);
                         Utility.showProgressDialog(getActivity(), true);
                     }
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
+
             }
         });
+
         mSpeciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -172,17 +158,17 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                                 public void onClick(View v) {
                                     String txt = txtSpec.getText().toString().trim();
                                     boolean cancel = false;
-                                    if(TextUtils.isEmpty(txt)) {
+                                    if (TextUtils.isEmpty(txt)) {
                                         txtSpec.setError(getString(R.string.error_field_required));
                                         txtSpec.requestFocus();
                                         cancel = true;
                                     }
-                                    if(!Validator.isOnlyAlpha(txt)) {
+                                    if (!Validator.isOnlyAlpha(txt)) {
                                         txtSpec.setError(getString(R.string.error_only_alpha));
                                         txtSpec.requestFocus();
                                         cancel = true;
                                     }
-                                    if(!cancel) {
+                                    if (!cancel) {
                                         mSpecialityList.add(0, txt);
                                         if (!mSpecialityList.contains(getString(R.string.other))) {
                                             mSpecialityList.add(getString(R.string.other));
@@ -192,26 +178,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                                     }
                                 }
                             });
-                    //Utility.openSpecDialog(getActivity(), mSpeciality);
-
-                   /*
-                   This is not allowing the validation to be done.. as its closing the dialog even when returning.
-
-                   Utility.showAlert(getActivity(), getString(R.string.add_new_spec), "", txtSpec, true, null,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if(which == DialogInterface.BUTTON_POSITIVE) {
-
-                                    }
-                                }
-                            });*/
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
+
             }
         });
         mMultiSpinnerDays.setOnClickListener(new View.OnClickListener() {
@@ -220,11 +192,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                 showDaysSelectionDialog(v);
             }
         });
-        //mMultiSpinnerDays.setOnClickListener(new ButtonClickHandler());
-
-        //collapse fields on create.
-        /*Utility.collapse(mLayoutWorkHrs, null);
-        Utility.collapse(mRelLayout2, null);*/
 
         Utility.collapseExpand(mLayoutWorkHrs);
         Utility.collapseExpand(mRelLayout2);
@@ -242,55 +209,16 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     public void showtimeFields(View view) {
         Log.v(this.getClass().getName(), "view: " + view.toString() + "workhrsLayout: " + mLayoutWorkHrs);
-        /*if (mLayoutWorkHrs.getVisibility() == View.VISIBLE) {
-            Utility.collapse(mLayoutWorkHrs, null);
-        } else {
-            Utility.expand(mLayoutWorkHrs, null);
-        }*/
-
         Utility.collapseExpand(mLayoutWorkHrs);
     }
 
-   /* public void showFeeFields(View view) {
-        Log.v(this.getClass().getName(), "view: " + view.toString() + "consult Fee: " + mConsultFee);
-        TextView rupeeSign = (TextView) mRootview.findViewById(R.id.viewRsSign);
-        if (mConsultFee.getVisibility() == View.VISIBLE) {
-            //mConsultFee.setVisibility(View.GONE);
-            rupeeSign.setVisibility(View.GONE);
-            Utility.collapse(mConsultFee, null);
-        } else {
-            //mConsultFee.setVisibility(View.VISIBLE);
-            rupeeSign.setVisibility(View.VISIBLE);
-            Utility.expand(mConsultFee, null);
-        }
-    }
-
-    public void showDaysFields(View view) {
-        Log.v(this.getClass().getName(), "view: " + view.toString() + "Days: " + mMultiSpinnerDays);
-        if (mMultiSpinnerDays.getVisibility() == View.VISIBLE) {
-            //mMultiSpinnerDays.setVisibility(View.GONE);
-            Utility.collapse(mMultiSpinnerDays, null);
-        } else {
-            //UIUtility.expandOrCollapse(mMultiSpinnerDays, "expand");
-            //mMultiSpinnerDays.setVisibility(View.VISIBLE);
-            Utility.expand(mMultiSpinnerDays, null);
-        }
-    }*/
-
     public void showWorkFields(View view) {
-        /*if (mRelLayout2.getVisibility() == View.VISIBLE) {
-            //mRelLayout2.setVisibility(View.GONE);
-            Utility.collapse(mRelLayout2, null);
-        } else {
-            Utility.expand(mRelLayout2, null);
-            //mRelLayout2.setVisibility(View.VISIBLE);
-        }*/
         Utility.collapseExpand(mRelLayout2);
     }
 
     @Override
     public CharSequence getPageTitle() {
-        return getString(R.string.work_place_details);
+        return getString(R.string.wp);
     }
 
     @Override
@@ -302,10 +230,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     public void onDialogDismissed(DialogFragment dialog) {
         DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
         String selectedDays = selectionDialog.getSelectedDays();
-        /*String[] days = selectionDialog.getSelectedDays().split(getString(R.string.comma));
-        if(days.length > 2) {
-            selectedDays = days[0] + getString(R.string.comma) + " " + days[1] + " ...";
-        }*/
         mMultiSpinnerDays.setText(selectedDays);
     }
 
@@ -321,7 +245,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     public void showDaysSelectionDialog(View view) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        //fragmentManager.saveFragmentInstanceState(this);
         String selctedDays = "";
         if (!mMultiSpinnerDays.getText().toString().equals(getString(R.string.select_days))) {
             selctedDays = mMultiSpinnerDays.getText().toString();
@@ -337,8 +260,7 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     private boolean addNewWorkPlace() {
-
-        ServProvSignUpActivity activity = (ServProvSignUpActivity) getActivity();
+        ServProvWorkInfoActivity activity = (ServProvWorkInfoActivity) getActivity();
         if (!activity.isValidInput()) {
             return false;
         }
@@ -371,7 +293,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         if (mConsultFee.isEnabled()) {
             spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
         }
-        spsspt.setNotes(mNotes.getText().toString().trim());
         spsspt.setServicePoint(spt);
 
         serviceProvider.addServProvHasServPt(spsspt);
@@ -385,13 +306,13 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
     }
 
     public boolean isValidInput() {
-        EditText[] fields = { mExperience, mQualification,
-                mName, mLoc, mPinCode, mPhone1, mConsultFee };
-        if(mServCatagory.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.pharmacist))) {
-            fields = new EditText[] { mExperience, mQualification,
-                    mName, mLoc, mPinCode, mPhone1 };
+        EditText[] fields = {mExperience, mQualification,
+                mName, mLoc, mPinCode, mPhone1, mConsultFee};
+        if (mServCatagory.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.pharmacist))) {
+            fields = new EditText[]{mExperience, mQualification,
+                    mName, mLoc, mPinCode, mPhone1};
         }
-        if(Utility.areEditFieldsEmpty(getActivity(), fields)) {
+        if (Utility.areEditFieldsEmpty(getActivity(), fields)) {
             return false;
         }
 
@@ -400,7 +321,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
         String category = mServCatagory.getSelectedItem().toString();
         if (category.equalsIgnoreCase(getString(R.string.select_category))) {
-            //UIUtility.showAlert(this, "", "Please select service category.");
             View selectedView = mServCatagory.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
                 TextView selectedTextView = (TextView) selectedView;
@@ -414,7 +334,6 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         String spec = mSpeciality.getSelectedItem().toString();
         if (spec.equalsIgnoreCase(getString(R.string.select_speciality)) ||
                 spec.equals(getString(R.string.other))) {
-            //UIUtility.showAlert(this, "", "Please select speciality.");
             View selectedView = mSpeciality.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
                 TextView selectedTextView = (TextView) selectedView;
@@ -526,16 +445,14 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mEmailId.setText("");
         mStartTime.setText(R.string.start_time);
         mEndTime.setText(R.string.end_time);
-        //mWeeklyOff.setSelected(false);
         mServPtType.setSelected(false);
         mConsultFee.setText("");
         mMultiSpinnerDays.setText(getString(R.string.select_days));
-        mNotes.setText("");
     }
 
     public void registerDone(View view) {
         if (addNewWorkPlace()) {
-            ServProvSignUpActivity activity = (ServProvSignUpActivity) getActivity();
+            ServProvWorkInfoActivity activity = (ServProvWorkInfoActivity) getActivity();
             activity.saveData();
         }
     }
@@ -547,13 +464,8 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SIGNUP);
         if (Utility.doServiceAction(getActivity(), mConnection, Context.BIND_AUTO_CREATE)) {
-            //Utility.showProgress(getActivity(), mFormView, mProgressView, true);
             Utility.showProgressDialog(getActivity(), true);
         }
-/*
-        SaveServiceData task = new SaveServiceData(this);
-        task.execute((Void) null);
-*/
     }
 
     @Override
@@ -577,162 +489,23 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
                 }
             });
         }
-        //Utility.showProgress(getActivity(), mFormView, mProgressView, false);
         Utility.showProgressDialog(getActivity(), false);
     }
 
     private void getSpecialitiesDone(Bundle data) {
-        //Utility.showProgress(getActivity(), mFormView, mProgressView, false);
         Utility.showProgressDialog(getActivity(), false);
         mSpecialityList = data.getStringArrayList("specialities");
         if (mSpecialityList == null) {
             mSpecialityList = new ArrayList<>();
         }
         mSpecialityList.add(0, getString(R.string.select_speciality));
-        if(!mSpecialityList.contains(getString(R.string.other))) {
+        if (!mSpecialityList.contains(getString(R.string.other))) {
             mSpecialityList.add(getString(R.string.other));
         }
-        //Utility.setNewSpec(getActivity(), list, mSpeciality);
         Utility.setNewSpinner(getActivity(), mSpecialityList, mSpeciality, null);
     }
 
     public void onBackPressed() {
         mConnection.setBound(false);
-        //startActivity(getIntent());
-        //getActivity().onBackPressed();
     }
-
-    /*
-    protected void printSelectedDays() {
-        if (selections[0]) {
-            setupAllDaysSelected();
-            return;
-        }
-        int i = 1;
-        selectedDays = getString(R.string.select_days);
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays = options[i++].toString();
-                break;
-            }
-        }
-        for (; i < options.length; i++) {
-            Log.i("ME", options[i] + " selected: " + selections[i]);
-
-            if (selections[i]) {
-                selectedDays += "," + options[i].toString();
-            }
-        }
-    }
-
-    private void setupSelection() {
-        String[] selectedDays = mMultiSpinnerDays.getText().toString().split(",");
-        selections[0] = false;
-        for (String d : selectedDays) {
-            selections[getDayIndex(d)] = true;
-        }
-    }
-
-    private int getDayIndex(String day) {
-        for (int i = 0; i < options.length; i++) {
-            if (day.equals(options[i])) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private void setupAllDaysSelected() {
-        selections[0] = false;
-        selectedDays = options[1].toString();
-        for (int i = 2; i < options.length; i++) {
-            selectedDays += "," + options[i];
-        }
-    }*/
-
-    /*public void onPrepareDialog(int id, Dialog dialog) {
-        if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-            setupSelection();
-        }
-    }
-
-    public Dialog onCreateDialog(int id) {
-        return new AlertDialog.Builder(getActivity())
-                .setTitle("Available Days")
-                .setMultiChoiceItems(options, selections, new DialogSelectionClickHandler())
-                .setPositiveButton("OK", new DialogButtonClickHandler())
-                .create();
-    }*/
-
-    /*public class ButtonClickHandler implements View.OnClickListener {
-        public void onClick(View view) {
-            if (!mMultiSpinnerDays.getText().equals(getString(R.string.select_days))) {
-                setupSelection();
-            }
-            getActivity().showDialog(0);
-        }
-    }
-
-    public class DialogSelectionClickHandler implements DialogInterface.OnMultiChoiceClickListener {
-        public void onClick(DialogInterface dialog, int clicked, boolean selected) {
-            if (options[clicked].toString().equalsIgnoreCase("All Days")) {
-                for (CharSequence option : options) {
-                    Log.i("ME", option + " selected: " + selected);
-                }
-            } else {
-                Log.i("ME", options[clicked] + " selected: " + selected);
-            }
-        }
-    }
-
-    public class DialogButtonClickHandler implements DialogInterface.OnClickListener {
-        public void onClick(DialogInterface dialog, int clicked) {
-            switch (clicked) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    printSelectedDays();
-                    mMultiSpinnerDays.setText(selectedDays);
-                    break;
-            }
-        }
-    }*/
-
-/*
-    */
-/**
- * Defines callbacks for service binding, passed to bindService()
- *//*
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        private Messenger mService;
-        private boolean mBound;
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            mService = new Messenger(service);
-            mBound = true;
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            bundle.putParcelable("service", LoginHolder.servLoginRef);
-            Message msg = Message.obtain(null, MappService.DO_SIGNUP);
-            msg.replyTo = new Messenger(mResponseHandler);
-            msg.setData(bundle);
-
-            try {
-                mService.send(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mService = null;
-            mBound = false;
-        }
-    };
-*/
 }

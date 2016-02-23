@@ -20,7 +20,7 @@ import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
-public class ServProvPersonalInfo extends FragmentActivity implements ResponseHandler {
+public class ServProvPersonalInfoActivity extends FragmentActivity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
     private TextView mEmailID;

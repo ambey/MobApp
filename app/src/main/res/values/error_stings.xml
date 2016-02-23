@@ -39,4 +39,7 @@
     <string name="error_no_matching_result">No result found for your search.</string>
     <string name="error_no_available_timeslot">Sorry! No timeslot is available on this day.</string>
     <string name="error_no_workplace_found">No work place is added yet. Please add a work place.</string>
+    <string name="error_only_digit">Only numbers are allowed</string>
+    <string name="error_please_select">Please Select</string>
+    <string name="error_pwd_length">Password should be of six characters</string>
 </resources>

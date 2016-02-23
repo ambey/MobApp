@@ -41,6 +41,7 @@ public class WorkPlace implements Parcelable {
     private int endTime;//as minutes
     private int idServicePoint;
     private int idService;
+    private String notes;
 
     public WorkPlace() {
         signInData = new SignInData();
@@ -71,6 +72,15 @@ public class WorkPlace implements Parcelable {
         idService = source.readInt();
 
         city = new City(source);
+        notes = source.readString();
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public int getIdServicePoint() {
@@ -100,7 +110,7 @@ public class WorkPlace implements Parcelable {
 
         dest.writeStringArray(new String[]{
                 name, location, pincode, phone, altPhone, emailId,
-                servPointType, servCategory, speciality, qualification, workingDays
+                servPointType, servCategory, speciality, qualification, workingDays, notes
         });
 
         dest.writeFloat(experience);

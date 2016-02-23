@@ -44,6 +44,7 @@ public class ServProvDetailsActivity extends Activity {
         TextView lbl = (TextView) findViewById(R.id.textview);
         TextView textViewFees = (TextView) findViewById(R.id.textviewFees);
         TextView sptType = (TextView) findViewById(R.id.textviewClinicName);
+        TextView notes = (TextView) findViewById(R.id.textViewNotes);
 /*
         TextView textViewReviews = (TextView) findViewById(R.id.textviewReviews);
 */
@@ -84,6 +85,7 @@ public class ServProvDetailsActivity extends Activity {
         textViewDocQualification.setText(mServProv.getQualification());
         textViewFees.setText(String.format("%.2f", spsspt.getConsultFee()));
         sptType.setText(String.format("%s %s", spsspt.getServPointType(), getString(R.string.nm)));
+        notes.setText(spsspt.getNotes());
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
         if (Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {

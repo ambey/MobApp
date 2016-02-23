@@ -35,6 +35,7 @@ public class ServProvHasServPt implements Parcelable {
     private ArrayList<Appointment> appointments;
     private ServicePoint servicePoint;
     private String servProvPhone;
+    private String notes;
 
     public ServProvHasServPt() {
         service = new Service();
@@ -55,6 +56,15 @@ public class ServProvHasServPt implements Parcelable {
         workingDays = source.readString();
         service = new Service(source);
         servicePoint = new ServicePoint(source);
+        notes = source.readString();
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public ServicePoint getServicePoint() {
@@ -170,6 +180,7 @@ public class ServProvHasServPt implements Parcelable {
         dest.writeString(workingDays);
         service.writeToParcel(dest, flags);
         servicePoint.writeToParcel(dest, flags);
+        dest.writeString(notes);
     }
 
 }

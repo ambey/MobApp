@@ -132,7 +132,7 @@ public class PatientsHomeScreenActivity extends Activity {
         final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
         if (buttonHandler.isBackPressed()) {
             buttonHandler.setBackPressed(false);
-            finish();
+            //finish();
             moveTaskToBack(true);
         } else {
             buttonHandler.setBackPressed(true);

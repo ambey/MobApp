@@ -230,16 +230,23 @@
                     android:layout_marginStart="2dp"
                     android:hint="@string/value"
                     android:textSize="15sp" />
-
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textViewNotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutConsultFees"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:hint="@string/notes" />
 
             <Button
                 android:id="@+id/buttonBookAppointment"
                 style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/layoutConsultFees"
+                android:layout_below="@+id/textViewNotes"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:onClick="bookAppointment"
