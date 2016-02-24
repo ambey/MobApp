@@ -5,8 +5,8 @@
     <string name="signUpPatient">Sign Up (Only Patients)</string>
     <string name="areYouServProv">Are You A Medical Service Provider?</string>
 
-    <string name="fnm">First Name *</string>
-    <string name="lnm">Last Name *</string>
+    <string name="fnm">First Name*</string>
+    <string name="lnm">Last Name*</string>
     <string name="cellPhoneNo">Cell Phone Number *</string>
     <string name="passWdCon">Confirm Password *</string>
     <string name="address">Address</string>

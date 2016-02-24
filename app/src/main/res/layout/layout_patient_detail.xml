@@ -75,7 +75,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:layout_weight="0.90"
-                android:text="@string/dob_label" />
+                android:text="@string/dob_label"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/textViewDOB"
@@ -97,7 +98,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:layout_weight="0.90"
+                android:layout_weight="0.85"
                 android:background="@drawable/spinner"
                 android:entries="@array/gender_type"
                 android:focusable="true"
@@ -136,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:layout_weight="0.90"
+                android:layout_weight="0.85"
                 android:hint="@string/weight"
                 android:inputType="numberDecimal"
                 android:maxLength="3" />
@@ -182,7 +183,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -253,7 +255,8 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:padding="5dp"
-                android:prompt="@string/state" />
+                android:prompt="@string/state"
+                android:layout_marginTop="12dp"/>
 
         </LinearLayout>
 

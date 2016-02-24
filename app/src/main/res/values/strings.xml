@@ -23,7 +23,7 @@
     <string name="dob">Date of Birth</string>
     <string name="dob_label">Date of Birth:</string>
     <string name="dob_with_format">Date of Birth: (dd/MM/yyyy)</string>
-    <string name="dob_format">dd/MM/yyyy *</string>
+    <string name="dob_format">dd/mm/yyyy *</string>
     <string name="city">City *</string>
     <string name="weekly_off">Weekly Off *</string>
     <string name="country_code">+91</string>
