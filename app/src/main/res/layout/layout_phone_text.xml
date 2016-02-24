@@ -131,7 +131,8 @@
                 android:layout_weight="0.32"
                 android:ems="4"
                 android:hint="@string/std_code"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="5" />
 
             <TextView
                 android:layout_width="0dp"
@@ -147,7 +148,8 @@
                 android:layout_weight="0.66"
                 android:ems="8"
                 android:hint="@string/landline_no"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="10" />
         </LinearLayout>
 
         <EditText

@@ -181,7 +181,9 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             bundle.putParcelable("signInData", signInData);
             mConnection.setAction(MappService.DO_LOGIN);
             mConnection.setData(bundle);
-            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                Utility.showProgressDialog(this, true);
+            }
         } else {
 
             mHandler.postDelayed(new Runnable() {
@@ -199,6 +201,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (action == MappService.DO_LOGIN) {
             loginDone(data);
         }
@@ -240,7 +243,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             }
             startActivity(intent);
         } else {
-            Utility.showMessage(this, R.string.msg_login_failed);
+            //Utility.showMessage(this, R.string.msg_login_failed);
             Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
             startActivity(intent);
             /*mPasswordView.setError(getString(R.string.error_incorrect_password));

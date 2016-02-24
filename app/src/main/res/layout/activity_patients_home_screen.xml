@@ -20,7 +20,7 @@
             android:layout_width="100dp"
             android:layout_height="80dp"
             android:clickable="true"
-            android:onClick="enlargeImg"
+            android:contentDescription="@string/patient"
             android:src="@drawable/patient" />
 
         <LinearLayout

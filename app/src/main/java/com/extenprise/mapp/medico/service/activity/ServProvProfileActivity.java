@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -101,6 +102,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     private EditText mOldPwd;
     private boolean isPwdCorrect;
+    private ImageButton mEditWpPencil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +145,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
         mListViewWP = (ListView) findViewById(R.id.workDetailListView);
+        mEditWpPencil = (ImageButton) findViewById(R.id.textViewAddNewWork);
 
         TextView mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
         TextView mMobNo = (TextView) findViewById(R.id.editTextMobNum);
@@ -196,6 +199,16 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         //Get work place mSpecialityList from server
         sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
+
+        //Getting speciality list...
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        SearchServProvForm mForm = new SearchServProvForm();
+        mForm.setCategory(mCategory);
+        bundle.putParcelable("form", mForm);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_GET_SPECIALITY);
+        Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
     }
 
 /*
@@ -1156,8 +1169,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mImgView.setImageResource(R.drawable.dr_avatar);
             ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
             serviceProvider.setPhoto(null);
-            //mImgView.setImageDrawable(getDrawable(R.drawable.dr_avatar)); require API level 21
-            mImgView.setImageBitmap(null);
         } else {
             setPhoto();
         }
@@ -1195,14 +1206,15 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Utility.showMessage(this, R.string.msg_upload_photo);
             ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
             serviceProvider.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-        } else {
-            setPhoto();
+            mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         }
+        setPhoto();
     }
 
     private void getWorkPlaceListDone(Bundle data) {
         if (data.getBoolean("status")) {
             //Utility.showRegistrationAlert(this, "", "Problem in loading workplaces");
+            mEditWpPencil.setVisibility(View.VISIBLE);
             mWorkPlaceList = data.getParcelableArrayList("workPlaceList");
             WorkPlaceListAdapter adapter = new WorkPlaceListAdapter(this,
                     R.layout.layout_wp_list_item, mWorkPlaceList);
@@ -1233,20 +1245,13 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             registerForContextMenu(mListViewWP);
             Utility.showMessage(this, R.string.work_place_details);
 
-            //Getting speciality list...
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-            SearchServProvForm mForm = new SearchServProvForm();
-            mForm.setCategory(mCategory);
-            bundle.putParcelable("form", mForm);
-            mConnection.setData(bundle);
-            mConnection.setAction(MappService.DO_GET_SPECIALITY);
-            Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
-
             //mListViewWP.setOnCreateContextMenuListener(this);
-        } /*else {
+        } else {
+            mEditWpPencil.setVisibility(View.GONE);
+            /*else {
             Utility.showMessage(this, R.string.some_error);
         }*/
+        }
         //Utility.showProgress(this, mFormView, mProgressView, false);
     }
 

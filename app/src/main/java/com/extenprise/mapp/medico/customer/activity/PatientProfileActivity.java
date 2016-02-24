@@ -200,35 +200,35 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 */
 
-    public void updateProfile(View v) {
+    public void updateProfile(View view) {
         boolean valid = true;
         View focusView = null;
-        String msg = getString(R.string.error_please_select);
-        LinearLayout layout = mContLay;
+        String msg = "";
+        int v = -1;
 
         if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextPinCode,
                 mSpinCity, mEditTextLoc})) {
             valid = false;
-            layout = mAddrLayout;
+            v = 1;
         }
-
         if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextWeight,
                 mEditTextCustomerLName, mEditTextCustomerFName})) {
             valid = false;
+            v = 0;
         }
 
         String str = getString(R.string.state);
         if (mSpinState.getSelectedItem().toString().equals(str)) {
             Utility.setSpinError(mSpinState, getString(R.string.error_please_select) + " " + str);
-            msg += " " + str;
-            layout = mAddrLayout;
+            msg = getString(R.string.error_please_select) + " " + str;
+            v = 1;
         }
 
         if (Validator.isPinCodeValid(mEditTextPinCode.getText().toString().trim())) {
             mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
             focusView = mEditTextPinCode;
             valid = false;
-            layout = mAddrLayout;
+            v = 1;
         }
 
         int nmValid = Validator.isNameValid(mSpinCity.getText().toString().trim());
@@ -236,7 +236,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mSpinCity.setError(getString(nmValid));
             focusView = mSpinCity;
             valid = false;
-            layout = mAddrLayout;
+            v = 1;
         }
 
         double value = 0.0;
@@ -249,13 +249,15 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mEditTextWeight.setError(getString(R.string.error_invalid_weight));
             focusView = mEditTextWeight;
             valid = false;
+            v = 0;
         }
 
         str = getString(R.string.gender);
         if (mSpinGender.getSelectedItem().toString().equals(str)) {
             Utility.setSpinError(mSpinGender, getString(R.string.error_please_select) +
                     " " + str);
-            msg += " " + str;
+            msg = getString(R.string.error_please_select) + " " + str;
+            v = 0;
         }
 
         String dob = mTextViewDOB.getText().toString().trim();
@@ -263,10 +265,12 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
             valid = false;
+            v = 0;
         } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) < 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
+            v = 0;
         }
 
         String emailId = mEditTextCustomerEmail.getText().toString().trim();
@@ -274,6 +278,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEditTextCustomerEmail;
             valid = false;
+            v = 0;
         }
 
         nmValid = Validator.isNameValid(mEditTextCustomerLName.getText().toString().trim());
@@ -281,6 +286,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mEditTextCustomerLName.setError(getString(nmValid));
             focusView = mEditTextCustomerLName;
             valid = false;
+            v = 0;
         }
 
         nmValid = Validator.isNameValid(mEditTextCustomerFName.getText().toString().trim());
@@ -288,23 +294,26 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mEditTextCustomerFName.setError(getString(nmValid));
             focusView = mEditTextCustomerFName;
             valid = false;
+            v = 0;
         }
 
+        if (v != -1) {
+            if (v == 0) {
+                Utility.collapse(mAddrLayout, true);
+                Utility.collapse(mContLay, (mContLay.getVisibility() == View.VISIBLE));
+            } else {
+                Utility.collapse(mContLay, true);
+                Utility.collapse(mAddrLayout, (mAddrLayout.getVisibility() == View.VISIBLE));
+            }
+        }
         if (!valid) {
             if (focusView != null) {
                 focusView.requestFocus();
             }
-            if (layout != null) {
-                layout.setVisibility(View.VISIBLE);
-            }
             return;
         }
-
-        if (!msg.equals(getString(R.string.error_please_select))) {
+        if (!msg.equals("")) {
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-            if (layout != null) {
-                layout.setVisibility(View.VISIBLE);
-            }
             return;
         }
 
@@ -372,12 +381,14 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             Utility.showMessage(this, R.string.msg_upload_photo);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
             mCust.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-        } else {
-            if (mCust.getPhoto() != null) {
-                /*mImgView.setBackgroundResource(0);*/
-                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
-                        mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
-            }
+        }
+        setPhoto();
+    }
+
+    private void setPhoto() {
+        if (mCust.getPhoto() != null) {
+            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
         }
     }
 
@@ -393,10 +404,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             //mImgView.setImageDrawable(getDrawable(R.drawable.patient)); require API level 21
             //mImgView.setImageBitmap(null);
         } else {
-            if (mCust.getPhoto() != null) {
-                mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
-                        mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
-            }
+            setPhoto();
         }
     }
 
