@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,7 +70,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private ImageView mImgView;
 
     private Bitmap mImgCopy;
-    private boolean imageChanged = false;
+    //private boolean imageChanged = false;
     private String mPhone;
 
     @Override
@@ -83,7 +82,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mPhone = "";
         mContLay = (LinearLayout) findViewById(R.id.contLay);
@@ -126,7 +125,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!Validator.isPasswordValid(mEditTextPasswd.getText().toString().trim())) {
+                    String pwd = mEditTextPasswd.getText().toString().trim();
+                    if (!Validator.isPasswordValid(pwd) && !TextUtils.isEmpty(pwd)) {
                         mEditTextPasswd.setError(getString(R.string.error_pwd_length));
                     }
                 }
@@ -137,7 +137,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!mEditTextPasswd.getText().toString().trim().equals(mEditTextConPasswd.getText().toString().trim())) {
+                    String pwd = mEditTextConPasswd.getText().toString().trim();
+                    if (!mEditTextPasswd.getText().toString().trim().equals(pwd) && !TextUtils.isEmpty(pwd)) {
                         mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
                     }
                 }

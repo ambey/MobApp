@@ -1,5 +1,7 @@
 package com.extenprise.mapp.medico.util;
 
+import android.text.TextUtils;
+
 import com.extenprise.mapp.medico.R;
 
 /**
@@ -36,6 +38,9 @@ public abstract class Validator {
     }
 
     public static int isNameValid(String name) {
+        if (TextUtils.isEmpty(name)) {
+            return R.string.error_field_required;
+        }
         char[] carray = name.toCharArray();
         for (char c : carray) {
             if (!Character.isLetter(c) && !Character.isSpaceChar(c)) {

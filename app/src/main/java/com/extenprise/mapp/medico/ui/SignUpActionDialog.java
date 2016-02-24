@@ -135,18 +135,20 @@ public class SignUpActionDialog extends DialogFragment {
                 }
             }
         }
-        String lname = mLName.getText().toString().trim();
-        if (TextUtils.isEmpty(lname)) {
-            mLName.setError(getString(R.string.error_field_required));
+
+        int msg = Validator.isNameValid(mLName.getText().toString().trim());
+        if (msg != -1) {
+            mLName.setError(getString(msg));
             focusView = mLName;
             cancel = true;
         }
-        String fname = mFName.getText().toString().trim();
-        if (TextUtils.isEmpty(fname)) {
-            mFName.setError(getString(R.string.error_field_required));
+        msg = Validator.isNameValid(mFName.getText().toString().trim());
+        if (msg != -1) {
+            mFName.setError(getString(msg));
             focusView = mFName;
             cancel = true;
         }
+
         if (cancel) {
             focusView.requestFocus();
         }

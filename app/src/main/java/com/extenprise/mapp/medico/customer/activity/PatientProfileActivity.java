@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.data.Customer;
@@ -200,47 +201,64 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 */
 
     public void updateProfile(View v) {
-        EditText[] fields = {mEditTextCustomerFName, mEditTextCustomerLName, mEditTextWeight,
-                mEditTextLoc, mEditTextPinCode, mSpinCity};
-        if (Utility.areEditFieldsEmpty(this, fields)) {
-            return;
-        }
-
         boolean valid = true;
         View focusView = null;
+        String msg = getString(R.string.error_please_select);
+        LinearLayout layout = mContLay;
 
-        /*if (!Validator.isOnlyAlpha(fName)) {
-            mEditTextCustomerFName.setError(getString(R.string.error_only_alpha));
-            focusView = mEditTextCustomerFName;
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextPinCode,
+                mSpinCity, mEditTextLoc})) {
+            valid = false;
+            layout = mAddrLayout;
+        }
+
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextWeight,
+                mEditTextCustomerLName, mEditTextCustomerFName})) {
             valid = false;
         }
-        if (!Validator.isOnlyAlpha(lName)) {
-            mEditTextCustomerLName.setError(getString(R.string.error_only_alpha));
-            focusView = mEditTextCustomerLName;
-            valid = false;
-        }*/
 
-        int nmValid = Validator.isNameValid(mEditTextCustomerFName.getText().toString().trim());
+        String str = getString(R.string.state);
+        if (mSpinState.getSelectedItem().toString().equals(str)) {
+            Utility.setSpinError(mSpinState, getString(R.string.error_please_select) + " " + str);
+            msg += " " + str;
+            layout = mAddrLayout;
+        }
+
+        if (Validator.isPinCodeValid(mEditTextPinCode.getText().toString().trim())) {
+            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mEditTextPinCode;
+            valid = false;
+            layout = mAddrLayout;
+        }
+
+        int nmValid = Validator.isNameValid(mSpinCity.getText().toString().trim());
         if (nmValid != -1) {
-            mEditTextCustomerFName.setError(getString(nmValid));
-            focusView = mEditTextCustomerFName;
+            mSpinCity.setError(getString(nmValid));
+            focusView = mSpinCity;
             valid = false;
+            layout = mAddrLayout;
         }
-        nmValid = Validator.isNameValid(mEditTextCustomerLName.getText().toString().trim());
-        if (nmValid != -1) {
-            mEditTextCustomerLName.setError(getString(nmValid));
-            focusView = mEditTextCustomerLName;
+
+        double value = 0.0;
+        try {
+            value = Double.parseDouble(mEditTextWeight.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        if (value <= 0.0) {
+            mEditTextWeight.setError(getString(R.string.error_invalid_weight));
+            focusView = mEditTextWeight;
             valid = false;
         }
 
-        String emailId = mEditTextCustomerEmail.getText().toString().trim();
-        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
-            mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
-            focusView = mEditTextCustomerEmail;
-            valid = false;
+        str = getString(R.string.gender);
+        if (mSpinGender.getSelectedItem().toString().equals(str)) {
+            Utility.setSpinError(mSpinGender, getString(R.string.error_please_select) +
+                    " " + str);
+            msg += " " + str;
         }
 
-        String dob = mTextViewDOB.getText().toString();
+        String dob = mTextViewDOB.getText().toString().trim();
         if (TextUtils.isEmpty(dob)) {
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
@@ -251,20 +269,42 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             valid = false;
         }
 
-        if (Validator.isPinCodeValid(mEditTextPinCode.getText().toString().trim())) {
-            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
-            focusView = mEditTextPinCode;
+        String emailId = mEditTextCustomerEmail.getText().toString().trim();
+        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
+            mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
+            focusView = mEditTextCustomerEmail;
             valid = false;
         }
 
-        if (!Validator.isOnlyAlpha(mSpinCity.getText().toString().trim())) {
-            mSpinCity.setError(getString(R.string.error_only_alpha));
-            focusView = mSpinCity;
+        nmValid = Validator.isNameValid(mEditTextCustomerLName.getText().toString().trim());
+        if (nmValid != -1) {
+            mEditTextCustomerLName.setError(getString(nmValid));
+            focusView = mEditTextCustomerLName;
             valid = false;
         }
 
-        if (!valid && focusView != null) {
-            focusView.requestFocus();
+        nmValid = Validator.isNameValid(mEditTextCustomerFName.getText().toString().trim());
+        if (nmValid != -1) {
+            mEditTextCustomerFName.setError(getString(nmValid));
+            focusView = mEditTextCustomerFName;
+            valid = false;
+        }
+
+        if (!valid) {
+            if (focusView != null) {
+                focusView.requestFocus();
+            }
+            if (layout != null) {
+                layout.setVisibility(View.VISIBLE);
+            }
+            return;
+        }
+
+        if (!msg.equals(getString(R.string.error_please_select))) {
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+            if (layout != null) {
+                layout.setVisibility(View.VISIBLE);
+            }
             return;
         }
 
