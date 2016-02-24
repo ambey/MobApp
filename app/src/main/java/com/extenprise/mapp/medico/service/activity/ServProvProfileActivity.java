@@ -199,16 +199,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
         //Get work place mSpecialityList from server
         sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
-
-        //Getting speciality list...
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        SearchServProvForm mForm = new SearchServProvForm();
-        mForm.setCategory(mCategory);
-        bundle.putParcelable("form", mForm);
-        mConnection.setData(bundle);
-        mConnection.setAction(MappService.DO_GET_SPECIALITY);
-        Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
     }
 
 /*
@@ -1252,6 +1242,15 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Utility.showMessage(this, R.string.some_error);
         }*/
         }
+        //Getting speciality list...
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        SearchServProvForm mForm = new SearchServProvForm();
+        mForm.setCategory(mCategory);
+        bundle.putParcelable("form", mForm);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_GET_SPECIALITY);
+        Utility.doServiceAction(ServProvProfileActivity.this, mConnection, BIND_AUTO_CREATE);
         //Utility.showProgress(this, mFormView, mProgressView, false);
     }
 

@@ -217,7 +217,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             v = 0;
         }
 
-        String str = getString(R.string.state);
+        String str = getString(R.string.state_lbl);
         if (mSpinState.getSelectedItem().toString().equals(str)) {
             Utility.setSpinError(mSpinState, getString(R.string.error_please_select) + " " + str);
             msg = getString(R.string.error_please_select) + " " + str;
@@ -252,7 +252,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             v = 0;
         }
 
-        str = getString(R.string.gender);
+        str = getString(R.string.gender_lbl);
         if (mSpinGender.getSelectedItem().toString().equals(str)) {
             Utility.setSpinError(mSpinGender, getString(R.string.error_please_select) +
                     " " + str);
@@ -300,7 +300,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (v != -1) {
             if (v == 0) {
                 Utility.collapse(mAddrLayout, true);
-                Utility.collapse(mContLay, (mContLay.getVisibility() == View.VISIBLE));
+                Utility.collapse(mContLay, false);
             } else {
                 Utility.collapse(mContLay, true);
                 Utility.collapse(mAddrLayout, (mAddrLayout.getVisibility() == View.VISIBLE));

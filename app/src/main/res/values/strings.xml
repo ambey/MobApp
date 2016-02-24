@@ -260,5 +260,6 @@
     <string name="hyphen">-</string>
     <string name="std_code">STD</string>
     <string name="landline_no">Landline Number</string>
-
+    <string name="gender_lbl">Gender *</string>
+    <string name="state_lbl">State *</string>
 </resources>

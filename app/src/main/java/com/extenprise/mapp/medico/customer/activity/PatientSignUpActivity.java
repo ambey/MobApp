@@ -432,20 +432,23 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         String msg = "";
         int v = -1;
 
-        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextPinCode, mSpinCity, mEditTextLoc})) {
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextPinCode,
+                mSpinCity, mEditTextLoc})) {
             valid = false;
             v = 1;
         }
-
-        EditText[] fields = {mEditTextWeight,
-                mEditTextCustomerLName, mEditTextCustomerFName, mEditTextConPasswd,
-                mEditTextPasswd, mEditTextCellphone};
-        if (Utility.areEditFieldsEmpty(this, fields)) {
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextWeight,
+                mEditTextCustomerLName, mEditTextCustomerFName})) {
             valid = false;
             v = 0;
         }
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextConPasswd,
+                mEditTextPasswd, mEditTextCellphone})) {
+            valid = false;
+            v = -1;
+        }
 
-        String str = getString(R.string.state);
+        String str = getString(R.string.state_lbl);
         if (mSpinState.getSelectedItem().toString().equals(str)) {
             Utility.setSpinError(mSpinState, getString(R.string.error_please_select) + " " + str);
             msg = getString(R.string.error_please_select) + " " + str;
@@ -480,7 +483,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             v = 0;
         }
 
-        str = getString(R.string.gender);
+        str = getString(R.string.gender_lbl);
         if (mSpinGender.getSelectedItem().toString().equals(str)) {
             Utility.setSpinError(mSpinGender, getString(R.string.error_please_select) +
                     " " + str);
@@ -551,10 +554,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         if (v != -1) {
             if (v == 0) {
                 Utility.collapse(mAddrLayout, true);
-                Utility.collapse(mContLay, (mContLay.getVisibility() == View.VISIBLE));
+                Utility.collapse(mContLay, false);
             } else {
                 Utility.collapse(mContLay, true);
-                Utility.collapse(mAddrLayout, (mAddrLayout.getVisibility() == View.VISIBLE));
+                Utility.collapse(mAddrLayout, false);
             }
         }
         if (!valid) {

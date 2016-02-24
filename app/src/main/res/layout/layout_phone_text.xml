@@ -158,7 +158,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:imeActionId="@+id/submitButton"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:maxLength="40" />
     </LinearLayout>
 
     <Button
