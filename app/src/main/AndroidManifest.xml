@@ -332,8 +332,19 @@
             android:name=".service.activity.ServProvPersonalInfoActivity"
             android:label="@string/title_activity_serv_prov_personal_info"></activity>
         <activity
-            android:name=".service.activity.ServProvWorkInfoActivity"
-            android:label="@string/title_activity_serv_prov_work_info">
+            android:name=".service.activity.WorkHoursActivity"
+            android:label="@string/title_activity_work_hours"
+            android:parentActivityName=".service.activity.ServProvProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.extenprise.mapp.medico.service.activity.ServProvProfileActivity" />
+            <!--
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
+
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
+            -->
         </activity>
     </application>
 

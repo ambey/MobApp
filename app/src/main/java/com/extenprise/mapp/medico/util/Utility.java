@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -784,6 +785,49 @@ public abstract class Utility {
             }
         });
         return builder;
+    }
+
+    public static boolean onPhotoActivityResult(Context context, ImageView imageView, int requestCode, int resultCode, Intent data) {
+        boolean imageChanged = false;
+        try {
+            Uri selectedImage;
+            Resources resources = context.getResources();
+            // When an Image is picked
+            if (resultCode == Activity.RESULT_OK) {
+                imageView.setBackgroundResource(0);
+                if (data == null) {
+                    String photoFileName = Utility.photoFileName;
+                    //File photo = new File(photoFileName);
+                    selectedImage = Uri.fromFile(new File(photoFileName));
+                    imageView.setImageURI(selectedImage);
+                    imageChanged = true;
+                } else {
+                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
+                        // Get the Image from data
+                        selectedImage = data.getData();
+                        imageView.setImageURI(selectedImage);
+                        imageChanged = true;
+                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        if (bitmap != null) {
+                            imageView.setImageBitmap(Utility.getBitmapFromBytes(Utility.getBytesFromBitmap(bitmap),
+                                    imageView.getLayoutParams().width, imageView.getLayoutParams().height));
+                            selectedImage = Utility.getImageUri(context, bitmap);
+                        } else {
+                            selectedImage = data.getData();
+                        }
+                        imageView.setImageURI(selectedImage);
+                        imageChanged = true;
+                    } else {
+                        Utility.showMessage(context, R.string.error_img_not_picked);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utility.showMessage(context, R.string.some_error);
+        }
+        return imageChanged;
     }
 
     private Drawable resize(Activity activity, Drawable image) {

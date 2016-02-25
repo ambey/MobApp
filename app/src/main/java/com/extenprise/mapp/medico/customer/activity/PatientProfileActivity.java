@@ -3,16 +3,12 @@ package com.extenprise.mapp.medico.customer.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -394,7 +390,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
-            mCust.setPhoto(null);
+            if (mCust != null) {
+                mCust.setPhoto(null);
+            }
         }
         setPhoto();
     }
@@ -540,7 +538,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                 }
                             } else {
                                 Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-                                customer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                                if (customer != null) {
+                                    customer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                                }
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
                                 bundle.putParcelable("customer", customer);
@@ -581,7 +581,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         String oldpwd = mOldPwd.getText().toString().trim();
         if (Validator.isPasswordValid(oldpwd)) {
             Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            customer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
+            if (customer != null) {
+                customer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
+            }
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
             bundle.putParcelable("customer", customer);
@@ -708,75 +710,16 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        try {
-            boolean isImageChanged = false;
-            Uri selectedImage = null;
-            Resources resources = getResources();
-            int requestEdit = resources.getInteger(R.integer.request_edit);
-            // When an Image is picked
-            if (resultCode == Activity.RESULT_OK) {
-                mImgView.setBackgroundResource(0);
-                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
-                    String photoFileName = Utility.photoFileName;
-                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
-                        photoFileName = Utility.photoEditFileName;
-                    }
-                    //File photo = new File(photoFileName);
-                    selectedImage = Uri.fromFile(new File(photoFileName));
-                    mImgView.setImageURI(selectedImage);
-                    isImageChanged = true;
-                } else {
-                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
-                        // Get the Image from data
-                        selectedImage = data.getData();
-                        mImgView.setImageURI(selectedImage);
-                        isImageChanged = true;
-                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                        if (bitmap != null) {
-                            mImgView.setImageBitmap(bitmap);
-                            selectedImage = Utility.getImageUri(this, bitmap);
-                        } else {
-                            selectedImage = data.getData();
-                        }
-                        mImgView.setImageURI(selectedImage);
-                        isImageChanged = true;
-                    } else {
-                        Utility.showMessage(this, R.string.error_img_not_picked);
-                    }
-                }
-            } else if (requestCode == requestEdit) {
-                isImageChanged = true;
+        if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+            bundle.putParcelable("customer", getUpdateData(new Customer()));
+            mConnection.setData(bundle);
+            mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
+            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                //Utility.showProgress(this, mFormView, mProgressView, true);
+                Utility.showProgressDialog(this, true);
             }
-            if (isImageChanged) {
-                if (requestCode != requestEdit) {
-                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
-                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
-                    try {
-                        startActivityForResult(editIntent, requestEdit);
-                    } catch (ActivityNotFoundException e) {
-                        Utility.showMessage(this, R.string.msg_no_photo_editor);
-                    }
-                } else {
-                    /*Customer c = new Customer();
-                    c.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));*/
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                    bundle.putParcelable("customer", getUpdateData(new Customer()));
-                    mConnection.setData(bundle);
-                    mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
-                    if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-                        //Utility.showProgress(this, mFormView, mProgressView, true);
-                        Utility.showProgressDialog(this, true);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utility.showMessage(this, R.string.some_error);
         }
     }
 
@@ -795,8 +738,10 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         Date datePicked = Utility.getStrAsDate(date, "dd/MM/yyyy");
         if (!Utility.isDateAfterToday(datePicked)) {
             Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
-                    Utility.getAge(customer.getDob())));
+            if (customer != null) {
+                mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
+                        Utility.getAge(customer.getDob())));
+            }
         }
     }
 

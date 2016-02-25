@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -70,7 +68,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     private Bitmap mImgCopy;
     //private boolean imageChanged = false;
-    private String mPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +80,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        mPhone = "";
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
         findViewById(R.id.buttonEditPersonalInfo).setVisibility(View.GONE);
@@ -98,13 +94,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         mEditTextCellphone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                String lastPhone = WorkingDataStore.getBundle().getString("lastPhone");
                 if (!hasFocus) {
                     String ph = mEditTextCellphone.getText().toString().trim();
                     if (TextUtils.isEmpty(ph)) {
                         mEditTextCellphone.setError(getString(R.string.error_field_required));
                     } else if (!Validator.isPhoneValid(ph)) {
                         mEditTextCellphone.setError(getString(R.string.error_invalid_phone));
-                    } else if (Validator.isPhoneValid(ph) && !mPhone.equals(ph)) {
+                    } else if (Validator.isPhoneValid(ph) && (lastPhone == null || !lastPhone.equals(ph))) {
                         sendRequest(MappService.DO_PHONE_EXIST_CHECK);
                     }
                 }
@@ -155,6 +152,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
+        WorkingDataStore.getBundle().remove("lastPhone");
     }
 
     @Override
@@ -335,67 +333,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        try {
-            boolean isImageChanged = false;
-            Uri selectedImage = null;
-            Resources resources = getResources();
-            int requestEdit = resources.getInteger(R.integer.request_edit);
-            // When an Image is picked
-            if (resultCode == Activity.RESULT_OK) {
-                mImgView.setBackgroundResource(0);
-                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
-                    String photoFileName = Utility.photoFileName;
-                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
-                        photoFileName = Utility.photoEditFileName;
-                    }
-                    //File photo = new File(photoFileName);
-                    selectedImage = Uri.fromFile(new File(photoFileName));
-                    mImgView.setImageURI(selectedImage);
-                    isImageChanged = true;
-                } else {
-                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
-                        // Get the Image from data
-                        selectedImage = data.getData();
-                        mImgView.setImageURI(selectedImage);
-                        isImageChanged = true;
-                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                        if (bitmap != null) {
-                            //mImgView.setImageBitmap(bitmap);
-                            mImgView.setImageBitmap(Utility.getBitmapFromBytes(Utility.getBytesFromBitmap(bitmap),
-                                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
-                            selectedImage = Utility.getImageUri(this, bitmap);
-                        } else {
-                            selectedImage = data.getData();
-                        }
-                        mImgView.setImageURI(selectedImage);
-                        isImageChanged = true;
-                    } else {
-                        Utility.showMessage(this, R.string.error_img_not_picked);
-                    }
-                }
-                if (selectedImage != null) {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                    mImgView.setImageBitmap(Utility.getBitmapFromBytes(Utility.getBytesFromBitmap(bitmap),
-                            mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
-                }
-            } else if (requestCode == requestEdit) {
-                isImageChanged = true;
-            }
-            if (isImageChanged) {
-                if (requestCode != requestEdit) {
-                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
-                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
-                    startActivityForResult(editIntent, requestEdit);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utility.showMessage(this, R.string.some_error);
-        }
+        Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data);
     }
 
     private void setErrorsNull() {
@@ -438,13 +376,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mSpinState;
         }
 
-        if (mSpinGender.getSelectedItem().toString().equals(getString(R.string.gender_lbl))) {
-            Utility.setSpinError(mSpinGender, getString(R.string.error_select_gender));
-            errMsg = R.string.error_select_gender;
-            v = R.string.personalDetails;
-            focusView = mSpinGender;
-        }
-
         String valTxt = mEditTextPinCode.getText().toString().trim();
         if (Validator.isPinCodeValid(valTxt) && !TextUtils.isEmpty(valTxt)) {
             mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
@@ -465,6 +396,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 mSpinCity, mEditTextLoc})) {
             valid = false;
             v = R.string.address;
+        }
+
+        if (mSpinGender.getSelectedItem().toString().equals(getString(R.string.gender_lbl))) {
+            Utility.setSpinError(mSpinGender, getString(R.string.error_select_gender));
+            errMsg = R.string.error_select_gender;
+            v = R.string.personalDetails;
+            focusView = mSpinGender;
         }
 
         double value = 0.0;
@@ -530,13 +468,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mEditTextPasswd.setError(getString(R.string.error_pwd_length));
             focusView = mEditTextPasswd;
             valid = false;
-            v = -1;
         }
         if (!valTxt.equals(mEditTextConPasswd.getText().toString().trim())) {
             mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
             focusView = mEditTextConPasswd;
             valid = false;
-            v = -1;
         }
 
         valTxt = mEditTextCellphone.getText().toString().trim();
@@ -545,14 +481,12 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mEditTextCellphone.requestFocus();
             focusView = mEditTextCellphone;
             valid = false;
-            v = -1;
         }
 
         if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextConPasswd,
                 mEditTextPasswd, mEditTextCellphone})) {
             valid = false;
             focusView = null;
-            v = -1;
         }
 
         if (v == R.string.personalDetails) {
@@ -607,7 +541,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             mEditTextCellphone.setError(null);
-            mPhone = mEditTextCellphone.getText().toString().trim();
+            WorkingDataStore.getBundle().putString("lastPhone", mEditTextCellphone.getText().toString().trim());
         } else {
             mEditTextCellphone.requestFocus();
         }
@@ -629,7 +563,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                             dialog.dismiss();
                             Utility.goTOLoginPage(PatientSignUpActivity.this, LoginActivity.class);
                         }
-                }
+                    }
             );
             //Utility.showAlert(this, "Thanks You..!", "You have successfully registered.\nLogin to your account.");
         }
