@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -317,7 +314,8 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        Utility.onPhotoActivityResult(getActivity(), mImgView, requestCode, resultCode, data);
+       /* //super.onActivityResult(requestCode, resultCode, data);
         try {
             boolean imageChanged = false;
             Uri selectedImage = null;
@@ -361,7 +359,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             if (imageChanged) {
                 if (requestCode != requestEdit) {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
+                    editIntent.setDataAndType(selectedImage, "image*//*");
                     editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
                     getActivity().startActivityForResult(editIntent, requestEdit);
@@ -370,7 +368,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         } catch (Exception e) {
             e.printStackTrace();
             Utility.showMessage(getActivity(), R.string.some_error);
-        }
+        }*/
     }
 
     public void saveData() {

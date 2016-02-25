@@ -36,7 +36,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     TextView mTextLabel;
     ImageView mImgLogo;
 
-    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
+    private MappServiceConnection mConnection;
     private int mLoginType;
     private Handler mHandler = new Handler();
 
@@ -80,6 +80,8 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         }
         mTextLabel = (TextView) findViewById(R.id.textViewlogo);
         mImgLogo = (ImageView) findViewById(R.id.imageViewLogo);
+
+        mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
         //Checking for updates in version of app.
 /*
@@ -181,11 +183,9 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             bundle.putParcelable("signInData", signInData);
             mConnection.setAction(MappService.DO_LOGIN);
             mConnection.setData(bundle);
-            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-                Utility.showProgressDialog(this, true);
-            }
-        } else {
+            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
 
+        } else {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -201,7 +201,6 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
-        Utility.showProgressDialog(this, false);
         if (action == MappService.DO_LOGIN) {
             loginDone(data);
         }
@@ -209,7 +208,6 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     }
 
     protected void loginDone(Bundle msgData) {
-
         boolean success = msgData.getBoolean("status");
         if (success) {
             Intent intent;
@@ -243,11 +241,8 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             }
             startActivity(intent);
         } else {
-            //Utility.showMessage(this, R.string.msg_login_failed);
             Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
             startActivity(intent);
-            /*mPasswordView.setError(getString(R.string.error_incorrect_password));
-            mPasswordView.requestFocus();*/
         }
     }
 }

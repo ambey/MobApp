@@ -5,13 +5,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -998,63 +995,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        try {
-            boolean isImageChanged = false;
-            Uri selectedImage = null;
-            Resources resources = getResources();
-            int requestEdit = resources.getInteger(R.integer.request_edit);
-            // When an Image is picked
-            if (resultCode == Activity.RESULT_OK) {
-                mImgView.setBackgroundResource(0);
-                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
-                    String photoFileName = Utility.photoFileName;
-                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
-                        photoFileName = Utility.photoEditFileName;
-                    }
-                    //File photo = new File(photoFileName);
-                    selectedImage = Uri.fromFile(new File(photoFileName));
-                    mImgView.setImageURI(selectedImage);
-                    isImageChanged = true;
-                } else {
-                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
-                        // Get the Image from data
-                        selectedImage = data.getData();
-                        mImgView.setImageURI(selectedImage);
-                        isImageChanged = true;
-                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                        if (bitmap != null) {
-                            mImgView.setImageBitmap(bitmap);
-                            selectedImage = Utility.getImageUri(this, bitmap);
-                        } else {
-                            selectedImage = data.getData();
-                        }
-                        mImgView.setImageURI(selectedImage);
-                        isImageChanged = true;
-                    } else {
-                        Utility.showMessage(this, R.string.error_img_not_picked);
-                    }
-                }
-            } else if (requestCode == requestEdit) {
-                isImageChanged = true;
-            }
-            if (isImageChanged) {
-                if (requestCode != requestEdit) {
-                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image/*");
-                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
-                    startActivityForResult(editIntent, requestEdit);
-                } else {
-                    mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-                    sendRequest(MappService.DO_UPLOAD_PHOTO, null);
-                }
-                //*mServiceProv.setPhoto(Utility.getBytesFromBitmap(mImgView.getDrawingCache()));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utility.showMessage(this, R.string.some_error);
+        if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
+            mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+            sendRequest(MappService.DO_UPLOAD_PHOTO, null);
         }
     }
 

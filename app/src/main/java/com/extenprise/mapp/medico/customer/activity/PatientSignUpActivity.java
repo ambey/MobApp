@@ -468,11 +468,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mEditTextPasswd.setError(getString(R.string.error_pwd_length));
             focusView = mEditTextPasswd;
             valid = false;
+            v = -1;
         }
         if (!valTxt.equals(mEditTextConPasswd.getText().toString().trim())) {
             mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
             focusView = mEditTextConPasswd;
             valid = false;
+            v = -1;
         }
 
         valTxt = mEditTextCellphone.getText().toString().trim();
@@ -481,12 +483,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mEditTextCellphone.requestFocus();
             focusView = mEditTextCellphone;
             valid = false;
+            v = -1;
         }
 
         if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextConPasswd,
                 mEditTextPasswd, mEditTextCellphone})) {
             valid = false;
             focusView = null;
+            v = -1;
         }
 
         if (v == R.string.personalDetails) {
