@@ -260,10 +260,12 @@ public class ServProvWPListFragment extends Fragment implements TitleFragment, R
     }
 
     private boolean addNewWorkPlace() {
+/*
         ServProvWorkInfoActivity activity = (ServProvWorkInfoActivity) getActivity();
         if (!activity.isValidInput()) {
             return false;
         }
+*/
         ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
         if (serviceProvider == null) {
             serviceProvider = new ServiceProvider();
@@ -450,12 +452,14 @@ public class ServProvWPListFragment extends Fragment implements TitleFragment, R
         mMultiSpinnerDays.setText(getString(R.string.select_days));
     }
 
+/*
     public void registerDone(View view) {
         if (addNewWorkPlace()) {
             ServProvWorkInfoActivity activity = (ServProvWorkInfoActivity) getActivity();
             activity.saveData();
         }
     }
+*/
 
     public void saveData() {
         Bundle bundle = new Bundle();

@@ -24,7 +24,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:onClick="updateProfile"
-        android:text="@string/update" />
+        android:text="@string/save" />
 
 </LinearLayout>
 

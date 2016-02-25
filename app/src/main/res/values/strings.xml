@@ -260,6 +260,13 @@
     <string name="hyphen">-</string>
     <string name="std_code">STD</string>
     <string name="landline_no">Landline Number</string>
+    <string name="save">Save</string>
+    <string name="working_hours">Working Hours</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="work_timings">Work Timings</string>
+    <string name="title_activity_work_hours">WorkHoursActivity</string>
+
     <string name="gender_lbl">Gender *</string>
     <string name="state_lbl">State *</string>
 </resources>

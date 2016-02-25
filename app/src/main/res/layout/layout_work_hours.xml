@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <CheckBox
+        android:id="@+id/checkBoxWorkDay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.5"
+        android:text="@string/monday" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5">
+
+        <!--
+                <TextView
+                    android:id="@+id/textViewWorkHours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/working_hours"
+                    android:layout_centerHorizontal="true"/>
+        -->
+
+        <LinearLayout
+            android:id="@+id/layoutWorkHours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!--
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:text="@string/morning" />
+            -->
+
+            <EditText
+                android:id="@+id/editTextFromTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/from"
+                android:inputType="time" />
+
+            <EditText
+                android:id="@+id/editTextToTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/to"
+                android:inputType="time" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layoutWorkHours"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!--
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:text="@string/evening" />
+            -->
+
+            <EditText
+                android:id="@+id/editTextFromTime2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/from"
+                android:inputType="time" />
+
+            <EditText
+                android:id="@+id/editTextToTime2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/to"
+                android:inputType="time" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
