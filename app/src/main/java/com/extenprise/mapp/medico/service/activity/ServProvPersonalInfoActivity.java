@@ -23,10 +23,10 @@ import com.extenprise.mapp.medico.util.Validator;
 public class ServProvPersonalInfoActivity extends FragmentActivity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
-    private TextView mEmailID;
-    private TextView mRegNo;
-    private TextView mFname;
-    private TextView mLname;
+    private EditText mEmailID;
+    private EditText mRegNo;
+    private EditText mFname;
+    private EditText mLname;
     private RadioGroup mGender;
     private RadioButton mFemale;
     private RadioButton mGenderBtn;
@@ -59,21 +59,21 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    String regNo = mRegNo.getText().toString().trim();
-                    if (!TextUtils.isEmpty(regNo)) {
-                        mServiceProv.setRegNo(regNo);
+                    if (!TextUtils.isEmpty(mRegNo.getText().toString().trim())) {
                         sendRequest(MappService.DO_REG_NO_CHECK);
                     }
                 }
             }
         });
+
+        TextView mobNo = (TextView) findViewById(R.id.mobnumValue);
+        mobNo.setText(mServiceProv.getSignInData().getPhone());
         mFname.setText(mServiceProv.getfName());
         mLname.setText(mServiceProv.getlName());
-        String email = getString(R.string.not_specified);
-        if (mServiceProv.getEmailId() != null) {
-            email = mServiceProv.getEmailId();
+        String email = mServiceProv.getEmailId();
+        if (email != null) {
+            mEmailID.setText(email);
         }
-        mEmailID.setText(email);
         mRegNo.setText(mServiceProv.getRegNo());
         if (mServiceProv.getGender().equalsIgnoreCase("Male")) {
             mMale.setChecked(true);
@@ -83,56 +83,63 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
     }
 
     public void updateProfile(View view) {
-        EditText[] fields = {(EditText) mFname, (EditText) mLname, (EditText) mRegNo};
-        if (Utility.areEditFieldsEmpty(this, fields)) {
-            return;
-        }
-
         boolean cancel = false;
         View focusView = null;
+
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mRegNo})) {
+            cancel = true;
+        }
+        int val = mGender.getCheckedRadioButtonId();
+        if (val == -1) {
+            mFemale.setError(getString(R.string.error_select_gender));
+            focusView = mFemale;
+            cancel = true;
+        } else {
+            mGenderBtn = (RadioButton) findViewById(val);
+        }
         String email = mEmailID.getText().toString().trim();
         if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
             mEmailID.setError(getString(R.string.error_invalid_email));
             focusView = mEmailID;
             cancel = true;
         }
-        if (!Validator.isOnlyAlpha(mFname.getText().toString().trim())) {
-            mFname.setError(getString(R.string.error_only_alpha));
-            focusView = mFname;
-            cancel = true;
-        }
-        if (!Validator.isOnlyAlpha(mLname.getText().toString().trim())) {
-            mLname.setError(getString(R.string.error_only_alpha));
+        val = Validator.isNameValid(mLname.getText().toString().trim());
+        if (val != -1) {
+            mLname.setError(getString(val));
             focusView = mLname;
             cancel = true;
         }
-        int genderID = mGender.getCheckedRadioButtonId();
-        if (genderID == -1) {
-            mFemale.setError(getString(R.string.error_select_gender));
-            focusView = mFemale;
+        val = Validator.isNameValid(mFname.getText().toString().trim());
+        if (val != -1) {
+            mFname.setError(getString(val));
+            focusView = mFname;
             cancel = true;
-        } else {
-            mGenderBtn = (RadioButton) findViewById(genderID);
         }
 
-        if (cancel && focusView != null) {
-            focusView.requestFocus();
+        if (cancel) {
+            if (focusView != null) {
+                focusView.requestFocus();
+            }
             return;
         }
 
-        mServiceProv.setfName(mFname.getText().toString().trim());
-        mServiceProv.setlName(mLname.getText().toString().trim());
-        mServiceProv.setEmailId(email);
-        mServiceProv.setGender(mGenderBtn.getText().toString());
-        mServiceProv.setRegNo(mRegNo.getText().toString());
-
         sendRequest(MappService.DO_UPDATE);
+    }
+
+    private ServiceProvider getProfileData(ServiceProvider sp) {
+        sp.setfName(mFname.getText().toString().trim());
+        sp.setlName(mLname.getText().toString().trim());
+        sp.setEmailId(mEmailID.getText().toString().trim());
+        sp.setGender(mGenderBtn.getText().toString());
+        sp.setRegNo(mRegNo.getText().toString());
+
+        return sp;
     }
 
     private void sendRequest(int action) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        bundle.putParcelable("service", mServiceProv);
+        bundle.putParcelable("service", getProfileData(mServiceProv));
         mConnection.setData(bundle);
         mConnection.setAction(action);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
@@ -162,12 +169,14 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
                     dialog.dismiss();
                 }
             });
+            ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servprov");
+            getProfileData(serviceProvider);
         }
     }
 
     public void regNoCheckDone(Bundle data) {
         if (data.getBoolean("exists")) {
-            mRegNo.setError("This Registration Number is already Registered.");
+            mRegNo.setError(getString(R.string.error_duplicate_reg_no));
             mRegNo.requestFocus();
         }
     }

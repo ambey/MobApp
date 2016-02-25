@@ -369,7 +369,12 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
         spsspt.setEndTime(Utility.getMinutes(mEndTime.getText().toString()));
         spsspt.setWorkingDays(mMultiSpinnerDays.getText().toString());
         if (mConsultFee.isEnabled()) {
-            spsspt.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+            String fees = mConsultFee.getText().toString().trim();
+            float fee = 0;
+            if (!TextUtils.isEmpty(fees)) {
+                fee = Float.parseFloat(fees);
+            }
+            spsspt.setConsultFee(fee);
         }
         spsspt.setNotes(mNotes.getText().toString().trim());
         spsspt.setServicePoint(spt);
@@ -386,17 +391,30 @@ public class ServProvWorkPlaceFragment extends Fragment implements TitleFragment
 
     public boolean isValidInput() {
         EditText[] fields = { mExperience, mQualification,
-                mName, mLoc, mPinCode, mPhone1, mConsultFee };
-        if(mServCatagory.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.pharmacist))) {
+                mName, mLoc, mPinCode, mPhone1};
+/*        if(mServCatagory.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.pharmacist))) {
             fields = new EditText[] { mExperience, mQualification,
                     mName, mLoc, mPinCode, mPhone1 };
-        }
+        }*/
         if(Utility.areEditFieldsEmpty(getActivity(), fields)) {
             return false;
         }
 
         boolean valid = true;
         View focusView = null;
+
+        if (mConsultFee.isEnabled()) {
+            String fees = mConsultFee.getText().toString().trim();
+            if (!TextUtils.isEmpty(fees)) {
+                try {
+                    float v = Float.parseFloat(fees);
+                } catch (NumberFormatException n) {
+                    mConsultFee.setError(getString(R.string.error_only_digit));
+                    valid = false;
+                    focusView = mConsultFee;
+                }
+            }
+        }
 
         String category = mServCatagory.getSelectedItem().toString();
         if (category.equalsIgnoreCase(getString(R.string.select_category))) {

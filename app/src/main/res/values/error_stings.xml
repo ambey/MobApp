@@ -23,7 +23,7 @@
     <string name="error_duplicate_reg_no">This Registration Number is already used by someone else.</string>
     <string name="error_appont">Sorry! The appointment can\'t be booked.</string>
     <string name="error_invalid_endtime">End time should be ateast 60 minutes ahead of the Start time</string>
-    <string name="error_select_gender">Please select Gender.</string>
+    <string name="error_select_gender">Please select Gender</string>
     <string name="error_invalid_pincode">Invalid Pin Code</string>
     <string name="error_wrong_pwd">Wrong Password</string>
     <string name="error_server_connect">Unable to connect to remote server.\nPlease try after sometime.</string>
@@ -40,6 +40,6 @@
     <string name="error_no_available_timeslot">Sorry! No timeslot is available on this day.</string>
     <string name="error_no_workplace_found">No work place is added yet. Please add a work place.</string>
     <string name="error_only_digit">Only numbers are allowed</string>
-    <string name="error_please_select">Please Select</string>
-    <string name="error_pwd_length">Password should be of six characters</string>
+    <string name="error_select_state">Please Select State</string>
+    <string name="error_pwd_length">Password should have minimum six characters</string>
 </resources>

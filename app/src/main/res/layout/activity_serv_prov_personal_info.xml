@@ -11,10 +11,15 @@
     tools:context="com.extenprise.mapp.medico.service.activity.ServProvPersonalInfoActivity">
 
     <include
+        android:id="@+id/layoutDisplayNumber"
+        layout="@layout/layout_display_mob_no" />
+
+    <include
         android:id="@+id/personalInfoLayout"
         layout="@layout/layout_personal_info"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
 
     <Button
         android:id="@+id/buttonViewUpdate"

@@ -103,6 +103,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private EditText mOldPwd;
     private boolean isPwdCorrect;
     private ImageButton mEditWpPencil;
+    private int defaultImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,14 +164,17 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         }*/
 
         mCategory = getString(R.string.physician);
+        defaultImg = R.drawable.dr_avatar;
         String servPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
         if(!servPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             if(servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                 mCategory = getString(R.string.pharmacist);
-                mImgView.setImageResource(R.drawable.medstore);
+                //mImgView.setImageResource(R.drawable.medstore);
+                defaultImg = R.drawable.medstore;
             } else {
                 mCategory = getString(R.string.diagnostic_center);
-                mImgView.setImageResource(R.drawable.diagcenter);
+                //mImgView.setImageResource(R.drawable.diagcenter);
+                defaultImg = R.drawable.diagcenter;
             }
             mViewdrLbl.setText(getString(R.string.welcome));
         }
@@ -611,14 +615,18 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     wp.setServCategory(mServCatagory.getSelectedItem().toString());
                     wp.setSpeciality(mSpeciality.getSelectedItem().toString());
                     wp.setServPointType(mServPtType.getSelectedItem().toString());
-                    wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
                     wp.setNotes(mNotes.getText().toString().trim());
                     wp.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
                     wp.setQualification(mQualification.getText().toString().trim());
                     wp.setSignInData(mSignInData);
                     wp.setPincode(mPinCode.getText().toString().trim());
                     if (mConsultFee.isEnabled()) {
-                        wp.setConsultFee(Float.parseFloat(mConsultFee.getText().toString().trim()));
+                        String fees = mConsultFee.getText().toString().trim();
+                        float fee = 0;
+                        if (!TextUtils.isEmpty(fees)) {
+                            fee = Float.parseFloat(fees);
+                        }
+                        wp.setConsultFee(fee);
                     }
                     if (finalAction == MappService.DO_EDIT_WORK_PLACE) {
                         wp.setIdServicePoint(item.getIdServicePoint());
@@ -649,34 +657,75 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private boolean isValidWorkPlace() {
-        EditText[] fields = { mExperience, mQualification,
-                mName, mLoc, mPinCode, mPhone1};
-        /*ArrayList<EditText> mSpecialityList = new ArrayList<>(Arrays.asList(mExperience, mQualification,
-                mName, mLoc, mPinCode, mPhone1));
-        if (mCategory.equals(getString(R.string.pharmacist))) {
-            mSpecialityList.add(mConsultFee);
-        }*/
-        if (mCategory.equals(getString(R.string.pharmacist))) {
-            fields = new EditText[] { mExperience, mQualification,
-                    mName, mLoc, mPinCode, mPhone1 };
-        }
-        if (Utility.areEditFieldsEmpty(this, fields)) {
-            return false;
-        }
-
         boolean valid = true;
         View focusView = null;
 
-        String category = mServCatagory.getSelectedItem().toString();
-        if (TextUtils.isEmpty(category) || category.equals(getString(R.string.select_category))) {
-            //Utility.showAlert(this, "", "Please select service category.");
-            View selectedView = mServCatagory.getSelectedView();
-            if (selectedView != null && selectedView instanceof TextView) {
-                TextView selectedTextView = (TextView) selectedView;
-                String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
-                selectedTextView.setError(errorString);
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mPhone1, mPinCode,
+                mLoc, mName, mQualification, mExperience})) {
+            valid = false;
+        }
+
+        if (mConsultFee.isEnabled()) {
+            String fees = mConsultFee.getText().toString().trim();
+            if (!TextUtils.isEmpty(fees)) {
+                try {
+                    float v = Float.parseFloat(fees);
+                } catch (NumberFormatException n) {
+                    mConsultFee.setError(getString(R.string.error_only_digit));
+                    valid = false;
+                    focusView = mConsultFee;
+                }
             }
-            focusView = mServCatagory;
+        }
+
+        String days = mMultiSpinnerDays.getText().toString();
+        if (days.equalsIgnoreCase(getString(R.string.practice_days))) {
+            mMultiSpinnerDays.setError(getString(R.string.error_field_required));
+            focusView = mMultiSpinnerDays;
+            valid = false;
+        }
+
+        if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {
+            mEndTime.setError(getString(R.string.error_field_required));
+            focusView = mEndTime;
+            valid = false;
+        }
+        if (mStartTime.getText().toString().equals(getString(R.string.start_time))) {
+            mStartTime.setError(getString(R.string.error_field_required));
+            focusView = mStartTime;
+            valid = false;
+        }
+        if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
+                !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
+            if (Utility.getMinutes(mStartTime.getText().toString()) >= Utility.getMinutes(mEndTime.getText().toString())) {
+                mEndTime.setError(getString(R.string.error_endtime));
+                focusView = mEndTime;
+                valid = false;
+            }
+        }
+
+        if (Validator.isPinCodeValid(mPinCode.getText().toString().trim())) {
+            mPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mPinCode;
+            valid = false;
+        }
+
+        String email = mEmailIdwork.getText().toString().trim();
+        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
+            mEmailIdwork.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailIdwork;
+            valid = false;
+        }
+
+        if (!Validator.isPhoneValid(mPhone1.getText().toString().trim())) {
+            mPhone1.setError(getString(R.string.error_invalid_phone));
+            focusView = mPhone1;
+            valid = false;
+        }
+        String phone2 = mPhone2.getText().toString().trim();
+        if (!TextUtils.isEmpty(phone2) && !Validator.isPhoneValid(phone2)) {
+            mPhone2.setError(getString(R.string.error_invalid_phone));
+            focusView = mPhone2;
             valid = false;
         }
 
@@ -696,51 +745,16 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
         }
 
-        if (!Validator.isPhoneValid(mPhone1.getText().toString().trim())) {
-            mPhone1.setError(getString(R.string.error_invalid_phone));
-            focusView = mPhone1;
-            valid = false;
-        }
-        String phone2 = mPhone2.getText().toString().trim();
-        if (!TextUtils.isEmpty(phone2) && !Validator.isPhoneValid(phone2)) {
-            mPhone2.setError(getString(R.string.error_invalid_phone));
-            focusView = mPhone2;
-            valid = false;
-        }
-
-        String email = mEmailIdwork.getText().toString().trim();
-        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
-            mEmailIdwork.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailIdwork;
-            valid = false;
-        }
-        if (Validator.isPinCodeValid(mPinCode.getText().toString().trim())) {
-            mPinCode.setError(getString(R.string.error_invalid_pincode));
-            focusView = mPinCode;
-            valid = false;
-        }
-        if (mEndTime.getText().toString().equals(getString(R.string.end_time))) {
-            mEndTime.setError(getString(R.string.error_field_required));
-            focusView = mEndTime;
-            valid = false;
-        }
-        if (mStartTime.getText().toString().equals(getString(R.string.start_time))) {
-            mStartTime.setError(getString(R.string.error_field_required));
-            focusView = mStartTime;
-            valid = false;
-        }
-        if (!(mEndTime.getText().toString().equals(getString(R.string.end_time))) &&
-                !(mStartTime.getText().toString().equals(getString(R.string.start_time)))) {
-            if (Utility.getMinutes(mStartTime.getText().toString()) >= Utility.getMinutes(mEndTime.getText().toString())) {
-                mEndTime.setError(getString(R.string.error_endtime));
-                focusView = mEndTime;
-                valid = false;
+        String category = mServCatagory.getSelectedItem().toString();
+        if (TextUtils.isEmpty(category) || category.equals(getString(R.string.select_category))) {
+            //Utility.showAlert(this, "", "Please select service category.");
+            View selectedView = mServCatagory.getSelectedView();
+            if (selectedView != null && selectedView instanceof TextView) {
+                TextView selectedTextView = (TextView) selectedView;
+                String errorString = selectedTextView.getResources().getString(R.string.error_field_required);
+                selectedTextView.setError(errorString);
             }
-        }
-        String days = mMultiSpinnerDays.getText().toString();
-        if (days.equalsIgnoreCase(getString(R.string.practice_days))) {
-            mMultiSpinnerDays.setError(getString(R.string.error_field_required));
-            focusView = mMultiSpinnerDays;
+            focusView = mServCatagory;
             valid = false;
         }
 
@@ -922,12 +936,17 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 */
 
     public void changeImage(View view) {
+        String[] opts = new String[]{getString(R.string.take_photo),
+                getString(R.string.from_gallery),
+                getString(R.string.remove)};
+        if (mServiceProv.getPhoto() == null) {
+            opts = new String[]{getString(R.string.take_photo),
+                    getString(R.string.from_gallery)};
+        }
         final Activity activity = this;
         final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         Utility.showAlert(activity, "", null, null, false,
-                new String[]{activity.getString(R.string.take_photo),
-                        activity.getString(R.string.from_gallery),
-                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                opts, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -1159,12 +1178,13 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mImgView.setImageResource(R.drawable.dr_avatar);
             ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
             serviceProvider.setPhoto(null);
-        } else {
-            setPhoto();
+            mServiceProv.setPhoto(null);
         }
+        setPhoto();
     }
 
     private void setPhoto() {
+        mImgView.setImageResource(defaultImg);
         if (mServiceProv.getPhoto() != null) {
             mImgView.setBackgroundResource(0);
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),

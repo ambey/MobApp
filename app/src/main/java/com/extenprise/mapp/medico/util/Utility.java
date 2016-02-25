@@ -402,6 +402,9 @@ public abstract class Utility {
     }
 
     public static void showMessage(Context context, int msgId) {
+        if (msgId == -1) {
+            return;
+        }
         Toast.makeText(context, context.getString(msgId), Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + context.getString(msgId));
     }

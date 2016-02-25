@@ -80,26 +80,9 @@
                 android:orientation="vertical"
                 android:paddingBottom="10dp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:text="@string/mob_num" />
-
-                    <TextView
-                        android:id="@+id/mobnumValue"
-                        style="@style/LargeLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="30dp"
-                        android:hint="@string/mob_num" />
-                </LinearLayout>
+                <include
+                    android:id="@+id/layoutDisplayNumber"
+                    layout="@layout/layout_display_mob_no" />
 
                 <include
                     android:id="@+id/customerInfo"

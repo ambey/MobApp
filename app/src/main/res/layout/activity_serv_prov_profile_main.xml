@@ -40,7 +40,11 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp" />
 
-    <LinearLayout
+    <include
+        android:id="@+id/layoutDisplayNumber"
+        layout="@layout/layout_display_mob_no" />
+
+    <!--<LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -59,7 +63,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:hint="@string/mob_num" />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <TextView
         android:id="@+id/textViewDoc"

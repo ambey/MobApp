@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
@@ -429,37 +428,29 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         setErrorsNull();
         boolean valid = true;
         View focusView = null;
-        String msg = "";
+        int errMsg = -1;
         int v = -1;
 
-        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextPinCode,
-                mSpinCity, mEditTextLoc})) {
-            valid = false;
-            v = 1;
-        }
-        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextWeight,
-                mEditTextCustomerLName, mEditTextCustomerFName})) {
-            valid = false;
-            v = 0;
-        }
-        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextConPasswd,
-                mEditTextPasswd, mEditTextCellphone})) {
-            valid = false;
-            v = -1;
+        if (mSpinState.getSelectedItem().toString().equals(getString(R.string.state_lbl))) {
+            Utility.setSpinError(mSpinState, getString(R.string.error_select_state));
+            errMsg = R.string.error_select_state;
+            v = R.string.address;
+            focusView = mSpinState;
         }
 
-        String str = getString(R.string.state_lbl);
-        if (mSpinState.getSelectedItem().toString().equals(str)) {
-            Utility.setSpinError(mSpinState, getString(R.string.error_please_select) + " " + str);
-            msg = getString(R.string.error_please_select) + " " + str;
-            v = 1;
+        if (mSpinGender.getSelectedItem().toString().equals(getString(R.string.gender_lbl))) {
+            Utility.setSpinError(mSpinGender, getString(R.string.error_select_gender));
+            errMsg = R.string.error_select_gender;
+            v = R.string.personalDetails;
+            focusView = mSpinGender;
         }
 
-        if (Validator.isPinCodeValid(mEditTextPinCode.getText().toString().trim())) {
+        String valTxt = mEditTextPinCode.getText().toString().trim();
+        if (Validator.isPinCodeValid(valTxt) && !TextUtils.isEmpty(valTxt)) {
             mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
             focusView = mEditTextPinCode;
             valid = false;
-            v = 1;
+            v = R.string.address;
         }
 
         int nmValid = Validator.isNameValid(mSpinCity.getText().toString().trim());
@@ -467,49 +458,48 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mSpinCity.setError(getString(nmValid));
             focusView = mSpinCity;
             valid = false;
-            v = 1;
+            v = R.string.address;
+        }
+
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextPinCode,
+                mSpinCity, mEditTextLoc})) {
+            valid = false;
+            v = R.string.address;
         }
 
         double value = 0.0;
+        valTxt = mEditTextWeight.getText().toString().trim();
         try {
-            value = Double.parseDouble(mEditTextWeight.getText().toString().trim());
+            value = Double.parseDouble(valTxt);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        if (value <= 0.0) {
+        if (value <= 0.0 && !TextUtils.isEmpty(valTxt)) {
             mEditTextWeight.setError(getString(R.string.error_invalid_weight));
             focusView = mEditTextWeight;
             valid = false;
-            v = 0;
+            v = R.string.personalDetails;
         }
 
-        str = getString(R.string.gender_lbl);
-        if (mSpinGender.getSelectedItem().toString().equals(str)) {
-            Utility.setSpinError(mSpinGender, getString(R.string.error_please_select) +
-                    " " + str);
-            msg = getString(R.string.error_please_select) + " " + str;
-            v = 0;
-        }
-
-        String dob = mTextViewDOB.getText().toString().trim();
-        if (TextUtils.isEmpty(dob)) {
+        valTxt = mTextViewDOB.getText().toString().trim();
+        if (TextUtils.isEmpty(valTxt)) {
             mTextViewDOB.setError(getString(R.string.error_field_required));
             focusView = mTextViewDOB;
             valid = false;
-            v = 0;
-        } else if (Utility.getAge(Utility.getStrAsDate(dob, "dd/MM/yyyy")) < 0) {
+            v = R.string.personalDetails;
+        } else if (Utility.getAge(Utility.getStrAsDate(valTxt, "dd/MM/yyyy")) < 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
-            v = 0;
+            v = R.string.personalDetails;
         }
 
-        String emailId = mEditTextCustomerEmail.getText().toString().trim();
-        if (!TextUtils.isEmpty(emailId) && !Validator.isValidEmaillId(emailId)) {
+        valTxt = mEditTextCustomerEmail.getText().toString().trim();
+        if (!TextUtils.isEmpty(valTxt) && !Validator.isValidEmaillId(valTxt)) {
             mEditTextCustomerEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEditTextCustomerEmail;
             valid = false;
-            v = 0;
+            v = R.string.personalDetails;
         }
 
         nmValid = Validator.isNameValid(mEditTextCustomerLName.getText().toString().trim());
@@ -517,7 +507,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mEditTextCustomerLName.setError(getString(nmValid));
             focusView = mEditTextCustomerLName;
             valid = false;
-            v = 0;
+            v = R.string.personalDetails;
         }
 
         nmValid = Validator.isNameValid(mEditTextCustomerFName.getText().toString().trim());
@@ -525,25 +515,32 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             mEditTextCustomerFName.setError(getString(nmValid));
             focusView = mEditTextCustomerFName;
             valid = false;
-            v = 0;
+            v = R.string.personalDetails;
         }
 
-        String passwd = mEditTextPasswd.getText().toString().trim();
-        if (!Validator.isPasswordValid(passwd) && !TextUtils.isEmpty(passwd)) {
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextWeight,
+                mEditTextCustomerLName, mEditTextCustomerFName})) {
+            valid = false;
+            v = R.string.personalDetails;
+            focusView = null;
+        }
+
+        valTxt = mEditTextPasswd.getText().toString().trim();
+        if (!Validator.isPasswordValid(valTxt) && !TextUtils.isEmpty(valTxt)) {
             mEditTextPasswd.setError(getString(R.string.error_pwd_length));
             focusView = mEditTextPasswd;
             valid = false;
             v = -1;
         }
-        if (!passwd.equals(mEditTextConPasswd.getText().toString().trim())) {
+        if (!valTxt.equals(mEditTextConPasswd.getText().toString().trim())) {
             mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
             focusView = mEditTextConPasswd;
             valid = false;
             v = -1;
         }
 
-        str = mEditTextCellphone.getText().toString().trim();
-        if (!Validator.isPhoneValid(str) && !TextUtils.isEmpty(str)) {
+        valTxt = mEditTextCellphone.getText().toString().trim();
+        if (!Validator.isPhoneValid(valTxt) && !TextUtils.isEmpty(valTxt)) {
             mEditTextCellphone.setError(getString(R.string.error_invalid_phone));
             mEditTextCellphone.requestFocus();
             focusView = mEditTextCellphone;
@@ -551,23 +548,28 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             v = -1;
         }
 
-        if (v != -1) {
-            if (v == 0) {
-                Utility.collapse(mAddrLayout, true);
-                Utility.collapse(mContLay, false);
-            } else {
-                Utility.collapse(mContLay, true);
-                Utility.collapse(mAddrLayout, false);
-            }
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextConPasswd,
+                mEditTextPasswd, mEditTextCellphone})) {
+            valid = false;
+            focusView = null;
+            v = -1;
+        }
+
+        if (v == R.string.personalDetails) {
+            Utility.collapse(mAddrLayout, true);
+            Utility.collapse(mContLay, false);
+        } else if (v == R.string.address) {
+            Utility.collapse(mContLay, true);
+            Utility.collapse(mAddrLayout, false);
+        }
+        if (focusView != null) {
+            focusView.requestFocus();
         }
         if (!valid) {
-            if (focusView != null) {
-                focusView.requestFocus();
-            }
             return;
         }
-        if (!msg.equals("")) {
-            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        if (errMsg != -1) {
+            Utility.showMessage(this, errMsg);
             return;
         }
 
