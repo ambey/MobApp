@@ -375,6 +375,17 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             v = R.string.address;
             focusView = mSpinState;
         }
+/**
+ *      Its not getting the focus but if address fields have focus...
+ than it shows warning their and open the personal fields..
+ so beter to put it in above so we can validate it at last.. as discussed..
+ */
+        if (mSpinGender.getSelectedItem().toString().equals(getString(R.string.gender_lbl))) {
+            Utility.setSpinError(mSpinGender, getString(R.string.error_select_gender));
+            errMsg = R.string.error_select_gender;
+            v = R.string.personalDetails;
+            focusView = mSpinGender;
+        }
 
         String valTxt = mEditTextPinCode.getText().toString().trim();
         if (Validator.isPinCodeValid(valTxt) && !TextUtils.isEmpty(valTxt)) {
@@ -396,13 +407,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 mSpinCity, mEditTextLoc})) {
             valid = false;
             v = R.string.address;
-        }
-
-        if (mSpinGender.getSelectedItem().toString().equals(getString(R.string.gender_lbl))) {
-            Utility.setSpinError(mSpinGender, getString(R.string.error_select_gender));
-            errMsg = R.string.error_select_gender;
-            v = R.string.personalDetails;
-            focusView = mSpinGender;
         }
 
         double value = 0.0;

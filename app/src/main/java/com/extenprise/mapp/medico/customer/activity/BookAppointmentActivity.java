@@ -59,7 +59,7 @@ public class BookAppointmentActivity extends Activity
         TextView lbl = (TextView) findViewById(R.id.tvDrLbl);
         if (!serviceProvider.getServProvHasServPt(0).getService().getCategory().
                 equalsIgnoreCase(getString(R.string.physician))) {
-            lbl.setText(getString(R.string.welcome));
+            lbl.setText("");
         }
 
         TextView textViewDocFName = (TextView) findViewById(R.id.tvDocFName);

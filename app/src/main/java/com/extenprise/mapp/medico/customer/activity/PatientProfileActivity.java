@@ -409,6 +409,10 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             });
             Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
             getUpdateData(customer);
+
+            setPersonalInfoEditable(false);
+            setAddressEditable(false);
+            Utility.setEnabledButton(this, mUpdateButton, false);
             /*Intent intent = getIntent();
             finish();
             startActivity(intent);*/
