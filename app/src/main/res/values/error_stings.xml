@@ -42,4 +42,5 @@
     <string name="error_only_digit">Only numbers are allowed</string>
     <string name="error_select_state">Please Select State</string>
     <string name="error_pwd_length">Password should have minimum six characters</string>
+    <string name="error_proper_name">Please Enter Proper Name</string>
 </resources>

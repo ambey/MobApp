@@ -66,6 +66,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
     private EditText mPasswordView;
     private CheckBox mSaveLoginCheckBox;
     private RadioGroup mRadioGroupUType;
+    private boolean isBookAppontRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             //actionBar.hide();
         }
 
+        isBookAppontRequest = false;
         /*requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
@@ -135,11 +137,15 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mSaveLoginCheckBox = (CheckBox) findViewById(R.id.rememberMe);
         initialize();
 
+        TextView loginAs = (TextView) findViewById(R.id.viewLogin);
+
         String targetActivity = getIntent().getStringExtra("target-activity");
         if (targetActivity != null && targetActivity.equalsIgnoreCase(BookAppointmentActivity.class.getName())) {
+            isBookAppontRequest = true;
             mLoginType = MappService.CUSTOMER_LOGIN;
-            mRadioGroupUType.check(R.id.radioButtonPatient);
-            findViewById(R.id.radioButtonMedServiceProvider).setEnabled(false);
+            mRadioGroupUType.setVisibility(View.GONE);
+            String level = loginAs.getText().toString() + " " + getString(R.string.patient);
+            loginAs.setText(level);
         }
     }
 
@@ -234,17 +240,30 @@ public class LoginActivity extends Activity implements ResponseHandler {
         return -1;
     }
 
+    private String whichLoginType(int loginType) {
+        if (loginType == MappService.CUSTOMER_LOGIN) {
+            return getString(R.string.patient);
+        } else if (loginType == MappService.SERVICE_LOGIN) {
+            return getString(R.string.serv_prov);
+        }
+        return "";
+    }
+
     public void attemptLogin() {
-        int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
-        RadioButton mRadioButtonUType;
-        if (uTypeID == -1) {
+        if (!isBookAppontRequest) {
+            int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
+            RadioButton mRadioButtonUType;
+            if (uTypeID == -1) {
             /* hide the soft keyboard and show the message */
-            Utility.hideSoftKeyboard(this);
-            Utility.showMessage(this, R.string.error_user_type_required);
-            //Utility.showAlert(this, "", "Please Select user type.");
-            return;
-        } else {
-            mRadioButtonUType = (RadioButton) findViewById(uTypeID);
+                Utility.hideSoftKeyboard(this);
+                Utility.showMessage(this, R.string.error_user_type_required);
+                //Utility.showAlert(this, "", "Please Select user type.");
+                return;
+            } else {
+                mRadioButtonUType = (RadioButton) findViewById(uTypeID);
+            }
+            String uType = mRadioButtonUType.getText().toString().trim();
+            mLoginType = whichLoginType(uType);
         }
 
         // Reset errors.
@@ -252,8 +271,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        final String uType = mRadioButtonUType.getText().toString().trim();
-        mLoginType = whichLoginType(uType);
         String phone = mMobileNumber.getText().toString().trim();
         String passwd = mPasswordView.getText().toString();
 
@@ -293,7 +310,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 loginPrefsEditor.putBoolean("saveLogin", true);
                 loginPrefsEditor.putString("username", phone);
                 loginPrefsEditor.putString("passwd", encryptedPasswd);
-                loginPrefsEditor.putString("logintype", uType);
+                loginPrefsEditor.putString("logintype", whichLoginType(mLoginType));
                 loginPrefsEditor.apply();
                         /*dialog.dismiss();
                         doLogin();

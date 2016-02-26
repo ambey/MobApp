@@ -830,6 +830,53 @@ public abstract class Utility {
         return imageChanged;
     }
 
+    public static boolean isNameValid(Activity activity, EditText first, EditText last) {
+        String fnm = first.getText().toString().trim();
+        String lnm = last.getText().toString().trim();
+        boolean valid = true;
+        View focusView = null;
+
+        if (fnm.length() < 2 && lnm.length() < 2) {
+            first.setError(activity.getString(R.string.error_proper_name));
+            focusView = first;
+            valid = false;
+        }
+
+        int msg = isNameValid(lnm);
+        if (msg != -1 && msg != R.string.error_name_min_length) {
+            last.setError(activity.getString(msg));
+            focusView = last;
+            valid = false;
+        }
+        msg = isNameValid(fnm);
+        if (msg != -1 && msg != R.string.error_name_min_length) {
+            first.setError(activity.getString(msg));
+            focusView = first;
+            valid = false;
+        }
+
+        if (focusView != null) {
+            focusView.requestFocus();
+        }
+        return valid;
+    }
+
+    public static int isNameValid(String name) {
+        if (TextUtils.isEmpty(name)) {
+            return R.string.error_field_required;
+        }
+        char[] carray = name.toCharArray();
+        for (char c : carray) {
+            if (!Character.isLetter(c) && !Character.isSpaceChar(c)) {
+                return R.string.error_only_alpha;
+            }
+        }
+        if (name.length() < 2) {
+            return R.string.error_name_min_length;
+        }
+        return -1;
+    }
+
     private Drawable resize(Activity activity, Drawable image) {
         Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
         Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap,

@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.service.data.SubscriptionStatus;
+import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
 /**
@@ -136,7 +137,7 @@ public class SignUpActionDialog extends DialogFragment {
             }
         }
 
-        int msg = Validator.isNameValid(mLName.getText().toString().trim());
+        /*int msg = Validator.isNameValid(mLName.getText().toString().trim());
         if (msg != -1) {
             mLName.setError(getString(msg));
             focusView = mLName;
@@ -147,10 +148,17 @@ public class SignUpActionDialog extends DialogFragment {
             mFName.setError(getString(msg));
             focusView = mFName;
             cancel = true;
+        }*/
+
+        if (!Utility.isNameValid(getActivity(), mFName, mLName)) {
+            focusView = null;
+            cancel = true;
         }
 
         if (cancel) {
-            focusView.requestFocus();
+            if (focusView != null) {
+                focusView.requestFocus();
+            }
         }
         return !cancel;
     }

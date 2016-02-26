@@ -366,61 +366,58 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         setErrorsNull();
         boolean valid = true;
         View focusView = null;
-        int errMsg = -1;
-        int v = -1;
+        int errMsg = R.string.error_select_state;
+        int v = R.string.address;
 
         if (mSpinState.getSelectedItem().toString().equals(getString(R.string.state_lbl))) {
             Utility.setSpinError(mSpinState, getString(R.string.error_select_state));
-            errMsg = R.string.error_select_state;
-            v = R.string.address;
             focusView = mSpinState;
+            valid = false;
         }
-/**
- *      Its not getting the focus but if address fields have focus...
- than it shows warning their and open the personal fields..
- so beter to put it in above so we can validate it at last.. as discussed..
- */
+
+        String valTxt = mEditTextPinCode.getText().toString().trim();
+        if (TextUtils.isEmpty(valTxt)) {
+            mEditTextPinCode.setError(getString(R.string.error_field_required));
+            focusView = mEditTextPinCode;
+            valid = false;
+            errMsg = -1;
+        } else if (Validator.isPinCodeValid(valTxt)) {
+            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mEditTextPinCode;
+            valid = false;
+            errMsg = -1;
+        }
+
+        int msgValid = Utility.isNameValid(mSpinCity.getText().toString().trim());
+        if (msgValid != -1) {
+            mSpinCity.setError(getString(msgValid));
+            focusView = mSpinCity;
+            valid = false;
+            errMsg = -1;
+        }
+
+        if (TextUtils.isEmpty(mEditTextLoc.getText().toString().trim())) {
+            mEditTextLoc.setError(getString(R.string.error_field_required));
+            focusView = mEditTextLoc;
+            valid = false;
+            errMsg = -1;
+        }
+
+        msgValid = Validator.isWeightValid(mEditTextWeight.getText().toString().trim());
+        if (msgValid != -1) {
+            mEditTextWeight.setError(getString(msgValid));
+            focusView = mEditTextWeight;
+            valid = false;
+            v = R.string.personalDetails;
+            errMsg = -1;
+        }
+
         if (mSpinGender.getSelectedItem().toString().equals(getString(R.string.gender_lbl))) {
             Utility.setSpinError(mSpinGender, getString(R.string.error_select_gender));
             errMsg = R.string.error_select_gender;
             v = R.string.personalDetails;
-            focusView = mSpinGender;
-        }
-
-        String valTxt = mEditTextPinCode.getText().toString().trim();
-        if (Validator.isPinCodeValid(valTxt) && !TextUtils.isEmpty(valTxt)) {
-            mEditTextPinCode.setError(getString(R.string.error_invalid_pincode));
-            focusView = mEditTextPinCode;
+            focusView = mEditTextHeight;
             valid = false;
-            v = R.string.address;
-        }
-
-        int nmValid = Validator.isNameValid(mSpinCity.getText().toString().trim());
-        if (nmValid != -1) {
-            mSpinCity.setError(getString(nmValid));
-            focusView = mSpinCity;
-            valid = false;
-            v = R.string.address;
-        }
-
-        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextPinCode,
-                mSpinCity, mEditTextLoc})) {
-            valid = false;
-            v = R.string.address;
-        }
-
-        double value = 0.0;
-        valTxt = mEditTextWeight.getText().toString().trim();
-        try {
-            value = Double.parseDouble(valTxt);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        if (value <= 0.0 && !TextUtils.isEmpty(valTxt)) {
-            mEditTextWeight.setError(getString(R.string.error_invalid_weight));
-            focusView = mEditTextWeight;
-            valid = false;
-            v = R.string.personalDetails;
         }
 
         valTxt = mTextViewDOB.getText().toString().trim();
@@ -429,11 +426,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mTextViewDOB;
             valid = false;
             v = R.string.personalDetails;
+            errMsg = -1;
         } else if (Utility.getAge(Utility.getStrAsDate(valTxt, "dd/MM/yyyy")) < 0) {
             mTextViewDOB.setError(getString(R.string.error_future_date));
             focusView = mTextViewDOB;
             valid = false;
             v = R.string.personalDetails;
+            errMsg = -1;
         }
 
         valTxt = mEditTextCustomerEmail.getText().toString().trim();
@@ -442,29 +441,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mEditTextCustomerEmail;
             valid = false;
             v = R.string.personalDetails;
+            errMsg = -1;
         }
 
-        nmValid = Validator.isNameValid(mEditTextCustomerLName.getText().toString().trim());
-        if (nmValid != -1) {
-            mEditTextCustomerLName.setError(getString(nmValid));
-            focusView = mEditTextCustomerLName;
-            valid = false;
-            v = R.string.personalDetails;
-        }
-
-        nmValid = Validator.isNameValid(mEditTextCustomerFName.getText().toString().trim());
-        if (nmValid != -1) {
-            mEditTextCustomerFName.setError(getString(nmValid));
-            focusView = mEditTextCustomerFName;
-            valid = false;
-            v = R.string.personalDetails;
-        }
-
-        if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextWeight,
-                mEditTextCustomerLName, mEditTextCustomerFName})) {
-            valid = false;
-            v = R.string.personalDetails;
+        if (!Utility.isNameValid(this, mEditTextCustomerFName, mEditTextCustomerLName)) {
             focusView = null;
+            valid = false;
+            v = R.string.personalDetails;
+            errMsg = -1;
         }
 
         valTxt = mEditTextPasswd.getText().toString().trim();
@@ -473,12 +457,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mEditTextPasswd;
             valid = false;
             v = -1;
+            errMsg = -1;
         }
         if (!valTxt.equals(mEditTextConPasswd.getText().toString().trim())) {
             mEditTextConPasswd.setError(getString(R.string.error_password_not_matching));
             focusView = mEditTextConPasswd;
             valid = false;
             v = -1;
+            errMsg = -1;
         }
 
         valTxt = mEditTextCellphone.getText().toString().trim();
@@ -488,6 +474,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             focusView = mEditTextCellphone;
             valid = false;
             v = -1;
+            errMsg = -1;
         }
 
         if (Utility.areEditFieldsEmpty(this, new EditText[]{mEditTextConPasswd,
@@ -495,23 +482,23 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             valid = false;
             focusView = null;
             v = -1;
+            errMsg = -1;
         }
 
-        if (v == R.string.personalDetails) {
-            Utility.collapse(mAddrLayout, true);
-            Utility.collapse(mContLay, false);
-        } else if (v == R.string.address) {
-            Utility.collapse(mContLay, true);
-            Utility.collapse(mAddrLayout, false);
-        }
-        if (focusView != null) {
-            focusView.requestFocus();
-        }
         if (!valid) {
-            return;
-        }
-        if (errMsg != -1) {
-            Utility.showMessage(this, errMsg);
+            if (v == R.string.personalDetails) {
+                Utility.collapse(mAddrLayout, true);
+                Utility.collapse(mContLay, false);
+            } else if (v == R.string.address) {
+                Utility.collapse(mContLay, true);
+                Utility.collapse(mAddrLayout, false);
+            }
+            if (focusView != null) {
+                focusView.requestFocus();
+            }
+            if (errMsg != -1) {
+                Utility.showMessage(this, errMsg);
+            }
             return;
         }
 

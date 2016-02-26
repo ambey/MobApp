@@ -37,20 +37,20 @@ public abstract class Validator {
         return true;
     }
 
-    public static int isNameValid(String name) {
-        if (TextUtils.isEmpty(name)) {
-            return R.string.error_field_required;
+    public static int isWeightValid(String weight) {
+        int msg = -1;
+        double value = 0.0;
+        try {
+            value = Double.parseDouble(weight);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-        char[] carray = name.toCharArray();
-        for (char c : carray) {
-            if (!Character.isLetter(c) && !Character.isSpaceChar(c)) {
-                return R.string.error_only_alpha;
-            }
+        if (TextUtils.isEmpty(weight)) {
+            msg = R.string.error_field_required;
+        } else if (value <= 0.0) {
+            msg = R.string.error_invalid_weight;
         }
-        if (name.length() < 2) {
-            return R.string.error_name_min_length;
-        }
-        return -1;
+        return msg;
     }
 
     public static boolean isPinCodeValid(String pinCode) {

@@ -103,16 +103,9 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
             focusView = mEmailID;
             cancel = true;
         }
-        val = Validator.isNameValid(mLname.getText().toString().trim());
-        if (val != -1) {
-            mLname.setError(getString(val));
-            focusView = mLname;
-            cancel = true;
-        }
-        val = Validator.isNameValid(mFname.getText().toString().trim());
-        if (val != -1) {
-            mFname.setError(getString(val));
-            focusView = mFname;
+
+        if (!Utility.isNameValid(this, mFname, mLname)) {
+            focusView = null;
             cancel = true;
         }
 
