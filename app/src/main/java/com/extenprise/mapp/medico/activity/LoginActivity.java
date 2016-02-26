@@ -26,6 +26,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.customer.activity.BookAppointmentActivity;
 import com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.medico.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
@@ -133,6 +134,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
         mSaveLoginCheckBox = (CheckBox) findViewById(R.id.rememberMe);
         initialize();
+
+        String targetActivity = getIntent().getStringExtra("target-activity");
+        if (targetActivity != null && targetActivity.equalsIgnoreCase(BookAppointmentActivity.class.getName())) {
+            mLoginType = MappService.CUSTOMER_LOGIN;
+            mRadioGroupUType.check(R.id.radioButtonPatient);
+            findViewById(R.id.radioButtonMedServiceProvider).setEnabled(false);
+        }
     }
 
     /*@Override
