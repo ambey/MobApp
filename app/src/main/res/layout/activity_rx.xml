@@ -44,12 +44,14 @@
         android:layout_marginTop="20dp"
         android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/rxItemForm"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/nameTextView"
-        android:layout_marginTop="20dp">
+    <!--
+        <ScrollView
+            android:id="@+id/rxItemForm"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/nameTextView"
+            android:layout_marginTop="20dp">
+    -->
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -73,7 +75,7 @@
 
             <LinearLayout
                 android:id="@+id/drugNameLayout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
@@ -85,7 +87,7 @@
                     android:layout_gravity="bottom"
                     android:layout_weight="0.5"
                     android:hint="@string/drug_name"
-                    android:inputType="text" />
+                    android:inputType="textNoSuggestions" />
 
                 <Spinner
                     android:id="@+id/drugFormSpinner"
@@ -236,7 +238,8 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="10dp"
                 android:gravity="start"
-                android:hint="@string/intake_steps" />
+                android:hint="@string/intake_steps"
+                android:inputType="textNoSuggestions" />
 
             <LinearLayout
                 android:id="@+id/altDrugLayout"
@@ -250,7 +253,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="@string/alt_drug"
-                    android:inputType="text" />
+                    android:inputType="textNoSuggestions" />
 
                 <Spinner
                     android:id="@+id/altDrugFormSpinner"
@@ -293,5 +296,7 @@
                 android:onClick="doneRx"
                 android:text="@string/done_with_rx" />
         </RelativeLayout>
-    </ScrollView>
+    <!--
+        </ScrollView>
+    -->
 </RelativeLayout>

@@ -42,7 +42,7 @@
             android:layout_alignBottom="@+id/editTextCity"
             android:layout_marginTop="10dp"
             android:hint="@string/loc"
-            android:inputType="text" />
+            android:inputType="textNoSuggestions" />
 
 
         <Spinner
@@ -274,7 +274,7 @@
                 android:layout_below="@+id/editTextConsultationFees"
                 android:layout_marginTop="10dp"
                 android:hint="@string/notes"
-                android:inputType="text" />
+                android:inputType="textNoSuggestions" />
 
         </RelativeLayout>
     </LinearLayout>

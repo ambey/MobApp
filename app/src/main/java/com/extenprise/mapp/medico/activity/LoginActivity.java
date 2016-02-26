@@ -81,13 +81,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 
-
-        View mLoginFormView = findViewById(R.id.login_form);
-        //mLoginFormView.setEnabled(false);
-        Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
-        rLayoutAnim.setDuration(3000);
-        mLoginFormView.startAnimation(rLayoutAnim);
-
         //mProgressView = findViewById(R.id.login_progress);
         mRadioGroupUType = (RadioGroup) findViewById(R.id.radioGroupUserType);
 
@@ -113,6 +106,12 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 return false;
             }
         });
+
+        View mLoginFormView = findViewById(R.id.login_form);
+        //mLoginFormView.setEnabled(false);
+        Animation rLayoutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.img_fade);
+        rLayoutAnim.setDuration(3000);
+        mLoginFormView.startAnimation(rLayoutAnim);
 
         Button emailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         emailSignInButton.setOnClickListener(new OnClickListener() {

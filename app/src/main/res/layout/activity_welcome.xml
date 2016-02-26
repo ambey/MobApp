@@ -9,29 +9,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.medico.activity.WelcomeActivity">
 
-    <ImageView
-        android:id="@+id/imageViewLogo"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="197dp"
-        android:src="@drawable/med_logo_final" />
-
-    <TextView
-        android:id="@+id/textViewlogo"
+    <Button
+        android:id="@+id/textViewLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_alignBottom="@+id/imageViewLogo"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#0000"
+        android:drawableTop="@drawable/med_logo_final"
+        android:enabled="false"
+        android:paddingBottom="100dp"
         android:text="@string/by_exp"
         android:textColor="#000"
         android:textSize="12sp"
         android:textStyle="bold|italic" />
 
-
-
-
+    <TextView
+        android:id="@+id/textViewWaitMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/msg_loading_home_page"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:visibility="gone" />
 
 </RelativeLayout>

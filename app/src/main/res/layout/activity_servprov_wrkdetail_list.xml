@@ -60,11 +60,11 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/spinner"
+        android:clickable="false"
         android:entries="@array/service_category"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:padding="5dp"
-        android:clickable="false"
         android:prompt="@string/speciality_doc"
         android:spinnerMode="dropdown" />
 
@@ -82,8 +82,8 @@
         android:layout_toRightOf="@+id/spinServiceProvCategory"
         android:background="@drawable/spinner"
         android:choiceMode="singleChoice"
-        android:focusable="true"
         android:clickable="false"
+        android:focusable="true"
         android:focusableInTouchMode="true"
         android:padding="5dp"
         android:spinnerMode="dropdown" />
@@ -96,11 +96,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
-        android:maxLength="2"
         android:layout_toEndOf="@+id/editTextQualification"
         android:layout_toRightOf="@+id/editTextQualification"
         android:hint="@string/experience"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:maxLength="2" />
 
 
     <EditText
@@ -110,6 +110,7 @@
         android:layout_below="@+id/spinServiceProvCategory"
         android:layout_marginTop="20dp"
         android:hint="@string/qualification"
+        android:inputType="textNoSuggestions"
         android:padding="4dp"/>
 
     <LinearLayout

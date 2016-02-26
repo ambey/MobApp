@@ -52,7 +52,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/servProLay1"
         android:layout_marginTop="10dp"
-        android:hint="@string/searchDrHint" />
+        android:hint="@string/searchDrHint"
+        android:inputType="textNoSuggestions" />
 
 
     <EditText
@@ -61,7 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editSearchDr"
         android:layout_marginTop="10dp"
-        android:hint="@string/loc1" />
+        android:hint="@string/loc1"
+        android:inputType="textNoSuggestions" />
 
     <ScrollView
         android:id="@+id/advSearchForm"
@@ -91,7 +93,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:hint="@string/qualification1" />
+                    android:hint="@string/qualification1"
+                    android:inputType="textNoSuggestions" />
 
                 <EditText
                     android:id="@+id/editTextExp"
@@ -101,7 +104,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="0.5"
                     android:hint="@string/minExp"
-                    android:inputType="phone" />
+                    android:inputType="number" />
             </LinearLayout>
 
             <TextView
@@ -129,8 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="@string/strtTime"
-                    android:onClick="showStartTimePicker"
-                   />
+                    android:onClick="showStartTimePicker" />
 
                 <Button
                     android:id="@+id/buttonEndTime"
@@ -140,8 +142,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_weight="0.5"
                     android:hint="@string/endTime"
-                    android:onClick="showEndTimePicker"
-                    />
+                    android:onClick="showEndTimePicker" />
             </LinearLayout>
 
             <RelativeLayout
@@ -173,15 +174,15 @@
                     android:onClick="showGenderField"
                     android:text="@string/gender" />
 
-            <!--<Spinner
-                android:entries="@array/days"
-                android:id="@+id/spinAvailDays"
-                android:background="@drawable/spinner"
-                android:layout_width="160.0dip"
-                android:layout_height="wrap_content"
-                android:prompt="@string/weekly_off"
-                android:layout_below="@+id/viewWeeklyOffLbl"
-                android:layout_marginTop="20dp"/>-->
+                <!--<Spinner
+                    android:entries="@array/days"
+                    android:id="@+id/spinAvailDays"
+                    android:background="@drawable/spinner"
+                    android:layout_width="160.0dip"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/weekly_off"
+                    android:layout_below="@+id/viewWeeklyOffLbl"
+                    android:layout_marginTop="20dp"/>-->
 
 
                 <Button
@@ -195,8 +196,7 @@
                     android:background="@drawable/spinner"
                     android:onClick="showDaysSelectionDialog"
                     android:text="@string/select_days"
-                    android:visibility="gone"
-                   />
+                    android:visibility="gone" />
 
                 <Spinner
                     android:id="@+id/spinGender"
@@ -213,7 +213,7 @@
                     android:visibility="gone"
 
 
-                   />
+                    />
             </RelativeLayout>
 
 

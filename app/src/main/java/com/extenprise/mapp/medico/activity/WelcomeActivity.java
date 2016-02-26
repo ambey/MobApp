@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
@@ -34,11 +33,9 @@ import android.content.Context;*/
 
 public class WelcomeActivity extends Activity implements ResponseHandler {
     TextView mTextLabel;
-    ImageView mImgLogo;
 
-    private MappServiceConnection mConnection;
+    private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private int mLoginType;
-    private Handler mHandler = new Handler();
 
     /*
     private static final String LOG_TAG = "AppUpgrade";
@@ -74,14 +71,11 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.hide();
         }
-        mTextLabel = (TextView) findViewById(R.id.textViewlogo);
-        mImgLogo = (ImageView) findViewById(R.id.imageViewLogo);
-
-        mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
+        mTextLabel = (TextView) findViewById(R.id.textViewLogo);
 
         //Checking for updates in version of app.
 /*
@@ -161,7 +155,9 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
     private void initialize() {
         Animation textAnimation = AnimationUtils.loadAnimation(this, R.anim.text_fade);
-        mImgLogo.startAnimation(textAnimation);
+        textAnimation.setDuration(4000);
+        textAnimation.setFillEnabled(true);
+        textAnimation.setFillAfter(true);
         mTextLabel.startAnimation(textAnimation);
 
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -183,15 +179,28 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             bundle.putParcelable("signInData", signInData);
             mConnection.setAction(MappService.DO_LOGIN);
             mConnection.setData(bundle);
-            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-
+            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+                //Utility.showProgressDialog(this, true);
+                final View viewWaitMsg = findViewById(R.id.textViewWaitMsg);
+                final Animation textBlink = AnimationUtils.loadAnimation(this, R.anim.text_fade);
+                textBlink.setDuration(500);
+                textBlink.setRepeatCount(Animation.INFINITE);
+                textBlink.setRepeatMode(Animation.RESTART);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewWaitMsg.setVisibility(View.VISIBLE);
+                        viewWaitMsg.startAnimation(textBlink);
+                    }
+                }, 5000);
+            }
         } else {
-            mHandler.postDelayed(new Runnable() {
+
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                     startActivity(intent);
-                    mImgLogo.setVisibility(View.GONE);
                     mTextLabel.setVisibility(View.GONE);
                     //WelcomeActivity.this.finish();
                 }
@@ -201,6 +210,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (action == MappService.DO_LOGIN) {
             loginDone(data);
         }
@@ -208,6 +218,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     }
 
     protected void loginDone(Bundle msgData) {
+
         boolean success = msgData.getBoolean("status");
         if (success) {
             Intent intent;
@@ -241,8 +252,11 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             }
             startActivity(intent);
         } else {
+            //Utility.showMessage(this, R.string.msg_login_failed);
             Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
             startActivity(intent);
+            /*mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();*/
         }
     }
 }
