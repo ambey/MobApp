@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/shaded_background"
     android:orientation="horizontal"
+    android:padding="4dp"
     android:weightSum="1">
 
     <CheckBox
@@ -48,7 +50,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:hint="@string/from"
-                android:inputType="time" />
+                android:imeOptions="actionNext"
+                android:inputType="time"
+                android:nextFocusForward="@+id/editTextToTime" />
 
             <EditText
                 android:id="@+id/editTextToTime"
@@ -56,7 +60,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:hint="@string/to"
-                android:inputType="time" />
+                android:imeOptions="actionNext"
+                android:inputType="time"
+                android:nextFocusForward="@+id/editTextFromTime2" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,7 +86,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:hint="@string/from"
-                android:inputType="time" />
+                android:imeOptions="actionNext"
+                android:inputType="time"
+                android:nextFocusForward="@+id/editTextToTime2" />
 
             <EditText
                 android:id="@+id/editTextToTime2"
@@ -88,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:hint="@string/to"
+                android:imeOptions="actionDone"
                 android:inputType="time" />
         </LinearLayout>
     </RelativeLayout>

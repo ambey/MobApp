@@ -31,7 +31,7 @@ public class ServProvHasServPt implements Parcelable {
     private float consultFee;
     private int startTime; //as minutes
     private int endTime;//as minutes
-    //private ArrayList<CustomerHistoryData> historyData;
+    private WeeklyWorkTiming weeklyWorkTiming;
     private ArrayList<Appointment> appointments;
     private ServicePoint servicePoint;
     private String servProvPhone;
@@ -143,16 +143,16 @@ public class ServProvHasServPt implements Parcelable {
         return endTime;
     }
 
-    /*public ArrayList<CustomerHistoryData> getHistoryData() {
-        return historyData;
-    }*/
-
- /*   public void setHistoryData(ArrayList<CustomerHistoryData> historyData) {
-        this.historyData = historyData;
-    }*/
-
     public void setEndTime(int endTime) {
         this.endTime = endTime;
+    }
+
+    public WeeklyWorkTiming getWeeklyWorkTiming() {
+        return weeklyWorkTiming;
+    }
+
+    public void setWeeklyWorkTiming(WeeklyWorkTiming weeklyWorkTiming) {
+        this.weeklyWorkTiming = weeklyWorkTiming;
     }
 
     public ArrayList<Appointment> getAppointments() {
@@ -182,5 +182,4 @@ public class ServProvHasServPt implements Parcelable {
         servicePoint.writeToParcel(dest, flags);
         dest.writeString(notes);
     }
-
 }

@@ -113,6 +113,9 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
 
                 String selectedCategory = mServProvCategory.getSelectedItem().toString();
                 if (selectedCategory.equals(getString(R.string.select_category))) {
+                    ArrayList<String> specList = new ArrayList<>();
+                    specList.add(getString(R.string.select_speciality));
+                    mSpeciality.setAdapter(new ArrayAdapter<>(AdvSearchServProvActivity.this, R.layout.layout_spinner, specList));
                     return;
                 }
                 mForm = new SearchServProvForm();

@@ -16,6 +16,7 @@
         <item name="actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
         <item name="android:actionMenuTextColor">@color/ThemeColor</item>
         <item name="actionMenuTextColor">@color/ThemeColor</item>
+        <item name="android:progressBarStyle">@style/ProgressBarStyle</item>
         <!--
                 <item name="android:popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
                 <item name="popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
@@ -23,6 +24,9 @@
         <!--<item name="android:buttonStyle">@style/MyButton</item>-->
     </style>
 
+    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:color">@color/ThemeColor</item>
+    </style>
     <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>

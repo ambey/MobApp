@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.service.data.WeeklyWorkTiming;
 import com.extenprise.mapp.medico.service.ui.WorkHoursAdapter;
 
 public class WorkHoursActivity extends Activity {
@@ -16,7 +17,7 @@ public class WorkHoursActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ListView listViewWorkHours = (ListView) findViewById(R.id.listViewWorkHours);
-        listViewWorkHours.setAdapter(new WorkHoursAdapter(this, 0));
+        listViewWorkHours.setAdapter(new WorkHoursAdapter(this, 0, new WeeklyWorkTiming()));
     }
 
 }

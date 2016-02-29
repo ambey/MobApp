@@ -123,7 +123,9 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     private void getSpeciality() {
         String selectedCategory = mServProvCategory.getSelectedItem().toString();
         if (selectedCategory.equalsIgnoreCase(getString(R.string.select_category))) {
-            mSpeciality.setAdapter(null);
+            ArrayList<String> specList = new ArrayList<>();
+            specList.add(getString(R.string.select_speciality));
+            mSpeciality.setAdapter(new ArrayAdapter<>(this, R.layout.layout_spinner, specList));
             return;
         }
         Bundle bundle = new Bundle();

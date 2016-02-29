@@ -8,33 +8,61 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="1"
     tools:context="com.extenprise.mapp.medico.service.activity.WorkHoursActivity">
 
-    <TextView
-        android:id="@+id/textViewWorkPlace"
-        style="@style/LargeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="ABC" />
+    <LinearLayout
+        android:id="@+id/layoutWorkPlaceTitle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.13"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewWorkPlace"
+            style="@style/LargeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="ABC" />
+
+        <TextView
+            android:id="@+id/textViewServProvName"
+            style="@style/MediumLabelGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="XYZ" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textViewServProvName"
-        style="@style/MediumLabelGreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="XYZ" />
-
-    <TextView
         style="@style/LargeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
+        android:layout_weight="0.07"
+        android:gravity="center_horizontal"
         android:text="@string/work_timings" />
 
     <ListView
         android:id="@+id/listViewWorkHours"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="0.65"
+        android:divider="#0000"
+        android:dividerHeight="8dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15">
+
+        <Button
+            style="@style/MyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/save" />
+    </RelativeLayout>
 </LinearLayout>
