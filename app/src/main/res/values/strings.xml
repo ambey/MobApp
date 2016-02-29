@@ -267,6 +267,6 @@
     <string name="work_timings">Work Timings</string>
     <string name="title_activity_work_hours">WorkHoursActivity</string>
 
-    <string name="gender_lbl">Gender *</string>
-    <string name="state_lbl">State *</string>
+    <string name="gender_lbl">Select Gender *</string>
+    <string name="state_lbl">Select State *</string>
 </resources>

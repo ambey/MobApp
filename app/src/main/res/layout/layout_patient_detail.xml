@@ -23,7 +23,7 @@
         android:layout_marginTop="10dp"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -68,37 +68,37 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textViewDOBLbl"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_weight="0.90"
+                android:layout_weight="0.34"
                 android:text="@string/dob_label"
-                android:textStyle="bold"/>
+                android:textStyle="bold"/>-->
 
             <TextView
                 android:id="@+id/textViewDOB"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:layout_weight="0.85"
+                android:layout_weight="0.50"
                 android:background="@drawable/spinner"
                 android:clickable="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:hint="@string/dob_format"
                 android:onClick="showDatePicker" />
 
             <Spinner
                 android:id="@+id/spinGender"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:layout_weight="0.85"
+                android:layout_weight="0.50"
                 android:background="@drawable/spinner"
                 android:entries="@array/gender_type"
                 android:focusable="true"
@@ -183,7 +183,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         >
 
         <LinearLayout

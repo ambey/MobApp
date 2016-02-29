@@ -228,11 +228,16 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     public void resendRx(View view) {
-        Intent intent = getParentActivityIntent();
+        Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
+        intent.putExtra("rx", mInboxItem.getRx());
+        intent.putExtra("appont", "");
+        intent.putExtra("servProv", "");
+        startActivity(intent);
+        /*Intent intent = getParentActivityIntent();
         if (intent == null) {
             return;
         }
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     private void sentAvailabilityFeedback() {

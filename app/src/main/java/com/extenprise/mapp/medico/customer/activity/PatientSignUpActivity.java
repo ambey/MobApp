@@ -88,6 +88,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         /*mFormView = findViewById(R.id.scrollView);
         mProgressView = findViewById(R.id.progressView);*/
         mTextViewDOB = (TextView) findViewById(R.id.textViewDOB);
+        mTextViewDOB.setHint(String.format("%s *", getString(R.string.dob)));
         mEditTextCustomerFName = (EditText) findViewById(R.id.editTextCustomerFName);
         mEditTextCustomerLName = (EditText) findViewById(R.id.editTextCustomerLName);
         mEditTextCellphone = (EditText) findViewById(R.id.editTextCellphone);
@@ -152,6 +153,8 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
+        Utility.collapse(mContLay, true);
+        Utility.collapse(mAddrLayout, true);
         WorkingDataStore.getBundle().remove("lastPhone");
     }
 

@@ -353,7 +353,8 @@ public class RxActivity extends Activity implements ResponseHandler {
             return false;
         }
         int rxItemPos = getIntent().getIntExtra("rxItemPos", 0);
-        RxInboxItem rxInboxItem = getIntent().getParcelableExtra("rxItem");
+        RxInboxItem rxInboxItem = WorkingDataStore.getBundle().getParcelable("rxItem");
+        //RxInboxItem rxInboxItem = getIntent().getParcelableExtra("rxItem");
         RxItem item = rxInboxItem.getRx().getItems().get(rxItemPos);
         fillRxItem(item);
         return true;
