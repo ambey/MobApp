@@ -101,6 +101,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private boolean isPwdCorrect;
     private ImageButton mEditWpPencil;
     private int defaultImg;
+    private TextView mDocName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +149,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         TextView mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
         TextView mMobNo = (TextView) findViewById(R.id.editTextMobNum);
         TextView mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
-        TextView mDocName = (TextView) findViewById(R.id.textviewDocname);
+        mDocName = (TextView) findViewById(R.id.textviewDocname);
 
  /*       Intent intent = getIntent();
         mCategory = intent.getStringExtra("category");
@@ -202,15 +203,12 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
     }
 
-/*
     @Override
     protected void onResume() {
         super.onResume();
-        if (mServiceProv == null) {
-            Utility.goTOLoginPage(this, LoginActivity.class);
-        }
+        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
     }
-*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1160,6 +1158,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
             serviceProvider.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
             mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+        } else {
+            mServiceProv.setPhoto(null);
         }
         setPhoto();
     }

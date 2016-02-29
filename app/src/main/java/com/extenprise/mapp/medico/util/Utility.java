@@ -264,6 +264,7 @@ public abstract class Utility {
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
                         // Display Selected time in textbox
+                        button.setError(null);
                         button.setText(String.format("%02d:%02d", hourOfDay, minute));
                     }
                 }, hour, minute, false);
@@ -421,9 +422,9 @@ public abstract class Utility {
             case ErrorCode.ERROR_APPONT_CONFLICT:
                 showMessage(context, R.string.error_appointment_clash);
                 break;
-            case ErrorCode.ERROR_INVALID_USER_OR_PASSWD:
+            /*case ErrorCode.ERROR_INVALID_USER_OR_PASSWD:
                 showMessage(context, R.string.error_invalid_user_or_passwd);
-                break;
+                break;*/
             case ErrorCode.ERROR_PHONE_EXISTS:
                 showMessage(context, R.string.error_request_already_made);
                 break;

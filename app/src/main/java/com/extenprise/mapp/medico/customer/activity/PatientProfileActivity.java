@@ -360,6 +360,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             Utility.showMessage(this, R.string.msg_upload_photo);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
             mCust.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+        } else {
+            mCust.setPhoto(null);
         }
         setPhoto();
     }
@@ -603,6 +605,13 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     public void changeImg(View view) {
+        String[] opts = new String[]{getString(R.string.take_photo),
+                getString(R.string.from_gallery),
+                getString(R.string.remove)};
+        if (mCust.getPhoto() == null) {
+            opts = new String[]{getString(R.string.take_photo),
+                    getString(R.string.from_gallery)};
+        }
         final Activity activity = this;
         final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, null, false,
@@ -611,9 +620,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 OnClickHandler is using array index to take actions, and it helps to understand
                 if the array is infront of us
                  */
-                new String[]{activity.getString(R.string.take_photo),
-                        activity.getString(R.string.from_gallery),
-                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                opts, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {

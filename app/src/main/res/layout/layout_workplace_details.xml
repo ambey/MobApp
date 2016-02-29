@@ -16,7 +16,7 @@
             android:layout_alignBottom="@+id/viewWorkPlaceType"
             android:layout_marginTop="10dp"
             android:hint="@string/name"
-            android:inputType="textAutoComplete|text" />
+            android:inputType="textNoSuggestions" />
 
         <Spinner
             android:id="@+id/viewWorkPlaceType"

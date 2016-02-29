@@ -30,6 +30,7 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
     private RadioGroup mGender;
     private RadioButton mFemale;
     private RadioButton mGenderBtn;
+    private TextView mPhone;
 
     private ServiceProvider mServiceProv;
 
@@ -66,8 +67,8 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
             }
         });
 
-        TextView mobNo = (TextView) findViewById(R.id.mobnumValue);
-        mobNo.setText(mServiceProv.getSignInData().getPhone());
+        mPhone = (TextView) findViewById(R.id.mobnumValue);
+        mPhone.setText(mServiceProv.getSignInData().getPhone());
         mFname.setText(mServiceProv.getfName());
         mLname.setText(mServiceProv.getlName());
         String email = mServiceProv.getEmailId();
@@ -120,6 +121,9 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
     }
 
     private ServiceProvider getProfileData(ServiceProvider sp) {
+        if (sp == null) {
+            sp = WorkingDataStore.getBundle().getParcelable("servProv");
+        }
         sp.setfName(mFname.getText().toString().trim());
         sp.setlName(mLname.getText().toString().trim());
         sp.setEmailId(mEmailID.getText().toString().trim());
