@@ -8,49 +8,51 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="1"
     tools:context="com.extenprise.mapp.medico.service.activity.SelectMedicalStoreActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
-        android:orientation="horizontal">
+        android:layout_weight="0.25">
 
         <TextView
-            style="@style/ExtraLargeLabel"
+            style="@style/LargeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_centerVertical="true"
+            android:drawableEnd="@mipmap/ic_med_store"
+            android:drawablePadding="24dp"
+            android:drawableRight="@mipmap/ic_med_store"
+            android:padding="24dp"
             android:text="@string/send_rx_to_mstore" />
+    </RelativeLayout>
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/medicalStore"
-            android:src="@drawable/medstore" />
-    </LinearLayout>
 
     <ListView
         android:id="@+id/medStoreListView"
         style="@style/ListViewStyle"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_weight="0.6"
         android:choiceMode="singleChoice" />
 
-    <Button
-        android:id="@+id/sendRxButton"
-        style="@style/MyButton"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:enabled="false"
-        android:onClick="sendRxToMedStore"
-        android:text="@string/send" />
+        android:layout_weight="0.15">
+
+        <Button
+            android:id="@+id/sendRxButton"
+            style="@style/MyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:enabled="false"
+            android:onClick="sendRxToMedStore"
+            android:text="@string/send" />
+    </RelativeLayout>
 </LinearLayout>
