@@ -62,6 +62,7 @@ public class PatientsHomeScreenActivity extends Activity {
     private void profile() {
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 mCustomer.getfName(), mCustomer.getlName()));
+        mImgView.setBackgroundResource(0);
         mImgView.setImageResource(R.drawable.patient);
         if (mCustomer.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto(),

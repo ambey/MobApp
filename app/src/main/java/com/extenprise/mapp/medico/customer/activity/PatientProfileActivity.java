@@ -141,6 +141,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
+        Utility.collapse(mContLay, true);
+        Utility.collapse(mAddrLayout, true);
     }
 
     public void showFields(View view) {
@@ -367,6 +369,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void setPhoto() {
+        mImgView.setBackgroundResource(0);
         mImgView.setImageResource(R.drawable.patient);
         if (mCust.getPhoto() != null) {
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
@@ -514,7 +517,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                             View focusView = null;
                             String newpwd = newPwd.getText().toString().trim();
                             if (!Validator.isPasswordValid(newpwd)) {
-                                newPwd.setError(getString(R.string.error_invalid_password));
+                                newPwd.setError(getString(R.string.error_pwd_length));
                                 focusView = newPwd;
                                 cancel = true;
                             }

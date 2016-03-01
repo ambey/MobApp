@@ -264,7 +264,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                             View focusView = null;
                             String newpwd = newPwd.getText().toString().trim();
                             if (!Validator.isPasswordValid(newpwd)) {
-                                newPwd.setError(getString(R.string.error_invalid_password));
+                                newPwd.setError(getString(R.string.error_pwd_length));
                                 focusView = newPwd;
                                 cancel = true;
                             }
@@ -654,6 +654,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private boolean isValidWorkPlace() {
         boolean valid = true;
         View focusView = null;
+        String value = "";
 
         if (Utility.areEditFieldsEmpty(this, new EditText[]{mPhone1, mPinCode,
                 mLoc, mName, mQualification, mExperience})) {
@@ -661,10 +662,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         }
 
         if (mConsultFee.isEnabled()) {
-            String fees = mConsultFee.getText().toString().trim();
-            if (!TextUtils.isEmpty(fees)) {
+            value = mConsultFee.getText().toString().trim();
+            if (!TextUtils.isEmpty(value)) {
                 try {
-                    float v = Float.parseFloat(fees);
+                    float v = Float.parseFloat(value);
                 } catch (NumberFormatException n) {
                     mConsultFee.setError(getString(R.string.error_only_digit));
                     valid = false;
@@ -673,8 +674,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
         }
 
-        String days = mMultiSpinnerDays.getText().toString();
-        if (days.equalsIgnoreCase(getString(R.string.practice_days))) {
+        value = mMultiSpinnerDays.getText().toString();
+        if (value.equalsIgnoreCase(getString(R.string.practice_days))) {
             mMultiSpinnerDays.setError(getString(R.string.error_field_required));
             focusView = mMultiSpinnerDays;
             valid = false;
@@ -699,35 +700,51 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
         }
 
-        if (Validator.isPinCodeValid(mPinCode.getText().toString().trim())) {
-            mPinCode.setError(getString(R.string.error_invalid_pincode));
-            focusView = mPinCode;
-            valid = false;
-        }
-
-        String email = mEmailIdwork.getText().toString().trim();
-        if (!TextUtils.isEmpty(email) && !Validator.isValidEmaillId(email)) {
+        value = mEmailIdwork.getText().toString().trim();
+        if (!TextUtils.isEmpty(value) && !Validator.isValidEmaillId(value)) {
             mEmailIdwork.setError(getString(R.string.error_invalid_email));
             focusView = mEmailIdwork;
             valid = false;
         }
 
-        if (!Validator.isPhoneValid(mPhone1.getText().toString().trim())) {
-            mPhone1.setError(getString(R.string.error_invalid_phone));
-            focusView = mPhone1;
-            valid = false;
-        }
-        String phone2 = mPhone2.getText().toString().trim();
-        if (!TextUtils.isEmpty(phone2) && !Validator.isPhoneValid(phone2)) {
+        value = mPhone2.getText().toString().trim();
+        if (!TextUtils.isEmpty(value) && !Validator.isPhoneValid(value)) {
             mPhone2.setError(getString(R.string.error_invalid_phone));
             focusView = mPhone2;
             valid = false;
         }
 
+        int errMsg = -1;
+        if (mState.getSelectedItem().toString().equals(getString(R.string.state_lbl))) {
+            Utility.setSpinError(mState, getString(R.string.error_select_state));
+            focusView = mPhone2;
+            errMsg = R.string.error_select_state;
+        }
+
+        if (Utility.areEditFieldsEmpty(this, new EditText[]{mPhone1, mPinCode,
+                mLoc, mName, mExperience, mQualification})) {
+            valid = false;
+            focusView = null;
+        }
+
+        value = mPhone1.getText().toString().trim();
+        if (!Validator.isPhoneValid(value) && !TextUtils.isEmpty(value)) {
+            mPhone1.setError(getString(R.string.error_invalid_phone));
+            focusView = mPhone1;
+            valid = false;
+        }
+
+        value = mPinCode.getText().toString().trim();
+        if (!TextUtils.isEmpty(value) && Validator.isPinCodeValid(value)) {
+            mPinCode.setError(getString(R.string.error_invalid_pincode));
+            focusView = mPinCode;
+            valid = false;
+        }
+
         if (mSpeciality.getSelectedItem() != null) {
-            String spec = mSpeciality.getSelectedItem().toString();
-            if (spec.equalsIgnoreCase(getString(R.string.select_speciality)) ||
-                    spec.equals(getString(R.string.other))) {
+            value = mSpeciality.getSelectedItem().toString();
+            if (value.equalsIgnoreCase(getString(R.string.select_speciality)) ||
+                    value.equals(getString(R.string.other))) {
                 //Utility.showAlert(this, "", "Please select speciality.");
                 View selectedView = mSpeciality.getSelectedView();
                 if (selectedView != null && selectedView instanceof TextView) {
@@ -740,8 +757,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             }
         }
 
-        String category = mServCatagory.getSelectedItem().toString();
-        if (TextUtils.isEmpty(category) || category.equals(getString(R.string.select_category))) {
+        value = mServCatagory.getSelectedItem().toString();
+        if (TextUtils.isEmpty(value) || value.equals(getString(R.string.select_category))) {
             //Utility.showAlert(this, "", "Please select service category.");
             View selectedView = mServCatagory.getSelectedView();
             if (selectedView != null && selectedView instanceof TextView) {
@@ -753,6 +770,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             valid = false;
         }
 
+        if (valid && errMsg != -1) {
+            valid = false;
+            Utility.showMessage(this, errMsg);
+        }
         if (focusView != null) {
             focusView.requestFocus();
         }

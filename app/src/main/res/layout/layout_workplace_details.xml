@@ -95,7 +95,7 @@
 
         <EditText
             android:id="@+id/editTextPhone1"
-            android:layout_width="180dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/editTextPhone2"
             android:layout_alignParentLeft="true"

@@ -43,4 +43,5 @@
     <string name="error_select_state">Please Select State</string>
     <string name="error_pwd_length">Password should have minimum six characters</string>
     <string name="error_proper_name">Please Enter Proper Name</string>
+    <string name="error_enter_std">Enter std code for landline number</string>
 </resources>

@@ -67,6 +67,7 @@ public class SignUpActionDialog extends DialogFragment {
             ((LinearLayout.LayoutParams) mLName.getLayoutParams()).weight = 0.5f;
             mPhoneText.setHint(String.format("%s **", mContext.getString(R.string.mobile_no)));
             mLandlineText.setHint(String.format("%s **", mContext.getString(R.string.landline_no)));
+            mStdCode.setHint(String.format("%s *", mContext.getString(R.string.std_code)));
         } else {
             mPhoneText.setHint(String.format("%s *", mContext.getString(R.string.mobile_no)));
         }
@@ -103,13 +104,42 @@ public class SignUpActionDialog extends DialogFragment {
                 cancel = true;
             }
         } else {
-            if (TextUtils.isEmpty(phone) &&
+            if (TextUtils.isEmpty(phone) && TextUtils.isEmpty(landline)) {
+                mPhoneText.setError(getString(R.string.error_mobile_or_landline_req));
+                focusView = mPhoneText;
+                cancel = true;
+            } else if (!TextUtils.isEmpty(landline)) {
+                mPhoneText.setError(null);
+                if (landline.length() + stdCode.length() != 11 || landline.startsWith("0")) {
+                    mLandlineText.setError(getString(R.string.error_invalid_phone));
+                    focusView = mLandlineText;
+                    cancel = true;
+                }
+                if (TextUtils.isEmpty(stdCode)) {
+                    mStdCode.setError(getString(R.string.error_field_required));
+                    focusView = mStdCode;
+                    cancel = true;
+                } else if (!stdCode.startsWith("0")) {
+                    mStdCode.setError(getString(R.string.error_invalid_std_code));
+                    focusView = mStdCode;
+                    cancel = true;
+                }
+            }
+
+            if (!TextUtils.isEmpty(phone) && !Validator.isPhoneValid(phone)) {
+                mPhoneText.setError(getString(R.string.error_invalid_phone));
+                focusView = mPhoneText;
+                cancel = true;
+            }
+        }
+            /*if (TextUtils.isEmpty(phone) &&
                     (TextUtils.isEmpty(stdCode) || TextUtils.isEmpty(landline))) {
                 mPhoneText.setError(getString(R.string.error_mobile_or_landline_req));
                 focusView = mPhoneText;
                 cancel = true;
             } else {
                 if (!TextUtils.isEmpty(landline)) {
+                    mPhoneText.setError(null);
                     if (landline.startsWith("0") || !stdCode.startsWith("0")) {
                         if (landline.startsWith("0")) {
                             mLandlineText.setError(getString(R.string.error_invalid_phone));
@@ -129,27 +159,7 @@ public class SignUpActionDialog extends DialogFragment {
                         }
                     }
                 }
-                if (!TextUtils.isEmpty(phone) && !Validator.isPhoneValid(phone)) {
-                    mPhoneText.setError(getString(R.string.error_invalid_phone));
-                    focusView = mPhoneText;
-                    cancel = true;
-                }
-            }
-        }
-
-        /*int msg = Validator.isNameValid(mLName.getText().toString().trim());
-        if (msg != -1) {
-            mLName.setError(getString(msg));
-            focusView = mLName;
-            cancel = true;
-        }
-        msg = Validator.isNameValid(mFName.getText().toString().trim());
-        if (msg != -1) {
-            mFName.setError(getString(msg));
-            focusView = mFName;
-            cancel = true;
-        }*/
-
+           */
         if (!Utility.isNameValid(getActivity(), mFName, mLName)) {
             focusView = null;
             cancel = true;
