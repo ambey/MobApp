@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.Appointment;
 import com.extenprise.mapp.medico.data.Rx;
@@ -218,6 +219,9 @@ public class RxActivity extends Activity implements ResponseHandler {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (WorkingDataStore.getBundle().getParcelable("servProv") == null) {
+            menu.removeItem(R.id.logout);
+        }
         getMenuInflater().inflate(R.menu.menu_rx, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -231,6 +235,11 @@ public class RxActivity extends Activity implements ResponseHandler {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.logout) {
+            Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+            WorkingDataStore.getBundle().remove("servProv");
             return true;
         }
 

@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -11,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -81,6 +84,31 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
         } else {
             mFemale.setChecked(true);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_service_provider_home, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case R.id.action_settings:
+                break;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("servProv");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void updateProfile(View view) {

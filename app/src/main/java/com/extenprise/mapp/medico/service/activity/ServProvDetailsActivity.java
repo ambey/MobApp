@@ -138,6 +138,9 @@ public class ServProvDetailsActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+            menu.removeItem(R.id.logout);
+        }
         getMenuInflater().inflate(R.menu.menu_doctor_details, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -147,11 +150,14 @@ public class ServProvDetailsActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case R.id.action_search:
+                return true;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("customer");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

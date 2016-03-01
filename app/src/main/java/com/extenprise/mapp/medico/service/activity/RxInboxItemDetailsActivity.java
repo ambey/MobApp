@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.Report;
 import com.extenprise.mapp.medico.data.ReportServiceStatus;
@@ -319,6 +320,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (WorkingDataStore.getBundle().getParcelable("servProv") == null) {
+            menu.removeItem(R.id.logout);
+        }
         getMenuInflater().inflate(R.menu.menu_rx, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -334,6 +338,12 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.logout) {
+            Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+            WorkingDataStore.getBundle().remove("servProv");
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -14,12 +14,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.RxFeedback;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.ui.RxInboxAdapter;
 import com.extenprise.mapp.medico.ui.DialogDismissListener;
 import com.extenprise.mapp.medico.ui.SortActionDialog;
+import com.extenprise.mapp.medico.util.Utility;
 
 import java.util.ArrayList;
 
@@ -79,6 +81,9 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (WorkingDataStore.getBundle().getParcelable("servProv") == null) {
+            menu.removeItem(R.id.logout);
+        }
         getMenuInflater().inflate(R.menu.menu_rx_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -88,14 +93,17 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.action_sort:
                 showSortDialog();
                 break;
             case R.id.action_settings:
+                break;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
 

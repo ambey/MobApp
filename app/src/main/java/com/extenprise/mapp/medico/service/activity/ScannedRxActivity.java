@@ -21,7 +21,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.Rx;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -72,6 +74,9 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (WorkingDataStore.getBundle().getParcelable("servProv") == null) {
+            menu.removeItem(R.id.logout);
+        }
         getMenuInflater().inflate(R.menu.menu_scanned_rx, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -81,11 +86,13 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                break;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("servProv");
+                break;
         }
 
         return super.onOptionsItemSelected(item);

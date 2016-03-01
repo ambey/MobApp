@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.ReportServiceStatus;
 import com.extenprise.mapp.medico.data.Rx;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -167,6 +169,10 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
                 showSortDialog();
                 break;
             case R.id.action_settings:
+                break;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
         return super.onOptionsItemSelected(item);

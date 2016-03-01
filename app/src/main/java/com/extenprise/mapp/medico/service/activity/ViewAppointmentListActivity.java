@@ -98,6 +98,9 @@ public class ViewAppointmentListActivity extends FragmentActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (WorkingDataStore.getBundle().getParcelable("servProv") == null) {
+            menu.removeItem(R.id.logout);
+        }
         getMenuInflater().inflate(R.menu.menu_view_appointment_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -111,6 +114,11 @@ public class ViewAppointmentListActivity extends FragmentActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.logout) {
+            Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+            WorkingDataStore.getBundle().remove("servProv");
             return true;
         }
 

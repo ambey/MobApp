@@ -32,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
@@ -294,6 +295,11 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                             }
                         }
                     });
+        }
+        if (id == R.id.logout) {
+            Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+            WorkingDataStore.getBundle().remove("servProv");
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
