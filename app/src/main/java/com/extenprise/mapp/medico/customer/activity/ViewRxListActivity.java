@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.customer.ui.RxListAdapter;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
@@ -107,6 +108,9 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+            menu.removeItem(R.id.logout);
+        }
         getMenuInflater().inflate(R.menu.menu_rx_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -125,6 +129,10 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
                 break;
             case R.id.action_settings:
                 break;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("customer");
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

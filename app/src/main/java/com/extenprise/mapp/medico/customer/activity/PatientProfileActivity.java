@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
@@ -476,98 +477,89 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if (id == R.id.action_changepwd) {
-            LayoutInflater inflater = this.getLayoutInflater();
-            final View dialogView = inflater.inflate(R.layout.layout_change_pwd, null);
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case R.id.action_settings:
+                return true;
+            case R.id.action_search:
+                return true;
+            case R.id.action_sign_in:
+                return true;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("customer");
+                return true;
+            case R.id.action_changepwd:
+                LayoutInflater inflater = this.getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.layout_change_pwd, null);
 
-            mOldPwd = (EditText) dialogView.findViewById(R.id.editTextOldPasswd);
-            final EditText newPwd = (EditText) dialogView.findViewById(R.id.editTextNewPasswd);
-            final EditText confPwd = (EditText) dialogView.findViewById(R.id.editTextCnfPasswd);
+                mOldPwd = (EditText) dialogView.findViewById(R.id.editTextOldPasswd);
+                final EditText newPwd = (EditText) dialogView.findViewById(R.id.editTextNewPasswd);
+                final EditText confPwd = (EditText) dialogView.findViewById(R.id.editTextCnfPasswd);
 
-            mOldPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        checkPwd();
+                mOldPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (!hasFocus) {
+                            checkPwd();
+                        }
                     }
-                }
-            });
+                });
 
-            final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
-            dialog.show();
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).
-                    setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            boolean cancel = false;
-                            if (!isPwdCorrect) {
-                                checkPwd();
-                                Utility.showMessage(PatientProfileActivity.this, R.string.msg_verify_pwd);
-                                cancel = true;
-                            }
-                            EditText[] fields = {newPwd, confPwd};
-                            if (Utility.areEditFieldsEmpty(PatientProfileActivity.this, fields)) {
-                                cancel = true;
-                            }
-
-                            View focusView = null;
-                            String newpwd = newPwd.getText().toString().trim();
-                            if (!Validator.isPasswordValid(newpwd)) {
-                                newPwd.setError(getString(R.string.error_pwd_length));
-                                focusView = newPwd;
-                                cancel = true;
-                            }
-                            String confpwd = confPwd.getText().toString().trim();
-                            if (!confpwd.equals(newpwd)) {
-                                confPwd.setError(getString(R.string.error_password_not_matching));
-                                focusView = confPwd;
-                                cancel = true;
-                            }
-
-                            if (cancel) {
-                                if (focusView != null) {
-                                    focusView.requestFocus();
+                final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).
+                        setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                boolean cancel = false;
+                                if (!isPwdCorrect) {
+                                    checkPwd();
+                                    Utility.showMessage(PatientProfileActivity.this, R.string.msg_verify_pwd);
+                                    cancel = true;
                                 }
-                            } else {
-                                Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-                                if (customer != null) {
-                                    customer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                                EditText[] fields = {newPwd, confPwd};
+                                if (Utility.areEditFieldsEmpty(PatientProfileActivity.this, fields)) {
+                                    cancel = true;
                                 }
-                                Bundle bundle = new Bundle();
-                                bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                                bundle.putParcelable("customer", customer);
-                                mConnection.setData(bundle);
-                                mConnection.setAction(MappService.DO_CHANGE_PWD);
-                                if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                                    //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
-                                    Utility.showProgressDialog(PatientProfileActivity.this, true);
+
+                                View focusView = null;
+                                String newpwd = newPwd.getText().toString().trim();
+                                if (!Validator.isPasswordValid(newpwd)) {
+                                    newPwd.setError(getString(R.string.error_pwd_length));
+                                    focusView = newPwd;
+                                    cancel = true;
                                 }
-                                dialog.dismiss();
+                                String confpwd = confPwd.getText().toString().trim();
+                                if (!confpwd.equals(newpwd)) {
+                                    confPwd.setError(getString(R.string.error_password_not_matching));
+                                    focusView = confPwd;
+                                    cancel = true;
+                                }
+
+                                if (cancel) {
+                                    if (focusView != null) {
+                                        focusView.requestFocus();
+                                    }
+                                } else {
+                                    Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+                                    if (customer != null) {
+                                        customer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
+                                    }
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+                                    bundle.putParcelable("customer", customer);
+                                    mConnection.setData(bundle);
+                                    mConnection.setAction(MappService.DO_CHANGE_PWD);
+                                    if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+                                        //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
+                                        Utility.showProgressDialog(PatientProfileActivity.this, true);
+                                    }
+                                    dialog.dismiss();
+                                }
                             }
-                        }
-                    });
-
-            /*
-            //Not working as per requirement ,,, validation not allowing, as closing the dialog..
-
-            Utility.showAlert(this, getString(R.string.changepwd), "", dialogView, true, null,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(which == AlertDialog.BUTTON_NEGATIVE) {
-                                dialog.dismiss();
-                            } else {
-
-                            }
-                        }
-                    });*/
-
-            /*final AlertDialog dialog = Utility.customDialogBuilder(this, dialogView, R.string.changepwd).create();
-            dialog.show();*/
+                        });
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

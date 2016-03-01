@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.AppointmentListItem;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.customer.ui.AppointmentListAdapter;
@@ -185,7 +186,11 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_appointment_list, menu);
+        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+            getMenuInflater().inflate(R.menu.menu_patients_home_screen, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -194,12 +199,18 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case R.id.action_search:
+                return true;
+            case R.id.action_sign_in:
+                return true;
+            case R.id.logout:
+                Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
+                WorkingDataStore.getBundle().remove("customer");
+                return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
