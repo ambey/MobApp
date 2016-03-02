@@ -207,6 +207,38 @@ public abstract class Utility {
         //return minutes / 60 + ":" + minutes % 60;
     }
 
+    public static String displayTime(int st, int en) {
+        String start = getTimeString(st);
+        String end = getTimeString(en);
+        //new SimpleDateFormat("h:mm a");
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("kk:mm");
+        try {
+            Date d = sdf.parse(start);
+            Date d1 = sdf.parse(end);
+            sdf.applyPattern("hh:mm aa");
+            return String.format("%s to %s", sdf.format(d), sdf.format(d1));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return String.format("%s to %s", start, end);
+    }
+
+    public static String getTimeInTwelveFormat(int min) {
+        String start = getTimeString(min);
+        //new SimpleDateFormat("h:mm a");
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        sdf.applyPattern("kk:mm");
+        try {
+            Date d = sdf.parse(start);
+            sdf.applyPattern("hh:mm aa");
+            return sdf.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return start;
+        }
+    }
+
     public static boolean findDocAvailability(String availDays, Calendar calendar) {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         String searchDay = "Sunday";

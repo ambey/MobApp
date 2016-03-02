@@ -57,7 +57,6 @@ public class ServProvDetailsActivity extends Activity {
         } else {
             mServProv = intent.getParcelableExtra("servProv");
         }
-        assert mServProv != null;
         ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         Service service = spsspt.getService();
 
@@ -79,7 +78,8 @@ public class ServProvDetailsActivity extends Activity {
         textViewClinic.setText(spsspt.getServicePoint().getName());
         textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));
         textViewClinicTime.setText(String.format("%s to %s",
-                Utility.getTimeString(spsspt.getStartTime()), Utility.getTimeString(spsspt.getEndTime())));
+                Utility.getTimeInTwelveFormat(spsspt.getStartTime()),
+                Utility.getTimeInTwelveFormat(spsspt.getEndTime())));
         textViewDocname.setText(String.format("%s %s", mServProv.getfName(), mServProv.getlName()));
         textViewDocSpeciality.setText(String.format("(%s)", spsspt.getService().getSpeciality()));
         textViewDocQualification.setText(mServProv.getQualification());
@@ -170,5 +170,15 @@ public class ServProvDetailsActivity extends Activity {
             intent.putExtra("parent-activity", getIntent().getStringExtra("myparent-activity"));
         }
         return intent;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
+        super.onBackPressed();
     }
 }

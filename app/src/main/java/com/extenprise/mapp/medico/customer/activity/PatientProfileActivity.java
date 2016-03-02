@@ -194,7 +194,21 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 */
 
+    private void setErrorsNull() {
+        mEditTextPinCode.setError(null);
+        mSpinCity.setError(null);
+        mEditTextLoc.setError(null);
+        mEditTextWeight.setError(null);
+        mEditTextCustomerLName.setError(null);
+        mEditTextCustomerFName.setError(null);
+        mEditTextCustomerEmail.setError(null);
+        mTextViewDOB.setError(null);
+        Utility.setSpinError(mSpinState, null);
+        Utility.setSpinError(mSpinGender, null);
+    }
+
     public void updateProfile(View view) {
+        setErrorsNull();
         boolean valid = true;
         View focusView = null;
         int errMsg = R.string.error_select_state;

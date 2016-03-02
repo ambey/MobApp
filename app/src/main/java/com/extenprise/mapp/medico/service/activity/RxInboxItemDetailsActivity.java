@@ -4,8 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -263,8 +261,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         }
         byte[] pix = report.getScannedCopy();
         if(pix != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
-            imageView.setImageBitmap(bitmap);
+            //Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
+            imageView.setImageBitmap(Utility.getBitmapFromBytes(pix,
+                    imageView.getLayoutParams().width, imageView.getLayoutParams().height));
         }
     }
 

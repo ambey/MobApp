@@ -420,7 +420,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         TextView workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
         Utility.setNewSpinner(this, null, mServCatagory,
-                new String[] { getString(R.string.select_category), mCategory });
+                new String[]{String.format("%s *", getString(R.string.select_category)), mCategory});
         Utility.setNewSpinner(this, mSpecialityList, mSpeciality, null);
 
         ArrayList<String> listWPType = new ArrayList<>();
@@ -1258,7 +1258,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (mSpecialityList == null) {
             mSpecialityList = new ArrayList<>();
         }
-        mSpecialityList.add(0, getString(R.string.select_speciality));
+        mSpecialityList.add(0, String.format("%s *", getString(R.string.select_speciality)));
         if(!mSpecialityList.contains(getString(R.string.other))) {
             mSpecialityList.add(getString(R.string.other));
         }
@@ -1302,6 +1302,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         DaysSelectionDialog selectionDialog = (DaysSelectionDialog) dialog;
         String selectedDays = selectionDialog.getSelectedDays();
         mMultiSpinnerDays.setText(selectedDays);
+        mMultiSpinnerDays.setError(null);
     }
 
     @Override

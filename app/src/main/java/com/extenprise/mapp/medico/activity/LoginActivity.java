@@ -38,6 +38,7 @@ import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.activity.MedicalStoreHomeActivity;
+import com.extenprise.mapp.medico.service.activity.ServProvDetailsActivity;
 import com.extenprise.mapp.medico.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.BackButtonHandler;
@@ -184,6 +185,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     public void onBackPressed() {
         mConnection.setBound(false);
+        if (isBookAppontRequest) {
+            Intent intent = new Intent(this, ServProvDetailsActivity.class);
+            intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
+            intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+            startActivity(intent);
+            return;
+        }
+
         final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
         if (buttonHandler.isBackPressed()) {
             buttonHandler.setBackPressed(false);
@@ -372,6 +381,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
+                workingData.putParcelable("customer", customer);
                 String targetActivity = getIntent().getStringExtra("target-activity");
                 if (targetActivity != null) {
                     try {
@@ -385,7 +395,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 } else {
                     intent = new Intent(this, PatientsHomeScreenActivity.class);
                 }
-                workingData.putParcelable("customer", customer);
                 assert customer != null;
                 phone = customer.getSignInData().getPhone();
             } else {

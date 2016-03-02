@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -321,8 +322,29 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        //startActivity(getIntent());
+        /*if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+            Intent intent = new Intent(this, PatientsHomeScreenActivity.class);
+            startActivity(intent);
+            return;
+        }*/
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+                Intent intent = new Intent(this, PatientsHomeScreenActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

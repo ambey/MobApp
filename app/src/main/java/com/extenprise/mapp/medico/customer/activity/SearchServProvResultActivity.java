@@ -22,6 +22,7 @@ import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.activity.ServProvDetailsActivity;
 import com.extenprise.mapp.medico.service.data.ServProvListItem;
+import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.service.ui.ServProvListAdapter;
 import com.extenprise.mapp.medico.ui.DialogDismissListener;
 import com.extenprise.mapp.medico.ui.SortActionDialog;
@@ -149,10 +150,16 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     }
 
     public void gotDetails(Bundle data) {
+        ServiceProvider serviceProvider = data.getParcelable("service");
+        if (serviceProvider == null) {
+            // It crashes the app in ServProvDetailsActivity sometimes.. so have to check this.
+            Utility.showMessage(this, R.string.error_server_connect);
+            return;
+        }
         //Utility.showProgress(this, mSearchResultView, mProgressView, false);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
         intent.putParcelableArrayListExtra("servProvList", mServProvList);
-        intent.putExtra("servProv", data.getParcelable("service"));
+        intent.putExtra("servProv", serviceProvider);
         startActivity(intent);
     }
 
@@ -198,7 +205,11 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        //startActivity(getIntent());
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         super.onBackPressed();
     }
 }
