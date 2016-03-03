@@ -214,7 +214,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_serv_prove_profile, menu);
+        getMenuInflater().inflate(R.menu.menu_profile_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

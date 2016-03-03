@@ -16,6 +16,7 @@ import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.customer.ui.RxListAdapter;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
+import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -68,7 +69,6 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
 
     private void getRxList() {
         //Utility.showProgress(this, mRxListView, mRxListProgress, true);
-        Utility.showProgressDialog(this, true);
         RxInboxItem item = new RxInboxItem();
         Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
         item.setCustomer(cust);
@@ -76,12 +76,19 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         bundle.putParcelable("rxItem", item);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_GET_CUST_RX_LIST);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
+        }
     }
 
     private void gotRxList(Bundle data) {
         //Utility.showProgress(this, mRxListView, mRxListProgress, false);
         Utility.showProgressDialog(this, false);
+        if (data.getInt("responseCode") == ErrorCode.ERROR_REQUEST_FAILED) {
+            onBackPressed();
+            return;
+        }
+
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
         RxListAdapter adapter = new RxListAdapter(this, 0, list, cust);
@@ -108,10 +115,7 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
-            menu.removeItem(R.id.logout);
-        }
-        getMenuInflater().inflate(R.menu.menu_rx_list, menu);
+        getMenuInflater().inflate(R.menu.menu_list_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

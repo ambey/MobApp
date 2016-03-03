@@ -47,16 +47,14 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mMsgView = (TextView) findViewById(R.id.msgView);
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imageDoctor);
-
-        profile();
-
+        //profile();
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
         lastVisited.setText(String.format("%s %s %s",
                 getString(R.string.last_visited),
                 prefs.getString("lastVisitDate", "--"),
                 prefs.getString("lastVisitTime", "--")));
-        Utility.setLastVisit(prefs);
+        //Utility.setLastVisit(prefs);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_service_provider_home, menu);
+        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

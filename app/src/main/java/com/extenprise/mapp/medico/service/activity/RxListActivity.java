@@ -81,10 +81,7 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (WorkingDataStore.getBundle().getParcelable("servProv") == null) {
-            menu.removeItem(R.id.logout);
-        }
-        getMenuInflater().inflate(R.menu.menu_rx_list, menu);
+        getMenuInflater().inflate(R.menu.menu_list_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -152,7 +152,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search_doc_result_list, menu);
+        getMenuInflater().inflate(R.menu.menu_list_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

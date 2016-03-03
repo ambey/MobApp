@@ -191,12 +191,20 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-            getMenuInflater().inflate(R.menu.menu_patients_home_screen, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
-        }
+        /*if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+            //menu.removeItem(R.id.logout); Not Removing Item
+            //menu.findItem(R.id.logout).setVisible(false); // Null Pointer Exception
+        }*/
+        getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+            menu.removeItem(R.id.logout);
+        }
+        return true;
     }
 
     @Override
@@ -322,11 +330,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        /*if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-            Intent intent = new Intent(this, PatientsHomeScreenActivity.class);
-            startActivity(intent);
-            return;
-        }*/
         Intent intent = getParentActivityIntent();
         if (intent != null) {
             startActivity(intent);
@@ -339,8 +342,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-                Intent intent = new Intent(this, PatientsHomeScreenActivity.class);
-                startActivity(intent);
+                Utility.goTOLoginPage(this, PatientsHomeScreenActivity.class);
                 return true;
             }
         }

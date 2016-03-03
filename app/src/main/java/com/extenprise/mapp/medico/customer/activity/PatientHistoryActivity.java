@@ -63,11 +63,7 @@ public class PatientHistoryActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-            getMenuInflater().inflate(R.menu.menu_patients_home_screen, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_patient_history, menu);
-        }
+        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

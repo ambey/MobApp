@@ -100,11 +100,20 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        /*if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+            //menu.removeItem(R.id.logout); Not Removing Item
+            //menu.findItem(R.id.logout).setVisible(false); // Null Pointer Exception
+        }*/
+        getMenuInflater().inflate(R.menu.menu_list_screen, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
             menu.removeItem(R.id.logout);
         }
-        getMenuInflater().inflate(R.menu.menu_search_doc_result_list, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

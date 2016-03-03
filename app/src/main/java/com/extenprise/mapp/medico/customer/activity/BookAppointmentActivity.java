@@ -125,7 +125,10 @@ public class BookAppointmentActivity extends Activity
         ServiceProvider serviceProvider = getIntent().getParcelableExtra("servProv");
         ServProvHasServPt spspt = serviceProvider.getServProvHasServPt(0);
         if (!(Utility.findDocAvailability(spspt.getWorkingDays(), cal))) {
-            Utility.showAlert(this, "", "Doctor is not available on the given date.");
+            SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, new ArrayList<String>());
+            mSpinnerTimeSlots.setAdapter(spinnerAdapter);
+            //Utility.showAlert(this, "", "Doctor is not available on the given date.");
+            Utility.showMessage(this, R.string.msg_doc_unavailable);
             return;
         }
 
@@ -145,7 +148,8 @@ public class BookAppointmentActivity extends Activity
     private void gotTimeSlots(Bundle data) {
         ArrayList<String> list = data.getStringArrayList("timeSlots");
         if (list == null) {
-            return;
+            list = new ArrayList<>();
+            //return;
         }
         for(String t : list) {
             if(Utility.isDateToday(mSelectedDate) && Utility.isTimePassed(t)) {
@@ -162,15 +166,6 @@ public class BookAppointmentActivity extends Activity
     private void gotAppont(Bundle data) {
         mMsgView.setVisibility(View.GONE);
         if (data.getBoolean("status")) {
-            /*Utility.showAlert(this, "", getString(R.string.msg_appont_booked), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    Intent intent = new Intent(BookAppointmentActivity.this, PatientsHomeScreenActivity.class);
-                    startActivity(intent);
-                }
-            });*/
-
             Utility.showAlert(this, "", getString(R.string.msg_appont_booked), null, false, null, getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -206,11 +201,7 @@ public class BookAppointmentActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-            getMenuInflater().inflate(R.menu.menu_patients_home_screen, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_book_appointment, menu);
-        }
+        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

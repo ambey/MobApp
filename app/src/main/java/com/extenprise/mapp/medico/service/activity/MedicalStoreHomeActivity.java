@@ -82,7 +82,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_medical_store_home, menu);
+        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -36,8 +36,7 @@ public class PatientsHomeScreenActivity extends Activity {
         mImgView = (ImageView) findViewById(R.id.imagePatient);
 
         mCustomer = WorkingDataStore.getBundle().getParcelable("customer");
-        profile();
-
+        //profile();
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
         try {
             SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
@@ -46,9 +45,10 @@ public class PatientsHomeScreenActivity extends Activity {
                     getString(R.string.last_visited),
                     prefs.getString("lastVisitDate", "--"),
                     prefs.getString("lastVisitTime", "--")));
-            Utility.setLastVisit(prefs);
+            //Utility.setLastVisit(prefs);
         } catch (Exception e) {
-            Utility.goTOLoginPage(this, LoginActivity.class);
+            e.printStackTrace();
+            //Utility.goTOLoginPage(this, LoginActivity.class);
         }
     }
 
@@ -99,7 +99,7 @@ public class PatientsHomeScreenActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_patients_home_screen, menu);
+        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

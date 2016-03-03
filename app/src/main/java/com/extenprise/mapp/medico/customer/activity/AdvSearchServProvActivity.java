@@ -178,12 +178,16 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-            getMenuInflater().inflate(R.menu.menu_patients_home_screen, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
-        }
+        getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+            menu.removeItem(R.id.logout);
+        }
+        return true;
     }
 
     @Override

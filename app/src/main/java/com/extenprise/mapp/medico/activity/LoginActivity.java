@@ -212,9 +212,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.removeItem(R.id.logout);
+        return true;
     }
 
     @Override
@@ -379,9 +384,13 @@ public class LoginActivity extends Activity implements ResponseHandler {
             Bundle workingData = WorkingDataStore.getBundle();
             String phone;
             Intent intent;
+            String userType = "";
+
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                userType = "customer";
                 Customer customer = msgData.getParcelable("customer");
                 workingData.putParcelable("customer", customer);
+                phone = customer.getSignInData().getPhone();
                 String targetActivity = getIntent().getStringExtra("target-activity");
                 if (targetActivity != null) {
                     try {
@@ -395,9 +404,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 } else {
                     intent = new Intent(this, PatientsHomeScreenActivity.class);
                 }
-                assert customer != null;
-                phone = customer.getSignInData().getPhone();
             } else {
+                userType = "servprov";
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
                 assert serviceProvider != null;
                 String servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
@@ -412,12 +420,18 @@ public class LoginActivity extends Activity implements ResponseHandler {
             }
             //Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
 
+            /* Setting the auto complete list for mobile number **/
             SharedPreferences preferences = getSharedPreferences("autoComplete", MODE_PRIVATE);
             Set<String> list = preferences.getStringSet("autoCompleteValues", new HashSet<String>());
             Set<String> in = new HashSet<>(list);
             in.add(phone);
             preferences.edit().putStringSet("autoCompleteValues", in).apply();
             /*editor.putString("autoCompleteValues", TextUtils.join(",", list));*/
+
+            /* Setting the Last Visited of User. **/
+            SharedPreferences prefs = getSharedPreferences(userType + "lastVisit" +
+                    phone, MODE_PRIVATE);
+            Utility.setLastVisit(prefs);
 
             Utility.showMessage(this, R.string.msg_login_done);
             mPasswordView.setText("");

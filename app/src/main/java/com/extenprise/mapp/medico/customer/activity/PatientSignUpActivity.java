@@ -67,7 +67,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private ImageView mImgView;
 
     private Bitmap mImgCopy;
-    //private boolean imageChanged = false;
+    private boolean imageChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,8 +161,14 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_patient_sign_up, menu);
+        getMenuInflater().inflate(R.menu.menu_search_doctor, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.removeItem(R.id.logout);
+        return true;
     }
 
     @Override
@@ -170,13 +176,18 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case R.id.action_settings:
+                return true;
+            case R.id.action_search:
+                Utility.goTOLoginPage(this, SearchServProvActivity.class);
+                return true;
+            case R.id.action_sign_in:
+                Utility.goTOLoginPage(this, LoginActivity.class);
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -336,7 +347,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data);
+        if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
+            imageChanged = true;
+        }
     }
 
     private void setErrorsNull() {
@@ -553,13 +566,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Utility.goTOLoginPage(PatientSignUpActivity.this, LoginActivity.class);
+                            Utility.goTOLoginPage(PatientSignUpActivity.this, PatientsHomeScreenActivity.class);
                         }
                     }, new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             dialog.dismiss();
-                            Utility.goTOLoginPage(PatientSignUpActivity.this, LoginActivity.class);
+                            Utility.goTOLoginPage(PatientSignUpActivity.this, PatientsHomeScreenActivity.class);
                         }
                     }
             );
@@ -609,7 +622,9 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getCity().setState(mSpinState.getSelectedItem().toString());
         c.getCity().setCountry("India");
         c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-
+        if (!imageChanged) {
+            c.setPhoto(null);
+        }
         return c;
     }
 

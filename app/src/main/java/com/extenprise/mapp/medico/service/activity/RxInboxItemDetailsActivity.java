@@ -253,18 +253,26 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     private void gotRxScannedCopy(Bundle data) {
         ImageView imageView = (ImageView) findViewById(R.id.rxCopyImageView);
+        TextView msgView = (TextView) findViewById(R.id.viewMsgNoItems);
         Report report = data.getParcelable("report");
         if (report == null) {
-            TextView msgView = (TextView) findViewById(R.id.viewMsgNoItems);
             msgView.setVisibility(View.VISIBLE);
             return;
         }
         byte[] pix = report.getScannedCopy();
         if(pix != null) {
-            //Bitmap bitmap = BitmapFactory.decodeByteArray(pix, 0, pix.length);
-            imageView.setImageBitmap(Utility.getBitmapFromBytes(pix,
-                    imageView.getLayoutParams().width, imageView.getLayoutParams().height));
+            try {
+                imageView.setImageBitmap(Utility.getBitmapFromBytes(pix));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+            /*imageView.setImageBitmap(Utility.getBitmapFromBytes(pix,
+                    imageView.getLayoutParams().width, imageView.getLayoutParams().height));
+
+                    ArithmeticException: divide by zero :  at
+                    Utility.getBitmapFromBytes(Utility.java:406)
+                    */
     }
 
     @Nullable
@@ -319,10 +327,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (WorkingDataStore.getBundle().getParcelable("servProv") == null) {
-            menu.removeItem(R.id.logout);
-        }
-        getMenuInflater().inflate(R.menu.menu_rx, menu);
+        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
