@@ -1,339 +1,281 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewQualExp"
-        style="@style/InputBlock"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:text="@string/qual_exp" />
+    <RelativeLayout
+        android:id="@+id/relLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/layoutQualExp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.35"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spinServiceProvCategory"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/spinner"
-                android:entries="@array/service_category"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:padding="5dp"
-                android:prompt="@string/speciality_doc"
-                android:spinnerMode="dropdown" />
-
-            <Spinner
-                android:id="@+id/editTextSpeciality"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/spinner"
-                android:choiceMode="singleChoice"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:padding="5dp"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/viewWorkPlaceType"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:hint="@string/name"
+            android:inputType="textNoSuggestions" />
 
-            <EditText
-                android:id="@+id/editTextExperience"
-                style="@style/LargeText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:hint="@string/experience"
-                android:inputType="number"
-                android:maxLength="2" />
-
-
-            <EditText
-                android:id="@+id/editTextQualification"
-                style="@style/LargeText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.5"
-                android:hint="@string/qualification" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textViewNameAddress"
-        style="@style/InputBlock"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="6dp"
-        android:layout_weight="0.1"
-        android:text="@string/name_address" />
-
-    <LinearLayout
-        android:id="@+id/layoutNameAddress"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Spinner
+            android:id="@+id/viewWorkPlaceType"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/editTextName"
+            android:layout_toRightOf="@+id/editTextName"
+            android:background="@drawable/spinner"
+            android:entries="@array/work_place_type"
+            android:padding="5dp"
+            android:prompt="@string/work_place_type"
+            android:spinnerMode="dropdown" />
 
-            <EditText
-                android:id="@+id/editTextName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.55"
-                android:hint="@string/name"
-                android:inputType="textNoSuggestions" />
-
-            <Spinner
-                android:id="@+id/viewWorkPlaceType"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.45"
-                android:background="@drawable/spinner"
-                android:entries="@array/work_place_type"
-                android:padding="5dp"
-                android:prompt="@string/work_place_type"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/editTextLoc"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:layout_alignBottom="@+id/editTextCity"
+            android:layout_marginTop="10dp"
+            android:hint="@string/loc"
+            android:inputType="textNoSuggestions" />
 
-            <EditText
-                android:id="@+id/editTextLoc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.55"
-                android:hint="@string/loc"
-                android:inputType="textNoSuggestions" />
 
-            <Spinner
-                android:id="@+id/editTextCity"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.45"
-                android:background="@drawable/spinner"
-                android:entries="@array/city"
-                android:padding="5dp"
-                android:prompt="@string/city"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Spinner
+            android:id="@+id/editTextCity"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/viewWorkPlaceType"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/editTextLoc"
+            android:layout_toRightOf="@+id/editTextLoc"
+            android:background="@drawable/spinner"
+            android:entries="@array/city"
+            android:padding="5dp"
+            android:prompt="@string/city"
+            android:spinnerMode="dropdown" />
 
-            <EditText
-                android:id="@+id/editTextPinCode"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.55"
-                android:hint="@string/pincode"
-                android:inputType="number"
-                android:maxLength="6" />
-
-            <Spinner
-                android:id="@+id/editTextState"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.45"
-                android:background="@drawable/spinner"
-                android:entries="@array/state"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:padding="5dp"
-                android:prompt="@string/state"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textViewPhoneEmail"
-        style="@style/InputBlock"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="6dp"
-        android:layout_weight="0.1"
-        android:text="@string/phone_email" />
-
-    <LinearLayout
-        android:id="@+id/layoutPhoneEmail"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.25"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/editTextPinCode"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:layout_alignBottom="@+id/editTextState"
+            android:layout_marginTop="10dp"
+            android:hint="@string/pincode"
+            android:inputType="number"
+            android:maxLength="6" />
 
-            <EditText
-                android:id="@+id/editTextPhone1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:ems="10"
-                android:hint="@string/phone1"
-                android:inputType="phone"
-                android:maxLength="10" />
+        <Spinner
+            android:id="@+id/editTextState"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/editTextCity"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/editTextPinCode"
+            android:layout_toRightOf="@+id/editTextPinCode"
+            android:background="@drawable/spinner"
+            android:entries="@array/state"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="5dp"
+            android:prompt="@string/state"
+            android:spinnerMode="dropdown" />
 
-            <EditText
-                android:id="@+id/editTextPhone2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.5"
-                android:ems="10"
-                android:hint="@string/phone2"
-                android:inputType="number"
-                android:maxLength="10" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/editTextPhone1"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/editTextPhone2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/editTextPinCode"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="@string/phone1"
+            android:inputType="phone"
+            android:maxLength="10" />
+
+        <EditText
+            android:id="@+id/editTextPhone2"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/editTextPinCode"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/editTextPhone1"
+            android:layout_toRightOf="@+id/editTextPhone1"
+            android:ems="10"
+            android:hint="@string/phone2"
+            android:inputType="number"
+            android:maxLength="10" />
 
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_below="@+id/editTextPhone1"
+            android:layout_marginTop="10dp"
             android:hint="@string/email"
             android:inputType="textEmailAddress" />
-        <!--
-            </RelativeLayout>
-        -->
-    </LinearLayout>
+    </RelativeLayout>
+
 
     <TextView
-        android:id="@+id/textViewWorkTimings"
-        style="@style/InputBlock"
+        android:id="@+id/viewWorkHrsLbl"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="6dp"
-        android:layout_weight="0.1"
-        android:text="@string/work_timings" />
-
-    <ListView
-        android:id="@+id/listViewWorkTimings"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.8"
-        android:divider="#0000"
-        android:dividerHeight="8dp"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/textViewFees"
-        style="@style/InputBlock"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="6dp"
-        android:layout_weight="0.1"
-        android:text="@string/fees_notes" />
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/label"
+        android:text="@string/work_hrs"
+        android:textColor="#fff"
+        android:textSize="20sp" />
 
     <LinearLayout
-        android:id="@+id/layoutFees"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.25"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/layoutWorkHrs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:visibility="visible">
 
-            <TextView
-                android:id="@+id/textviewFees"
+            <Button
+                android:id="@+id/buttonStartTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:onClick="showStartTimePicker"
+                android:text="@string/start_time" />
+
+            <Button
+                android:id="@+id/buttonEndTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:onClick="showEndTimePicker"
+                android:text="@string/end_time" />
+        </LinearLayout>
+
+        <!--
+                    <TextView
+                        android:id="@+id/viewWeeklyOffLbl"
+                        android:layout_width="160dp"
+                        android:layout_height="30dp"
+                        android:layout_below="@id/buttonStartTime"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/label"
+                        android:clickable="true"
+                        android:onClick="showDaysFields"
+                        android:text="@string/practice_days"
+                        android:textColor="#fff"
+                        android:textSize="20dp" />
+        -->
+
+        <!--<Spinner
+            android:id="@+id/editTextWeeklyOff"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewWeeklyOffLbl"
+            android:background="@drawable/spinner"
+
+            android:entries="@array/days"
+            android:prompt="@string/weekly_off" />-->
+        <!--
+                    <TextView
+                        android:id="@+id/viewConsultationFees"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_below="@+id/buttonStartTime"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_toEndOf="@+id/viewWeeklyOffLbl"
+                        android:layout_toRightOf="@+id/viewWeeklyOffLbl"
+                        android:background="@drawable/label"
+                        android:clickable="true"
+                        android:onClick="showFeeFields"
+                        android:text="@string/consult_fees"
+                        android:textColor="#fff"
+                        android:textSize="20dp" />
+        -->
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <Button
+                android:id="@+id/editTextWeeklyOff"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:layout_weight="0.5"
-                android:text="@string/consultFee" />
+                android:background="@drawable/spinner"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:text="@string/practice_days" />
+
 
             <TextView
                 android:id="@+id/viewRsSign"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/editTextConsultationFees"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_weight="0.05"
+                android:layout_toEndOf="@+id/editTextWeeklyOff"
+                android:layout_toRightOf="@+id/editTextWeeklyOff"
                 android:text="@string/rs_sign"
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/editTextFees"
-                android:layout_width="0dp"
+
+                android:id="@+id/editTextConsultationFees"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.45"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_toEndOf="@+id/viewRsSign"
+                android:layout_toRightOf="@+id/viewRsSign"
                 android:ems="4"
+                android:hint="@string/consult_fees"
                 android:inputType="number"
                 android:maxLength="4" />
-        </LinearLayout>
 
-        <EditText
-            android:id="@+id/editTextNotes"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:hint="@string/notes"
-            android:inputType="textNoSuggestions" />
+            <EditText
+                android:id="@+id/editTextNotes"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextConsultationFees"
+                android:layout_marginTop="10dp"
+                android:hint="@string/notes"
+                android:inputType="textNoSuggestions" />
 
+        </RelativeLayout>
     </LinearLayout>
+
+
 </LinearLayout>

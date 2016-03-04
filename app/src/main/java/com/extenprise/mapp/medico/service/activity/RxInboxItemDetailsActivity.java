@@ -166,6 +166,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             mConnection.setAction(MappService.DO_GET_RX_SCANNED_COPY);
             Bundle bundle = new Bundle();
             bundle.putInt("idRx", rx.getIdReport());
+            Log.d("", " ID Report ***** " + rx.getIdReport());
             mConnection.setData(bundle);
             if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
                 Utility.showProgressDialog(this, true);

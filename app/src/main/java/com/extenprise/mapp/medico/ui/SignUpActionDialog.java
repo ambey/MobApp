@@ -80,6 +80,13 @@ public class SignUpActionDialog extends DialogFragment {
     }
 
     public boolean isInputValid() {
+        mPhoneText.setError(null);
+        mStdCode.setError(null);
+        mLandlineText.setError(null);
+        mEmailID.setError(null);
+        mFName.setError(null);
+        mLName.setError(null);
+
         String phone = mPhoneText.getText().toString().trim();
         String stdCode = mStdCode.getText().toString().trim();
         String landline = mLandlineText.getText().toString().trim();

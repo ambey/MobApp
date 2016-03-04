@@ -112,7 +112,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
                 startActivity(intent);
             }
         });*/
-        Utility.showAlert(this, "", getString(R.string.msg_appont_booked), null, false, null, getString(R.string.ok), new DialogInterface.OnClickListener() {
+        Utility.showAlert(this, "", getString(R.string.msg_rx_sent_to_medstore), null, false, null, getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

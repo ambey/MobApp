@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,11 +9,126 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ServProvSignUpActivity">
 
-    <include
-        android:id="@+id/workPlaceDetailLayout"
-        layout="@layout/layout_workplace_details"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/viewWorkDetCount"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+            android:layout_height="30dp"
+            android:background="@drawable/text_backg"
+            android:text="@string/count"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewEditWrkDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/viewWorkDetCount"
+            android:layout_marginTop="8dp"
+            android:layout_toLeftOf="@+id/viewEditWrkDetail"
+            android:layout_toStartOf="@+id/viewEditWrkDetail"
+            android:clickable="true"
+            android:text="@string/edit1"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/viewEditWrkDetail"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/viewWorkDetCount"
+            android:layout_marginEnd="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/pencil"
+            android:clickable="true"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/spinServiceProvCategory"
+            android:layout_width="170dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/viewWorkDetCount"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/spinner"
+            android:clickable="false"
+            android:entries="@array/service_category"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="5dp"
+            android:prompt="@string/speciality_doc"
+            android:spinnerMode="dropdown" />
+
+
+        <Spinner
+            android:id="@+id/editTextSpeciality"
+            android:layout_width="170dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/viewWorkDetCount"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/spinServiceProvCategory"
+            android:layout_toRightOf="@+id/spinServiceProvCategory"
+            android:background="@drawable/spinner"
+            android:choiceMode="singleChoice"
+            android:clickable="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="5dp"
+            android:spinnerMode="dropdown" />
+
+        <EditText
+            android:id="@+id/editTextExperience"
+            android:layout_width="170dp"
+            android:layout_height="32dp"
+            android:layout_below="@+id/editTextSpeciality"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/editTextQualification"
+            android:layout_toRightOf="@+id/editTextQualification"
+            android:hint="@string/experience"
+            android:inputType="number"
+            android:maxLength="2" />
+
+
+        <EditText
+            android:id="@+id/editTextQualification"
+            android:layout_width="170dp"
+            android:layout_height="32dp"
+            android:layout_below="@+id/spinServiceProvCategory"
+            android:layout_marginTop="20dp"
+            android:hint="@string/qualification"
+            android:inputType="textNoSuggestions"
+            android:padding="4dp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextQualification"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/workPlaceDetailLayout"
+                layout="@layout/layout_workplace_details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
 
 

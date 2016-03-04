@@ -289,17 +289,21 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
 */
 
     public void sendRx(View view) {
-        sendRx();
-    }
-
-    private void sendRx() {
+        //sendRx();
         Bundle bundle = new Bundle();
         bundle.putParcelable("form", mAppont);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_SAVE_SCANNED_RX_COPY);
         if (Utility.doServiceAction(ScannedRxActivity.this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgressDialog(ScannedRxActivity.this, true);
+        } else {
+            setSendButton(R.string.resend_rx);
         }
+    }
+
+    private void setSendButton(int txt) {
+        mResendRx.setVisibility(View.VISIBLE);
+        mResendRx.setText(getString(txt));
     }
 
     private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
@@ -342,7 +346,8 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            sendRx();
+            setSendButton(R.string.send);
+            //sendRx();
         }
 
         @Override

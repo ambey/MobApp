@@ -248,9 +248,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         final Resources resources = getResources();
         Utility.showAlert(activity, activity.getString(R.string.take_photo), null, null, false,
-                new String[]{activity.getString(R.string.take_photo),
-                        activity.getString(R.string.from_gallery),
-                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                Utility.imageOpts(this, imageChanged), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {

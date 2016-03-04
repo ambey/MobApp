@@ -417,7 +417,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mQualification = (EditText) dialogView.findViewById(R.id.editTextQualification);
         mMultiSpinnerDays = (Button) dialogView.findViewById(R.id.editTextWeeklyOff);
         mServCatagory = (Spinner) dialogView.findViewById(R.id.spinServiceProvCategory);
-        TextView workhourLBL = (TextView) dialogView.findViewById(R.id.viewWorkHrsLbl);
 
         Utility.setNewSpinner(this, null, mServCatagory,
                 new String[]{String.format("%s *", getString(R.string.select_category)), mCategory});
@@ -469,7 +468,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Utility.setNewSpec(this, specs, mServCatagory);*/
         }
 
-        workhourLBL.setClickable(false);
         mSpeciality.setClickable(true);
         mServCatagory.setClickable(true);
         mStartTime.setOnClickListener(new View.OnClickListener() {
@@ -958,17 +956,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 */
 
     public void changeImage(View view) {
-        String[] opts = new String[]{getString(R.string.take_photo),
-                getString(R.string.from_gallery),
-                getString(R.string.remove)};
-        if (mServiceProv.getPhoto() == null) {
-            opts = new String[]{getString(R.string.take_photo),
-                    getString(R.string.from_gallery)};
-        }
         final Activity activity = this;
         final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         Utility.showAlert(activity, "", null, null, false,
-                opts, new DialogInterface.OnClickListener() {
+                Utility.imageOpts(this, (mServiceProv.getPhoto() == null)), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {

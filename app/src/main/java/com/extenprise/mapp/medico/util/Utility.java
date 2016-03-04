@@ -45,6 +45,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.AppStatus;
 import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
@@ -736,6 +737,7 @@ public abstract class Utility {
         if (loginPreferences.getBoolean("saveLogin", false)) {
             loginPreferences.edit().clear().apply();
         }
+        WorkingDataStore.getBundle().clear();
         activity.finish();
         Intent intent = new Intent(activity, targetClass);
         activity.startActivity(intent);
@@ -818,6 +820,17 @@ public abstract class Utility {
             }
         });
         return builder;
+    }
+
+    public static String[] imageOpts(Activity activity, boolean isRemove) {
+        String[] opts = new String[]{activity.getString(R.string.take_photo),
+                activity.getString(R.string.from_gallery)};
+        if (isRemove) {
+            opts = new String[]{activity.getString(R.string.take_photo),
+                    activity.getString(R.string.from_gallery),
+                    activity.getString(R.string.remove)};
+        }
+        return opts;
     }
 
     public static boolean onPhotoActivityResult(Context context, final ImageView imageView, int requestCode, int resultCode, Intent data) {

@@ -43,7 +43,7 @@ public class BookAppointmentActivity extends Activity
     private TextView mTextViewDate;
     private Button mBookButton;
     private Date mSelectedDate;
-    private TextView mMsgView;
+    //private TextView mMsgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class BookAppointmentActivity extends Activity
         mSpinnerTimeSlots = (Spinner) findViewById(R.id.spinnerTimeSlots);
         mTextViewDate = (TextView) findViewById(R.id.tvDate);
         mBookButton = (Button) findViewById(R.id.buttonBook);
-        mMsgView = (TextView) findViewById(R.id.viewMsg);
+        //mMsgView = (TextView) findViewById(R.id.viewMsg);
 
         //ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
         textViewDocFName.setText(serviceProvider.getfName());
@@ -99,8 +99,10 @@ public class BookAppointmentActivity extends Activity
 
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_BOOK_APPONT);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-        mMsgView.setVisibility(View.VISIBLE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            //mMsgView.setVisibility(View.VISIBLE);
+            Utility.showProgressDialog(this, true);
+        }
     }
 
     public void setTimeSlots() {
@@ -142,7 +144,9 @@ public class BookAppointmentActivity extends Activity
         bundle.putParcelable("form", form);
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_APPONT_TIME_SLOTS);
-        Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
+        }
     }
 
     private void gotTimeSlots(Bundle data) {
@@ -164,7 +168,7 @@ public class BookAppointmentActivity extends Activity
     }
 
     private void gotAppont(Bundle data) {
-        mMsgView.setVisibility(View.GONE);
+        //mMsgView.setVisibility(View.GONE);
         if (data.getBoolean("status")) {
             Utility.showAlert(this, "", getString(R.string.msg_appont_booked), null, false, null, getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
@@ -238,6 +242,7 @@ public class BookAppointmentActivity extends Activity
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
         if (action == MappService.DO_APPONT_TIME_SLOTS) {
             gotTimeSlots(data);
         } else if (action == MappService.DO_BOOK_APPONT) {
