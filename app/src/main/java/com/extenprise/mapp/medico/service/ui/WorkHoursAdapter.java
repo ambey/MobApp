@@ -17,13 +17,20 @@ import com.extenprise.mapp.medico.service.data.WeeklyWorkTiming;
  */
 public class WorkHoursAdapter extends ArrayAdapter<String> implements View.OnFocusChangeListener {
     private String[] weekDays;
-    private boolean isAllDaysChecked;
+    private boolean[] checked;
+    private boolean allDaysChecked;
     private WeeklyWorkTiming weeklyWorkTiming;
 
     public WorkHoursAdapter(Context context, int resource, WeeklyWorkTiming weeklyWorkTiming) {
         super(context, resource);
         weekDays = context.getResources().getStringArray(R.array.days);
-        this.weeklyWorkTiming = weeklyWorkTiming;
+        checked = new boolean[weekDays.length];
+        if (weeklyWorkTiming != null) {
+            this.weeklyWorkTiming = weeklyWorkTiming;
+        } else {
+            this.weeklyWorkTiming = new WeeklyWorkTiming();
+        }
+
     }
 
     @Override
@@ -55,15 +62,16 @@ public class WorkHoursAdapter extends ArrayAdapter<String> implements View.OnFoc
         WeeklyWorkTiming.WorkTime workTime = weeklyWorkTiming.getWorkTime(weekDays[position]);
         checkBoxWorkDay.setText(weekDays[position]);
         if (!weekDays[position].equals(getContext().getString(R.string.all_days))) {
-            checkBoxWorkDay.setEnabled(!isAllDaysChecked);
-            boolean isChecked = isAllDaysChecked || workTime != null;
-            if (isChecked) {
+            View layout = v.findViewById(R.id.layoutWorkTiming);
+            layout.setEnabled(!allDaysChecked);
+            //checkBoxWorkDay.setEnabled(!allDaysChecked);
+            if (checked[position]) {
                 weeklyWorkTiming.addWorkTime(weekDays[position]);
             }
-            checkBoxWorkDay.setChecked(isChecked);
+            checkBoxWorkDay.setChecked(checked[position]);
         } else {
             checkBoxWorkDay.setEnabled(true);
-            checkBoxWorkDay.setChecked(isAllDaysChecked);
+            checkBoxWorkDay.setChecked(allDaysChecked);
         }
         checkBoxWorkDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -74,10 +82,11 @@ public class WorkHoursAdapter extends ArrayAdapter<String> implements View.OnFoc
                     weeklyWorkTiming.addWorkTime(day);
                 } else {
                     weeklyWorkTiming.removeWorkTime(day);
+                    checked[position] = false;
                 }
                 if (day.equals(getContext().getString(R.string.all_days)) || !isChecked) {
                     if (day.equals(getContext().getString(R.string.all_days))) {
-                        isAllDaysChecked = isChecked;
+                        setAllDaysChecked(isChecked);
                     }
                     notifyDataSetChanged();
                 }
@@ -86,7 +95,7 @@ public class WorkHoursAdapter extends ArrayAdapter<String> implements View.OnFoc
         editTextFrom.setHint(String.format("%s *", getContext().getString(R.string.from)));
         editTextTo.setHint(String.format("%s *", getContext().getString(R.string.to)));
         String from = "", from2 = "", to = "", to2 = "";
-        if (!isAllDaysChecked && workTime != null) {
+        if (workTime != null) {
             checkBoxWorkDay.setChecked(true);
             from = workTime.getFrom();
             to = workTime.getTo();
@@ -111,6 +120,7 @@ public class WorkHoursAdapter extends ArrayAdapter<String> implements View.OnFoc
         String time = text.getText().toString().trim();
         if (!(hasFocus || time.equals(""))) {
             int position = Integer.parseInt(text.getTag().toString());
+            checked[position] = true;
             weeklyWorkTiming.addWorkTime(weekDays[position]);
             WeeklyWorkTiming.WorkTime workTime = weeklyWorkTiming.getWorkTime(weekDays[position]);
             switch (text.getId()) {
@@ -127,7 +137,45 @@ public class WorkHoursAdapter extends ArrayAdapter<String> implements View.OnFoc
                     workTime.setTo2(time);
                     break;
             }
+            if (position == 0) {
+                setAllDaysChecked(true);
+                setAllDaysWorkTime(text.getId(), time);
+            }
             notifyDataSetChanged();
+        }
+    }
+
+    private void setAllDaysWorkTime(int id, String time) {
+        for (int i = 1; i < weekDays.length; i++) {
+            weeklyWorkTiming.addWorkTime(weekDays[i]);
+            WeeklyWorkTiming.WorkTime workTime = weeklyWorkTiming.getWorkTime(weekDays[i]);
+            switch (id) {
+                case R.id.editTextFromTime:
+                    workTime.setFrom(time);
+                    break;
+                case R.id.editTextFromTime2:
+                    workTime.setFrom2(time);
+                    break;
+                case R.id.editTextToTime:
+                    workTime.setTo(time);
+                    break;
+                case R.id.editTextToTime2:
+                    workTime.setTo2(time);
+                    break;
+            }
+        }
+    }
+
+    public WeeklyWorkTiming getWeeklyWorkTiming() {
+        return weeklyWorkTiming;
+    }
+
+    private void setAllDaysChecked(boolean checked) {
+        allDaysChecked = checked;
+        if (checked) {
+            for (int i = 1; i < this.checked.length; i++) {
+                this.checked[i] = true;
+            }
         }
     }
 }

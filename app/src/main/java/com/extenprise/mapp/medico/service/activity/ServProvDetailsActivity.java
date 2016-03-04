@@ -17,6 +17,7 @@ import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.service.data.ServProvHasServPt;
 import com.extenprise.mapp.medico.service.data.Service;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
 
 import java.util.Calendar;
@@ -72,8 +73,9 @@ public class ServProvDetailsActivity extends Activity {
         }
 
         if (mServProv.getPhoto() != null) {
-            imageView.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto(),
-                    imageView.getLayoutParams().width, imageView.getLayoutParams().height));
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(imageView, mServProv.getPhoto(),
+                    imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+            task.execute();
         }
         textViewClinic.setText(spsspt.getServicePoint().getName());
         textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));

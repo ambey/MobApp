@@ -14,8 +14,8 @@ public class ServProvHasServPt implements Parcelable {
 
     public static final Creator<ServProvHasServPt> CREATOR = new Creator<ServProvHasServPt>() {
         @Override
-        public ServProvHasServPt createFromParcel(Parcel source) {
-            return new ServProvHasServPt(source);
+        public ServProvHasServPt createFromParcel(Parcel in) {
+            return new ServProvHasServPt(in);
         }
 
         @Override
@@ -42,21 +42,42 @@ public class ServProvHasServPt implements Parcelable {
         appointments = new ArrayList<>();
     }
 
-    public ServProvHasServPt(Parcel source) {
-        service = new Service();
-        appointments = new ArrayList<>();
+    protected ServProvHasServPt(Parcel in) {
+        idServProvHasServPt = in.readInt();
+        servPointType = in.readString();
+        service = in.readParcelable(Service.class.getClassLoader());
+        experience = in.readFloat();
+        workingDays = in.readString();
+        consultFee = in.readFloat();
+        startTime = in.readInt();
+        endTime = in.readInt();
+        weeklyWorkTiming = in.readParcelable(WeeklyWorkTiming.class.getClassLoader());
+        appointments = in.createTypedArrayList(Appointment.CREATOR);
+        servicePoint = in.readParcelable(ServicePoint.class.getClassLoader());
+        servProvPhone = in.readString();
+        notes = in.readString();
+    }
 
-        idServProvHasServPt = source.readInt();
-        servProvPhone = source.readString();
-        startTime = source.readInt();
-        endTime = source.readInt();
-        experience = source.readFloat();
-        consultFee = source.readFloat();
-        servPointType = source.readString();
-        workingDays = source.readString();
-        service = new Service(source);
-        servicePoint = new ServicePoint(source);
-        notes = source.readString();
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idServProvHasServPt);
+        dest.writeString(servPointType);
+        dest.writeParcelable(service, flags);
+        dest.writeFloat(experience);
+        dest.writeString(workingDays);
+        dest.writeFloat(consultFee);
+        dest.writeInt(startTime);
+        dest.writeInt(endTime);
+        dest.writeParcelable(weeklyWorkTiming, flags);
+        dest.writeTypedList(appointments);
+        dest.writeParcelable(servicePoint, flags);
+        dest.writeString(servProvPhone);
+        dest.writeString(notes);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public String getNotes() {
@@ -163,23 +184,4 @@ public class ServProvHasServPt implements Parcelable {
         this.appointments = appointments;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(idServProvHasServPt);
-        dest.writeString(servProvPhone);
-        dest.writeInt(startTime);
-        dest.writeInt(endTime);
-        dest.writeFloat(experience);
-        dest.writeFloat(consultFee);
-        dest.writeString(servPointType);
-        dest.writeString(workingDays);
-        service.writeToParcel(dest, flags);
-        servicePoint.writeToParcel(dest, flags);
-        dest.writeString(notes);
-    }
 }

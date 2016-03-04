@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +23,8 @@ import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
+import com.extenprise.mapp.medico.ui.BackButtonHandler;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
 
 import java.util.ArrayList;
@@ -31,8 +32,6 @@ import java.util.ArrayList;
 public class ServiceProviderHomeActivity extends Activity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
-    private ServiceProvider mServiceProv;
-    private boolean exit = false;
     private TextView mMsgView;
     private TextView mWelcomeView;
     private ImageView mImgView;
@@ -42,14 +41,14 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
-        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        ServiceProvider serviceProv = WorkingDataStore.getBundle().getParcelable("servProv");
 
         mMsgView = (TextView) findViewById(R.id.msgView);
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imageDoctor);
         //profile();
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProv.getSignInData().getPhone(), MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + serviceProv.getSignInData().getPhone(), MODE_PRIVATE);
         lastVisited.setText(String.format("%s %s %s",
                 getString(R.string.last_visited),
                 prefs.getString("lastVisitDate", "--"),
@@ -60,42 +59,44 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     @Override
     protected void onResume() {
         super.onResume();
-        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
         profile();
     }
 
     private void profile() {
         mImgView.setImageResource(R.drawable.dr_avatar);
-        String mServPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
+        ServiceProvider serviceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        String mServPointType = serviceProv.getServProvHasServPt(0).getServPointType();
         String label = getString(R.string.hello_dr);
         if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             label = getString(R.string.hello);
             mImgView.setImageResource(R.drawable.diagcenter);
         }
         mWelcomeView.setText(String.format("%s %s %s", label,
-                mServiceProv.getfName(), mServiceProv.getlName()));
-        if (mServiceProv.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
+                serviceProv.getfName(), serviceProv.getlName()));
+        if (serviceProv.getPhoto() != null) {
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, serviceProv.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
+            task.execute();
         }
     }
 
     public void viewAppointment(View view) {
         Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-        intent.putExtra("servProv", mServiceProv);
+        intent.putExtra("servProv", WorkingDataStore.getBundle().getParcelable("servProv"));
         startActivity(intent);
     }
 
     public void viewProfile(View view) {
         Intent intent = new Intent(this, ServProvProfileActivity.class);
-        intent.putExtra("servProv", mServiceProv);
+        intent.putExtra("servProv", WorkingDataStore.getBundle().getParcelable("servProv"));
         intent.putExtra("category", getString(R.string.physician));
         startActivity(intent);
     }
 
     public void viewRxFeedback(View view) {
         Bundle bundle = new Bundle();
-        bundle.putString("phone", mServiceProv.getSignInData().getPhone());
+        ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+        bundle.putString("phone", serviceProvider.getSignInData().getPhone());
         bundle.putInt("status", ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
         mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
         mConnection.setData(bundle);
@@ -133,18 +134,18 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        if (exit) {
-            Log.v("onBackPressed", "ServiceProviderHomeActivity called.. calling finish.");
-            //finish(); // finish activity
-            moveTaskToBack(true); // exist app
-            //finish(); // finish activity
+        final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
+        if (buttonHandler.isBackPressed()) {
+            buttonHandler.setBackPressed(false);
+            //finish();
+            moveTaskToBack(true);
         } else {
+            buttonHandler.setBackPressed(true);
             Utility.showMessage(this, R.string.msg_press_back_button);
-            exit = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    exit = false;
+                    buttonHandler.setBackPressed(false);
                 }
             }, 3 * 1000);
         }

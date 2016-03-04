@@ -301,8 +301,8 @@ public class ServProvWPListFragment extends Fragment implements TitleFragment, R
 
         clearWorkPlace();
         int count = serviceProvider.getServiceCount() + 1;
-        TextView countView = (TextView) mRootview.findViewById(R.id.viewWorkPlaceCount);
-        countView.setText(String.format("#%d", count));
+        //TextView countView = (TextView) mRootview.findViewById(R.id.viewWorkPlaceCount);
+        //countView.setText(String.format("#%d", count));
         WorkingDataStore.getBundle().putParcelable("servProv", serviceProvider);
         return true;
     }

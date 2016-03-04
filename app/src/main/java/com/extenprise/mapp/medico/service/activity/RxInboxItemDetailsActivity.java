@@ -30,6 +30,7 @@ import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.RxItemAvailability;
 import com.extenprise.mapp.medico.service.ui.RxItemListAdapter;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
 
 import java.text.SimpleDateFormat;
@@ -262,7 +263,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         byte[] pix = report.getScannedCopy();
         if(pix != null) {
             try {
-                imageView.setImageBitmap(Utility.getBitmapFromBytes(pix));
+                ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(imageView, pix,
+                        imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+                task.execute();
             } catch (Exception e) {
                 e.printStackTrace();
             }

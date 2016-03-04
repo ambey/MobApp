@@ -23,6 +23,7 @@ import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.BackButtonHandler;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
 
 import java.util.ArrayList;
@@ -74,8 +75,9 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
                 mServProv.getfName(), mServProv.getlName()));
         mImgView.setImageResource(R.drawable.medstore);
         if (mServProv.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServProv.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServProv.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
+            task.execute();
         }
     }
 

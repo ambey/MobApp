@@ -10,7 +10,7 @@
     <string name="error_user_type_required">Please Select User Type</string>
     <string name="some_error">Please Try Again</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_password">The password should be minimum 6 characters.</string>
     <string name="error_incorrect_password">Incorrect login/password entered</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_email_exists">This email Id is already registered.\nPlease enter your password.</string>

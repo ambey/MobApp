@@ -86,7 +86,8 @@
             android:name=".service.activity.ServProvSignUpActivity"
             android:label="@string/title_activity_sign_up"
             android:parentActivityName=".activity.SignUpPreviousActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.SignUpPreviousActivity" />
@@ -110,11 +111,11 @@
 
 
             <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
             -->
         </activity>
         <activity
@@ -330,7 +331,7 @@
         </activity>
         <activity
             android:name=".service.activity.ServProvPersonalInfoActivity"
-            android:label="@string/title_activity_serv_prov_personal_info"></activity>
+            android:label="@string/title_activity_serv_prov_personal_info" />
         <activity
             android:name=".service.activity.WorkHoursActivity"
             android:label="@string/title_activity_work_hours"

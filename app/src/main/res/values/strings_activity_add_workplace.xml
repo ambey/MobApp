@@ -3,6 +3,7 @@
     <string name="title_activity_add_workplace">Work Place Details</string>
 
     <string name="work_place_details">Work Place Details</string>
+    <string name="work_place">Work Place</string>
     <string name="work_place_type">Work Place Type *</string>
     <string name="add_new_work_place">Add New Work Place</string>
     <string name="remove_work_place">Remove\nWork Place</string>
@@ -15,7 +16,7 @@
     <string name="experience">Exp (Yr) *</string>
     <string name="loc">Location *</string>
     <string name="phone1">Phone 1 *</string>
-    <string name="phone2">Phone 2 (Optional)</string>
+    <string name="phone2">Phone 2</string>
     <string name="email">Email ID</string>
     <string name="nm">Name</string>
 

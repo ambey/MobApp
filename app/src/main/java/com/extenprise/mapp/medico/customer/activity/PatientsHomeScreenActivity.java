@@ -18,6 +18,7 @@ import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.ui.BackButtonHandler;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
 
 
@@ -65,8 +66,9 @@ public class PatientsHomeScreenActivity extends Activity {
         mImgView.setBackgroundResource(0);
         mImgView.setImageResource(R.drawable.patient);
         if (mCustomer.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCustomer.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mCustomer.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
+            task.execute();
         }
     }
 

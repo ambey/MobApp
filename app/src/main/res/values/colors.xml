@@ -2,7 +2,7 @@
     <color name="black">#000</color>
     <color name="gray">#9d9d9d</color>
     <color name="background2">#88ffebee</color>
-    <color name="list_item_bg">#ffebee</color>
+    <color name="list_item_bg">#fff8ff</color>
     <color name="button_pressed_bg">#66999999</color>
     <color name="button_focussed_bg">#1f999999</color>
     <color name="flat_button_bg">#00000000</color>

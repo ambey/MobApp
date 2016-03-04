@@ -31,6 +31,7 @@ import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.TitleFragment;
+import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
@@ -238,12 +239,10 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
         }
         int genderID = mRadioGroupGender.getCheckedRadioButtonId();
         if (genderID == -1) {
-            //Utility.showAlert(this, "", "Please Select Gender.");
             RadioButton mFemale = (RadioButton) mRootView.findViewById(R.id.radioButtonFemale);
             mFemale.setError(getString(R.string.error_select_gender));
             focusView = mFemale;
             cancel = true;
-            //return;
         } else {
             mRadioButtonGender = (RadioButton) mRootView.findViewById(genderID);
         }
@@ -255,24 +254,6 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             pager.setCurrentItem(0);
             return false;
         }
-
-        /*if (!imageChanged) {
-            Utility.showAlert(getActivity(), "", getString(R.string.msg_without_img), null, false,
-                    new String[]{getString(R.string.yes), getString(R.string.no)},
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case 0:
-                                    break;
-                                case 1:
-                                    Utility.showMessage(getActivity(), R.string.msg_set_img);
-                                    break;
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-        }*/
 
         return true;
     }
@@ -378,7 +359,9 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             WorkingDataStore.getBundle().putParcelable("servProv", sp);
         }
         try {
-            sp.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+            BitmapToByteArrayTask task = new BitmapToByteArrayTask(sp,
+                    ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
+            task.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }

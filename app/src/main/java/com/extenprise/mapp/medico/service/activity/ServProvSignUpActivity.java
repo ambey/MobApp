@@ -168,10 +168,12 @@ public class ServProvSignUpActivity extends FragmentActivity {
         return fragment.onCreateDialog(id);
     }*/
 
+/*
     public void showtimeFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showtimeFields(view);
     }
+*/
 
     /*public void showFeeFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
@@ -183,11 +185,14 @@ public class ServProvSignUpActivity extends FragmentActivity {
         fragment.showDaysFields(view);
     }*/
 
+/*
     public void showWorkFields(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showWorkFields(view);
     }
+*/
 
+/*
     public void showStartTimePicker(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showStartTimePicker(view);
@@ -197,6 +202,7 @@ public class ServProvSignUpActivity extends FragmentActivity {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);
         fragment.showEndTimePicker(view);
     }
+*/
 
     public void addNewWorkPlace(View view) {
         ServProvWorkPlaceFragment fragment = (ServProvWorkPlaceFragment) mPagerAdapter.getItem(1);

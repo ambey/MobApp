@@ -1,177 +1,64 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="1"
     tools:context=".ServProvSignUpActivity">
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+        <ProgressBar
+            android:id="@+id/progressView"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
 
-            <LinearLayout
-                android:id="@+id/linLayout1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <include
+            android:id="@+id/workPlaceDetailLayout"
+            layout="@layout/layout_workplace_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 
-                <Spinner
-                    android:id="@+id/spinServiceProvCategory"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/spinner"
-                    android:entries="@array/service_category"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:padding="5dp"
-                    android:prompt="@string/speciality_doc"
-                    android:spinnerMode="dropdown" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.2"
+        android:clipToPadding="false"
+        android:paddingBottom="10dp">
 
-                <Spinner
-                    android:id="@+id/editTextSpeciality"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/spinner"
-                    android:choiceMode="singleChoice"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:padding="5dp"
-                    android:spinnerMode="dropdown" />
-            </LinearLayout>
-            <!-- <EditText
-                 android:id="@+id/editTextSpeciality"
-                 android:layout_width="220dp"
-                 android:layout_height="25dp"
-                 android:hint="Speciality *"
-                 android:background="@drawable/text"
-                 android:inputType="textAutoComplete"
-                 android:textSize="18dp"/> -->
+        <Button
+            android:id="@+id/buttonAddWorkPlace"
+            style="@style/MyButton"
+            android:layout_width="150dp"
+            android:layout_height="64dp"
+            android:layout_centerVertical="true"
+            android:onClick="addNewWorkPlace"
+            android:text="@string/add_another" />
 
-            <LinearLayout
-                android:id="@+id/linLayout2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linLayout1"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/editTextExperience"
-                    style="@style/LargeText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:hint="@string/experience"
-                    android:inputType="number"
-                    android:maxLength="2" />
-
-
-                <EditText
-                    android:id="@+id/editTextQualification"
-                    style="@style/LargeText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="0.5"
-                    android:hint="@string/qualification" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/viewWorkPlaceDetLbl"
-                style="@style/CollapseFormHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="30dp"
-                android:layout_below="@+id/linLayout2"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:onClick="showWorkFields"
-                android:text="@string/work_place_details" />
-
-            <TextView
-                android:id="@+id/viewWorkPlaceCount"
-                style="@style/LargeText"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/linLayout1"
-                android:layout_alignRight="@+id/linLayout1"
-                android:layout_alignTop="@+id/viewWorkPlaceDetLbl"
-                android:text="@string/count" />
-
-            <ProgressBar
-                android:id="@+id/progressView"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone" />
-
-            <RelativeLayout
-                android:id="@+id/addWorkPlaceForm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/viewWorkPlaceDetLbl">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:clipToPadding="false"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp">
-
-                    <include
-                        android:id="@+id/workPlaceDetailLayout"
-                        layout="@layout/layout_workplace_details"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:clipToPadding="false"
-                        android:orientation="horizontal"
-                        android:paddingBottom="10dp">
-
-                        <Button
-                            android:id="@+id/buttonAddWorkPlace"
-                            style="@style/MyButton"
-                            android:layout_width="0dp"
-                            android:layout_height="64dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="0.5"
-                            android:onClick="addNewWorkPlace"
-                            android:text="@string/add_another" />
-
-                        <Button
-                            android:id="@+id/buttonDone"
-                            style="@style/MyButton"
-                            android:layout_width="0dp"
-                            android:layout_height="64dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="0.5"
-                            android:onClick="registerDone"
-                            android:text="@string/done1" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </RelativeLayout>
-        </RelativeLayout>
-    </ScrollView>
-
-</RelativeLayout>
+        <Button
+            android:id="@+id/buttonDone"
+            style="@style/MyButton"
+            android:layout_width="1540dp"
+            android:layout_height="64dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@id/buttonAddWorkPlace"
+            android:layout_toRightOf="@id/buttonAddWorkPlace"
+            android:onClick="registerDone"
+            android:text="@string/done1" />
+    </RelativeLayout>
+</LinearLayout>

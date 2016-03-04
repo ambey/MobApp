@@ -32,6 +32,8 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
+import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.DateChangeListener;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
@@ -376,7 +378,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
-            mCust.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+            BitmapToByteArrayTask task = new BitmapToByteArrayTask(mCust, ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
+            task.execute();
         } else {
             mCust.setPhoto(null);
         }
@@ -387,8 +390,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mImgView.setBackgroundResource(0);
         mImgView.setImageResource(R.drawable.patient);
         if (mCust.getPhoto() != null) {
-            mImgView.setImageBitmap(Utility.getBitmapFromBytes(mCust.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mCust.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
+            task.execute();
         }
     }
 
@@ -431,7 +435,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
         c.setlName(mEditTextCustomerLName.getText().toString().trim());
         if (mImgView.getDrawable() != null) {
-            c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+            BitmapToByteArrayTask task = new BitmapToByteArrayTask(c,
+                    ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
+            task.execute();
         }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");

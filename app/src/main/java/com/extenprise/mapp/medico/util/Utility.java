@@ -820,7 +820,7 @@ public abstract class Utility {
         return builder;
     }
 
-    public static boolean onPhotoActivityResult(Context context, ImageView imageView, int requestCode, int resultCode, Intent data) {
+    public static boolean onPhotoActivityResult(Context context, final ImageView imageView, int requestCode, int resultCode, Intent data) {
         boolean imageChanged = false;
         try {
             Uri selectedImage;
@@ -843,8 +843,21 @@ public abstract class Utility {
                     } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
                         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                         if (bitmap != null) {
-                            imageView.setImageBitmap(Utility.getBitmapFromBytes(Utility.getBytesFromBitmap(bitmap),
-                                    imageView.getLayoutParams().width, imageView.getLayoutParams().height));
+                            BitmapToByteArrayTask task = new BitmapToByteArrayTask(null, bitmap) {
+                                @Override
+                                protected byte[] doInBackground(Void... params) {
+                                    return super.doInBackground(params);
+                                }
+
+                                @Override
+                                protected void onPostExecute(byte[] bytes) {
+                                    super.onPostExecute(bytes);
+                                    ByteArrayToBitmapTask bitmapTask = new ByteArrayToBitmapTask(imageView, bytes,
+                                            imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+                                    bitmapTask.execute();
+                                }
+                            };
+                            task.execute();
                             selectedImage = Utility.getImageUri(context, bitmap);
                         } else {
                             selectedImage = data.getData();

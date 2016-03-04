@@ -3,6 +3,7 @@ package com.extenprise.mapp.medico.service.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.extenprise.mapp.medico.data.HasPhoto;
 import com.extenprise.mapp.medico.data.LastVisited;
 import com.extenprise.mapp.medico.data.SignInData;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class ServiceProvider implements Parcelable {
+public class ServiceProvider implements Parcelable, HasPhoto {
 
     public static final Creator<ServiceProvider> CREATOR = new Creator<ServiceProvider>() {
         @Override

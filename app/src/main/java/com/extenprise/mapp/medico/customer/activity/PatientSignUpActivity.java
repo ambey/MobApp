@@ -28,6 +28,7 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
+import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
 import com.extenprise.mapp.medico.util.DateChangeListener;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
@@ -621,8 +622,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         c.getCity().setCity(mSpinCity.getText().toString().trim());
         c.getCity().setState(mSpinState.getSelectedItem().toString());
         c.getCity().setCountry("India");
-        c.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-        if (!imageChanged) {
+        if (imageChanged) {
+            BitmapToByteArrayTask task = new BitmapToByteArrayTask(c, ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
+            task.execute();
+        } else {
             c.setPhoto(null);
         }
         return c;

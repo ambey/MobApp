@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.extenprise.mapp.medico.data.Appointment;
 import com.extenprise.mapp.medico.data.City;
+import com.extenprise.mapp.medico.data.HasPhoto;
 import com.extenprise.mapp.medico.data.LastVisited;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.util.Utility;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class Customer implements Parcelable {
+public class Customer implements Parcelable, HasPhoto {
 
     public static final Creator<Customer> CREATOR = new Creator<Customer>() {
 
