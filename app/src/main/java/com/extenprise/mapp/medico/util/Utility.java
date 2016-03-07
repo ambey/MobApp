@@ -394,6 +394,10 @@ public abstract class Utility {
     }
 
     public static Bitmap getBitmapFromBytes(byte[] image, int width, int height) {
+        if (width < 0 || height < 0) {
+            Log.v("getBitmapFromBytes", "Invalid width or height");
+            return null;
+        }
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(image, 0, image.length, options);
@@ -414,10 +418,12 @@ public abstract class Utility {
         return BitmapFactory.decodeByteArray(image, 0, image.length, options);
     }
 
+/*
     // convert from byte array to bitmap
     public static Bitmap getBitmapFromBytes(byte[] image) throws Exception {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
+*/
 
     public static void setEnabledButton(Context context, Button button, boolean enabled) {
         button.setEnabled(enabled);

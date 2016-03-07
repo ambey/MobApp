@@ -32,7 +32,7 @@ public class ByteArrayToBitmapTask extends AsyncTask<Void, Void, Bitmap> {
         super.onPostExecute(bitmap);
         if (viewWeakReference != null) {
             ImageView view = viewWeakReference.get();
-            if (view != null) {
+            if (view != null && bitmap != null) {
                 view.setImageBitmap(bitmap);
             }
         }
