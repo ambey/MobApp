@@ -138,7 +138,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
                         protected void onPostExecute(byte[] bytes) {
                             super.onPostExecute(bytes);
                             ByteArrayToBitmapTask bitmapTask = new ByteArrayToBitmapTask(mRxView, bytes,
-                                    mRxView.getLayoutParams().width, mRxView.getLayoutParams().height);
+                                    mRxView.getMeasuredWidth(), mRxView.getMeasuredHeight());
                             bitmapTask.execute();
                         }
                     };

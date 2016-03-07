@@ -254,6 +254,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void gotRxScannedCopy(Bundle data) {
+        if (!data.getBoolean("status")) {
+            return;
+        }
         ImageView imageView = (ImageView) findViewById(R.id.rxCopyImageView);
         TextView msgView = (TextView) findViewById(R.id.viewMsgNoItems);
         Report report = data.getParcelable("report");
@@ -265,7 +268,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         if(pix != null) {
             try {
                 ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(imageView, pix,
-                        imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+                        imageView.getMeasuredWidth(), imageView.getMeasuredHeight());
                 task.execute();
             } catch (Exception e) {
                 e.printStackTrace();

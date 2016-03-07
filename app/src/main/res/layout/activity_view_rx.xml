@@ -49,8 +49,8 @@
         <ListView
             android:id="@+id/listRxItems"
             style="@style/ListViewStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <!--
                 <ScrollView
@@ -58,11 +58,11 @@
                     android:layout_height="wrap_content">
         -->
 
-            <ImageView
-                android:id="@+id/rxCopyImageView"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/rx_copy" />
+        <ImageView
+            android:id="@+id/rxCopyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/rx_copy" />
         <!--
                 </ScrollView>
         -->
