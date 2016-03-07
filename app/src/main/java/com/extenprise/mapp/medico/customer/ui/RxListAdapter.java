@@ -18,12 +18,12 @@ import com.extenprise.mapp.medico.service.activity.RxInboxItemDetailsActivity;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServProvListItem;
 
-//import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+//import org.w3c.dom.Text;
 
 /**
  * Created by ambey on 10/10/15.
@@ -127,7 +127,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putParcelableArrayListExtra("inbox", mList);
         intent.putExtra("customer", mCust);
-        intent.putExtra("feedback", RxFeedback.NONE.ordinal());
+        intent.putExtra("feedback", RxFeedback.NONE);
         intent.putExtra("parent-activity", getContext().getClass().getName());
         getContext().startActivity(intent);
     }

@@ -35,30 +35,21 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
     private static String parentActivity;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
-    private ArrayList<ServProvListItem> mServProvList;
     /*private View mProgressView;
     private View mSearchResultView;*/
     private ArrayAdapter<ServProvListItem> mAdapter;
+
+    public static void setParentActivity(String parentActivity) {
+        SearchServProvResultActivity.parentActivity = parentActivity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serv_prov_result);
 
-        /*mSearchResultView = findViewById(R.id.formServProvResult);
-        mProgressView = findViewById(R.id.progressBar);*/
-
-        Intent intent = getIntent();
-        if (intent.getStringExtra("parent-activity") != null) {
-            SearchServProvResultActivity.parentActivity = intent.getStringExtra("parent-activity");
-        }
-
-        if (savedInstanceState != null) {
-            mServProvList = savedInstanceState.getParcelableArrayList("servProvList");
-        } else {
-            mServProvList = intent.getParcelableArrayListExtra("servProvList");
-        }
-        mAdapter = new ServProvListAdapter(this, R.layout.activity_search_result, mServProvList);
+        ArrayList<ServProvListItem> servProvList = WorkingDataStore.getBundle().getParcelableArrayList("servProvList");
+        mAdapter = new ServProvListAdapter(this, R.layout.activity_search_result, servProvList);
 
         ListView listView = (ListView) findViewById(R.id.docListView);
         listView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
@@ -71,30 +62,17 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         });
         listView.setAdapter(mAdapter);
 
-        ServProvListItem spl = mServProvList.get(0);
+        ServProvListItem spl;
         String msg = "not present";
-        if (spl.getWorkingDays() != null) {
-            msg = spl.getWorkingDays();
+        if (servProvList != null && servProvList.size() > 0) {
+            spl = servProvList.get(0);
+            if (spl.getWorkingDays() != null) {
+                msg = spl.getWorkingDays();
+            }
         }
 
         //Toast.makeText(this, "working days : " + msg, Toast.LENGTH_LONG).show();
         Log.v("Home", "############################" + "working days : " + msg);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("servProvList", mServProvList);
-        outState.putParcelable("form", getIntent().getParcelableExtra("form"));
-        outState.putString("parent-activity", getIntent().getStringExtra("parent-actvity"));
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Intent intent = getIntent();
-        intent.putExtra("parent-activity", savedInstanceState.getString("parent-activity"));
-        intent.putExtra("form", savedInstanceState.getParcelable("form"));
     }
 
     @Override
@@ -165,10 +143,9 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
             Utility.showMessage(this, R.string.error_server_connect);
             return;
         }
-        //Utility.showProgress(this, mSearchResultView, mProgressView, false);
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.putParcelable("servProv", serviceProvider);
         Intent intent = new Intent(this, ServProvDetailsActivity.class);
-        intent.putParcelableArrayListExtra("servProvList", mServProvList);
-        intent.putExtra("servProv", serviceProvider);
         startActivity(intent);
     }
 
@@ -186,8 +163,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         Intent intent = null;
         try {
             intent = new Intent(this, Class.forName(SearchServProvResultActivity.parentActivity));
-            intent.putExtra("form", getIntent().getParcelableExtra("form"));
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return intent;

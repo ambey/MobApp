@@ -29,6 +29,8 @@ import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.AppointmentListItem;
+import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
 
 import java.io.File;
@@ -131,7 +133,16 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
                     bitmap = MediaStore.Images.Media
                             .getBitmap(cr, selectedImage);
 
-                    mRxView.setImageBitmap(bitmap);
+                    BitmapToByteArrayTask task = new BitmapToByteArrayTask(null, bitmap) {
+                        @Override
+                        protected void onPostExecute(byte[] bytes) {
+                            super.onPostExecute(bytes);
+                            ByteArrayToBitmapTask bitmapTask = new ByteArrayToBitmapTask(mRxView, bytes,
+                                    mRxView.getLayoutParams().width, mRxView.getLayoutParams().height);
+                            bitmapTask.execute();
+                        }
+                    };
+                    task.execute();
                     Toast.makeText(this, selectedImage.toString(),
                             Toast.LENGTH_LONG).show();
                 } catch (Exception e) {

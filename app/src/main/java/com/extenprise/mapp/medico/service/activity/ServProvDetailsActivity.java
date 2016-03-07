@@ -25,8 +25,6 @@ import java.util.Calendar;
 
 public class ServProvDetailsActivity extends Activity {
 
-    private ServiceProvider mServProv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,16 +50,16 @@ public class ServProvDetailsActivity extends Activity {
         TextView textViewDocQualification = (TextView) findViewById(R.id.textviewDocQualification);
         Button bookAppontButton = (Button) findViewById(R.id.buttonBookAppointment);
 
-        Intent intent = getIntent();
-        if (savedInstanceState != null) {
-            mServProv = savedInstanceState.getParcelable("servProv");
-        } else {
-            mServProv = intent.getParcelableExtra("servProv");
+        ServiceProvider servProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        if (!(servProv != null && servProv.getServiceCount() > 0)) {
+            Utility.showMessage(this, R.string.error_session_expired);
+            Utility.startActivity(this, LoginActivity.class);
+            return;
         }
-        ServProvHasServPt spsspt = mServProv.getServProvHasServPt(0);
-        Service service = spsspt.getService();
-
+        ServProvHasServPt spspt = servProv.getServProvHasServPt(0);
+        Service service = spspt.getService();
         String category = service.getCategory();
+
         if (category.equalsIgnoreCase(getString(R.string.pharmacist))) {
             Utility.setEnabledButton(this, bookAppontButton, false);
             imageView.setImageResource(R.drawable.medstore);
@@ -72,25 +70,25 @@ public class ServProvDetailsActivity extends Activity {
             lbl.setText("");
         }
 
-        if (mServProv.getPhoto() != null) {
-            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(imageView, mServProv.getPhoto(),
+        if (servProv.getPhoto() != null) {
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(imageView, servProv.getPhoto(),
                     imageView.getLayoutParams().width, imageView.getLayoutParams().height);
             task.execute();
         }
-        textViewClinic.setText(spsspt.getServicePoint().getName());
-        textViewDocExperience.setText(String.format("%.1f", spsspt.getExperience()));
+        textViewClinic.setText(spspt.getServicePoint().getName());
+        textViewDocExperience.setText(String.format("%.1f", spspt.getExperience()));
         textViewClinicTime.setText(String.format("%s to %s",
-                Utility.getTimeInTwelveFormat(spsspt.getStartTime()),
-                Utility.getTimeInTwelveFormat(spsspt.getEndTime())));
-        textViewDocname.setText(String.format("%s %s", mServProv.getfName(), mServProv.getlName()));
-        textViewDocSpeciality.setText(String.format("(%s)", spsspt.getService().getSpeciality()));
-        textViewDocQualification.setText(mServProv.getQualification());
-        textViewFees.setText(String.format("%.2f", spsspt.getConsultFee()));
-        sptType.setText(String.format("%s %s", spsspt.getServPointType(), getString(R.string.nm)));
-        notes.setText(spsspt.getNotes());
+                Utility.getTimeInTwelveFormat(spspt.getStartTime()),
+                Utility.getTimeInTwelveFormat(spspt.getEndTime())));
+        textViewDocname.setText(String.format("%s %s", servProv.getfName(), servProv.getlName()));
+        textViewDocSpeciality.setText(String.format("(%s)", spspt.getService().getSpeciality()));
+        textViewDocQualification.setText(servProv.getQualification());
+        textViewFees.setText(String.format("%.2f", spspt.getConsultFee()));
+        sptType.setText(String.format("%s %s", spspt.getServPointType(), getString(R.string.nm)));
+        notes.setText(spspt.getNotes());
 
         TextView availability = (TextView) findViewById(R.id.textviewAvailability);
-        if (Utility.findDocAvailability(spsspt.getWorkingDays(), Calendar.getInstance())) {
+        if (Utility.findDocAvailability(spspt.getWorkingDays(), Calendar.getInstance())) {
             imageViewAvailable.setImageResource(R.drawable.g_circle);
             availability.setText(getString(R.string.available));
         } else {
@@ -99,27 +97,12 @@ public class ServProvDetailsActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("servProv", getIntent().getParcelableExtra("servProv"));
-        outState.putParcelableArrayList("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
-        outState.putString("myparent-activity", getIntent().getStringExtra("myparent-activity"));
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        getIntent().putParcelableArrayListExtra("servProvList", savedInstanceState.getParcelableArrayList("servProvList"));
-        getIntent().putExtra("myparent-activity", savedInstanceState.getString("myparent-activity"));
-    }
-
     /*
     @Override
     protected void onResume() {
         super.onResume();
         if (mServProv == null) {
-            Utility.goTOLoginPage(this, LoginActivity.class);
+            Utility.startActivity(this, LoginActivity.class);
         }
     }
 */
@@ -129,11 +112,7 @@ public class ServProvDetailsActivity extends Activity {
         if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
             intent = new Intent(this, LoginActivity.class);
             intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
-        } else {
-            intent.putExtra("customer", WorkingDataStore.getBundle().getParcelable("customer"));
         }
-        intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
-        intent.putExtra("servProv", mServProv);
         startActivity(intent);
     }
 

@@ -45,6 +45,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.extenprise.mapp.medico.R;
+import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.AppStatus;
 import com.extenprise.mapp.medico.net.ErrorCode;
@@ -511,6 +512,7 @@ public abstract class Utility {
         activity.getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         //activity.getSupportActionBar().hide();
     }
+
     public static void enlargeImage(ImageView imageView) {
         if (imageView.getLayoutParams().height == LinearLayout.LayoutParams.MATCH_PARENT) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(140, 140);
@@ -602,7 +604,12 @@ public abstract class Utility {
         }
     }*/
 
-    public static void goTOLoginPage(Activity activity, Class targetClass) {
+    public static void sessionExpired(Activity activity) {
+        Utility.showMessage(activity, R.string.error_session_expired);
+        Utility.startActivity(activity, LoginActivity.class);
+    }
+
+    public static void startActivity(Activity activity, Class targetClass) {
         Log.v("Home", "############################" + activity.getString(R.string.msg_exception));
         Intent intent = new Intent(activity, targetClass);
         activity.startActivity(intent);

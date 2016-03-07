@@ -107,10 +107,10 @@ public class SignUpPreviousActivity extends FragmentActivity implements Response
             case R.id.action_settings:
                 return true;
             case R.id.action_search:
-                Utility.goTOLoginPage(this, SearchServProvActivity.class);
+                Utility.startActivity(this, SearchServProvActivity.class);
                 return true;
             case R.id.action_sign_in:
-                Utility.goTOLoginPage(this, LoginActivity.class);
+                Utility.startActivity(this, LoginActivity.class);
                 return true;
         }
         return super.onOptionsItemSelected(item);

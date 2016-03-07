@@ -70,7 +70,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         if(customer != null) {
             mInboxItem.setCustomer(customer);
         }
-        int feedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
+        int feedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         mAvailMap = (BitSet) intent.getSerializableExtra("availMap");
 
         View layoutAppont = findViewById(R.id.layoutAppont);
@@ -85,7 +85,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         TextView custPhoneView;
         TextView lbl;
 
-        if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        if (feedback == RxFeedback.VIEW_FEEDBACK) {
             View layoutRxHead = findViewById(R.id.layoutRxHead);
             layoutRxHead.setVisibility(View.GONE);
 
@@ -119,14 +119,14 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
         mSendAvailButton = (Button) findViewById(R.id.buttonSendAvailability);
         Button resendRxButton = (Button) findViewById(R.id.buttonResendRx);
-        if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        if (feedback == RxFeedback.VIEW_FEEDBACK) {
             mSendAvailButton.setVisibility(View.GONE);
             if (mInboxItem.getRx().isAllItemsAvailable()) {
                 Utility.setEnabledButton(this, resendRxButton, false);
             }
-        } else if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
+        } else if (feedback == RxFeedback.GIVE_FEEDBACK) {
             resendRxButton.setVisibility(View.GONE);
-            if(mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal()) {
+            if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT) {
                 Utility.setEnabledButton(this, mSendAvailButton, false);
             }
         } else {
@@ -134,14 +134,14 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             resendRxButton.setVisibility(View.GONE);
         }
 
-        if (feedback != RxFeedback.NONE.ordinal()) {
+        if (feedback != RxFeedback.NONE) {
             int status = mInboxItem.getReportService().getStatus();
-            if (ReportServiceStatus.STATUS_PENDING.ordinal() == status ||
-                    ReportServiceStatus.STATUS_NEW.ordinal() == status) {
-                status = ReportServiceStatus.STATUS_INPROCESS.ordinal();
+            if (ReportServiceStatus.STATUS_PENDING == status ||
+                    ReportServiceStatus.STATUS_NEW == status) {
+                status = ReportServiceStatus.STATUS_INPROCESS;
             }
             statusView.setText(ReportServiceStatus.getStatusString(this, status));
-            if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+            if (feedback == RxFeedback.VIEW_FEEDBACK) {
                 statusView.setVisibility(View.GONE);
             }
         }
@@ -173,10 +173,10 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             }
             return;
         }
-        RxFeedback fb = RxFeedback.NONE;
-        if (feedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        int fb = RxFeedback.NONE;
+        if (feedback == RxFeedback.VIEW_FEEDBACK) {
             fb = RxFeedback.VIEW_FEEDBACK;
-        } else if (feedback == RxFeedback.GIVE_FEEDBACK.ordinal()) {
+        } else if (feedback == RxFeedback.GIVE_FEEDBACK) {
             fb = RxFeedback.GIVE_FEEDBACK;
         }
         RxItemListAdapter adapter = new RxItemListAdapter(this, 0, mInbox, mInboxItem, fb);
@@ -190,7 +190,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         Intent intent = getIntent();
         outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
         outState.putParcelable("customer", intent.getParcelableExtra("customer"));
-        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE.ordinal()));
+        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE));
         outState.putSerializable("availMap", intent.getSerializableExtra("availMap"));
     }
 
@@ -200,7 +200,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     public void setAvailabilityChanged(boolean isChanged) {
         /* Change the state of the button only if the feedback was sent previously */
-        if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal()) {
+        if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT) {
             Utility.setEnabledButton(this, mSendAvailButton, isChanged);
         }
     }
@@ -214,7 +214,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         RxItemAvailability availability = new RxItemAvailability();
         availability.setIdServProvHasServPt(mInboxItem.getReportService().getIdServProvHasServPt());
         availability.setIdRx(mInboxItem.getReportService().getIdReport());
-        availability.setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
+        availability.setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT);
         availability.setReceivedDate(mInboxItem.getReportService().getReceivedDate());
         availability.setAvailableList(mInboxItem.getRx().getItems());
 
@@ -242,7 +242,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     }
 
     private void sentAvailabilityFeedback() {
-        mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
+        mInboxItem.getReportService().setStatus(ReportServiceStatus.STATUS_FEEDBACK_SENT);
         Utility.showAlert(this, "", getString(R.string.msg_availablity_sent), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -299,8 +299,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 /*
         ReportService service = mInboxItem.getReportService();
         if(service != null) {
-            if (service.getStatus() == ReportServiceStatus.STATUS_NEW.ordinal()) {
-                service.setStatus(ReportServiceStatus.STATUS_PENDING.ordinal());
+            if (service.getStatus() == ReportServiceStatus.STATUS_NEW) {
+                service.setStatus(ReportServiceStatus.STATUS_PENDING);
             }
             Bundle bundle = new Bundle();
             bundle.putParcelable("report_service", service);
@@ -311,7 +311,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         }
 */
         intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));
-        intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE.ordinal()));
+        intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
         intent.putExtra("customer", getIntent().getParcelableExtra("customer"));
         intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         return intent;

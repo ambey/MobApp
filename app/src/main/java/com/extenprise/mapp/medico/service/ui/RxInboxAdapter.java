@@ -36,9 +36,9 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
     private ArrayList<RxInboxItem> mSortedRxList;
     private String mSortField;
     private boolean mAscending;
-    private RxFeedback mFeedback;
+    private int mFeedback;
 
-    public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list, RxFeedback feedback) {
+    public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list, int feedback) {
         super(context, resource);
         mRxList = list;
         this.mFeedback = feedback;
@@ -143,7 +143,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         }
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putParcelableArrayListExtra("inbox", mRxList);
-        intent.putExtra("feedback", mFeedback.ordinal());
+        intent.putExtra("feedback", mFeedback);
         if (mAvailMaps != null) {
             intent.putExtra("availMap", mAvailMaps.get(position));
         }

@@ -49,7 +49,7 @@ public class PatientsHomeScreenActivity extends Activity {
             //Utility.setLastVisit(prefs);
         } catch (Exception e) {
             e.printStackTrace();
-            //Utility.goTOLoginPage(this, LoginActivity.class);
+            //Utility.startActivity(this, LoginActivity.class);
         }
     }
 

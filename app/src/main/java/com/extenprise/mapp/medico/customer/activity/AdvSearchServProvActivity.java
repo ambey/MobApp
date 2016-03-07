@@ -79,12 +79,8 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         /*mSearchFormView = findViewById(R.id.advSearchForm);
         mProgressView = findViewById(R.id.search_progress);*/
 
-        if (savedInstanceState != null) {
-            Intent intent = getIntent();
-            intent.putStringArrayListExtra("specList", savedInstanceState.getStringArrayList("specList"));
-            intent.putExtra("form", savedInstanceState.getParcelable("form"));
-        }
-        ArrayList<String> specList = getIntent().getStringArrayListExtra("specList");
+        Bundle bundle = WorkingDataStore.getBundle();
+        ArrayList<String> specList = bundle.getStringArrayList("specList");
         if (specList == null) {
             specList = new ArrayList<>();
             specList.add(getString(R.string.select_speciality));
@@ -92,7 +88,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.layout_spinner, specList);
         mSpeciality.setAdapter(spinnerAdapter);
 
-        mForm = getIntent().getParcelableExtra("form");
+        mForm = bundle.getParcelable("searchForm");
         if (mForm != null) {
             mLocation.setText(mForm.getLocation());
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, mForm.getSpeciality()));
@@ -138,14 +134,6 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
                 // your code here
             }
         });
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Intent intent = getIntent();
-        outState.putStringArrayList("specList", intent.getStringArrayListExtra("specList"));
-        outState.putParcelable("form", intent.getParcelableExtra("form"));
     }
 
     public void showtimeFields(View view) {
@@ -353,10 +341,10 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
         Utility.showProgressDialog(this, false);
         boolean success = data.getBoolean("status");
         if (success) {
+            Bundle bundle = WorkingDataStore.getBundle();
+            bundle.putParcelableArrayList("servProvList", data.getParcelableArrayList("servProvList"));
+            SearchServProvResultActivity.setParentActivity(this.getClass().getName());
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
-            intent.putParcelableArrayListExtra("servProvList", data.getParcelableArrayList("servProvList"));
-            intent.putExtra("parent-activity", this.getClass().getName());
-            intent.putExtra("form", mForm);
             startActivity(intent);
         }
     }

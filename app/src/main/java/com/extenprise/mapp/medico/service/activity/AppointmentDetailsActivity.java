@@ -129,7 +129,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     protected void onResume() {
         super.onResume();
         if (mServProv == null) {
-            Utility.goTOLoginPage(this, LoginActivity.class);
+            Utility.startActivity(this, LoginActivity.class);
         }
     }
 

@@ -183,10 +183,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
             case R.id.action_settings:
                 return true;
             case R.id.action_search:
-                Utility.goTOLoginPage(this, SearchServProvActivity.class);
+                Utility.startActivity(this, SearchServProvActivity.class);
                 return true;
             case R.id.action_sign_in:
-                Utility.goTOLoginPage(this, LoginActivity.class);
+                Utility.startActivity(this, LoginActivity.class);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -565,13 +565,13 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Utility.goTOLoginPage(PatientSignUpActivity.this, PatientsHomeScreenActivity.class);
+                            Utility.startActivity(PatientSignUpActivity.this, PatientsHomeScreenActivity.class);
                         }
                     }, new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             dialog.dismiss();
-                            Utility.goTOLoginPage(PatientSignUpActivity.this, PatientsHomeScreenActivity.class);
+                            Utility.startActivity(PatientSignUpActivity.this, PatientsHomeScreenActivity.class);
                         }
                     }
             );

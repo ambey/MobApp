@@ -81,7 +81,7 @@ public class ViewAppointmentListActivity extends FragmentActivity
         super.onResume();
         mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
         if (mServiceProv == null) {
-            Utility.goTOLoginPage(this, LoginActivity.class);
+            Utility.startActivity(this, LoginActivity.class);
             return;
         }
         getUpcomingList();
@@ -197,12 +197,11 @@ public class ViewAppointmentListActivity extends FragmentActivity
             Bundle bundle = WorkingDataStore.getBundle();
             bundle.putParcelableArrayList("pastList", mPastList);
         }
-        assert mPastList != null;
         adapter = new AppointmentListAdapter(this, 0, mPastList, mServiceProv);
         adapter.setShowDate(true);
         mPastListView.setAdapter(adapter);
         mPastListView.setOnItemClickListener(adapter);
-        if (mPastList.size() > 0) {
+        if (mPastList != null && mPastList.size() > 0) {
             mPastListView.setVisibility(View.VISIBLE);
             mPastMsgView.setVisibility(View.GONE);
             Utility.setEnabledButton(this, mPastSortBtn, true);

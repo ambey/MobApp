@@ -31,10 +31,10 @@ import java.util.BitSet;
 public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterView.OnItemClickListener {
     private ArrayList<RxInboxItem> mInbox;
     private RxInboxItem mRxInboxItem;
-    private RxFeedback mFeedback;
+    private int mFeedback;
     private BitSet mAvailMap;
 
-    public RxItemListAdapter(Context context, int resource, ArrayList<RxInboxItem> rxInbox, RxInboxItem rxItem, RxFeedback feedback) {
+    public RxItemListAdapter(Context context, int resource, ArrayList<RxInboxItem> rxInbox, RxInboxItem rxItem, int feedback) {
         super(context, resource);
         mInbox = rxInbox;
         mRxInboxItem = rxItem;
@@ -135,7 +135,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
         bundle.putParcelable("rxItem", mRxInboxItem);
 
         Intent intent = new Intent(getContext(), RxActivity.class);
-        intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK.ordinal());
+        intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK);
         intent.putExtra("parent-activity", RxInboxItemDetailsActivity.class.getName());
         intent.putExtra("rxItemPos", position);
         intent.putParcelableArrayListExtra("inbox", mInbox);

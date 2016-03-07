@@ -44,4 +44,6 @@
     <string name="error_pwd_length">Password should have minimum six characters</string>
     <string name="error_proper_name">Please Enter Proper Name</string>
     <string name="error_enter_std">Enter std code for landline number</string>
+    <string name="error_no_details_exist">No details found.</string>
+    <string name="error_session_expired">Your session expired.</string>
 </resources>

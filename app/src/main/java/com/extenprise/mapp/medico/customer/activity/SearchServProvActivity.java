@@ -177,14 +177,10 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         spsspt.setService(s);
 */
         fillSearchForm();
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.putParcelable("searchForm", mForm);
+        bundle.putStringArrayList("specList", specList);
         Intent intent = new Intent(this, AdvSearchServProvActivity.class);
-        intent.putExtra("form", mForm);
-        //SpinnerAdapter adp = mSpeciality.getAdapter();
-        /*ArrayList list = new ArrayList();
-        for(int i = 0; i < mSpeciality.getCount(); i++) {
-            list.add(mSpeciality.getItemAtPosition(i));
-        }*/
-        intent.putStringArrayListExtra("specList", specList);
         startActivity(intent);
     }
 
@@ -297,10 +293,10 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     protected void searchDone(Bundle msgData) {
         ArrayList<Parcelable> list = msgData.getParcelableArrayList("servProvList");
         if (list != null && list.size() > 0) {
+            Bundle bundle = WorkingDataStore.getBundle();
+            bundle.putParcelableArrayList("servProvList", msgData.getParcelableArrayList("servProvList"));
+            SearchServProvResultActivity.setParentActivity(this.getClass().getName());
             Intent intent = new Intent(this, SearchServProvResultActivity.class);
-            intent.putParcelableArrayListExtra("servProvList", list);
-            intent.putExtra("parent-activity", this.getClass().getName());
-            intent.putExtra("myparent-activity", getIntent().getStringExtra("parent-activity"));
             startActivity(intent);
         }
     }
@@ -342,7 +338,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-                Utility.goTOLoginPage(this, PatientsHomeScreenActivity.class);
+                Utility.startActivity(this, PatientsHomeScreenActivity.class);
                 return true;
             }
         }

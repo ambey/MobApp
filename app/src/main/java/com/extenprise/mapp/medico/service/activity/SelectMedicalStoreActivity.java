@@ -79,7 +79,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
         form.setIdServProvHasServPt(item.getIdServProvHasServPt());
         form.setIdRx(mRx.getIdReport());
         form.setDate(new Date());
-        form.setStatus(ReportServiceStatus.STATUS_NEW.ordinal());
+        form.setStatus(ReportServiceStatus.STATUS_NEW);
         bundle.putParcelable("form", form);
         mConnection.setAction(MappService.DO_SEND_RX);
         mConnection.setData(bundle);
@@ -116,14 +116,14 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                Utility.goTOLoginPage(SelectMedicalStoreActivity.this, ServiceProviderHomeActivity.class);
+                Utility.startActivity(SelectMedicalStoreActivity.this, ServiceProviderHomeActivity.class);
             }
         }, new DialogInterface.OnCancelListener() {
 
             @Override
             public void onCancel(DialogInterface dialog) {
                 dialog.dismiss();
-                Utility.goTOLoginPage(SelectMedicalStoreActivity.this, ServiceProviderHomeActivity.class);
+                Utility.startActivity(SelectMedicalStoreActivity.this, ServiceProviderHomeActivity.class);
             }
         });
     }

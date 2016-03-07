@@ -35,20 +35,25 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     private TextView mMsgView;
     private TextView mWelcomeView;
     private ImageView mImgView;
+    private ServiceProvider mServiceProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
-        ServiceProvider serviceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServiceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+        if (!(mServiceProvider != null && mServiceProvider.getServiceCount() > 0)) {
+            Utility.sessionExpired(this);
+            return;
+        }
 
         mMsgView = (TextView) findViewById(R.id.msgView);
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imageDoctor);
         //profile();
         TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + serviceProv.getSignInData().getPhone(), MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProvider.getSignInData().getPhone(), MODE_PRIVATE);
         lastVisited.setText(String.format("%s %s %s",
                 getString(R.string.last_visited),
                 prefs.getString("lastVisitDate", "--"),
@@ -64,17 +69,16 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     private void profile() {
         mImgView.setImageResource(R.drawable.dr_avatar);
-        ServiceProvider serviceProv = WorkingDataStore.getBundle().getParcelable("servProv");
-        String mServPointType = serviceProv.getServProvHasServPt(0).getServPointType();
+        String mServPointType = mServiceProvider.getServProvHasServPt(0).getServPointType();
         String label = getString(R.string.hello_dr);
         if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             label = getString(R.string.hello);
             mImgView.setImageResource(R.drawable.diagcenter);
         }
         mWelcomeView.setText(String.format("%s %s %s", label,
-                serviceProv.getfName(), serviceProv.getlName()));
-        if (serviceProv.getPhoto() != null) {
-            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, serviceProv.getPhoto(),
+                mServiceProvider.getfName(), mServiceProvider.getlName()));
+        if (mServiceProvider.getPhoto() != null) {
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServiceProvider.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
             task.execute();
         }
@@ -95,9 +99,8 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     public void viewRxFeedback(View view) {
         Bundle bundle = new Bundle();
-        ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
-        bundle.putString("phone", serviceProvider.getSignInData().getPhone());
-        bundle.putInt("status", ReportServiceStatus.STATUS_FEEDBACK_SENT.ordinal());
+        bundle.putString("phone", mServiceProvider.getSignInData().getPhone());
+        bundle.putInt("status", ReportServiceStatus.STATUS_FEEDBACK_SENT);
         mConnection.setAction(MappService.DO_GET_RX_FEEDBACK);
         mConnection.setData(bundle);
         mMsgView.setVisibility(View.VISIBLE);
@@ -168,7 +171,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);
-        intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK.ordinal());
+        intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());
         startActivity(intent);
     }

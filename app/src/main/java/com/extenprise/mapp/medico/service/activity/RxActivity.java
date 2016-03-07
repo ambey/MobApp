@@ -81,7 +81,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         } else {
             mParentActivity = intent.getStringExtra("parent-activity");
             mAppont = intent.getParcelableExtra("appont");
-            mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE.ordinal());
+            mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         }
         /*mForm = findViewById(R.id.rxItemForm);
         mProgressBar = findViewById(R.id.rxSave_progress);*/
@@ -145,7 +145,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         mAltDrugForm = (Spinner) findViewById(R.id.altDrugFormSpinner);
 
         RxInboxItem rxInboxItem = null;
-        if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
             if (savedInstanceState != null) {
                 mInbox = savedInstanceState.getParcelableArrayList("inbox");
             } else {
@@ -194,14 +194,14 @@ public class RxActivity extends Activity implements ResponseHandler {
         Intent intent = getIntent();
         outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
         outState.putParcelable("appont", intent.getParcelableExtra("appont"));
-        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE.ordinal()));
+        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE));
         outState.putString("parent-activity", intent.getStringExtra("parent-activity"));
         outState.putInt("rxItemPos", intent.getIntExtra("rxItemPos", 0));
         outState.putParcelable("servProv", intent.getParcelableExtra("servProv"));
     }
 
     private void fillRx(RxInboxItem rxInboxItem) {
-        if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
             int position = getIntent().getIntExtra("rxItemPos", 0);
             setupRxItemUI(rxInboxItem.getRx().getItems().get(position));
             return;
@@ -250,7 +250,7 @@ public class RxActivity extends Activity implements ResponseHandler {
     }
 
     public void doneRx(View view) {
-        if (mFeedback == RxFeedback.VIEW_FEEDBACK.ordinal()) {
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
             if (updateRxItem()) {
                 try {
                     Intent intent = new Intent(this, Class.forName(mParentActivity));

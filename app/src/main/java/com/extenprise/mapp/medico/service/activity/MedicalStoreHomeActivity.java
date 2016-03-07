@@ -56,7 +56,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
                     prefs.getString("lastVisitTime", "--")));
             Utility.setLastVisit(prefs);
         } catch (Exception e) {
-            Utility.goTOLoginPage(this, LoginActivity.class);
+            Utility.startActivity(this, LoginActivity.class);
             return;
         }
 
@@ -130,7 +130,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putParcelableArrayListExtra("inbox", list);
-        intent.putExtra("feedback", RxFeedback.GIVE_FEEDBACK.ordinal());
+        intent.putExtra("feedback", RxFeedback.GIVE_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());
         startActivity(intent);
     }
