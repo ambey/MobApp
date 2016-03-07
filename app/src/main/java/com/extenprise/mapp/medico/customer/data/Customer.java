@@ -59,7 +59,7 @@ public class Customer implements Parcelable, HasPhoto {
 
         idCustomer = source.readInt();
 
-        String[] fields = new String[11];
+        String[] fields = new String[12];
         source.readStringArray(fields);
         int i = 0;
         fName = fields[i++];

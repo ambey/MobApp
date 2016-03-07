@@ -70,7 +70,14 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private void profile() {
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 mServProv.getfName(), mServProv.getlName()));
-        mLastVisited.setText(mServProv.getLastVisit());
+        //mLastVisited.setText(mServProv.getLastVisit());
+        mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited),
+                Utility.getDateAsStr(
+                        Utility.getStrAsDate(mServProv.getLastVisit(), "yyyy-MM-dd HH:mm"),
+                        "dd/MM/yyyy HH:mm")));
+        if (mServProv.getLastVisit() == null) {
+            mLastVisited.setText(String.format("%s - -", getString(R.string.last_visited)));
+        }
         mImgView.setImageResource(R.drawable.medstore);
         if (mServProv.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServProv.getPhoto(),

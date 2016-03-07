@@ -30,7 +30,6 @@ import com.extenprise.mapp.medico.customer.activity.BookAppointmentActivity;
 import com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.medico.customer.activity.SearchServProvActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
-import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
@@ -344,9 +343,9 @@ public class LoginActivity extends Activity implements ResponseHandler {
     private void doLogin(String phone, String encryptedPasswd) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", mLoginType);
-        SignInData signInData = new SignInData();
+        /*SignInData signInData = new SignInData();
         signInData.setPhone(phone);
-        signInData.setPasswd(encryptedPasswd);
+        signInData.setPasswd(encryptedPasswd);*/
 
         Calendar calendar = Calendar.getInstance();
         String lastVisit = String.format("%s %s", Utility.getDateAsStr(calendar.getTime(), "yyyy-MM-dd"),
@@ -365,7 +364,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             serviceProvider.setLastVisit(lastVisit);
             bundle.putParcelable("serviceProvider", serviceProvider);
         }
-        bundle.putParcelable("signInData", signInData);
+        //bundle.putParcelable("signInData", signInData);
         mConnection.setAction(MappService.DO_LOGIN);
         mConnection.setData(bundle);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
