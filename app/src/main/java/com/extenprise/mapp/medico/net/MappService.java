@@ -16,7 +16,6 @@ import com.extenprise.mapp.medico.customer.data.Customer;
 import com.extenprise.mapp.medico.data.Appointment;
 import com.extenprise.mapp.medico.data.Report;
 import com.extenprise.mapp.medico.data.Rx;
-import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.service.data.AppointmentListItem;
 import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServProvListItem;
@@ -108,9 +107,16 @@ public class MappService extends Service {
     public void doLogin(Message msg) {
         Bundle data = msg.getData();
         mLoginType = data.getInt("loginType");
-        SignInData signInData = data.getParcelable("signInData");
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        sendAsyncMsg(msg, gson.toJson(signInData));
+        if (mLoginType == CUSTOMER_LOGIN) {
+            Customer customer = data.getParcelable("customer");
+            sendAsyncMsg(msg, gson.toJson(customer));
+        } else if (mLoginType == SERVICE_LOGIN) {
+            ServiceProvider serviceProvider = data.getParcelable("serviceProvider");
+            sendAsyncMsg(msg, gson.toJson(serviceProvider));
+        }
+        /*SignInData signInData = data.getParcelable("signInData");
+        sendAsyncMsg(msg, gson.toJson(signInData));*/
     }
 
     public void doSignupOrUpdate(Message msg) {

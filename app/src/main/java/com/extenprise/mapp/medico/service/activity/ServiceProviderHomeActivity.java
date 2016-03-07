@@ -2,7 +2,6 @@ package com.extenprise.mapp.medico.service.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -36,6 +35,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     private TextView mWelcomeView;
     private ImageView mImgView;
     private ServiceProvider mServiceProvider;
+    private TextView mLastVisited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +52,25 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imageDoctor);
         //profile();
-        TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProvider.getSignInData().getPhone(), MODE_PRIVATE);
+        mLastVisited = (TextView) findViewById(R.id.lastVisitedView);
+        /*SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProvider.getSignInData().getPhone(), MODE_PRIVATE);
         lastVisited.setText(String.format("%s %s %s",
                 getString(R.string.last_visited),
                 prefs.getString("lastVisitDate", "--"),
-                prefs.getString("lastVisitTime", "--")));
+                prefs.getString("lastVisitTime", "--")));*/
         //Utility.setLastVisit(prefs);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mServiceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
         profile();
     }
 
     private void profile() {
         mImgView.setImageResource(R.drawable.dr_avatar);
+        mLastVisited.setText(mServiceProvider.getLastVisit());
         String mServPointType = mServiceProvider.getServProvHasServPt(0).getServPointType();
         String label = getString(R.string.hello_dr);
         if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {

@@ -2,7 +2,6 @@ package com.extenprise.mapp.medico.customer.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -24,9 +23,10 @@ import com.extenprise.mapp.medico.util.Utility;
 
 public class PatientsHomeScreenActivity extends Activity {
 
-    TextView mWelcomeView;
-    ImageView mImgView;
-    Customer mCustomer;
+    private TextView mWelcomeView;
+    private ImageView mImgView;
+    private Customer mCustomer;
+    private TextView mLastVisited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class PatientsHomeScreenActivity extends Activity {
 
         mCustomer = WorkingDataStore.getBundle().getParcelable("customer");
         //profile();
-        TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
-        try {
+        mLastVisited = (TextView) findViewById(R.id.lastVisitedView);
+       /* try {
             SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
                     mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
             lastVisited.setText(String.format("%s %s %s",
@@ -50,7 +50,7 @@ public class PatientsHomeScreenActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
             //Utility.startActivity(this, LoginActivity.class);
-        }
+        }*/
     }
 
     @Override
@@ -63,6 +63,7 @@ public class PatientsHomeScreenActivity extends Activity {
     private void profile() {
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 mCustomer.getfName(), mCustomer.getlName()));
+        mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited), mCustomer.getLastVisit()));
         mImgView.setBackgroundResource(0);
         mImgView.setImageResource(R.drawable.patient);
         if (mCustomer.getPhoto() != null) {

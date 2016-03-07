@@ -215,6 +215,7 @@
     <string name="back">Back</string>
     <string name="take_photo">Take Photo</string>
     <string name="from_gallery">Choose from Gallery</string>
+    <string name="profile_photo">Upload Profile Photo</string>
 
     <string name="show_history">Show History</string>
     <string name="no_appont_yet">No Appointments yet…</string>

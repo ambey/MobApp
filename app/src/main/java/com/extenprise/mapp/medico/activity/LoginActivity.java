@@ -47,6 +47,7 @@ import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -346,6 +347,24 @@ public class LoginActivity extends Activity implements ResponseHandler {
         SignInData signInData = new SignInData();
         signInData.setPhone(phone);
         signInData.setPasswd(encryptedPasswd);
+
+        Calendar calendar = Calendar.getInstance();
+        String lastVisit = String.format("%s %s", Utility.getDateAsStr(calendar.getTime(), "yyyy-MM-dd"),
+                Utility.getFormattedTime(calendar));
+
+        if (mLoginType == MappService.CUSTOMER_LOGIN) {
+            Customer customer = new Customer();
+            customer.getSignInData().setPhone(phone);
+            customer.getSignInData().setPasswd(encryptedPasswd);
+            customer.setLastVisit(lastVisit);
+            bundle.putParcelable("customer", customer);
+        } else if (mLoginType == MappService.SERVICE_LOGIN) {
+            ServiceProvider serviceProvider = new ServiceProvider();
+            serviceProvider.getSignInData().setPhone(phone);
+            serviceProvider.getSignInData().setPasswd(encryptedPasswd);
+            serviceProvider.setLastVisit(lastVisit);
+            bundle.putParcelable("serviceProvider", serviceProvider);
+        }
         bundle.putParcelable("signInData", signInData);
         mConnection.setAction(MappService.DO_LOGIN);
         mConnection.setData(bundle);

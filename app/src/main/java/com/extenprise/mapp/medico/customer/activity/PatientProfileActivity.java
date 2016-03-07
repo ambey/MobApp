@@ -620,15 +620,17 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     public void changeImg(View view) {
+        String[] opts = new String[]{getString(R.string.take_photo),
+                getString(R.string.from_gallery)};
+        if (mCust.getPhoto() != null) {
+            opts = new String[]{getString(R.string.take_photo),
+                    getString(R.string.from_gallery),
+                    getString(R.string.remove)};
+        }
         final Activity activity = this;
         final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
-        Utility.showAlert(activity, activity.getString(R.string.take_photo), null, null, false,
-                /*
-                The array is put here instead of a method call to get the array because
-                OnClickHandler is using array index to take actions, and it helps to understand
-                if the array is infront of us
-                 */
-                Utility.imageOpts(this, (mCust.getPhoto() != null)), new DialogInterface.OnClickListener() {
+        Utility.showAlert(activity, activity.getString(R.string.profile_photo), null, null, false,
+                opts, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {

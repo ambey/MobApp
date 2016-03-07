@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.extenprise.mapp.medico.data.HasPhoto;
-import com.extenprise.mapp.medico.data.LastVisited;
 import com.extenprise.mapp.medico.data.SignInData;
 
 import java.text.ParseException;
@@ -41,12 +40,11 @@ public class ServiceProvider implements Parcelable, HasPhoto {
     private ArrayList<ServProvHasServPt> services;
     //private ArrayList<ServiceProvider> links;
     private byte[] photo;
-    private LastVisited lastVisited;
+    private String lastVisit;
 
     public ServiceProvider() {
         signInData = new SignInData();
         services = new ArrayList<>();
-        lastVisited = new LastVisited();
         //links = new ArrayList<>();
     }
 
@@ -64,7 +62,7 @@ public class ServiceProvider implements Parcelable, HasPhoto {
         subscribed = in.readInt();
         services = in.createTypedArrayList(ServProvHasServPt.CREATOR);
         photo = in.createByteArray();
-        lastVisited = in.readParcelable(LastVisited.class.getClassLoader());
+        lastVisit = in.readString();
 
         String date = in.readString();
         if (!date.equals("")) {
@@ -76,6 +74,14 @@ public class ServiceProvider implements Parcelable, HasPhoto {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getLastVisit() {
+        return lastVisit;
+    }
+
+    public void setLastVisit(String lastVisit) {
+        this.lastVisit = lastVisit;
     }
 
     @Override
@@ -93,7 +99,7 @@ public class ServiceProvider implements Parcelable, HasPhoto {
         dest.writeInt(subscribed);
         dest.writeTypedList(services);
         dest.writeByteArray(photo);
-        dest.writeParcelable(lastVisited, flags);
+        dest.writeString(lastVisit);
         String date = "";
         if (subsDate != null) {
             SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -113,14 +119,6 @@ public class ServiceProvider implements Parcelable, HasPhoto {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
-    }
-
-    public LastVisited getLastVisited() {
-        return lastVisited;
-    }
-
-    public void setLastVisited(LastVisited lastVisited) {
-        this.lastVisited = lastVisited;
     }
 
     public String getRegNo() {

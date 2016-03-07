@@ -261,7 +261,7 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     public void captureImage(View v) {
         final Activity activity = getActivity();
         final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
-        Utility.showAlert(activity, getString(R.string.uploadImg), null, null, false,
+        Utility.showAlert(activity, getString(R.string.profile_photo), null, null, false,
                 new String[]{activity.getString(R.string.take_photo),
                         activity.getString(R.string.from_gallery),
                         activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {

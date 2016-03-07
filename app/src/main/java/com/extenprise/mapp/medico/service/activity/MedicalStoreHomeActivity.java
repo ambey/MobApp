@@ -2,7 +2,6 @@ package com.extenprise.mapp.medico.service.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -36,6 +35,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private TextView mMsgView;
     private ImageView mImgView;
     private TextView mWelcomeView;
+    private TextView mLastVisited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +45,9 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         mMsgView = (TextView) findViewById(R.id.msgView);
         mImgView = (ImageView) findViewById(R.id.imageMedstore);
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
-
-        mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mLastVisited = (TextView) findViewById(R.id.lastVisitedView);
+       /* mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
         try {
-            TextView lastVisited = (TextView) findViewById(R.id.lastVisitedView);
             SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServProv.getSignInData().getPhone(), MODE_PRIVATE);
             lastVisited.setText(String.format("%s %s %s",
                     getString(R.string.last_visited),
@@ -58,9 +57,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         } catch (Exception e) {
             Utility.startActivity(this, LoginActivity.class);
             return;
-        }
-
-        profile();
+        }*/
     }
 
     @Override
@@ -73,6 +70,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private void profile() {
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 mServProv.getfName(), mServProv.getlName()));
+        mLastVisited.setText(mServProv.getLastVisit());
         mImgView.setImageResource(R.drawable.medstore);
         if (mServProv.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServProv.getPhoto(),

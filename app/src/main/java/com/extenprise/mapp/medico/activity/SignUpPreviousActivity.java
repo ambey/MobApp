@@ -66,9 +66,9 @@ public class SignUpPreviousActivity extends FragmentActivity implements Response
         Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_sign_up);
-        } else {
+        } /*else {
             Utility.showMessage(this, R.string.msg_can_not_proceed);
-        }
+        }*/
     }
 
     public void signUpServProv(View view) {

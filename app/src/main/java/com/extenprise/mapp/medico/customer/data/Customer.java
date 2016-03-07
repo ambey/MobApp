@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.extenprise.mapp.medico.data.Appointment;
 import com.extenprise.mapp.medico.data.City;
 import com.extenprise.mapp.medico.data.HasPhoto;
-import com.extenprise.mapp.medico.data.LastVisited;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.util.Utility;
 
@@ -45,20 +44,18 @@ public class Customer implements Parcelable, HasPhoto {
     private String pincode;
     private byte[] photo;
     private ArrayList<Appointment> appointments;
-    private LastVisited lastVisited;
+    private String lastVisit;
 
     public Customer() {
         signInData = new SignInData();
         city = new City();
         appointments = new ArrayList<>();
-        lastVisited = new LastVisited();
     }
 
     public Customer(Parcel source) {
         signInData = new SignInData();
         city = new City();
         appointments = new ArrayList<>();
-        lastVisited = new LastVisited();
 
         idCustomer = source.readInt();
 
@@ -75,7 +72,8 @@ public class Customer implements Parcelable, HasPhoto {
         pincode = fields[i++];
         city.setCity(fields[i++]);
         city.setState(fields[i++]);
-        city.setCountry(fields[i]);
+        city.setCountry(fields[i++]);
+        lastVisit = fields[i];
 
         age = source.readInt();
         weight = source.readFloat();
@@ -84,12 +82,18 @@ public class Customer implements Parcelable, HasPhoto {
         sdf.applyPattern("dd/MM/yyyy");
         try {
             dob = sdf.parse(source.readString());
-            lastVisited.setLastVisitedDate(sdf.parse(source.readString()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        lastVisited.setLastVisitedTime(source.readInt());
         photo = source.createByteArray();
+    }
+
+    public String getLastVisit() {
+        return lastVisit;
+    }
+
+    public void setLastVisit(String lastVisit) {
+        this.lastVisit = lastVisit;
     }
 
     public byte[] getPhoto() {
@@ -98,14 +102,6 @@ public class Customer implements Parcelable, HasPhoto {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
-    }
-
-    public LastVisited getLastVisited() {
-        return lastVisited;
-    }
-
-    public void setLastVisited(LastVisited lastVisited) {
-        this.lastVisited = lastVisited;
     }
 
     public ArrayList<Appointment> getAppointments() {
@@ -233,7 +229,7 @@ public class Customer implements Parcelable, HasPhoto {
         dest.writeInt(idCustomer);
         dest.writeStringArray(new String[]{
                 fName, lName, signInData.getPhone(), signInData.getPasswd(), emailId, gender,
-                location, pincode, city.getCity(), city.getState(), city.getCountry()
+                location, pincode, city.getCity(), city.getState(), city.getCountry(), lastVisit
         });
         dest.writeInt(age);
         dest.writeFloat(weight);
@@ -246,11 +242,7 @@ public class Customer implements Parcelable, HasPhoto {
             dateStr = sdf.format(dob);
         }
         dest.writeString(dateStr);
-        if(lastVisited.getLastVisitedDate() != null) {
-            dateStr = sdf.format(lastVisited.getLastVisitedDate());
-        }
         dest.writeString(dateStr);
-        dest.writeInt(lastVisited.getLastVisitedTime());
         dest.writeByteArray(photo);
     }
 }
