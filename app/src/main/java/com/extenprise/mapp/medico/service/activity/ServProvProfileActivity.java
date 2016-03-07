@@ -902,7 +902,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     public void openPersonalInfo(View view) {
-        Utility.goTOLoginPage(this, ServProvPersonalInfoActivity.class);
+        Utility.startActivity(this, ServProvPersonalInfoActivity.class);
         /*if (mPersonalInfo.getVisibility() == View.VISIBLE) {
             mPersonalInfo.setVisibility(View.GONE);
 //            mInfo.setVisibility(View.VISIBLE);

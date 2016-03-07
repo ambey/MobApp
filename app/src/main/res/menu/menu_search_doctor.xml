@@ -11,14 +11,16 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_red_24dp"
         android:orderInCategory="100"
+        android:showAsAction="ifRoom"
         android:title="@string/action_search"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_sign_in"
         android:icon="@drawable/ic_account_box_red_24dp"
         android:orderInCategory="100"
+        android:showAsAction="ifRoom"
         android:title="@string/action_sign_in"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

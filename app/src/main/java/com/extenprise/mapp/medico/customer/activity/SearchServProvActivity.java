@@ -198,7 +198,8 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
-            menu.removeItem(R.id.logout);
+            //menu.removeItem(R.id.logout);
+            menu.findItem(R.id.logout).setVisible(false);
         }
         return true;
     }
@@ -213,7 +214,14 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
             case R.id.action_search:
                 return true;
             case R.id.action_sign_in:
-                showSignInScreen(null);
+                Intent intent;
+                if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+                    intent = new Intent(this, PatientsHomeScreenActivity.class);
+                } else {
+                    intent = new Intent(this, LoginActivity.class);
+                }
+                startActivity(intent);
+                return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
                 WorkingDataStore.getBundle().remove("customer");
@@ -221,16 +229,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void showSignInScreen(View v) {
-        Intent intent;
-        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
-            intent = new Intent(this, PatientsHomeScreenActivity.class);
-        } else {
-            intent = new Intent(this, LoginActivity.class);
-        }
-        startActivity(intent);
     }
 
     private void fillSearchForm() {

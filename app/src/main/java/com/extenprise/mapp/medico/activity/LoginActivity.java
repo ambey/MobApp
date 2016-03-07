@@ -218,7 +218,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.removeItem(R.id.logout);
+        //menu.removeItem(R.id.logout);
+        menu.findItem(R.id.logout).setVisible(false);
         return true;
     }
 
