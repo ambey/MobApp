@@ -1,6 +1,5 @@
 package com.extenprise.mapp.medico.customer.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -43,13 +42,7 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cust_rx_list);
 
-        Intent intent = getIntent();
-        ArrayList<RxInboxItem> rxInboxItems;
-        if (savedInstanceState != null) {
-            rxInboxItems = savedInstanceState.getParcelableArrayList("inbox");
-        } else {
-            rxInboxItems = intent.getParcelableArrayListExtra("inbox");
-        }
+        ArrayList<RxInboxItem> rxInboxItems = WorkingDataStore.getBundle().getParcelableArrayList("inbox");
         mRxListView = (ListView) findViewById(R.id.rxListView);
         //mRxListProgress = (ProgressBar) findViewById(R.id.rxListProgress);
         mRxMsgView = (TextView) findViewById(R.id.rxMsgView);
@@ -71,10 +64,12 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         //Utility.showProgress(this, mRxListView, mRxListProgress, true);
         RxInboxItem item = new RxInboxItem();
         Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
-        Customer c = new Customer();
-        if (cust != null) {
-            c.setIdCustomer(cust.getIdCustomer());
+        if (cust == null) {
+            Utility.sessionExpired(this);
+            return;
         }
+        Customer c = new Customer();
+        c.setIdCustomer(cust.getIdCustomer());
         item.setCustomer(c);
         Bundle bundle = new Bundle();
         bundle.putParcelable("rxItem", item);

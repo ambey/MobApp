@@ -61,11 +61,11 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
             intent.putExtra("availMap", savedInstanceState.getSerializable("availMap"));
         }
-        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
         int feedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         mAvailMap = (BitSet) intent.getSerializableExtra("availMap");
 
         Bundle workingData = WorkingDataStore.getBundle();
+        ArrayList<RxInboxItem> mInbox = workingData.getParcelableArrayList("inbox");
         mInboxItem = workingData.getParcelable("rxItem");
         if (mInboxItem == null) {
             return;
@@ -326,7 +326,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
         }
 */
-        intent.putParcelableArrayListExtra("inbox", getIntent().getParcelableArrayListExtra("inbox"));
         intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
         intent.putExtra("customer", getIntent().getParcelableExtra("customer"));
         intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));

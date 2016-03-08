@@ -120,12 +120,12 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.putParcelable("rxItem", getItem(position));
+        bundle.putParcelableArrayList("inbox", mList);
         if (mSortField != null) {
             bundle.putString("sortField", mSortField);
             bundle.putBoolean("ascending", mAscending);
         }
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
-        intent.putParcelableArrayListExtra("inbox", mList);
         intent.putExtra("feedback", RxFeedback.NONE);
         intent.putExtra("parent-activity", getContext().getClass().getName());
         getContext().startActivity(intent);
