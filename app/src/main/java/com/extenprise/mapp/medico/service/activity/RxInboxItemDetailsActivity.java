@@ -71,6 +71,12 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         TextView custPhoneView;
         TextView lbl;
 
+        Bundle workingData = WorkingDataStore.getBundle();
+        mInboxItem = workingData.getParcelable("rxItem");
+        if (mInboxItem == null) {
+            return;
+        }
+
         if (feedback == RxFeedback.VIEW_FEEDBACK) {
             View layoutRxHead = findViewById(R.id.layoutRxHead);
             layoutRxHead.setVisibility(View.GONE);
@@ -103,11 +109,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             }
         }
 
-        Bundle workingData = WorkingDataStore.getBundle();
-        mInboxItem = workingData.getParcelable("rxItem");
-        if (mInboxItem == null) {
-            return;
-        }
         if (savedInstanceState != null) {
             intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
             intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
