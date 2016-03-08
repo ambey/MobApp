@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
+import com.extenprise.mapp.medico.data.HasPhoto;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -36,6 +37,7 @@ import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.DateChangeListener;
 import com.extenprise.mapp.medico.util.EncryptUtil;
+import com.extenprise.mapp.medico.util.PhotoTaskCompleteListener;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
@@ -46,7 +48,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class PatientProfileActivity extends FragmentActivity implements ResponseHandler, DateChangeListener {
+public class PatientProfileActivity extends FragmentActivity implements ResponseHandler, DateChangeListener, PhotoTaskCompleteListener {
 
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
 
@@ -317,7 +319,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-        bundle.putParcelable("customer", getUpdateData(new Customer()));
+        bundle.putParcelable("customer", setupUpdateData(new Customer(), false));
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_UPDATE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
@@ -381,9 +383,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             BitmapToByteArrayTask task = new BitmapToByteArrayTask(mCust, ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
             task.execute();
         } else {
-            mCust.setPhoto(null);
+            setPhoto();
         }
-        setPhoto();
     }
 
     private void setPhoto() {
@@ -419,7 +420,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 }
             });
             Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            getUpdateData(customer);
+            setupUpdateData(customer, true);
 
             setPersonalInfoEditable(false);
             setAddressEditable(false);
@@ -430,13 +431,13 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         }
     }
 
-    private Customer getUpdateData(Customer c) {
+    private Customer setupUpdateData(Customer c, boolean readPhoto) {
         c.getSignInData().setPhone(mMobNo.getText().toString());
         c.setfName(mEditTextCustomerFName.getText().toString().trim());
         c.setlName(mEditTextCustomerLName.getText().toString().trim());
-        if (mImgView.getDrawable() != null) {
+        if (readPhoto && mImgView.getDrawable() != null) {
             BitmapToByteArrayTask task = new BitmapToByteArrayTask(c,
-                    ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
+                    ((BitmapDrawable) mImgView.getDrawable()).getBitmap(), MappService.DO_UPLOAD_PHOTO, this);
             task.execute();
         }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -719,15 +720,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-            bundle.putParcelable("customer", getUpdateData(new Customer()));
-            mConnection.setData(bundle);
-            mConnection.setAction(MappService.DO_UPLOAD_PHOTO);
-            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-                //Utility.showProgress(this, mFormView, mProgressView, true);
-                Utility.showProgressDialog(this, true);
-            }
+            setupUpdateData(new Customer(), true);
         }
     }
 
@@ -760,5 +753,19 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mConnection.setBound(false);
         //startActivity(getIntent());
         super.onBackPressed();
+    }
+
+    @Override
+    public void taskCompleted(int action, HasPhoto entity) {
+        Customer customer = (Customer) entity;
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+        bundle.putParcelable("customer", customer);
+        mConnection.setData(bundle);
+        mConnection.setAction(action);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            //Utility.showProgress(this, mFormView, mProgressView, true);
+            Utility.showProgressDialog(this, true);
+        }
     }
 }

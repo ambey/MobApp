@@ -97,7 +97,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     public void viewAppointment(View view) {
         Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-        intent.putExtra("servProv", WorkingDataStore.getBundle().getParcelable("servProv"));
         startActivity(intent);
     }
 

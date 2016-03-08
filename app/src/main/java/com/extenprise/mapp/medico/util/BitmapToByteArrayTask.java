@@ -11,10 +11,18 @@ import com.extenprise.mapp.medico.data.HasPhoto;
 public class BitmapToByteArrayTask extends AsyncTask<Void, Void, byte[]> {
     private HasPhoto photoRef;
     private Bitmap bitmap;
+    private int action;
+    private PhotoTaskCompleteListener listener;
 
-    public BitmapToByteArrayTask(HasPhoto photoRef, Bitmap bitmap) {
+    public BitmapToByteArrayTask(HasPhoto photoRef, Bitmap bitmap, int action, PhotoTaskCompleteListener listener) {
         this.photoRef = photoRef;
         this.bitmap = bitmap;
+        this.action = action;
+        this.listener = listener;
+    }
+
+    public BitmapToByteArrayTask(HasPhoto photoRef, Bitmap bitmap) {
+        this(photoRef, bitmap, -1, null);
     }
 
     @Override
@@ -27,6 +35,9 @@ public class BitmapToByteArrayTask extends AsyncTask<Void, Void, byte[]> {
         super.onPostExecute(bytes);
         if (photoRef != null) {
             photoRef.setPhoto(bytes);
+        }
+        if (listener != null) {
+            listener.taskCompleted(action, photoRef);
         }
     }
 }
