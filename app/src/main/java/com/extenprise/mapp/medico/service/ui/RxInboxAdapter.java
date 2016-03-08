@@ -102,14 +102,22 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
             servProvPhoneView = (TextView) v.findViewById(R.id.drPhoneView);
         }
         RxInboxItem item = getItem(position);
-        int status = item.getReportService().getStatus();
+        if (item == null) {
+            return v;
+        }
+        int status = RxFeedback.NONE;
+        if (item.getReportService() != null) {
+            status = item.getReportService().getStatus();
+        }
         statusView.setText(ReportServiceStatus.getStatusString(getContext(), status));
         if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
             statusView.setVisibility(View.GONE);
         }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        dateView.setText(sdf.format(item.getRx().getDate()));
+        if (item.getRx() != null) {
+            dateView.setText(sdf.format(item.getRx().getDate()));
+        }
         servProvNameView.setText(String.format("%s %s.", item.getServProv().getLastName().toUpperCase(),
                 item.getServProv().getFirstName().substring(0, 1).toUpperCase()));
         custNameView.setText(String.format("%s %s.", item.getCustomer().getlName().toUpperCase(),

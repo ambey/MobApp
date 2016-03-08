@@ -55,21 +55,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             actionBar.setTitle(R.string.title_activity_rx_feedback);
         }
 
-        Bundle workingData = WorkingDataStore.getBundle();
-        mInboxItem = workingData.getParcelable("rxItem");
-
         Intent intent = getIntent();
-        if (savedInstanceState != null) {
-            intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
-            intent.putExtra("customer", savedInstanceState.getParcelable("customer"));
-            intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
-            intent.putExtra("availMap", savedInstanceState.getSerializable("availMap"));
-        }
-        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
-        Customer customer = intent.getParcelableExtra("customer");
-        if(customer != null) {
-            mInboxItem.setCustomer(customer);
-        }
         int feedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         mAvailMap = (BitSet) intent.getSerializableExtra("availMap");
 
@@ -110,23 +96,41 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             lbl = (TextView) findViewById(R.id.drNameLblView);
 
             String category = mInboxItem.getServProv().getCategory();
-            if(category != null) {
+            if (category != null) {
                 if (category.equalsIgnoreCase(getString(R.string.diagnostic_center))) {
                     lbl.setText("");
                 }
             }
         }
 
+        Bundle workingData = WorkingDataStore.getBundle();
+        mInboxItem = workingData.getParcelable("rxItem");
+        if (mInboxItem == null) {
+            return;
+        }
+        if (savedInstanceState != null) {
+            intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
+            intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
+            intent.putExtra("availMap", savedInstanceState.getSerializable("availMap"));
+        }
+        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
+        Customer customer = workingData.getParcelable("customer");
+        if (customer != null) {
+            mInboxItem.setCustomer(customer);
+        }
+
         mSendAvailButton = (Button) findViewById(R.id.buttonSendAvailability);
         Button resendRxButton = (Button) findViewById(R.id.buttonResendRx);
         if (feedback == RxFeedback.VIEW_FEEDBACK) {
             mSendAvailButton.setVisibility(View.GONE);
-            if (mInboxItem.getRx().isAllItemsAvailable()) {
+            if (mInboxItem.getRx() != null &&
+                    mInboxItem.getRx().isAllItemsAvailable()) {
                 Utility.setEnabledButton(this, resendRxButton, false);
             }
         } else if (feedback == RxFeedback.GIVE_FEEDBACK) {
             resendRxButton.setVisibility(View.GONE);
-            if (mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT) {
+            if (mInboxItem.getReportService() != null &&
+                    mInboxItem.getReportService().getStatus() == ReportServiceStatus.STATUS_FEEDBACK_SENT) {
                 Utility.setEnabledButton(this, mSendAvailButton, false);
             }
         } else {
@@ -135,7 +139,10 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         }
 
         if (feedback != RxFeedback.NONE) {
-            int status = mInboxItem.getReportService().getStatus();
+            int status = RxFeedback.NONE;
+            if (mInboxItem.getReportService() != null) {
+                status = mInboxItem.getReportService().getStatus();
+            }
             if (ReportServiceStatus.STATUS_PENDING == status ||
                     ReportServiceStatus.STATUS_NEW == status) {
                 status = ReportServiceStatus.STATUS_INPROCESS;
@@ -145,21 +152,27 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
                 statusView.setVisibility(View.GONE);
             }
         }
+        if (mInboxItem.getServProv() != null) {
+            servProvNameView.setText(String.format("%s %s.", mInboxItem.getServProv().getLastName().toUpperCase(),
+                    mInboxItem.getServProv().getFirstName().substring(0, 1).toUpperCase()));
+            servPointView.setText(String.format("%s, %s", mInboxItem.getServProv().getServPtName(),
+                    mInboxItem.getServProv().getServPtLocation()));
+            servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
+        }
+        if (mInboxItem.getCustomer() != null) {
+            custNameView.setText(String.format("%s %s.", mInboxItem.getCustomer().getlName().toUpperCase(),
+                    mInboxItem.getCustomer().getfName().substring(0, 1).toUpperCase()));
+            custPhoneView.setText(mInboxItem.getCustomer().getSignInData().getPhone());
+        }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        dateView.setText(sdf.format(mInboxItem.getRx().getDate()));
-        servProvNameView.setText(String.format("%s %s.", mInboxItem.getServProv().getLastName().toUpperCase(),
-                mInboxItem.getServProv().getFirstName().substring(0, 1).toUpperCase()));
-        custNameView.setText(String.format("%s %s.", mInboxItem.getCustomer().getlName().toUpperCase(),
-                mInboxItem.getCustomer().getfName().substring(0, 1).toUpperCase()));
-        custPhoneView.setText(mInboxItem.getCustomer().getSignInData().getPhone());
-        servPointView.setText(String.format("%s, %s", mInboxItem.getServProv().getServPtName(),
-                mInboxItem.getServProv().getServPtLocation()));
-        servProvPhoneView.setText(String.format("(%s)", mInboxItem.getServProv().getPhone()));
+        if (mInboxItem.getRx() != null) {
+            dateView.setText(sdf.format(mInboxItem.getRx().getDate()));
+        }
 
         ListView listView = (ListView) findViewById(R.id.listRxItems);
         Rx rx = mInboxItem.getRx();
-        if (rx.getItems().size() == 0) {
+        if (rx != null && rx.getItems().size() == 0) {
             mSendAvailButton.setVisibility(View.GONE);
             resendRxButton.setVisibility(View.GONE);
             listView.setVisibility(View.GONE);
@@ -168,7 +181,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             bundle.putInt("idRx", rx.getIdReport());
             Log.d("", " ID Report ***** " + rx.getIdReport());
             mConnection.setData(bundle);
-            if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
                 Utility.showProgressDialog(this, true);
             }
             return;
@@ -222,7 +235,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         data.putParcelable("form", availability);
         mConnection.setData(data);
         mConnection.setAction(MappService.DO_SEND_AVAILABILITY);
-        if(Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             //progressDialog = ProgressDialog.show(this, "", getString(R.string.msg_please_wait), true);
             Utility.showProgressDialog(this, true);
         }
@@ -265,7 +278,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
             return;
         }
         byte[] pix = report.getScannedCopy();
-        if(pix != null) {
+        if (pix != null) {
             try {
                 ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(imageView, pix,
                         imageView.getMeasuredWidth(), imageView.getMeasuredHeight());
@@ -288,14 +301,14 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         Intent intent = super.getParentActivityIntent();
         if (intent == null) {
             String parentActivityClass = getIntent().getStringExtra("parent-activity");
-            if(parentActivityClass != null) {
+            if (parentActivityClass != null) {
                 try {
                     intent = new Intent(this, Class.forName(parentActivityClass));
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
-            if(intent == null) {
+            if (intent == null) {
                 return null;
             }
         }

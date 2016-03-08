@@ -71,7 +71,11 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         //Utility.showProgress(this, mRxListView, mRxListProgress, true);
         RxInboxItem item = new RxInboxItem();
         Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
-        item.setCustomer(cust);
+        Customer c = new Customer();
+        if (cust != null) {
+            c.setIdCustomer(cust.getIdCustomer());
+        }
+        item.setCustomer(c);
         Bundle bundle = new Bundle();
         bundle.putParcelable("rxItem", item);
         mConnection.setData(bundle);

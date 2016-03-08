@@ -118,6 +118,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mLoginFormView.startAnimation(rLayoutAnim);
 
         Button emailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        emailSignInButton.setEnabled(true);
         emailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -265,21 +266,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
     }
 
     public void attemptLogin() {
-        if (!isBookAppontRequest) {
-            int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
-            RadioButton mRadioButtonUType;
-            if (uTypeID == -1) {
-            /* hide the soft keyboard and show the message */
-                Utility.hideSoftKeyboard(this);
-                Utility.showMessage(this, R.string.error_user_type_required);
-                //Utility.showAlert(this, "", "Please Select user type.");
-                return;
-            } else {
-                mRadioButtonUType = (RadioButton) findViewById(uTypeID);
-            }
-            String uType = mRadioButtonUType.getText().toString().trim();
-            mLoginType = whichLoginType(uType);
-        }
+        Button signInButton = (Button) findViewById(R.id.email_sign_in_button);
+        signInButton.setEnabled(false);
 
         // Reset errors.
         mMobileNumber.setError(null);
@@ -305,39 +293,59 @@ public class LoginActivity extends Activity implements ResponseHandler {
             cancel = true;
         }
 
+        int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
+        if (!isBookAppontRequest) {
+            if (uTypeID == -1) {
+            /* hide the soft keyboard and show the message */
+                Utility.hideSoftKeyboard(this);
+                Utility.showMessage(this, R.string.error_user_type_required);
+                focusView = null;
+                cancel = true;
+            }
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            focusView.requestFocus();
-        } else {
-            Utility.hideSoftKeyboard(this);
+            if (focusView != null) {
+                focusView.requestFocus();
+            }
+            signInButton.setEnabled(true);
+            return;
+        }
+        Utility.hideSoftKeyboard(this);
 
-            String encryptedPasswd = EncryptUtil.encrypt(passwd);
-            SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-            final SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
-            boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-            if (!saveLogin && mSaveLoginCheckBox.isChecked()) {
+        if (!isBookAppontRequest) {
+            RadioButton mRadioButtonUType;
+            mRadioButtonUType = (RadioButton) findViewById(uTypeID);
+            String uType = mRadioButtonUType.getText().toString().trim();
+            mLoginType = whichLoginType(uType);
+        }
+        String encryptedPasswd = EncryptUtil.encrypt(passwd);
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        final SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
+        boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (!saveLogin && mSaveLoginCheckBox.isChecked()) {
                 /*final AlertDialog dialog = Utility.customDialogBuilder(this, null, R.string.confirm_remember).create();
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {*/
-                loginPrefsEditor.putBoolean("saveLogin", true);
-                loginPrefsEditor.putString("username", phone);
-                loginPrefsEditor.putString("passwd", encryptedPasswd);
-                loginPrefsEditor.putString("logintype", whichLoginType(mLoginType));
-                loginPrefsEditor.apply();
+            loginPrefsEditor.putBoolean("saveLogin", true);
+            loginPrefsEditor.putString("username", phone);
+            loginPrefsEditor.putString("passwd", encryptedPasswd);
+            loginPrefsEditor.putString("logintype", whichLoginType(mLoginType));
+            loginPrefsEditor.apply();
                         /*dialog.dismiss();
                         doLogin();
                     }
                 });
                 return;*/
-            } else if (!mSaveLoginCheckBox.isChecked()) {
-                loginPrefsEditor.clear();
-                loginPrefsEditor.apply();
-            }
-            doLogin(phone, encryptedPasswd);
+        } else if (!mSaveLoginCheckBox.isChecked()) {
+            loginPrefsEditor.clear();
+            loginPrefsEditor.apply();
         }
+        doLogin(phone, encryptedPasswd);
     }
 
     private void doLogin(String phone, String encryptedPasswd) {
@@ -401,15 +409,18 @@ public class LoginActivity extends Activity implements ResponseHandler {
         boolean success = msgData.getBoolean("status");
         if (success) {
             Bundle workingData = WorkingDataStore.getBundle();
-            String phone;
+            String phone = null, userType;
             Intent intent;
-            String userType = "";
 
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 userType = "customer";
                 Customer customer = msgData.getParcelable("customer");
-                workingData.putParcelable("customer", customer);
-                phone = customer.getSignInData().getPhone();
+                if (customer != null) {
+                    workingData.putParcelable("customer", customer);
+                    if (customer.getSignInData() != null) {
+                        phone = customer.getSignInData().getPhone();
+                    }
+                }
                 String targetActivity = getIntent().getStringExtra("target-activity");
                 if (targetActivity != null) {
                     try {
@@ -440,17 +451,18 @@ public class LoginActivity extends Activity implements ResponseHandler {
             //Utility.setLastVisit(getSharedPreferences(type + "lastVisit" + phone, MODE_PRIVATE));
 
             /* Setting the auto complete list for mobile number **/
-            SharedPreferences preferences = getSharedPreferences("autoComplete", MODE_PRIVATE);
-            Set<String> list = preferences.getStringSet("autoCompleteValues", new HashSet<String>());
-            Set<String> in = new HashSet<>(list);
-            in.add(phone);
-            preferences.edit().putStringSet("autoCompleteValues", in).apply();
-            /*editor.putString("autoCompleteValues", TextUtils.join(",", list));*/
+            if (phone != null) {
+                SharedPreferences preferences = getSharedPreferences("autoComplete", MODE_PRIVATE);
+                Set<String> list = preferences.getStringSet("autoCompleteValues", new HashSet<String>());
+                Set<String> in = new HashSet<>(list);
+                in.add(phone);
+                preferences.edit().putStringSet("autoCompleteValues", in).apply();
 
-            /* Setting the Last Visited of User. **/
-            SharedPreferences prefs = getSharedPreferences(userType + "lastVisit" +
-                    phone, MODE_PRIVATE);
-            Utility.setLastVisit(prefs);
+                /* Setting the Last Visited of User. **/
+                SharedPreferences prefs = getSharedPreferences(userType + "lastVisit" +
+                        phone, MODE_PRIVATE);
+                Utility.setLastVisit(prefs);
+            }
 
             Utility.showMessage(this, R.string.msg_login_done);
             mPasswordView.setText("");
@@ -465,6 +477,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 mMobileNumber.setError(getString(R.string.error_incorrect_password));
             }
             mMobileNumber.requestFocus();
+            /* enable Sigh In button in 3 seconds */
+            final Button signInButton = (Button) findViewById(R.id.email_sign_in_button);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    signInButton.setEnabled(true);
+                }
+            }, 3000);
         }
     }
 }

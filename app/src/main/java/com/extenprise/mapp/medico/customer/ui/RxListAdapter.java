@@ -126,7 +126,6 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         }
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putParcelableArrayListExtra("inbox", mList);
-        intent.putExtra("customer", mCust);
         intent.putExtra("feedback", RxFeedback.NONE);
         intent.putExtra("parent-activity", getContext().getClass().getName());
         getContext().startActivity(intent);
