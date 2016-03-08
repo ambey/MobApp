@@ -177,7 +177,7 @@
                     <TextView
                         android:id="@+id/textviewClinicTimes"
                         style="@style/TableHead"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:text="@string/time" />
                 </TableRow>
 

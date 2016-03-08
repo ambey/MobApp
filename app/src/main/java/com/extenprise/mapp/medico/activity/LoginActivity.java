@@ -345,15 +345,42 @@ public class LoginActivity extends Activity implements ResponseHandler {
             loginPrefsEditor.clear();
             loginPrefsEditor.apply();
         }
-        doLogin(phone, encryptedPasswd);
-    }
+        //doLogin(phone, encryptedPasswd);
 
-    private void doLogin(String phone, String encryptedPasswd) {
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", mLoginType);
-        /*SignInData signInData = new SignInData();
+
+        Calendar calendar = Calendar.getInstance();
+        String lastVisit = String.format("%s %s", Utility.getDateAsStr(calendar.getTime(), "yyyy-MM-dd"),
+                Utility.getFormattedTime(calendar));
+        if (mLoginType == MappService.CUSTOMER_LOGIN) {
+            Customer customer = new Customer();
+            customer.getSignInData().setPhone(phone);
+            customer.getSignInData().setPasswd(encryptedPasswd);
+            customer.setLastVisit(lastVisit);
+            bundle.putParcelable("customer", customer);
+        } else if (mLoginType == MappService.SERVICE_LOGIN) {
+            ServiceProvider serviceProvider = new ServiceProvider();
+            serviceProvider.getSignInData().setPhone(phone);
+            serviceProvider.getSignInData().setPasswd(encryptedPasswd);
+            serviceProvider.setLastVisit(lastVisit);
+            bundle.putParcelable("serviceProvider", serviceProvider);
+        }
+        mConnection.setAction(MappService.DO_LOGIN);
+        mConnection.setData(bundle);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
+        } else {
+            signInButton.setEnabled(true);
+        }
+    }
+
+    /*private void doLogin(String phone, String encryptedPasswd) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", mLoginType);
+        *//*SignInData signInData = new SignInData();
         signInData.setPhone(phone);
-        signInData.setPasswd(encryptedPasswd);*/
+        signInData.setPasswd(encryptedPasswd);*//*
 
         Calendar calendar = Calendar.getInstance();
         String lastVisit = String.format("%s %s", Utility.getDateAsStr(calendar.getTime(), "yyyy-MM-dd"),
@@ -378,7 +405,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
             Utility.showProgressDialog(this, true);
         }
-    }
+    }*/
 
     @Override
     public boolean gotResponse(int action, Bundle data) {

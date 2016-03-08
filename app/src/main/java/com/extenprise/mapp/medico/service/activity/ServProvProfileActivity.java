@@ -45,6 +45,7 @@ import com.extenprise.mapp.medico.service.data.WorkPlace;
 import com.extenprise.mapp.medico.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.medico.ui.DaysSelectionDialog;
 import com.extenprise.mapp.medico.ui.DialogDismissListener;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
@@ -1141,9 +1142,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private void removePhotoDone(Bundle data) {
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
-            mImgView.setImageResource(R.drawable.dr_avatar);
-            ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
-            serviceProvider.setPhoto(null);
+            mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
             mServiceProv.setPhoto(null);
         }
         setPhoto();
@@ -1152,9 +1151,12 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private void setPhoto() {
         mImgView.setImageResource(defaultImg);
         if (mServiceProv.getPhoto() != null) {
-            mImgView.setBackgroundResource(0);
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServiceProv.getPhoto(),
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
+            task.execute();
+            /*mImgView.setBackgroundResource(0);
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));
+                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));*/
         }
     }
 
@@ -1166,7 +1168,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void pwdCheckDone(Bundle data) {
-        //Utility.showProgress(this, mFormView, mProgressView, false);
         if (data.getBoolean("status")) {
             isPwdCorrect = true;
         } else {
@@ -1177,14 +1178,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void uploadPhotoDone(Bundle data) {
-        //Utility.showProgress(this, mFormView, mProgressView, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
-            ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
-            serviceProvider.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+            mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
             mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
-        } else {
-            mServiceProv.setPhoto(null);
         }
         setPhoto();
     }

@@ -330,8 +330,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void changePwdDone(Bundle data) {
-        //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_change_pwd);
         } else {
@@ -340,8 +338,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void pwdCheckDone(Bundle data) {
-        //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             isPwdCorrect = true;
         } else {
@@ -354,6 +350,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     @Override
     public boolean gotResponse(int action, Bundle data) {
+        Utility.showProgressDialog(this, false);
         switch (action) {
             case MappService.DO_UPDATE:
                 updateDone(data);
@@ -375,11 +372,10 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void uploadPhotoDone(Bundle data) {
-        //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
+            mCust.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
             BitmapToByteArrayTask task = new BitmapToByteArrayTask(mCust, ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
             task.execute();
         } else {
@@ -388,7 +384,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void setPhoto() {
-        mImgView.setBackgroundResource(0);
         mImgView.setImageResource(R.drawable.patient);
         if (mCust.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mCust.getPhoto(),
@@ -398,20 +393,15 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void removePhotoDone(Bundle data) {
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
-            if (mCust != null) {
-                mCust.setPhoto(null);
-            }
+            mCust.setPhoto(null);
         }
         setPhoto();
     }
 
     private void updateDone(Bundle data) {
-        //Utility.showProgress(this, mFormView, mProgressView, false);
-        Utility.showProgressDialog(this, false);
         if (data.getBoolean("status")) {
             Utility.showAlert(this, "", getString(R.string.msg_profile_updated), new DialogInterface.OnClickListener() {
                 @Override
@@ -425,9 +415,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             setPersonalInfoEditable(false);
             setAddressEditable(false);
             Utility.setEnabledButton(this, mUpdateButton, false);
-            /*Intent intent = getIntent();
-            finish();
-            startActivity(intent);*/
         }
     }
 

@@ -56,8 +56,24 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         }
 
         Intent intent = getIntent();
+        if (savedInstanceState != null) {
+            intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
+            intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
+            intent.putExtra("availMap", savedInstanceState.getSerializable("availMap"));
+        }
+        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
         int feedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         mAvailMap = (BitSet) intent.getSerializableExtra("availMap");
+
+        Bundle workingData = WorkingDataStore.getBundle();
+        mInboxItem = workingData.getParcelable("rxItem");
+        if (mInboxItem == null) {
+            return;
+        }
+        Customer customer = workingData.getParcelable("customer");
+        if (customer != null) {
+            mInboxItem.setCustomer(customer);
+        }
 
         View layoutAppont = findViewById(R.id.layoutAppont);
         layoutAppont.setVisibility(View.GONE);
@@ -70,12 +86,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         TextView custNameView;
         TextView custPhoneView;
         TextView lbl;
-
-        Bundle workingData = WorkingDataStore.getBundle();
-        mInboxItem = workingData.getParcelable("rxItem");
-        if (mInboxItem == null) {
-            return;
-        }
 
         if (feedback == RxFeedback.VIEW_FEEDBACK) {
             View layoutRxHead = findViewById(R.id.layoutRxHead);
@@ -107,17 +117,6 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
                     lbl.setText("");
                 }
             }
-        }
-
-        if (savedInstanceState != null) {
-            intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
-            intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
-            intent.putExtra("availMap", savedInstanceState.getSerializable("availMap"));
-        }
-        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
-        Customer customer = workingData.getParcelable("customer");
-        if (customer != null) {
-            mInboxItem.setCustomer(customer);
         }
 
         mSendAvailButton = (Button) findViewById(R.id.buttonSendAvailability);

@@ -835,6 +835,7 @@ public abstract class Utility {
         return builder;
     }
 
+/*
     public static String[] imageOpts(Activity activity, boolean isRemove) {
         String[] opts = new String[]{activity.getString(R.string.take_photo),
                 activity.getString(R.string.from_gallery)};
@@ -845,11 +846,13 @@ public abstract class Utility {
         }
         return opts;
     }
+*/
 
     public static boolean onPhotoActivityResult(Context context, final ImageView imageView, int requestCode, int resultCode, Intent data) {
         boolean imageChanged = false;
         try {
             Uri selectedImage;
+            Bitmap bitmap;
             Resources resources = context.getResources();
             // When an Image is picked
             if (resultCode == Activity.RESULT_OK) {
@@ -858,37 +861,21 @@ public abstract class Utility {
                     String photoFileName = Utility.photoFileName;
                     //File photo = new File(photoFileName);
                     selectedImage = Uri.fromFile(new File(photoFileName));
-                    imageView.setImageURI(selectedImage);
+                    bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
+                    setUpImage(context, imageView, bitmap, null);
+                    //imageView.setImageURI(selectedImage);
                     imageChanged = true;
                 } else {
                     if (requestCode == resources.getInteger(R.integer.request_gallery)) {
                         // Get the Image from data
                         selectedImage = data.getData();
-                        imageView.setImageURI(selectedImage);
+                        bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
+                        setUpImage(context, imageView, bitmap, data);
+                        //imageView.setImageURI(selectedImage);
                         imageChanged = true;
                     } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                        if (bitmap != null) {
-                            BitmapToByteArrayTask task = new BitmapToByteArrayTask(null, bitmap) {
-                                @Override
-                                protected byte[] doInBackground(Void... params) {
-                                    return super.doInBackground(params);
-                                }
-
-                                @Override
-                                protected void onPostExecute(byte[] bytes) {
-                                    super.onPostExecute(bytes);
-                                    ByteArrayToBitmapTask bitmapTask = new ByteArrayToBitmapTask(imageView, bytes,
-                                            imageView.getLayoutParams().width, imageView.getLayoutParams().height);
-                                    bitmapTask.execute();
-                                }
-                            };
-                            task.execute();
-                            selectedImage = Utility.getImageUri(context, bitmap);
-                        } else {
-                            selectedImage = data.getData();
-                        }
-                        imageView.setImageURI(selectedImage);
+                        bitmap = (Bitmap) data.getExtras().get("data");
+                        setUpImage(context, imageView, bitmap, data);
                         imageChanged = true;
                     } else {
                         Utility.showMessage(context, R.string.error_img_not_picked);
@@ -900,6 +887,31 @@ public abstract class Utility {
             Utility.showMessage(context, R.string.some_error);
         }
         return imageChanged;
+    }
+
+    private static void setUpImage(Context context, final ImageView imageView, Bitmap bitmap, Intent data) {
+        Uri selectedImage = null;
+        if (bitmap != null) {
+            BitmapToByteArrayTask task = new BitmapToByteArrayTask(null, bitmap) {
+                @Override
+                protected byte[] doInBackground(Void... params) {
+                    return super.doInBackground(params);
+                }
+
+                @Override
+                protected void onPostExecute(byte[] bytes) {
+                    super.onPostExecute(bytes);
+                    ByteArrayToBitmapTask bitmapTask = new ByteArrayToBitmapTask(imageView, bytes,
+                            imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+                    bitmapTask.execute();
+                }
+            };
+            task.execute();
+            selectedImage = Utility.getImageUri(context, bitmap);
+        } else if (data != null) {
+            selectedImage = data.getData();
+        }
+        imageView.setImageURI(selectedImage);
     }
 
     public static boolean isNameValid(Activity activity, EditText first, EditText last) {

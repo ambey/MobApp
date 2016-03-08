@@ -57,6 +57,7 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
         TextView  mMultiSpinnerDays = (TextView) v.findViewById(R.id.editTextWeeklyOff);
         TextView  mStartTime = (TextView) v.findViewById(R.id.buttonStartTime);
         TextView mConsultFee = (TextView) v.findViewById(R.id.editTextConsultationFees);
+        TextView mNotes = (TextView) v.findViewById(R.id.textViewNotes);
         /*TextView mPhone2 = (TextView) v.findViewById(R.id.editTextPhone2);
         TextView  mCity = (TextView) v.findViewById(R.id.editTextCity);
         TextView mPinCode = (TextView) v.findViewById(R.id.editTextPinCode);*/
@@ -82,6 +83,7 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
                 Utility.getTimeString(item.getStartTime()), Utility.getTimeString(item.getEndTime())));
         mConsultFee.setText(String.format("%s%s", getContext().getString(R.string.consult_fees),
                 String.format("%.2f", item.getConsultFee())));
+        mNotes.setText(String.format("%s : %s", getContext().getString(R.string.notes), item.getNotes()));
 
         /*v.setOnClickListener(new View.OnClickListener() {
             @Override

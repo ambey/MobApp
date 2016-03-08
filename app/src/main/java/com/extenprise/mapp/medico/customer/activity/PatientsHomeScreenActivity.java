@@ -72,12 +72,14 @@ public class PatientsHomeScreenActivity extends Activity {
                             Utility.getStrAsDate(lastVisit, "yyyy-MM-dd HH:mm"),
                             "dd/MM/yyyy HH:mm")));
         }
-        mImgView.setBackgroundResource(0);
-        mImgView.setImageResource(R.drawable.patient);
+
         if (mCustomer.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mCustomer.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
             task.execute();
+        } else {
+            mImgView.setBackgroundResource(0);
+            mImgView.setImageResource(R.drawable.patient);
         }
     }
 

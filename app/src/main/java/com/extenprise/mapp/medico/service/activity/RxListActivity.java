@@ -45,15 +45,16 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
             intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
             intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
         }
-        ArrayList<RxInboxItem> mInbox = getIntent().getParcelableArrayListExtra("inbox");
-        mFeedback = getIntent().getIntExtra("feedback", RxFeedback.NONE);
-        TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
+
+        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
         if (mInbox == null) {
             mInbox = new ArrayList<>();
         }
+        TextView msgView = (TextView) findViewById(R.id.noItemsMsgView);
         if (mInbox.size() > 0) {
             msgView.setVisibility(View.GONE);
         }
+        mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         int fb = RxFeedback.NONE;
         if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
             fb = RxFeedback.GIVE_FEEDBACK;
