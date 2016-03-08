@@ -63,16 +63,14 @@ public class PatientsHomeScreenActivity extends Activity {
     private void profile() {
         mWelcomeView.setText(String.format("%s %s %s", getString(R.string.hello),
                 mCustomer.getfName(), mCustomer.getlName()));
-        /*SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy HH:mm");
-        sdf.format(mCustomer.getLastVisit());*/
-
-        mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited),
-                Utility.getDateAsStr(
-                        Utility.getStrAsDate(mCustomer.getLastVisit(), "yyyy-MM-dd HH:mm"),
-                        "dd/MM/yyyy HH:mm")));
-        if (mCustomer.getLastVisit() == null) {
+        String lastVisit = mCustomer.getLastVisit();
+        if (lastVisit == null || lastVisit.equals("")) {
             mLastVisited.setText(String.format("%s - -", getString(R.string.last_visited)));
+        } else {
+            mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited),
+                    Utility.getDateAsStr(
+                            Utility.getStrAsDate(lastVisit, "yyyy-MM-dd HH:mm"),
+                            "dd/MM/yyyy HH:mm")));
         }
         mImgView.setBackgroundResource(0);
         mImgView.setImageResource(R.drawable.patient);

@@ -70,12 +70,14 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
     private void profile() {
         mImgView.setImageResource(R.drawable.dr_avatar);
-        mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited),
-                Utility.getDateAsStr(
-                        Utility.getStrAsDate(mServiceProvider.getLastVisit(), "yyyy-MM-dd HH:mm"),
-                        "dd/MM/yyyy HH:mm")));
-        if (mServiceProvider.getLastVisit() == null) {
+        String lastVisit = mServiceProvider.getLastVisit();
+        if (lastVisit == null || lastVisit.equals("")) {
             mLastVisited.setText(String.format("%s - -", getString(R.string.last_visited)));
+        } else {
+            mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited),
+                    Utility.getDateAsStr(
+                            Utility.getStrAsDate(lastVisit, "yyyy-MM-dd HH:mm"),
+                            "dd/MM/yyyy HH:mm")));
         }
         //mLastVisited.setText(mServiceProvider.getLastVisit());
         String mServPointType = mServiceProvider.getServProvHasServPt(0).getServPointType();
