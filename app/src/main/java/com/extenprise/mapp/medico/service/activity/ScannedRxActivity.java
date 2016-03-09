@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -117,12 +116,28 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     protected void displayScanCopy() {
         try {
             if (mData != null) {
-                InputStream stream = getContentResolver().openInputStream(
+                final InputStream stream = getContentResolver().openInputStream(
                         mData.getData());
                 if(stream != null) {
-                    mRxCopy = BitmapFactory.decodeStream(stream);
-                    mRxView.setImageBitmap(mRxCopy);
-                    stream.close();
+                    AsyncTask<Void, Void, byte[]> task = new AsyncTask<Void, Void, byte[]>() {
+                        @Override
+                        protected byte[] doInBackground(Void... params) {
+                            try {
+                                return Utility.readBytes(stream);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        protected void onPostExecute(byte[] bytes) {
+                            ByteArrayToBitmapTask bitmapTask = new ByteArrayToBitmapTask(mRxView, bytes,
+                                    mRxView.getMeasuredWidth(), mRxView.getMeasuredHeight());
+                            bitmapTask.execute();
+                        }
+                    };
+                    task.execute();
                 }
             } else {
                 Uri selectedImage = mRxUri;
@@ -143,8 +158,6 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
                         }
                     };
                     task.execute();
-                    Toast.makeText(this, selectedImage.toString(),
-                            Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
                             .show();

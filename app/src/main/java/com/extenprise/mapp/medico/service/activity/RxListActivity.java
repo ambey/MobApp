@@ -42,7 +42,6 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
 
         Intent intent = getIntent();
         if (savedInstanceState != null) {
-            //intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
             intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
         }
 
@@ -77,7 +76,6 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Intent intent = getIntent();
-        //outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
         outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE));
     }
 

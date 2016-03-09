@@ -131,9 +131,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         Utility.showProgressDialog(this, false);
         mMsgView.setVisibility(View.GONE);
         WorkingDataStore.getBundle().putParcelableArrayList("inbox", data.getParcelableArrayList("inbox"));
-        //ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
-        //intent.putParcelableArrayListExtra("inbox", list);
         intent.putExtra("feedback", RxFeedback.GIVE_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());
         startActivity(intent);

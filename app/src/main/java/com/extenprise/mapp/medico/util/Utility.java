@@ -53,6 +53,8 @@ import com.extenprise.mapp.medico.net.MappService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -902,11 +904,6 @@ public abstract class Utility {
         if (bitmap != null) {
             BitmapToByteArrayTask task = new BitmapToByteArrayTask(null, bitmap) {
                 @Override
-                protected byte[] doInBackground(Void... params) {
-                    return super.doInBackground(params);
-                }
-
-                @Override
                 protected void onPostExecute(byte[] bytes) {
                     super.onPostExecute(bytes);
                     ByteArrayToBitmapTask bitmapTask = new ByteArrayToBitmapTask(imageView, bytes,
@@ -915,11 +912,10 @@ public abstract class Utility {
                 }
             };
             task.execute();
-            selectedImage = Utility.getImageUri(context, bitmap);
         } else if (data != null) {
             selectedImage = data.getData();
+            imageView.setImageURI(selectedImage);
         }
-        imageView.setImageURI(selectedImage);
     }
 
     public static boolean isNameValid(Activity activity, EditText first, EditText last) {
@@ -969,11 +965,17 @@ public abstract class Utility {
         return -1;
     }
 
-    private Drawable resize(Activity activity, Drawable image) {
-        Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
-        Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap,
-                (int) (bitmap.getWidth() * 0.5), (int) (bitmap.getHeight() * 0.5), false);
-        return new BitmapDrawable(activity.getResources(), bitmapResized);
+    public static byte[] readBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[1024];
+
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+
+        return byteBuffer.toByteArray();
     }
 
     ///////////////////////////////////////////////////Un Used Methods /////////////////////
@@ -1214,4 +1216,11 @@ public static String getCommaSepparatedString(String[] arr) {
     }
 
     */
+
+    private Drawable resize(Activity activity, Drawable image) {
+        Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap,
+                (int) (bitmap.getWidth() * 0.5), (int) (bitmap.getHeight() * 0.5), false);
+        return new BitmapDrawable(activity.getResources(), bitmapResized);
+    }
 }
