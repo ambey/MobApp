@@ -42,11 +42,12 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
 
         Intent intent = getIntent();
         if (savedInstanceState != null) {
-            intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
+            //intent.putParcelableArrayListExtra("inbox", savedInstanceState.getParcelableArrayList("inbox"));
             intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
         }
 
-        ArrayList<RxInboxItem> mInbox = intent.getParcelableArrayListExtra("inbox");
+        Bundle workingData = WorkingDataStore.getBundle();
+        ArrayList<RxInboxItem> mInbox = workingData.getParcelableArrayList("inbox");
         if (mInbox == null) {
             mInbox = new ArrayList<>();
         }
@@ -54,6 +55,7 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
         if (mInbox.size() > 0) {
             msgView.setVisibility(View.GONE);
         }
+
         mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         int fb = RxFeedback.NONE;
         if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
@@ -61,10 +63,10 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
         } else if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
             fb = RxFeedback.VIEW_FEEDBACK;
         }
+
         RxInboxAdapter adapter = new RxInboxAdapter(this, 0, mInbox, fb);
-        Bundle bundle = WorkingDataStore.getBundle();
-        adapter.setAscending(bundle.getBoolean("ascending"));
-        adapter.setSortField(bundle.getString("sortField"));
+        adapter.setAscending(workingData.getBoolean("ascending"));
+        adapter.setSortField(workingData.getString("sortField"));
 
         ListView view = (ListView) findViewById(R.id.rxListView);
         view.setAdapter(adapter);
@@ -75,7 +77,7 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Intent intent = getIntent();
-        outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
+        //outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
         outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE));
     }
 

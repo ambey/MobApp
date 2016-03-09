@@ -635,6 +635,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         } else {
             c.setPhoto(null);
         }
+
+        //As customer is going to home page after sign up successful.
+        Calendar calendar = Calendar.getInstance();
+        c.setLastVisit(String.format("%s %s", Utility.getDateAsStr(calendar.getTime(), "yyyy-MM-dd"),
+                Utility.getFormattedTime(calendar)));
         return c;
     }
 

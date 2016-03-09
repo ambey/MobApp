@@ -20,13 +20,10 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
-import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.BackButtonHandler;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
-
-import java.util.ArrayList;
 
 public class ServiceProviderHomeActivity extends Activity implements ResponseHandler {
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
@@ -96,8 +93,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     }
 
     public void viewAppointment(View view) {
-        Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-        startActivity(intent);
+        Utility.startActivity(this, ViewAppointmentListActivity.class, true);
     }
 
     public void viewProfile(View view) {
@@ -177,9 +173,9 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     private void gotRxInbox(Bundle data) {
         Utility.showProgressDialog(this, false);
         mMsgView.setVisibility(View.GONE);
-        ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.putParcelableArrayList("inbox", data.getParcelableArrayList("inbox"));
         Intent intent = new Intent(this, RxListActivity.class);
-        intent.putParcelableArrayListExtra("inbox", list);
         intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());
         startActivity(intent);

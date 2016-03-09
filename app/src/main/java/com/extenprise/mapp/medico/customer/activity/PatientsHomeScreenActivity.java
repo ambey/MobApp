@@ -89,18 +89,15 @@ public class PatientsHomeScreenActivity extends Activity {
     }
 
     public void viewRxList(View view) {
-        Intent intent = new Intent(this, ViewRxListActivity.class);
-        startActivity(intent);
+        Utility.startActivity(this, ViewRxListActivity.class, true);
     }
 
     public void viewAppointments(View view) {
-        Intent intent = new Intent(this, ViewAppointmentListActivity.class);
-        startActivity(intent);
+        Utility.startActivity(this, ViewAppointmentListActivity.class, true);
     }
 
     public void viewProfile(View view) {
-        Intent intent = new Intent(this, PatientProfileActivity.class);
-        startActivity(intent);
+        Utility.startActivity(this, ViewAppointmentListActivity.class, false);
     }
 
     public void searchDoc(View view) {

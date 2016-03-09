@@ -133,12 +133,13 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
         }
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.putParcelable("rxItem", mRxInboxItem);
+        bundle.putParcelableArrayList("inbox", mInbox);
 
         Intent intent = new Intent(getContext(), RxActivity.class);
         intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK);
         intent.putExtra("parent-activity", RxInboxItemDetailsActivity.class.getName());
         intent.putExtra("rxItemPos", position);
-        intent.putParcelableArrayListExtra("inbox", mInbox);
+        //intent.putParcelableArrayListExtra("inbox", mInbox);
         getContext().startActivity(intent);
     }
 }

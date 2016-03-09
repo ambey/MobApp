@@ -19,13 +19,10 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
-import com.extenprise.mapp.medico.service.data.RxInboxItem;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.BackButtonHandler;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
-
-import java.util.ArrayList;
 
 
 public class MedicalStoreHomeActivity extends Activity implements ResponseHandler {
@@ -133,9 +130,10 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private void gotRxInbox(Bundle data) {
         Utility.showProgressDialog(this, false);
         mMsgView.setVisibility(View.GONE);
-        ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
+        WorkingDataStore.getBundle().putParcelableArrayList("inbox", data.getParcelableArrayList("inbox"));
+        //ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
         Intent intent = new Intent(this, RxListActivity.class);
-        intent.putParcelableArrayListExtra("inbox", list);
+        //intent.putParcelableArrayListExtra("inbox", list);
         intent.putExtra("feedback", RxFeedback.GIVE_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());
         startActivity(intent);
@@ -162,7 +160,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
         final BackButtonHandler buttonHandler = BackButtonHandler.getInstance();
         if (buttonHandler.isBackPressed()) {
             buttonHandler.setBackPressed(false);
-            finish();
+            //finish();
             moveTaskToBack(true);
         } else {
             buttonHandler.setBackPressed(true);

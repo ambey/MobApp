@@ -146,12 +146,13 @@ public class RxActivity extends Activity implements ResponseHandler {
 
         RxInboxItem rxInboxItem = null;
         if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
-            if (savedInstanceState != null) {
+            /*if (savedInstanceState != null) {
                 mInbox = savedInstanceState.getParcelableArrayList("inbox");
             } else {
                 mInbox = intent.getParcelableArrayListExtra("inbox");
-            }
+            }*/
             Bundle bundle = WorkingDataStore.getBundle();
+            mInbox = bundle.getParcelableArrayList("inbox");
             rxInboxItem = bundle.getParcelable("rxItem");
             assert rxInboxItem != null;
             Customer c = rxInboxItem.getCustomer();
@@ -253,9 +254,10 @@ public class RxActivity extends Activity implements ResponseHandler {
         if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
             if (updateRxItem()) {
                 try {
+                    WorkingDataStore.getBundle().putParcelableArrayList("inbox", mInbox);
                     Intent intent = new Intent(this, Class.forName(mParentActivity));
                     intent.putExtra("feedback", mFeedback);
-                    intent.putParcelableArrayListExtra("inbox", mInbox);
+                    //intent.putParcelableArrayListExtra("inbox", mInbox);
                     intent.putExtra("rxItem", getIntent().getParcelableExtra("rxItem"));
                     startActivity(intent);
                 } catch (ClassNotFoundException e) {
@@ -521,7 +523,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             Intent intent = new Intent(this, Class.forName(mParentActivity));
             intent.putExtra("appont", mAppont);
             intent.putExtra("feedback", mFeedback);
-            intent.putParcelableArrayListExtra("inbox", mInbox);
+            //intent.putParcelableArrayListExtra("inbox", mInbox);
             return intent;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

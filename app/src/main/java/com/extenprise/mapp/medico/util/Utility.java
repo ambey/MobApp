@@ -616,6 +616,14 @@ public abstract class Utility {
     }
 
     public static void startActivity(Activity activity, Class targetClass) {
+        startActivity(activity, targetClass, false);
+    }
+
+    public static void startActivity(Activity activity, Class targetClass, boolean checkForInternet) {
+        if (!AppStatus.getInstance(activity).isOnline() && checkForInternet) {
+            Utility.showMessage(activity, R.string.error_not_online);
+            return;
+        }
         Log.v("Home", "############################" + activity.getString(R.string.msg_exception));
         Intent intent = new Intent(activity, targetClass);
         activity.startActivity(intent);
