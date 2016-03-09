@@ -641,13 +641,14 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                                 if (which == DialogInterface.BUTTON_POSITIVE) {
                                                     Bundle bundle = new Bundle();
                                                     bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                                                    Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-                                                    bundle.putParcelable("customer", customer);
+                                                    //Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+                                                    Customer cust = new Customer();
+                                                    cust.getSignInData().setPhone(mCust.getSignInData().getPhone());
+                                                    bundle.putParcelable("customer", cust);
                                                     mConnection.setData(bundle);
                                                     mConnection.setAction(MappService.DO_REMOVE_PHOTO);
                                                     if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
-                                                        //Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
-                                                        Utility.showProgressDialog(PatientProfileActivity.this, true);
+                                                        Utility.showProgressDialog(activity, true);
                                                     }
                                                 }
                                             }

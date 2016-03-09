@@ -988,11 +988,12 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                                                 if (which == DialogInterface.BUTTON_POSITIVE) {
                                                     Bundle bundle = new Bundle();
                                                     bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                                                    bundle.putParcelable("service", mServiceProv);
+                                                    ServiceProvider sp = new ServiceProvider();
+                                                    sp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
+                                                    bundle.putParcelable("service", sp);
                                                     mConnection.setData(bundle);
                                                     mConnection.setAction(MappService.DO_REMOVE_PHOTO);
                                                     if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
-                                                        //Utility.showProgress(getApplicationContext(), mFormView, mProgressView, true);
                                                         Utility.showProgressDialog(ServProvProfileActivity.this, true);
                                                     }
                                                 }
@@ -1004,18 +1005,30 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 });
     }
 
+/*
     public void removePhoto(View view) {
-        Utility.showAlert(this, getString(R.string.confirm_remove_photo), "", null, true, null,
+        final Activity activity = this;
+        Utility.showAlert(activity, getString(R.string.confirm_remove_photo), "", null, true, null,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == AlertDialog.BUTTON_POSITIVE) {
-                            sendRequest(MappService.DO_REMOVE_PHOTO, null);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+                            ServiceProvider sp = new ServiceProvider();
+                            sp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
+                            bundle.putParcelable("service", sp);
+                            mConnection.setData(bundle);
+                            mConnection.setAction(MappService.DO_REMOVE_PHOTO);
+                            if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
+                                Utility.showProgressDialog(activity, true);
+                            }
                         }
                         dialog.dismiss();
                     }
                 });
     }
+*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
