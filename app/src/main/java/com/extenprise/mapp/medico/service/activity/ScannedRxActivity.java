@@ -35,7 +35,6 @@ import com.extenprise.mapp.medico.util.Utility;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 
 public class ScannedRxActivity extends Activity implements ResponseHandler {
 
@@ -118,7 +117,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
             if (mData != null) {
                 final InputStream stream = getContentResolver().openInputStream(
                         mData.getData());
-                if(stream != null) {
+                if (stream != null) {
                     AsyncTask<Void, Void, byte[]> task = new AsyncTask<Void, Void, byte[]>() {
                         @Override
                         protected byte[] doInBackground(Void... params) {
@@ -330,52 +329,30 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         mResendRx.setText(getString(txt));
     }
 
-    private class SaveBlobTask extends AsyncTask<Void, Void, Void> {
+    private class SaveBlobTask extends AsyncTask<Void, Void, byte[]> {
 
         public SaveBlobTask(Intent data) {
             mData = data;
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected byte[] doInBackground(Void... voids) {
             String path;
             if (mData != null) {
-                path = mData.getDataString();
-            } else {
-                path = mRxUri.getPath();
+                mRxUri = mData.getData();
             }
             try {
-                if (path != null) {
-                    RandomAccessFile raf = new RandomAccessFile(path, "r");
-                    byte[] mBytes = new byte[(int) raf.length()];
-                    raf.readFully(mBytes);
-                    raf.close();
-                    mAppont.setRxCopy(mBytes);
-                }
-            } catch (IOException x) {
-                x.printStackTrace();
+                return Utility.readBytes(getContentResolver().openInputStream(mRxUri));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
             }
-/*
-            ContentValues values = new ContentValues();
-            Appointment appointment = DBUtil.getAppointment(dbHelper, mAppontId);
-            String rxId = "a" + appointment.getIdAppointment() + "r" + (appointment.getReportCount() + 1);
-
-            values.put(MappContract.Prescription.COLUMN_NAME_ID_APPOMT, appointment.getIdAppointment());
-            values.put(MappContract.Prescription.COLUMN_NAME_ID_RX, rxId);
-            values.put(MappContract.Prescription.COLUMN_NAME_SCANNED_COPY, bytes);
-            db.insert(MappContract.Prescription.TABLE_NAME, null, values);
-*/
-            return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(byte[] bytes) {
+            mAppont.setRxCopy(bytes);
             setSendButton(R.string.send);
-            //sendRx();
-        }
-
-        @Override
-        protected void onCancelled() {
         }
     }
 }
