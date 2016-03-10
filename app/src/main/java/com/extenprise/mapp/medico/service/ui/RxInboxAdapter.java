@@ -115,9 +115,10 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         }
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
-        if (item.getRx() != null) {
-            dateView.setText(sdf.format(item.getRx().getDate()));
-        }
+        //if (item.getRx() != null) {
+        //dateView.setText(sdf.format(item.getRx().getDate()));
+        dateView.setText(sdf.format(item.getReportService().getLastUpdateDate()));
+        //}
         servProvNameView.setText(String.format("%s %s.", item.getServProv().getLastName().toUpperCase(),
                 item.getServProv().getFirstName().substring(0, 1).toUpperCase()));
         custNameView.setText(String.format("%s %s.", item.getCustomer().getlName().toUpperCase(),
