@@ -261,6 +261,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".customer.activity.PatientsHomeScreenActivity" />
+            <!--
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
+
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
+            -->
+
         </activity>
 
         <service
@@ -346,6 +354,11 @@
                                         <category android:name="android.intent.category.LAUNCHER" />
                                     </intent-filter>
             -->
+        </activity>
+        <activity
+            android:name=".ui.PhotoCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar">
         </activity>
     </application>
 

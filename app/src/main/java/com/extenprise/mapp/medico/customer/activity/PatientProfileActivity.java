@@ -33,6 +33,7 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
+import com.extenprise.mapp.medico.ui.PhotoCropActivity;
 import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.DateChangeListener;
@@ -396,7 +397,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
             mCust = WorkingDataStore.getBundle().getParcelable("customer");
-            mCust.setPhoto(null);
+            if (mCust != null) {
+                mCust.setPhoto(null);
+            }
         }
         setPhoto();
     }
@@ -707,9 +710,30 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == getResources().getInteger(R.integer.request_camera) ||
+                requestCode == getResources().getInteger(R.integer.request_gallery)) &&
+                resultCode == RESULT_OK) {
+            WorkingDataStore.getBundle().putParcelable("uri", data.getData());
+            Intent intent = new Intent(this, PhotoCropActivity.class);
+            startActivityForResult(intent, getResources().getInteger(R.integer.request_edit));
+        } else if (requestCode == getResources().getInteger(R.integer.request_edit) &&
+                resultCode == RESULT_OK) {
+            byte[] image = WorkingDataStore.getBundle().getByteArray("image");
+            if (image != null) {
+                ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, image,
+                        mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
+                task.execute();
+                Customer c = new Customer();
+                setupUpdateData(c, false);
+                c.setPhoto(image);
+                taskCompleted(MappService.DO_UPLOAD_PHOTO, c);
+            }
+        }
+/*
         if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
             setupUpdateData(new Customer(), true);
         }
+*/
     }
 
     @Nullable

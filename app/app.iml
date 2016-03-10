@@ -152,5 +152,6 @@
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-measurement-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-cast-8.4.0" level="project" />
+    <orderEntry type="module" module-name="cropper" exported="" />
   </component>
 </module>
