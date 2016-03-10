@@ -272,7 +272,8 @@
                 android:layout_below="@+id/editTextConsultationFees"
                 android:layout_marginTop="10dp"
                 android:hint="@string/notes"
-                android:inputType="textNoSuggestions" />
+                android:inputType="textNoSuggestions"
+                android:maxLength="60" />
 
         </RelativeLayout>
     </LinearLayout>

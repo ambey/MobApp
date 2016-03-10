@@ -28,7 +28,9 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
+import com.extenprise.mapp.medico.ui.PhotoCropActivity;
 import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.DateChangeListener;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
@@ -355,9 +357,27 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == getResources().getInteger(R.integer.request_camera) ||
+                requestCode == getResources().getInteger(R.integer.request_gallery)) &&
+                resultCode == RESULT_OK) {
+            WorkingDataStore.getBundle().putParcelable("uri", data.getData());
+            Intent intent = new Intent(this, PhotoCropActivity.class);
+            startActivityForResult(intent, getResources().getInteger(R.integer.request_edit));
+        } else if (requestCode == getResources().getInteger(R.integer.request_edit) &&
+                resultCode == RESULT_OK) {
+            byte[] image = WorkingDataStore.getBundle().getByteArray("image");
+            if (image != null) {
+                ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, image,
+                        mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
+                task.execute();
+                imageChanged = true;
+            }
+        }
+/*
         if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
             imageChanged = true;
         }
+*/
     }
 
     private void setErrorsNull() {

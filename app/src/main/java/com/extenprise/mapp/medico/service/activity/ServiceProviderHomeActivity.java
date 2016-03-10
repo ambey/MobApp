@@ -66,7 +66,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     }
 
     private void profile() {
-        mImgView.setImageResource(R.drawable.dr_avatar);
         String lastVisit = mServiceProvider.getLastVisit();
         if (lastVisit == null || lastVisit.equals("")) {
             mLastVisited.setText(String.format("%s - -", getString(R.string.last_visited)));
@@ -76,19 +75,24 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
                             Utility.getStrAsDate(lastVisit, "yyyy-MM-dd HH:mm"),
                             "dd/MM/yyyy HH:mm")));
         }
-        //mLastVisited.setText(mServiceProvider.getLastVisit());
-        String mServPointType = mServiceProvider.getServProvHasServPt(0).getServPointType();
+
         String label = getString(R.string.hello_dr);
-        if (!mServPointType.equalsIgnoreCase(getString(R.string.clinic))) {
+        int defaultImg = R.drawable.dr_avatar;
+        if (!mServiceProvider.getServProvHasServPt(0).getServPointType().
+                equalsIgnoreCase(getString(R.string.clinic))) {
             label = getString(R.string.hello);
-            mImgView.setImageResource(R.drawable.diagcenter);
+            defaultImg = R.drawable.diagcenter;
         }
         mWelcomeView.setText(String.format("%s %s %s", label,
                 mServiceProvider.getfName(), mServiceProvider.getlName()));
+
         if (mServiceProvider.getPhoto() != null) {
-            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServiceProvider.getPhoto(),
+            ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView,
+                    mServiceProvider.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
             task.execute();
+        } else {
+            mImgView.setImageResource(defaultImg);
         }
     }
 

@@ -83,7 +83,9 @@ public class WorkPlaceListAdapter extends ArrayAdapter<WorkPlace> implements Ada
                 Utility.getTimeString(item.getStartTime()), Utility.getTimeString(item.getEndTime())));
         mConsultFee.setText(String.format("%s%s", getContext().getString(R.string.consult_fees),
                 String.format("%.2f", item.getConsultFee())));
-        mNotes.setText(String.format("%s : %s", getContext().getString(R.string.notes), item.getNotes()));
+        if (item.getNotes() != null) {
+            mNotes.setText(String.format("%s : %s", getContext().getString(R.string.notes), item.getNotes()));
+        }
 
         /*v.setOnClickListener(new View.OnClickListener() {
             @Override
