@@ -858,6 +858,31 @@ public abstract class Utility {
     }
 */
 
+    public static Uri onPhotoActivityResult(Context context, int requestCode, int resultCode, Intent data) {
+        try {
+            Bitmap bitmap;
+            Resources resources = context.getResources();
+            if (resultCode == Activity.RESULT_OK) {
+                if (data == null) {
+                    return Uri.fromFile(new File(Utility.photoFileName));
+                } else {
+                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
+                        return data.getData();
+                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
+                        bitmap = (Bitmap) data.getExtras().get("data");
+                        return Utility.getImageUri(context, bitmap);
+                    } else {
+                        Utility.showMessage(context, R.string.error_img_not_picked);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utility.showMessage(context, R.string.some_error);
+        }
+        return null;
+    }
+
     public static boolean onPhotoActivityResult(Context context, final ImageView imageView, int requestCode, int resultCode, Intent data) {
         boolean imageChanged = false;
         try {

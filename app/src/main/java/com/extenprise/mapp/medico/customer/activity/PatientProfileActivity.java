@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -713,7 +714,11 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if ((requestCode == getResources().getInteger(R.integer.request_camera) ||
                 requestCode == getResources().getInteger(R.integer.request_gallery)) &&
                 resultCode == RESULT_OK) {
-            WorkingDataStore.getBundle().putParcelable("uri", data.getData());
+            Uri image = Utility.onPhotoActivityResult(this, requestCode, resultCode, data);
+            if (image == null) {
+                return;
+            }
+            WorkingDataStore.getBundle().putParcelable("uri", image);
             Intent intent = new Intent(this, PhotoCropActivity.class);
             startActivityForResult(intent, getResources().getInteger(R.integer.request_edit));
         } else if (requestCode == getResources().getInteger(R.integer.request_edit) &&
@@ -729,11 +734,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 taskCompleted(MappService.DO_UPLOAD_PHOTO, c);
             }
         }
-/*
-        if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
-            setupUpdateData(new Customer(), true);
-        }
-*/
     }
 
     @Nullable
