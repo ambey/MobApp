@@ -97,7 +97,7 @@ public class PatientsHomeScreenActivity extends Activity {
     }
 
     public void viewProfile(View view) {
-        Utility.startActivity(this, ViewAppointmentListActivity.class, false);
+        Utility.startActivity(this, PatientProfileActivity.class, false);
     }
 
     public void searchDoc(View view) {

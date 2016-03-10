@@ -218,33 +218,25 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
     }
 
     protected void loginDone(Bundle msgData) {
-
+        Utility.showProgressDialog(this, false);
         boolean success = msgData.getBoolean("status");
         if (success) {
-            Intent intent;
             Bundle workingData = WorkingDataStore.getBundle();
+            Intent intent;
             if (mLoginType == MappService.CUSTOMER_LOGIN) {
                 Customer customer = msgData.getParcelable("customer");
-                String targetActivity = getIntent().getStringExtra("target-activity");
-                if (targetActivity != null) {
-                    try {
-                        intent = new Intent(this, Class.forName(targetActivity));
-                        intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                } else {
-                    intent = new Intent(this, PatientsHomeScreenActivity.class);
+                if (customer != null) {
+                    workingData.putParcelable("customer", customer);
                 }
-                intent.putExtra("customer", customer);
-                workingData.putParcelable("customer", customer);
+                intent = new Intent(this, PatientsHomeScreenActivity.class);
             } else {
+                String servPointType = "";
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
-                assert serviceProvider != null;
-                String servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
+                if (serviceProvider != null) {
+                    workingData.putParcelable("servProv", serviceProvider);
+                    servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
+                }
                 Log.v("LoginActivity", "service category: " + servPointType);
-                workingData.putParcelable("servProv", serviceProvider);
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
                 if (servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                     intent = new Intent(this, MedicalStoreHomeActivity.class);
@@ -252,11 +244,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
             }
             startActivity(intent);
         } else {
-            //Utility.showMessage(this, R.string.msg_login_failed);
-            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
-            startActivity(intent);
-            /*mPasswordView.setError(getString(R.string.error_incorrect_password));
-            mPasswordView.requestFocus();*/
+            Utility.startActivity(this, LoginActivity.class);
         }
     }
 }
