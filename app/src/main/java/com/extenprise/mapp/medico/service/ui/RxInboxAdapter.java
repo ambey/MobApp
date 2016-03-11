@@ -194,7 +194,8 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
             comparator = new Comparator<RxInboxItem>() {
                 @Override
                 public int compare(RxInboxItem lhs, RxInboxItem rhs) {
-                    return lhs.getRx().getDate().compareTo(rhs.getRx().getDate());
+                    //return lhs.getRx().getDate().compareTo(rhs.getRx().getDate());
+                    return lhs.getReportService().getLastUpdateDate().compareTo(rhs.getReportService().getLastUpdateDate());
                 }
             };
         } else if (sortField.equals(context.getString(R.string.by_drname))) {
