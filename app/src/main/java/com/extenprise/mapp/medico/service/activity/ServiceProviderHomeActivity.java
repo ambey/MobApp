@@ -48,8 +48,17 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mMsgView = (TextView) findViewById(R.id.msgView);
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imageDoctor);
-        //profile();
+
         mLastVisited = (TextView) findViewById(R.id.lastVisitedView);
+        String lastVisit = mServiceProvider.getLastVisit();
+        if (lastVisit == null || lastVisit.equals("")) {
+            mLastVisited.setText(String.format("%s - -", getString(R.string.last_visited)));
+        } else {
+            mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited),
+                    Utility.getDateAsStr(
+                            Utility.getStrAsDate(lastVisit, "yyyy-MM-dd HH:mm"),
+                            "dd/MM/yyyy HH:mm")));
+        }
         /*SharedPreferences prefs = getSharedPreferences("servprov" + "lastVisit" + mServiceProvider.getSignInData().getPhone(), MODE_PRIVATE);
         lastVisited.setText(String.format("%s %s %s",
                 getString(R.string.last_visited),
@@ -66,16 +75,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     }
 
     private void profile() {
-        String lastVisit = mServiceProvider.getLastVisit();
-        if (lastVisit == null || lastVisit.equals("")) {
-            mLastVisited.setText(String.format("%s - -", getString(R.string.last_visited)));
-        } else {
-            mLastVisited.setText(String.format("%s %s", getString(R.string.last_visited),
-                    Utility.getDateAsStr(
-                            Utility.getStrAsDate(lastVisit, "yyyy-MM-dd HH:mm"),
-                            "dd/MM/yyyy HH:mm")));
-        }
-
         String label = getString(R.string.hello_dr);
         int defaultImg = R.drawable.dr_avatar;
         if (!mServiceProvider.getServProvHasServPt(0).getServPointType().

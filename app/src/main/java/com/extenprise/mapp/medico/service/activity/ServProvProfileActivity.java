@@ -35,7 +35,6 @@ import android.widget.TextView;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.HasPhoto;
-import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -66,7 +65,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ArrayList<WorkPlace> mWorkPlaceList;
     private ServiceProvider mServiceProv;
-    private SignInData mSignInData;
+    /*private SignInData mSignInData;*/
     private RelativeLayout mPersonalInfo, mWorkPlaceInfo;
     /*
         private LinearLayout mInfo, mPInfo;
@@ -120,68 +119,36 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         options = Utility.getDaysOptions(this);
         selections = new boolean[options.length];
 
-        WorkPlace mWorkPlace = new WorkPlace();
         mWorkPlaceList = new ArrayList<>();
-        mServiceProv = new ServiceProvider();
-        mSignInData = new SignInData();
-
         mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
-        //assert mServiceProv != null;
-        mSignInData.setPhone(mServiceProv.getPhone());
-        mWorkPlace.setSignInData(mSignInData);
 
-        /*mFormView = findViewById(R.id.updateServProvform);
-        mProgressView = findViewById(R.id.progressView);*/
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
-/*
-        mInfo = (LinearLayout) findViewById(R.id.info);
-        mPInfo = (LinearLayout) findViewById(R.id.pInfo);
-*/
+
         TextView mobNo = (TextView) findViewById(R.id.mobnumValue);
         mobNo.setText(mServiceProv.getSignInData().getPhone());
 
-        mFname = (TextView) findViewById(R.id.textViewFName);
-        mLname = (TextView) findViewById(R.id.textViewLName);
-        mEmailID = (TextView) findViewById(R.id.editTextEmail);
-        mRegNo = (TextView) findViewById(R.id.editTextRegNum);
-        mGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-        mMale = (RadioButton) findViewById(R.id.radioButtonMale);
-        mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
-        mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
+        mDocName = (TextView) findViewById(R.id.textviewDocname);
         mListViewWP = (ListView) findViewById(R.id.workDetailListView);
         mEditWpPencil = (ImageButton) findViewById(R.id.textViewAddNewWork);
 
-        TextView mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
-        TextView mMobNo = (TextView) findViewById(R.id.editTextMobNum);
         TextView mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
-        mDocName = (TextView) findViewById(R.id.textviewDocname);
-
- /*       Intent intent = getIntent();
-        mCategory = intent.getStringExtra("category");
-        if (mCategory.equals(getString(R.string.pharmacist))) {
-            mViewdrLbl.setText(getString(R.string.welcome));
-            mImgView.setImageResource(R.drawable.medstore);
-        } else if(mCategory.equals(getString(R.string.diagnostic_center))) {
-            mViewdrLbl.setText(getString(R.string.welcome));
-            mImgView.setImageResource(R.drawable.diagcenter);
-        }*/
-
         mCategory = getString(R.string.physician);
         defaultImg = R.drawable.dr_avatar;
         String servPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
         if(!servPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             if(servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                 mCategory = getString(R.string.pharmacist);
-                //mImgView.setImageResource(R.drawable.medstore);
                 defaultImg = R.drawable.medstore;
             } else {
                 mCategory = getString(R.string.diagnostic_center);
-                //mImgView.setImageResource(R.drawable.diagcenter);
                 defaultImg = R.drawable.diagcenter;
             }
             mViewdrLbl.setText(getString(R.string.welcome));
         }
+
+        mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
+        setPhoto();
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -192,11 +159,23 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
-        mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
-        setPhoto();
+
+        /**
+         * This is older view of personal info, i think we should remove it if not required.
+         */
+        mFname = (TextView) findViewById(R.id.textViewFName);
+        mLname = (TextView) findViewById(R.id.textViewLName);
+        mEmailID = (TextView) findViewById(R.id.editTextEmail);
+        mRegNo = (TextView) findViewById(R.id.editTextRegNum);
+        mGender = (RadioGroup) findViewById(R.id.radioGroupGender);
+        mMale = (RadioButton) findViewById(R.id.radioButtonMale);
+        mFemale = (RadioButton) findViewById(R.id.radioButtonFemale);
+        TextView mGenderTextView = (TextView) findViewById(R.id.viewGenderLabel);
+        TextView mMobNo = (TextView) findViewById(R.id.editTextMobNum);
+
         mFname.setText(getString(R.string.first_name_with_lbl, mServiceProv.getfName()));
         mLname.setText(getString(R.string.last_name_with_lbl, mServiceProv.getlName()));
-        mMobNo.setText(getString(R.string.mobile_no_with_lbl, mSignInData.getPhone()));
+        mMobNo.setText(getString(R.string.mobile_no_with_lbl, mServiceProv.getSignInData().getPhone()));
         String email = getString(R.string.not_specified);
         if (mServiceProv.getEmailId() != null) {
             email = mServiceProv.getEmailId();
@@ -205,8 +184,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mRegNo.setText(getString(R.string.reg_no_with_lbl, mServiceProv.getRegNo()));
         mGenderTextView.setText(getString(R.string.gender_with_lbl, mServiceProv.getGender()));
 
-        //Get work place mSpecialityList from server
-        sendRequest(MappService.DO_WORK_PLACE_LIST, mWorkPlace);
+        //Get work place and mSpecialityList from server
+        WorkPlace wp = new WorkPlace();
+        wp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
+        sendRequest(MappService.DO_WORK_PLACE_LIST, wp);
     }
 
     @Override
@@ -341,7 +322,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final WorkPlace wp = (WorkPlace) mListViewWP.getItemAtPosition(info.position);
-        wp.setSignInData(mSignInData);
+        wp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
         if (item.getTitle() == getString(R.string.edit)) {
             getWorkPlaceView(wp, info.position);
             //editWorkPlaceInfo(item.getActionView());
@@ -622,7 +603,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                     wp.setNotes(mNotes.getText().toString().trim());
                     wp.setExperience(Float.parseFloat(mExperience.getText().toString().trim()));
                     wp.setQualification(mQualification.getText().toString().trim());
-                    wp.setSignInData(mSignInData);
+                    wp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
                     wp.setPincode(mPinCode.getText().toString().trim());
                     if (mConsultFee.isEnabled()) {
                         String fees = mConsultFee.getText().toString().trim();
@@ -880,7 +861,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                                            mServiceProv.setEmailId(email);
                                            mServiceProv.setGender(mGenderBtn.getText().toString());
                                            mServiceProv.setRegNo(mRegNo.getText().toString());
-                                           mServiceProv.setSignInData(mSignInData);
 
                                            sendRequest(MappService.DO_UPDATE, null);
                                            dialog.dismiss();
@@ -1053,8 +1033,10 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, image,
                         mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
                 task.execute();
-                mServiceProv.setPhoto(image);
-                taskCompleted(MappService.DO_UPLOAD_PHOTO, mServiceProv);
+                ServiceProvider sp = new ServiceProvider();
+                sp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
+                sp.setPhoto(image);
+                taskCompleted(MappService.DO_UPLOAD_PHOTO, sp);
             }
         }
         /*if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
@@ -1187,7 +1169,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     }
 
     private void setPhoto() {
-        mImgView.setImageResource(defaultImg);
         if (mServiceProv.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServiceProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
@@ -1195,6 +1176,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             /*mImgView.setBackgroundResource(0);
             mImgView.setImageBitmap(Utility.getBitmapFromBytes(mServiceProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height));*/
+        } else {
+            mImgView.setImageResource(defaultImg);
         }
     }
 
@@ -1220,8 +1203,9 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             Utility.showMessage(this, R.string.msg_upload_photo);
             mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
             mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
+        } else {
+            setPhoto();
         }
-        setPhoto();
     }
 
     private void getWorkPlaceListDone(Bundle data) {
@@ -1372,7 +1356,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         ServiceProvider servProv = (ServiceProvider) entity;
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-        bundle.putParcelable("servprov", servProv);
+        bundle.putParcelable("service", servProv);
         mConnection.setData(bundle);
         mConnection.setAction(action);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {

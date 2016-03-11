@@ -85,19 +85,13 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         mCust = WorkingDataStore.getBundle().getParcelable("customer");
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
-
-        /*mFormView = findViewById(R.id.scrollView);
-        mProgressView = findViewById(R.id.progressView);*/
-
         mPname = (TextView) findViewById(R.id.textviewPname);
         mMobNo = (TextView) findViewById(R.id.mobnumValue);
         mImgView = (ImageView) findViewById(R.id.imageViewPatient);
-
         mTextViewDOB = (TextView) findViewById(R.id.textViewDOB);
         mEditTextCustomerFName = (EditText) findViewById(R.id.editTextCustomerFName);
         mEditTextCustomerLName = (EditText) findViewById(R.id.editTextCustomerLName);
@@ -114,11 +108,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mPname.setText(String.format("%s %s\n(%d years)", mCust.getfName(), mCust.getlName(),
                 Utility.getAge(mCust.getDob())));
         mMobNo.setText(mCust.getSignInData().getPhone());
-        setPhoto();
         mEditTextCustomerFName.setText(mCust.getfName());
         mEditTextCustomerLName.setText(mCust.getlName());
         mEditTextCustomerEmail.setText(mCust.getEmailId());
-
         SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         sdf.applyPattern("dd/MM/yyyy");
         Date dt = mCust.getDob();
@@ -132,12 +124,14 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mEditTextLoc.setText(mCust.getLocation());
         mEditTextPinCode.setText(mCust.getPincode());
         mSpinCity.setText(mCust.getCity().getCity());
-        // mSpinCity.setSelection(Utility.getSpinnerIndex(mSpinCity, customer.getCity().getCity()));
         mSpinState.setSelection(Utility.getSpinnerIndex(mSpinState, mCust.getCity().getState()));
 
         setPersonalInfoEditable(false);
         setAddressEditable(false);
         Utility.setEnabledButton(this, mUpdateButton, false);
+        Utility.collapse(mContLay, true);
+        Utility.collapse(mAddrLayout, true);
+        setPhoto();
 
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("image");
@@ -148,8 +142,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 mImgView.setImageBitmap(mImgCopy);
             }
         }
-        Utility.collapse(mContLay, true);
-        Utility.collapse(mAddrLayout, true);
     }
 
     public void showFields(View view) {
@@ -189,16 +181,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         setAddressEditable(true);
         Utility.setEnabledButton(this, mUpdateButton, true);
     }
-
-/*
-    public void editPatientProf(View v) {
-        //setFieldsEnability((!mEditTextCustomerFName.isEnabled()));
-        */
-/*Utility.collapse(mContLay, false);
-        Utility.collapse(mAddrLayout, true);*//*
-
-    }
-*/
 
     private void setErrorsNull() {
         mEditTextPinCode.setError(null);
@@ -386,11 +368,12 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     }
 
     private void setPhoto() {
-        mImgView.setImageResource(R.drawable.patient);
         if (mCust.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mCust.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
             task.execute();
+        } else {
+            mImgView.setImageResource(R.drawable.patient);
         }
     }
 
@@ -590,7 +573,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             mConnection.setData(bundle);
             mConnection.setAction(MappService.DO_PWD_CHECK);
             if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                //Utility.showProgress(PatientProfileActivity.this, mFormView, mProgressView, true);
                 Utility.showProgressDialog(this, true);
             }
         } else {

@@ -35,9 +35,6 @@ public class PatientsHomeScreenActivity extends Activity {
 
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imagePatient);
-
-        mCustomer = WorkingDataStore.getBundle().getParcelable("customer");
-        //profile();
         mLastVisited = (TextView) findViewById(R.id.lastVisitedView);
        /* try {
             SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
@@ -78,7 +75,6 @@ public class PatientsHomeScreenActivity extends Activity {
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
             task.execute();
         } else {
-            mImgView.setBackgroundResource(0);
             mImgView.setImageResource(R.drawable.patient);
         }
     }
