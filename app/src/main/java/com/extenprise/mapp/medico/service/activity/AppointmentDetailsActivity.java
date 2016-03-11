@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -120,6 +121,13 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         if (mAppont.isConfirmed() || mAppont.isCanceled() || appontDate.before(today)) {
             Utility.setEnabledButton(this, mConfirmAppontButton, false);
             Utility.setEnabledButton(this, mCancelAppontButton, false);
+        }
+
+        Log.d("Rx Presence", " : " + mAppont.getRxPresent());
+        if (mAppont.getRxPresent() == 1) {
+            Utility.setEnabledButton(this, uploadRxButton, false);
+        } else if (mAppont.getRxPresent() == 2) {
+            Utility.setEnabledButton(this, rxButton, false);
         }
 
         fillPastAppointements();
@@ -304,10 +312,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        /* Remove the data from WorkingDataStore */
-        Bundle bundle = WorkingDataStore.getBundle();
-        bundle.remove("appontList");
-
+        removeData();
         Intent intent = super.getParentActivityIntent();
         if (intent != null) {
             intent.putExtra("service", mServProv);
@@ -315,10 +320,16 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         return intent;
     }
 
+    private void removeData() {
+        /* Remove the data from WorkingDataStore */
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.remove("appontList");
+    }
+
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        //startActivity(getIntent());
+        removeData();
         super.onBackPressed();
     }
 }

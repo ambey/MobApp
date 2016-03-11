@@ -293,14 +293,19 @@ public class LoginActivity extends Activity implements ResponseHandler {
             cancel = true;
         }
 
-        int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
+
         if (!isBookAppontRequest) {
+            int uTypeID = mRadioGroupUType.getCheckedRadioButtonId();
             if (uTypeID == -1) {
             /* hide the soft keyboard and show the message */
                 Utility.hideSoftKeyboard(this);
                 Utility.showMessage(this, R.string.error_user_type_required);
-                focusView = null;
-                cancel = true;
+                return;
+            } else {
+                RadioButton mRadioButtonUType;
+                mRadioButtonUType = (RadioButton) findViewById(uTypeID);
+                String uType = mRadioButtonUType.getText().toString().trim();
+                mLoginType = whichLoginType(uType);
             }
         }
 
@@ -315,37 +320,20 @@ public class LoginActivity extends Activity implements ResponseHandler {
         }
         Utility.hideSoftKeyboard(this);
 
-        if (!isBookAppontRequest) {
-            RadioButton mRadioButtonUType;
-            mRadioButtonUType = (RadioButton) findViewById(uTypeID);
-            String uType = mRadioButtonUType.getText().toString().trim();
-            mLoginType = whichLoginType(uType);
-        }
         String encryptedPasswd = EncryptUtil.encrypt(passwd);
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         final SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
-        boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (!saveLogin && mSaveLoginCheckBox.isChecked()) {
-                /*final AlertDialog dialog = Utility.customDialogBuilder(this, null, R.string.confirm_remember).create();
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {*/
+        //boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (mSaveLoginCheckBox.isChecked()) {
             loginPrefsEditor.putBoolean("saveLogin", true);
             loginPrefsEditor.putString("username", phone);
             loginPrefsEditor.putString("passwd", encryptedPasswd);
             loginPrefsEditor.putString("logintype", whichLoginType(mLoginType));
             loginPrefsEditor.apply();
-                        /*dialog.dismiss();
-                        doLogin();
-                    }
-                });
-                return;*/
-        } else if (!mSaveLoginCheckBox.isChecked()) {
+        } else {
             loginPrefsEditor.clear();
             loginPrefsEditor.apply();
         }
-        //doLogin(phone, encryptedPasswd);
 
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", mLoginType);
@@ -374,38 +362,6 @@ public class LoginActivity extends Activity implements ResponseHandler {
             signInButton.setEnabled(true);
         }
     }
-
-    /*private void doLogin(String phone, String encryptedPasswd) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("loginType", mLoginType);
-        *//*SignInData signInData = new SignInData();
-        signInData.setPhone(phone);
-        signInData.setPasswd(encryptedPasswd);*//*
-
-        Calendar calendar = Calendar.getInstance();
-        String lastVisit = String.format("%s %s", Utility.getDateAsStr(calendar.getTime(), "yyyy-MM-dd"),
-                Utility.getFormattedTime(calendar));
-
-        if (mLoginType == MappService.CUSTOMER_LOGIN) {
-            Customer customer = new Customer();
-            customer.getSignInData().setPhone(phone);
-            customer.getSignInData().setPasswd(encryptedPasswd);
-            customer.setLastVisit(lastVisit);
-            bundle.putParcelable("customer", customer);
-        } else if (mLoginType == MappService.SERVICE_LOGIN) {
-            ServiceProvider serviceProvider = new ServiceProvider();
-            serviceProvider.getSignInData().setPhone(phone);
-            serviceProvider.getSignInData().setPasswd(encryptedPasswd);
-            serviceProvider.setLastVisit(lastVisit);
-            bundle.putParcelable("serviceProvider", serviceProvider);
-        }
-        //bundle.putParcelable("signInData", signInData);
-        mConnection.setAction(MappService.DO_LOGIN);
-        mConnection.setData(bundle);
-        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            Utility.showProgressDialog(this, true);
-        }
-    }*/
 
     @Override
     public boolean gotResponse(int action, Bundle data) {

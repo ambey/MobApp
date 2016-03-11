@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
-import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
@@ -25,6 +24,8 @@ import com.extenprise.mapp.medico.service.activity.MedicalStoreHomeActivity;
 import com.extenprise.mapp.medico.service.activity.ServiceProviderHomeActivity;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.util.Utility;
+
+import java.util.Calendar;
 
 /*import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -161,26 +162,39 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
         mTextLabel.startAnimation(textAnimation);
 
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        boolean logoutDone = loginPreferences.getBoolean("logout", false);
-        if (saveLogin && !logoutDone) {
-            SignInData signInData = new SignInData();
-            signInData.setPhone(loginPreferences.getString("username", ""));
-            signInData.setPasswd(loginPreferences.getString("passwd", ""));
+        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        //boolean logoutDone = loginPreferences.getBoolean("logout", false);
+        if (saveLogin) {
             String type = loginPreferences.getString("logintype", "");
             if (type.equalsIgnoreCase(getString(R.string.patient))) {
                 mLoginType = MappService.CUSTOMER_LOGIN;
             } else if (type.equalsIgnoreCase(getString(R.string.serv_prov))) {
                 mLoginType = MappService.SERVICE_LOGIN;
             }
+            String phone = loginPreferences.getString("username", "");
+            String pwd = loginPreferences.getString("passwd", "");
+            Calendar calendar = Calendar.getInstance();
+            String lastVisit = String.format("%s %s", Utility.getDateAsStr(calendar.getTime(), "yyyy-MM-dd"),
+                    Utility.getFormattedTime(calendar));
 
             Bundle bundle = new Bundle();
             bundle.putInt("loginType", mLoginType);
-            bundle.putParcelable("signInData", signInData);
+            if (mLoginType == MappService.CUSTOMER_LOGIN) {
+                Customer customer = new Customer();
+                customer.getSignInData().setPhone(phone);
+                customer.getSignInData().setPasswd(pwd);
+                customer.setLastVisit(lastVisit);
+                bundle.putParcelable("customer", customer);
+            } else if (mLoginType == MappService.SERVICE_LOGIN) {
+                ServiceProvider serviceProvider = new ServiceProvider();
+                serviceProvider.getSignInData().setPhone(phone);
+                serviceProvider.getSignInData().setPasswd(pwd);
+                serviceProvider.setLastVisit(lastVisit);
+                bundle.putParcelable("serviceProvider", serviceProvider);
+            }
             mConnection.setAction(MappService.DO_LOGIN);
             mConnection.setData(bundle);
             if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-                //Utility.showProgressDialog(this, true);
                 final View viewWaitMsg = findViewById(R.id.textViewWaitMsg);
                 final Animation textBlink = AnimationUtils.loadAnimation(this, R.anim.text_fade);
                 textBlink.setDuration(500);
@@ -195,7 +209,6 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
                 }, 5000);
             }
         } else {
-
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

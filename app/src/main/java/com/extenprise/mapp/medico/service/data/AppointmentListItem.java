@@ -36,6 +36,7 @@ public class AppointmentListItem implements Parcelable {
     private boolean confirmed;
     private boolean canceled;
     private byte[] rxCopy;
+    private int rxPresent;
 
     public AppointmentListItem() {
     }
@@ -64,6 +65,15 @@ public class AppointmentListItem implements Parcelable {
                 e.printStackTrace();
             }
         }
+        rxPresent = in.readInt();
+    }
+
+    public int getRxPresent() {
+        return rxPresent;
+    }
+
+    public void setRxPresent(int rxPresent) {
+        this.rxPresent = rxPresent;
     }
 
     public boolean isCanceled() {
@@ -205,6 +215,6 @@ public class AppointmentListItem implements Parcelable {
             dateStr = sdf.format(date);
         }
         dest.writeString(dateStr);
+        dest.writeInt(rxPresent);
     }
-
 }
