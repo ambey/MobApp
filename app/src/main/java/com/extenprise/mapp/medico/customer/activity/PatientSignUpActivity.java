@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -360,7 +361,11 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         if ((requestCode == getResources().getInteger(R.integer.request_camera) ||
                 requestCode == getResources().getInteger(R.integer.request_gallery)) &&
                 resultCode == RESULT_OK) {
-            WorkingDataStore.getBundle().putParcelable("uri", data.getData());
+            Uri image = Utility.onPhotoActivityResult(this, requestCode, resultCode, data);
+            if (image == null) {
+                return;
+            }
+            WorkingDataStore.getBundle().putParcelable("uri", image);
             Intent intent = new Intent(this, PhotoCropActivity.class);
             startActivityForResult(intent, getResources().getInteger(R.integer.request_edit));
         } else if (requestCode == getResources().getInteger(R.integer.request_edit) &&
@@ -373,11 +378,6 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
                 imageChanged = true;
             }
         }
-/*
-        if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
-            imageChanged = true;
-        }
-*/
     }
 
     private void setErrorsNull() {

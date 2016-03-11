@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
+import com.extenprise.mapp.medico.data.HasPhoto;
 import com.extenprise.mapp.medico.data.SignInData;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
@@ -45,8 +47,10 @@ import com.extenprise.mapp.medico.service.data.WorkPlace;
 import com.extenprise.mapp.medico.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.medico.ui.DaysSelectionDialog;
 import com.extenprise.mapp.medico.ui.DialogDismissListener;
+import com.extenprise.mapp.medico.ui.PhotoCropActivity;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.EncryptUtil;
+import com.extenprise.mapp.medico.util.PhotoTaskCompleteListener;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
 
@@ -54,7 +58,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class ServProvProfileActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener {
+public class ServProvProfileActivity extends FragmentActivity implements ResponseHandler, DialogDismissListener, PhotoTaskCompleteListener {
 
     //String []selectedDays = new String[_options.length];
     protected CharSequence[] options;
@@ -1032,10 +1036,31 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
+        if ((requestCode == getResources().getInteger(R.integer.request_camera) ||
+                requestCode == getResources().getInteger(R.integer.request_gallery)) &&
+                resultCode == RESULT_OK) {
+            Uri image = Utility.onPhotoActivityResult(this, requestCode, resultCode, data);
+            if (image == null) {
+                return;
+            }
+            WorkingDataStore.getBundle().putParcelable("uri", image);
+            Intent intent = new Intent(this, PhotoCropActivity.class);
+            startActivityForResult(intent, getResources().getInteger(R.integer.request_edit));
+        } else if (requestCode == getResources().getInteger(R.integer.request_edit) &&
+                resultCode == RESULT_OK) {
+            byte[] image = WorkingDataStore.getBundle().getByteArray("image");
+            if (image != null) {
+                ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, image,
+                        mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
+                task.execute();
+                mServiceProv.setPhoto(image);
+                taskCompleted(MappService.DO_UPLOAD_PHOTO, mServiceProv);
+            }
+        }
+        /*if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
             mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
             sendRequest(MappService.DO_UPLOAD_PHOTO, null);
-        }
+        }*/
     }
 
     /*@Override
@@ -1340,6 +1365,19 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mConnection.setBound(false);
         //startActivity(getIntent());
         super.onBackPressed();
+    }
+
+    @Override
+    public void taskCompleted(int action, HasPhoto entity) {
+        ServiceProvider servProv = (ServiceProvider) entity;
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.SERVICE_LOGIN);
+        bundle.putParcelable("servprov", servProv);
+        mConnection.setData(bundle);
+        mConnection.setAction(action);
+        if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
+        }
     }
 
 }
