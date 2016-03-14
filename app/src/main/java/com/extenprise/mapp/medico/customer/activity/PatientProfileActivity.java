@@ -85,7 +85,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        mCust = WorkingDataStore.getBundle().getParcelable("customer");
+        //mCust = WorkingDataStore.getBundle().getParcelable("customer");
+        mCust = (Customer) WorkingDataStore.getLoginRef();
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
@@ -358,7 +359,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     private void uploadPhotoDone(Bundle data) {
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
-            mCust = WorkingDataStore.getBundle().getParcelable("customer");
+            //mCust = WorkingDataStore.getBundle().getParcelable("customer");
             mCust.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
             BitmapToByteArrayTask task = new BitmapToByteArrayTask(mCust, ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
             task.execute();
@@ -380,7 +381,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     private void removePhotoDone(Bundle data) {
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
-            mCust = WorkingDataStore.getBundle().getParcelable("customer");
+            //mCust = WorkingDataStore.getBundle().getParcelable("customer");
             if (mCust != null) {
                 mCust.setPhoto(null);
             }
@@ -396,8 +397,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     dialog.dismiss();
                 }
             });
-            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            setupUpdateData(customer, true);
+            //Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+            Customer cust = (Customer) WorkingDataStore.getLoginRef();
+            setupUpdateData(cust, true);
 
             setPersonalInfoEditable(false);
             setAddressEditable(false);
@@ -482,7 +484,6 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
             case R.id.action_changepwd:
                 LayoutInflater inflater = this.getLayoutInflater();
@@ -537,13 +538,12 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                                         focusView.requestFocus();
                                     }
                                 } else {
-                                    Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-                                    if (customer != null) {
-                                        customer.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
-                                    }
+                                    Customer cust = new Customer();
+                                    cust.getSignInData().setPhone(mCust.getSignInData().getPhone());
+                                    cust.getSignInData().setPasswd(EncryptUtil.encrypt(newpwd));
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-                                    bundle.putParcelable("customer", customer);
+                                    bundle.putParcelable("customer", cust);
                                     mConnection.setData(bundle);
                                     mConnection.setAction(MappService.DO_CHANGE_PWD);
                                     if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
@@ -562,21 +562,20 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     private void checkPwd() {
         String oldpwd = mOldPwd.getText().toString().trim();
-        if (Validator.isPasswordValid(oldpwd)) {
-            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            if (customer != null) {
-                customer.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
-            }
-            Bundle bundle = new Bundle();
-            bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
-            bundle.putParcelable("customer", customer);
-            mConnection.setData(bundle);
-            mConnection.setAction(MappService.DO_PWD_CHECK);
-            if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
-                Utility.showProgressDialog(this, true);
-            }
-        } else {
+        if (!Validator.isPasswordValid(oldpwd)) {
             mOldPwd.setError(getString(R.string.error_wrong_pwd));
+            return;
+        }
+        Customer cust = new Customer();
+        cust.getSignInData().setPhone(mCust.getSignInData().getPhone());
+        cust.getSignInData().setPasswd(EncryptUtil.encrypt(oldpwd));
+        Bundle bundle = new Bundle();
+        bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
+        bundle.putParcelable("customer", cust);
+        mConnection.setData(bundle);
+        mConnection.setAction(MappService.DO_PWD_CHECK);
+        if (Utility.doServiceAction(PatientProfileActivity.this, mConnection, BIND_AUTO_CREATE)) {
+            Utility.showProgressDialog(this, true);
         }
     }
 
@@ -721,22 +720,18 @@ public class PatientProfileActivity extends FragmentActivity implements Response
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        Intent intent = super.getParentActivityIntent();
-        if (intent != null) {
+        /*if (intent != null) {
             intent.putExtra("customer", WorkingDataStore.getBundle().getParcelable("customer"));
-        }
-        return intent;
+        }*/
+        return super.getParentActivityIntent();
     }
 
     @Override
     public void datePicked(String date) {
         Date datePicked = Utility.getStrAsDate(date, "dd/MM/yyyy");
         if (!Utility.isDateAfterToday(datePicked)) {
-            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
-            if (customer != null) {
-                mPname.setText(String.format("%s %s\n(%d years)", customer.getfName(), customer.getlName(),
-                        Utility.getAge(customer.getDob())));
-            }
+            mPname.setText(String.format("%s %s\n(%d years)", mCust.getfName(), mCust.getlName(),
+                    Utility.getAge(datePicked)));
         }
     }
 

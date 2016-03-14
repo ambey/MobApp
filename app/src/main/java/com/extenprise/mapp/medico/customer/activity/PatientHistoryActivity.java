@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
-import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.service.activity.ViewRxActivity;
 import com.extenprise.mapp.medico.service.data.AppointmentListItem;
 import com.extenprise.mapp.medico.service.ui.AppontHistListAdapter;
@@ -80,7 +79,6 @@ public class PatientHistoryActivity extends Activity {
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
 

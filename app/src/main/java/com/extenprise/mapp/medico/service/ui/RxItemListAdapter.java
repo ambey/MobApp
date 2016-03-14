@@ -52,7 +52,11 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
     @Override
     public int getCount() {
         try {
-            return mRxInboxItem.getRx().getRxItemCount();
+            if (mFeedback != RxFeedback.GIVE_FEEDBACK) {
+                return mRxInboxItem.getRx().getRxItemCount();
+            } else {
+                return mRxInboxItem.getRx().getRxItemCount();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package com.extenprise.mapp.medico.service.activity;
 
+import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -33,7 +34,6 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
     private RadioGroup mGender;
     private RadioButton mFemale;
     private RadioButton mGenderBtn;
-    private TextView mPhone;
 
     private ServiceProvider mServiceProv;
 
@@ -41,8 +41,12 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serv_prov_personal_info);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
-        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServiceProv = (ServiceProvider) WorkingDataStore.getLoginRef();
 
         findViewById(R.id.editTextCellphone).setVisibility(View.GONE);
         findViewById(R.id.editTextPasswd).setVisibility(View.GONE);
@@ -70,7 +74,7 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
             }
         });
 
-        mPhone = (TextView) findViewById(R.id.mobnumValue);
+        TextView mPhone = (TextView) findViewById(R.id.mobnumValue);
         mPhone.setText(mServiceProv.getSignInData().getPhone());
         mFname.setText(mServiceProv.getfName());
         mLname.setText(mServiceProv.getlName());
@@ -105,7 +109,6 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
                 break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -150,7 +153,7 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
 
     private ServiceProvider getProfileData(ServiceProvider sp) {
         if (sp == null) {
-            sp = WorkingDataStore.getBundle().getParcelable("servProv");
+            sp = (ServiceProvider) WorkingDataStore.getLoginRef();
         }
         sp.setfName(mFname.getText().toString().trim());
         sp.setlName(mLname.getText().toString().trim());
@@ -194,7 +197,7 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
                     dialog.dismiss();
                 }
             });
-            ServiceProvider serviceProvider = WorkingDataStore.getBundle().getParcelable("servprov");
+            ServiceProvider serviceProvider = (ServiceProvider) WorkingDataStore.getLoginRef();
             getProfileData(serviceProvider);
         }
     }

@@ -52,8 +52,7 @@ public class ServProvDetailsActivity extends Activity {
 
         ServiceProvider servProv = WorkingDataStore.getBundle().getParcelable("servProv");
         if (!(servProv != null && servProv.getServiceCount() > 0)) {
-            Utility.showMessage(this, R.string.error_session_expired);
-            Utility.startActivity(this, LoginActivity.class);
+            Utility.sessionExpired(this);
             return;
         }
         ServProvHasServPt spspt = servProv.getServProvHasServPt(0);
@@ -109,7 +108,7 @@ public class ServProvDetailsActivity extends Activity {
 
     public void bookAppointment(View view) {
         Intent intent = new Intent(this, BookAppointmentActivity.class);
-        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+        if (WorkingDataStore.getLoginRef() == null) {
             intent = new Intent(this, LoginActivity.class);
             intent.putExtra("target-activity", BookAppointmentActivity.class.getName());
         }
@@ -129,7 +128,7 @@ public class ServProvDetailsActivity extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+        if (WorkingDataStore.getLoginRef() == null) {
             menu.removeItem(R.id.logout);
         }
         return true;
@@ -146,7 +145,6 @@ public class ServProvDetailsActivity extends Activity {
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
 

@@ -33,6 +33,7 @@ public class RxItem implements Parcelable {
     private String altDrugStrength;
     private String altDrugForm;
     private int available;
+    private int idServProvHasServPt;
 
     public RxItem() {
     }
@@ -56,6 +57,15 @@ public class RxItem implements Parcelable {
         altDrugStrength = in.readString();
         altDrugForm = in.readString();
         available = in.readInt();
+        idServProvHasServPt = in.readInt();
+    }
+
+    public int getIdServProvHasServPt() {
+        return idServProvHasServPt;
+    }
+
+    public void setIdServProvHasServPt(int idServProvHasServPt) {
+        this.idServProvHasServPt = idServProvHasServPt;
     }
 
     public int getSrNo() {
@@ -216,6 +226,7 @@ public class RxItem implements Parcelable {
         dest.writeString(altDrugStrength);
         dest.writeString(altDrugForm);
         dest.writeInt(available);
+        dest.writeInt(idServProvHasServPt);
     }
 
     public String getmDose() {

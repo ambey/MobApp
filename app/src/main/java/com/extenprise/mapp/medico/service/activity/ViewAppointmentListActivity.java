@@ -51,8 +51,6 @@ public class ViewAppointmentListActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_appointment_list);
 
-        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
-
         mUpcomingListView = (ListView) findViewById(R.id.upcomingAppontsList);
         mPastListView = (ListView) findViewById(R.id.pastAppontsList);
         mUpcomingMsgView = (TextView) findViewById(R.id.upcomingAppontsMsgView);
@@ -79,9 +77,9 @@ public class ViewAppointmentListActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServiceProv = (ServiceProvider) WorkingDataStore.getLoginRef();
         if (mServiceProv == null) {
-            Utility.startActivity(this, LoginActivity.class);
+            Utility.sessionExpired(this);
             return;
         }
         getUpcomingList();
@@ -115,7 +113,6 @@ public class ViewAppointmentListActivity extends FragmentActivity
         }
         if (id == R.id.logout) {
             Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-            WorkingDataStore.getBundle().remove("servProv");
             return true;
         }
 

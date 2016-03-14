@@ -266,7 +266,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         Intent intent = new Intent(this, RxActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("appont", mAppont);
-        intent.putExtra("servProv", mServProv);
+        //intent.putExtra("servProv", mServProv);
         startActivity(intent);
     }
 
@@ -314,9 +314,9 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     public Intent getParentActivityIntent() {
         removeData();
         Intent intent = super.getParentActivityIntent();
-        if (intent != null) {
+        /*if (intent != null) {
             intent.putExtra("service", mServProv);
-        }
+        }*/
         return intent;
     }
 

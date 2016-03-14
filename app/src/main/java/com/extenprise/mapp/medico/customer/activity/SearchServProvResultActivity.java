@@ -88,7 +88,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+        if (WorkingDataStore.getLoginRef() == null) {
             menu.removeItem(R.id.logout);
         }
         return true;
@@ -110,7 +110,6 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
                 break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -145,8 +144,7 @@ public class SearchServProvResultActivity extends FragmentActivity implements Re
         }
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.putParcelable("servProv", serviceProvider);
-        Intent intent = new Intent(this, ServProvDetailsActivity.class);
-        startActivity(intent);
+        Utility.startActivity(this, ServProvDetailsActivity.class);
     }
 
     @Override

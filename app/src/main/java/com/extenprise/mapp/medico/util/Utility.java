@@ -613,8 +613,8 @@ public abstract class Utility {
     }*/
 
     public static void sessionExpired(Activity activity) {
-        Utility.showMessage(activity, R.string.error_session_expired);
-        Utility.startActivity(activity, LoginActivity.class);
+        showMessage(activity, R.string.error_session_expired);
+        startActivity(activity, LoginActivity.class);
     }
 
     public static void startActivity(Activity activity, Class targetClass) {
@@ -761,6 +761,7 @@ public abstract class Utility {
             loginPreferences.edit().clear().apply();
         }
         WorkingDataStore.getBundle().clear();
+        WorkingDataStore.setLoginRef(null);
         activity.finish();
         Intent intent = new Intent(activity, targetClass);
         activity.startActivity(intent);

@@ -240,6 +240,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
                 Customer customer = msgData.getParcelable("customer");
                 if (customer != null) {
                     workingData.putParcelable("customer", customer);
+                    WorkingDataStore.setLoginRef(customer);
                 }
                 intent = new Intent(this, PatientsHomeScreenActivity.class);
             } else {
@@ -247,6 +248,7 @@ public class WelcomeActivity extends Activity implements ResponseHandler {
                 ServiceProvider serviceProvider = msgData.getParcelable("service");
                 if (serviceProvider != null) {
                     workingData.putParcelable("servProv", serviceProvider);
+                    WorkingDataStore.setLoginRef(serviceProvider);
                     servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
                 }
                 Log.v("LoginActivity", "service category: " + servPointType);

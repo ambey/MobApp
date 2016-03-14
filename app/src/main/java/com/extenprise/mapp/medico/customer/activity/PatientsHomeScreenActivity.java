@@ -53,7 +53,12 @@ public class PatientsHomeScreenActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mCustomer = WorkingDataStore.getBundle().getParcelable("customer");
+        //mCustomer = WorkingDataStore.getBundle().getParcelable("customer");
+        mCustomer = (Customer) WorkingDataStore.getLoginRef();
+        if (mCustomer == null) {
+            Utility.sessionExpired(this);
+            return;
+        }
         profile();
     }
 
@@ -127,7 +132,6 @@ public class PatientsHomeScreenActivity extends Activity {
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
         return super.onOptionsItemSelected(item);

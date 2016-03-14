@@ -120,7 +120,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         selections = new boolean[options.length];
 
         mWorkPlaceList = new ArrayList<>();
-        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        //mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServiceProv = (ServiceProvider) WorkingDataStore.getLoginRef();
 
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
         mWorkPlaceInfo = (RelativeLayout) findViewById(R.id.workPlaceInfo);
@@ -193,7 +194,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     @Override
     protected void onResume() {
         super.onResume();
-        mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServiceProv = (ServiceProvider) WorkingDataStore.getLoginRef();
         mDocName.setText(String.format("%s %s", mServiceProv.getfName(), mServiceProv.getlName()));
     }
 
@@ -284,7 +285,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         }
         if (id == R.id.logout) {
             Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-            WorkingDataStore.getBundle().remove("servProv");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -1162,7 +1162,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private void removePhotoDone(Bundle data) {
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_photo_removed);
-            mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
             mServiceProv.setPhoto(null);
         }
         setPhoto();
@@ -1201,7 +1200,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
     private void uploadPhotoDone(Bundle data) {
         if (data.getBoolean("status")) {
             Utility.showMessage(this, R.string.msg_upload_photo);
-            mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
             mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
         } else {
             setPhoto();

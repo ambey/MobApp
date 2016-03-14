@@ -589,6 +589,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
     private void signUpDone(Bundle data) {
         if (data.getBoolean("status")) {
             WorkingDataStore.getBundle().putParcelable("customer", data.getParcelable("customer"));
+            WorkingDataStore.setLoginRef(data.getParcelable("customer"));
             Utility.showAlert(this, "", getString(R.string.msg_registration_done), null, false, null, getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         @Override

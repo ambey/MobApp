@@ -502,7 +502,7 @@ public class RxActivity extends Activity implements ResponseHandler {
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
         intent.putExtra("rx", mRx);
         intent.putExtra("appont", mAppont);
-        intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
+        //intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
         startActivity(intent);
     }
 

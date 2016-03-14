@@ -39,7 +39,8 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider_home);
 
-        mServiceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+        //mServiceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServiceProvider = (ServiceProvider) WorkingDataStore.getLoginRef();
         if (!(mServiceProvider != null && mServiceProvider.getServiceCount() > 0)) {
             Utility.sessionExpired(this);
             return;
@@ -70,7 +71,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
     @Override
     protected void onResume() {
         super.onResume();
-        mServiceProvider = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServiceProvider = (ServiceProvider) WorkingDataStore.getLoginRef();
         profile();
     }
 
@@ -136,7 +137,6 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
                 break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
         return super.onOptionsItemSelected(item);

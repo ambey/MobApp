@@ -51,7 +51,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serv_prov);
 
-        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+        Customer customer = (Customer) WorkingDataStore.getLoginRef();
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(false);
@@ -197,7 +197,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+        if (WorkingDataStore.getLoginRef() == null) {
             //menu.removeItem(R.id.logout);
             menu.findItem(R.id.logout).setVisible(false);
         }
@@ -215,7 +215,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
                 return true;
             case R.id.action_sign_in:
                 Intent intent;
-                if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+                if (WorkingDataStore.getLoginRef() != null) {
                     intent = new Intent(this, PatientsHomeScreenActivity.class);
                 } else {
                     intent = new Intent(this, LoginActivity.class);
@@ -224,7 +224,6 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
 
@@ -315,7 +314,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+        if (WorkingDataStore.getLoginRef() != null) {
             intent = new Intent(this, PatientsHomeScreenActivity.class);
         }
         return intent;
@@ -335,7 +334,7 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+            if (WorkingDataStore.getLoginRef() != null) {
                 Utility.startActivity(this, PatientsHomeScreenActivity.class);
                 return true;
             }

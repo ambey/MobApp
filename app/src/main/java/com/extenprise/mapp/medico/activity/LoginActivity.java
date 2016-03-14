@@ -188,8 +188,8 @@ public class LoginActivity extends Activity implements ResponseHandler {
         mConnection.setBound(false);
         if (isBookAppontRequest) {
             Intent intent = new Intent(this, ServProvDetailsActivity.class);
-            intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
-            intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+            /*intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
+            intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));*/
             startActivity(intent);
             return;
         }
@@ -403,13 +403,14 @@ public class LoginActivity extends Activity implements ResponseHandler {
                     if (customer.getSignInData() != null) {
                         phone = customer.getSignInData().getPhone();
                     }
+                    WorkingDataStore.setLoginRef(customer);
                 }
                 String targetActivity = getIntent().getStringExtra("target-activity");
                 if (targetActivity != null) {
                     try {
                         intent = new Intent(this, Class.forName(targetActivity));
-                        intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
-                        intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));
+                        /*intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
+                        intent.putParcelableArrayListExtra("servProvList", getIntent().getParcelableArrayListExtra("servProvList"));*/
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                         return;
@@ -423,6 +424,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
                 assert serviceProvider != null;
                 String servPointType = serviceProvider.getServProvHasServPt(0).getServPointType();
                 Log.v("LoginActivity", "service category: " + servPointType);
+                WorkingDataStore.setLoginRef(serviceProvider);
                 workingData.putParcelable("servProv", serviceProvider);
                 intent = new Intent(this, ServiceProviderHomeActivity.class);
                 if (servPointType.equalsIgnoreCase(getString(R.string.medical_store)) ||

@@ -86,10 +86,9 @@ public class BookAppointmentActivity extends Activity
     public void bookAppointment(View view) {
         /* Send request to book appointment */
         Appointment form = new Appointment();
-        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+        Customer customer = (Customer) WorkingDataStore.getLoginRef();
         if (customer == null) {
-            Utility.showMessage(this, R.string.error_session_expired);
-            Utility.startActivity(this, LoginActivity.class);
+            Utility.sessionExpired(this);
             return;
         }
         form.setIdCustomer(customer.getIdCustomer());
@@ -188,10 +187,9 @@ public class BookAppointmentActivity extends Activity
             });
             Utility.setEnabledButton(this, mBookButton, false);
             Appointment appointment = data.getParcelable("form");
-            Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+            Customer customer = (Customer) WorkingDataStore.getLoginRef();
             if (customer == null) {
-                Utility.showMessage(this, R.string.error_session_expired);
-                Utility.startActivity(this, LoginActivity.class);
+                Utility.sessionExpired(this);
                 return;
             }
             customer.getAppointments().add(appointment);
@@ -219,7 +217,6 @@ public class BookAppointmentActivity extends Activity
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
 

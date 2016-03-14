@@ -172,7 +172,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (WorkingDataStore.getBundle().getParcelable("customer") == null) {
+        if (WorkingDataStore.getLoginRef() == null) {
             //menu.removeItem(R.id.logout);
             menu.findItem(R.id.logout).setVisible(false);
         }
@@ -191,7 +191,7 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
                 return true;
             case R.id.action_sign_in:
                 Intent intent;
-                if (WorkingDataStore.getBundle().getParcelable("customer") != null) {
+                if (WorkingDataStore.getLoginRef() != null) {
                     intent = new Intent(this, PatientsHomeScreenActivity.class);
                 } else {
                     intent = new Intent(this, LoginActivity.class);
@@ -200,7 +200,6 @@ public class AdvSearchServProvActivity extends FragmentActivity implements Respo
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
 

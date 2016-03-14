@@ -35,6 +35,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
     //private int mSelectedPosition;
     private String mSortField;
     private boolean mAscending;
+    private int idMedStore;
 
     public RxListAdapter(Context context, int resource, ArrayList<RxInboxItem> list, Customer c) {
         super(context, resource);
@@ -105,6 +106,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
             TextView medStorePhView = (TextView) v.findViewById(R.id.medStorePhoneView);
 
             ServProvListItem medStore = item.getMedStoreList().get(0);
+            idMedStore = medStore.getIdServProvHasServPt();
             medStoreNameView.setText(medStore.getServPtName());
             fNameView.setText(medStore.getFirstName());
             lNameView.setText(medStore.getLastName());
@@ -128,6 +130,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putExtra("feedback", RxFeedback.NONE);
         intent.putExtra("parent-activity", getContext().getClass().getName());
+        intent.putExtra("idMedStore", idMedStore);
         getContext().startActivity(intent);
     }
 

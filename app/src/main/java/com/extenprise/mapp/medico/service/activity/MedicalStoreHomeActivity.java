@@ -60,7 +60,12 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     @Override
     protected void onResume() {
         super.onResume();
-        mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        //mServProv = WorkingDataStore.getBundle().getParcelable("servProv");
+        mServProv = (ServiceProvider) WorkingDataStore.getLoginRef();
+        if (!(mServProv != null && mServProv.getServiceCount() > 0)) {
+            Utility.sessionExpired(this);
+            return;
+        }
         profile();
     }
 
@@ -76,11 +81,13 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
                             Utility.getStrAsDate(lastVisit, "yyyy-MM-dd HH:mm"),
                             "dd/MM/yyyy HH:mm")));
         }
-        mImgView.setImageResource(R.drawable.medstore);
+
         if (mServProv.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
             task.execute();
+        } else {
+            mImgView.setImageResource(R.drawable.medstore);
         }
     }
 
@@ -109,7 +116,6 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
                 break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
 
@@ -147,7 +153,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
 
     public void viewProfile(View view) {
         Intent intent = new Intent(this, ServProvProfileActivity.class);
-        intent.putExtra("service", mServProv);
+        //intent.putExtra("service", mServProv);
         intent.putExtra("category", getString(R.string.pharmacist));
         startActivity(intent);
     }

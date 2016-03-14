@@ -84,7 +84,7 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
     }
 
     private void setupForm(AppointmentListItem form) {
-        Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
+        Customer customer = (Customer) WorkingDataStore.getLoginRef();
         form.setIdCustomer(customer.getIdCustomer());
         Calendar cal = Calendar.getInstance();
         form.setDate(cal.getTime());
@@ -203,7 +203,6 @@ public class ViewAppointmentListActivity extends FragmentActivity implements Res
                 return true;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
 

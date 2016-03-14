@@ -50,7 +50,7 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         if (rxInboxItems == null) {
             getRxList();
         } else {
-            Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
+            Customer cust = (Customer) WorkingDataStore.getLoginRef();
             RxListAdapter adapter = new RxListAdapter(this, 0, rxInboxItems, cust);
             mRxListView.setAdapter(adapter);
             mRxListView.setOnItemClickListener(adapter);
@@ -63,7 +63,7 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
     private void getRxList() {
         //Utility.showProgress(this, mRxListView, mRxListProgress, true);
         RxInboxItem item = new RxInboxItem();
-        Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
+        Customer cust = (Customer) WorkingDataStore.getLoginRef();
         if (cust == null) {
             Utility.sessionExpired(this);
             return;
@@ -89,7 +89,7 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
         }
 
         ArrayList<RxInboxItem> list = data.getParcelableArrayList("inbox");
-        Customer cust = WorkingDataStore.getBundle().getParcelable("customer");
+        Customer cust = (Customer) WorkingDataStore.getLoginRef();
         RxListAdapter adapter = new RxListAdapter(this, 0, list, cust);
         mRxListView.setAdapter(adapter);
         mRxListView.setOnItemClickListener(adapter);
@@ -134,7 +134,6 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
                 break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("customer");
                 return true;
         }
         return super.onOptionsItemSelected(item);
