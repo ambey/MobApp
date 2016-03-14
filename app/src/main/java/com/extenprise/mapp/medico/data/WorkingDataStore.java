@@ -7,8 +7,17 @@ import android.os.Bundle;
  */
 public abstract class WorkingDataStore {
     private static Bundle bundle = new Bundle();
+    private static Object loginRef;
 
     public static Bundle getBundle() {
         return bundle;
+    }
+
+    public static Object getLoginRef() {
+        return loginRef;
+    }
+
+    public static void setLoginRef(Object loginRef) {
+        WorkingDataStore.loginRef = loginRef;
     }
 }
