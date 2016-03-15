@@ -187,7 +187,11 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        //startActivity(getIntent());
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         super.onBackPressed();
     }
 

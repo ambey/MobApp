@@ -149,7 +149,7 @@
         <item>@string/select_category</item>
         <item>@string/physician</item>
         <item>@string/pharmacist</item>
-        <item>@string/diagnostic_center</item>
+        <item>@string/diagnosticCenter</item>
     </string-array>
 
     <string-array name="report_service_status">

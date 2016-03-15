@@ -33,6 +33,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
     private RxInboxItem mRxInboxItem;
     private int mFeedback;
     private BitSet mAvailMap;
+    private ArrayList<RxItem> mRxItems;
 
     public RxItemListAdapter(Context context, int resource, ArrayList<RxInboxItem> rxInbox, RxInboxItem rxItem, int feedback) {
         super(context, resource);
@@ -46,21 +47,39 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
             for (int j = 0; j < rx.getRxItemCount(); j++) {
                 mAvailMap.set(j, (rxItems.get(j).getAvailable() == 1));
             }
+        } else {
+            mRxItems = new ArrayList<>();
+            int idMedStore = WorkingDataStore.getBundle().getInt("idMedStore");
+            for (int i = 0; i < mRxInboxItem.getRx().getRxItemCount(); i++) {
+                RxItem rItem = mRxInboxItem.getRx().getItems().get(i);
+                if (rItem.getIdServProvHasServPt() == idMedStore) {
+                    mRxItems.add(rItem);
+                }
+            }
         }
     }
 
     @Override
+    public RxItem getItem(int position) {
+        if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
+            return mRxInboxItem.getRx().getItems().get(position);
+        }
+        return mRxItems.get(position);
+    }
+
+    @Override
     public int getCount() {
+        int count = 0;
         try {
-            if (mFeedback != RxFeedback.GIVE_FEEDBACK) {
-                return mRxInboxItem.getRx().getRxItemCount();
+            if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
+                count = mRxInboxItem.getRx().getRxItemCount();
             } else {
-                return mRxInboxItem.getRx().getRxItemCount();
+                count = mRxItems.size();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
+        return count;
     }
 
     @Override
@@ -83,7 +102,7 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
         RadioButton notAvailableCB = (RadioButton) v.findViewById(R.id.rbNotAvailable);
         TextView availableView = (TextView) v.findViewById(R.id.viewAvailable);
 
-        final RxItem item = mRxInboxItem.getRx().getItems().get(position);
+        final RxItem item = getItem(position);
 
         if (mFeedback != RxFeedback.GIVE_FEEDBACK) {
             availableCB.setVisibility(View.GONE);

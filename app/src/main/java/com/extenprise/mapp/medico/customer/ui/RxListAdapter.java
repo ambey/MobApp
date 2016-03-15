@@ -91,7 +91,8 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
 
         String category = servProvItem.getCategory();
         if(category != null) {
-            if (category.equalsIgnoreCase(getContext().getString(R.string.diagnostic_center))) {
+            if (category.equalsIgnoreCase(getContext().getString(R.string.diagnostic_center)) ||
+                    category.equalsIgnoreCase(getContext().getString(R.string.diagnosticCenter))) {
                 lbl.setText("");
             }
         }
@@ -105,7 +106,11 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
             TextView medStoreAddrView = (TextView) v.findViewById(R.id.medStoreAddressView);
             TextView medStorePhView = (TextView) v.findViewById(R.id.medStorePhoneView);
 
-            ServProvListItem medStore = item.getMedStoreList().get(0);
+            int j = 0;
+            for (int i = 1; i < item.getMedStoreList().size(); i++) {
+                j = i;
+            }
+            ServProvListItem medStore = item.getMedStoreList().get(j);
             idMedStore = medStore.getIdServProvHasServPt();
             medStoreNameView.setText(medStore.getServPtName());
             fNameView.setText(medStore.getFirstName());
@@ -122,6 +127,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.putParcelable("rxItem", getItem(position));
+        bundle.putInt("idMedStore", idMedStore);
         bundle.putParcelableArrayList("inbox", mList);
         if (mSortField != null) {
             bundle.putString("sortField", mSortField);
@@ -130,7 +136,6 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         Intent intent = new Intent(getContext(), RxInboxItemDetailsActivity.class);
         intent.putExtra("feedback", RxFeedback.NONE);
         intent.putExtra("parent-activity", getContext().getClass().getName());
-        intent.putExtra("idMedStore", idMedStore);
         getContext().startActivity(intent);
     }
 

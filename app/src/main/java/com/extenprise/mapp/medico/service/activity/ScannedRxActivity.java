@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.Rx;
-import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -88,7 +87,6 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
                 break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
 

@@ -112,7 +112,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
             String category = mInboxItem.getServProv().getCategory();
             if (category != null) {
-                if (category.equalsIgnoreCase(getString(R.string.diagnostic_center))) {
+                if (category.equalsIgnoreCase(getString(R.string.diagnostic_center)) ||
+                        category.equalsIgnoreCase(getString(R.string.diagnosticCenter))) {
                     lbl.setText("");
                 }
             }

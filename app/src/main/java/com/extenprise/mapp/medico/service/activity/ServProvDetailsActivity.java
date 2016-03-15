@@ -64,7 +64,8 @@ public class ServProvDetailsActivity extends Activity {
             imageView.setImageResource(R.drawable.medstore);
             lbl.setText("");
         }
-        if (category.equalsIgnoreCase(getString(R.string.diagnosticCenter))) {
+        if (category.equalsIgnoreCase(getString(R.string.diagnosticCenter)) ||
+                category.equals(getString(R.string.diagnostic_center))) {
             imageView.setImageResource(R.drawable.diagcenter);
             lbl.setText("");
         }
