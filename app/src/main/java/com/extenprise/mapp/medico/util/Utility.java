@@ -13,8 +13,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -50,6 +52,7 @@ import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.net.AppStatus;
 import com.extenprise.mapp.medico.net.ErrorCode;
 import com.extenprise.mapp.medico.net.MappService;
+import com.extenprise.mapp.medico.ui.PhotoCropActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,7 +68,6 @@ import java.util.Date;
 
 public abstract class Utility {
     public static final String photoFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "photo.jpg";
-    public static final String photoEditFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "photoEdit.jpg";
 
     private static ProgressDialog _progressDialog;
 
@@ -393,6 +395,29 @@ public abstract class Utility {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         return stream.toByteArray();
+    }
+
+    public static Bitmap getBitmapFromUri(Context context, Uri photoUri) throws IOException {
+        InputStream is = context.getContentResolver().openInputStream(photoUri);
+        if (is == null) {
+            return null;
+        }
+        int orientation = getOrientation(context, photoUri);
+        Bitmap srcBitmap = BitmapFactory.decodeStream(is);
+        is.close();
+
+        /*
+         * if the orientation is not 0 (or -1, which means we don't know), we
+         * have to do a rotation.
+         */
+        if (orientation > 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(orientation);
+
+            srcBitmap = Bitmap.createBitmap(srcBitmap, 0, 0, srcBitmap.getWidth(),
+                    srcBitmap.getHeight(), matrix, true);
+        }
+        return srcBitmap;
     }
 
     public static Bitmap getBitmapFromBytes(byte[] image, int width, int height) {
@@ -859,70 +884,64 @@ public abstract class Utility {
     }
 */
 
-    public static Uri onPhotoActivityResult(Context context, int requestCode, int resultCode, Intent data) {
-        try {
-            Bitmap bitmap;
-            Resources resources = context.getResources();
-            if (resultCode == Activity.RESULT_OK) {
-                if (data == null) {
-                    return Uri.fromFile(new File(Utility.photoFileName));
-                } else {
-                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
-                        return data.getData();
-                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
-                        bitmap = (Bitmap) data.getExtras().get("data");
-                        return Utility.getImageUri(context, bitmap);
-                    } else {
-                        Utility.showMessage(context, R.string.error_img_not_picked);
-                    }
-                }
+    public static Uri getPhotoUri(Context context, int requestCode, Intent data) {
+        Resources resources = context.getResources();
+        if (data == null) {
+            return Uri.fromFile(new File(Utility.photoFileName));
+        } else {
+            if (requestCode == resources.getInteger(R.integer.request_gallery)) {
+                return data.getData();
+            } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                return Utility.getImageUri(context, bitmap);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utility.showMessage(context, R.string.some_error);
         }
         return null;
     }
 
-    public static boolean onPhotoActivityResult(Context context, final ImageView imageView, int requestCode, int resultCode, Intent data) {
-        boolean imageChanged = false;
-        try {
-            Uri selectedImage;
-            Bitmap bitmap;
-            Resources resources = context.getResources();
-            // When an Image is picked
-            if (resultCode == Activity.RESULT_OK) {
-                imageView.setBackgroundResource(0);
-                if (data == null) {
-                    String photoFileName = Utility.photoFileName;
-                    //File photo = new File(photoFileName);
-                    selectedImage = Uri.fromFile(new File(photoFileName));
-                    bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
-                    setUpImage(context, imageView, bitmap, null);
-                    //imageView.setImageURI(selectedImage);
-                    imageChanged = true;
-                } else {
-                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
-                        // Get the Image from data
-                        selectedImage = data.getData();
-                        bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
-                        setUpImage(context, imageView, bitmap, data);
-                        //imageView.setImageURI(selectedImage);
-                        imageChanged = true;
-                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
-                        bitmap = (Bitmap) data.getExtras().get("data");
-                        setUpImage(context, imageView, bitmap, data);
-                        imageChanged = true;
-                    } else {
-                        Utility.showMessage(context, R.string.error_img_not_picked);
-                    }
-                }
+    public static void onPhotoActivityResult(final Activity activity, final int requestCode, int resultCode, Intent data) {
+        if ((requestCode == activity.getResources().getInteger(R.integer.request_camera) ||
+                requestCode == activity.getResources().getInteger(R.integer.request_gallery)) &&
+                resultCode == Activity.RESULT_OK) {
+            Uri image = Utility.getPhotoUri(activity, requestCode, data);
+            if (image == null) {
+                return;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utility.showMessage(context, R.string.some_error);
+            UriToBitmapTask task = new UriToBitmapTask(activity, image) {
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    super.onPostExecute(bitmap);
+                    BitmapToByteArrayTask byteArrayTask = new BitmapToByteArrayTask(null, bitmap) {
+                        @Override
+                        protected void onPostExecute(byte[] bytes) {
+                            super.onPostExecute(bytes);
+                            Utility.showProgressDialog(activity, false);
+                            WorkingDataStore.getBundle().putByteArray("photo", bytes);
+                            Intent intent = new Intent(activity, PhotoCropActivity.class);
+                            activity.startActivityForResult(intent, activity.getResources().getInteger(R.integer.request_edit));
+                        }
+                    };
+                    byteArrayTask.execute();
+                }
+            };
+            task.execute();
+            Utility.showProgressDialog(activity, true);
         }
-        return imageChanged;
+    }
+
+    public static int getOrientation(Context context, Uri photoUri) {
+        /* it's on the external media. */
+        Cursor cursor = context.getContentResolver().query(photoUri,
+                new String[]{MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
+
+        if (cursor == null || cursor.getCount() != 1) {
+            return -1;
+        }
+
+        cursor.moveToFirst();
+        int orientation = cursor.getInt(0);
+        cursor.close();
+        return orientation;
     }
 
     private static void setUpImage(Context context, final ImageView imageView, Bitmap bitmap, Intent data) {

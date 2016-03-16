@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -34,7 +33,6 @@ import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
 import com.extenprise.mapp.medico.net.ServiceResponseHandler;
-import com.extenprise.mapp.medico.ui.PhotoCropActivity;
 import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.DateChangeListener;
@@ -692,19 +690,9 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == getResources().getInteger(R.integer.request_camera) ||
-                requestCode == getResources().getInteger(R.integer.request_gallery)) &&
-                resultCode == RESULT_OK) {
-            Uri image = Utility.onPhotoActivityResult(this, requestCode, resultCode, data);
-            if (image == null) {
-                return;
-            }
-            WorkingDataStore.getBundle().putParcelable("uri", image);
-            Intent intent = new Intent(this, PhotoCropActivity.class);
-            startActivityForResult(intent, getResources().getInteger(R.integer.request_edit));
-        } else if (requestCode == getResources().getInteger(R.integer.request_edit) &&
-                resultCode == RESULT_OK) {
-            byte[] image = WorkingDataStore.getBundle().getByteArray("image");
+        if (requestCode == getResources().getInteger(R.integer.request_edit) &&
+                resultCode == Activity.RESULT_OK) {
+            byte[] image = WorkingDataStore.getBundle().getByteArray("photo");
             if (image != null) {
                 ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, image,
                         mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
@@ -714,6 +702,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                 c.setPhoto(image);
                 taskCompleted(MappService.DO_UPLOAD_PHOTO, c);
             }
+        } else {
+            Utility.onPhotoActivityResult(this, requestCode, resultCode, data);
         }
     }
 
