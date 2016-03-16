@@ -32,6 +32,7 @@ import com.extenprise.mapp.medico.net.ServiceResponseHandler;
 import com.extenprise.mapp.medico.service.data.ServiceProvider;
 import com.extenprise.mapp.medico.ui.TitleFragment;
 import com.extenprise.mapp.medico.util.BitmapToByteArrayTask;
+import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.Utility;
 import com.extenprise.mapp.medico.util.Validator;
@@ -56,6 +57,8 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     private EditText mRegistrationNumber;
     private ImageView mImgView;
     private View mRootView;
+    private boolean imageChanged = false;
+    private int defaultImg;
 /*
     private int requestGallery = 100;
     private int requestCamera = 200;
@@ -131,12 +134,14 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
 
         mImgView = (ImageView) mRootView.findViewById(R.id.uploadimageview);
         category = getActivity().getIntent().getIntExtra("category", R.string.practitioner);
+        defaultImg = R.drawable.dr_avatar;
         if (category == R.string.pharmacist) {
-            mImgView.setImageResource(R.drawable.medstore);
+            defaultImg = R.drawable.medstore;
         } else if (category == R.string.diagnosticCenter ||
                 category == R.string.diagnostic_center) {
-            mImgView.setImageResource(R.drawable.diagcenter);
+            defaultImg = R.drawable.diagcenter;
         }
+        mImgView.setImageResource(defaultImg);
 
         /*mRegistrationNumber.addTextChangedListener(new TextWatcher() {
 
@@ -260,12 +265,17 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
     }
 
     public void captureImage(View v) {
+        String[] opts = new String[]{getString(R.string.take_photo),
+                getString(R.string.from_gallery)};
+        if (imageChanged) {
+            opts = new String[]{getString(R.string.take_photo),
+                    getString(R.string.from_gallery),
+                    getString(R.string.remove)};
+        }
         final Activity activity = getActivity();
         final File destination = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
         Utility.showAlert(activity, getString(R.string.profile_photo), null, null, false,
-                new String[]{activity.getString(R.string.take_photo),
-                        activity.getString(R.string.from_gallery),
-                        activity.getString(R.string.remove)}, new DialogInterface.OnClickListener() {
+                opts, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -277,13 +287,8 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
                                 Utility.pickPhotoFromGallery(activity, getResources().getInteger(R.integer.request_gallery));
                                 break;
                             case 2:
-                                mImgView.setImageBitmap(null);
-                                mImgView.setImageResource(R.drawable.dr_avatar);
-                                if (category == R.string.pharmacist) {
-                                    mImgView.setImageResource(R.drawable.medstore);
-                                } else if (category == R.string.diagnosticCenter || category == R.string.diagnostic_center) {
-                                    mImgView.setImageResource(R.drawable.diagcenter);
-                                }
+                                mImgView.setImageResource(defaultImg);
+                                imageChanged = false;
                                 break;
                         }
                     }
@@ -296,61 +301,19 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Utility.onPhotoActivityResult(getActivity(), mImgView, requestCode, resultCode, data);
-       /* //super.onActivityResult(requestCode, resultCode, data);
-        try {
-            boolean imageChanged = false;
-            Uri selectedImage = null;
-            Resources resources = getResources();
-            int requestEdit = resources.getInteger(R.integer.request_edit);
-            // When an Image is picked
-            if (resultCode == Activity.RESULT_OK) {
-                mImgView.setBackgroundResource(0);
-                if (data == null || requestCode == resources.getInteger(R.integer.request_edit)) {
-                    String photoFileName = Utility.photoFileName;
-                    if (requestCode == resources.getInteger(R.integer.request_edit)) {
-                        photoFileName = Utility.photoEditFileName;
-                    }
-                    //File photo = new File(photoFileName);
-                    selectedImage = Uri.fromFile(new File(photoFileName));
-                    mImgView.setImageURI(selectedImage);
-                    imageChanged = true;
-                } else {
-                    if (requestCode == resources.getInteger(R.integer.request_gallery)) {
-                        // Get the Image from data
-                        selectedImage = data.getData();
-                        mImgView.setImageURI(selectedImage);
-                        imageChanged = true;
-                    } else if (requestCode == resources.getInteger(R.integer.request_camera)) {
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                        if (bitmap != null) {
-                            mImgView.setImageBitmap(bitmap);
-                            selectedImage = Utility.getImageUri(getActivity(), bitmap);
-                        } else {
-                            selectedImage = data.getData();
-                        }
-                        mImgView.setImageURI(selectedImage);
-                        imageChanged = true;
-                    } else {
-                        Utility.showMessage(getActivity(), R.string.error_img_not_picked);
-                    }
-                }
-            } else if (requestCode == requestEdit) {
+        //Utility.onPhotoActivityResult(getActivity(), mImgView, requestCode, resultCode, data);
+        if (requestCode == getResources().getInteger(R.integer.request_edit) &&
+                resultCode == Activity.RESULT_OK) {
+            byte[] image = WorkingDataStore.getBundle().getByteArray("photo");
+            if (image != null) {
+                ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, image,
+                        mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
+                task.execute();
                 imageChanged = true;
             }
-            if (imageChanged) {
-                if (requestCode != requestEdit) {
-                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                    editIntent.setDataAndType(selectedImage, "image*//*");
-                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Utility.photoEditFileName)));
-                    getActivity().startActivityForResult(editIntent, requestEdit);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utility.showMessage(getActivity(), R.string.some_error);
-        }*/
+        } else {
+            Utility.onPhotoActivityResult(getActivity(), requestCode, resultCode, data);
+        }
     }
 
     public void saveData() {
@@ -359,13 +322,19 @@ public class ServProvSignUpFragment extends Fragment implements ResponseHandler,
             sp = new ServiceProvider();
             WorkingDataStore.getBundle().putParcelable("servProv", sp);
         }
-        try {
+        if (imageChanged) {
+            BitmapToByteArrayTask task = new BitmapToByteArrayTask(sp, ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
+            task.execute();
+        } else {
+            sp.setPhoto(null);
+        }
+        /*try {
             BitmapToByteArrayTask task = new BitmapToByteArrayTask(sp,
                     ((BitmapDrawable) mImgView.getDrawable()).getBitmap());
             task.execute();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         sp.setfName(mFirstName.getText().toString().trim());
         sp.setlName(mLastName.getText().toString().trim());
         sp.setPhone(mCellphoneview.getText().toString().trim());

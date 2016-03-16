@@ -110,13 +110,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mEditTextCustomerFName.setText(mCust.getfName());
         mEditTextCustomerLName.setText(mCust.getlName());
         mEditTextCustomerEmail.setText(mCust.getEmailId());
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        sdf.applyPattern("dd/MM/yyyy");
-        Date dt = mCust.getDob();
-        if (dt != null) {
-            String dob = sdf.format(mCust.getDob());
-            mTextViewDOB.setText(dob);
-        }
+        mTextViewDOB.setText(Utility.getDateAsStr(mCust.getDob(), "dd/MM/yyyy"));
         mSpinGender.setSelection(Utility.getSpinnerIndex(mSpinGender, mCust.getGender()));
         mEditTextHeight.setText(String.format("%.1f", mCust.getHeight()));
         mEditTextWeight.setText(String.format("%.1f", mCust.getWeight()));
@@ -300,16 +294,30 @@ public class PatientProfileActivity extends FragmentActivity implements Response
             return;
         }
 
+        if (mCust.getfName().equalsIgnoreCase(mEditTextCustomerFName.getText().toString().trim()) &&
+                mCust.getlName().equalsIgnoreCase(mEditTextCustomerLName.getText().toString().trim()) &&
+                mCust.getEmailId().equalsIgnoreCase(mEditTextCustomerEmail.getText().toString().trim()) &&
+                mCust.getGender().equalsIgnoreCase(mSpinGender.getSelectedItem().toString()) &&
+                mCust.getLocation().equalsIgnoreCase(mEditTextLoc.getText().toString().trim()) &&
+                mCust.getCity().getCity().equalsIgnoreCase(mSpinCity.getText().toString().trim()) &&
+                mCust.getPincode().equalsIgnoreCase(mEditTextPinCode.getText().toString().trim()) &&
+                mCust.getCity().getState().equalsIgnoreCase(mSpinState.getSelectedItem().toString()) &&
+                mCust.getHeight() == Float.parseFloat(mEditTextHeight.getText().toString().trim()) &&
+                mCust.getWeight() == Float.parseFloat(mEditTextWeight.getText().toString().trim()) &&
+                Utility.getDateAsStr(mCust.getDob(), "dd/MM/yyyy").equals(mTextViewDOB.getText().toString())) {
+
+            Utility.showMessage(this, R.string.msg_no_change_found);
+            return;
+        }
+
         Bundle bundle = new Bundle();
         bundle.putInt("loginType", MappService.CUSTOMER_LOGIN);
         bundle.putParcelable("customer", setupUpdateData(new Customer(), false));
         mConnection.setData(bundle);
         mConnection.setAction(MappService.DO_UPDATE);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            //Utility.showProgress(this, mFormView, mProgressView, true);
             Utility.showProgressDialog(this, true);
         }
-        //sendRequest(getUpdateData(), MappService.DO_UPDATE);
     }
 
     private void changePwdDone(Bundle data) {
@@ -395,9 +403,12 @@ public class PatientProfileActivity extends FragmentActivity implements Response
                     dialog.dismiss();
                 }
             });
+
             //Customer customer = WorkingDataStore.getBundle().getParcelable("customer");
             Customer cust = (Customer) WorkingDataStore.getLoginRef();
-            setupUpdateData(cust, true);
+            setupUpdateData(cust, false);
+            mPname.setText(String.format("%s %s\n(%d years)", cust.getfName(), cust.getlName(),
+                    Utility.getAge(cust.getDob())));
 
             setPersonalInfoEditable(false);
             setAddressEditable(false);
@@ -443,7 +454,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         c.setPincode(mEditTextPinCode.getText().toString().trim());
         c.getCity().setCity(mSpinCity.getText().toString().trim());
         c.getCity().setState(mSpinState.getSelectedItem().toString());
-        c.getCity().setCountry("India");
+        c.getCity().setCountry(getString(R.string.india));
 
         return c;
     }
@@ -743,7 +754,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         mConnection.setData(bundle);
         mConnection.setAction(action);
         if (Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE)) {
-            //Utility.showProgress(this, mFormView, mProgressView, true);
+            //Utility.showProgresmFormViewFormView, mProgressView, true);
             Utility.showProgressDialog(this, true);
         }
     }

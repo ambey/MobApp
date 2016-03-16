@@ -45,4 +45,5 @@
     <string name="msg_select_edit_work_place">Please select a work place to edit.</string>
     <string name="msg_loading_home_page">Loading Home Page…</string>
     <string name="msg_doc_unavailable">Doctor is not available on the given date.</string>
+    <string name="msg_no_change_found">You have not changed anything in Profile</string>
 </resources>

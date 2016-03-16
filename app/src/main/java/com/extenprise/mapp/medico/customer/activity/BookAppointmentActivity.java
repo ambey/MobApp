@@ -2,6 +2,7 @@ package com.extenprise.mapp.medico.customer.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -245,7 +246,7 @@ public class BookAppointmentActivity extends Activity
         return data.getBoolean("status");
     }
 
-/*
+
     @Override
     public Intent getParentActivityIntent() {
         return super.getParentActivityIntent();
@@ -261,5 +262,4 @@ public class BookAppointmentActivity extends Activity
         }
         super.onBackPressed();
     }
-*/
 }

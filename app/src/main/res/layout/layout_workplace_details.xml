@@ -16,7 +16,8 @@
             android:layout_alignBottom="@+id/viewWorkPlaceType"
             android:layout_marginTop="10dp"
             android:hint="@string/name"
-            android:inputType="textNoSuggestions" />
+            android:inputType="textNoSuggestions"
+            android:maxLength="40" />
 
         <Spinner
             android:id="@+id/viewWorkPlaceType"
@@ -42,7 +43,8 @@
             android:layout_alignBottom="@+id/editTextCity"
             android:layout_marginTop="10dp"
             android:hint="@string/loc"
-            android:inputType="textNoSuggestions" />
+            android:inputType="textNoSuggestions"
+            android:maxLength="40" />
 
 
         <Spinner
@@ -131,7 +133,8 @@
             android:layout_below="@+id/editTextPhone1"
             android:layout_marginTop="10dp"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:maxLength="40" />
     </RelativeLayout>
 
 

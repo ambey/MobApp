@@ -79,56 +79,56 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/srNoLblTextView"
+                android:layout_marginTop="10dp"
                 android:text="@string/bp_view"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/bpLText"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/bp"
-                android:inputType="number"
-               android:layout_toRightOf="@+id/bPTextView"
                 android:layout_below="@+id/srNoLblTextView"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+               android:layout_toRightOf="@+id/bPTextView"
+                android:hint="@string/bp"
+                android:inputType="number" />
             <TextView
                 android:id="@+id/mark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/srNoLblTextView"
                 android:layout_toRightOf="@+id/bpLText"
                 android:text="/"
                 android:textStyle="bold"
-                android:layout_below="@+id/srNoLblTextView"
 
                 />
             <EditText
                 android:id="@+id/bpHText"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/bp"
-                android:inputType="number"
-                android:layout_toRightOf="@+id/mark"
                 android:layout_below="@+id/srNoLblTextView"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/mark"
+                android:hint="@string/bp"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/tempTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bPTextView"
+                android:layout_marginTop="20dp"
                 android:text="@string/temp"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"/>
+                android:textStyle="bold" />
             <EditText
                 android:id="@+id/tempText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/temp_val"
-                android:inputType="number"
-                android:layout_toRightOf="@+id/bPTextView"
                 android:layout_below="@+id/bPTextView"
                 android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/bPTextView"
+                android:hint="@string/temp_val"
+                android:inputType="number"
               />
 
 
@@ -146,7 +146,8 @@
                     android:layout_gravity="bottom"
                     android:layout_weight="0.5"
                     android:hint="@string/drug_name"
-                    android:inputType="textNoSuggestions" />
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25" />
 
                 <Spinner
                     android:id="@+id/drugFormSpinner"
@@ -164,7 +165,8 @@
                     android:layout_gravity="bottom"
                     android:layout_weight="0.2"
                     android:hint="@string/days"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="2" />
 
             </LinearLayout>
 
@@ -298,7 +300,8 @@
                 android:layout_marginTop="10dp"
                 android:gravity="start"
                 android:hint="@string/intake_steps"
-                android:inputType="textNoSuggestions" />
+                android:inputType="textNoSuggestions"
+                android:maxLength="60" />
 
             <LinearLayout
                 android:id="@+id/altDrugLayout"
@@ -312,7 +315,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="@string/alt_drug"
-                    android:inputType="textNoSuggestions" />
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25" />
 
                 <Spinner
                     android:id="@+id/altDrugFormSpinner"

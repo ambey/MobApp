@@ -88,7 +88,8 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWd"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLength="40" />
 
             <EditText
                 android:id="@+id/editTextConPasswd"
@@ -97,7 +98,8 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/passWdCon"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLength="40" />
 
             <include
                 android:id="@+id/customerInfo"

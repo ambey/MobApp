@@ -300,7 +300,7 @@ public class LoginActivity extends Activity implements ResponseHandler {
             /* hide the soft keyboard and show the message */
                 Utility.hideSoftKeyboard(this);
                 Utility.showMessage(this, R.string.error_user_type_required);
-                return;
+                cancel = true;
             } else {
                 RadioButton mRadioButtonUType;
                 mRadioButtonUType = (RadioButton) findViewById(uTypeID);

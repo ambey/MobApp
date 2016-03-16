@@ -7,7 +7,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -310,14 +309,12 @@ public class SearchServProvActivity extends Activity implements ResponseHandler,
         return success;
     }
 
-    @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        Intent intent = super.getParentActivityIntent();
         if (WorkingDataStore.getLoginRef() != null) {
-            intent = new Intent(this, PatientsHomeScreenActivity.class);
+            return new Intent(this, PatientsHomeScreenActivity.class);
         }
-        return intent;
+        return super.getParentActivityIntent();
     }
 
     @Override

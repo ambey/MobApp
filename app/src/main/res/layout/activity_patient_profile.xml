@@ -28,6 +28,13 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/patient" />
 
+            <ProgressBar
+                android:id="@+id/progressView"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/textViewEditImage"
                 android:layout_width="20dp"
@@ -61,15 +68,6 @@
                 android:layout_marginTop="30dp"
                 android:background="#9d9d9d" />
 
-            <ProgressBar
-                android:id="@+id/progressView"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linenView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="fill_parent"

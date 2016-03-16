@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 //import org.w3c.dom.Text;
 
@@ -98,7 +99,8 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
         }
 
         View medStoreLayout = v.findViewById(R.id.medStoreLayout);
-        if (item.getMedStoreList() != null && item.getMedStoreList().size() > 0) {
+        List<ServProvListItem> listMedSt = item.getMedStoreList();
+        if (listMedSt != null && listMedSt.size() > 0) {
             medStoreLayout.setVisibility(View.VISIBLE);
             TextView medStoreNameView = (TextView) v.findViewById(R.id.medStoreNameView);
             TextView fNameView = (TextView) v.findViewById(R.id.firstNameView);
@@ -106,11 +108,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
             TextView medStoreAddrView = (TextView) v.findViewById(R.id.medStoreAddressView);
             TextView medStorePhView = (TextView) v.findViewById(R.id.medStorePhoneView);
 
-            int j = 0;
-            for (int i = 1; i < item.getMedStoreList().size(); i++) {
-                j = i;
-            }
-            ServProvListItem medStore = item.getMedStoreList().get(j);
+            ServProvListItem medStore = item.getMedStoreList().get(listMedSt.size() - 1);
             idMedStore = medStore.getIdServProvHasServPt();
             medStoreNameView.setText(medStore.getServPtName());
             fNameView.setText(medStore.getFirstName());

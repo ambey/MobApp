@@ -313,11 +313,10 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     @Override
     public Intent getParentActivityIntent() {
         removeData();
-        Intent intent = super.getParentActivityIntent();
         /*if (intent != null) {
             intent.putExtra("service", mServProv);
         }*/
-        return intent;
+        return super.getParentActivityIntent();
     }
 
     private void removeData() {

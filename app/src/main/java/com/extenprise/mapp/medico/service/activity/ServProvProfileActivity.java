@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -46,7 +45,6 @@ import com.extenprise.mapp.medico.service.data.WorkPlace;
 import com.extenprise.mapp.medico.service.ui.WorkPlaceListAdapter;
 import com.extenprise.mapp.medico.ui.DaysSelectionDialog;
 import com.extenprise.mapp.medico.ui.DialogDismissListener;
-import com.extenprise.mapp.medico.ui.PhotoCropActivity;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.EncryptUtil;
 import com.extenprise.mapp.medico.util.PhotoTaskCompleteListener;
@@ -989,32 +987,26 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 });
     }
 
-/*
-    public void removePhoto(View view) {
-        final Activity activity = this;
-        Utility.showAlert(activity, getString(R.string.confirm_remove_photo), "", null, true, null,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == AlertDialog.BUTTON_POSITIVE) {
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("loginType", MappService.SERVICE_LOGIN);
-                            ServiceProvider sp = new ServiceProvider();
-                            sp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
-                            bundle.putParcelable("service", sp);
-                            mConnection.setData(bundle);
-                            mConnection.setAction(MappService.DO_REMOVE_PHOTO);
-                            if (Utility.doServiceAction(activity, mConnection, BIND_AUTO_CREATE)) {
-                                Utility.showProgressDialog(activity, true);
-                            }
-                        }
-                        dialog.dismiss();
-                    }
-                });
-    }
-*/
-
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == getResources().getInteger(R.integer.request_edit) &&
+                resultCode == Activity.RESULT_OK) {
+            byte[] image = WorkingDataStore.getBundle().getByteArray("photo");
+            if (image != null) {
+                ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, image,
+                        mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
+                task.execute();
+                ServiceProvider sp = new ServiceProvider();
+                sp.getSignInData().setPhone(mServiceProv.getSignInData().getPhone());
+                sp.setPhoto(image);
+                taskCompleted(MappService.DO_UPLOAD_PHOTO, sp);
+            }
+        } else {
+            Utility.onPhotoActivityResult(this, requestCode, resultCode, data);
+        }
+    }
+
+   /* @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == getResources().getInteger(R.integer.request_camera) ||
                 requestCode == getResources().getInteger(R.integer.request_gallery)) &&
@@ -1039,11 +1031,11 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 taskCompleted(MappService.DO_UPLOAD_PHOTO, sp);
             }
         }
-        /*if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
+        *//*if (Utility.onPhotoActivityResult(this, mImgView, requestCode, resultCode, data)) {
             mServiceProv.setPhoto(Utility.getBytesFromBitmap(((BitmapDrawable) mImgView.getDrawable()).getBitmap()));
             sendRequest(MappService.DO_UPLOAD_PHOTO, null);
-        }*/
-    }
+        }*//*
+    }*/
 
     /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

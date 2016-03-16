@@ -18,6 +18,7 @@
             android:hint="@string/first_name"
             android:imeOptions="actionNext"
             android:inputType="textNoSuggestions"
+            android:maxLength="25"
             android:nextFocusForward="@+id/editTextLName"
             android:textColor="@color/black" />
 
@@ -32,6 +33,7 @@
             android:hint="@string/last_name"
             android:imeOptions="actionNext"
             android:inputType="textNoSuggestions"
+            android:maxLength="25"
             android:nextFocusForward="@+id/editTextCellphone" />
 
     </LinearLayout>
@@ -73,6 +75,7 @@
         android:hint="@string/email"
         android:imeOptions="actionNext"
         android:inputType="textEmailAddress"
+        android:maxLength="40"
         android:nextFocusForward="@+id/editTextPasswd" />
 
     <EditText
@@ -83,6 +86,7 @@
         android:hint="@string/passWd"
         android:imeOptions="actionNext"
         android:inputType="textPassword"
+        android:maxLength="40"
         android:nextFocusForward="@+id/editTextCnfPasswd" />
 
     <EditText
@@ -93,6 +97,7 @@
         android:hint="@string/passWdCon"
         android:imeOptions="actionNext"
         android:inputType="textPassword"
+        android:maxLength="40"
         android:nextFocusForward="@+id/editTextRegistrationNumber" />
 
     <RadioGroup
@@ -126,6 +131,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/reg_no"
-        android:inputType="textNoSuggestions" />
+        android:inputType="textNoSuggestions"
+        android:maxLength="40" />
 
 </LinearLayout>

@@ -72,7 +72,11 @@
         <activity
             android:name=".customer.activity.SearchServProvActivity"
             android:label="@string/title_activity_search_doctor"
+            android:parentActivityName=".activity.LoginActivity"
             android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.LoginActivity" />
 
             <!--
             <intent-filter>
