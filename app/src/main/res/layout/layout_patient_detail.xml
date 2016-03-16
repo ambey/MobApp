@@ -277,4 +277,49 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textViewPrefMedStore"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/label"
+        android:clickable="true"
+        android:onClick="showFields"
+        android:text="@string/preff_medstore"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTextMedStoreCity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="0.5"
+            android:hint="@string/preffmedcity"
+            android:inputType="number"
+            android:maxLength="6" />
+
+        <Spinner
+            android:id="@+id/editTextMedStore"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+
+            android:layout_weight="0.5"
+            android:background="@drawable/spinner"
+            android:entries="@array/preffmedstorelist"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="5dp"
+            android:prompt="@string/preffmedstore" />
+
+    </LinearLayout>
+
+
 </LinearLayout>

@@ -275,4 +275,12 @@
     <string name="phone_email">Phone and Email ID</string>
     <string name="fees_notes">Fees and Notes</string>
     <string name="qual_exp">Qualification and Experience</string>
+    <string name="preff_medstore">Preferred Pharmacy</string>
+    <string name="preffmedcity">City</string>
+    <string name="preffmedstore">Medical Store</string>
+    <string name="bp_view">Blood Pressure :</string>
+    <string name="bp">BP</string>
+    <string name="temp">Temperature :</string>
+    <string name="temp_val">Temperature</string>
+
 </resources>

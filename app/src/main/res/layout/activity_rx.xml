@@ -74,11 +74,69 @@
                 android:layout_toRightOf="@id/srNoLblTextView"
                 android:text="@string/srno" />
 
+            <TextView
+                android:id="@+id/bPTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/srNoLblTextView"
+                android:text="@string/bp_view"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:id="@+id/bpLText"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/bp"
+                android:inputType="number"
+               android:layout_toRightOf="@+id/bPTextView"
+                android:layout_below="@+id/srNoLblTextView"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:id="@+id/mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/bpLText"
+                android:text="/"
+                android:textStyle="bold"
+                android:layout_below="@+id/srNoLblTextView"
+
+                />
+            <EditText
+                android:id="@+id/bpHText"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/bp"
+                android:inputType="number"
+                android:layout_toRightOf="@+id/mark"
+                android:layout_below="@+id/srNoLblTextView"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tempTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bPTextView"
+                android:text="@string/temp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"/>
+            <EditText
+                android:id="@+id/tempText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/temp_val"
+                android:inputType="number"
+                android:layout_toRightOf="@+id/bPTextView"
+                android:layout_below="@+id/bPTextView"
+                android:layout_marginLeft="10dp"
+              />
+
+
             <LinearLayout
                 android:id="@+id/drugNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="80dp"
                 android:orientation="horizontal">
 
                 <EditText

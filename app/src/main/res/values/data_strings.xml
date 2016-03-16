@@ -280,4 +280,10 @@
     <string name="by_medstore">Pharmacy Name</string>
     <string name="by_medstore_owner">Pharmacy Owner</string>
 
+    <string-array name="preffmedstorelist">
+        <item>Sanjivani</item>
+
+
+    </string-array>
+
 </resources>
