@@ -500,6 +500,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             Log.v("RxActivity", "Saved Rx, id: " + mRx.getIdReport());
         }
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
+        intent.putExtra("parent-activity", mParentActivity);
         intent.putExtra("rx", mRx);
         intent.putExtra("appont", mAppont);
         //intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
@@ -519,21 +520,26 @@ public class RxActivity extends Activity implements ResponseHandler {
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
+        Intent intent;
         try {
-            Intent intent = new Intent(this, Class.forName(mParentActivity));
+            intent = new Intent(this, Class.forName(mParentActivity));
             intent.putExtra("appont", mAppont);
             intent.putExtra("feedback", mFeedback);
-            //intent.putParcelableArrayListExtra("inbox", mInbox);
-            return intent;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            intent = super.getParentActivityIntent();
         }
-        return super.getParentActivityIntent();
+        return intent;
     }
 
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         //startActivity(getIntent());
         super.onBackPressed();
     }

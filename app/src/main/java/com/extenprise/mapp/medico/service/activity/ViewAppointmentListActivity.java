@@ -254,6 +254,11 @@ public class ViewAppointmentListActivity extends FragmentActivity
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         //startActivity(getIntent());
         super.onBackPressed();
     }

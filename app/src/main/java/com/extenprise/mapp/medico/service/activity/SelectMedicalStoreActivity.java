@@ -18,6 +18,7 @@ import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.data.ReportServiceStatus;
 import com.extenprise.mapp.medico.data.Rx;
+import com.extenprise.mapp.medico.data.RxFeedback;
 import com.extenprise.mapp.medico.net.MappService;
 import com.extenprise.mapp.medico.net.MappServiceConnection;
 import com.extenprise.mapp.medico.net.ResponseHandler;
@@ -156,6 +157,8 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
         }
         if (intent != null) {
             intent.putExtra("appont", getIntent().getParcelableExtra("appont"));
+            intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
+            intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         }
         return intent;
     }

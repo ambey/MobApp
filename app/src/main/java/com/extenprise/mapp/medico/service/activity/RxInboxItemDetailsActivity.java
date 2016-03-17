@@ -43,6 +43,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     private RxInboxItem mInboxItem;
     private Button mSendAvailButton;
     private BitSet mAvailMap;
+    private String mParentActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         }
         int feedback = intent.getIntExtra("feedback", RxFeedback.NONE);
         mAvailMap = (BitSet) intent.getSerializableExtra("availMap");
+        mParentActivity = intent.getStringExtra("parent-activity");
 
         Bundle workingData = WorkingDataStore.getBundle();
         ArrayList<RxInboxItem> mInbox = workingData.getParcelableArrayList("inbox");
@@ -299,34 +301,19 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
         if (intent == null) {
-            String parentActivityClass = getIntent().getStringExtra("parent-activity");
-            if (parentActivityClass != null) {
+            //String parentActivityClass = getIntent().getStringExtra("parent-activity");
+            if (mParentActivity != null) {
                 try {
-                    intent = new Intent(this, Class.forName(parentActivityClass));
+                    intent = new Intent(this, Class.forName(mParentActivity));
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
-            if (intent == null) {
-                return null;
-            }
         }
-/*
-        ReportService service = mInboxItem.getReportService();
-        if(service != null) {
-            if (service.getStatus() == ReportServiceStatus.STATUS_NEW) {
-                service.setStatus(ReportServiceStatus.STATUS_PENDING);
-            }
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("report_service", service);
-            mConnection.setData(bundle);
-            mConnection.setAction(MappService.DO_UPDATE_REPORT_STATUS);
-            Utility.doServiceAction(this, mConnection, BIND_AUTO_CREATE);
-
+        if (intent != null) {
+            intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
+            intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         }
-*/
-        intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
-        intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         return intent;
     }
 
@@ -371,8 +358,11 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        //startActivity(getIntent());
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         super.onBackPressed();
     }
-
 }

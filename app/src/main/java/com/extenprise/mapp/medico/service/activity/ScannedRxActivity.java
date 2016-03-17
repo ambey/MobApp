@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -250,9 +251,29 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         }
 
     */
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent intent;
+        try {
+            intent = new Intent(this, Class.forName(mParentActivity));
+            intent.putExtra("appont", mAppont);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            intent = super.getParentActivityIntent();
+        }
+        return intent;
+    }
+
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         //startActivity(getIntent());
         super.onBackPressed();
     }

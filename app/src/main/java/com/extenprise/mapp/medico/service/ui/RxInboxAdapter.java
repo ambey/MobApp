@@ -37,6 +37,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
     private String mSortField;
     private boolean mAscending;
     private int mFeedback;
+    private int mIdServProv;
 
     public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list, int feedback) {
         super(context, resource);
@@ -127,6 +128,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         servPointNameView.setText(String.format("%s, %s", item.getServProv().getServPtName(),
                 item.getServProv().getServPtLocation()));
         servProvPhoneView.setText(String.format("(%s)", item.getServProv().getPhone()));
+        mIdServProv = item.getServProv().getIdServProvHasServPt();
         return v;
     }
 
@@ -146,6 +148,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.putParcelable("rxItem", getItem(position));
+        bundle.putInt("idServProv", mIdServProv);
         bundle.putParcelableArrayList("inbox", mRxList);
         if (mSortField != null) {
             bundle.putString("sortField", mSortField);
@@ -158,6 +161,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         }
         Activity myActivity = (Activity)getContext();
         intent.putExtra("origin_activity", myActivity.getIntent().getStringExtra("parent-activity"));
+        intent.putExtra("parent-activity", getContext().getClass().getName());
         myActivity.startActivity(intent);
     }
 

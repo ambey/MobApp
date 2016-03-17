@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class RxListActivity extends FragmentActivity implements DialogDismissListener {
 
     private int mFeedback;
+    private String mParentActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
         if (savedInstanceState != null) {
             intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
         }
+        mParentActivity = intent.getStringExtra("parent-activity");
 
         Bundle workingData = WorkingDataStore.getBundle();
         ArrayList<RxInboxItem> mInbox = workingData.getParcelableArrayList("inbox");
@@ -124,15 +126,25 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        String parentClass = getIntent().getStringExtra("parent-activity");
-        if (parentClass != null) {
+        //String parentClass = getIntent().getStringExtra("parent-activity");
+        if (mParentActivity != null) {
             try {
-                intent = new Intent(this, Class.forName(parentClass));
+                intent = new Intent(this, Class.forName(mParentActivity));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
         return intent;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override

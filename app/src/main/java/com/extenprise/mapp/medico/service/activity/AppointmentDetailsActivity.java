@@ -313,23 +313,22 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        removeData();
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.remove("appontList");
         /*if (intent != null) {
             intent.putExtra("service", mServProv);
         }*/
         return super.getParentActivityIntent();
     }
 
-    private void removeData() {
-        /* Remove the data from WorkingDataStore */
-        Bundle bundle = WorkingDataStore.getBundle();
-        bundle.remove("appontList");
-    }
-
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
-        removeData();
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         super.onBackPressed();
     }
 }

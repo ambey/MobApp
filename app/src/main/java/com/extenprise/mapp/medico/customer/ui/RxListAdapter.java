@@ -36,7 +36,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
     //private int mSelectedPosition;
     private String mSortField;
     private boolean mAscending;
-    private int idMedStore;
+    private int mIdMedStore;
 
     public RxListAdapter(Context context, int resource, ArrayList<RxInboxItem> list, Customer c) {
         super(context, resource);
@@ -109,7 +109,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
             TextView medStorePhView = (TextView) v.findViewById(R.id.medStorePhoneView);
 
             ServProvListItem medStore = item.getMedStoreList().get(listMedSt.size() - 1);
-            idMedStore = medStore.getIdServProvHasServPt();
+            mIdMedStore = medStore.getIdServProvHasServPt();
             medStoreNameView.setText(medStore.getServPtName());
             fNameView.setText(medStore.getFirstName());
             lNameView.setText(medStore.getLastName());
@@ -125,7 +125,7 @@ public class RxListAdapter extends ArrayAdapter<RxInboxItem> implements AdapterV
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.putParcelable("rxItem", getItem(position));
-        bundle.putInt("idMedStore", idMedStore);
+        bundle.putInt("idServProv", mIdMedStore);
         bundle.putParcelableArrayList("inbox", mList);
         if (mSortField != null) {
             bundle.putString("sortField", mSortField);
