@@ -44,6 +44,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     private Uri mRxUri;
     private Intent mData;
     private Button mResendRx;
+    private String mParentActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +54,10 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
         Intent intent = getIntent();
         if (savedInstanceState != null) {
             mAppont = savedInstanceState.getParcelable("appont");
+            mParentActivity = savedInstanceState.getString("parent-activity");
         } else {
             mAppont = intent.getParcelableExtra("appont");
+            mParentActivity = intent.getStringExtra("parent-activity");
         }
 
         mRxView = (ImageView) findViewById(R.id.rxCopyImageView);
@@ -171,7 +174,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         Intent intent = getIntent();
         outState.putParcelable("appont", intent.getParcelableExtra("appont"));
-
+        outState.putString("parent-activity", mParentActivity);
         BitmapDrawable drawable = (BitmapDrawable) mRxView.getDrawable();
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
@@ -217,6 +220,7 @@ public class ScannedRxActivity extends Activity implements ResponseHandler {
     private void sendRxToMedStore(Bundle data) {
         Rx rx = data.getParcelable("rx");
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
+        intent.putExtra("parent-activity", mParentActivity);
         intent.putExtra("rx", rx);
         startActivity(intent);
     }

@@ -241,6 +241,7 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
     public void resendRx(View view) {
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("rx", mInboxItem.getRx());
         intent.putExtra("appont", "");
         intent.putExtra("servProv", "");

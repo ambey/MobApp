@@ -288,6 +288,7 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
 
     public void showScannedRxScreen(View view) {
         Intent intent = new Intent(this, ScannedRxActivity.class);
+        intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("appont", mAppont);
         startActivity(intent);
     }

@@ -296,11 +296,7 @@
         <activity
             android:name=".service.activity.SelectMedicalStoreActivity"
             android:label="@string/title_activity_select_medical_store"
-            android:parentActivityName=".service.activity.AppointmentDetailsActivity"
             android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".service.activity.AppointmentDetailsActivity" />
         </activity>
         <activity
             android:name=".activity.WelcomeActivity"
@@ -343,7 +339,12 @@
         </activity>
         <activity
             android:name=".service.activity.ServProvPersonalInfoActivity"
-            android:label="@string/title_activity_serv_prov_personal_info" />
+            android:label="@string/title_activity_serv_prov_personal_info"
+            android:parentActivityName=".service.activity.ServProvProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.extenprise.mapp.medico.service.activity.ServProvProfileActivity" />
+        </activity>
         <activity
             android:name=".service.activity.WorkHoursActivity"
             android:label="@string/title_activity_work_hours"

@@ -38,6 +38,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
     private ListView mMedStoreList;
     private Rx mRx;
+    private String mParentActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
         mMedStoreList = (ListView) findViewById(R.id.medStoreListView);
         Intent intent = getIntent();
         mRx = intent.getParcelableExtra("rx");
+        mParentActivity = intent.getStringExtra("parent-activity");
 
         mConnection.setAction(MappService.DO_GET_MEDSTORE_LIST);
         Bundle bundle = new Bundle();
@@ -63,6 +65,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("rx", getIntent().getParcelableExtra("rx"));
+        outState.putString("parent-activity", mParentActivity);
     }
 
     public void sendRxToMedStore(View view) {
@@ -140,10 +143,19 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        Intent intent = super.getParentActivityIntent();
+        Intent intent;
+        if (mParentActivity != null) {
+            try {
+                intent = new Intent(this, Class.forName(mParentActivity));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                intent = super.getParentActivityIntent();
+            }
+        } else {
+            intent = super.getParentActivityIntent();
+        }
         if (intent != null) {
             intent.putExtra("appont", getIntent().getParcelableExtra("appont"));
-            //intent.putExtra("servProv", getIntent().getParcelableExtra("servProv"));
         }
         return intent;
     }

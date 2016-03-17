@@ -2,6 +2,7 @@ package com.extenprise.mapp.medico.service.activity;
 
 import android.app.ActionBar;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -207,5 +208,10 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
             mRegNo.setError(getString(R.string.error_duplicate_reg_no));
             mRegNo.requestFocus();
         }
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent();
     }
 }
