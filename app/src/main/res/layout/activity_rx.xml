@@ -8,6 +8,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.medico.util.RxActivity">
 
+
+
     <TextView
         android:id="@+id/rxForLbl"
         android:layout_width="wrap_content"
@@ -53,10 +55,15 @@
             android:layout_marginTop="20dp">
     -->
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rxForLbl">
+            android:layout_below="@+id/rxForLbl"
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/srNoLblTextView"
@@ -174,7 +181,8 @@
                 android:id="@+id/drugNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/bldSugCntTextView"
                 android:orientation="horizontal">
 
                 <EditText
@@ -397,6 +405,7 @@
                 android:onClick="doneRx"
                 android:text="@string/done_with_rx" />
         </RelativeLayout>
+    </ScrollView>
     <!--
         </ScrollView>
     -->
