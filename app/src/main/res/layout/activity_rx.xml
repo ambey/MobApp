@@ -85,58 +85,96 @@
 
             <EditText
                 android:id="@+id/bpLText"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/srNoLblTextView"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="30dp"
                android:layout_toRightOf="@+id/bPTextView"
-                android:hint="@string/bp"
-                android:inputType="number" />
+                android:layout_marginTop="7dp"
+
+                android:inputType="number"
+                android:background="@drawable/text"/>
             <TextView
-                android:id="@+id/mark"
+                android:id="@+id/markView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/srNoLblTextView"
                 android:layout_toRightOf="@+id/bpLText"
+                android:layout_marginLeft="10dp"
                 android:text="/"
                 android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:textSize="20dp"
 
                 />
             <EditText
                 android:id="@+id/bpHText"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/srNoLblTextView"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/mark"
-                android:hint="@string/bp"
-                android:inputType="number" />
+                android:layout_toRightOf="@+id/markView"
+              android:background="@drawable/text"
+                android:inputType="number"
+                android:layout_marginTop="7dp"/>
 
             <TextView
                 android:id="@+id/tempTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bPTextView"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/temp"
                 android:textStyle="bold" />
             <EditText
                 android:id="@+id/tempText"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bPTextView"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/bPTextView"
+                android:inputType="number"
+                android:background="@drawable/text"
+                android:layout_marginTop="12dp"
+              />
+            <TextView
+                android:id="@+id/tsignView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bPTextView"
+                android:layout_marginTop="11dp"
+                android:text="@string/temp_sign"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/tempText"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:id="@+id/bldSugCntTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tempText"
+                android:layout_marginTop="15dp"
+                android:text="@string/bldsug_text"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/bloodSugText"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tempText"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/bPTextView"
-                android:hint="@string/temp_val"
+                android:layout_toRightOf="@+id/bldSugCntTextView"
                 android:inputType="number"
-              />
+                android:background="@drawable/text"
+                android:layout_marginTop="12dp"
+                />
+
 
 
             <LinearLayout
                 android:id="@+id/drugNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="120dp"
                 android:orientation="horizontal">
 
                 <EditText

@@ -278,9 +278,10 @@
     <string name="preff_medstore">Preferred Pharmacy</string>
     <string name="preffmedcity">City</string>
     <string name="preffmedstore">Medical Store</string>
-    <string name="bp_view">Blood Pressure :</string>
+    <string name="bp_view">Blood Pressure </string>
     <string name="bp">BP</string>
-    <string name="temp">Temperature :</string>
-    <string name="temp_val">Temperature</string>
+    <string name="temp">Temperature </string>
+    <string name="bldsug_text">Blood Sugar Count</string>
+    <string name="temp_sign">\u2103</string>
 
 </resources>
