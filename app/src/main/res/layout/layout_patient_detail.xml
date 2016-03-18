@@ -330,10 +330,12 @@
         android:textColor="#fff"
         android:textSize="18sp" />
     <LinearLayout
+        android:id="@+id/selectPharmacyLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/editTextMedStoreCity"

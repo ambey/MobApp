@@ -76,8 +76,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
 
         String label = getString(R.string.hello_dr);
         int defaultImg = R.drawable.dr_avatar;
-        if (!mServiceProvider.getServProvHasServPt(0).getServPointType().
-                equalsIgnoreCase(getString(R.string.clinic))) {
+        if (getCategory() == R.string.diagnosticCenter) {
             label = getString(R.string.hello);
             defaultImg = R.drawable.diagcenter;
         }
@@ -94,13 +93,22 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         }
     }
 
+    private int getCategory() {
+        int category = R.string.physician;
+        if (!mServiceProvider.getServProvHasServPt(0).getServPointType().
+                equalsIgnoreCase(getString(R.string.clinic))) {
+            category = R.string.diagnosticCenter;
+        }
+        return category;
+    }
+
     public void viewAppointment(View view) {
         Utility.startActivity(this, ViewAppointmentListActivity.class, true);
     }
 
     public void viewProfile(View view) {
         Intent intent = new Intent(this, ServProvProfileActivity.class);
-        intent.putExtra("category", getString(R.string.physician));
+        intent.putExtra("category", getString(getCategory()));
         startActivity(intent);
     }
 
@@ -174,6 +182,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());
+        intent.putExtra("category", getCategory());
         startActivity(intent);
     }
 

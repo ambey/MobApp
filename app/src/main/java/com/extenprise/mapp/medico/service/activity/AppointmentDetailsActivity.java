@@ -141,24 +141,6 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         }
     }
 
-    private void statusChangeDone(int msg) {
-        /*Utility.setEnabledButton(this, mConfirmAppontButton, false);
-        Utility.setEnabledButton(this, mCancelAppontButton, false);*/
-        //Utility.showAlert(this, "", msg);
-
-        //refreshing page
-        Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Intent intent = getIntent();
-                intent.putExtra("appont", mAppont);
-                finish();
-                startActivity(intent);
-            }
-        });
-    }
-
     private void gotPastAppointments(Bundle data) {
         /* Hide the message view */
         TextView msgView = (TextView) findViewById(R.id.viewMsg);
@@ -310,14 +292,29 @@ public class AppointmentDetailsActivity extends Activity implements ResponseHand
         return data.getBoolean("status");
     }
 
+    private void statusChangeDone(int msg) {
+        /*Utility.setEnabledButton(this, mConfirmAppontButton, false);
+        Utility.setEnabledButton(this, mCancelAppontButton, false);*/
+        //Utility.showAlert(this, "", msg);
+
+        //refreshing page
+        Utility.showAlert(this, "", getString(msg), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = getIntent();
+                intent.putExtra("appont", mAppont);
+                finish();
+                startActivity(intent);
+            }
+        });
+    }
+
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.remove("appontList");
-        /*if (intent != null) {
-            intent.putExtra("service", mServProv);
-        }*/
         return super.getParentActivityIntent();
     }
 

@@ -149,6 +149,16 @@ public class ServProvPersonalInfoActivity extends FragmentActivity implements Re
             return;
         }
 
+        if (mServiceProv.getfName().equalsIgnoreCase(mFname.getText().toString().trim()) &&
+                mServiceProv.getlName().equalsIgnoreCase(mLname.getText().toString().trim()) &&
+                mServiceProv.getEmailId().equalsIgnoreCase(mEmailID.getText().toString().trim()) &&
+                mServiceProv.getGender().equalsIgnoreCase(mGenderBtn.getText().toString()) &&
+                mServiceProv.getRegNo().equalsIgnoreCase(mRegNo.getText().toString().trim())) {
+
+            Utility.showMessage(this, R.string.msg_no_change_found);
+            return;
+        }
+
         sendRequest(MappService.DO_UPDATE);
     }
 

@@ -48,6 +48,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
     private LinearLayout mContLay;
     private LinearLayout mAddrLayout;
+    private LinearLayout mSelectPharmacyLayout;
 
     /*private View mFormView;
     private View mProgressView;*/
@@ -84,6 +85,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
+        mSelectPharmacyLayout = (LinearLayout) findViewById(R.id.selectPharmacyLayout);
 /*
         findViewById(R.id.buttonEditPersonalInfo).setVisibility(View.GONE);
         findViewById(R.id.buttonEditAddr).setVisibility(View.GONE);

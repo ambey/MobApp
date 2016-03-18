@@ -120,4 +120,14 @@ public class PatientHistoryActivity extends Activity {
         return intent;
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
+        super.onBackPressed();
+    }
+
 }

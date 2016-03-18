@@ -118,7 +118,6 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         selections = new boolean[options.length];
 
         mWorkPlaceList = new ArrayList<>();
-        //mServiceProv = WorkingDataStore.getBundle().getParcelable("servProv");
         mServiceProv = (ServiceProvider) WorkingDataStore.getLoginRef();
 
         mPersonalInfo = (RelativeLayout) findViewById(R.id.personalInfo);
@@ -131,10 +130,21 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         mListViewWP = (ListView) findViewById(R.id.workDetailListView);
         mEditWpPencil = (ImageButton) findViewById(R.id.textViewAddNewWork);
 
-        TextView mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
-        mCategory = getString(R.string.physician);
+        mCategory = getIntent().getStringExtra("category");
         defaultImg = R.drawable.dr_avatar;
-        String servPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
+        int lbl = R.string.welcome;
+        if (mCategory.equals(getString(R.string.pharmacist))) {
+            defaultImg = R.drawable.medstore;
+        } else if (mCategory.equals(getString(R.string.diagnosticCenter))) {
+            defaultImg = R.drawable.diagcenter;
+        } else {
+            lbl = R.string.hello_dr;
+        }
+
+        TextView mViewdrLbl = (TextView) findViewById(R.id.viewdrLbl);
+        mViewdrLbl.setText(getString(lbl));
+
+        /*String servPointType = mServiceProv.getServProvHasServPt(0).getServPointType();
         if(!servPointType.equalsIgnoreCase(getString(R.string.clinic))) {
             if(servPointType.equalsIgnoreCase(getString(R.string.medical_store))) {
                 mCategory = getString(R.string.pharmacist);
@@ -143,8 +153,8 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
                 mCategory = getString(R.string.diagnostic_center);
                 defaultImg = R.drawable.diagcenter;
             }
-            mViewdrLbl.setText(getString(R.string.welcome));
-        }
+
+        }*/
 
         mImgView = (ImageView) findViewById(R.id.imageViewDoctor);
         setPhoto();
@@ -409,8 +419,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         ArrayList<String> listWPType = new ArrayList<>();
         if(mCategory.equalsIgnoreCase(getString(R.string.physician))) {
             listWPType.add(getString(R.string.clinic));
-        }
-        else if(mCategory.equalsIgnoreCase(getString(R.string.pharmacist))) {
+        } else if (mCategory.equalsIgnoreCase(getString(R.string.pharmacist))) {
             mConsultFee.setEnabled(false);
             listWPType.add(getString(R.string.medical_store));
         } else {
@@ -436,7 +445,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             mEndTime.setText(Utility.getTimeString(item.getEndTime()));
             mQualification.setText(item.getQualification());
             mMultiSpinnerDays.setText(item.getWorkingDays());
-            mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, item.getServCategory()));
+            mServCatagory.setSelection(Utility.getSpinnerIndex(mServCatagory, mCategory));
             mSpeciality.setSelection(Utility.getSpinnerIndex(mSpeciality, item.getSpeciality()));
             //mSpecStr = item.getSpeciality();
             mExperience.setText(String.format("%.01f", item.getExperience()));
@@ -553,7 +562,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isValidWorkPlace()) {
+                if (isValidWorkPlace(item)) {
                     for ( int i = 0; i < mWorkPlaceList.size(); i++ ) {
                         if(item != null && i == position) {
                             continue;
@@ -639,7 +648,7 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         dialog.show();*/
     }
 
-    private boolean isValidWorkPlace() {
+    private boolean isValidWorkPlace(WorkPlace item) {
         boolean valid = true;
         View focusView = null;
         String value = "";
@@ -765,6 +774,30 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
         if (focusView != null) {
             focusView.requestFocus();
         }
+
+
+        if (item.getName().equals(mName.getText().toString().trim()) &&
+                item.getLocation().equals(mLoc.getText().toString().trim()) &&
+                item.getCity().getCity().equals(mCity.getSelectedItem().toString()) &&
+                item.getCity().getState().equals(mState.getSelectedItem().toString()) &&
+                item.getNotes().equals(mNotes.getText().toString().trim()) &&
+                item.getPhone().equals(mPhone1.getText().toString().trim()) &&
+                item.getAltPhone().equals(mPhone2.getText().toString().trim()) &&
+                item.getEmailId().equals(mEmailIdwork.getText().toString().trim()) &&
+                item.getConsultFee() == Float.parseFloat(mConsultFee.getText().toString().trim()) &&
+                item.getServPointType().equals(mServPtType.getSelectedItem().toString()) &&
+                item.getStartTime() == Utility.getMinutes(mStartTime.getText().toString()) &&
+                item.getEndTime() == Utility.getMinutes(mEndTime.getText().toString()) &&
+                item.getQualification().equals(mQualification.getText().toString().trim()) &&
+                item.getWorkingDays().equals(mMultiSpinnerDays.getText().toString().trim()) &&
+                item.getServCategory().equals(mServCatagory.getSelectedItem().toString()) &&
+                item.getSpeciality().equals(mSpeciality.getSelectedItem().toString()) &&
+                item.getPincode().equals(mPinCode.getText().toString().trim())) {
+
+            Utility.showMessage(this, R.string.msg_no_change_found);
+            valid = false;
+        }
+
         return valid;
     }
 

@@ -42,18 +42,20 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
         mFeedback = feedback;
         mRxItems = new ArrayList<>();
 
+        Rx rx = mRxInboxItem.getRx();
+        int itemCount = rx.getRxItemCount();
+        ArrayList<RxItem> rxItems = rx.getItems();
+
         if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
-            Rx rx = mRxInboxItem.getRx();
-            mAvailMap = new BitSet(rx.getRxItemCount());
-            ArrayList<RxItem> rxItems = rx.getItems();
-            for (int j = 0; j < rx.getRxItemCount(); j++) {
+            mAvailMap = new BitSet(itemCount);
+            for (int j = 0; j < itemCount; j++) {
                 mAvailMap.set(j, (rxItems.get(j).getAvailable() == 1));
             }
         }
 
         int idSP = WorkingDataStore.getBundle().getInt("idServProv");
-        for (int i = 0; i < mRxInboxItem.getRx().getRxItemCount(); i++) {
-            RxItem rItem = mRxInboxItem.getRx().getItems().get(i);
+        for (int i = 0; i < itemCount; i++) {
+            RxItem rItem = rxItems.get(i);
             if (rItem.getIdServProvHasServPt() == idSP) {
                 mRxItems.add(rItem);
             }
@@ -62,9 +64,9 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
 
     @Override
     public RxItem getItem(int position) {
-        if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
+        /*if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
             return mRxInboxItem.getRx().getItems().get(position);
-        }
+        }*/
         return mRxItems.get(position);
     }
 
@@ -72,12 +74,12 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
     public int getCount() {
         int count = 0;
         try {
-            if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
+            /*if (mFeedback == RxFeedback.GIVE_FEEDBACK) {
                 count = mRxInboxItem.getRx().getRxItemCount();
             } else {
                 count = mRxItems.size();
-            }
-            //count = mRxItems.size();
+            }*/
+            count = mRxItems.size();
         } catch (Exception e) {
             e.printStackTrace();
         }

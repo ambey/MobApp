@@ -54,6 +54,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
     private LinearLayout mContLay;
     private LinearLayout mAddrLayout;
+    private LinearLayout mSelectPharmacyLayout;
     /*private View mFormView;
     private View mProgressView;*/
 
@@ -88,6 +89,8 @@ public class PatientProfileActivity extends FragmentActivity implements Response
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
+        mSelectPharmacyLayout = (LinearLayout) findViewById(R.id.selectPharmacyLayout);
+
         mPname = (TextView) findViewById(R.id.textviewPname);
         mMobNo = (TextView) findViewById(R.id.mobnumValue);
         mImgView = (ImageView) findViewById(R.id.imageViewPatient);
@@ -124,6 +127,7 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         Utility.setEnabledButton(this, mUpdateButton, false);
         Utility.collapse(mContLay, true);
         Utility.collapse(mAddrLayout, true);
+        Utility.collapse(mSelectPharmacyLayout, true);
         setPhoto();
 
         if (savedInstanceState != null) {
@@ -141,10 +145,18 @@ public class PatientProfileActivity extends FragmentActivity implements Response
         int vID = view.getId();
         if (vID == R.id.textViewPersonalFields) {
             Utility.collapse(mAddrLayout, true);
+            Utility.collapse(mSelectPharmacyLayout, true);
             Utility.collapse(mContLay, (mContLay.getVisibility() == View.VISIBLE));
+
         } else if (vID == R.id.viewAddress) {
             Utility.collapse(mContLay, true);
+            Utility.collapse(mSelectPharmacyLayout, true);
             Utility.collapse(mAddrLayout, (mAddrLayout.getVisibility() == View.VISIBLE));
+
+        } else if (vID == R.id.textViewPrefMedStore) {
+            Utility.collapse(mContLay, true);
+            Utility.collapse(mAddrLayout, true);
+            Utility.collapse(mSelectPharmacyLayout, (mSelectPharmacyLayout.getVisibility() == View.VISIBLE));
         }
     }
 

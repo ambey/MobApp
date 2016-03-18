@@ -30,14 +30,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.GridLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -582,6 +579,14 @@ public abstract class Utility {
     }
 
     public static void collapse(final View v, final boolean collapse) {
+        if (collapse) {
+            v.setVisibility(View.GONE);
+        } else {
+            v.setVisibility(View.VISIBLE);
+        }
+    }
+
+   /* public static void collapse(final View v, final boolean collapse) {
         if (!collapse) {
             v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         }
@@ -617,7 +622,7 @@ public abstract class Utility {
 
         a.setDuration((int) (height / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
-    }
+    }*/
 
     public static void setLastVisit(SharedPreferences prefer) {
         //SharedPreferences prefer = activity.getSharedPreferences(type + "lastVisit" + phone, 0);

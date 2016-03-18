@@ -145,11 +145,11 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
 
     @Override
     public void onBackPressed() {
-        Intent intent = getParentActivityIntent();
+        /*Intent intent = getParentActivityIntent();
         if (intent != null) {
             startActivity(intent);
             return;
-        }
+        }*/
         super.onBackPressed();
     }
 

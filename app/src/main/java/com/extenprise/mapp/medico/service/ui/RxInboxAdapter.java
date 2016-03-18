@@ -128,7 +128,8 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         servPointNameView.setText(String.format("%s, %s", item.getServProv().getServPtName(),
                 item.getServProv().getServPtLocation()));
         servProvPhoneView.setText(String.format("(%s)", item.getServProv().getPhone()));
-        mIdServProv = item.getServProv().getIdServProvHasServPt();
+        //mIdServProv = item.getServProv().getIdServProvHasServPt();
+        mIdServProv = item.getReportService().getIdServProvHasServPt();
         return v;
     }
 
