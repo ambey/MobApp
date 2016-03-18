@@ -33,39 +33,53 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextCustomerFName"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:ems="10"
-                android:hint="@string/fnm"
-                android:inputType="textNoSuggestions"
-                android:maxLength="25" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/editTextCustomerLName"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.5"
-                android:ems="10"
-                android:hint="@string/lnm"
-                android:inputType="textNoSuggestions"
-                android:maxLength="25" />
+                <EditText
+                    android:id="@+id/editTextCustomerFName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:ems="10"
+                    android:hint="@string/fnm"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25" />
+            </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/editTextCustomerLName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="0.5"
+                    android:ems="10"
+                    android:hint="@string/lnm"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25" />
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/editTextCustomerEmail"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:maxLength="40" />
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextCustomerEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:maxLength="40" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -116,14 +130,19 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextHeight"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.90"
-                android:hint="@string/height"
-                android:inputType="numberDecimal"
-                android:maxLength="3" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/editTextHeight"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.90"
+                    android:hint="@string/height"
+                    android:inputType="numberDecimal"
+                    android:maxLength="3" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/viewHeightUnit"
@@ -134,16 +153,21 @@
                 android:layout_weight="1.2"
                 android:text="@string/cm" />
 
-            <EditText
-                android:id="@+id/editTextWeight"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.85"
-                android:hint="@string/weight"
-                android:inputType="numberDecimal"
-                android:maxLength="3" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/editTextWeight"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.85"
+                    android:hint="@string/weight"
+                    android:inputType="numberDecimal"
+                    android:maxLength="3" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/viewWeightUnit"
@@ -156,16 +180,18 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonEditPersonalInfo"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/button_float_edit"
-            android:onClick="editPersonalInfo"
-            android:padding="6dp" />
+        <!--
+                <Button
+                    android:id="@+id/buttonEditPersonalInfo"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/button_float_edit"
+                    android:onClick="editPersonalInfo"
+                    android:padding="6dp" />
+        -->
 
     </LinearLayout>
 
@@ -186,8 +212,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible"
-        >
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -195,26 +220,35 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextLoc"
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:ems="10"
-                android:hint="@string/loc"
-                android:inputType="textNoSuggestions"
-                android:maxLength="25" />
+                android:layout_weight="0.5">
 
-            <EditText
-                android:id="@+id/editTextCity"
-                android:layout_width="fill_parent"
+                <EditText
+                    android:id="@+id/editTextLoc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/loc"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:ems="10"
-                android:hint="@string/city"
-                android:inputType="textNoSuggestions"
-                android:maxLength="25" />
+                android:layout_weight="0.5">
 
+                <EditText
+                    android:id="@+id/editTextCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/city"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25" />
+            </android.support.design.widget.TextInputLayout>
             <!--<Spinner
                 android:id="@+id/editTextCity"
                 android:layout_width="fill_parent"
@@ -231,24 +265,29 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextZipCode"
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_weight="0.5"
-                android:hint="@string/pincode"
-                android:inputType="number"
-                android:maxLength="6" />
+                android:layout_weight="0.5">
+
+                <EditText
+                    android:id="@+id/editTextZipCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/pincode"
+                    android:inputType="number"
+                    android:maxLength="6" />
+            </android.support.design.widget.TextInputLayout>
 
             <Spinner
                 android:id="@+id/editTextState"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
@@ -263,17 +302,19 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonEditAddr"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/button_float_edit"
-            android:onClick="editAddress"
-            android:padding="6dp" />
+        <!--
+                <Button
+                    android:id="@+id/buttonEditAddr"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/button_float_edit"
+                    android:onClick="editAddress"
+                    android:padding="6dp" />
+        -->
 
     </LinearLayout>
 

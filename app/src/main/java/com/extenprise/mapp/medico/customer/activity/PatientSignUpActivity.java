@@ -84,8 +84,10 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
 
         mContLay = (LinearLayout) findViewById(R.id.contLay);
         mAddrLayout = (LinearLayout) findViewById(R.id.addrLayout);
+/*
         findViewById(R.id.buttonEditPersonalInfo).setVisibility(View.GONE);
         findViewById(R.id.buttonEditAddr).setVisibility(View.GONE);
+*/
 
         /*mFormView = findViewById(R.id.scrollView);
         mProgressView = findViewById(R.id.progressView);*/
