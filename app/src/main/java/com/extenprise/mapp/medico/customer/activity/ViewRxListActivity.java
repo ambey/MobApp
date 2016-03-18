@@ -1,6 +1,8 @@
 package com.extenprise.mapp.medico.customer.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -165,9 +167,20 @@ public class ViewRxListActivity extends FragmentActivity implements ResponseHand
 
     }
 
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent();
+    }
+
     @Override
     public void onBackPressed() {
         mConnection.setBound(false);
+        Intent intent = getParentActivityIntent();
+        if (intent != null) {
+            startActivity(intent);
+            return;
+        }
         //startActivity(getIntent());
         super.onBackPressed();
     }
