@@ -144,21 +144,19 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        Intent intent;
+        Intent intent = super.getParentActivityIntent();
         if (mParentActivity != null) {
             try {
                 intent = new Intent(this, Class.forName(mParentActivity));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-                intent = super.getParentActivityIntent();
             }
-        } else {
-            intent = super.getParentActivityIntent();
         }
+
         if (intent != null) {
             intent.putExtra("appont", getIntent().getParcelableExtra("appont"));
             intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
-            intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
+            //intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         }
         return intent;
     }

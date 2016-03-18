@@ -75,6 +75,12 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Intent intent = getIntent();

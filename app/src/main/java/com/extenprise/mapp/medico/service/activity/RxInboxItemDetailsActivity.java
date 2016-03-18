@@ -244,7 +244,9 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     public void resendRx(View view) {
         Intent intent = new Intent(this, SelectMedicalStoreActivity.class);
         intent.putExtra("parent-activity", getClass().getName());
+        intent.putExtra("origin_activity", getIntent().getStringExtra("origin_activity"));
         intent.putExtra("rx", mInboxItem.getRx());
+        intent.putExtra("feedback", getIntent().getStringExtra("feedback"));
         intent.putExtra("appont", "");
         intent.putExtra("servProv", "");
         startActivity(intent);
@@ -300,19 +302,18 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        if (intent == null) {
-            //String parentActivityClass = getIntent().getStringExtra("parent-activity");
-            if (mParentActivity != null) {
-                try {
-                    intent = new Intent(this, Class.forName(mParentActivity));
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+        if (mParentActivity != null) {
+            try {
+                intent = new Intent(this, Class.forName(mParentActivity));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                intent = super.getParentActivityIntent();
             }
         }
+
         if (intent != null) {
             intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
-            intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
+            //intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         }
         return intent;
     }
