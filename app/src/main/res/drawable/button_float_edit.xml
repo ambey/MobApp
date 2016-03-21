@@ -14,10 +14,12 @@
         android:bottom="3dp"
         android:right="3dp">
         <shape android:shape="oval">
-            <solid android:color="@color/primary_color" />
+            <solid android:color="@color/primary_dark" />
         </shape>
     </item>
-    <item>
+    <item
+        android:bottom="3dp"
+        android:right="3dp">
         <bitmap
             android:alpha="1.0"
             android:src="@drawable/ic_action_edit"
