@@ -790,12 +790,16 @@ public abstract class Utility {
         return sdf.format(date);
     }
 
-    public static void logout(SharedPreferences loginPreferences, Activity activity, Class targetClass) {
-        if (loginPreferences.getBoolean("saveLogin", false)) {
-            loginPreferences.edit().clear().apply();
+    public static void prepareLogout(SharedPreferences preferences) {
+        if (preferences.getBoolean("saveLogin", false)) {
+            preferences.edit().clear().apply();
         }
         WorkingDataStore.getBundle().clear();
         WorkingDataStore.setLoginRef(null);
+    }
+
+    public static void logout(SharedPreferences loginPreferences, Activity activity, Class targetClass) {
+        prepareLogout(loginPreferences);
         activity.finish();
         Intent intent = new Intent(activity, targetClass);
         activity.startActivity(intent);

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.extenprise.mapp.medico.R;
 import com.extenprise.mapp.medico.activity.LoginActivity;
 import com.extenprise.mapp.medico.customer.data.Customer;
+import com.extenprise.mapp.medico.customer.ui.NavigationItemSelectedListener;
 import com.extenprise.mapp.medico.data.WorkingDataStore;
 import com.extenprise.mapp.medico.ui.BackButtonHandler;
 import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
@@ -25,9 +27,9 @@ import com.extenprise.mapp.medico.util.Utility;
 
 
 public class PatientsHomeScreenActivity extends AppCompatActivity {
-
     private TextView mWelcomeView;
     private ImageView mImgView;
+    private ImageView mNavImgView;
     private Customer mCustomer;
     private TextView mLastVisited;
 
@@ -43,6 +45,12 @@ public class PatientsHomeScreenActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener(this));
+
+        View headerView = navigationView.getHeaderView(0);
+        mNavImgView = (ImageView) headerView.findViewById(R.id.imageViewPhoto);
 
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imagePatient);
@@ -77,10 +85,14 @@ public class PatientsHomeScreenActivity extends AppCompatActivity {
         mImgView.setImageBitmap(null);
         if (mCustomer.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mCustomer.getPhoto(),
-                    mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
+                    mImgView.getMeasuredWidth(), mImgView.getMeasuredHeight());
             task.execute();
+            ByteArrayToBitmapTask task2 = new ByteArrayToBitmapTask(mNavImgView, mCustomer.getPhoto(),
+                    mNavImgView.getMeasuredWidth(), mNavImgView.getMeasuredHeight());
+            task2.execute();
         } else {
             mImgView.setImageResource(R.drawable.patient);
+            mNavImgView.setImageResource(R.drawable.patient);
         }
     }
 

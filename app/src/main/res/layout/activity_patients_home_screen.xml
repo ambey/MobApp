@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.extenprise.mapp.medico.customer.activity.PatientsHomeScreenActivity">
 
     <LinearLayout
@@ -78,7 +80,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_weight="0.5"
                 android:onClick="viewAppointments"
-                android:text="@string/doc_appoint" />
+                android:text="@string/view_appoint" />
 
             <Button
                 android:id="@+id/buttonViewRx"

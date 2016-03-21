@@ -3,12 +3,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@android:drawable/ic_menu_myplaces"
+            android:icon="@drawable/ic_home"
             android:title="@string/home" />
         <item
             android:id="@+id/nav_search"
-            android:icon="@android:drawable/ic_menu_search"
+            android:icon="@drawable/ic_search"
             android:title="@string/search_doctor" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_box"
+            android:title="@string/edit_profile" />
         <item
             android:id="@+id/nav_view_rx"
             android:icon="@android:drawable/ic_menu_agenda"
@@ -18,8 +22,14 @@
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="@string/view_appoint" />
         <item
+            android:id="@+id/nav_view_report"
+            android:enabled="false"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="@string/view_other_reports" />
+        <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_signout" />
+            android:icon="@drawable/ic_signout"
+            android:title="@string/logout" />
     </group>
 
     <!--

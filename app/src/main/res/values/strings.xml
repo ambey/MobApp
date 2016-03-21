@@ -2,10 +2,12 @@
 <resources>
     <string name="app_name">Medico</string>
 
-    <!--<string name="server_name">http://10.0.2.2:8080/mappTest</string>-->
+    <string name="server_name">http://10.0.2.2:8080/mappTest</string>
 
 
-    <string name="server_name">http://122.170.15.3:8080/mappTest</string>
+    <!--
+        <string name="server_name">http://122.170.15.3:8080/mappTest</string>
+    -->
     <!--
         <string name="server_name">http://208.74.28.39:8080/mappTest</string>
     -->
@@ -290,4 +292,5 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="home">Home</string>
+    <string name="edit_profile">Edit Profile</string>
 </resources>
