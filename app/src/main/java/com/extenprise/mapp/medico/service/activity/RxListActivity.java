@@ -29,7 +29,8 @@ import java.util.ArrayList;
 public class RxListActivity extends FragmentActivity implements DialogDismissListener {
 
     private int mFeedback;
-    private String mParentActivity;
+
+    //private String mParentActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,7 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
         if (savedInstanceState != null) {
             intent.putExtra("feedback", savedInstanceState.getInt("feedback"));
         }
-        mParentActivity = intent.getStringExtra("parent-activity");
+        //mParentActivity = intent.getStringExtra("parent-activity");
 
         Bundle workingData = WorkingDataStore.getBundle();
         ArrayList<RxInboxItem> mInbox = workingData.getParcelableArrayList("inbox");
@@ -109,7 +110,6 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
                 break;
             case R.id.logout:
                 Utility.logout(getSharedPreferences("loginPrefs", MODE_PRIVATE), this, LoginActivity.class);
-                WorkingDataStore.getBundle().remove("servProv");
                 break;
         }
 
@@ -132,10 +132,10 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        //String parentClass = getIntent().getStringExtra("parent-activity");
-        if (mParentActivity != null) {
+        String parentClass = WorkingDataStore.getBundle().getString("parent_activity");
+        if (parentClass != null) {
             try {
-                intent = new Intent(this, Class.forName(mParentActivity));
+                intent = new Intent(this, Class.forName(parentClass));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -145,11 +145,11 @@ public class RxListActivity extends FragmentActivity implements DialogDismissLis
 
     @Override
     public void onBackPressed() {
-        /*Intent intent = getParentActivityIntent();
+        Intent intent = getParentActivityIntent();
         if (intent != null) {
             startActivity(intent);
             return;
-        }*/
+        }
         super.onBackPressed();
     }
 

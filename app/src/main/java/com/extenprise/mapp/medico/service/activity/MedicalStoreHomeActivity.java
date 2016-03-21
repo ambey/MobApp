@@ -82,6 +82,7 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
                             "dd/MM/yyyy HH:mm")));
         }
 
+        mImgView.setImageBitmap(null);
         if (mServProv.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mServProv.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);
@@ -136,7 +137,9 @@ public class MedicalStoreHomeActivity extends Activity implements ResponseHandle
     private void gotRxInbox(Bundle data) {
         Utility.showProgressDialog(this, false);
         mMsgView.setVisibility(View.GONE);
-        WorkingDataStore.getBundle().putParcelableArrayList("inbox", data.getParcelableArrayList("inbox"));
+        Bundle bundle = WorkingDataStore.getBundle();
+        bundle.putParcelableArrayList("inbox", data.getParcelableArrayList("inbox"));
+        bundle.putString("parent_activity", getClass().getName());
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putExtra("feedback", RxFeedback.GIVE_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());

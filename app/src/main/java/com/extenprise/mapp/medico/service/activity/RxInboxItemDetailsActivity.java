@@ -246,7 +246,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
         intent.putExtra("parent-activity", getClass().getName());
         intent.putExtra("origin_activity", getIntent().getStringExtra("origin_activity"));
         intent.putExtra("rx", mInboxItem.getRx());
-        intent.putExtra("feedback", getIntent().getStringExtra("feedback"));
+        //intent.putExtra("feedback", intent.getIntExtra("feedback", RxFeedback.NONE));
+        intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK);
         intent.putExtra("appont", "");
         intent.putExtra("servProv", "");
         startActivity(intent);
@@ -313,7 +314,8 @@ public class RxInboxItemDetailsActivity extends Activity implements ResponseHand
 
         if (intent != null) {
             intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
-            //intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
+            //intent.putExtra("origin_activity", getIntent().getStringExtra("origin_activity"));
+            intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         }
         return intent;
     }

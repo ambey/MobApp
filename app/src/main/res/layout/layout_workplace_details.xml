@@ -266,7 +266,7 @@
                 android:ems="4"
                 android:hint="@string/consult_fees"
                 android:inputType="number"
-                android:maxLength="4" />
+                android:maxLength="6" />
 
             <EditText
                 android:id="@+id/editTextNotes"

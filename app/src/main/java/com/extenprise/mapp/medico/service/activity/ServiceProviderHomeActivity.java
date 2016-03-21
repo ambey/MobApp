@@ -83,6 +83,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mWelcomeView.setText(String.format("%s %s %s", label,
                 mServiceProvider.getfName(), mServiceProvider.getlName()));
 
+        mImgView.setImageBitmap(null);
         if (mServiceProvider.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView,
                     mServiceProvider.getPhoto(),
@@ -179,6 +180,7 @@ public class ServiceProviderHomeActivity extends Activity implements ResponseHan
         mMsgView.setVisibility(View.GONE);
         Bundle bundle = WorkingDataStore.getBundle();
         bundle.putParcelableArrayList("inbox", data.getParcelableArrayList("inbox"));
+        bundle.putString("parent_activity", getClass().getName());
         Intent intent = new Intent(this, RxListActivity.class);
         intent.putExtra("feedback", RxFeedback.VIEW_FEEDBACK);
         intent.putExtra("parent-activity", getClass().getName());

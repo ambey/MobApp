@@ -193,12 +193,12 @@ public class RxActivity extends Activity implements ResponseHandler {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Intent intent = getIntent();
-        outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
+        //outState.putParcelableArrayList("inbox", intent.getParcelableArrayListExtra("inbox"));
         outState.putParcelable("appont", intent.getParcelableExtra("appont"));
         outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE));
         outState.putString("parent-activity", intent.getStringExtra("parent-activity"));
         outState.putInt("rxItemPos", intent.getIntExtra("rxItemPos", 0));
-        outState.putParcelable("servProv", intent.getParcelableExtra("servProv"));
+        //outState.putParcelable("servProv", intent.getParcelableExtra("servProv"));
     }
 
     private void fillRx(RxInboxItem rxInboxItem) {
@@ -525,6 +525,7 @@ public class RxActivity extends Activity implements ResponseHandler {
             intent = new Intent(this, Class.forName(mParentActivity));
             intent.putExtra("appont", mAppont);
             intent.putExtra("feedback", mFeedback);
+            intent.putExtra("origin_activity", getIntent().getStringExtra("origin_activity"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             intent = super.getParentActivityIntent();

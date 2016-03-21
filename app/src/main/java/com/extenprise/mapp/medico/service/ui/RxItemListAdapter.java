@@ -53,12 +53,16 @@ public class RxItemListAdapter extends ArrayAdapter<RxItem> implements AdapterVi
             }
         }
 
-        int idSP = WorkingDataStore.getBundle().getInt("idServProv");
+        int idSP = WorkingDataStore.getBundle().getInt("idServProv", -1);
         for (int i = 0; i < itemCount; i++) {
             RxItem rItem = rxItems.get(i);
             if (rItem.getIdServProvHasServPt() == idSP) {
                 mRxItems.add(rItem);
             }
+        }
+
+        if (idSP == -1) {
+            mRxItems = mRxInboxItem.getRx().getItems();
         }
     }
 

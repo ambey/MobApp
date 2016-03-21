@@ -161,6 +161,7 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         }
         Utility.collapse(mContLay, true);
         Utility.collapse(mAddrLayout, true);
+        Utility.collapse(mSelectPharmacyLayout, true);
         WorkingDataStore.getBundle().remove("lastPhone");
     }
 
@@ -229,10 +230,18 @@ public class PatientSignUpActivity extends Activity implements ResponseHandler, 
         int vID = view.getId();
         if (vID == R.id.textViewPersonalFields) {
             Utility.collapse(mAddrLayout, true);
+            Utility.collapse(mSelectPharmacyLayout, true);
             Utility.collapse(mContLay, (mContLay.getVisibility() == View.VISIBLE));
+
         } else if (vID == R.id.viewAddress) {
             Utility.collapse(mContLay, true);
+            Utility.collapse(mSelectPharmacyLayout, true);
             Utility.collapse(mAddrLayout, (mAddrLayout.getVisibility() == View.VISIBLE));
+
+        } else if (vID == R.id.textViewPrefMedStore) {
+            Utility.collapse(mContLay, true);
+            Utility.collapse(mAddrLayout, true);
+            Utility.collapse(mSelectPharmacyLayout, (mSelectPharmacyLayout.getVisibility() == View.VISIBLE));
         }
     }
 

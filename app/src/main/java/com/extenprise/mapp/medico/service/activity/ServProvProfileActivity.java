@@ -775,27 +775,27 @@ public class ServProvProfileActivity extends FragmentActivity implements Respons
             focusView.requestFocus();
         }
 
+        if (item != null && valid) {
+            if (item.getName().equals(mName.getText().toString().trim()) &&
+                    item.getLocation().equals(mLoc.getText().toString().trim()) &&
+                    item.getCity().getCity().equals(mCity.getSelectedItem().toString()) &&
+                    item.getCity().getState().equals(mState.getSelectedItem().toString()) &&
+                    item.getNotes().equals(mNotes.getText().toString().trim()) &&
+                    item.getPhone().equals(mPhone1.getText().toString().trim()) &&
+                    item.getAltPhone().equals(mPhone2.getText().toString().trim()) &&
+                    item.getEmailId().equals(mEmailIdwork.getText().toString().trim()) &&
+                    item.getConsultFee() == Float.parseFloat(mConsultFee.getText().toString().trim()) &&
+                    item.getServPointType().equals(mServPtType.getSelectedItem().toString()) &&
+                    item.getStartTime() == Utility.getMinutes(mStartTime.getText().toString()) &&
+                    item.getEndTime() == Utility.getMinutes(mEndTime.getText().toString()) &&
+                    item.getQualification().equals(mQualification.getText().toString().trim()) &&
+                    item.getWorkingDays().equals(mMultiSpinnerDays.getText().toString().trim()) &&
+                    item.getSpeciality().equals(mSpeciality.getSelectedItem().toString()) &&
+                    item.getPincode().equals(mPinCode.getText().toString().trim())) {
 
-        if (item.getName().equals(mName.getText().toString().trim()) &&
-                item.getLocation().equals(mLoc.getText().toString().trim()) &&
-                item.getCity().getCity().equals(mCity.getSelectedItem().toString()) &&
-                item.getCity().getState().equals(mState.getSelectedItem().toString()) &&
-                item.getNotes().equals(mNotes.getText().toString().trim()) &&
-                item.getPhone().equals(mPhone1.getText().toString().trim()) &&
-                item.getAltPhone().equals(mPhone2.getText().toString().trim()) &&
-                item.getEmailId().equals(mEmailIdwork.getText().toString().trim()) &&
-                item.getConsultFee() == Float.parseFloat(mConsultFee.getText().toString().trim()) &&
-                item.getServPointType().equals(mServPtType.getSelectedItem().toString()) &&
-                item.getStartTime() == Utility.getMinutes(mStartTime.getText().toString()) &&
-                item.getEndTime() == Utility.getMinutes(mEndTime.getText().toString()) &&
-                item.getQualification().equals(mQualification.getText().toString().trim()) &&
-                item.getWorkingDays().equals(mMultiSpinnerDays.getText().toString().trim()) &&
-                item.getServCategory().equals(mServCatagory.getSelectedItem().toString()) &&
-                item.getSpeciality().equals(mSpeciality.getSelectedItem().toString()) &&
-                item.getPincode().equals(mPinCode.getText().toString().trim())) {
-
-            Utility.showMessage(this, R.string.msg_no_change_found);
-            valid = false;
+                Utility.showMessage(this, R.string.msg_no_change_found);
+                valid = false;
+            }
         }
 
         return valid;

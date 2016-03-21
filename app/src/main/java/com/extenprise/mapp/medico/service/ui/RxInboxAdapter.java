@@ -37,7 +37,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
     private String mSortField;
     private boolean mAscending;
     private int mFeedback;
-    private int mIdServProv;
+    //private int mIdServProv;
 
     public RxInboxAdapter(Context context, int resource, ArrayList<RxInboxItem> list, int feedback) {
         super(context, resource);
@@ -129,7 +129,7 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
                 item.getServProv().getServPtLocation()));
         servProvPhoneView.setText(String.format("(%s)", item.getServProv().getPhone()));
         //mIdServProv = item.getServProv().getIdServProvHasServPt();
-        mIdServProv = item.getReportService().getIdServProvHasServPt();
+        //mIdServProv = item.getReportService().getIdServProvHasServPt();
         return v;
     }
 
@@ -148,8 +148,9 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = WorkingDataStore.getBundle();
-        bundle.putParcelable("rxItem", getItem(position));
-        bundle.putInt("idServProv", mIdServProv);
+        RxInboxItem item = getItem(position);
+        bundle.putParcelable("rxItem", item);
+        bundle.putInt("idServProv", item.getServProv().getIdServProvHasServPt());
         bundle.putParcelableArrayList("inbox", mRxList);
         if (mSortField != null) {
             bundle.putString("sortField", mSortField);

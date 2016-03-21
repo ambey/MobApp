@@ -40,6 +40,7 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     private ListView mMedStoreList;
     private Rx mRx;
     private String mParentActivity;
+    private int mFeedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +51,17 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mMedStoreList = (ListView) findViewById(R.id.medStoreListView);
         Intent intent = getIntent();
+        if (savedInstanceState != null) {
+            mParentActivity = savedInstanceState.getString("parent-activity");
+            mFeedback = savedInstanceState.getInt("feedback");
+        } else {
+            mParentActivity = intent.getStringExtra("parent-activity");
+            mFeedback = intent.getIntExtra("feedback", RxFeedback.NONE);
+        }
+
+        mMedStoreList = (ListView) findViewById(R.id.medStoreListView);
         mRx = intent.getParcelableExtra("rx");
-        mParentActivity = intent.getStringExtra("parent-activity");
 
         mConnection.setAction(MappService.DO_GET_MEDSTORE_LIST);
         Bundle bundle = new Bundle();
@@ -65,8 +73,12 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("rx", getIntent().getParcelableExtra("rx"));
-        outState.putString("parent-activity", mParentActivity);
+        Intent intent = getIntent();
+        outState.putParcelable("rx", intent.getParcelableExtra("rx"));
+        //outState.putString("parent-activity", mParentActivity);
+        outState.putParcelable("appont", intent.getParcelableExtra("appont"));
+        outState.putInt("feedback", intent.getIntExtra("feedback", RxFeedback.NONE));
+        outState.putString("parent-activity", intent.getStringExtra("parent-activity"));
     }
 
     public void sendRxToMedStore(View view) {
@@ -155,7 +167,9 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
 
         if (intent != null) {
             intent.putExtra("appont", getIntent().getParcelableExtra("appont"));
-            intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
+            //intent.putExtra("feedback", getIntent().getIntExtra("feedback", RxFeedback.NONE));
+            intent.putExtra("feedback", mFeedback);
+            intent.putExtra("origin_activity", getIntent().getStringExtra("origin_activity"));
             //intent.putExtra("parent-activity", getIntent().getStringExtra("origin_activity"));
         }
         return intent;

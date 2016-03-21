@@ -100,7 +100,7 @@
             android:layout_toRightOf="@+id/editTextQualification"
             android:hint="@string/experience"
             android:inputType="number"
-            android:maxLength="2" />
+            android:maxLength="3" />
 
 
         <EditText

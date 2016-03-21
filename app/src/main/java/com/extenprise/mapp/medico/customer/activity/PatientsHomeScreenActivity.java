@@ -74,6 +74,7 @@ public class PatientsHomeScreenActivity extends AppCompatActivity {
                             "dd/MM/yyyy HH:mm")));
         }
 
+        mImgView.setImageBitmap(null);
         if (mCustomer.getPhoto() != null) {
             ByteArrayToBitmapTask task = new ByteArrayToBitmapTask(mImgView, mCustomer.getPhoto(),
                     mImgView.getLayoutParams().width, mImgView.getLayoutParams().height);

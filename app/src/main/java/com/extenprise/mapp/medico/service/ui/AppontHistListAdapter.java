@@ -16,13 +16,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class AppontHistListAdapter extends ArrayAdapter<AppointmentListItem> {
-    private AppointmentListItem mAppont;
+    //private AppointmentListItem mAppont;
     private ArrayList<AppointmentListItem> mList;
 
     public AppontHistListAdapter(Context context, int resource, AppointmentListItem appont, ArrayList<AppointmentListItem> list) {
         super(context, resource);
-        mAppont = appont;
-        mList = list;
+        //mAppont = appont;
+        mList = new ArrayList<>();
+        for (AppointmentListItem apnt : list) {
+            if (apnt.getRxPresent() != 0) {
+                mList.add(apnt);
+            }
+        }
+        //mList = list;
     }
 
     @Override
