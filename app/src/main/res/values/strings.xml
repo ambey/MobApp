@@ -2,14 +2,16 @@
 <resources>
     <string name="app_name">Medico</string>
 
-    <!--
                                 <string name="server_name">http://10.0.2.2:8080/mappTest</string>
+
+    <!--
+        <string name="server_name">http://122.170.15.3:8080/mappTest</string>
     -->
 
-    <string name="server_name">http://122.170.15.3:8080/mappTest</string>
 
-
-    <!--<string name="server_name">http://208.74.28.39:8080/mappTest</string>-->
+    <!--
+        <string name="server_name">http://208.74.28.39:8080/mappTest</string>
+    -->
 
     <string name="notes">Notes</string>
     <string name="by_exp">By Extenprise</string>
@@ -283,5 +285,7 @@
     <string name="temp">Temperature </string>
     <string name="bldsug_text">Blood Sugar Count</string>
     <string name="temp_sign">\u2103</string>
-
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="home">Home</string>
 </resources>

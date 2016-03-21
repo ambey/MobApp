@@ -59,6 +59,7 @@
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden">
 
             <!--
@@ -117,7 +118,6 @@
             <!--
                         <intent-filter>
                             <action android:name="android.intent.action.MAIN" />
-
                             <category android:name="android.intent.category.LAUNCHER" />
                         </intent-filter>
             -->
@@ -181,7 +181,6 @@
             <!--
                         <intent-filter>
                             <action android:name="android.intent.action.MAIN" />
-
                             <category android:name="android.intent.category.LAUNCHER" />
                         </intent-filter>
             -->
@@ -207,7 +206,15 @@
         <activity
             android:name=".customer.activity.PatientsHomeScreenActivity"
             android:label="@string/title_activity_patients_home_screen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!--
+                        <intent-filter>
+                            <action android:name="ANDROID.INTENT.ACTION.MAIN" />
+                            <category android:name="ANDROID.INTENT.CATEGORY.LAUNCHER" />
+                        </intent-filter>
+            -->
+        </activity>
         <activity
             android:name=".service.activity.RxActivity"
             android:label="@string/title_activity_rx_activity"
@@ -296,17 +303,15 @@
         <activity
             android:name=".service.activity.SelectMedicalStoreActivity"
             android:label="@string/title_activity_select_medical_store"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.WelcomeActivity"
             android:label="Medico"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -363,8 +368,7 @@
         <activity
             android:name=".ui.PhotoCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

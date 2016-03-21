@@ -1,11 +1,11 @@
 package com.extenprise.mapp.medico.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -54,7 +54,7 @@ import java.util.Set;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity implements ResponseHandler {
+public class LoginActivity extends AppCompatActivity implements ResponseHandler {
 
     //ProgressDialog progressDialog;
     private MappServiceConnection mConnection = new MappServiceConnection(new ServiceResponseHandler(this, this));
@@ -72,13 +72,26 @@ public class LoginActivity extends Activity implements ResponseHandler {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.layout_toolbar_login);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+/*
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+*/
+
+/*
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowHomeEnabled(false);
             //actionBar.hide();
         }
+*/
 
         isBookAppontRequest = false;
         /*requestWindowFeature(Window.FEATURE_NO_TITLE);

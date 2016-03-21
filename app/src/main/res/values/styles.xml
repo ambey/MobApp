@@ -15,7 +15,9 @@
         <!--
                 <item name="android:progressBarStyle">@style/ProgressBarStyle</item>
         -->
-        <item name="actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
+        <!--
+                <item name="actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
+        -->
         <item name="android:spinnerStyle">@style/SpinnerTheme</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorAccent">@color/primary_dark</item>

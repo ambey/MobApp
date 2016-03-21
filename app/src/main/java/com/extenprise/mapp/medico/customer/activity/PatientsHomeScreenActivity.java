@@ -1,10 +1,13 @@
 package com.extenprise.mapp.medico.customer.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +24,7 @@ import com.extenprise.mapp.medico.util.ByteArrayToBitmapTask;
 import com.extenprise.mapp.medico.util.Utility;
 
 
-public class PatientsHomeScreenActivity extends Activity {
+public class PatientsHomeScreenActivity extends AppCompatActivity {
 
     private TextView mWelcomeView;
     private ImageView mImgView;
@@ -31,23 +34,19 @@ public class PatientsHomeScreenActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patients_home_screen);
+        setContentView(R.layout.layout_drawer_patient_home);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
         mWelcomeView = (TextView) findViewById(R.id.viewWelcomeLbl);
         mImgView = (ImageView) findViewById(R.id.imagePatient);
         mLastVisited = (TextView) findViewById(R.id.lastVisitedView);
-       /* try {
-            SharedPreferences prefs = getSharedPreferences("customer" + "lastVisit" +
-                    mCustomer.getSignInData().getPhone(), MODE_PRIVATE);
-            lastVisited.setText(String.format("%s %s %s",
-                    getString(R.string.last_visited),
-                    prefs.getString("lastVisitDate", "--"),
-                    prefs.getString("lastVisitTime", "--")));
-            //Utility.setLastVisit(prefs);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //Utility.startActivity(this, LoginActivity.class);
-        }*/
     }
 
     @Override
