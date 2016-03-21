@@ -89,7 +89,7 @@
     <string name="last_name">Last Name</string>
     <string name="age">Age</string>
     <string name="year">Years</string>
-    <string name="weight">Weight *</string>
+    <string name="weight">Weight </string>
     <string name="kg">Kg</string>
     <string name="practice_days">Practice Days *</string>
     <string name="add">Add</string>
@@ -281,7 +281,12 @@
     <string name="bp">BP</string>
     <string name="temp">Temperature </string>
     <string name="bldsug_text">Blood Sugar Count</string>
-    <string name="temp_sign">\u2103</string>
+
+    <string name="bldsug1"> Fasting </string>
+    <string name="bldsug2"> PP </string>
+
+
+    <string name="temp_sign">\u2109</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="home">Home</string>

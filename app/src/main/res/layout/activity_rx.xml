@@ -8,7 +8,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.extenprise.mapp.medico.util.RxActivity">
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/rxForLbl"
@@ -55,9 +62,6 @@
             android:layout_marginTop="20dp">
     -->
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -164,8 +168,8 @@
                 android:text="@string/bldsug_text"
                 android:textStyle="bold" />
             <EditText
-                android:id="@+id/bloodSugText"
-                android:layout_width="100dp"
+                android:id="@+id/bloodSug1Text"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tempText"
                 android:layout_marginLeft="10dp"
@@ -173,8 +177,35 @@
                 android:inputType="number"
                 android:background="@drawable/text"
                 android:layout_marginTop="12dp"
+                android:hint="@string/bldsug1"
                 />
 
+            <TextView
+                android:id="@+id/mark1View"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tempText"
+                android:layout_toRightOf="@+id/bloodSug1Text"
+                android:layout_marginLeft="10dp"
+                android:text="/"
+                android:textStyle="bold"
+                android:layout_marginTop="11dp"
+                android:textSize="20dp"
+
+                />
+
+            <EditText
+                android:id="@+id/bloodSug2Text"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tempText"
+                android:layout_marginLeft="28dp"
+                android:layout_toRightOf="@+id/bloodSug1Text"
+                android:inputType="number"
+                android:background="@drawable/text"
+                android:layout_marginTop="12dp"
+                android:hint="@string/bldsug2"
+                />
 
 
             <LinearLayout
@@ -378,13 +409,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2" />
             </LinearLayout>
+            <EditText
+                android:id="@+id/editTextNote"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+                android:layout_below="@id/altDrugLayout"
+            android:layout_marginTop="10dp"
+            android:hint="@string/notes"
+            android:inputType="textNoSuggestions"
+            android:maxLength="60" />
 
             <Button
                 android:id="@+id/addButton"
                 style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/altDrugLayout"
+                android:layout_below="@id/editTextNote"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:onClick="addRxItem"
@@ -405,8 +445,10 @@
                 android:onClick="doneRx"
                 android:text="@string/done_with_rx" />
         </RelativeLayout>
-    </ScrollView>
+
     <!--
         </ScrollView>
     -->
+        </RelativeLayout>
+</ScrollView>
 </RelativeLayout>
