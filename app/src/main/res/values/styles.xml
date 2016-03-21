@@ -2,53 +2,67 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
         <!--
-                <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
+                <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
+                <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_red_24dp</item>
+                <item name="homeAsUpIndicator">@drawable/ic_arrow_back_red_24dp</item>
+                <item name="android:actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
+                <item name="android:actionMenuTextColor">@color/ThemeColor</item>
+                <item name="actionMenuTextColor">@color/ThemeColor</item>
         -->
-        <!--<item name="android:windowFullscreen">true</item>-->
-        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_red_24dp</item>
-        <item name="homeAsUpIndicator">@drawable/ic_arrow_back_red_24dp</item>
-        <item name="android:spinnerStyle">@style/SpinnerTheme</item>
-        <item name="android:actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
+        <!--
+                <item name="android:progressBarStyle">@style/ProgressBarStyle</item>
+        -->
         <item name="actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
-        <item name="android:actionMenuTextColor">@color/ThemeColor</item>
-        <item name="actionMenuTextColor">@color/ThemeColor</item>
-        <item name="android:progressBarStyle">@style/ProgressBarStyle</item>
-        <!--
-                <item name="android:popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
-                <item name="popupMenuStyle">@style/AppTheme.ActionBar.OverflowMenu</item>
-        -->
-        <!--<item name="android:buttonStyle">@style/MyButton</item>-->
+        <item name="android:spinnerStyle">@style/SpinnerTheme</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorAccent">@color/primary_dark</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
     </style>
 
-    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
-        <item name="android:color">@color/ThemeColor</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--
+        <style name="AppTheme.Dialog" parent="Widget.AppCompat.ButtonBar.AlertDialog">
+            <item name="colorAccent">@color/primary_dark</item>
+        </style>
+
+        <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+            <item name="colorAccent">@color/primary_dark</item>
+        </style>
+    -->
+
+    <style name="AppTheme.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!-- ActionBar styles -->
-    <style name="AppTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@drawable/stroked_rect</item>
-        <item name="android:displayOptions">showHome|useLogo|showTitle</item>
-        <item name="displayOptions">showHome|useLogo|showTitle</item>
-        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
-        <item name="android:logo">@mipmap/ic_medico_logo</item>
-    </style>
+    <!--
+        <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+            <item name="android:background">@drawable/stroked_rect</item>
+            <item name="android:displayOptions">showHome|useLogo|showTitle</item>
+            <item name="displayOptions">showHome|useLogo|showTitle</item>
+            <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+            <item name="android:logo">@mipmap/ic_medico_logo</item>
+        </style>
 
-    <style name="AppTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/ThemeColor</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">21sp</item>
-    </style>
+        <style name="AppTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance">
+            <item name="android:textColor">@color/ThemeColor</item>
+            <item name="android:textStyle">bold</item>
+            <item name="android:textSize">21sp</item>
+        </style>
+    -->
 
-    <style name="AppTheme.ActionBar.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+    <style name="AppTheme.ActionBar.Overflow" parent="Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/menu_overflow_icon</item>
     </style>
 
@@ -95,15 +109,6 @@
         </style>
     -->
 
-    <style name="Theme.Transparent" parent="android:Theme">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
     <style name="ExpandLabel">
         <item name="android:background">@drawable/expand</item>
         <item name="android:textStyle">bold</item>
@@ -131,17 +136,17 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
-    <style name="FloatButton" parent="@android:style/Widget.Button">
+    <style name="FloatButton" parent="Widget.AppCompat.Button">
 
     </style>
 
-    <style name="IconButton" parent="@android:style/Widget.Button">
+    <style name="IconButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/raised_button</item>
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:minHeight">64dp</item>
     </style>
 
-    <style name="MyButton" parent="@android:style/Widget.Button">
+    <style name="MyButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/raised_button</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color</item>
@@ -151,6 +156,8 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>
+        <item name="textAllCaps">true</item>
+        <item name="elevation">2dp</item>
     </style>
 
     <style name="RectButton" parent="@android:style/Widget.Button">
@@ -212,13 +219,11 @@
 
     <style name="ExtraLargeLabel">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#00f</item>
         <item name="android:textSize">24sp</item>
     </style>
 
     <style name="LargeLabel">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#00f</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -270,11 +275,11 @@
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingBottom">5dp</item>
     </style>-->
-    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+    <style name="SpinnerTheme" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
         <item name="android:background">@drawable/spinner</item>
     </style>
 
-    <style name="customDialog" parent="@android:style/Theme.Dialog">
+    <style name="customDialog" parent="Widget.AppCompat.ButtonBar.AlertDialog">
         <item name="android:windowAnimationStyle">@style/customDialogAnimation</item>
     </style>
 
