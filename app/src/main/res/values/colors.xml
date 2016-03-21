@@ -9,9 +9,22 @@
     <color name="raised_button_bg">#fff</color>
     <color name="button_deactivated_bg">#1f000000</color>
     <color name="button_text_deactivated">#4d000000</color>
-    <color name="button_text">@color/primary_color</color>
-    <color name="primary_text">#df000000</color>
-    <color name="primary_color">#d50000</color>
+    <color name="button_text">@color/primary_dark</color>
+    <!--
+        <color name="primary_text">#df000000</color>
+    -->
+    <!--
+        <color name="primary_color">#d50000</color>
+    -->
     <color name="light_shadow">#1f000000</color>
     <color name="dark_shadow">#4d000000</color>
+    <color name="primary">#D32F2F</color>
+    <color name="primary_dark">#C62828</color>
+    <color name="primary_light">#F44336</color>
+    <color name="primary_superlight">#ffebee</color>
+    <color name="accent">#009688</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
 </resources>
