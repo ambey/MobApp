@@ -150,7 +150,11 @@ public class RxInboxAdapter extends ArrayAdapter<RxInboxItem> implements Adapter
         Bundle bundle = WorkingDataStore.getBundle();
         RxInboxItem item = getItem(position);
         bundle.putParcelable("rxItem", item);
-        bundle.putInt("idServProv", item.getServProv().getIdServProvHasServPt());
+        if (mFeedback == RxFeedback.VIEW_FEEDBACK) {
+            bundle.putInt("idServProv", item.getServProv().getIdServProvHasServPt());
+        } else {
+            bundle.putInt("idServProv", item.getReportService().getIdServProvHasServPt());
+        }
         bundle.putParcelableArrayList("inbox", mRxList);
         if (mSortField != null) {
             bundle.putString("sortField", mSortField);

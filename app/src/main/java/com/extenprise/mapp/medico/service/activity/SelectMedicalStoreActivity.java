@@ -85,7 +85,8 @@ public class SelectMedicalStoreActivity extends FragmentActivity implements Resp
         int position = ((MedStoreListAdapter)mMedStoreList.getAdapter()).getSelectedPos();
         System.out.println("selected medstore pos: " + position);
         if(position == -1) {
-            unbindService(mConnection);
+            //unbindService(mConnection);
+            Utility.showMessage(this, R.string.msg_select_medStore);
             return;
         }
         Bundle bundle = new Bundle();
